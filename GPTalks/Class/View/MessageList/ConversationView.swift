@@ -18,6 +18,7 @@ struct AnimationID {
 struct ConversationView: View {
         
     let conversation: Conversation
+    let service: AIProvider
 
 //    let namespace: Namespace.ID
 //    var lastConversationDate: Date?
@@ -110,7 +111,7 @@ struct ConversationView: View {
             } else {
                 Text(conversation.content)
                     .textSelection(.enabled)
-                    .bubbleStyle(isMyMessage: true, type: .text)
+                    .bubbleStyle(isMyMessage: true, type: .text, service: service)
             }
         }
     }
@@ -125,7 +126,7 @@ struct ConversationView: View {
                 
                 if conversation.isReplying {
                     ReplyingIndicatorView()
-                        .frame(width: 48, height: 24)
+                        .frame(width: 48, height: 15)
                 }
             }
             .bubbleStyle(isMyMessage: false, type: .text)

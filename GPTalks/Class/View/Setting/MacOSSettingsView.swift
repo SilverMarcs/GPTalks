@@ -63,6 +63,7 @@ struct ModelSettingsView: View {
     enum Item: String, CaseIterable, Identifiable, Hashable {
         case openAI
         case openRouter
+        case pAI
         case summaries
         
         var id: String { rawValue }
@@ -74,6 +75,8 @@ struct ModelSettingsView: View {
                 OpenAISettingsView()
             case .openRouter:
                 OpenRouterSettingsView()
+            case .pAI:
+                PAISettingsView()
             case .summaries:
                 SummarySettingsView()
             }

@@ -9,8 +9,8 @@
 import SwiftUI
 
 extension View {
-    func bubbleStyle(isMyMessage: Bool, type: MessageType = .text) -> some View {
-        modifier(Bubble(isMyMessage: isMyMessage, type: type))
+    func bubbleStyle(isMyMessage: Bool, type: MessageType = .text, service: AIProvider = .openAI) -> some View {
+        modifier(Bubble(isMyMessage: isMyMessage, type: type, service: service))
     }
 }
 
@@ -18,6 +18,7 @@ struct Bubble: ViewModifier {
     
     var isMyMessage: Bool
     var type: MessageType = .text
+    var service: AIProvider = .openAI
     
     #if os(iOS)
     let radius: CGFloat = 19
@@ -37,7 +38,7 @@ struct Bubble: ViewModifier {
                 content
                     .padding(.horizontal, horizontalPadding)
                     .padding(.vertical, verticalPadding)
-                    .background(.accentColor)
+                    .background(userMessageBackgroundColor)
 #if os(iOS)
                     .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius))
 #endif
@@ -77,6 +78,17 @@ struct Bubble: ViewModifier {
                     .foregroundColor(.primary)
             
             }
+        }
+    }
+    
+    private var userMessageBackgroundColor: Color {
+        switch service {
+        case .openAI:
+            return Color("greenColor")
+        case .openRouter:
+            return Color("purpleColor")
+        case .pAI:
+            return Color("orangeColor")
         }
     }
     

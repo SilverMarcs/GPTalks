@@ -16,10 +16,11 @@ import Foundation
 enum AIProvider: String, CaseIterable, Codable {
    case openAI
    case openRouter
-
-   var id: RawValue {
-       return rawValue
-   }
+    case pAI
+//
+//   var id: RawValue {
+//       return rawValue
+//   }
     
     func service(configuration: DialogueSession.Configuration) -> ChatService {
        switch self {
@@ -27,16 +28,13 @@ enum AIProvider: String, CaseIterable, Codable {
            return OpenAIService(configuration: configuration)
        case .openRouter:
            return OpenRouterService(configuration: configuration)
+       case .pAI:
+           return PAIService(configuration: configuration)
        }
     }
     
     var iconName: String {
-        switch self {
-        case .openAI:
-            return "openaigreen"
-        case .openRouter:
-            return "openai"
-        }
+        return self.rawValue.lowercased()
     }
 
    var name: String {
@@ -45,6 +43,8 @@ enum AIProvider: String, CaseIterable, Codable {
            return "OpenAI"
        case .openRouter:
            return "OpenRouter"
+       case .pAI:
+           return "PAI"
        }
    }
     
@@ -54,6 +54,8 @@ enum AIProvider: String, CaseIterable, Codable {
             return AppConfiguration.shared.OAIcontextLength
         case .openRouter:
             return AppConfiguration.shared.ORcontextLength
+        case .pAI:
+            return AppConfiguration.shared.PAIcontextLength
         }
     }
     
@@ -63,6 +65,8 @@ enum AIProvider: String, CaseIterable, Codable {
             return AppConfiguration.shared.OAItemperature
         case .openRouter:
             return AppConfiguration.shared.ORtemperature
+        case .pAI:
+            return AppConfiguration.shared.PAItemperature
         }
     }
     
@@ -72,6 +76,8 @@ enum AIProvider: String, CaseIterable, Codable {
             return AppConfiguration.shared.OAIsystemPrompt
         case .openRouter:
             return AppConfiguration.shared.ORsystemPrompt
+        case .pAI:
+            return AppConfiguration.shared.PAIsystemPrompt
         }
     }
     
@@ -81,6 +87,8 @@ enum AIProvider: String, CaseIterable, Codable {
             return AppConfiguration.shared.OAImodel
         case .openRouter:
             return AppConfiguration.shared.ORmodel
+        case .pAI:
+            return AppConfiguration.shared.PAImodel
         }
     }
 
@@ -90,13 +98,18 @@ enum AIProvider: String, CaseIterable, Codable {
             return Model.openAIModels
         case .openRouter:
             return Model.openRouterModels
+        case .pAI:
+            return Model.pAIModels
         }
     }
 }
 
 enum Model: String, Codable {
+    /// openai
    case gpt3
    case gpt4
+    
+    /// openrouter
    case phind
    case codellama
    case mistral
@@ -104,9 +117,12 @@ enum Model: String, Codable {
     case palm
     case palmcode
     
+    /// pawan
+    case pai
+    case pailight
+    
     var name: String {
         switch self {
-            
         case .gpt3:
             return "GPT-3"
         case .gpt4:
@@ -123,6 +139,10 @@ enum Model: String, Codable {
             return "Palm"
         case .palmcode:
             return "GCode"
+        case .pai:
+            return "PAI"
+        case .pailight:
+            return "PAI-L"
         }
     }
 
@@ -144,12 +164,16 @@ enum Model: String, Codable {
            return "google/palm-2-chat-bison"
        case .palmcode:
            return "google/palm-2-codechat-bison"
+       case .pai:
+           return "pai-001-beta"
+       case .pailight:
+           return "pai-001-light-beta"
        }
    }
     
     var maxTokens: Int {
         switch self {
-        case .gpt3, .gpt4, .phind, .codellama, .mistral, .mythomax:
+        case .gpt3, .gpt4, .phind, .codellama, .mistral, .mythomax, .pai, .pailight:
             return 4000
         case .palm, .palmcode:
             return 2000
@@ -158,4 +182,5 @@ enum Model: String, Codable {
 
    static let openAIModels: [Model] = [.gpt3, .gpt4]
     static let openRouterModels: [Model] = [.phind, .codellama, .mistral, .mythomax, .palm, .palmcode]
+    static let pAIModels: [Model] = [.pai, .pailight]
 }

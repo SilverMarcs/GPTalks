@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class PawanService: BaseChatService {
+class PAIService: BaseChatService {
     
     override var baseURL: String {
         return "https://api.pawan.krd"

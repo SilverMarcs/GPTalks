@@ -241,6 +241,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             
 //            if conversations.count == 1 { createTitle() }
         } catch {
+            print(error.localizedDescription)
 #if os(iOS)
 //            withAnimation {
 //                conversation.errorDesc = error.localizedDescription

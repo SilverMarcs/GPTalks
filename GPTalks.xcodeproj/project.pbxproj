@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0837E47A2AFE54D500C03059 /* PAIChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E4792AFE54D500C03059 /* PAIChatService.swift */; };
+		0837E47D2AFE57A100C03059 /* PAISettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E47C2AFE57A100C03059 /* PAISettingsView.swift */; };
 		085D40BF2AFD66340033F8B5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Extensions.swift */; };
 		085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */; };
 		085D40C32AFD8C250033F8B5 /* AIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* AIProvider.swift */; };
@@ -77,6 +79,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0837E4792AFE54D500C03059 /* PAIChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAIChatService.swift; sourceTree = "<group>"; };
+		0837E47C2AFE57A100C03059 /* PAISettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAISettingsView.swift; sourceTree = "<group>"; };
 		085D40BE2AFD66340033F8B5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		085D40C22AFD8C250033F8B5 /* AIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvider.swift; sourceTree = "<group>"; };
@@ -158,6 +162,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0837E47B2AFE54DA00C03059 /* PAI */ = {
+			isa = PBXGroup;
+			children = (
+				0837E4792AFE54D500C03059 /* PAIChatService.swift */,
+			);
+			path = PAI;
+			sourceTree = "<group>";
+		};
 		08723DA22AFA2AE4001D59FE /* OpenRouter */ = {
 			isa = PBXGroup;
 			children = (
@@ -194,6 +206,7 @@
 				E4994DEA29D6E655002981D0 /* CustomPromptsView.swift */,
 				08723DAC2AFAC35D001D59FE /* OpenRouterSettingsView.swift */,
 				08A327462AFB62CE0086C3F1 /* SummarySettingsView.swift */,
+				0837E47C2AFE57A100C03059 /* PAISettingsView.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -298,8 +311,8 @@
 				E4924F0729DEEC0800B69605 /* ErrorMessageView.swift */,
 				E4C65ED929CA9F7800AFA884 /* MessageMarkdownView.swift */,
 				E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */,
-				E4EAAFC229D1E25900A37FA5 /* BottomViews */,
 				E4C65F1F29D0649800AFA884 /* DialogueSettingsView.swift */,
+				E4EAAFC229D1E25900A37FA5 /* BottomViews */,
 			);
 			path = MessageList;
 			sourceTree = "<group>";
@@ -316,6 +329,7 @@
 		E4C65EE229CA9F7800AFA884 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				0837E47B2AFE54DA00C03059 /* PAI */,
 				08723DAB2AFA4911001D59FE /* Common */,
 				08723DA22AFA2AE4001D59FE /* OpenRouter */,
 				E4924EFC29DED9D100B69605 /* OpenAI */,
@@ -548,11 +562,13 @@
 				E4C65EF529CA9F7800AFA884 /* ComposerInputView.swift in Sources */,
 				E4924F0C29DF2AD800B69605 /* OpenAISettingsView.swift in Sources */,
 				E4C65EFC29CA9F7800AFA884 /* BaseChatService.swift in Sources */,
+				0837E47A2AFE54D500C03059 /* PAIChatService.swift in Sources */,
 				08723DA62AFA2B03001D59FE /* OpenRouterService.swift in Sources */,
 				08723DAD2AFAC35D001D59FE /* OpenRouterSettingsView.swift in Sources */,
 				E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */,
 				E4C65EA429CA9E7E00AFA884 /* Persistence.swift in Sources */,
 				E4924F0829DEEC0800B69605 /* ErrorMessageView.swift in Sources */,
+				0837E47D2AFE57A100C03059 /* PAISettingsView.swift in Sources */,
 				085D40C32AFD8C250033F8B5 /* AIProvider.swift in Sources */,
 				085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */,
 				E4C65EFA29CA9F7800AFA884 /* LanguageModels.swift in Sources */,

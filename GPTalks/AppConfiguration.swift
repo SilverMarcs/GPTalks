@@ -29,7 +29,7 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.OAIsystemPrompt") var OAIsystemPrompt: String = "You are a helpful assistant."
     
-    @AppStorage("configuration.OAImodel") var OAImodel: Model = .phind
+    @AppStorage("configuration.OAImodel") var OAImodel: Model = .gpt3
     
     /// openRouter
     @AppStorage("configuration.ORKey") var ORkey = ""
@@ -40,6 +40,17 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.ORsystemPrompt") var ORsystemPrompt: String = "You are a helpful assistant."
     
-    @AppStorage("configuration.ORmodel") var ORmodel: Model = .gpt3
+    @AppStorage("configuration.ORmodel") var ORmodel: Model = .phind
+    
+    /// pawan
+    @AppStorage("configuration.PKey") var PAIkey = ""
+    
+    @AppStorage("configuration.PcontextLength") var PAIcontextLength = 30
+    
+    @AppStorage("configuration.Ptemperature") var PAItemperature: Double = 0.8
+    
+    @AppStorage("configuration.PsystemPrompt") var PAIsystemPrompt: String = "You are a helpful assistant."
+    
+    @AppStorage("configuration.Pmodel") var PAImodel: Model = .pai
 
 }
