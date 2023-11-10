@@ -90,7 +90,7 @@ struct DialogueSessionListView: View {
     private func listView(session: DialogueSession) -> some View {
        NavigationLink(value: session) {
            HStack(spacing: 10) {
-               Image(session.service.provider.iconName)
+               Image(session.configuration.service.iconName)
                    .resizable()
                    .frame(width: imageSize, height: imageSize)
                    .cornerRadius(imagePadding)

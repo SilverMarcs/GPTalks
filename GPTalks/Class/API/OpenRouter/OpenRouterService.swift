@@ -9,10 +9,6 @@ import SwiftUI
 
 class OpenRouterService: BaseChatService {
     
-    override var provider: AIProvider {
-        return .openRouter
-    }
-    
     override var baseURL: String {
         return "https://openrouter.ai/api"
     }
@@ -24,7 +20,7 @@ class OpenRouterService: BaseChatService {
     override var headers: [String: String] {
         [
             "Content-Type": "application/json",
-            "Authorization": "Bearer \(configuration.key)",
+            "Authorization": "Bearer \(AppConfiguration.shared.ORkey)",
             "HTTP-Referer": "https://github.com/SilverMarcs"
         ]
     }

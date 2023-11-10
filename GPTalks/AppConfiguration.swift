@@ -29,6 +29,8 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.OAIsystemPrompt") var OAIsystemPrompt: String = "You are a helpful assistant."
     
+    @AppStorage("configuration.OAImodel") var OAImodel: Model = .phind
+    
     /// openRouter
     @AppStorage("configuration.ORKey") var ORkey = ""
     
@@ -37,5 +39,7 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.ORtemperature") var ORtemperature: Double = 0.8
     
     @AppStorage("configuration.ORsystemPrompt") var ORsystemPrompt: String = "You are a helpful assistant."
+    
+    @AppStorage("configuration.ORmodel") var ORmodel: Model = .gpt3
 
 }

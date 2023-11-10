@@ -118,7 +118,11 @@ struct ConversationView: View {
     var assistantMessage: some View {
         HStack(spacing: 0) {
             VStack(alignment: .leading) {
-                TextMessageView(text: conversation.content, isReplying: false)
+                if AppConfiguration.shared.isMarkdownEnabled{
+                    MessageMarkdownView(text: conversation.content)
+                        .textSelection(.enabled)
+                }
+                
                 if conversation.isReplying {
                     ReplyingIndicatorView()
                         .frame(width: 48, height: 24)

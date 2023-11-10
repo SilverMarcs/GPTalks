@@ -8,7 +8,6 @@
 import SwiftUI
 
 protocol ChatService {
-    var provider: AIProvider { get }
     var baseURL: String { get }
     var path: String { get }
     var method: String {  get }
@@ -23,11 +22,6 @@ protocol ChatService {
 }
 
 class BaseChatService: @unchecked Sendable, ChatService {
-    var provider: AIProvider {
-        // TODO: this should be nil
-        return .openAI
-    }
-    
     required init(configuration: DialogueSession.Configuration) {
         self.configuration = configuration
     }
@@ -103,7 +97,7 @@ class BaseChatService: @unchecked Sendable, ChatService {
                            temperature: configuration.temperature,
                            messages:  conversations.map { $0.toMessage() },
                            stream: stream,
-                           max_tokens: 3900)
+                           max_tokens: configuration.model.maxTokens)
         return try JSONEncoder().encode(request)
     }
     
@@ -173,7 +167,7 @@ class BaseChatService: @unchecked Sendable, ChatService {
         urlRequest.httpMethod = method
         headers.forEach {  urlRequest.setValue($1, forHTTPHeaderField: $0) }
         let requestModel = Chat(model: configuration.model.id, temperature: temperature,
-                                messages: messages, stream: true, max_tokens: 4096)
+                                messages: messages, stream: true, max_tokens: configuration.model.maxTokens)
         urlRequest.httpBody = try JSONEncoder().encode(requestModel)
         
         let (result, response) = try await urlSession.bytes(for: urlRequest)
@@ -228,7 +222,7 @@ class BaseChatService: @unchecked Sendable, ChatService {
                                 temperature: 0.8,
                                 messages: [Message(role: "user", content: text)],
                                 stream: false,
-                                max_tokens: 3900)
+                                max_tokens: 100)
         urlRequest.httpBody = try JSONEncoder().encode(requestModel)
         
         let (data, response) = try await urlSession.data(for: urlRequest)

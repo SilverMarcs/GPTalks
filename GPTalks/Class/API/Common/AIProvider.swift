@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct Model: Codable, Hashable {
-   let name: String
-   let id: String
-}
+//struct Model: Codable, Hashable {
+//   let name: String
+//   let id: String
+//}
 
 
 enum AIProvider: String, CaseIterable, Codable {
@@ -20,6 +20,15 @@ enum AIProvider: String, CaseIterable, Codable {
    var id: RawValue {
        return rawValue
    }
+    
+    func service(configuration: DialogueSession.Configuration) -> ChatService {
+       switch self {
+       case .openAI:
+           return OpenAIService(configuration: configuration)
+       case .openRouter:
+           return OpenRouterService(configuration: configuration)
+       }
+    }
     
     var iconName: String {
         switch self {
@@ -39,39 +48,114 @@ enum AIProvider: String, CaseIterable, Codable {
        }
    }
     
+    var contextLength: Int {
+        switch self {
+        case .openAI:
+            return AppConfiguration.shared.OAIcontextLength
+        case .openRouter:
+            return AppConfiguration.shared.ORcontextLength
+        }
+    }
+    
+    var temperature: Double {
+        switch self {
+        case .openAI:
+            return AppConfiguration.shared.OAItemperature
+        case .openRouter:
+            return AppConfiguration.shared.ORtemperature
+        }
+    }
+    
+    var systemPrompt: String {
+        switch self {
+        case .openAI:
+            return AppConfiguration.shared.OAIsystemPrompt
+        case .openRouter:
+            return AppConfiguration.shared.ORsystemPrompt
+        }
+    }
+    
     var preferredModel: Model {
         switch self {
         case .openAI:
-            return Model(name: "GPT-4", id: "gpt-4-1106-preview")
+            return AppConfiguration.shared.OAImodel
         case .openRouter:
-            return Model(name: "Phind", id: "phind/phind-codellama-34b-v2")
+            return AppConfiguration.shared.ORmodel
         }
     }
 
-   var models: [Model] {
-       switch self {
-       case .openAI:
-           return [
-            Model(name: "GPT-3", id: "gpt-3.5-turbo-1106"),
-            Model(name: "GPT-4", id: "gpt-4-1106-preview"),
-           ]
-       case .openRouter:
-           return [
-              Model(name: "GPT-3", id: "openai/gpt-3.5-turbo-1106"),
-              Model(name: "GPT-4", id: "openai/gpt-4-1106-preview"),
-              Model(name: "Phind", id: "phind/phind-codellama-34b-v2"),
-              Model(name: "CodeLlama", id: "meta-llama/codellama-34b-instruct"),
-//              Model(name: "Llama2-70B", id: "meta-llama/llama-2-70b-chat"),
-//              Model(name: "Llama2-13B", id: "meta-llama/llama-2-13b-chat"),
-              Model(name: "Mistral", id: "open-orca/mistral-7b-openorca"),
-//              Model(name: "Hermes", id: "nousresearch/nous-hermes-llama2-13b"),
-//              Model(name: "Hermes-70B", id: "nousresearch/nous-hermes-llama2-70b"),
-              Model(name: "MythoMax", id: "gryphe/mythomax-l2-13b"),
-//              Model(name: "MythoMax-8k", id: "gryphe/mythomax-l2-13b-8k"),
-//              Model(name: "Palm", id: "google/palm-2-chat-bison"),
-//              Model(name: "GCode", id: "google/palm-2-codechat-bison")
-           ]
+    var models: [Model] {
+        switch self {
+        case .openAI:
+            return Model.openAIModels
+        case .openRouter:
+            return Model.openRouterModels
+        }
+    }
+}
 
+enum Model: String, Codable {
+   case gpt3
+   case gpt4
+   case phind
+   case codellama
+   case mistral
+   case mythomax
+    case palm
+    case palmcode
+    
+    var name: String {
+        switch self {
+            
+        case .gpt3:
+            return "GPT-3"
+        case .gpt4:
+            return "GPT-4"
+        case .phind:
+            return "Phind"
+        case .codellama:
+            return "CodeLlama"
+        case .mistral:
+            return "Mistral"
+        case .mythomax:
+            return "MythoMax"
+        case .palm:
+            return "Palm"
+        case .palmcode:
+            return "GCode"
+        }
+    }
+
+   var id: String {
+       switch self {
+       case .gpt3:
+           return "gpt-3.5-turbo-1106"
+       case .gpt4:
+           return "gpt-4-1106-preview"
+       case .phind:
+           return "phind/phind-codellama-34b-v2"
+       case .codellama:
+           return "meta-llama/codellama-34b-instruct"
+       case .mistral:
+           return "open-orca/mistral-7b-openorca"
+       case .mythomax:
+           return "gryphe/mythomax-l2-13b"
+       case .palm:
+           return "google/palm-2-chat-bison"
+       case .palmcode:
+           return "google/palm-2-codechat-bison"
        }
    }
+    
+    var maxTokens: Int {
+        switch self {
+        case .gpt3, .gpt4, .phind, .codellama, .mistral, .mythomax:
+            return 4000
+        case .palm, .palmcode:
+            return 2000
+        }
+    }
+
+   static let openAIModels: [Model] = [.gpt3, .gpt4]
+    static let openRouterModels: [Model] = [.phind, .codellama, .mistral, .mythomax, .palm, .palmcode]
 }

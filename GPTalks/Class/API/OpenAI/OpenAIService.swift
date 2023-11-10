@@ -9,10 +9,6 @@ import Foundation
 
 class OpenAIService: BaseChatService {
     
-    override var provider: AIProvider {
-        return .openAI
-    }
-    
     override var baseURL: String {
         return "https://api.openai.com"
     }
@@ -24,7 +20,7 @@ class OpenAIService: BaseChatService {
     override var headers: [String: String] {
         [
             "Content-Type": "application/json",
-            "Authorization": "Bearer \(configuration.key)",
+            "Authorization": "Bearer \(AppConfiguration.shared.OAIkey)",
         ]
     }
     

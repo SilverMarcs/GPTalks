@@ -29,6 +29,21 @@ struct OpenRouterSettingsView: View {
                 GroupBox {
                     
                     HStack {
+                        Text("Model")
+                        Spacer()
+                        Picker(selection: configuration.$ORmodel) {
+                            ForEach(AIProvider.openRouter.models, id: \.self) { model in
+                                Text(model.name)
+                                    .tag(model.id)
+                            }
+                        }
+                        .frame(width: 250)
+                    }
+                    .padding()
+                    
+                    Divider()
+                    
+                    HStack {
                         Text("Context Length")
                         Spacer()
                         Picker(selection: configuration.$ORcontextLength) {

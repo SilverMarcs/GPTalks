@@ -42,7 +42,7 @@ struct MessageMarkdownView: View {
             .padding(15)
             .background(.tertiarySystemBackground)
             .clipShape(RoundedRectangle(cornerRadius: 8))
-            .markdownMargin(top: .zero, bottom: .em(0.7))
+            .markdownMargin(top: .zero, bottom: .em(0.8))
           CodeCopyButton(text: configuration.content)
         }
       }

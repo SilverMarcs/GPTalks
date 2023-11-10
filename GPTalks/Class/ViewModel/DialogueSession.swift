@@ -13,11 +13,6 @@ import AudioToolbox
 class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Codable {
     
     struct Configuration: Codable {
-        
-        var isOpenAI = AppConfiguration.shared.preferredChatService == .openAI
-        
-        var key: String = AppConfiguration.shared.preferredChatService == .openAI ? AppConfiguration.shared.OAIkey : AppConfiguration.shared.ORkey
-        
         var temperature: Double
         var systemPrompt: String
         var contextLength: Int
@@ -27,10 +22,9 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         init() {
             service = AppConfiguration.shared.preferredChatService
             model = service.preferredModel
-            
-            contextLength = isOpenAI ? AppConfiguration.shared.OAIcontextLength : AppConfiguration.shared.ORcontextLength
-            temperature = isOpenAI ? AppConfiguration.shared.OAItemperature : AppConfiguration.shared.ORtemperature
-            systemPrompt = isOpenAI ? AppConfiguration.shared.OAIsystemPrompt : AppConfiguration.shared.ORsystemPrompt
+            contextLength = service.contextLength
+            temperature = service.temperature
+            systemPrompt = service.systemPrompt
         }
         
     }
@@ -43,18 +37,14 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         conversations = try container.decode([Conversation].self, forKey: .conversations)
         date = try container.decode(Date.self, forKey: .date)
         id = try container.decode(UUID.self, forKey: .id)
-//        let messages = try container.decode([Message].self, forKey: .messages)
 
         isReplying = false
         isStreaming = false
         input = ""
         
-        service = configuration.service == .openAI
-        ? OpenAIService(configuration: configuration)
-        : OpenRouterService(configuration: configuration)
+        service = configuration.service.service(configuration: configuration)
         
 
-//        service.messages = messages
         initFinished = true
     }
     
@@ -62,7 +52,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(configuration, forKey: .configuration)
         try container.encode(conversations, forKey: .conversations)
-//        try container.encode(service.messages, forKey: .messages)
         try container.encode(id, forKey: .id)
         try container.encode(date, forKey: .date)
     }
@@ -70,7 +59,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     enum CodingKeys: CodingKey {
         case configuration
         case conversations
-//        case messages
         case date
         case id
     }
@@ -123,9 +111,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         return conversations.last?.content ?? ""
     }
         
-    lazy var service: ChatService = configuration.service == .openAI
-    ? OpenAIService(configuration: configuration)
-    : OpenRouterService(configuration: configuration)
+    lazy var service: ChatService = configuration.service.service(configuration: configuration)
     
     init() {
         
@@ -148,12 +134,9 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     
     @MainActor
     func clearMessages() {
-//        service.removeAllMessages()
-        title = "Empty"
-//        self.conversations = []
-//        withAnimation { [weak self] in
-//            self?.removeAllConversations()
-//        }
+        withAnimation { [weak self] in
+            self?.removeAllConversations()
+        }
     }
     
     @MainActor
@@ -168,15 +151,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         conversations = Array(conversations[..<index])
         await send(text: conversation.content, scroll: scroll)
     }
-
-    
-//    @MainActor
-//    func retry(_ conversation: Conversation, index: Int, scroll: ((UnitPoint) -> Void)? = nil) async {
-//        removeConversation(at: index)
-//        service.messages.remove(at: index)
-//        // TODO incomplete
-//        await send(text: conversation.content, isRetry: true, scroll: scroll)
-//    }
     
     private var lastConversationData: ConversationData?
     
@@ -493,6 +467,19 @@ extension DialogueSession {
                 $0.id == conversation.id
             }) {
                 PersistenceController.shared.container.viewContext.delete(conversationData)
+            }
+            try PersistenceController.shared.save()
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func removeAllConversations() {
+        conversations.removeAll()
+        do {
+            let viewContext = PersistenceController.shared.container.viewContext
+            if let conversations = rawData?.conversations as? Set<ConversationData> {
+                conversations.forEach(viewContext.delete)
             }
             try PersistenceController.shared.save()
         } catch let error {
