@@ -8,20 +8,10 @@
 import SwiftUI
 
 struct DialogueSessionListView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    
     @State private var showRenameDialog = false
     @State private var newName = ""
     @State private var sessionToRename: DialogueSession?
     @State private var searchQuery = ""
-    
-#if os(iOS)
-    @Environment(\.verticalSizeClass) var verticalSizeClass
-
-    private var shouldShowIcon: Bool {
-        verticalSizeClass != .compact
-    }
-#endif
 
     @Binding var dialogueSessions: [DialogueSession]
     @Binding var selectedDialogueSession: DialogueSession?
@@ -48,10 +38,11 @@ struct DialogueSessionListView: View {
     var body: some View {
         List(selection: $selectedDialogueSession) {
             ForEach(filteredDialogueSessions) { session in
-                list(session: session)
+                listView(session: session)
                     .contextMenu {
                         Button {
                             sessionToRename = session
+                            newName = session.title
                             showRenameDialog = true
                         } label: {
                             HStack {
@@ -87,153 +78,91 @@ struct DialogueSessionListView: View {
 #endif
         .alert("Rename", isPresented: $showRenameDialog, actions: {
             TextField("Enter new name", text: $newName)
-            // TODO do all thsi inside session itself
             Button("Rename", action: {
                 if let session = sessionToRename {
                     session.rename(newTitle: newName)
-                    do {
-                        try viewContext.save()
-                    } catch {
-                        print("Failed to save the changes: \(error)")
-                    }
                 }
             })
             Button("Cancel", role: .cancel, action: {})
         })
     }
     
-    private func list(session: DialogueSession) -> some View {
-#if os(iOS)
-        iosList(session: session)
-#else
-        macosList(session: session)
-#endif
+    private func listView(session: DialogueSession) -> some View {
+       NavigationLink(value: session) {
+           HStack(spacing: 10) {
+               Image(session.service.provider.iconName)
+                   .resizable()
+                   .frame(width: imageSize, height: imageSize)
+                   .cornerRadius(imagePadding)
+               VStack(spacing: 8) {
+                   HStack {
+                      Text(session.title)
+                          .bold()
+                          .font(titleFont)
+                          .lineLimit(1)
+                      Spacer()
+                      Text(session.configuration.model.name)
+                          .font(Font.system(.subheadline))
+                   }
+
+                   Text(session.lastMessage)
+                      .font(lastMessageFont)
+                      .foregroundColor(.secondary)
+                      .lineLimit(textLineLimit)
+                      .frame(
+                          maxWidth: .infinity,
+                          maxHeight: .infinity,
+                          alignment: .leading
+                      )
+               }
+           }
+           .padding(.vertical, 10)
+           .padding(.horizontal, 5)
+       }
     }
     
-#if os(iOS)
-    private func iosList(session: DialogueSession) -> some View {
-        HStack {
-            if shouldShowIcon {
-                Image("openai")
-                    .resizable()
-                    .frame(width: 44, height: 44)
-                    .cornerRadius(22)
-                    .padding(.leading, 3)
-                    .padding(.trailing, 8)
-            }
-            VStack(spacing: 4) {
-                NavigationLink(value: session) {
-                    HStack {
-                        Text(session.title)
-                            .bold()
-                            .font(Font.system(.headline))
-                            .lineLimit(1)
-                        Spacer()
-                        Text(session.configuration.model.name)
-                            .font(Font.system(.subheadline))
-                    }
-                }
-                HStack {
-                    Text(session.lastMessage)
-                        .font(Font.system(.subheadline))
-                        .foregroundColor(.secondary)
-                        .lineLimit(2)
-                        .frame(
-                            maxWidth: .infinity,
-                            maxHeight: .infinity,
-                            alignment: .topLeading
-                        )
-                }
-                .frame(height: 41)
-            }
-        }
-    }
-#endif
+    let imageSize: CGFloat = {
+       #if os(iOS)
+       return 44
+       #elseif os(macOS)
+       return 36
+       #endif
+    }()
+
+    let  imagePadding: CGFloat = {
+       #if os(iOS)
+       return 22
+       #elseif os(macOS)
+       return 11
+       #endif
+    }()
+
+    let titleFont: Font = {
+       #if os(iOS)
+       return Font.system(.headline)
+       #elseif os(macOS)
+       return Font.system(.body)
+       #endif
+    }()
     
-    private func macosList(session: DialogueSession) -> some View {
-        NavigationLink(value: session) {
-            HStack {
-                Image(session.service.provider.iconName)
-                    .resizable()
-                    .frame(width: 34, height: 34)
-                    .cornerRadius(11)
-                    .padding(.leading, 5)
-                    .padding(.trailing, 3)
-                VStack {
-                    HStack {
-                        Text(session.title)
-                            .bold()
-                            .font(Font.system(.headline))
-                        Spacer()
-                        Text(session.configuration.model.name)
-                            .font(Font.system(.subheadline))
-                    }
-                    .padding(.bottom, -1)
-                    HStack {
-//                        if session.isReplying {
-//                            VStack(alignment: .leading) {
-//                                ReplyingIndicatorView()
-//                                    .frame(height: 15, alignment: .leading)
-//                                    .lineLimit(1)
-//                            }
-//                        } else {
-                            Text(session.lastMessage)
-                                .font(Font.system(.body))
-                                .foregroundColor(.secondary)
-                                .lineLimit(1)
-                                .frame(
-                                    maxWidth: .infinity,
-                                    maxHeight: .infinity,
-                                    alignment: .leading
-                                )
-//                        }
-                    }
-                }
-                .padding(.vertical, 10)
-            }
-        }
-    }
+    let lastMessageFont: Font = {
+        #if os(iOS)
+        return Font.system(.subheadline)
+        #elseif os(macOS)
+        return Font.system(.body)
+        #endif
+    }()
+
+    let textLineLimit: Int = {
+       #if os(iOS)
+       return 2
+       #elseif os(macOS)
+       return 1
+       #endif
+    }()
     
-    
-    private func updateList() {
-        withAnimation {
-            if selectedDialogueSession != nil {
-                let session = selectedDialogueSession
-                sortList()
-                selectedDialogueSession = session
-            } else {
-                sortList()
-            }
-        }
-    }
-    
-    private func sortList() {
-        dialogueSessions = dialogueSessions.sorted(by: {
-            $0.date > $1.date
-        })
-    }
 }
 
 
-extension Date {
-    
-    var dialogueDesc: String {
-        if self.isInYesterday {
-            return String(localized: "Yesterday")
-        }
-        if self.isInToday {
-            return timeString(ofStyle: .short)
-        }
-        return dateString(ofStyle: .short)
-    }
-}
 
-import Combine
 
-extension Published.Publisher {
-    var didSet: AnyPublisher<Value, Never> {
-        // Any better ideas on how to get the didSet semantics?
-        // This works, but I'm not sure if it's ideal.
-        self.receive(on: RunLoop.main).eraseToAnyPublisher()
-    }
-}

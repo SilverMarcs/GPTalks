@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUIX
 import Kingfisher
+import Combine
 
 extension String {
     func copyToPasteboard() {
@@ -37,5 +38,27 @@ extension AnyTransition {
             insertion: .move(edge: .bottom),
             removal: .move(edge: .top).combined(with: .opacity)
         )
+    }
+}
+
+
+extension Date {
+    
+    var dialogueDesc: String {
+        if self.isInYesterday {
+            return String(localized: "Yesterday")
+        }
+        if self.isInToday {
+            return timeString(ofStyle: .short)
+        }
+        return dateString(ofStyle: .short)
+    }
+}
+
+extension Published.Publisher {
+    var didSet: AnyPublisher<Value, Never> {
+        // Any better ideas on how to get the didSet semantics?
+        // This works, but I'm not sure if it's ideal.
+        self.receive(on: RunLoop.main).eraseToAnyPublisher()
     }
 }

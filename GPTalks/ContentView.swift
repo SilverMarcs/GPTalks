@@ -23,8 +23,6 @@ struct ContentView: View {
     @State var isShowSettingView = false
     
     @State var isReplying = false
-    
-//    @State private var columnVisibility = NavigationSplitViewVisibility.doubleColumn
 
     var body: some View {
         NavigationSplitView {
