@@ -12,6 +12,17 @@ enum AIProvider: String, CaseIterable, Codable {
    case openRouter
     case pAI
     
+    var id: String {
+        switch self {
+        case .openAI:
+            return "openai"
+        case .openRouter:
+            return "openrouter"
+        case .pAI:
+            return "pawan"
+        }
+    }
+    
     func service(configuration: DialogueSession.Configuration) -> ChatService {
        switch self {
        case .openAI:

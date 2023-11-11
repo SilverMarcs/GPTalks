@@ -120,49 +120,48 @@ struct OpenAISettingsView: View {
     
     
     var iOS: some View {
-        Form {
-            Section {
-                VStack {
-                    Stepper(value: $configuration.OAItemperature, in: 0...2, step: 0.1) {
-                        HStack {
-                            Text("Temperature")
-                            Spacer()
-                            Text(String(format: "%.1f", configuration.OAItemperature))
-                                .padding(.horizontal)
-                                .height(32)
-                                .width(60)
-                                .background(Color.secondarySystemFill)
-                                .cornerRadius(8)
-                        }
-                    }
-                }
-            } header: {
-                Text("Default Settings")
-            }
-            
-            Section {
-                HStack {
-                    Image(systemName: "key")
-                    Spacer()
-                    if showAPIKey {
-                        TextField("OpenAI API Key", text: $configuration.OAIkey)
-                            .truncationMode(.middle)
-                    } else {
-                        SecureField("OpenAI API Key", text: $configuration.OAIkey)
-                            .truncationMode(.middle)
-                    }
-                    Button {
-                        showAPIKey.toggle()
-                    } label: {
-                        if showAPIKey {
-                            Image(systemName: "eye.slash")
-                        } else {
-                            Image(systemName: "eye")
-                        }
-                    }
-                }
-            }
-        }
-        .navigationTitle("OpenAI")
+       Form {
+           Section(header: Text("Default Parameters")) {
+               Picker(selection: $configuration.OAImodel, label: Text("Model")) {
+                   ForEach(AIProvider.openAI.models, id: \.self) { model in
+                      Text(model.name).tag(model.id)
+                   }
+               }
+               Picker(selection: $configuration.OAIcontextLength, label: Text("Context Length")) {
+                   ForEach(Array(1...10).reversed() + [30], id: \.self) { number in
+                      Text(number == 30 ? "Unlimited Messages" : "Last \(number) Messages").tag(number)
+                   }
+               }
+               Stepper(value: $configuration.OAItemperature, in: 0...2, step: 0.1) {
+                   HStack {
+                      Text("Temperature")
+                      Spacer()
+                      Text(String(format: "%.1f", configuration.OAItemperature))
+                   }
+               }
+           }
+           Section(header: Text("System Prompt")) {
+               TextField("Enter a System Prompt", text: $configuration.OAIsystemPrompt, axis: .vertical)
+                   .lineLimit(3, reservesSpace: true)
+           }
+           Section(header: Text("OpenAI API Key")) {
+               HStack {
+                   Image(systemName: "key")
+                   Spacer()
+                   if showAPIKey {
+                      TextField("", text: $configuration.OAIkey)
+                   } else {
+                      SecureField("", text: $configuration.OAIkey)
+                   }
+                   Button {
+                      showAPIKey.toggle()
+                   } label: {
+                      Image(systemName: showAPIKey ? "eye.slash" : "eye")
+                   }
+               }
+           }
+       }
+       .navigationTitle("OpenAI")
     }
+
 }

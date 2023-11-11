@@ -25,25 +25,16 @@ struct AppSettingsView: View {
                     Spacer()
                     Toggle("Markdown Enabled", isOn: $configuration.isMarkdownEnabled)
                 }
-                Section {
-                    HStack {
-                        Image(systemName: "key.fill")
-                        Spacer()
-                        if showAPIKey {
-                            TextField("OpenAI API Key", text: $configuration.rapidApiKey)
-                                .truncationMode(.middle)
-                        } else {
-                            SecureField("OpenAI API Key", text: $configuration.rapidApiKey)
-                                .truncationMode(.middle)
-                        }
-                        Button {
-                            showAPIKey.toggle()
-                        } label: {
-                            if showAPIKey {
-                                Image(systemName: "eye.slash")
-                            } else {
-                                Image(systemName: "eye")
-                            }
+                HStack {
+                    Image(systemName: "building.2.fill")
+                        .renderingMode(.original)
+                    Text("Default Provider")
+                        .lineLimit(1)
+                    Spacer()
+                    Picker(selection: configuration.$preferredChatService) {
+                        ForEach(AIProvider.allCases, id: \.self) { provider in
+                            Text(provider.name)
+                                .tag(provider.id)
                         }
                     }
                 }
@@ -72,6 +63,17 @@ struct AppSettingsView: View {
                     }
                 }
                 NavigationLink {
+                    PAISettingsView()
+                } label: {
+                    HStack {
+                        Image("pai")
+                            .resizable()
+                            .cornerRadius(10)
+                            .frame(width: 30, height: 30)
+                        Text("PAI")
+                    }
+                }
+                NavigationLink {
                     SummarySettingsView()
                 } label: {
                     HStack {
@@ -83,19 +85,7 @@ struct AppSettingsView: View {
                     }
                 }
             }
-//            Section("Model") {
-//                NavigationLink {
-//                    OpenRouterSettingsView()
-//                } label: {
-//                    HStack {
-//                        Image("openai")
-//                            .resizable()
-//                            .cornerRadius(10)
-//                            .frame(width: 30, height: 30)
-//                        Text("OpenRouter")
-//                    }
-//                }
-//            }
+
             Section("Prompt") {
                 NavigationLink {
                     PromptsListView()

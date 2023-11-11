@@ -120,49 +120,48 @@ struct PAISettingsView: View {
     
     
     var iOS: some View {
-        Form {
-            Section {
-                VStack {
-                    Stepper(value: $configuration.PAItemperature, in: 0...2, step: 0.1) {
-                        HStack {
-                            Text("Temperature")
-                            Spacer()
-                            Text(String(format: "%.1f", configuration.PAItemperature))
-                                .padding(.horizontal)
-                                .height(32)
-                                .width(60)
-                                .background(Color.secondarySystemFill)
-                                .cornerRadius(8)
-                        }
-                    }
-                }
-            } header: {
-                Text("Default Settings")
-            }
-            
-            Section {
-                HStack {
-                    Image(systemName: "key")
-                    Spacer()
-                    if showAPIKey {
-                        TextField("PAI API Key", text: $configuration.PAIkey)
-                            .truncationMode(.middle)
-                    } else {
-                        SecureField("PAI API Key", text: $configuration.PAIkey)
-                            .truncationMode(.middle)
-                    }
-                    Button {
-                        showAPIKey.toggle()
-                    } label: {
-                        if showAPIKey {
-                            Image(systemName: "eye.slash")
-                        } else {
-                            Image(systemName: "eye")
-                        }
-                    }
-                }
-            }
-        }
-        .navigationTitle("PAI")
+       Form {
+           Section(header: Text("Default Parameters")) {
+               Picker(selection: $configuration.PAImodel, label: Text("Model")) {
+                   ForEach(AIProvider.pAI.models, id: \.self) { model in
+                      Text(model.name).tag(model.id)
+                   }
+               }
+               Picker(selection: $configuration.PAIcontextLength, label: Text("Context Length")) {
+                   ForEach(Array(1...10).reversed() + [30], id: \.self) { number in
+                      Text(number == 30 ? "Unlimited Messages" : "Last \(number) Messages").tag(number)
+                   }
+               }
+               Stepper(value: $configuration.PAItemperature, in: 0...2, step: 0.1) {
+                   HStack {
+                      Text("Temperature")
+                      Spacer()
+                      Text(String(format: "%.1f", configuration.PAItemperature))
+                   }
+               }
+           }
+           Section(header: Text("System Prompt")) {
+               TextField("Enter a System Prompt", text: $configuration.PAIsystemPrompt, axis: .vertical)
+                   .lineLimit(3, reservesSpace: true)
+           }
+           Section(header: Text("PAI API Key")) {
+               HStack {
+                   Image(systemName: "key")
+                   Spacer()
+                   if showAPIKey {
+                      TextField("", text: $configuration.PAIkey)
+                   } else {
+                      SecureField("", text: $configuration.PAIkey)
+                   }
+                   Button {
+                      showAPIKey.toggle()
+                   } label: {
+                      Image(systemName: showAPIKey ? "eye.slash" : "eye")
+                   }
+               }
+           }
+       }
+       .navigationTitle("PAI")
     }
+
 }

@@ -116,7 +116,8 @@ struct DialogueSessionListView: View {
                       )
                }
            }
-           .padding(.vertical, 10)
+
+           .padding(.vertical, 7)
            .padding(.horizontal, 5)
        }
     }

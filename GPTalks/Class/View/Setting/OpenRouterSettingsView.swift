@@ -122,49 +122,48 @@ struct OpenRouterSettingsView: View {
     
     
     var iOS: some View {
-        Form {
-            Section {
-                VStack {
-                    Stepper(value: $configuration.ORtemperature, in: 0...2, step: 0.1) {
-                        HStack {
-                            Text("Temperature")
-                            Spacer()
-                            Text(String(format: "%.1f", configuration.ORtemperature))
-                                .padding(.horizontal)
-                                .height(32)
-                                .width(60)
-                                .background(Color.secondarySystemFill)
-                                .cornerRadius(8)
-                        }
-                    }
-                }
-            } header: {
-                Text("Default Settings")
-            }
-            
-            Section {
-                HStack {
-                    Image(systemName: "key")
-                    Spacer()
-                    if showAPIKey {
-                        TextField("OpenAI API Key", text: $configuration.ORkey)
-                            .truncationMode(.middle)
-                    } else {
-                        SecureField("OpenAI API Key", text: $configuration.ORkey)
-                            .truncationMode(.middle)
-                    }
-                    Button {
-                        showAPIKey.toggle()
-                    } label: {
-                        if showAPIKey {
-                            Image(systemName: "eye.slash")
-                        } else {
-                            Image(systemName: "eye")
-                        }
-                    }
-                }
-            }
-        }
-        .navigationTitle("OpenAI")
+       Form {
+           Section(header: Text("Default Parameters")) {
+               Picker(selection: $configuration.ORmodel, label: Text("Model")) {
+                   ForEach(AIProvider.openRouter.models, id: \.self) { model in
+                      Text(model.name).tag(model.id)
+                   }
+               }
+               Picker(selection: $configuration.ORcontextLength, label: Text("Context Length")) {
+                   ForEach(Array(1...10).reversed() + [30], id: \.self) { number in
+                      Text(number == 30 ? "Unlimited Messages" : "Last \(number) Messages").tag(number)
+                   }
+               }
+               Stepper(value: $configuration.ORtemperature, in: 0...2, step: 0.1) {
+                   HStack {
+                      Text("Temperature")
+                      Spacer()
+                      Text(String(format: "%.1f", configuration.ORtemperature))
+                   }
+               }
+           }
+           Section(header: Text("System Prompt")) {
+               TextField("Enter a System Prompt", text: $configuration.ORsystemPrompt, axis: .vertical)
+                   .lineLimit(3, reservesSpace: true)
+           }
+           Section(header: Text("OpenRouter API Key")) {
+               HStack {
+                   Image(systemName: "key")
+                   Spacer()
+                   if showAPIKey {
+                      TextField("", text: $configuration.ORkey)
+                   } else {
+                      SecureField("", text: $configuration.ORkey)
+                   }
+                   Button {
+                      showAPIKey.toggle()
+                   } label: {
+                      Image(systemName: showAPIKey ? "eye.slash" : "eye")
+                   }
+               }
+           }
+       }
+       .navigationTitle("OpenRouter")
     }
+
 }
