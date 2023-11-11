@@ -32,53 +32,26 @@ struct Bubble: ViewModifier {
     
     
     func body(content: Content) -> some View {
-        switch type {
-        case .text, .error:
-            if isMyMessage {
-                content
-                    .padding(.horizontal, horizontalPadding)
-                    .padding(.vertical, verticalPadding)
-                    .background(userMessageBackgroundColor)
-#if os(iOS)
-                    .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius))
-#endif
-                    .clipShape(RoundedRectangle(cornerRadius: radius))
-                    .foregroundColor(.white)
-            } else {
-                content
-                    .padding(.horizontal, horizontalPadding)
-                    .padding(.vertical, verticalPadding)
-                    .background(replyBackgroundColor)
-#if os(iOS)
-                    .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius))
-#endif
-                    .clipShape(RoundedRectangle(cornerRadius: radius))
-                    .foregroundColor(.primary)
-            }
-        case .textEdit:
-            if isMyMessage {
-                content
-                    .padding(.horizontal, horizontalPadding)
-                    .padding(.vertical, verticalPadding)
-                    .background(Color(.darkGray))
-#if os(iOS)
-                    .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius))
-#endif
-                    .clipShape(RoundedRectangle(cornerRadius: radius))
-                    .foregroundColor(.white)
-            } else {
-                content
-                    .padding(.horizontal, horizontalPadding)
-                    .padding(.vertical, verticalPadding)
-                    .background(replyBackgroundColor)
-#if os(iOS)
-                    .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius))
-#endif
-                    .clipShape(RoundedRectangle(cornerRadius: radius))
-                    .foregroundColor(.primary)
-            
-            }
-        }
+       switch type {
+       case .text, .textEdit:
+           let backgroundColor = type == .textEdit && isMyMessage ? Color(.darkGray) : isMyMessage ? userMessageBackgroundColor : replyBackgroundColor
+           let foregroundColor = isMyMessage ? Color.white : Color.primary
+
+           content
+               .padding(.horizontal, horizontalPadding)
+               .padding(.vertical, verticalPadding)
+               .background(backgroundColor)
+               #if os(iOS)
+               .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
+               #endif
+               .clipShape(RoundedRectangle(cornerRadius: radius))
+               .foregroundColor(foregroundColor)
+       }
+    }
+
+    
+    private var editingBackgroundColor: Color {
+        Color(.darkGray)
     }
     
     private var userMessageBackgroundColor: Color {

@@ -64,7 +64,7 @@ struct ConversationView: View {
                 Button {
                     editingMessage = conversation.content
                     isEditing = true
-                    isFocused = isEditing
+                    isFocused = true
                 } label: {
                     HStack {
                         Image(systemName: "pencil")

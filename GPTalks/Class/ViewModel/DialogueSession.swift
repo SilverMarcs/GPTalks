@@ -38,7 +38,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         date = try container.decode(Date.self, forKey: .date)
         id = try container.decode(UUID.self, forKey: .id)
 
-        isReplying = false
         input = ""
         
         service = configuration.service.service(configuration: configuration)
@@ -77,8 +76,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     var rawData: DialogueData?
     
     //MARK: - State
-    
-    @Published var isReplying: Bool = false
+
     @Published var input: String = ""
     @Published var title: String = "New Chat"
     @Published var conversations: [Conversation] = []
@@ -102,6 +100,10 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     
     var lastConversation: Conversation {
         return conversations[conversations.count - 1]
+    }
+    
+    func isReplying() -> Bool {
+        return lastConversation.isReplying
     }
     
     
@@ -159,8 +161,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         
         var streamText = ""
         
-        isReplying = true
-        
         if !isRegen && !isRetry{
             appendConversation(Conversation(role: "user", content: text))
             scroll?(.bottom)
@@ -193,7 +193,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         }
 
         conversations[conversations.count - 1].isReplying = false
-        self.isReplying = false
+
         scroll?(.bottom)
 
     }

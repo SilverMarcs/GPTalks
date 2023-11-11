@@ -10,7 +10,6 @@ import SwiftUI
 enum MessageType {
     case text
     case textEdit
-    case error
 }
 
 struct Conversation: Codable, Identifiable, Hashable {
