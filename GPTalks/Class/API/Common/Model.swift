@@ -19,6 +19,7 @@ enum Model: String, Codable {
    case mythomax
     case palm
     case palmcode
+    case zephyr
     
     /// pawan
     case pai
@@ -46,6 +47,8 @@ enum Model: String, Codable {
             return "PAI"
         case .pailight:
             return "PAI-L"
+        case .zephyr:
+            return "Zephyr"
         }
     }
 
@@ -71,12 +74,14 @@ enum Model: String, Codable {
            return "pai-001-beta"
        case .pailight:
            return "pai-001-light-beta"
+       case .zephyr:
+           return "huggingfaceh4/zephyr-7b-beta"
        }
    }
     
     var maxTokens: Int {
         switch self {
-        case .gpt3, .gpt4, .phind, .codellama, .mistral, .mythomax, .pai, .pailight:
+        case .gpt3, .gpt4, .phind, .codellama, .mistral, .mythomax, .pai, .pailight, .zephyr:
             return 4000
         case .palm, .palmcode:
             return 2000
@@ -84,6 +89,6 @@ enum Model: String, Codable {
     }
 
    static let openAIModels: [Model] = [.gpt3, .gpt4]
-    static let openRouterModels: [Model] = [.phind, .codellama, .mistral, .mythomax, .palm, .palmcode]
+    static let openRouterModels: [Model] = [.phind, .codellama, .mistral, .mythomax, .palm, .palmcode, .zephyr]
     static let pAIModels: [Model] = [.pai, .pailight]
 }

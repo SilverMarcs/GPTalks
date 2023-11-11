@@ -52,14 +52,23 @@ struct ComposerInputView: View {
     
     @ViewBuilder
     private var textEditor: some View {
-        TextEditor(text: $session.input)
-            .focused($isTextFieldFocused)
-            .font(.system(size: 15))
-            .frame(minHeight: size, maxHeight: 450)
-           .fixedSize(horizontal: false, vertical: true)
-           .padding(.leading, 3)
-           .padding(.trailing, size + 6)
-           .scrollContentBackground(.hidden)
+        ZStack(alignment: .leading) {
+            if session.input.isEmpty {
+                Text("Send a message")
+                    .font(.system(size: 13))
+                    .padding(.leading, 6)
+                    .padding(.trailing, size + 6)
+                    .foregroundColor(.placeholderText)
+            }
+            TextEditor(text: $session.input)
+                .focused($isTextFieldFocused)
+                .font(.system(size: 15, weight: .regular, design: .default))
+                .frame(minHeight: size, maxHeight: 450)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.leading, 3)
+                .padding(.trailing, size + 6)
+                .scrollContentBackground(.hidden)
+        }
     }
     
     @ViewBuilder
