@@ -68,6 +68,9 @@ struct ComposerInputView: View {
                 .padding(.leading, 3)
                 .padding(.trailing, size + 6)
                 .scrollContentBackground(.hidden)
+                .onKeyboardShortcut(.return, modifiers: .command) {
+                    send(session.input)
+                }
         }
     }
     

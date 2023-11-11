@@ -193,7 +193,7 @@ struct MessageListView: View {
 #endif
     
     func sendMessage(_ proxy: ScrollViewProxy) {
-        if session.isReplying() {
+        if !session.conversations.isEmpty && session.lastConversation.isReplying {
             return
         }
         Task { @MainActor in

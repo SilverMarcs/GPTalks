@@ -421,7 +421,6 @@ extension ConversationData {
         role = conversation.role
         content = conversation.content
         date = conversation.date
-//        errorDesc = conversation.errorDesc
         do {
             try PersistenceController.shared.save()
         } catch let error {

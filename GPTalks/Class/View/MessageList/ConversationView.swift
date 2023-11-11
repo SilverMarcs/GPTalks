@@ -126,7 +126,7 @@ struct ConversationView: View {
                 
                 if conversation.isReplying {
                     ReplyingIndicatorView()
-                        .frame(width: 48, height: 15)
+                        .frame(width: 48, height: 16)
                 }
             }
             .bubbleStyle(isMyMessage: false, type: .text)
