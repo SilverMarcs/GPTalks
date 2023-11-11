@@ -33,7 +33,11 @@ struct ComposerInputView: View {
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
+            #if os(macOS)
+            textEditor
+            #else
             textField
+            #endif
             sendButton
         }
         .padding(4)
@@ -44,6 +48,18 @@ struct ComposerInputView: View {
         )
         .padding(.trailing)
         .padding(.leading, 4)
+    }
+    
+    @ViewBuilder
+    private var textEditor: some View {
+        TextEditor(text: $session.input)
+            .focused($isTextFieldFocused)
+            .font(.system(size: 15))
+            .frame(minHeight: size, maxHeight: 450)
+           .fixedSize(horizontal: false, vertical: true)
+           .padding(.leading, 3)
+           .padding(.trailing, size + 6)
+           .scrollContentBackground(.hidden)
     }
     
     @ViewBuilder
