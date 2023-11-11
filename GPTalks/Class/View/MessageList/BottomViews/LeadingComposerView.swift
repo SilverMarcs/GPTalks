@@ -25,7 +25,7 @@ struct LeadingComposerView: View {
     }
     
     var body: some View {
-            if session.inputData == nil && !session.isSending {
+//            if session.inputData == nil && !session.isSending {
                 Menu {
                     ForEach(PromptManager.shared.prompts) { promt in
                         Button {
@@ -48,6 +48,6 @@ struct LeadingComposerView: View {
                 .buttonStyle(.borderless)
 //                .padding(-4)
 #endif
-            }
+//            }
     }
 }

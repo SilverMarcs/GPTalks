@@ -97,6 +97,7 @@ struct MessageListView: View {
                                      scrollToBottom(proxy: proxy, anchor: $0)
                                  })
                              }
+                               // THIS IS BUGGY> DUPLICATES LAST USER MESSAGE when app staretd next time
                            } editHandler: { conversation in
                                Task { @MainActor in
                                    await session.edit(from: index, conversation: conversation, scroll: {
@@ -178,7 +179,7 @@ struct MessageListView: View {
         }
         Task { @MainActor in
 //            session.bubbleText = session.input
-            session.isSending = true
+//            session.isSending = true
             await session.send()
             {
                 scrollToBottom(proxy: proxy, anchor: $0)

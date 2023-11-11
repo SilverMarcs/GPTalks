@@ -56,7 +56,7 @@ struct ConversationView: View {
                 } label: {
                     HStack {
                         Image(systemName: "arrow.clockwise")
-                        Text("Retry")
+                        Text("Regenerate")
                     }
                 }
             }
@@ -126,7 +126,7 @@ struct ConversationView: View {
                 
                 if conversation.isReplying {
                     ReplyingIndicatorView()
-                        .frame(width: 48, height: 15)
+                        .frame(width: 48, height: 18)
                 }
             }
             .bubbleStyle(isMyMessage: false, type: .text)

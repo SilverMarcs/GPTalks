@@ -62,7 +62,7 @@ struct ComposerInputView: View {
 
     @ViewBuilder
     private var sendButton: some View {
-        if !session.input.isEmpty || session.inputData != nil {
+        if !session.input.isEmpty {
             Button {
                 send(session.input)
             } label: {
