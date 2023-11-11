@@ -10,8 +10,6 @@ import SwiftUIX
 //import Introspect
 
 struct MessageListView: View {
-    
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var session: DialogueSession
     @FocusState var isTextFieldFocused: Bool
     
@@ -97,7 +95,6 @@ struct MessageListView: View {
                                      scrollToBottom(proxy: proxy, anchor: $0)
                                  })
                              }
-                               // THIS IS BUGGY> DUPLICATES LAST USER MESSAGE when app staretd next time
                            } editHandler: { conversation in
                                Task { @MainActor in
                                    await session.edit(from: index, conversation: conversation, scroll: {
@@ -111,6 +108,28 @@ struct MessageListView: View {
                        }
                    }
                    .padding(.vertical, 5)
+                   
+                   if session.errorDesc != "" {
+                       VStack(spacing: 15) {
+                           Text(session.errorDesc)
+                               .foregroundStyle(.red)
+                           Button {
+                               Task { @MainActor in
+                                   await session.retry() {
+                                       scrollToBottom(proxy: proxy, anchor: $0)
+                                   }
+                               }
+                                   
+                           } label: {
+                                 Text("Retry")
+                                   .font(.title2)
+                                   .semibold()
+                                   .padding(5)
+                            }
+                           .cornerRadius(15)
+                       }
+                       .padding()
+                   }
                    
                    Spacer()
                       .id(bottomID)
@@ -178,8 +197,6 @@ struct MessageListView: View {
             return
         }
         Task { @MainActor in
-//            session.bubbleText = session.input
-//            session.isSending = true
             await session.send()
             {
                 scrollToBottom(proxy: proxy, anchor: $0)

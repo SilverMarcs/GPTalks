@@ -83,6 +83,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     @Published var title: String = "New Chat"
     @Published var conversations: [Conversation] = []
     @Published var date = Date()
+    @Published var errorDesc: String = ""
     
     private var initFinished = false
     //MARK: - Properties
@@ -145,22 +146,22 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         await send(text: conversation.content, scroll: scroll)
     }
     
-//    @MainActor
-//    func retry(from index: Int, conversation: Conversation, scroll: ((UnitPoint) -> Void)? = nil) async {
-//        conversations = Array(conversations[..<index])
-//        await send(text: conversation.content, isRetry: true, scroll: scroll)
-//    }
-    
+    @MainActor
+    func retry(scroll: ((UnitPoint) -> Void)? = nil) async {
+        await send(text: lastConversation.content, isRetry: true, scroll: scroll)
+    }
+
     private var lastConversationData: ConversationData?
     
     @MainActor
-    private func send(text: String, isRegen: Bool = false, scroll: ((UnitPoint) -> Void)? = nil) async {
+    private func send(text: String, isRegen: Bool = false, isRetry: Bool = false, scroll: ((UnitPoint) -> Void)? = nil) async {
+        resetErrorDesc()
         
         var streamText = ""
         
         isReplying = true
         
-        if !isRegen {
+        if !isRegen && !isRetry{
             appendConversation(Conversation(role: "user", content: text))
             scroll?(.bottom)
         }
@@ -170,7 +171,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         do {
             try await Task.sleep(for: .milliseconds(260))
             
-            scroll?(.top)
             scroll?(.bottom)
             
             let adjustedContext = adjustContext(from: conversations, limit: configuration.contextLength, systemPrompt: configuration.systemPrompt)
@@ -180,46 +180,21 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             for try await text in stream {
                 streamText += text
                 conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-#if os(iOS)
-                withAnimation {
-                    scroll?(.top)///for an issue of iOS 16
-                    scroll?(.bottom)
-                }
-#else
-                scroll?(.top)
-                scroll?(.bottom)/// withAnimation may cause scrollview jitter in macOS
-#endif
+                scroll?(.bottom)
+
             }
             lastConversationData?.sync(with: conversations[conversations.count - 1])
 
 //            if conversations.count == 1 { createTitle() }
         } catch {
-            print(error.localizedDescription)
-#if os(iOS)
-//            withAnimation {
-//                conversation.errorDesc = error.localizedDescription
-//                lastConversationData?.sync(with: conversation)
-//                scroll?(.bottom)
-//            }
-#else
-//            conversation.errorDesc = error.localizedDescription
-//            lastConversationData?.sync(with: conversation)
+            removeConversation(at: conversations.count - 1)
+            setErrorDesc(errorDesc: error.localizedDescription)
             scroll?(.bottom)
-#endif
         }
-#if os(iOS)
-//        withAnimation {
-//            conversation.isReplying = false
-//            updateLastConversation(conversation)
-//            isReplying = false
-//            scroll?(.bottom)
-//            save()
-//        }
-#else
+
         conversations[conversations.count - 1].isReplying = false
         self.isReplying = false
         scroll?(.bottom)
-#endif
 
     }
     
@@ -269,6 +244,7 @@ extension DialogueSession {
         guard let id = rawData.id,
               let date = rawData.date,
               let title = rawData.title,
+              let errorDesc = rawData.errorDesc,
               let configurationData = rawData.configuration,
               let conversations = rawData.conversations as? Set<ConversationData> else {
             return nil
@@ -277,6 +253,7 @@ extension DialogueSession {
         self.id = id
         self.date = date
         self.title = title
+        self.errorDesc = errorDesc
         if let configuration = try? JSONDecoder().decode(Configuration.self, from: configurationData) {
             self.configuration = configuration
         }
@@ -284,7 +261,7 @@ extension DialogueSession {
         self.conversations = conversations.compactMap { data in
             if let id = data.id,
                let content = data.content,
-               let role = data.role ,
+               let role = data.role,
                let date = data.date {
                 let conversation = Conversation(
                     id: id,
@@ -377,6 +354,16 @@ extension DialogueSession {
         }
     }
     
+    func setErrorDesc(errorDesc: String) {
+        self.errorDesc = errorDesc
+        save()
+    }
+    
+    func resetErrorDesc() {
+        self.errorDesc = ""
+        save()
+    }
+    
     func save() {
         guard initFinished else {
             return
@@ -384,7 +371,17 @@ extension DialogueSession {
         do {
             rawData?.date = date
             rawData?.title = title
+            rawData?.errorDesc = errorDesc
             rawData?.configuration = try JSONEncoder().encode(configuration)
+//            rawData?.conversations = NSSet(array: conversations.map { conversation in
+//                let data = ConversationData(context: PersistenceController.shared.container.viewContext)
+//                data.id = conversation.id
+//                data.date = conversation.date
+//                data.role = conversation.role
+//                data.content = conversation.content
+//                data.dialogue = rawData
+//                return data
+//            })
             try PersistenceController.shared.save()
         } catch let error {
             print(error.localizedDescription)
