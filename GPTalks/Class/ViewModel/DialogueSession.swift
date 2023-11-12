@@ -40,7 +40,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
 
         input = ""
         
-        service = configuration.service.service(configuration: configuration)
+        service = configuration.service.service(configuration: configuration, session: self)
         
 
         initFinished = true
@@ -102,13 +102,18 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         return conversations[conversations.count - 1]
     }
     
+    var lastConcersationContent: String? {
+        return lastConversation.content
+    }
+    
+    var streamingTask: Task<Void, Error>?
+    
+    
     func isReplying() -> Bool {
         return lastConversation.isReplying
     }
-    
-    
         
-    lazy var service: ChatService = configuration.service.service(configuration: configuration)
+    lazy var service: ChatService = configuration.service.service(configuration: configuration, session: self)
     
     init() {
         
@@ -169,24 +174,29 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         
         do {
-            try await Task.sleep(for: .milliseconds(260))
-            
             scroll?(.bottom)
             
             let adjustedContext = adjustContext(from: conversations, limit: configuration.contextLength, systemPrompt: configuration.systemPrompt)
             
-            let stream = try await service.sendMessage(adjustedContext)
-            
-            for try await text in stream {
-                streamText += text
-                conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                scroll?(.bottom)
-
+            streamingTask = Task {
+                let stream = try await service.sendMessage(adjustedContext)
+                
+                for try await text in stream {
+                    try Task.checkCancellation()
+                    streamText += text
+                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    scroll?(.bottom)
+                }
+                lastConversationData?.sync(with: conversations[conversations.count - 1])
             }
-            lastConversationData?.sync(with: conversations[conversations.count - 1])
-
-//            if conversations.count == 1 { createTitle() }
-        } catch {
+            
+            try await streamingTask?.value
+        }catch {
+            // TODO: do better with stop_reason from openai
+            if error.localizedDescription == "cancelled" {
+                conversations[conversations.count - 1].isReplying = false
+                return
+            }
             removeConversation(at: conversations.count - 1)
             setErrorDesc(errorDesc: error.localizedDescription)
             scroll?(.bottom)

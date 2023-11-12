@@ -107,8 +107,8 @@ struct ContentView: View {
         } else {
             DialogueSessionListView(
                 dialogueSessions: $dialogueSessions,
-                selectedDialogueSession: $selectedDialogueSession,
-                isReplying: $isReplying
+                selectedDialogueSession: $selectedDialogueSession
+//                isReplying: $isReplying
             ) {
                 deleteItems(offsets: $0)
             } deleteDialogueHandler: {

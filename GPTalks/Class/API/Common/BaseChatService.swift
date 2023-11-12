@@ -13,6 +13,7 @@ protocol ChatService {
     var method: String {  get }
     var headers: [String: String] { get }
     var configuration: DialogueSession.Configuration { get set }
+    var session: DialogueSession { get set }
 
     func makeRequest(with conversations: [Conversation], stream: Bool) throws -> URLRequest
     func createTitle() async throws -> String
@@ -22,8 +23,12 @@ protocol ChatService {
 }
 
 class BaseChatService: @unchecked Sendable, ChatService {
-    required init(configuration: DialogueSession.Configuration) {
+    var session: DialogueSession
+    var configuration: DialogueSession.Configuration
+    
+    required init(configuration: DialogueSession.Configuration, session: DialogueSession) {
         self.configuration = configuration
+        self.session = session
     }
     
     var baseURL: String {
@@ -35,8 +40,6 @@ class BaseChatService: @unchecked Sendable, ChatService {
     }
     
     var method: String = "POST"
-    
-    var configuration: DialogueSession.Configuration
     
     lazy var urlSession: URLSession = {
         let configuration = URLSessionConfiguration.default
@@ -110,10 +113,63 @@ class BaseChatService: @unchecked Sendable, ChatService {
         }
     }
     
+//    func sendMessageStream(_ conversations: [Conversation]) async throws -> AsyncThrowingStream<String, Error> {
+//        let urlRequest = try makeRequest(with: conversations, stream: true)
+//
+//        let (result, response) = try await urlSession.bytes(for: urlRequest)
+//
+//        try Task.checkCancellation()
+//
+//        guard let httpResponse = response as? HTTPURLResponse else {
+//            throw String(localized: "Invalid response")
+//        }
+//
+//        guard 200...299 ~= httpResponse.statusCode else {
+//            var errorText = ""
+//            for try await line in result.lines {
+//                try Task.checkCancellation()
+//                errorText += line
+//            }
+//
+//            if let data = errorText.data(using: .utf8), let errorResponse = try? jsonDecoder.decode(ErrorRootResponse.self, from: data).error {
+//                errorText = "\n\(errorResponse.message)"
+//            }
+//            throw String(localized: "Response Error: \(httpResponse.statusCode), \(errorText)")
+//        }
+//
+//        return AsyncThrowingStream<String, Error> { continuation in
+//            session.streamingTask = Task(priority: .userInitiated) { [weak self] in
+//                guard let self = self else { return }
+//                do {
+//                    var reply = ""
+//                    for try await line in result.lines {
+//                        if Task.isCancelled {
+//                            break
+//                        }
+//                        if line.hasPrefix("data: "),
+//                           let data = line.dropFirst(6).data(using: .utf8),
+//                           let response = try? self.jsonDecoder.decode(StreamCompletionResponse.self, from: data),
+//                           let text = response.choices.first?.delta.content {
+//                            reply += text
+//                            continuation.yield(text)
+//                        }
+//                    }
+//
+//                    continuation.finish()
+//                } catch {
+//                    continuation.finish(throwing: error)
+//                }
+//            }
+//        }
+//    }
+    
     func sendMessageStream(_ conversations: [Conversation]) async throws -> AsyncThrowingStream<String, Error> {
         let urlRequest = try makeRequest(with: conversations, stream: true)
         
         let (result, response) = try await urlSession.bytes(for: urlRequest)
+        
+//        try Task.checkCancellation()
+        
         guard let httpResponse = response as? HTTPURLResponse else {
             throw String(localized: "Invalid response")
         }
@@ -121,6 +177,7 @@ class BaseChatService: @unchecked Sendable, ChatService {
         guard 200...299 ~= httpResponse.statusCode else {
             var errorText = ""
             for try await line in result.lines {
+                try Task.checkCancellation()
                 errorText += line
             }
             
@@ -131,11 +188,12 @@ class BaseChatService: @unchecked Sendable, ChatService {
         }
         
         return AsyncThrowingStream<String, Error> { continuation in
-            Task(priority: .userInitiated) { [weak self] in
-                guard let self else { return }
+            session.streamingTask = Task(priority: .userInitiated) { [weak self] in
+                guard let self = self else { return }
                 do {
                     var reply = ""
                     for try await line in result.lines {
+                        try Task.checkCancellation()
                         if line.hasPrefix("data: "),
                            let data = line.dropFirst(6).data(using: .utf8),
                            let response = try? self.jsonDecoder.decode(StreamCompletionResponse.self, from: data),

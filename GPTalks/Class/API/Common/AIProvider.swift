@@ -23,14 +23,14 @@ enum AIProvider: String, CaseIterable, Codable {
         }
     }
 
-    func service(configuration: DialogueSession.Configuration) -> ChatService {
+    func service(configuration: DialogueSession.Configuration, session: DialogueSession) -> ChatService {
         switch self {
         case .openAI:
-            return OpenAIService(configuration: configuration)
+            return OpenAIService(configuration: configuration, session: session)
         case .openRouter:
-            return OpenRouterService(configuration: configuration)
+            return OpenRouterService(configuration: configuration, session: session)
         case .pAI:
-            return PAIService(configuration: configuration)
+            return PAIService(configuration: configuration, session: session)
         }
     }
 

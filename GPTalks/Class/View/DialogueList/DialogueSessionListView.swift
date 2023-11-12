@@ -16,7 +16,7 @@ struct DialogueSessionListView: View {
     @Binding var dialogueSessions: [DialogueSession]
     @Binding var selectedDialogueSession: DialogueSession?
     
-    @Binding var isReplying: Bool
+//    @Binding var isReplying: Bool
     
     var deleteHandler: (IndexSet) -> Void
     var deleteDialogueHandler: (DialogueSession) -> Void
