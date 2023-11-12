@@ -87,10 +87,6 @@ struct MessageListView: View {
     var contentView: some View {
            ScrollViewReader { proxy in
                ScrollView {
-                   Button("Stop Streaming") {
-                       session.streamingTask?.cancel()
-                   }
-                   
                    VStack(spacing: 0) {
                        ForEach(enumerating: Array(session.conversations.enumerated())) { index, conversation in
                            ConversationView(conversation: conversation, service: session.configuration.service) { conversation in
@@ -145,6 +141,8 @@ struct MessageListView: View {
                       isTextFieldFocused: _isTextFieldFocused
                    ) { _ in
                       sendMessage(proxy)
+                   } stop: {
+                       session.stopStreaming()
                    }
                }
                .onAppear() {
@@ -202,10 +200,6 @@ struct MessageListView: View {
                 scrollToBottom(proxy: proxy, anchor: $0)
             }
         }
-    }
-    
-    func stopMessage() {
-        session.streamingTask?.cancel()
     }
     
     private func scrollToBottom(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {

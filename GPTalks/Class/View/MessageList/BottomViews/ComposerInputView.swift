@@ -15,6 +15,8 @@ struct ComposerInputView: View {
     
     var send: (String) -> Void
     
+    var stop: () -> Void
+    
     private var size: CGFloat {
 #if os(macOS)
         20
@@ -38,7 +40,11 @@ struct ComposerInputView: View {
             #else
             textField
             #endif
-            sendButton
+            if !session.conversations.isEmpty && session.isReplying() {
+                stopButton
+            } else {
+                sendButton
+            }
         }
         .padding(4)
         .overlay(
@@ -99,7 +105,7 @@ struct ComposerInputView: View {
                 Image(systemName: "arrow.up.circle.fill")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: size, height: size)
+                    .frame(width: size + 4, height: size + 4)
                     .foregroundColor(.accentColor)
                     .font(.body.weight(.semibold))
             }
@@ -120,6 +126,22 @@ struct ComposerInputView: View {
             .offset(x:-4, y: -4)
 #endif
         }
+    }
+    
+    @ViewBuilder
+    private var stopButton: some View {
+        Button {
+            stop()
+        } label: {
+            Image(systemName: "stop.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: size + 4, height: size + 4)
+                .foregroundColor(.red)
+                .font(.body.weight(.semibold))
+        }
+        .buttonStyle(.plain)
+        .keyboardShortcut(.defaultAction)
     }
     
 }

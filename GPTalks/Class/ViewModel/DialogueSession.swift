@@ -106,6 +106,11 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     func isReplying() -> Bool {
         return lastConversation.isReplying
     }
+    
+    func stopStreaming() {
+        streamingTask?.cancel()
+        streamingTask = nil
+    }
         
     lazy var service: ChatService = configuration.service.service(session: self)
     

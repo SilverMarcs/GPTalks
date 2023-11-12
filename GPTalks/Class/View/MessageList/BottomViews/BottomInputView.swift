@@ -18,6 +18,8 @@ struct BottomInputView: View {
     @FocusState var isTextFieldFocused: Bool
         
     var send: (String) -> Void
+    
+    var stop: () -> Void
         
     var body: some View {
         HStack {
@@ -36,7 +38,8 @@ struct BottomInputView: View {
             ComposerInputView(
                 session: session,
                 isTextFieldFocused: _isTextFieldFocused,
-                send: send
+                send: send,
+                stop: stop
             )
         }
         .alert(
