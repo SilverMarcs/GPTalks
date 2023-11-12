@@ -9,22 +9,22 @@ import Foundation
 
 enum Model: String, Codable {
     /// openai
-   case gpt3
-   case gpt4
-    
+    case gpt3
+    case gpt4
+
     /// openrouter
-   case phind
-   case codellama
-   case mistral
-   case mythomax
+    case phind
+    case codellama
+    case mistral
+    case mythomax
     case palm
     case palmcode
     case zephyr
-    
+
     /// pawan
     case pai
     case pailight
-    
+
     var name: String {
         switch self {
         case .gpt3:
@@ -52,33 +52,33 @@ enum Model: String, Codable {
         }
     }
 
-   var id: String {
-       switch self {
-       case .gpt3:
-           return "gpt-3.5-turbo-1106"
-       case .gpt4:
-           return "gpt-4-1106-preview"
-       case .phind:
-           return "phind/phind-codellama-34b-v2"
-       case .codellama:
-           return "meta-llama/codellama-34b-instruct"
-       case .mistral:
-           return "open-orca/mistral-7b-openorca"
-       case .mythomax:
-           return "gryphe/mythomax-l2-13b"
-       case .palm:
-           return "google/palm-2-chat-bison"
-       case .palmcode:
-           return "google/palm-2-codechat-bison"
-       case .pai:
-           return "pai-001-beta"
-       case .pailight:
-           return "pai-001-light-beta"
-       case .zephyr:
-           return "huggingfaceh4/zephyr-7b-beta"
-       }
-   }
-    
+    var id: String {
+        switch self {
+        case .gpt3:
+            return "gpt-3.5-turbo-1106"
+        case .gpt4:
+            return "gpt-4-1106-preview"
+        case .phind:
+            return "phind/phind-codellama-34b-v2"
+        case .codellama:
+            return "meta-llama/codellama-34b-instruct"
+        case .mistral:
+            return "open-orca/mistral-7b-openorca"
+        case .mythomax:
+            return "gryphe/mythomax-l2-13b"
+        case .palm:
+            return "google/palm-2-chat-bison"
+        case .palmcode:
+            return "google/palm-2-codechat-bison"
+        case .pai:
+            return "pai-001-beta"
+        case .pailight:
+            return "pai-001-light-beta"
+        case .zephyr:
+            return "huggingfaceh4/zephyr-7b-beta"
+        }
+    }
+
     var maxTokens: Int {
         switch self {
         case .gpt3, .gpt4, .phind, .codellama, .mistral, .mythomax, .pai, .pailight, .zephyr:
@@ -88,7 +88,7 @@ enum Model: String, Codable {
         }
     }
 
-   static let openAIModels: [Model] = [.gpt3, .gpt4]
+    static let openAIModels: [Model] = [.gpt3, .gpt4]
     static let openRouterModels: [Model] = [.phind, .codellama, .mistral, .mythomax, .palm, .palmcode, .zephyr]
     static let pAIModels: [Model] = [.pai, .pailight]
 }

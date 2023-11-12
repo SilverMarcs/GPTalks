@@ -58,6 +58,24 @@ struct Chat: Codable {
     let max_tokens: Int
 }
 
+struct Function: Codable {
+    let name: String
+    let description: String
+    let parameters: Parameters
+}
+
+struct Parameters: Codable {
+    let type: String
+    let properties: [String: Property]
+    let required: [String]
+}
+
+struct Property: Codable {
+    let type: String
+    let description: String?
+    let enumValues: [String]?
+}
+
 struct ErrorRootResponse: Decodable {
     let error: ErrorResponse
 }

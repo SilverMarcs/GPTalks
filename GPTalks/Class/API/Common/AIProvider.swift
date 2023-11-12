@@ -8,10 +8,10 @@
 import Foundation
 
 enum AIProvider: String, CaseIterable, Codable {
-   case openAI
-   case openRouter
+    case openAI
+    case openRouter
     case pAI
-    
+
     var id: String {
         switch self {
         case .openAI:
@@ -22,33 +22,33 @@ enum AIProvider: String, CaseIterable, Codable {
             return "pawan"
         }
     }
-    
+
     func service(configuration: DialogueSession.Configuration) -> ChatService {
-       switch self {
-       case .openAI:
-           return OpenAIService(configuration: configuration)
-       case .openRouter:
-           return OpenRouterService(configuration: configuration)
-       case .pAI:
-           return PAIService(configuration: configuration)
-       }
-    }
-    
-    var iconName: String {
-        return self.rawValue.lowercased()
+        switch self {
+        case .openAI:
+            return OpenAIService(configuration: configuration)
+        case .openRouter:
+            return OpenRouterService(configuration: configuration)
+        case .pAI:
+            return PAIService(configuration: configuration)
+        }
     }
 
-   var name: String {
-       switch self {
-       case .openAI:
-           return "OpenAI"
-       case .openRouter:
-           return "OpenRouter"
-       case .pAI:
-           return "PAI"
-       }
-   }
-    
+    var iconName: String {
+        return rawValue.lowercased()
+    }
+
+    var name: String {
+        switch self {
+        case .openAI:
+            return "OpenAI"
+        case .openRouter:
+            return "OpenRouter"
+        case .pAI:
+            return "PAI"
+        }
+    }
+
     var contextLength: Int {
         switch self {
         case .openAI:
@@ -59,7 +59,7 @@ enum AIProvider: String, CaseIterable, Codable {
             return AppConfiguration.shared.PAIcontextLength
         }
     }
-    
+
     var temperature: Double {
         switch self {
         case .openAI:
@@ -70,7 +70,7 @@ enum AIProvider: String, CaseIterable, Codable {
             return AppConfiguration.shared.PAItemperature
         }
     }
-    
+
     var systemPrompt: String {
         switch self {
         case .openAI:
@@ -81,7 +81,7 @@ enum AIProvider: String, CaseIterable, Codable {
             return AppConfiguration.shared.PAIsystemPrompt
         }
     }
-    
+
     var preferredModel: Model {
         switch self {
         case .openAI:
@@ -104,4 +104,3 @@ enum AIProvider: String, CaseIterable, Codable {
         }
     }
 }
-

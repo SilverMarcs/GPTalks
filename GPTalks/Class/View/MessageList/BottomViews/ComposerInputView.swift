@@ -62,16 +62,18 @@ struct ComposerInputView: View {
             }
             TextEditor(text: $session.input)
                 .focused($isTextFieldFocused)
-                .font(.system(size: 15, weight: .regular, design: .default))
-                .frame(minHeight: size, maxHeight: 450)
+                .font(.system(size: 13, weight: .regular, design: .default))
+                .frame(minHeight: size, maxHeight: 410)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.leading, 3)
                 .padding(.trailing, size + 6)
+                .padding(.top, 4)
                 .scrollContentBackground(.hidden)
                 .onKeyboardShortcut(.return, modifiers: .command) {
                     send(session.input)
                 }
         }
+
     }
     
     @ViewBuilder

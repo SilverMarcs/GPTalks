@@ -106,8 +106,6 @@ class BaseChatService: @unchecked Sendable, ChatService {
         do {
             return try await sendMessageStream(conversations)
         } catch {
-//            appendNewUserMessage(input: messageText)
-//            appendNewAssistantMessage(input: "")
             throw error
         }
     }
