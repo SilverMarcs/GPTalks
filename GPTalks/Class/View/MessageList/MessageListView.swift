@@ -12,27 +12,10 @@ import SwiftUIX
 struct MessageListView: View {
     @ObservedObject var session: DialogueSession
     @FocusState var isTextFieldFocused: Bool
-    
     @State var isShowSettingsView = false
-    
-    @State var isShowClearMessagesAlert = false
-    
-    @State var isShowLoadingToast = false
-    
+
     var body: some View {
         contentView
-            .alert(
-                "Warning",
-                isPresented: $isShowClearMessagesAlert
-            ) {
-                Button(role: .destructive) {
-                    session.clearMessages()
-                } label: {
-                    Text("Confirm")
-                }
-            } message: {
-                Text("Remove all messages?")
-            }
 #if os(iOS)
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -133,23 +116,22 @@ struct MessageListView: View {
                .onTapGesture {
                    isTextFieldFocused = false
                }
+               .onAppear() {
+                   scrollToBottom(proxy: proxy)
+               }
+               .onChange(of: session) {
+                  scrollToBottom(proxy: proxy)
+               }
                .safeAreaInset(edge: .bottom, spacing: 0) {
                    BottomInputView(
                       session: session,
-                      isLoading: $isShowLoadingToast,
-                      namespace: animation,
                       isTextFieldFocused: _isTextFieldFocused
                    ) { _ in
                       sendMessage(proxy)
                    } stop: {
                        session.stopStreaming()
                    }
-               }
-               .onAppear() {
-                   scrollToBottom(proxy: proxy)
-               }
-               .onChange(of: session) {
-                  scrollToBottom(proxy: proxy)
+                   .background(.secondarySystemBackground)
                }
 #if os(iOS)
                 .onReceive(keyboardWillChangePublisher) { value in

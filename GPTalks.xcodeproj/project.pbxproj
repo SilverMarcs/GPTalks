@@ -41,7 +41,6 @@
 		E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */; };
 		E4C65EF329CA9F7800AFA884 /* ReplyingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDB29CA9F7800AFA884 /* ReplyingIndicatorView.swift */; };
 		E4C65EF429CA9F7800AFA884 /* LeadingComposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDC29CA9F7800AFA884 /* LeadingComposerView.swift */; };
-		E4C65EF529CA9F7800AFA884 /* ComposerInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDD29CA9F7800AFA884 /* ComposerInputView.swift */; };
 		E4C65EF629CA9F7800AFA884 /* AppSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */; };
 		E4C65EF729CA9F7800AFA884 /* DialogueSessionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EE029CA9F7800AFA884 /* DialogueSessionListView.swift */; };
 		E4C65EFA29CA9F7800AFA884 /* LanguageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EE529CA9F7800AFA884 /* LanguageModels.swift */; };
@@ -116,7 +115,6 @@
 		E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		E4C65EDB29CA9F7800AFA884 /* ReplyingIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplyingIndicatorView.swift; sourceTree = "<group>"; };
 		E4C65EDC29CA9F7800AFA884 /* LeadingComposerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeadingComposerView.swift; sourceTree = "<group>"; };
-		E4C65EDD29CA9F7800AFA884 /* ComposerInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposerInputView.swift; sourceTree = "<group>"; };
 		E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsView.swift; sourceTree = "<group>"; };
 		E4C65EE029CA9F7800AFA884 /* DialogueSessionListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogueSessionListView.swift; sourceTree = "<group>"; };
 		E4C65EE529CA9F7800AFA884 /* LanguageModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageModels.swift; sourceTree = "<group>"; };
@@ -384,7 +382,6 @@
 			children = (
 				E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */,
 				E4C65EDC29CA9F7800AFA884 /* LeadingComposerView.swift */,
-				E4C65EDD29CA9F7800AFA884 /* ComposerInputView.swift */,
 			);
 			path = BottomViews;
 			sourceTree = "<group>";
@@ -563,7 +560,6 @@
 				E4E99BD029D681A000C0FCBD /* PromptsListView.swift in Sources */,
 				08723DAA2AFA4595001D59FE /* OpenAIService.swift in Sources */,
 				E4C65EF129CA9F7800AFA884 /* MessageMarkdownView.swift in Sources */,
-				E4C65EF529CA9F7800AFA884 /* ComposerInputView.swift in Sources */,
 				E4924F0C29DF2AD800B69605 /* OpenAISettingsView.swift in Sources */,
 				E4C65EFC29CA9F7800AFA884 /* BaseChatService.swift in Sources */,
 				0837E47A2AFE54D500C03059 /* PAIChatService.swift in Sources */,
