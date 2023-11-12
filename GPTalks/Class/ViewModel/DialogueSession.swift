@@ -40,7 +40,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
 
         input = ""
         
-        service = configuration.service.service(configuration: configuration, session: self)
+        service = configuration.service.service(session: self)
         
 
         initFinished = true
@@ -82,16 +82,10 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     @Published var conversations: [Conversation] = []
     @Published var date = Date()
     @Published var errorDesc: String = ""
+    @Published var configuration: Configuration = Configuration()
     
     private var initFinished = false
     //MARK: - Properties
-    
-    @Published var configuration: Configuration = Configuration() {
-        didSet {
-            service.configuration = configuration
-            save()
-        }
-    }
         
     var lastMessage: String {
         // Do loading spinner here in viewbuilder
@@ -113,7 +107,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         return lastConversation.isReplying
     }
         
-    lazy var service: ChatService = configuration.service.service(configuration: configuration, session: self)
+    lazy var service: ChatService = configuration.service.service(session: self)
     
     init() {
         

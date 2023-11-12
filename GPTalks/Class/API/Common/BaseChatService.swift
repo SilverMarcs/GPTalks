@@ -12,7 +12,6 @@ protocol ChatService {
     var path: String { get }
     var method: String {  get }
     var headers: [String: String] { get }
-    var configuration: DialogueSession.Configuration { get set }
     var session: DialogueSession { get set }
 
     func makeRequest(with conversations: [Conversation], stream: Bool) throws -> URLRequest
@@ -24,11 +23,13 @@ protocol ChatService {
 
 class BaseChatService: @unchecked Sendable, ChatService {
     var session: DialogueSession
-    var configuration: DialogueSession.Configuration
     
-    required init(configuration: DialogueSession.Configuration, session: DialogueSession) {
-        self.configuration = configuration
+    required init(session: DialogueSession) {
         self.session = session
+    }
+    
+    var configuration: DialogueSession.Configuration {
+        session.configuration
     }
     
     var baseURL: String {
