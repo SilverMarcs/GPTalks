@@ -21,7 +21,12 @@ struct BottomInputView: View {
 
             inputBox
 
-            sendButton
+            if session.isReplying() {
+                stopButton
+            } else {
+                sendButton
+            }
+            
         }
         .padding(.horizontal)
         .padding(.top, 12)
@@ -48,7 +53,7 @@ struct BottomInputView: View {
             Image(systemName: "trash")
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageSize, height: imageSize)
+                .frame(width: imageSize - 1, height: imageSize - 1)
         }
         .buttonStyle(.borderless)
         .foregroundColor(.secondary)
@@ -62,11 +67,25 @@ struct BottomInputView: View {
             Image(systemName: "arrow.up.circle.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageSize + 1, height: imageSize + 1)
+                .frame(width: imageSize, height: imageSize)
         }
         .foregroundColor(session.input.isEmpty ? .tertiaryLabel : .accentColor)
         .buttonStyle(.borderless)
-        .disabled(session.input.isEmpty)
+        .disabled(session.input.isEmpty || session.isReplying())
+    }
+    
+    @ViewBuilder
+    private var stopButton: some View {
+        Button {
+            stop()
+        } label: {
+            Image(systemName: "stop.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: imageSize, height: imageSize)
+                .foregroundColor(.systemRed)
+        }
+        .buttonStyle(.borderless)
     }
 
     @ViewBuilder
@@ -101,7 +120,7 @@ struct BottomInputView: View {
 
     private var imageSize: CGFloat {
         #if os(macOS)
-            19
+            20
         #else
             22
         #endif
