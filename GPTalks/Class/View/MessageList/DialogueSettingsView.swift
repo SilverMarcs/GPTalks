@@ -58,9 +58,8 @@ struct DialogueSettingsView: View {
                     Spacer()
                     TextField("Chat title", text: $title)
                         .focused($focusedField, equals: .title)
-//                        .textFieldStyle(.roundedBorder)
+                        .textFieldStyle(.roundedBorder)
                         .frame(width: 170)
-//                        .labelsHidden()
                 }
                 
                 HStack {

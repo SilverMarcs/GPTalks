@@ -5,7 +5,7 @@
 //  Created by Zabir Raihan on 10/11/2023.
 //
 
-import Foundation
+import SwiftUI
 
 enum AIProvider: String, CaseIterable, Codable {
     case openAI
@@ -36,6 +36,17 @@ enum AIProvider: String, CaseIterable, Codable {
 
     var iconName: String {
         return rawValue.lowercased()
+    }
+    
+    var accentColor: Color {
+        switch self {
+        case .openAI:
+            return Color("greenColor")
+        case .openRouter:
+            return Color("purpleColor")
+        case .pAI:
+            return Color("orangeColor")
+        }
     }
 
     var name: String {

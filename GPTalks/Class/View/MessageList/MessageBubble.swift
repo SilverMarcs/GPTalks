@@ -9,8 +9,8 @@
 import SwiftUI
 
 extension View {
-    func bubbleStyle(isMyMessage: Bool, type: MessageType = .text, service: AIProvider = .openAI) -> some View {
-        modifier(Bubble(isMyMessage: isMyMessage, type: type, service: service))
+    func bubbleStyle(isMyMessage: Bool, type: MessageType = .text, accentColor: Color = Color("greenColor")) -> some View {
+        modifier(Bubble(isMyMessage: isMyMessage, type: type, accentColor: accentColor))
     }
 }
 
@@ -18,7 +18,7 @@ struct Bubble: ViewModifier {
     
     var isMyMessage: Bool
     var type: MessageType = .text
-    var service: AIProvider = .openAI
+    var accentColor: Color = Color("greenColor")
     
     #if os(iOS)
     let radius: CGFloat = 19
@@ -34,7 +34,7 @@ struct Bubble: ViewModifier {
     func body(content: Content) -> some View {
        switch type {
        case .text, .textEdit:
-           let backgroundColor = type == .textEdit && isMyMessage ? Color(.darkGray) : isMyMessage ? userMessageBackgroundColor : replyBackgroundColor
+           let backgroundColor = type == .textEdit && isMyMessage ? Color(.darkGray) : isMyMessage ? accentColor : replyBackgroundColor
            let foregroundColor = isMyMessage ? Color.white : Color.primary
 
            content
@@ -52,17 +52,6 @@ struct Bubble: ViewModifier {
     
     private var editingBackgroundColor: Color {
         Color(.darkGray)
-    }
-    
-    private var userMessageBackgroundColor: Color {
-        switch service {
-        case .openAI:
-            return Color("greenColor")
-        case .openRouter:
-            return Color("purpleColor")
-        case .pAI:
-            return Color("orangeColor")
-        }
     }
     
     private var replyBackgroundColor: Color {

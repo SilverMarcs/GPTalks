@@ -69,7 +69,7 @@ struct BottomInputView: View {
                 .scaledToFit()
                 .frame(width: imageSize, height: imageSize)
         }
-        .foregroundColor(session.input.isEmpty ? .tertiaryLabel : .accentColor)
+        .foregroundColor(session.input.isEmpty ? .tertiaryLabel : session.configuration.service.accentColor)
         .buttonStyle(.borderless)
         .disabled(session.input.isEmpty || session.isReplying())
     }

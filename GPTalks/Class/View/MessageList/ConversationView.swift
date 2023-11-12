@@ -11,74 +11,47 @@ import SwiftUIX
 struct ConversationView: View {
     
     let conversation: Conversation
-    let service: AIProvider
+    let accentColor: Color
     
     let regenHandler: (Conversation) -> Void
     let editHandler: (Conversation) -> Void
     
-    @State var isEditing = false
+    @State var isEditing: Bool = false
     @FocusState var isFocused: Bool
     @State var editingMessage: String = ""
     var deleteHandler: (() -> Void)?
     
+    @State private var isHovered = false
+    
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 1) {
             if conversation.role == "user" {
                 userMessage
+//                    .onHover { hover in
+//                        self.isHovered = hover
+//                    }
 
             } else if conversation.role == "assistant" {
                 assistantMessage
+//                    .onHover { hover in
+//                        self.isHovered = hover
+//                    }
+
 
             } else {
                 ReplyingIndicatorView()
                 
             }
         }
-//        .padding(.horizontal, 15)
-        
+        #if os(iOS)
         .contextMenu {
-            if conversation.role == "assistant" {
-                Button {
-                    regenHandler(conversation)
-                } label: {
-                    HStack {
-                        Image(systemName: "arrow.clockwise")
-                        Text("Regenerate")
-                    }
-                }
-            }
-            if conversation.role == "user" {
-                Button {
-                    editingMessage = conversation.content
-                    isEditing = true
-                    isFocused = true
-                } label: {
-                    HStack {
-                        Image(systemName: "pencil")
-                        Text("Edit")
-                    }
-                }
-            }
-            Button {
-                conversation.content.copyToPasteboard()
-            } label: {
-                HStack {
-                    Image(systemName: "doc.on.doc")
-                    Text("Copy")
-                }
-            }
-            Button(role: .destructive) {
-                deleteHandler?()
-            } label: {
-                HStack {
-                    Image(systemName: "trash")
-                    Text("Delete")
-                }
-            }
+            contextMenu
         }
+        #endif
     }
     
-    var userMessage: some View {
+    @ViewBuilder
+    private var userMessage: some View {
         HStack(spacing: 0) {
             Spacer()
             if isEditing {
@@ -88,18 +61,34 @@ struct ConversationView: View {
                     .textFieldStyle(.plain)
                     .bubbleStyle(isMyMessage: true, type: .textEdit)
             } else {
+                Menu {
+                   contextMenu
+                } label: {
+                    Label("Options", systemImage: "ellipsis.circle")
+                        .labelStyle(.iconOnly)
+                }
+                
+                .menuIndicator(.hidden)
+                .menuStyle(.borderlessButton)
+                .frame(width: 20, height: 20)
+                .visible(isHovered)
+                
                 Text(conversation.content)
                     .textSelection(.enabled)
-                    .bubbleStyle(isMyMessage: true, type: .text, service: service)
+                    .bubbleStyle(isMyMessage: true, type: .text, accentColor: accentColor)
             }
         }
         .padding(.leading, horizontalPadding)
         .padding(.vertical, 5)
         .padding(.trailing, 15)
+        .onHover { hover in
+            self.isHovered = hover
+        }
     }
     
-    var assistantMessage: some View {
-        HStack(spacing: 0) {
+    @ViewBuilder
+    private var assistantMessage: some View {
+        HStack(spacing: 2) {
             VStack(alignment: .leading) {
                 if AppConfiguration.shared.isMarkdownEnabled{
                     MessageMarkdownView(text: conversation.content)
@@ -113,11 +102,25 @@ struct ConversationView: View {
             }
             .bubbleStyle(isMyMessage: false, type: .text)
             
+            Menu {
+               contextMenu
+            } label: {
+                Label("Options", systemImage: "ellipsis.circle")
+                    .labelStyle(.iconOnly)
+            }
+            .menuIndicator(.hidden)
+            .menuStyle(.borderlessButton)
+            .frame(width: 20, height: 20)
+            .visible(isHovered)
+            
             Spacer()
         }
         .padding(.trailing, horizontalPadding)
         .padding(.vertical, 5)
         .padding(.leading, 15)
+        .onHover { hover in
+            self.isHovered = hover
+        }
     }
     
     
@@ -147,11 +150,53 @@ struct ConversationView: View {
         .padding(.trailing, 10)
     }
     
+    @ViewBuilder
+    private var contextMenu: some View {
+        if conversation.role == "assistant" {
+            Button {
+                regenHandler(conversation)
+            } label: {
+                HStack {
+                    Image(systemName: "arrow.clockwise")
+                    Text("Regenerate")
+                }
+            }
+        }
+        if conversation.role == "user" {
+            Button {
+                editingMessage = conversation.content
+                isEditing = true
+                isFocused = true
+            } label: {
+                HStack {
+                    Image(systemName: "pencil")
+                    Text("Edit")
+                }
+            }
+        }
+        Button {
+            conversation.content.copyToPasteboard()
+        } label: {
+            HStack {
+                Image(systemName: "doc.on.doc")
+                Text("Copy")
+            }
+        }
+        Button(role: .destructive) {
+            deleteHandler?()
+        } label: {
+            HStack {
+                Image(systemName: "trash")
+                Text("Delete")
+            }
+        }
+    }
+    
     private var horizontalPadding: CGFloat {
 #if os(iOS)
         return 55
 #else
-        return 105
+        return 95
 #endif
     }
 }

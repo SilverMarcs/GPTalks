@@ -72,7 +72,7 @@ struct MessageListView: View {
                ScrollView {
                    VStack(spacing: 0) {
                        ForEach(enumerating: Array(session.conversations.enumerated())) { index, conversation in
-                           ConversationView(conversation: conversation, service: session.configuration.service) { conversation in
+                           ConversationView(conversation: conversation, accentColor: session.configuration.service.accentColor) { conversation in
                              Task { @MainActor in
                                  await session.regenerate(from: index, scroll: {
                                      scrollToBottom(proxy: proxy, anchor: $0)
@@ -173,7 +173,7 @@ struct MessageListView: View {
 #endif
     
     func sendMessage(_ proxy: ScrollViewProxy) {
-        if !session.conversations.isEmpty && session.lastConversation.isReplying {
+        if session.isReplying() {
             return
         }
         Task { @MainActor in

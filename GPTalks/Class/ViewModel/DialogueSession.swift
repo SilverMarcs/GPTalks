@@ -104,7 +104,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     
     
     func isReplying() -> Bool {
-        return lastConversation.isReplying
+        return !conversations.isEmpty && lastConversation.isReplying
     }
     
     func stopStreaming() {
@@ -193,6 +193,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         }catch {
             // TODO: do better with stop_reason from openai
             if error.localizedDescription == "cancelled" {
+                lastConversationData?.sync(with: conversations[conversations.count - 1])
                 conversations[conversations.count - 1].isReplying = false
                 return
             }
