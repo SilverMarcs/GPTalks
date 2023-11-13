@@ -9,12 +9,13 @@
 import SwiftUI
 
 extension View {
-    func bubbleStyle(isMyMessage: Bool, type: MessageType = .text, accentColor: Color = Color("greenColor")) -> some View {
+    func bubbleStyle(isMyMessage: Bool, type: MessageType = .text, accentColor: Color = .systemBlue) -> some View {
         modifier(Bubble(isMyMessage: isMyMessage, type: type, accentColor: accentColor))
     }
 }
 
 struct Bubble: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
     
     var isMyMessage: Bool
     var type: MessageType = .text
@@ -33,8 +34,8 @@ struct Bubble: ViewModifier {
     
     func body(content: Content) -> some View {
        switch type {
-       case .text, .textEdit:
-           let backgroundColor = type == .textEdit && isMyMessage ? Color(.darkGray) : isMyMessage ? accentColor : replyBackgroundColor
+       case .text, .edit:
+           let backgroundColor = type == .edit && isMyMessage ? Color(.darkGray) : isMyMessage ? accentColor : replyBackgroundColor
            let foregroundColor = isMyMessage ? Color.white : Color.primary
 
            content
@@ -61,6 +62,4 @@ struct Bubble: ViewModifier {
         colorScheme == .light ? Color(hexadecimal: "#e9e9eb") : Color(hexadecimal: "#262529")
 #endif
     }
-    
-    @Environment(\.colorScheme) var colorScheme
 }

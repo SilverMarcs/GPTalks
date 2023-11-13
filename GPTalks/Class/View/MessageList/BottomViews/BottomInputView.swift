@@ -118,14 +118,14 @@ struct BottomInputView: View {
     private var textEditor: some View {
         if session.input.isEmpty {
             Text("Send a message")
-                .font(.system(size: 13))
+                .font(.body)
                 .padding(7)
                 .padding(.leading, 4)
                 .foregroundColor(.placeholderText)
         }
         TextEditor(text: $session.input)
             .focused($isTextFieldFocused)
-            .font(.system(size: 13))
+            .font(.body)
             .frame(maxHeight: 400)
             .fixedSize(horizontal: false, vertical: true)
             .padding(7)

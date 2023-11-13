@@ -51,7 +51,7 @@ struct ContentView: View {
                 }
         } detail: {
             if let selectedDialogueSession = selectedDialogueSession {
-                MessageListView(session:selectedDialogueSession)
+                MessageListView(session: selectedDialogueSession)
             } else {
                 Text("Select a chat to see it here")
                     .font(.title)
