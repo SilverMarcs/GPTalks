@@ -31,7 +31,7 @@ struct MessageListView: View {
                         }
                     }
                     .sheet(isPresented: $isShowSettingsView) {
-//                        dialogSettings
+                        dialogSettings
                     }
                 }
             }
@@ -45,9 +45,9 @@ struct MessageListView: View {
                     } label: {
                         Image(systemName:"slider.vertical.3")
                     }
-//                    .popover(isPresented: $isShowSettingsView) {
-//                        DialogueSettingsView(configuration: $session.configuration, title: $session.title)
-//                    }
+                    .popover(isPresented: $isShowSettingsView) {
+                        DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+                    }
                 }
             }
 #endif
@@ -151,24 +151,24 @@ struct MessageListView: View {
            }
        }
 
-//#if os(iOS)
-//    var dialogSettings: some View {
-//        NavigationStack {
-//            DialogueSettingsView(configuration: $session.configuration, title: $session.title)
-//                .navigationBarTitleDisplayMode(.inline)
-//                .toolbar {
-//                    ToolbarItem {
-//                        Button {
-//                            isShowSettingsView = false
-//                        } label: {
-//                            Text("Done")
-//                                .bold()
-//                        }
-//                    }
-//                }
-//        }
-//    }
-//#endif
+#if os(iOS)
+    var dialogSettings: some View {
+        NavigationStack {
+            DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem {
+                        Button {
+                            isShowSettingsView = false
+                        } label: {
+                            Text("Done")
+                                .bold()
+                        }
+                    }
+                }
+        }
+    }
+#endif
     
     func sendMessage(_ proxy: ScrollViewProxy) {
         if session.isReplying() {

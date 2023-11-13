@@ -85,25 +85,6 @@ struct AppSettingsView: View {
                     }
                 }
             }
-
-            Section("Prompt") {
-                NavigationLink {
-                    PromptsListView()
-                } label: {
-                    HStack {
-                        Image(systemName: "arrow.clockwise")
-                        Text("Sync Prompts")
-                    }
-                }
-                NavigationLink {
-                    CustomPromptsView()
-                } label: {
-                    HStack {
-                        Image(systemName: "person.fill")
-                        Text("Custom Prompts")
-                    }
-                }
-            }
         }
         .navigationTitle("Settings")
     }

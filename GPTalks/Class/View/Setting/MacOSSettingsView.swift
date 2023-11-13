@@ -20,10 +20,6 @@ struct MacOSSettingsView: View {
                 .tabItem {
                     Label("Services", systemImage: "brain.head.profile")
                 }
-            PromptSettingsView()
-                .tabItem {
-                    Label("Prompt", systemImage: "text.book.closed")
-                }
         }
         .frame(minWidth: 700, minHeight: 400)
     }
@@ -103,73 +99,6 @@ struct ModelSettingsView: View {
             }
             .listStyle(.sidebar)
         }
-    }
-}
-
-struct PromptSettingsView: View {
-    
-    enum Item: String, CaseIterable, Identifiable, Hashable {
-        case syncPrompts = "syncPrompts"
-        case customPrompts = "customPrompts"
-        
-        var id: String { rawValue }
-        
-        var destination: some View {
-            makeDestination()
-        }
-        
-        @ViewBuilder
-        private func makeDestination() -> some View {
-            switch self {
-            case .syncPrompts:
-                PromptsListView()
-                    .padding()
-            case .customPrompts:
-                CustomPromptsView()
-            }
-        }
-        
-        var label: some View {
-            switch self {
-            case .syncPrompts:
-                return HStack {
-                    Image(systemName: "arrow.clockwise")
-                    Text("Sync Prompts")
-                }
-            case .customPrompts:
-                return HStack {
-                    Image(systemName: "person")
-                    Text("Custom Prompts")
-                }
-            }
-        }
-    }
-    
-    @State var selection: Item? = .syncPrompts
-    
-    var body: some View {
-        NavigationView {
-            List(selection: $selection) {
-                ForEach(Item.allCases) { item in
-                    NavigationLink(
-                        destination: item.destination,
-                        tag: item,
-                        selection: $selection,
-                        label: {
-                            item.label
-                        }
-                    )
-                }
-            }
-            .listStyle(.sidebar)
-        }
-    }
-    
-}
-
-struct MacOSSettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        MacOSSettingsView()
     }
 }
 
