@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-enum MessageType {
-    case text
-    case edit
-}
-
 struct Conversation: Codable, Identifiable, Hashable {
     var id = UUID()
     var date = Date()

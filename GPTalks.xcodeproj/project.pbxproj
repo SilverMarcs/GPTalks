@@ -17,9 +17,8 @@
 		08723DAA2AFA4595001D59FE /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08723DA92AFA4595001D59FE /* OpenAIService.swift */; };
 		08723DAD2AFAC35D001D59FE /* OpenRouterSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08723DAC2AFAC35D001D59FE /* OpenRouterSettingsView.swift */; };
 		08A327472AFB62CE0086C3F1 /* SummarySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A327462AFB62CE0086C3F1 /* SummarySettingsView.swift */; };
-		08ED9EB82B02564D00849A1E /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* ListItem.swift */; };
+		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
 		E4924EED29DB0A4400B69605 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E4924EEF29DB0A4400B69605 /* Localizable.strings */; };
-		E4924F0829DEEC0800B69605 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4924F0729DEEC0800B69605 /* ErrorMessageView.swift */; };
 		E4924F0C29DF2AD800B69605 /* OpenAISettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4924F0B29DF2AD800B69605 /* OpenAISettingsView.swift */; };
 		E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */; };
 		E4C65EA229CA9E7E00AFA884 /* GPTalks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA129CA9E7E00AFA884 /* GPTalks.swift */; };
@@ -38,11 +37,9 @@
 		E4C65EF129CA9F7800AFA884 /* MessageMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65ED929CA9F7800AFA884 /* MessageMarkdownView.swift */; };
 		E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */; };
 		E4C65EF329CA9F7800AFA884 /* ReplyingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDB29CA9F7800AFA884 /* ReplyingIndicatorView.swift */; };
-		E4C65EF429CA9F7800AFA884 /* LeadingComposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDC29CA9F7800AFA884 /* LeadingComposerView.swift */; };
 		E4C65EF629CA9F7800AFA884 /* AppSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */; };
 		E4C65EF729CA9F7800AFA884 /* DialogueSessionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EE029CA9F7800AFA884 /* DialogueSessionListView.swift */; };
 		E4C65EFA29CA9F7800AFA884 /* LanguageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EE529CA9F7800AFA884 /* LanguageModels.swift */; };
-		E4C65EFB29CA9F7800AFA884 /* Prompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EE629CA9F7800AFA884 /* Prompt.swift */; };
 		E4C65EFC29CA9F7800AFA884 /* BaseChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EE729CA9F7800AFA884 /* BaseChatService.swift */; };
 		E4C65EFD29CA9F7800AFA884 /* chatgpt_prompts.json in Resources */ = {isa = PBXBuildFile; fileRef = E4C65EE929CA9F7800AFA884 /* chatgpt_prompts.json */; };
 		E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EEB29CA9F7800AFA884 /* Splash.swift */; };
@@ -53,7 +50,6 @@
 		E4C65F1829CBEE2400AFA884 /* BottomInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */; };
 		E4C65F2029D0649800AFA884 /* DialogueSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65F1F29D0649800AFA884 /* DialogueSettingsView.swift */; };
 		E4E99BC729D415FF00C0FCBD /* DialogueListPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E99BC629D415FF00C0FCBD /* DialogueListPlaceholderView.swift */; };
-		E4E99BC929D5AF9F00C0FCBD /* ToolTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E99BC829D5AF9F00C0FCBD /* ToolTipView.swift */; };
 		E4E99BCC29D5D58700C0FCBD /* SwiftCSV in Frameworks */ = {isa = PBXBuildFile; productRef = E4E99BCB29D5D58700C0FCBD /* SwiftCSV */; };
 /* End PBXBuildFile section */
 
@@ -85,9 +81,8 @@
 		08723DA92AFA4595001D59FE /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		08723DAC2AFAC35D001D59FE /* OpenRouterSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenRouterSettingsView.swift; sourceTree = "<group>"; };
 		08A327462AFB62CE0086C3F1 /* SummarySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySettingsView.swift; sourceTree = "<group>"; };
-		08ED9EB72B02564D00849A1E /* ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
+		08ED9EB72B02564D00849A1E /* DialogueListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListItem.swift; sourceTree = "<group>"; };
 		E4924EEE29DB0A4400B69605 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		E4924F0729DEEC0800B69605 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		E4924F0B29DF2AD800B69605 /* OpenAISettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAISettingsView.swift; sourceTree = "<group>"; };
 		E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSSettingsView.swift; sourceTree = "<group>"; };
 		E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,11 +104,9 @@
 		E4C65ED929CA9F7800AFA884 /* MessageMarkdownView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageMarkdownView.swift; sourceTree = "<group>"; };
 		E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		E4C65EDB29CA9F7800AFA884 /* ReplyingIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplyingIndicatorView.swift; sourceTree = "<group>"; };
-		E4C65EDC29CA9F7800AFA884 /* LeadingComposerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeadingComposerView.swift; sourceTree = "<group>"; };
 		E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsView.swift; sourceTree = "<group>"; };
 		E4C65EE029CA9F7800AFA884 /* DialogueSessionListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogueSessionListView.swift; sourceTree = "<group>"; };
 		E4C65EE529CA9F7800AFA884 /* LanguageModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageModels.swift; sourceTree = "<group>"; };
-		E4C65EE629CA9F7800AFA884 /* Prompt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prompt.swift; sourceTree = "<group>"; };
 		E4C65EE729CA9F7800AFA884 /* BaseChatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseChatService.swift; sourceTree = "<group>"; };
 		E4C65EE929CA9F7800AFA884 /* chatgpt_prompts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chatgpt_prompts.json; sourceTree = "<group>"; };
 		E4C65EEB29CA9F7800AFA884 /* Splash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Splash.swift; sourceTree = "<group>"; };
@@ -121,7 +114,6 @@
 		E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomInputView.swift; sourceTree = "<group>"; };
 		E4C65F1F29D0649800AFA884 /* DialogueSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueSettingsView.swift; sourceTree = "<group>"; };
 		E4E99BC629D415FF00C0FCBD /* DialogueListPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListPlaceholderView.swift; sourceTree = "<group>"; };
-		E4E99BC829D5AF9F00C0FCBD /* ToolTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolTipView.swift; sourceTree = "<group>"; };
 		E4EF056C2A3B3744005CF741 /* GPTalks-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GPTalks-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -297,13 +289,12 @@
 		E4C65ED629CA9F7800AFA884 /* MessageList */ = {
 			isa = PBXGroup;
 			children = (
+				E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */,
 				E4C65ED729CA9F7800AFA884 /* MessageListView.swift */,
 				E4C65ED829CA9F7800AFA884 /* ConversationView.swift */,
-				E4924F0729DEEC0800B69605 /* ErrorMessageView.swift */,
 				E4C65ED929CA9F7800AFA884 /* MessageMarkdownView.swift */,
 				E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */,
 				E4C65F1F29D0649800AFA884 /* DialogueSettingsView.swift */,
-				E4EAAFC229D1E25900A37FA5 /* BottomViews */,
 			);
 			path = MessageList;
 			sourceTree = "<group>";
@@ -313,7 +304,7 @@
 			children = (
 				E4C65EE029CA9F7800AFA884 /* DialogueSessionListView.swift */,
 				E4E99BC629D415FF00C0FCBD /* DialogueListPlaceholderView.swift */,
-				08ED9EB72B02564D00849A1E /* ListItem.swift */,
+				08ED9EB72B02564D00849A1E /* DialogueListItem.swift */,
 			);
 			path = DialogueList;
 			sourceTree = "<group>";
@@ -325,17 +316,8 @@
 				08723DAB2AFA4911001D59FE /* Common */,
 				08723DA22AFA2AE4001D59FE /* OpenRouter */,
 				E4924EFC29DED9D100B69605 /* OpenAI */,
-				E4C65EE429CA9F7800AFA884 /* Models */,
 			);
 			path = API;
-			sourceTree = "<group>";
-		};
-		E4C65EE429CA9F7800AFA884 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				E4C65EE629CA9F7800AFA884 /* Prompt.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		E4C65EE829CA9F7800AFA884 /* Resource */ = {
@@ -362,18 +344,8 @@
 			isa = PBXGroup;
 			children = (
 				E4C65EDB29CA9F7800AFA884 /* ReplyingIndicatorView.swift */,
-				E4E99BC829D5AF9F00C0FCBD /* ToolTipView.swift */,
 			);
 			path = UI;
-			sourceTree = "<group>";
-		};
-		E4EAAFC229D1E25900A37FA5 /* BottomViews */ = {
-			isa = PBXGroup;
-			children = (
-				E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */,
-				E4C65EDC29CA9F7800AFA884 /* LeadingComposerView.swift */,
-			);
-			path = BottomViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -529,7 +501,6 @@
 				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
 				E4C65EEE29CA9F7800AFA884 /* Conversation.swift in Sources */,
-				E4C65EFB29CA9F7800AFA884 /* Prompt.swift in Sources */,
 				08A327472AFB62CE0086C3F1 /* SummarySettingsView.swift in Sources */,
 				E4C65EA929CA9E7E00AFA884 /* ContentView.swift in Sources */,
 				E4C65F1829CBEE2400AFA884 /* BottomInputView.swift in Sources */,
@@ -537,9 +508,8 @@
 				0837E4812AFFE7B000C03059 /* Model.swift in Sources */,
 				E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */,
 				E4C65EF729CA9F7800AFA884 /* DialogueSessionListView.swift in Sources */,
-				E4E99BC929D5AF9F00C0FCBD /* ToolTipView.swift in Sources */,
 				E4C65EF329CA9F7800AFA884 /* ReplyingIndicatorView.swift in Sources */,
-				08ED9EB82B02564D00849A1E /* ListItem.swift in Sources */,
+				08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */,
 				E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */,
 				E4C65EF629CA9F7800AFA884 /* AppSettingsView.swift in Sources */,
 				08723DAA2AFA4595001D59FE /* OpenAIService.swift in Sources */,
@@ -551,13 +521,11 @@
 				08723DAD2AFAC35D001D59FE /* OpenRouterSettingsView.swift in Sources */,
 				E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */,
 				E4C65EA429CA9E7E00AFA884 /* Persistence.swift in Sources */,
-				E4924F0829DEEC0800B69605 /* ErrorMessageView.swift in Sources */,
 				0837E47D2AFE57A100C03059 /* PAISettingsView.swift in Sources */,
 				085D40C32AFD8C250033F8B5 /* AIProvider.swift in Sources */,
 				085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */,
 				E4C65EFA29CA9F7800AFA884 /* LanguageModels.swift in Sources */,
 				E4C65EF029CA9F7800AFA884 /* ConversationView.swift in Sources */,
-				E4C65EF429CA9F7800AFA884 /* LeadingComposerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

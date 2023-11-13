@@ -67,30 +67,6 @@ class BaseChatService: @unchecked Sendable, ChatService {
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         return jsonDecoder
     }()
-
-//    internal func trimConversation(with input: String) -> [Message] {
-//        var trimmedMessages = [Message]()
-//        if trimmedMessagesIndex > messages.endIndex - 1 {
-//            trimmedMessages.append(Message(role: "user", content: input))
-//        } else {
-//            trimmedMessages += messages[trimmedMessagesIndex...]
-//            trimmedMessages.append(Message(role: "user", content: input))
-//        }
-//        
-//        let maxToken = 4096
-//        var tokenCount = trimmedMessages.tokenCount
-//        while tokenCount > maxToken {
-//            print(trimmedMessages.remove(at: 0))
-//            trimmedMessagesIndex += 1
-//            print("trimmedMessagesIndex: \(trimmedMessagesIndex)")
-//            tokenCount = trimmedMessages.tokenCount
-//            print("tokenCount:\(tokenCount)")
-//        }
-//        
-//        trimmedMessages.insert(Message(role: "system", content: configuration.systemPrompt), at: 0)
-//        
-//        return trimmedMessages
-//    }
     
     func createTitle() async throws -> String {
         try await sendTaskMessage("Give me a title of this conversation. Make it as short as possible. Your title should NOT exceed 4 words. Send the title only and nothing else. Do not include quotation symbols. Do not add your own words unless it is the title only")
@@ -113,63 +89,12 @@ class BaseChatService: @unchecked Sendable, ChatService {
             throw error
         }
     }
-    
-//    func sendMessageStream(_ conversations: [Conversation]) async throws -> AsyncThrowingStream<String, Error> {
-//        let urlRequest = try makeRequest(with: conversations, stream: true)
-//
-//        let (result, response) = try await urlSession.bytes(for: urlRequest)
-//
-//        try Task.checkCancellation()
-//
-//        guard let httpResponse = response as? HTTPURLResponse else {
-//            throw String(localized: "Invalid response")
-//        }
-//
-//        guard 200...299 ~= httpResponse.statusCode else {
-//            var errorText = ""
-//            for try await line in result.lines {
-//                try Task.checkCancellation()
-//                errorText += line
-//            }
-//
-//            if let data = errorText.data(using: .utf8), let errorResponse = try? jsonDecoder.decode(ErrorRootResponse.self, from: data).error {
-//                errorText = "\n\(errorResponse.message)"
-//            }
-//            throw String(localized: "Response Error: \(httpResponse.statusCode), \(errorText)")
-//        }
-//
-//        return AsyncThrowingStream<String, Error> { continuation in
-//            session.streamingTask = Task(priority: .userInitiated) { [weak self] in
-//                guard let self = self else { return }
-//                do {
-//                    var reply = ""
-//                    for try await line in result.lines {
-//                        if Task.isCancelled {
-//                            break
-//                        }
-//                        if line.hasPrefix("data: "),
-//                           let data = line.dropFirst(6).data(using: .utf8),
-//                           let response = try? self.jsonDecoder.decode(StreamCompletionResponse.self, from: data),
-//                           let text = response.choices.first?.delta.content {
-//                            reply += text
-//                            continuation.yield(text)
-//                        }
-//                    }
-//
-//                    continuation.finish()
-//                } catch {
-//                    continuation.finish(throwing: error)
-//                }
-//            }
-//        }
-//    }
+
     
     func sendMessageStream(_ conversations: [Conversation]) async throws -> AsyncThrowingStream<String, Error> {
         let urlRequest = try makeRequest(with: conversations, stream: true)
         
         let (result, response) = try await urlSession.bytes(for: urlRequest)
-        
-//        try Task.checkCancellation()
         
         guard let httpResponse = response as? HTTPURLResponse else {
             throw String(localized: "Invalid response")

@@ -8,6 +8,11 @@
 
 import SwiftUI
 
+enum MessageType {
+    case text
+    case edit
+}
+
 extension View {
     func bubbleStyle(isMyMessage: Bool, type: MessageType = .text, accentColor: Color = Color(.systemBlue)) -> some View {
         modifier(Bubble(isMyMessage: isMyMessage, type: type, accentColor: accentColor))
