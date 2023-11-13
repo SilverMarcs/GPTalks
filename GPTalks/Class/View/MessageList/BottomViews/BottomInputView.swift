@@ -26,7 +26,6 @@ struct BottomInputView: View {
             } else {
                 sendButton
             }
-            
         }
         .padding(.horizontal)
         .padding(.top, 12)
@@ -73,7 +72,7 @@ struct BottomInputView: View {
         .buttonStyle(.borderless)
         .disabled(session.input.isEmpty || session.isReplying())
     }
-    
+
     @ViewBuilder
     private var stopButton: some View {
         Button {
@@ -91,31 +90,51 @@ struct BottomInputView: View {
     @ViewBuilder
     private var inputBox: some View {
         ZStack(alignment: .leading) {
-            if session.input.isEmpty {
-                Text("Send a message")
-                    .font(.system(size: 13))
-                    .padding(7)
-                    .padding(.leading, 4)
-                    .foregroundColor(.placeholderText)
-            }
-            TextEditor(text: $session.input)
-                .focused($isTextFieldFocused)
-                .font(.system(size: 13))
-                .frame(maxHeight: 400)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(7)
-                .scrollContentBackground(.hidden)
-                .onKeyboardShortcut(.return, modifiers: .command) {
-                    if !session.input.isEmpty || session.isReplying() {
-                        send(session.input)
-                    }
-                }
+            #if os(macOS)
+                textEditor
+            #else
+                textField
+            #endif
         }
         .overlay(
             RoundedRectangle(cornerRadius: 16, style: .circular)
                 .stroke(.tertiary, lineWidth: 0.6)
                 .opacity(0.8)
         )
+    }
+
+    @ViewBuilder
+    private var textField: some View {
+        TextField("Send a message", text: $session.input, axis: .vertical)
+            .focused($isTextFieldFocused)
+            .multilineTextAlignment(.leading)
+            .lineLimit(1 ... 15)
+            .padding(6)
+            .padding(.horizontal, 4)
+            .frame(minHeight: imageSize)
+    }
+
+    @ViewBuilder
+    private var textEditor: some View {
+        if session.input.isEmpty {
+            Text("Send a message")
+                .font(.system(size: 13))
+                .padding(7)
+                .padding(.leading, 4)
+                .foregroundColor(.placeholderText)
+        }
+        TextEditor(text: $session.input)
+            .focused($isTextFieldFocused)
+            .font(.system(size: 13))
+            .frame(maxHeight: 400)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(7)
+            .scrollContentBackground(.hidden)
+            .onKeyboardShortcut(.return, modifiers: .command) {
+                if !session.input.isEmpty || session.isReplying() {
+                    send(session.input)
+                }
+            }
     }
 
     private var imageSize: CGFloat {

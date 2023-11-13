@@ -16,7 +16,6 @@ struct DialogueSessionListView: View {
     @Binding var dialogueSessions: [DialogueSession]
     @Binding var selectedDialogueSession: DialogueSession?
     
-    var deleteHandler: (IndexSet) -> Void
     var deleteDialogueHandler: (DialogueSession) -> Void
 
     var filteredDialogueSessions: [DialogueSession] {
@@ -35,7 +34,7 @@ struct DialogueSessionListView: View {
     
     var body: some View {
         List(filteredDialogueSessions, selection: $selectedDialogueSession) { session in
-            listView(session: session)
+            listItem(session: session)
                 .contextMenu {
                     Button {
                         sessionToRename = session
@@ -80,7 +79,7 @@ struct DialogueSessionListView: View {
         })
     }
     
-    private func listView(session: DialogueSession) -> some View {
+    private func listItem(session: DialogueSession) -> some View {
        NavigationLink(value: session) {
            HStack(spacing: 10) {
                Image(session.configuration.service.iconName)
@@ -112,6 +111,13 @@ struct DialogueSessionListView: View {
 
            .padding(.vertical, 7)
            .padding(.horizontal, 5)
+       }
+       .swipeActions(edge: .trailing) {
+           Button(role: .destructive) {
+               deleteDialogueHandler(session)
+           } label: {
+               Label("Delete", systemImage: "trash")
+           }
        }
     }
     

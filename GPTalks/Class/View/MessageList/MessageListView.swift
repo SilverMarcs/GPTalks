@@ -131,7 +131,11 @@ struct MessageListView: View {
                    } stop: {
                        session.stopStreaming()
                    }
+#if os(macOS)
                    .background(.secondarySystemBackground)
+#else
+                   .background(.systemBackground)
+#endif
                }
 #if os(iOS)
                 .onReceive(keyboardWillChangePublisher) { value in

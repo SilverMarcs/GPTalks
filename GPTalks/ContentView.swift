@@ -57,9 +57,14 @@ struct ContentView: View {
                     .font(.title)
             }
         }
+        .onAppear() {
+            dialogueSessions = items.compactMap {
+                DialogueSession(rawData: $0)
+            }
+        }
+        .background(.secondarySystemBackground)
 #if os(macOS)
         .frame(minWidth: 1100, minHeight: 770)
-        .background(.secondarySystemBackground)
 #else
         .sheet(isPresented: $isShowSettingView) {
             NavigationStack {
@@ -78,16 +83,6 @@ struct ContentView: View {
             }
         }
 #endif
-        .onAppear() {
-            dialogueSessions = items.compactMap {
-                DialogueSession(rawData: $0)
-            }
-#if os(macOS)
-            if let first = dialogueSessions.first {
-                selectedDialogueSession = first
-            }
-#endif
-        }
     }
     
     
@@ -100,8 +95,6 @@ struct ContentView: View {
                 dialogueSessions: $dialogueSessions,
                 selectedDialogueSession: $selectedDialogueSession
             ) {
-                deleteItems(offsets: $0)
-            } deleteDialogueHandler: {
                 deleteItem($0)
             }
         }
