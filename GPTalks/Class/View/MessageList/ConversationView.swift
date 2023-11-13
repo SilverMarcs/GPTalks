@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-// import SwiftUIX
 
 struct ConversationView: View {
     let conversation: Conversation
@@ -53,10 +52,6 @@ struct ConversationView: View {
             Spacer()
             if isEditing {
                 editControls()
-//                TextField("Your edited text here", text: $editingMessage, axis: .vertical)
-//                    .focused($isFocused)
-//                    .textFieldStyle(.plain)
-//                    .bubbleStyle(isMyMessage: true, type: .edit)
                 TextEditor(text: $editingMessage)
                     .font(.body)
                     .focused($isFocused)
@@ -104,7 +99,7 @@ struct ConversationView: View {
         .menuIndicator(.hidden)
         .menuStyle(.borderlessButton)
         .frame(width: 20, height: 20)
-        .visible(isHovered)
+        .opacity(isHovered ? 1 : 0)
     }
 
     @ViewBuilder

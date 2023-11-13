@@ -6,8 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUIX
-//import Introspect
 
 struct MessageListView: View {
     @ObservedObject var session: DialogueSession
@@ -25,7 +23,7 @@ struct MessageListView: View {
                         HStack(spacing: 4) {
                             Text(firstTwoWords(of: session.title))
                                .bold()
-                               .foregroundColor(.label)
+                               .foregroundColor(Color.secondary)
 
                             Image(systemName:"chevron.right")
                                 .font(.system(size: 10))
@@ -33,7 +31,7 @@ struct MessageListView: View {
                         }
                     }
                     .sheet(isPresented: $isShowSettingsView) {
-                        dialogSettings
+//                        dialogSettings
                     }
                 }
             }
@@ -47,9 +45,9 @@ struct MessageListView: View {
                     } label: {
                         Image(systemName:"slider.vertical.3")
                     }
-                    .popover(isPresented: $isShowSettingsView) {
-                        DialogueSettingsView(configuration: $session.configuration, title: $session.title)
-                    }
+//                    .popover(isPresented: $isShowSettingsView) {
+//                        DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+//                    }
                 }
             }
 #endif
@@ -71,7 +69,7 @@ struct MessageListView: View {
            ScrollViewReader { proxy in
                ScrollView {
                    VStack(spacing: 0) {
-                       ForEach(enumerating: Array(session.conversations.enumerated())) { index, conversation in
+                       ForEach(Array(session.conversations.enumerated()), id: \.element.id) { index, conversation in
                            ConversationView(conversation: conversation, accentColor: session.configuration.service.accentColor) { conversation in
                              Task { @MainActor in
                                  await session.regenerate(from: index, scroll: {
@@ -131,11 +129,7 @@ struct MessageListView: View {
                    } stop: {
                        session.stopStreaming()
                    }
-#if os(macOS)
-                   .background(.secondarySystemBackground)
-#else
                    .background(.bar)
-#endif
                }
 #if os(iOS)
                 .onReceive(keyboardWillChangePublisher) { value in
@@ -157,24 +151,24 @@ struct MessageListView: View {
            }
        }
 
-#if os(iOS)
-    var dialogSettings: some View {
-        NavigationStack {
-            DialogueSettingsView(configuration: $session.configuration, title: $session.title)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem {
-                        Button {
-                            isShowSettingsView = false
-                        } label: {
-                            Text("Done")
-                                .bold()
-                        }
-                    }
-                }
-        }
-    }
-#endif
+//#if os(iOS)
+//    var dialogSettings: some View {
+//        NavigationStack {
+//            DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+//                .navigationBarTitleDisplayMode(.inline)
+//                .toolbar {
+//                    ToolbarItem {
+//                        Button {
+//                            isShowSettingsView = false
+//                        } label: {
+//                            Text("Done")
+//                                .bold()
+//                        }
+//                    }
+//                }
+//        }
+//    }
+//#endif
     
     func sendMessage(_ proxy: ScrollViewProxy) {
         if session.isReplying() {

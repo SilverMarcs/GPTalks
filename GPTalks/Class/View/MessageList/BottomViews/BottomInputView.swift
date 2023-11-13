@@ -68,7 +68,8 @@ struct BottomInputView: View {
                 .scaledToFit()
                 .frame(width: imageSize, height: imageSize)
         }
-        .foregroundColor(session.input.isEmpty ? .tertiaryLabel : session.configuration.service.accentColor)
+        .keyboardShortcut(.return, modifiers: .command)
+        .foregroundColor(session.input.isEmpty ? placeHolderTextColor : session.configuration.service.accentColor)
         .buttonStyle(.borderless)
         .disabled(session.input.isEmpty || session.isReplying())
     }
@@ -82,7 +83,7 @@ struct BottomInputView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: imageSize, height: imageSize)
-                .foregroundColor(.systemRed)
+                .foregroundColor(.red)
         }
         .buttonStyle(.borderless)
     }
@@ -121,7 +122,7 @@ struct BottomInputView: View {
                 .font(.body)
                 .padding(7)
                 .padding(.leading, 4)
-                .foregroundColor(.placeholderText)
+                .foregroundColor(placeHolderTextColor)
         }
         TextEditor(text: $session.input)
             .focused($isTextFieldFocused)
@@ -130,11 +131,6 @@ struct BottomInputView: View {
             .fixedSize(horizontal: false, vertical: true)
             .padding(7)
             .scrollContentBackground(.hidden)
-            .onKeyboardShortcut(.return, modifiers: .command) {
-                if !session.input.isEmpty || session.isReplying() {
-                    send(session.input)
-                }
-            }
     }
 
     private var imageSize: CGFloat {
@@ -142,6 +138,14 @@ struct BottomInputView: View {
             20
         #else
             22
+        #endif
+    }
+    
+    private var placeHolderTextColor: Color {
+        #if os(macOS)
+        Color(.placeholderTextColor)
+        #else
+        Color(.placeholderText)
         #endif
     }
 }

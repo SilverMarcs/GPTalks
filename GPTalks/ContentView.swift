@@ -62,7 +62,7 @@ struct ContentView: View {
                 DialogueSession(rawData: $0)
             }
         }
-        .background(.secondarySystemBackground)
+        .background(.background)
 #if os(macOS)
         .frame(minWidth: 1100, minHeight: 770)
 #else

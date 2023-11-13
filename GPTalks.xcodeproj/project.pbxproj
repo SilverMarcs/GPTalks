@@ -10,7 +10,7 @@
 		0837E47A2AFE54D500C03059 /* PAIChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E4792AFE54D500C03059 /* PAIChatService.swift */; };
 		0837E47D2AFE57A100C03059 /* PAISettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E47C2AFE57A100C03059 /* PAISettingsView.swift */; };
 		0837E4812AFFE7B000C03059 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E4802AFFE7AF00C03059 /* Model.swift */; };
-		085D40BF2AFD66340033F8B5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Extensions.swift */; };
+		085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Utils.swift */; };
 		085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */; };
 		085D40C32AFD8C250033F8B5 /* AIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* AIProvider.swift */; };
 		08723DA62AFA2B03001D59FE /* OpenRouterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08723DA52AFA2B03001D59FE /* OpenRouterService.swift */; };
@@ -19,11 +19,9 @@
 		08A327472AFB62CE0086C3F1 /* SummarySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A327462AFB62CE0086C3F1 /* SummarySettingsView.swift */; };
 		08ED9EB82B02564D00849A1E /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* ListItem.swift */; };
 		E4924EED29DB0A4400B69605 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E4924EEF29DB0A4400B69605 /* Localizable.strings */; };
-		E4924EF429DC309E00B69605 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E4924EF329DC309E00B69605 /* Kingfisher */; };
 		E4924F0829DEEC0800B69605 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4924F0729DEEC0800B69605 /* ErrorMessageView.swift */; };
 		E4924F0C29DF2AD800B69605 /* OpenAISettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4924F0B29DF2AD800B69605 /* OpenAISettingsView.swift */; };
 		E4994DEB29D6E655002981D0 /* CustomPromptsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DEA29D6E655002981D0 /* CustomPromptsView.swift */; };
-		E4994DED29D9C923002981D0 /* ScrollViewDidScrollViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DEC29D9C923002981D0 /* ScrollViewDidScrollViewModifier.swift */; };
 		E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */; };
 		E4C65EA229CA9E7E00AFA884 /* GPTalks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA129CA9E7E00AFA884 /* GPTalks.swift */; };
 		E4C65EA429CA9E7E00AFA884 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA329CA9E7E00AFA884 /* Persistence.swift */; };
@@ -50,7 +48,6 @@
 		E4C65EFD29CA9F7800AFA884 /* chatgpt_prompts.json in Resources */ = {isa = PBXBuildFile; fileRef = E4C65EE929CA9F7800AFA884 /* chatgpt_prompts.json */; };
 		E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EEB29CA9F7800AFA884 /* Splash.swift */; };
 		E4C65EFF29CA9F7800AFA884 /* KeyboardPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EEC29CA9F7800AFA884 /* KeyboardPublisher.swift */; };
-		E4C65F0229CAA01800AFA884 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F0129CAA01800AFA884 /* Introspect */; };
 		E4C65F0529CAA02800AFA884 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F0429CAA02800AFA884 /* SwiftUIX */; };
 		E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F0D29CAA06600AFA884 /* Splash */; };
 		E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F1029CAA08400AFA884 /* MarkdownUI */; };
@@ -83,7 +80,7 @@
 		0837E4792AFE54D500C03059 /* PAIChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAIChatService.swift; sourceTree = "<group>"; };
 		0837E47C2AFE57A100C03059 /* PAISettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAISettingsView.swift; sourceTree = "<group>"; };
 		0837E4802AFFE7AF00C03059 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		085D40BE2AFD66340033F8B5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		085D40BE2AFD66340033F8B5 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		085D40C22AFD8C250033F8B5 /* AIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvider.swift; sourceTree = "<group>"; };
 		08723DA52AFA2B03001D59FE /* OpenRouterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenRouterService.swift; sourceTree = "<group>"; };
@@ -95,7 +92,6 @@
 		E4924F0729DEEC0800B69605 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		E4924F0B29DF2AD800B69605 /* OpenAISettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAISettingsView.swift; sourceTree = "<group>"; };
 		E4994DEA29D6E655002981D0 /* CustomPromptsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPromptsView.swift; sourceTree = "<group>"; };
-		E4994DEC29D9C923002981D0 /* ScrollViewDidScrollViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewDidScrollViewModifier.swift; sourceTree = "<group>"; };
 		E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSSettingsView.swift; sourceTree = "<group>"; };
 		E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C65EA129CA9E7E00AFA884 /* GPTalks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTalks.swift; sourceTree = "<group>"; };
@@ -138,10 +134,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4924EF429DC309E00B69605 /* Kingfisher in Frameworks */,
 				E4E99BCC29D5D58700C0FCBD /* SwiftCSV in Frameworks */,
 				E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */,
-				E4C65F0229CAA01800AFA884 /* Introspect in Frameworks */,
 				E4C65F0529CAA02800AFA884 /* SwiftUIX in Frameworks */,
 				E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */,
 			);
@@ -365,8 +359,7 @@
 			children = (
 				E4C65EEB29CA9F7800AFA884 /* Splash.swift */,
 				E4C65EEC29CA9F7800AFA884 /* KeyboardPublisher.swift */,
-				E4994DEC29D9C923002981D0 /* ScrollViewDidScrollViewModifier.swift */,
-				085D40BE2AFD66340033F8B5 /* Extensions.swift */,
+				085D40BE2AFD66340033F8B5 /* Utils.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -406,12 +399,10 @@
 			);
 			name = GPTalks;
 			packageProductDependencies = (
-				E4C65F0129CAA01800AFA884 /* Introspect */,
 				E4C65F0429CAA02800AFA884 /* SwiftUIX */,
 				E4C65F0D29CAA06600AFA884 /* Splash */,
 				E4C65F1029CAA08400AFA884 /* MarkdownUI */,
 				E4E99BCB29D5D58700C0FCBD /* SwiftCSV */,
-				E4924EF329DC309E00B69605 /* Kingfisher */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -487,12 +478,10 @@
 			);
 			mainGroup = E4C65E9529CA9E7E00AFA884;
 			packageReferences = (
-				E4C65F0029CAA01800AFA884 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				E4C65F0329CAA02800AFA884 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
 				E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */,
 				E4C65F0F29CAA08400AFA884 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				E4E99BCA29D5D58700C0FCBD /* XCRemoteSwiftPackageReference "SwiftCSV" */,
-				E4924EF229DC309E00B69605 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -544,10 +533,9 @@
 				E4C65EEF29CA9F7800AFA884 /* MessageListView.swift in Sources */,
 				E4C65F2029D0649800AFA884 /* DialogueSettingsView.swift in Sources */,
 				E4994DEB29D6E655002981D0 /* CustomPromptsView.swift in Sources */,
-				085D40BF2AFD66340033F8B5 /* Extensions.swift in Sources */,
+				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
 				E4C65EEE29CA9F7800AFA884 /* Conversation.swift in Sources */,
-				E4994DED29D9C923002981D0 /* ScrollViewDidScrollViewModifier.swift in Sources */,
 				E4C65EFB29CA9F7800AFA884 /* Prompt.swift in Sources */,
 				08A327472AFB62CE0086C3F1 /* SummarySettingsView.swift in Sources */,
 				E4C65EA929CA9E7E00AFA884 /* ContentView.swift in Sources */,
@@ -975,22 +963,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E4924EF229DC309E00B69605 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.0.0;
-			};
-		};
-		E4C65F0029CAA01800AFA884 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.3;
-			};
-		};
 		E4C65F0329CAA02800AFA884 /* XCRemoteSwiftPackageReference "SwiftUIX" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX";
@@ -1026,16 +998,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E4924EF329DC309E00B69605 /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E4924EF229DC309E00B69605 /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
-		E4C65F0129CAA01800AFA884 /* Introspect */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E4C65F0029CAA01800AFA884 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
-			productName = Introspect;
-		};
 		E4C65F0429CAA02800AFA884 /* SwiftUIX */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E4C65F0329CAA02800AFA884 /* XCRemoteSwiftPackageReference "SwiftUIX" */;

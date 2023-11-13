@@ -27,11 +27,10 @@ struct OpenRouterSettingsView: View {
                 Text("Default Settings")
                     .bold()
                 GroupBox {
-                    
                     HStack {
                         Text("Model")
                         Spacer()
-                        Picker(selection: configuration.$ORmodel) {
+                        Picker("", selection: configuration.$ORmodel) {
                             ForEach(AIProvider.openRouter.models, id: \.self) { model in
                                 Text(model.name)
                                     .tag(model.id)
@@ -40,13 +39,14 @@ struct OpenRouterSettingsView: View {
                         .frame(width: 250)
                     }
                     .padding()
+
                     
                     Divider()
                     
                     HStack {
                         Text("Context Length")
                         Spacer()
-                        Picker(selection: configuration.$ORcontextLength) {
+                        Picker("", selection: configuration.$ORcontextLength) {
                             ForEach(Array(1...10).reversed() + [30], id: \.self) { number in
                                 Text(number == 30 ? "Unlimited Messages" : "Last \(number) Messages")
                                     .tag(number)
@@ -68,9 +68,9 @@ struct OpenRouterSettingsView: View {
                         } maximumValueLabel: {
                             Text("2")
                         }
-                        .width(215)
+//                        .width(215)
                         Text(String(format: "%.2f", configuration.ORtemperature))
-                            .width(30)
+//                            .width(30)
                     }
                     .padding()
                     

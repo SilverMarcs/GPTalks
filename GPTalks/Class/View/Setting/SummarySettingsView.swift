@@ -30,7 +30,7 @@ struct SummarySettingsView: View {
                 GroupBox {
                     HStack {
                         Text("Summary Length")
-                        Picker(selection: configuration.$OAIcontextLength) {
+                        Picker("", selection: configuration.$OAIcontextLength) {
                             ForEach(Array(1...3).reversed(), id: \.self) { number in
                                 Text("Length \(number) Messages")
                                     .tag(number)
@@ -91,9 +91,9 @@ struct SummarySettingsView: View {
                             Spacer()
                             Text(String(format: "%.1f", configuration.ORtemperature))
                                 .padding(.horizontal)
-                                .height(32)
-                                .width(60)
-                                .background(Color.secondarySystemFill)
+//                                .height(32)
+//                                .width(60)
+//                                .background(Color.secondarySystemFill)
                                 .cornerRadius(8)
                         }
                     }

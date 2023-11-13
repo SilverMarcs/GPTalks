@@ -31,7 +31,7 @@ struct AppSettingsView: View {
                     Text("Default Provider")
                         .lineLimit(1)
                     Spacer()
-                    Picker(selection: configuration.$preferredChatService) {
+                    Picker("", selection: configuration.$preferredChatService) {
                         ForEach(AIProvider.allCases, id: \.self) { provider in
                             Text(provider.name)
                                 .tag(provider.id)

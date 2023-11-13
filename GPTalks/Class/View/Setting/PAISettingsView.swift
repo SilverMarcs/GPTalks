@@ -30,7 +30,7 @@ struct PAISettingsView: View {
                     HStack {
                         Text("Model")
                         Spacer()
-                        Picker(selection: configuration.$PAImodel) {
+                        Picker("", selection: configuration.$PAImodel) {
                             ForEach(AIProvider.pAI.models, id: \.self) { model in
                                 Text(model.name)
                                     .tag(model.id)
@@ -45,7 +45,7 @@ struct PAISettingsView: View {
                     HStack {
                         Text("Context Length")
                         Spacer()
-                        Picker(selection: configuration.$PAIcontextLength) {
+                        Picker("", selection: configuration.$PAIcontextLength) {
                             ForEach(Array(1...10).reversed() + [30], id: \.self) { number in
                                 Text(number == 30 ? "Unlimited Messages" : "Last \(number) Messages")
                                     .tag(number)
@@ -67,9 +67,9 @@ struct PAISettingsView: View {
                         } maximumValueLabel: {
                             Text("2")
                         }
-                        .width(215)
+//                        .width(215)
                         Text(String(format: "%.2f", configuration.PAItemperature))
-                            .width(30)
+//                            .width(30)
                     }
                     .padding()
                     

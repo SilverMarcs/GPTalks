@@ -30,7 +30,7 @@ struct OpenAISettingsView: View {
                     HStack {
                         Text("Model")
                         Spacer()
-                        Picker(selection: configuration.$OAImodel) {
+                        Picker("", selection: configuration.$OAImodel) {
                             ForEach(AIProvider.openAI.models, id: \.self) { model in
                                 Text(model.name)
                                     .tag(model.id)
@@ -45,7 +45,7 @@ struct OpenAISettingsView: View {
                     HStack {
                         Text("Context Length")
                         Spacer()
-                        Picker(selection: configuration.$OAIcontextLength) {
+                        Picker("",selection: configuration.$OAIcontextLength) {
                             ForEach(Array(1...10).reversed() + [30], id: \.self) { number in
                                 Text(number == 30 ? "Unlimited Messages" : "Last \(number) Messages")
                                     .tag(number)
@@ -60,16 +60,17 @@ struct OpenAISettingsView: View {
                     HStack {
                         Text("Temperature")
                         Spacer()
+                        HStack {
                         Slider(value: configuration.$OAItemperature, in: 0...2) {
-                            
                         } minimumValueLabel: {
                             Text("0")
                         } maximumValueLabel: {
                             Text("2")
                         }
-                        .width(215)
                         Text(String(format: "%.2f", configuration.OAItemperature))
-                            .width(30)
+//                            .frame(width: 30)
+                        }
+                    .frame(width: 240)
                     }
                     .padding()
                     

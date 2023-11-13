@@ -35,20 +35,12 @@ struct GeneralSettingsView: View {
     @StateObject var configuration = AppConfiguration.shared
     
     var body: some View {
-            VStack(alignment: .center, spacing: 20) {
+        VStack(alignment: .leading, spacing: 20) {
                 Toggle("Markdown Enabled", isOn: configuration.$isMarkdownEnabled)
                 
-//                Toggle("Auto Generate Chat Title", isOn: configuration.$isAutoGenerateTitle)
-
-                HStack {
-                    Text("Preferred AI Provider")
-                    
-                    Spacer()
-                    
-                    Picker(selection: configuration.$preferredChatService) {
-                        ForEach(AIProvider.allCases, id: \.self) {
-                            Text($0.rawValue.capitalizingFirstLetter())
-                        }
+                Picker("Preferred AI Provider", selection: configuration.$preferredChatService) {
+                    ForEach(AIProvider.allCases, id: \.self) {
+                        Text($0.rawValue.capitalizingFirstLetter())
                     }
                 }
             }
