@@ -106,11 +106,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     func isReplying() -> Bool {
         return !conversations.isEmpty && lastConversation.isReplying
     }
-    
-    func stopStreaming() {
-        streamingTask?.cancel()
-        streamingTask = nil
-    }
         
     lazy var service: ChatService = configuration.service.service(session: self)
     
@@ -119,6 +114,11 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
     
     //MARK: - Message Actions
+    @MainActor
+    func stopStreaming() {
+        streamingTask?.cancel()
+        streamingTask = nil
+    }
     
     @MainActor
     func send(scroll: ((UnitPoint) -> Void)? = nil) async {
@@ -205,7 +205,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         conversations[conversations.count - 1].isReplying = false
 
         scroll?(.bottom)
-
+        save()
     }
     
     func createTitle() {
@@ -383,15 +383,7 @@ extension DialogueSession {
             rawData?.title = title
             rawData?.errorDesc = errorDesc
             rawData?.configuration = try JSONEncoder().encode(configuration)
-//            rawData?.conversations = NSSet(array: conversations.map { conversation in
-//                let data = ConversationData(context: PersistenceController.shared.container.viewContext)
-//                data.id = conversation.id
-//                data.date = conversation.date
-//                data.role = conversation.role
-//                data.content = conversation.content
-//                data.dialogue = rawData
-//                return data
-//            })
+    
             try PersistenceController.shared.save()
         } catch let error {
             print(error.localizedDescription)

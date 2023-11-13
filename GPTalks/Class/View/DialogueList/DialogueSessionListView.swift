@@ -8,15 +8,13 @@
 import SwiftUI
 
 struct DialogueSessionListView: View {
-    @State private var showRenameDialog = false
+    @State private var showRenameDialogue = false
     @State private var newName = ""
     @State private var sessionToRename: DialogueSession?
     @State private var searchQuery = ""
 
     @Binding var dialogueSessions: [DialogueSession]
     @Binding var selectedDialogueSession: DialogueSession?
-    
-//    @Binding var isReplying: Bool
     
     var deleteHandler: (IndexSet) -> Void
     var deleteDialogueHandler: (DialogueSession) -> Void
@@ -43,7 +41,7 @@ struct DialogueSessionListView: View {
                         Button {
                             sessionToRename = session
                             newName = session.title
-                            showRenameDialog = true
+                            showRenameDialogue = true
                         } label: {
                             HStack {
                                 Image(systemName: "pencil")
@@ -76,7 +74,7 @@ struct DialogueSessionListView: View {
 #else
         .frame(minWidth: 290)
 #endif
-        .alert("Rename", isPresented: $showRenameDialog, actions: {
+        .alert("Rename", isPresented: $showRenameDialogue, actions: {
             TextField("Enter new name", text: $newName)
             Button("Rename", action: {
                 if let session = sessionToRename {

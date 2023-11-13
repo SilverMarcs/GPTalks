@@ -20,9 +20,9 @@ struct ContentView: View {
     @State var dialogueSessions: [DialogueSession] = []
     @State var selectedDialogueSession: DialogueSession?
     
+#if os(iOS)
     @State var isShowSettingView = false
-    
-    @State var isReplying = false
+#endif
 
     var body: some View {
         NavigationSplitView {
@@ -52,15 +52,6 @@ struct ContentView: View {
         } detail: {
             if let selectedDialogueSession = selectedDialogueSession {
                 MessageListView(session:selectedDialogueSession)
-//                    .onReceive(selectedDialogueSession.$isReplying.didSet) { isReplying in
-//                        self.isReplying = isReplying
-//                    }
-//                    .onReceive(selectedDialogueSession.$conversations.didSet) { conversations in
-//                        if conversations.isEmpty {
-//                            isReplying = true
-//                            isReplying = false
-//                        }
-//                    }
             } else {
                 Text("Select a chat to see it here")
                     .font(.title)
@@ -108,7 +99,6 @@ struct ContentView: View {
             DialogueSessionListView(
                 dialogueSessions: $dialogueSessions,
                 selectedDialogueSession: $selectedDialogueSession
-//                isReplying: $isReplying
             ) {
                 deleteItems(offsets: $0)
             } deleteDialogueHandler: {
@@ -132,8 +122,6 @@ struct ContentView: View {
                     selectedDialogueSession = dialogueSessions.first
                 }
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
@@ -148,8 +136,6 @@ struct ContentView: View {
             do {
                 try PersistenceController.shared.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
@@ -168,8 +154,6 @@ struct ContentView: View {
             do {
                 try PersistenceController.shared.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
