@@ -88,7 +88,9 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     //MARK: - Properties
         
     var lastMessage: String {
-        // Do loading spinner here in viewbuilder
+        if errorDesc != "" {
+            return errorDesc
+        }
         return conversations.last?.content ?? ""
     }
     
@@ -275,7 +277,7 @@ extension DialogueSession {
                let date = data.date {
                 let conversation = Conversation(
                     id: id,
-                    date: date, 
+                    date: date,
                     role: role,
                     content: content
                 )
