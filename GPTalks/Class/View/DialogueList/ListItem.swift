@@ -12,17 +12,17 @@ struct ListItem: View {
     @State private var newName = ""
     @State private var sessionToRename: DialogueSession?
     @State private var searchQuery = ""
-    
+
     @ObservedObject var session: DialogueSession
     var deleteDialogueHandler: (DialogueSession) -> Void
-    
+
     var body: some View {
         NavigationLink(value: session) {
             HStack(spacing: 10) {
                 Image(session.configuration.service.iconName)
                     .resizable()
                     .frame(width: imageSize, height: imageSize)
-                    .cornerRadius(imagePadding)
+                    .cornerRadius(imageRadius)
                 VStack(spacing: 8) {
                     HStack {
                         Text(session.title)
@@ -37,9 +37,9 @@ struct ListItem: View {
                         if session.isReplying() {
                             ReplyingIndicatorView()
                                 .frame(
-                                       maxWidth: .infinity,
-                                       maxHeight: 14,
-                                       alignment: .leading
+                                    maxWidth: .infinity,
+                                    maxHeight: 14,
+                                    alignment: .leading
                                 )
                         } else {
                             Text(session.lastMessage)
@@ -89,46 +89,44 @@ struct ListItem: View {
             }
         }
     }
-    
-    
-    let imageSize: CGFloat = {
-       #if os(iOS)
-       return 44
-       #elseif os(macOS)
-       return 36
-       #endif
-    }()
 
-    let  imagePadding: CGFloat = {
-       #if os(iOS)
-       return 22
-       #elseif os(macOS)
-       return 11
-       #endif
-    }()
-
-    let titleFont: Font = {
-       #if os(iOS)
-       return Font.system(.headline)
-       #elseif os(macOS)
-       return Font.system(.body)
-       #endif
-    }()
-    
-    let lastMessageFont: Font = {
+    private var imageSize: CGFloat {
         #if os(iOS)
-        return Font.system(.subheadline)
+            44
         #elseif os(macOS)
-        return Font.system(.body)
+            36
         #endif
-    }()
+    }
 
-    let textLineLimit: Int = {
-       #if os(iOS)
-       return 2
-       #elseif os(macOS)
-       return 1
-       #endif
-    }()
+    private var imageRadius: CGFloat {
+        #if os(iOS)
+            16
+        #elseif os(macOS)
+            11
+        #endif
+    }
+
+    private var titleFont: Font {
+        #if os(iOS)
+            Font.system(.headline)
+        #elseif os(macOS)
+            Font.system(.body)
+        #endif
+    }
+
+    private var lastMessageFont: Font {
+        #if os(iOS)
+            Font.system(.subheadline)
+        #elseif os(macOS)
+            Font.system(.body)
+        #endif
+    }
+
+    private var textLineLimit: Int {
+        #if os(iOS)
+            2
+        #elseif os(macOS)
+            1
+        #endif
+    }
 }
-
