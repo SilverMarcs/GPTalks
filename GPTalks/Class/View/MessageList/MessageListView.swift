@@ -134,7 +134,7 @@ struct MessageListView: View {
 #if os(macOS)
                    .background(.secondarySystemBackground)
 #else
-                   .background(.systemBackground)
+                   .background(.bar)
 #endif
                }
 #if os(iOS)
