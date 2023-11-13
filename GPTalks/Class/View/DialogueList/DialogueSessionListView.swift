@@ -34,36 +34,31 @@ struct DialogueSessionListView: View {
     }
     
     var body: some View {
-        List(selection: $selectedDialogueSession) {
-            ForEach(filteredDialogueSessions) { session in
-                listView(session: session)
-                    .contextMenu {
-                        Button {
-                            sessionToRename = session
-                            newName = session.title
-                            showRenameDialogue = true
-                        } label: {
-                            HStack {
-                                Image(systemName: "pencil")
-                                Text("Rename")
-                            }
-                        }
-
-                        Button(role: .destructive) {
-                            deleteDialogueHandler(session)
-                            if session == selectedDialogueSession {
-                                selectedDialogueSession = nil
-                            }
-                        } label: {
-                            HStack {
-                                Image(systemName: "trash")
-                                Text("Delete")
-                            }
+        List(filteredDialogueSessions, selection: $selectedDialogueSession) { session in
+            listView(session: session)
+                .contextMenu {
+                    Button {
+                        sessionToRename = session
+                        newName = session.title
+                        showRenameDialogue = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "pencil")
+                            Text("Rename")
                         }
                     }
-            }
-            .onDelete { indexSet in
-                deleteHandler(indexSet)
+
+                    Button(role: .destructive) {
+                        deleteDialogueHandler(session)
+                        if session == selectedDialogueSession {
+                            selectedDialogueSession = nil
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "trash")
+                            Text("Delete")
+                        }
+                    }
             }
         }
         .searchable(text: $searchQuery)
