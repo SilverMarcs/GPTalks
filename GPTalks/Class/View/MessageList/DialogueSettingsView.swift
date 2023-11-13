@@ -2,7 +2,7 @@
 //  DialogueSettingsView.swift
 //  ChatGPT
 //
-//  Created by LuoHuanyu on 2023/3/26.
+//  Created by Zabir Raihan on 10/11/2023.
 //
 
 import SwiftUI
@@ -27,7 +27,7 @@ struct DialogueSettingsView: View {
             FormContent
         }
         .padding()
-        .frame(width: 300, height: 250)
+        .frame(width: 300, height: 220)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.focusedField = nil
@@ -48,10 +48,11 @@ struct DialogueSettingsView: View {
                         .fixedSize()
                     Spacer()
                     Text(configuration.service.name)
-                        .fixedSize()
-                        .frame(width: 170)
+                                                .frame(width: 170)
                 }
                 
+                
+                #if os(iOS)
                 HStack {
                     Text("Title")
                         .fixedSize()
@@ -59,8 +60,9 @@ struct DialogueSettingsView: View {
                     TextField("Chat title", text: $title)
                         .focused($focusedField, equals: .title)
                         .textFieldStyle(.roundedBorder)
-                        .frame(width: 170)
+                        .frame(width: width)
                 }
+                #endif
                 
                 HStack {
                     Text("Model")
@@ -72,7 +74,7 @@ struct DialogueSettingsView: View {
                                 .tag(model.id)
                         }
                     }
-                    .frame(width: 170)
+                    .frame(width: width)
                     .labelsHidden()
                 }
                 
@@ -86,7 +88,7 @@ struct DialogueSettingsView: View {
                                 .tag(number)
                         }
                     }
-                    .frame(width: 170)
+                    .frame(width: width)
                     .labelsHidden()
                 }
                 
@@ -111,5 +113,12 @@ struct DialogueSettingsView: View {
                     .lineLimit(4, reservesSpace: true)
             }
         }
+    }
+    private var width: CGFloat {
+        #if os(iOS)
+        return 170
+        #else
+        return 150
+        #endif
     }
 }

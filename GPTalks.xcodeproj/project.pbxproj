@@ -17,6 +17,7 @@
 		08723DAA2AFA4595001D59FE /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08723DA92AFA4595001D59FE /* OpenAIService.swift */; };
 		08723DAD2AFAC35D001D59FE /* OpenRouterSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08723DAC2AFAC35D001D59FE /* OpenRouterSettingsView.swift */; };
 		08A327472AFB62CE0086C3F1 /* SummarySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A327462AFB62CE0086C3F1 /* SummarySettingsView.swift */; };
+		08ED9EB82B02564D00849A1E /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* ListItem.swift */; };
 		E4924EED29DB0A4400B69605 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E4924EEF29DB0A4400B69605 /* Localizable.strings */; };
 		E4924EF429DC309E00B69605 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E4924EF329DC309E00B69605 /* Kingfisher */; };
 		E4924F0829DEEC0800B69605 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4924F0729DEEC0800B69605 /* ErrorMessageView.swift */; };
@@ -89,6 +90,7 @@
 		08723DA92AFA4595001D59FE /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		08723DAC2AFAC35D001D59FE /* OpenRouterSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenRouterSettingsView.swift; sourceTree = "<group>"; };
 		08A327462AFB62CE0086C3F1 /* SummarySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySettingsView.swift; sourceTree = "<group>"; };
+		08ED9EB72B02564D00849A1E /* ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
 		E4924EEE29DB0A4400B69605 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E4924F0729DEEC0800B69605 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		E4924F0B29DF2AD800B69605 /* OpenAISettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAISettingsView.swift; sourceTree = "<group>"; };
@@ -323,6 +325,7 @@
 			children = (
 				E4C65EE029CA9F7800AFA884 /* DialogueSessionListView.swift */,
 				E4E99BC629D415FF00C0FCBD /* DialogueListPlaceholderView.swift */,
+				08ED9EB72B02564D00849A1E /* ListItem.swift */,
 			);
 			path = DialogueList;
 			sourceTree = "<group>";
@@ -555,6 +558,7 @@
 				E4C65EF729CA9F7800AFA884 /* DialogueSessionListView.swift in Sources */,
 				E4E99BC929D5AF9F00C0FCBD /* ToolTipView.swift in Sources */,
 				E4C65EF329CA9F7800AFA884 /* ReplyingIndicatorView.swift in Sources */,
+				08ED9EB82B02564D00849A1E /* ListItem.swift in Sources */,
 				E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */,
 				E4C65EF629CA9F7800AFA884 /* AppSettingsView.swift in Sources */,
 				E4E99BD029D681A000C0FCBD /* PromptsListView.swift in Sources */,
