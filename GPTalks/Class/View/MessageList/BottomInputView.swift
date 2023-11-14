@@ -58,7 +58,7 @@ struct BottomInputView: View {
         .keyboardShortcut("r", modifiers: .command)
         .foregroundColor(session.isReplying() ? placeHolderTextColor : session.configuration.service.accentColor)
         .buttonStyle(.borderless)
-        .disabled(session.isReplying())
+        .disabled(session.conversations.isEmpty || session.isReplying())
     }
 
     @ViewBuilder

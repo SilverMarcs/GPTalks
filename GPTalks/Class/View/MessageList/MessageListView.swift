@@ -128,7 +128,10 @@ struct MessageListView: View {
                       sendMessage(proxy)
                    } stop: {
                        session.stopStreaming()
-                   } regen: {_ in 
+                   } regen: {_ in
+                       if session.isReplying() {
+                           return
+                       }
                        Task { @MainActor in
                            await session.regenerate(from: session.conversations.count - 1, scroll: {
                                scrollToBottom(proxy: proxy, anchor: $0)
