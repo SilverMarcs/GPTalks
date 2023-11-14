@@ -13,20 +13,42 @@ struct ConversationView: View {
 
     let regenHandler: (Conversation) -> Void
     let editHandler: (Conversation) -> Void
+    let deleteHandler: (() -> Void)?
 
     @State var isEditing: Bool = false
     @FocusState var isFocused: Bool
     @State var editingMessage: String = ""
-    var deleteHandler: (() -> Void)?
-
     @State private var isHovered = false
+    
+    @State private var textSize: CGSize = .zero
+
+    @State private var showPopover = false
+    
+    let maxUserMessageHeight: CGFloat = 500
 
     var body: some View {
         VStack {
             if conversation.role == "user" {
-                userMessage
-                    .padding(.trailing, 15)
-                    .padding(.leading, horizontalPadding)
+                VStack(alignment: .trailing) {
+                    userMessage
+                        .frame(maxHeight: textSize.height > maxUserMessageHeight ? maxUserMessageHeight : .infinity)
+
+                    if textSize.height > maxUserMessageHeight {
+                        Button("Show More") {
+                            showPopover = true
+                        }
+                        .opacity(isEditing ? 0 : 1)
+                        .popover(isPresented: $showPopover) {
+                            ScrollView {
+                                Text(conversation.content)
+                            }
+                            .frame(maxWidth: 400, maxHeight: 400)
+                            .padding()
+                        }
+                    }
+                }
+                .padding(.trailing, 15)
+                .padding(.leading, horizontalPadding)
             } else if conversation.role == "assistant" {
                 assistantMessage
                     .padding(.leading, 15)
@@ -56,7 +78,7 @@ struct ConversationView: View {
                     .font(.body)
                     .focused($isFocused)
                     .scrollContentBackground(.hidden)
-                    .frame(maxHeight: 500)
+                    .frame(maxHeight: maxUserMessageHeight - 18)
                     .bubbleStyle(isMyMessage: true, type: .edit)
             } else {
                 optionsMenu()
@@ -65,6 +87,14 @@ struct ConversationView: View {
                     .bubbleStyle(isMyMessage: true, type: .text, accentColor: accentColor)
             }
         }
+        .background(
+            GeometryReader { proxy in
+                Color.clear
+                    .onAppear {
+                        textSize = proxy.size
+                    }
+            }
+        )
     }
 
     @ViewBuilder
@@ -113,6 +143,7 @@ struct ConversationView: View {
             } label: {
                 Image(systemName: "xmark")
             }
+            .keyboardShortcut(.escape, modifiers: .command)
             .buttonStyle(.borderless)
             .foregroundColor(.red)
 
