@@ -74,6 +74,9 @@ struct ConversationView: View {
                 if AppConfiguration.shared.isMarkdownEnabled {
                     MessageMarkdownView(text: conversation.content)
                         .textSelection(.enabled)
+                } else {
+                    Text(conversation.content)
+                        .textSelection(.enabled)
                 }
                 if conversation.isReplying {
                     ReplyingIndicatorView()
@@ -120,9 +123,9 @@ struct ConversationView: View {
             } label: {
                 Image(systemName: "checkmark")
             }
+            .keyboardShortcut(.return, modifiers: .command)
             .buttonStyle(.borderless)
             .foregroundColor(.green)
-            .keyboardShortcut(isEditing ? .defaultAction : .none)
         }
         .padding(.trailing, 10)
     }

@@ -192,7 +192,11 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         }catch {
             // TODO: do better with stop_reason from openai
             if error.localizedDescription == "cancelled" {
-                lastConversationData?.sync(with: conversations[conversations.count - 1])
+                if lastConversation.content != "" {
+                    lastConversationData?.sync(with: conversations[conversations.count - 1])
+                } else {
+                    removeConversation(at: conversations.count - 1)
+                }
                 conversations[conversations.count - 1].isReplying = false
                 return
             }

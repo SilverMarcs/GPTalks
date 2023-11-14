@@ -41,7 +41,6 @@
 		E4C65EF729CA9F7800AFA884 /* DialogueSessionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EE029CA9F7800AFA884 /* DialogueSessionListView.swift */; };
 		E4C65EFA29CA9F7800AFA884 /* LanguageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EE529CA9F7800AFA884 /* LanguageModels.swift */; };
 		E4C65EFC29CA9F7800AFA884 /* BaseChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EE729CA9F7800AFA884 /* BaseChatService.swift */; };
-		E4C65EFD29CA9F7800AFA884 /* chatgpt_prompts.json in Resources */ = {isa = PBXBuildFile; fileRef = E4C65EE929CA9F7800AFA884 /* chatgpt_prompts.json */; };
 		E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EEB29CA9F7800AFA884 /* Splash.swift */; };
 		E4C65EFF29CA9F7800AFA884 /* KeyboardPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EEC29CA9F7800AFA884 /* KeyboardPublisher.swift */; };
 		E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F0D29CAA06600AFA884 /* Splash */; };
@@ -106,7 +105,6 @@
 		E4C65EE029CA9F7800AFA884 /* DialogueSessionListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogueSessionListView.swift; sourceTree = "<group>"; };
 		E4C65EE529CA9F7800AFA884 /* LanguageModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageModels.swift; sourceTree = "<group>"; };
 		E4C65EE729CA9F7800AFA884 /* BaseChatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseChatService.swift; sourceTree = "<group>"; };
-		E4C65EE929CA9F7800AFA884 /* chatgpt_prompts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chatgpt_prompts.json; sourceTree = "<group>"; };
 		E4C65EEB29CA9F7800AFA884 /* Splash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Splash.swift; sourceTree = "<group>"; };
 		E4C65EEC29CA9F7800AFA884 /* KeyboardPublisher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardPublisher.swift; sourceTree = "<group>"; };
 		E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomInputView.swift; sourceTree = "<group>"; };
@@ -285,8 +283,8 @@
 		E4C65ED629CA9F7800AFA884 /* MessageList */ = {
 			isa = PBXGroup;
 			children = (
-				E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */,
 				E4C65ED729CA9F7800AFA884 /* MessageListView.swift */,
+				E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */,
 				E4C65ED829CA9F7800AFA884 /* ConversationView.swift */,
 				E4C65ED929CA9F7800AFA884 /* MessageMarkdownView.swift */,
 				E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */,
@@ -319,7 +317,6 @@
 		E4C65EE829CA9F7800AFA884 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				E4C65EE929CA9F7800AFA884 /* chatgpt_prompts.json */,
 				E4924EEF29DB0A4400B69605 /* Localizable.strings */,
 				E4C65EAA29CA9E7F00AFA884 /* Assets.xcassets */,
 			);
@@ -457,7 +454,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4C65EFD29CA9F7800AFA884 /* chatgpt_prompts.json in Resources */,
 				E4924EED29DB0A4400B69605 /* Localizable.strings in Resources */,
 				E4C65EAF29CA9E7F00AFA884 /* Preview Assets.xcassets in Resources */,
 				E4C65EAB29CA9E7F00AFA884 /* Assets.xcassets in Resources */,

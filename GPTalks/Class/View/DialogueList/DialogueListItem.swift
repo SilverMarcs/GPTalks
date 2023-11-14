@@ -15,6 +15,7 @@ struct ListItem: View {
 
     @ObservedObject var session: DialogueSession
     var deleteDialogueHandler: (DialogueSession) -> Void
+    var sessionResetter: () -> Void
 
     var body: some View {
         NavigationLink(value: session) {
@@ -78,6 +79,19 @@ struct ListItem: View {
                 HStack {
                     Image(systemName: "pencil")
                     Text("Rename")
+                }
+            }
+            
+            Button(role: .destructive) {
+                deleteDialogueHandler(session)
+                sessionResetter()
+//                if session == selectedDialogueSession {
+//                    selectedDialogueSession = nil
+//                }
+            } label: {
+                HStack {
+                    Image(systemName: "trash")
+                    Text("Delete")
                 }
             }
         }

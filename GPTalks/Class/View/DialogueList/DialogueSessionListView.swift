@@ -33,6 +33,8 @@ struct DialogueSessionListView: View {
         List(filteredDialogueSessions, selection: $selectedDialogueSession) { session in
             ListItem(session: session) { _ in
                 deleteDialogueHandler(session)
+            } sessionResetter: {
+                selectedDialogueSession = nil
             }
         }
         .searchable(text: $searchQuery)

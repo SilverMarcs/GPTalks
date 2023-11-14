@@ -6,8 +6,8 @@
 //
 
 import MarkdownUI
-import SwiftUI
 import Splash
+import SwiftUI
 
 struct MessageMarkdownView: View {
     @Environment(\.colorScheme) private var colorScheme
@@ -18,40 +18,40 @@ struct MessageMarkdownView: View {
         Markdown(MarkdownContent(text))
             .markdownCodeSyntaxHighlighter(.splash(theme: theme))
             .markdownBlockStyle(\.codeBlock) {
-              codeBlock($0)
+                CodeBlock(configuration: $0)
             }
     }
-    
-    private var theme: Splash.Theme {
-      switch self.colorScheme {
-      case .dark:
-        return .wwdc17(withFont: .init(size: 16))
-      default:
-        return .sunset(withFont: .init(size: 16))
-      }
-    }
-    
-    @ViewBuilder
-    private func codeBlock(_ configuration: CodeBlockConfiguration) -> some View {
-      HStack {
-          configuration.label
-            .markdownTextStyle {
-              FontFamilyVariant(.monospaced)
-              FontSize(.em(0.97))
+
+    struct CodeBlock: View {
+        @State private var isHovered = false
+        let configuration: CodeBlockConfiguration
+
+        var body: some View {
+            ZStack(alignment: .bottomTrailing) {
+                configuration.label
+                    .markdownTextStyle {
+                        FontFamilyVariant(.monospaced)
+                        FontSize(.em(0.97))
+                    }
+                    .padding(15)
+                    .background(.background.secondary)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .markdownMargin(top: .zero, bottom: .em(0.8))
+
+                CodeCopyButton(text: configuration.content)
+                    .padding(11)
+                    .opacity(isHovered ? 1 : 0)
             }
-            .padding(15)
-            .background(.background.secondary)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .markdownMargin(top: .zero, bottom: .em(0.8))
-          CodeCopyButton(text: configuration.content)
+            .onHover { hovering in
+                isHovered = hovering
+            }
         }
-      }
-    
-    
+    }
+
     struct CodeCopyButton: View {
         @State private var isButtonPressed = false
         var text: String
-        
+
         var body: some View {
             Button(action: {
                 self.isButtonPressed = true
@@ -61,9 +61,21 @@ struct MessageMarkdownView: View {
                 text.copyToPasteboard()
             }) {
                 Image(systemName: isButtonPressed ? "checkmark" : "clipboard")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 9, height: 19)
+                    .padding(1)
             }
             .disabled(isButtonPressed)
-            .buttonStyle(.plain)
+        }
+    }
+
+    private var theme: Splash.Theme {
+        switch colorScheme {
+        case .dark:
+            return .wwdc17(withFont: .init(size: 16))
+        default:
+            return .sunset(withFont: .init(size: 16))
         }
     }
 }

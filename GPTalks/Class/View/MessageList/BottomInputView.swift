@@ -14,10 +14,11 @@ struct BottomInputView: View {
 
     var send: (String) -> Void
     var stop: () -> Void
+    var regen: (Conversation) -> Void
 
     var body: some View {
         HStack(spacing: 12) {
-            deleteButton
+            regenButton
 
             inputBox
 
@@ -42,6 +43,22 @@ struct BottomInputView: View {
         } message: {
             Text("Remove all messages?")
         }
+    }
+    
+    @ViewBuilder
+    private var regenButton: some View {
+        Button {
+            regen(session.lastConversation)
+        } label: {
+            Image(systemName: "arrow.clockwise.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: imageSize, height: imageSize)
+        }
+        .keyboardShortcut("r", modifiers: .command)
+        .foregroundColor(session.isReplying() ? placeHolderTextColor : session.configuration.service.accentColor)
+        .buttonStyle(.borderless)
+        .disabled(session.isReplying())
     }
 
     @ViewBuilder
@@ -98,7 +115,7 @@ struct BottomInputView: View {
             #endif
         }
         .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .circular)
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .stroke(.tertiary, lineWidth: 0.6)
                 .opacity(0.8)
         )

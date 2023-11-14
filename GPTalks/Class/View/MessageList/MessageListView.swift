@@ -23,7 +23,7 @@ struct MessageListView: View {
                         HStack(spacing: 4) {
                             Text(firstTwoWords(of: session.title))
                                .bold()
-                               .foregroundColor(Color.secondary)
+                               .foregroundColor(Color.primary)
 
                             Image(systemName:"chevron.right")
                                 .font(.system(size: 10))
@@ -83,7 +83,9 @@ struct MessageListView: View {
                                    })
                                }
                            } deleteHandler: {
-                               session.removeConversation(at: index)
+                               withAnimation {
+                                   session.removeConversation(at: index)
+                               }
                            }
                            .id(index)
                        }
@@ -128,6 +130,12 @@ struct MessageListView: View {
                       sendMessage(proxy)
                    } stop: {
                        session.stopStreaming()
+                   } regen: {_ in 
+                       Task { @MainActor in
+                           await session.regenerate(from: session.conversations.count - 1, scroll: {
+                               scrollToBottom(proxy: proxy, anchor: $0)
+                           })
+                       }
                    }
                    .background(.bar)
                }

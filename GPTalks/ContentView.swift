@@ -61,6 +61,11 @@ struct ContentView: View {
             dialogueSessions = items.compactMap {
                 DialogueSession(rawData: $0)
             }
+            #if os(macOS)
+            if !dialogueSessions.isEmpty {
+                selectedDialogueSession = dialogueSessions.first
+            }
+            #endif
         }
         .background(.background)
 #if os(macOS)

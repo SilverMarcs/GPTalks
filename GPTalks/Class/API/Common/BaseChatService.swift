@@ -69,7 +69,7 @@ class BaseChatService: @unchecked Sendable, ChatService {
     }()
     
     func createTitle() async throws -> String {
-        try await sendTaskMessage("Give me a title of this conversation. Make it as short as possible. Your title should NOT exceed 4 words. Send the title only and nothing else. Do not include quotation symbols. Do not add your own words unless it is the title only")
+        try await sendTaskMessage("Give me a title of this conversation. Make it as short as possible. Your title should NOT exceed 3 words. Send the title only and nothing else. Do not include quotation symbols. Do not add your own words unless it is the title only")
     }
     
     func makeJSONBody(with conversations: [Conversation], stream: Bool = true) throws -> Data {
@@ -129,63 +129,6 @@ class BaseChatService: @unchecked Sendable, ChatService {
                         }
                     }
                     
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
-        }
-    }
-    
-    // TODO: this is flawed. need to summarize whole convo
-    func sendTaskMessageStream(_ taskPrompt: String, messageText: String? = nil, temperature: Double = 0) async throws -> AsyncThrowingStream<String, Error> {
-        let messages = [
-            Message(role: "system", content: configuration.systemPrompt),
-            Message(role: "user", content: taskPrompt)
-        ]
-        
-        let url = URL(string: baseURL + path)!
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = method
-        headers.forEach {  urlRequest.setValue($1, forHTTPHeaderField: $0) }
-        let requestModel = Chat(model: configuration.model.id, temperature: temperature,
-                                messages: messages, stream: true, max_tokens: configuration.model.maxTokens)
-        urlRequest.httpBody = try JSONEncoder().encode(requestModel)
-        
-        let (result, response) = try await urlSession.bytes(for: urlRequest)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw String(localized: "Invalid response")
-        }
-        
-        guard 200...299 ~= httpResponse.statusCode else {
-            var errorText = ""
-            for try await line in result.lines {
-                errorText += line
-            }
-            
-            if let data = errorText.data(using: .utf8), let errorResponse = try? jsonDecoder.decode(ErrorRootResponse.self, from: data).error {
-                errorText = "\n\(errorResponse.message)"
-            }
-            
-            throw String(localized: "Response Error: \(httpResponse.statusCode), \(errorText)")
-        }
-        
-        return AsyncThrowingStream<String, Error> { continuation in
-            Task(priority: .userInitiated) { [weak self] in
-                guard let self else { return }
-                do {
-                    var reply = ""
-                    for try await line in result.lines {
-                        if line.hasPrefix("data: "),
-                           let data = line.dropFirst(6).data(using: .utf8),
-                           let response = try? self.jsonDecoder.decode(StreamCompletionResponse.self, from: data),
-                           let text = response.choices.first?.delta.content {
-                            reply += text
-                            continuation.yield(text)
-                        }
-                    }
-
                     continuation.finish()
                 } catch {
                     continuation.finish(throwing: error)
