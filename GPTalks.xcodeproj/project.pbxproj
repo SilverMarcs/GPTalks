@@ -44,13 +44,11 @@
 		E4C65EFD29CA9F7800AFA884 /* chatgpt_prompts.json in Resources */ = {isa = PBXBuildFile; fileRef = E4C65EE929CA9F7800AFA884 /* chatgpt_prompts.json */; };
 		E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EEB29CA9F7800AFA884 /* Splash.swift */; };
 		E4C65EFF29CA9F7800AFA884 /* KeyboardPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EEC29CA9F7800AFA884 /* KeyboardPublisher.swift */; };
-		E4C65F0529CAA02800AFA884 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F0429CAA02800AFA884 /* SwiftUIX */; };
 		E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F0D29CAA06600AFA884 /* Splash */; };
 		E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F1029CAA08400AFA884 /* MarkdownUI */; };
 		E4C65F1829CBEE2400AFA884 /* BottomInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */; };
 		E4C65F2029D0649800AFA884 /* DialogueSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65F1F29D0649800AFA884 /* DialogueSettingsView.swift */; };
 		E4E99BC729D415FF00C0FCBD /* DialogueListPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E99BC629D415FF00C0FCBD /* DialogueListPlaceholderView.swift */; };
-		E4E99BCC29D5D58700C0FCBD /* SwiftCSV in Frameworks */ = {isa = PBXBuildFile; productRef = E4E99BCB29D5D58700C0FCBD /* SwiftCSV */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,9 +120,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4E99BCC29D5D58700C0FCBD /* SwiftCSV in Frameworks */,
 				E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */,
-				E4C65F0529CAA02800AFA884 /* SwiftUIX in Frameworks */,
 				E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -365,10 +361,8 @@
 			);
 			name = GPTalks;
 			packageProductDependencies = (
-				E4C65F0429CAA02800AFA884 /* SwiftUIX */,
 				E4C65F0D29CAA06600AFA884 /* Splash */,
 				E4C65F1029CAA08400AFA884 /* MarkdownUI */,
-				E4E99BCB29D5D58700C0FCBD /* SwiftCSV */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -444,10 +438,8 @@
 			);
 			mainGroup = E4C65E9529CA9E7E00AFA884;
 			packageReferences = (
-				E4C65F0329CAA02800AFA884 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
 				E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */,
 				E4C65F0F29CAA08400AFA884 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
-				E4E99BCA29D5D58700C0FCBD /* XCRemoteSwiftPackageReference "SwiftCSV" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -923,14 +915,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E4C65F0329CAA02800AFA884 /* XCRemoteSwiftPackageReference "SwiftUIX" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.4;
-			};
-		};
 		E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JohnSundell/Splash";
@@ -947,22 +931,9 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		E4E99BCA29D5D58700C0FCBD /* XCRemoteSwiftPackageReference "SwiftCSV" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/swiftcsv/SwiftCSV.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.8.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E4C65F0429CAA02800AFA884 /* SwiftUIX */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E4C65F0329CAA02800AFA884 /* XCRemoteSwiftPackageReference "SwiftUIX" */;
-			productName = SwiftUIX;
-		};
 		E4C65F0D29CAA06600AFA884 /* Splash */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */;
@@ -972,11 +943,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E4C65F0F29CAA08400AFA884 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
-		};
-		E4E99BCB29D5D58700C0FCBD /* SwiftCSV */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E4E99BCA29D5D58700C0FCBD /* XCRemoteSwiftPackageReference "SwiftCSV" */;
-			productName = SwiftCSV;
 		};
 /* End XCSwiftPackageProductDependency section */
 
