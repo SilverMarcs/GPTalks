@@ -85,9 +85,6 @@ struct ListItem: View {
             Button(role: .destructive) {
                 deleteDialogueHandler(session)
                 sessionResetter()
-//                if session == selectedDialogueSession {
-//                    selectedDialogueSession = nil
-//                }
             } label: {
                 HStack {
                     Image(systemName: "trash")

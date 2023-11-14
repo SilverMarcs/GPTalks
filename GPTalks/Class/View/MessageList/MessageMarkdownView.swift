@@ -64,9 +64,11 @@ struct MessageMarkdownView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 9, height: 19)
-                    .padding(1)
+                    .padding(.vertical, 1)
             }
             .disabled(isButtonPressed)
+            .background(.background)
+            .cornerRadius(5)
         }
     }
 
