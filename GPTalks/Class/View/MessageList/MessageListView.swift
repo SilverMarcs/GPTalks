@@ -96,16 +96,14 @@ struct MessageListView: View {
                        VStack(spacing: 15) {
                            Text(session.errorDesc)
                                .foregroundStyle(.red)
-                           Button {
+                           Button("Retry") {
                                Task { @MainActor in
                                    await session.retry() {
                                        scrollToBottom(proxy: proxy, anchor: $0)
                                    }
                                }
-                                   
-                           } label: {
-                                 Text("Retry")
-                            }
+                           }
+                           .clipShape(.capsule(style: .circular))
                        }
                        .padding()
                    }

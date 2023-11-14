@@ -37,6 +37,7 @@ struct ConversationView: View {
                         Button("Show More") {
                             showPopover = true
                         }
+                        .clipShape(.capsule(style: .circular))
                         .opacity(isEditing ? 0 : 1)
                         .popover(isPresented: $showPopover) {
                             ScrollView {
