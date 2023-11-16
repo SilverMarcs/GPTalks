@@ -63,7 +63,7 @@ struct AppSettingsView: View {
                     }
                 }
                 NavigationLink {
-                    PAISettingsView()
+                    CustomSettingsView()
                 } label: {
                     HStack {
                         Image("custom")

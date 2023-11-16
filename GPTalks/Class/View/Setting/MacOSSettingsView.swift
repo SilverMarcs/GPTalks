@@ -64,7 +64,7 @@ struct ModelSettingsView: View {
             case .openRouter:
                 OpenRouterSettingsView()
             case .custom:
-                PAISettingsView()
+                CustomSettingsView()
             case .summaries:
                 SummarySettingsView()
             }

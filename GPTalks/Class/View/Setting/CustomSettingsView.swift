@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PAISettingsView: View {
+struct CustomSettingsView: View {
     @StateObject var configuration = AppConfiguration.shared
 
     @State private var showAPIKey = false
@@ -79,7 +79,7 @@ struct PAISettingsView: View {
                     HStack {
                         Text("System prompt")
                         Spacer()
-                        TextField("System Prompt", text: configuration.$ORsystemPrompt)
+                        TextField("System Prompt", text: configuration.$CsystemPrompt)
                             .textFieldStyle(.roundedBorder)
                             .frame(width: 240)
                     }
