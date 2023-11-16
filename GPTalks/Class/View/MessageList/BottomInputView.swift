@@ -56,7 +56,7 @@ struct BottomInputView: View {
                 .frame(width: imageSize, height: imageSize)
         }
         .keyboardShortcut("r", modifiers: .command)
-        .foregroundColor(session.isReplying() ? placeHolderTextColor : session.configuration.service.accentColor)
+        .foregroundColor(session.isReplying() ? placeHolderTextColor : session.configuration.provider.accentColor)
         .buttonStyle(.borderless)
         .disabled(session.conversations.isEmpty || session.isReplying())
     }
@@ -86,7 +86,7 @@ struct BottomInputView: View {
                 .frame(width: imageSize, height: imageSize)
         }
         .keyboardShortcut(.return, modifiers: .command)
-        .foregroundColor(session.input.isEmpty ? placeHolderTextColor : session.configuration.service.accentColor)
+        .foregroundColor(session.input.isEmpty ? placeHolderTextColor : session.configuration.provider.accentColor)
         .buttonStyle(.borderless)
         .disabled(session.input.isEmpty || session.isReplying())
     }

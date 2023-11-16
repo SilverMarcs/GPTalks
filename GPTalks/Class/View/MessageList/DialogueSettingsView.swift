@@ -47,7 +47,7 @@ struct DialogueSettingsView: View {
                     Text("Provider")
                         .fixedSize()
                     Spacer()
-                    Text(configuration.service.name)
+                    Text(configuration.provider.name)
                         .frame(width: 170)
                 }
 
@@ -68,7 +68,7 @@ struct DialogueSettingsView: View {
                         .fixedSize()
                     Spacer()
                     Picker("", selection: $configuration.model) {
-                        ForEach(configuration.service.models, id: \.self) { model in
+                        ForEach(configuration.provider.models, id: \.self) { model in
                             Text(model.name)
                                 .tag(model.id)
                         }

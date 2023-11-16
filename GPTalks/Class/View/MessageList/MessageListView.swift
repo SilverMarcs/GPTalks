@@ -70,7 +70,7 @@ struct MessageListView: View {
                ScrollView {
                    VStack(spacing: 0) {
                        ForEach(Array(session.conversations.enumerated()), id: \.element.id) { index, conversation in
-                           ConversationView(conversation: conversation, accentColor: session.configuration.service.accentColor) { conversation in
+                           ConversationView(conversation: conversation, accentColor: session.configuration.provider.accentColor) { conversation in
                              Task { @MainActor in
                                  await session.regenerate(from: index, scroll: {
                                      scrollToBottom(proxy: proxy, anchor: $0)

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OpenAI
 
 struct Conversation: Codable, Identifiable, Hashable {
     var id = UUID()
@@ -14,8 +15,8 @@ struct Conversation: Codable, Identifiable, Hashable {
     var content: String
     var isReplying: Bool = false
     
-    func toMessage() -> Message {
-        return Message(role: role, content: content)
+    func toChat() -> Chat {
+        return Chat(role: role == "user" ? .user : .system, content: content)
     }
 }
 

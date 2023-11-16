@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OpenAI
 
 class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Codable {
     
@@ -13,15 +14,15 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         var temperature: Double
         var systemPrompt: String
         var contextLength: Int
-        var service: AIProvider
+        var provider: AIProvider
         var model: Model
         
         init() {
-            service = AppConfiguration.shared.preferredChatService
-            model = service.preferredModel
-            contextLength = service.contextLength
-            temperature = service.temperature
-            systemPrompt = service.systemPrompt
+            provider = AppConfiguration.shared.preferredChatService
+            model = provider.preferredModel
+            contextLength = provider.contextLength
+            temperature = provider.temperature
+            systemPrompt = provider.systemPrompt
         }
         
     }
@@ -34,10 +35,9 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         conversations = try container.decode([Conversation].self, forKey: .conversations)
         date = try container.decode(Date.self, forKey: .date)
         id = try container.decode(UUID.self, forKey: .id)
-
         input = ""
         
-        service = configuration.service.service(session: self)
+//        service = configuration.service.service(session: self)
         
 
         initFinished = true
@@ -99,14 +99,18 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         return lastConversation.content
     }
     
+    var lastConversationData: ConversationData?
+    
     var streamingTask: Task<Void, Error>?
     
     
     func isReplying() -> Bool {
         return !conversations.isEmpty && lastConversation.isReplying
     }
+    
+    lazy var openAIconfig = configuration.provider.config
         
-    lazy var service: ChatService = configuration.service.service(session: self)
+    lazy var service: OpenAI = configuration.provider.service(openAIconfiguration: openAIconfig)
     
     init() {
         
@@ -155,8 +159,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     func retry(scroll: ((UnitPoint) -> Void)? = nil) async {
         await send(text: lastConversation.content, isRetry: true, scroll: scroll)
     }
-
-    private var lastConversationData: ConversationData?
     
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false, scroll: ((UnitPoint) -> Void)? = nil) async {
@@ -166,29 +168,33 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         
         if !isRegen && !isRetry{
             appendConversation(Conversation(role: "user", content: text))
-            scroll?(.bottom)
         }
         
-        lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+        scroll?(.bottom)
         
         do {
-            scroll?(.bottom)
+            lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
             
             let adjustedContext = adjustContext(from: conversations, limit: configuration.contextLength, systemPrompt: configuration.systemPrompt)
             
-            streamingTask = Task {
-                let stream = try await service.sendMessage(adjustedContext)
-                
-                for try await text in stream {
-                    try Task.checkCancellation()
-                    streamText += text
-                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                    scroll?(.bottom)
-                }
-                lastConversationData?.sync(with: conversations[conversations.count - 1])
+            var messages = adjustedContext.map { $0.toChat() }
+            
+            messages.append(.init(role: .user, content: text))
+            
+            let query = ChatQuery(model: configuration.model.id,
+                                  messages: messages,
+                                  temperature: configuration.temperature,
+                                  maxTokens: configuration.model.maxTokens,
+                                  stream: true)
+            
+            for try await result in service.chatsStream(query: query) {
+                streamText += result.choices.first?.delta.content ?? ""
+                conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                scroll?(.bottom)
             }
             
-            try await streamingTask?.value
+            lastConversationData?.sync(with: conversations[conversations.count - 1])
+            
         }catch {
             // TODO: do better with stop_reason from openai
             if error.localizedDescription == "cancelled" {
@@ -211,19 +217,19 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         save()
     }
     
-    func createTitle() {
-        Task { @MainActor in
-            do {
-                let newTitle = try await service.createTitle()
-                let words = newTitle.split(separator: " ")
-                let firstFiveWords = words.prefix(5).joined(separator: " ")
-                self.rename(newTitle: String(firstFiveWords))
-
-               } catch let error {
-                print(error)
-            }
-        }
-    }
+//    func createTitle() {
+//        Task { @MainActor in
+//            do {
+//                let newTitle = try await service.createTitle()
+//                let words = newTitle.split(separator: " ")
+//                let firstFiveWords = words.prefix(5).joined(separator: " ")
+//                self.rename(newTitle: String(firstFiveWords))
+//
+//               } catch let error {
+//                print(error)
+//            }
+//        }
+//    }
     
     func adjustContext(
         from conversations: [Conversation],

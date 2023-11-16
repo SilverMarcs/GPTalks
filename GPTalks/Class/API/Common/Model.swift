@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OpenAI
 
 enum Model: String, Codable {
     /// openai
@@ -72,16 +73,16 @@ enum Model: String, Codable {
             return "google/palm-2-chat-bison"
         case .palmcode:
             return "google/palm-2-codechat-bison"
-        case .pai:
-            return "pai-001-beta"
-        case .pailight:
-            return "pai-001-light-beta"
         case .zephyr:
             return "huggingfaceh4/zephyr-7b-beta"
         case .orgpt3:
             return "openai/gpt-3.5-turbo-1106"
         case .orgpt4:
             return "openai/gpt-4-1106-preview"
+        case .pai:
+            return "gpt-4"
+        case .pailight:
+            return "pai-001-light-beta"
         }
     }
 

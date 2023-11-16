@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OpenAI
 
 enum AIProvider: String, CaseIterable, Codable {
     case openAI
@@ -22,16 +23,30 @@ enum AIProvider: String, CaseIterable, Codable {
             return "pawan"
         }
     }
-
-    func service(session: DialogueSession) -> ChatService {
+    
+    var config: OpenAI.Configuration {
         switch self {
         case .openAI:
-            return OpenAIService(session: session)
+            return OpenAI.Configuration(
+                token: AppConfiguration.shared.OAIkey,
+                host: "https://api.openai.com"
+            )
         case .openRouter:
-            return OpenRouterService(session: session)
+            return OpenAI.Configuration(
+                token: AppConfiguration.shared.ORkey,
+                host: "https://openrouter.ai/api",
+                additionalHeaders: ["HTTP-Referer" : "https://example.com"]
+            )
         case .pAI:
-            return PAIService(session: session)
+            return OpenAI.Configuration(
+                token: AppConfiguration.shared.PAIkey,
+                host: "http://127.0.0.1:1337"
+            )
         }
+    }
+
+    func service(openAIconfiguration: OpenAI.Configuration) -> OpenAI {
+        return OpenAI(configuration: openAIconfiguration)
     }
 
     var iconName: String {

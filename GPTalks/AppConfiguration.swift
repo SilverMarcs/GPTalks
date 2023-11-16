@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OpenAI
 
 class AppConfiguration: ObservableObject {
     

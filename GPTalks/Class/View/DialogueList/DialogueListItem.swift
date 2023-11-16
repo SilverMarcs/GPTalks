@@ -20,7 +20,7 @@ struct ListItem: View {
     var body: some View {
         NavigationLink(value: session) {
             HStack(spacing: 10) {
-                Image(session.configuration.service.iconName)
+                Image(session.configuration.provider.iconName)
                     .resizable()
                     .frame(width: imageSize, height: imageSize)
                     .cornerRadius(imageRadius)
