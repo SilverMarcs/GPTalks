@@ -77,6 +77,17 @@ struct PAISettingsView: View {
                     Divider()
                     
                     HStack {
+                        Text("System prompt")
+                        Spacer()
+                        TextField("System Prompt", text: configuration.$ORsystemPrompt)
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: 240)
+                    }
+                    .padding(paddingValue)
+                    
+                    Divider()
+                    
+                    HStack {
                         Text("Host URL")
                         Spacer()
                         TextField("Include https:// or http://", text: configuration.$CHost)
@@ -140,11 +151,12 @@ struct PAISettingsView: View {
                 }
             }
             Section(header: Text("System Prompt")) {
-                TextField("Enter a System Prompt", text: $configuration.CHost, axis: .vertical)
+                TextField("Enter a System Prompt", text: $configuration.CsystemPrompt, axis: .vertical)
                     .lineLimit(3, reservesSpace: true)
             }
             Section(header: Text("Custom API Key")) {
                 HStack {
+                    
                     Image(systemName: "key")
                     Spacer()
                     if showAPIKey {
@@ -158,7 +170,16 @@ struct PAISettingsView: View {
                         Image(systemName: showAPIKey ? "eye.slash" : "eye")
                     }
                 }
+                HStack {
+                    Text("Host URL")
+                    Spacer()
+                    TextField("Include https:// or http://", text: configuration.$CHost)
+                }
             }
+            
+
+            
+            
         }
         .navigationTitle("PAI")
     }

@@ -170,9 +170,8 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             appendConversation(Conversation(role: .user, content: text))
         }
         
-        scroll?(.bottom)
-        
         do {
+        
             lastConversationData = appendConversation(Conversation(role: .assistant, content: "", isReplying: true))
             
             let adjustedContext = adjustContext(from: conversations, limit: configuration.contextLength, systemPrompt: configuration.systemPrompt)
@@ -186,12 +185,17 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                                   temperature: configuration.temperature,
                                   maxTokens: configuration.model.maxTokens,
                                   stream: true)
-            
-            for try await result in service.chatsStream(query: query) {
-                streamText += result.choices.first?.delta.content ?? ""
-                conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-//                scroll?(.bottom)
+            streamingTask = Task {
+                for try await result in service.chatsStream(query: query) {
+                    streamText += result.choices.first?.delta.content ?? ""
+                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    //                scroll?(.bottom)
+                }
             }
+            
+            scroll?(.bottom)
+            
+            try await streamingTask?.value
             
             lastConversationData?.sync(with: conversations[conversations.count - 1])
             

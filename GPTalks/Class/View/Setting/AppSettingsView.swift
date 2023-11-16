@@ -66,7 +66,7 @@ struct AppSettingsView: View {
                     PAISettingsView()
                 } label: {
                     HStack {
-                        Image("pai")
+                        Image("custom")
                             .resizable()
                             .cornerRadius(10)
                             .frame(width: 30, height: 30)
