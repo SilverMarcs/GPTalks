@@ -9,37 +9,37 @@ import SwiftUI
 import OpenAI
 
 enum AIProvider: String, CaseIterable, Codable {
-    case openAI
-    case openRouter
-    case pAI
+    case openai
+    case openrouter
+    case custom
 
     var id: String {
         switch self {
-        case .openAI:
+        case .openai:
             return "openai"
-        case .openRouter:
+        case .openrouter:
             return "openrouter"
-        case .pAI:
+        case .custom:
             return "pawan"
         }
     }
     
     var config: OpenAI.Configuration {
         switch self {
-        case .openAI:
+        case .openai:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.OAIkey,
                 host: "https://api.openai.com"
             )
-        case .openRouter:
+        case .openrouter:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.ORkey,
                 host: "https://openrouter.ai/api",
                 additionalHeaders: ["HTTP-Referer" : "https://example.com"]
             )
-        case .pAI:
+        case .custom:
             return OpenAI.Configuration(
-                token: AppConfiguration.shared.PAIkey,
+                token: AppConfiguration.shared.Ckey,
                 host: "http://127.0.0.1:1337"
             )
         }
@@ -55,78 +55,78 @@ enum AIProvider: String, CaseIterable, Codable {
     
     var accentColor: Color {
         switch self {
-        case .openAI:
+        case .openai:
             return Color("greenColor")
-        case .openRouter:
+        case .openrouter:
             return Color("purpleColor")
-        case .pAI:
+        case .custom:
             return Color("orangeColor")
         }
     }
 
     var name: String {
         switch self {
-        case .openAI:
+        case .openai:
             return "OpenAI"
-        case .openRouter:
+        case .openrouter:
             return "OpenRouter"
-        case .pAI:
+        case .custom:
             return "PAI"
         }
     }
 
     var contextLength: Int {
         switch self {
-        case .openAI:
+        case .openai:
             return AppConfiguration.shared.OAIcontextLength
-        case .openRouter:
+        case .openrouter:
             return AppConfiguration.shared.ORcontextLength
-        case .pAI:
-            return AppConfiguration.shared.PAIcontextLength
+        case .custom:
+            return AppConfiguration.shared.CcontextLength
         }
     }
 
     var temperature: Double {
         switch self {
-        case .openAI:
+        case .openai:
             return AppConfiguration.shared.OAItemperature
-        case .openRouter:
+        case .openrouter:
             return AppConfiguration.shared.ORtemperature
-        case .pAI:
-            return AppConfiguration.shared.PAItemperature
+        case .custom:
+            return AppConfiguration.shared.Ctemperature
         }
     }
 
     var systemPrompt: String {
         switch self {
-        case .openAI:
+        case .openai:
             return AppConfiguration.shared.OAIsystemPrompt
-        case .openRouter:
+        case .openrouter:
             return AppConfiguration.shared.ORsystemPrompt
-        case .pAI:
-            return AppConfiguration.shared.PAIsystemPrompt
+        case .custom:
+            return AppConfiguration.shared.CHost
         }
     }
 
     var preferredModel: Model {
         switch self {
-        case .openAI:
+        case .openai:
             return AppConfiguration.shared.OAImodel
-        case .openRouter:
+        case .openrouter:
             return AppConfiguration.shared.ORmodel
-        case .pAI:
-            return AppConfiguration.shared.PAImodel
+        case .custom:
+            return AppConfiguration.shared.Cmodel
         }
     }
 
     var models: [Model] {
         switch self {
-        case .openAI:
+        case .openai:
             return Model.openAIModels
-        case .openRouter:
+        case .openrouter:
             return Model.openRouterModels
-        case .pAI:
-            return Model.pAIModels
+        case .custom:
+            return Model.customModels
         }
     }
 }

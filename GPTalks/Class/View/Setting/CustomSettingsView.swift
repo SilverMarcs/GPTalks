@@ -19,6 +19,8 @@ struct PAISettingsView: View {
             iOS
         #endif
     }
+    
+    let paddingValue: CGFloat = 10
 
     var macOS: some View {
         ScrollView {
@@ -29,22 +31,22 @@ struct PAISettingsView: View {
                     HStack {
                         Text("Model")
                         Spacer()
-                        Picker("", selection: configuration.$PAImodel) {
-                            ForEach(AIProvider.pAI.models, id: \.self) { model in
+                        Picker("", selection: configuration.$Cmodel) {
+                            ForEach(AIProvider.custom.models, id: \.self) { model in
                                 Text(model.name)
                                     .tag(model.id)
                             }
                         }
                         .frame(width: 250)
                     }
-                    .padding()
+                    .padding(paddingValue)
 
                     Divider()
 
                     HStack {
                         Text("Context Length")
                         Spacer()
-                        Picker("", selection: configuration.$PAIcontextLength) {
+                        Picker("", selection: configuration.$CcontextLength) {
                             ForEach(Array(1 ... 10).reversed() + [30], id: \.self) { number in
                                 Text(number == 30 ? "Unlimited Messages" : "Last \(number) Messages")
                                     .tag(number)
@@ -52,7 +54,7 @@ struct PAISettingsView: View {
                         }
                         .frame(width: 250)
                     }
-                    .padding()
+                    .padding(paddingValue)
 
                     Divider()
 
@@ -60,23 +62,29 @@ struct PAISettingsView: View {
                         Text("Temperature")
                         Spacer()
                         HStack {
-                            Slider(value: configuration.$PAItemperature, in: 0 ... 2, step: 0.1) {
+                            Slider(value: configuration.$Ctemperature, in: 0 ... 2, step: 0.1) {
                             } minimumValueLabel: {
                                 Text("0")
                             } maximumValueLabel: {
                                 Text("2")
                             }
-                            Text(String(format: "%.2f", configuration.PAItemperature))
+                            Text(String(format: "%.2f", configuration.Ctemperature))
                         }
                         .frame(width: 240)
                     }
-                    .padding()
+                    .padding(paddingValue)
 
                     Divider()
+                    
+                    HStack {
+                        Text("Host URL")
+                        Spacer()
+                        TextField("Include https:// or http://", text: configuration.$CHost)
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: 240)
+                    }
+                    .padding(paddingValue)
 
-                    TextField("System Prompt", text: configuration.$PAIsystemPrompt)
-                        .textFieldStyle(.roundedBorder)
-                        .padding()
                 }
                 .padding(.bottom)
 
@@ -86,10 +94,10 @@ struct PAISettingsView: View {
                     HStack {
                         Image(systemName: "key")
                         if showAPIKey {
-                            TextField("", text: configuration.$PAIkey)
+                            TextField("", text: configuration.$Ckey)
                                 .textFieldStyle(.roundedBorder)
                         } else {
-                            SecureField("", text: configuration.$PAIkey)
+                            SecureField("", text: configuration.$Ckey)
                                 .textFieldStyle(.roundedBorder)
                         }
                         Button {
@@ -103,13 +111,8 @@ struct PAISettingsView: View {
                         }
                         .buttonStyle(.borderless)
                     }
-                    .padding()
+                    .padding(paddingValue)
                 }
-                HStack {
-                    Spacer()
-                    Link("PAI Documentation", destination: URL(string: "https://discord.gg/pawan")!)
-                }
-                .padding(.bottom)
             }
             .padding()
         }
@@ -118,36 +121,36 @@ struct PAISettingsView: View {
     var iOS: some View {
         Form {
             Section(header: Text("Default Parameters")) {
-                Picker(selection: $configuration.PAImodel, label: Text("Model")) {
-                    ForEach(AIProvider.pAI.models, id: \.self) { model in
+                Picker(selection: $configuration.Cmodel, label: Text("Model")) {
+                    ForEach(AIProvider.custom.models, id: \.self) { model in
                         Text(model.name).tag(model.id)
                     }
                 }
-                Picker(selection: $configuration.PAIcontextLength, label: Text("Context Length")) {
+                Picker(selection: $configuration.CcontextLength, label: Text("Context Length")) {
                     ForEach(Array(1 ... 10).reversed() + [30], id: \.self) { number in
                         Text(number == 30 ? "Unlimited Messages" : "Last \(number) Messages").tag(number)
                     }
                 }
-                Stepper(value: $configuration.PAItemperature, in: 0 ... 2, step: 0.1) {
+                Stepper(value: $configuration.Ctemperature, in: 0 ... 2, step: 0.1) {
                     HStack {
                         Text("Temperature")
                         Spacer()
-                        Text(String(format: "%.1f", configuration.PAItemperature))
+                        Text(String(format: "%.1f", configuration.Ctemperature))
                     }
                 }
             }
             Section(header: Text("System Prompt")) {
-                TextField("Enter a System Prompt", text: $configuration.PAIsystemPrompt, axis: .vertical)
+                TextField("Enter a System Prompt", text: $configuration.CHost, axis: .vertical)
                     .lineLimit(3, reservesSpace: true)
             }
-            Section(header: Text("PAI API Key")) {
+            Section(header: Text("Custom API Key")) {
                 HStack {
                     Image(systemName: "key")
                     Spacer()
                     if showAPIKey {
-                        TextField("", text: $configuration.PAIkey)
+                        TextField("", text: $configuration.Ckey)
                     } else {
-                        SecureField("", text: $configuration.PAIkey)
+                        SecureField("", text: $configuration.Ckey)
                     }
                     Button {
                         showAPIKey.toggle()

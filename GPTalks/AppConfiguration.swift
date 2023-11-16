@@ -19,7 +19,7 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.isAutoGenerateTitle") var isAutoGenerateTitle: Bool = false
     
-    @AppStorage("configuration.preferredChatService") var preferredChatService: AIProvider = .openAI
+    @AppStorage("configuration.preferredChatService") var preferredChatService: AIProvider = .openai
         
     /// openAI
     @AppStorage("configuration.OAIKey") var OAIkey = ""
@@ -30,7 +30,7 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.OAIsystemPrompt") var OAIsystemPrompt: String = "You are a helpful assistant."
     
-    @AppStorage("configuration.OAImodel") var OAImodel: Model = .gpt3
+    @AppStorage("configuration.OAImodel") var OAImodel: Model = .gpt3t
     
     /// openRouter
     @AppStorage("configuration.ORKey") var ORkey = ""
@@ -41,17 +41,17 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.ORsystemPrompt") var ORsystemPrompt: String = "You are a helpful assistant."
     
-    @AppStorage("configuration.ORmodel") var ORmodel: Model = .phind
+    @AppStorage("configuration.ORmodel") var ORmodel: Model = .orphind
     
-    /// pawan
-    @AppStorage("configuration.PKey") var PAIkey = ""
+    /// custom
+    @AppStorage("configuration.CKey") var Ckey = ""
     
-    @AppStorage("configuration.PcontextLength") var PAIcontextLength = 30
+    @AppStorage("configuration.CcontextLength") var CcontextLength = 30
     
-    @AppStorage("configuration.Ptemperature") var PAItemperature: Double = 0.8
+    @AppStorage("configuration.Ctemperature") var Ctemperature: Double = 0.8
     
-    @AppStorage("configuration.PsystemPrompt") var PAIsystemPrompt: String = "You are a helpful assistant."
+    @AppStorage("configuration.CsystemPrompt") var CHost: String = ""
     
-    @AppStorage("configuration.Pmodel") var PAImodel: Model = .pai
+    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt3t
 
 }

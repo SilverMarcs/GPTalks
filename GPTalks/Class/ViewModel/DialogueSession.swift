@@ -110,7 +110,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     
     lazy var openAIconfig = configuration.provider.config
         
-    lazy var service: OpenAI = configuration.provider.service(openAIconfiguration: openAIconfig)
+    lazy var service: OpenAI = OpenAI(configuration: openAIconfig)
     
     init() {
         
@@ -303,7 +303,9 @@ extension DialogueSession {
     
     @discardableResult
     func appendConversation(_ conversation: Conversation) -> ConversationData {
-        conversations.append(conversation)
+        withAnimation {
+            conversations.append(conversation)
+        }
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id
         data.date = conversation.date

@@ -30,7 +30,7 @@ struct OpenAISettingsView: View {
                         Text("Model")
                         Spacer()
                         Picker("", selection: configuration.$OAImodel) {
-                            ForEach(AIProvider.openAI.models, id: \.self) { model in
+                            ForEach(AIProvider.openai.models, id: \.self) { model in
                                 Text(model.name)
                                     .tag(model.id)
                             }
@@ -119,7 +119,7 @@ struct OpenAISettingsView: View {
         Form {
             Section(header: Text("Default Parameters")) {
                 Picker(selection: $configuration.OAImodel, label: Text("Model")) {
-                    ForEach(AIProvider.openAI.models, id: \.self) { model in
+                    ForEach(AIProvider.openai.models, id: \.self) { model in
                         Text(model.name).tag(model.id)
                     }
                 }

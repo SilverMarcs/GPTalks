@@ -49,6 +49,14 @@ struct MessageListView: View {
                         DialogueSettingsView(configuration: $session.configuration, title: $session.title)
                     }
                 }
+                
+                ToolbarItem(placement: .cancellationAction) {
+                    Button {
+                        session.removeAllConversations()
+                    } label: {
+                        Image(systemName:"trash")
+                    }
+                }
             }
 #endif
     }

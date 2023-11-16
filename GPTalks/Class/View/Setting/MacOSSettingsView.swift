@@ -51,7 +51,7 @@ struct ModelSettingsView: View {
     enum Item: String, CaseIterable, Identifiable, Hashable {
         case openAI
         case openRouter
-        case pAI
+        case custom
         case summaries
         
         var id: String { rawValue }
@@ -63,7 +63,7 @@ struct ModelSettingsView: View {
                 OpenAISettingsView()
             case .openRouter:
                 OpenRouterSettingsView()
-            case .pAI:
+            case .custom:
                 PAISettingsView()
             case .summaries:
                 SummarySettingsView()
@@ -85,17 +85,11 @@ struct ModelSettingsView: View {
     
     var body: some View {
         NavigationView {
-            List(selection: $selection) {
-                ForEach(Item.allCases) { item in
-                    NavigationLink(
-                        destination: item.destination,
-                        tag: item,
-                        selection: $selection,
-                        label: {
-                            item.label
-                        }
-                    )
-                }
+            List(Item.allCases, selection: $selection) {item in
+                NavigationLink(
+                    destination: item.destination,
+                    label: { item.label }
+                )
             }
             .listStyle(.sidebar)
         }

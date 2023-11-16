@@ -30,7 +30,7 @@ struct OpenRouterSettingsView: View {
                         Text("Model")
                         Spacer()
                         Picker("", selection: configuration.$ORmodel) {
-                            ForEach(AIProvider.openRouter.models, id: \.self) { model in
+                            ForEach(AIProvider.openrouter.models, id: \.self) { model in
                                 Text(model.name)
                                     .tag(model.id)
                             }
@@ -119,7 +119,7 @@ struct OpenRouterSettingsView: View {
         Form {
             Section(header: Text("Default Parameters")) {
                 Picker(selection: $configuration.ORmodel, label: Text("Model")) {
-                    ForEach(AIProvider.openRouter.models, id: \.self) { model in
+                    ForEach(AIProvider.openrouter.models, id: \.self) { model in
                         Text(model.name).tag(model.id)
                     }
                 }
