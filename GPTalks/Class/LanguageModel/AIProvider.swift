@@ -40,7 +40,7 @@ enum AIProvider: String, CaseIterable, Codable {
         case .custom:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.Ckey,
-                host: "http://127.0.0.1:1337"
+                host: AppConfiguration.shared.CHost
             )
         }
     }
@@ -104,7 +104,7 @@ enum AIProvider: String, CaseIterable, Codable {
         case .openrouter:
             return AppConfiguration.shared.ORsystemPrompt
         case .custom:
-            return AppConfiguration.shared.CHost
+            return AppConfiguration.shared.CsystemPrompt
         }
     }
 

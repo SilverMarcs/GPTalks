@@ -52,6 +52,7 @@ struct MessageListView: View {
                 
                 ToolbarItem(placement: .cancellationAction) {
                     Button {
+                        session.resetErrorDesc()
                         session.removeAllConversations()
                     } label: {
                         Image(systemName:"trash")

@@ -11,12 +11,12 @@ import OpenAI
 struct Conversation: Codable, Identifiable, Hashable {
     var id = UUID()
     var date = Date()
-    var role: String
+    var role: Chat.Role
     var content: String
     var isReplying: Bool = false
     
     func toChat() -> Chat {
-        return Chat(role: role == "user" ? .user : .system, content: content)
+        return Chat(role: role, content: content)
     }
 }
 

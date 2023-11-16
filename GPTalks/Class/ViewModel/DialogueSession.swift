@@ -167,13 +167,13 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         var streamText = ""
         
         if !isRegen && !isRetry{
-            appendConversation(Conversation(role: "user", content: text))
+            appendConversation(Conversation(role: .user, content: text))
         }
         
         scroll?(.bottom)
         
         do {
-            lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+            lastConversationData = appendConversation(Conversation(role: .assistant, content: "", isReplying: true))
             
             let adjustedContext = adjustContext(from: conversations, limit: configuration.contextLength, systemPrompt: configuration.systemPrompt)
             
@@ -190,7 +190,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             for try await result in service.chatsStream(query: query) {
                 streamText += result.choices.first?.delta.content ?? ""
                 conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                scroll?(.bottom)
+//                scroll?(.bottom)
             }
             
             lastConversationData?.sync(with: conversations[conversations.count - 1])
@@ -240,7 +240,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         var newConversations: [Conversation] = []
 
         if systemPrompt != "" {
-            newConversations.append(Conversation(role: "system", content: systemPrompt))
+            newConversations.append(Conversation(role: .system, content: systemPrompt))
         }
 
         if conversations.count > limit {
@@ -285,7 +285,18 @@ extension DialogueSession {
                 let conversation = Conversation(
                     id: id,
                     date: date,
-                    role: role,
+                    role: {
+                        switch role {
+                        case "user":
+                            return .user
+                        case "assistant":
+                            return .assistant
+                        case "system":
+                            return .system
+                        default:
+                            return .function
+                        }
+                    }(),
                     content: content
                 )
                 return conversation
@@ -309,7 +320,7 @@ extension DialogueSession {
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id
         data.date = conversation.date
-        data.role = conversation.role
+        data.role = conversation.role.rawValue
         data.content = conversation.content
         rawData?.conversations?.adding(data)
         data.dialogue = rawData
@@ -431,9 +442,9 @@ extension ConversationData {
     
     func sync(with conversation: Conversation) {
         id = conversation.id
-        role = conversation.role
-        content = conversation.content
         date = conversation.date
+        role = conversation.role.rawValue
+        content = conversation.content
         do {
             try PersistenceController.shared.save()
         } catch let error {

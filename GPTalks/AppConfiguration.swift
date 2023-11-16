@@ -50,7 +50,9 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.Ctemperature") var Ctemperature: Double = 0.8
     
-    @AppStorage("configuration.CsystemPrompt") var CHost: String = ""
+    @AppStorage("configuration.CsystemPrompt") var CsystemPrompt: String = "You are a helpful assistant."
+    
+    @AppStorage("configuration.CHost") var CHost: String = ""
     
     @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt3t
 
