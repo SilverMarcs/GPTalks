@@ -11,6 +11,7 @@ struct MessageListView: View {
     @ObservedObject var session: DialogueSession
     @FocusState var isTextFieldFocused: Bool
     @State var isShowSettingsView = false
+    @State var isShowDeleteWarning = false
 
     var body: some View {
         contentView
@@ -38,6 +39,13 @@ struct MessageListView: View {
 #else
             .navigationTitle(session.title)
             .navigationSubtitle(session.configuration.model.name)
+            .alert("Delete all messages?", isPresented: $isShowDeleteWarning) {
+                Button("Cancel", role: .cancel, action: {})
+                Button("Confirm", role: .destructive, action: {
+                    session.resetErrorDesc()
+                    session.removeAllConversations()
+                })
+            }
             .toolbar {
                 ToolbarItem(placement: .navigation) {
                     Button {
@@ -52,8 +60,7 @@ struct MessageListView: View {
                 
                 ToolbarItem(placement: .cancellationAction) {
                     Button {
-                        session.resetErrorDesc()
-                        session.removeAllConversations()
+                        isShowDeleteWarning.toggle()
                     } label: {
                         Image(systemName:"trash")
                     }
@@ -93,7 +100,7 @@ struct MessageListView: View {
                                }
                            } deleteHandler: {
                                withAnimation {
-                                   session.removeConversation(at: index)
+                                   session.removeConversation(conversation)
                                }
                            }
                            .id(index)

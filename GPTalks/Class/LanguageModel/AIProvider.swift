@@ -12,6 +12,7 @@ enum AIProvider: String, CaseIterable, Codable {
     case openai
     case openrouter
     case custom
+    case custom2
 
     var id: String {
         switch self {
@@ -21,6 +22,8 @@ enum AIProvider: String, CaseIterable, Codable {
             return "openrouter"
         case .custom:
             return "pawan"
+        case .custom2:
+            return "custom2"
         }
     }
     
@@ -40,7 +43,12 @@ enum AIProvider: String, CaseIterable, Codable {
         case .custom:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.Ckey,
-                host: AppConfiguration.shared.CHost
+                host: AppConfiguration.shared.Chost
+            )
+        case .custom2:
+            return OpenAI.Configuration(
+                token: AppConfiguration.shared.C2key,
+                host: AppConfiguration.shared.C2host
             )
         }
     }
@@ -61,6 +69,8 @@ enum AIProvider: String, CaseIterable, Codable {
             return Color("purpleColor")
         case .custom:
             return Color("orangeColor")
+        case .custom2:
+            return .accentColor
         }
     }
 
@@ -71,7 +81,9 @@ enum AIProvider: String, CaseIterable, Codable {
         case .openrouter:
             return "OpenRouter"
         case .custom:
-            return "PAI"
+            return "Custom"
+        case .custom2:
+            return "Custom 2"
         }
     }
 
@@ -83,6 +95,8 @@ enum AIProvider: String, CaseIterable, Codable {
             return AppConfiguration.shared.ORcontextLength
         case .custom:
             return AppConfiguration.shared.CcontextLength
+        case .custom2:
+            return AppConfiguration.shared.C2contextLength
         }
     }
 
@@ -94,6 +108,8 @@ enum AIProvider: String, CaseIterable, Codable {
             return AppConfiguration.shared.ORtemperature
         case .custom:
             return AppConfiguration.shared.Ctemperature
+        case .custom2:
+            return AppConfiguration.shared.C2temperature
         }
     }
 
@@ -105,6 +121,8 @@ enum AIProvider: String, CaseIterable, Codable {
             return AppConfiguration.shared.ORsystemPrompt
         case .custom:
             return AppConfiguration.shared.CsystemPrompt
+        case .custom2:
+            return AppConfiguration.shared.C2systemPrompt
         }
     }
 
@@ -116,6 +134,8 @@ enum AIProvider: String, CaseIterable, Codable {
             return AppConfiguration.shared.ORmodel
         case .custom:
             return AppConfiguration.shared.Cmodel
+        case .custom2:
+            return AppConfiguration.shared.C2model
         }
     }
 
@@ -126,6 +146,8 @@ enum AIProvider: String, CaseIterable, Codable {
         case .openrouter:
             return Model.openRouterModels
         case .custom:
+            return Model.customModels
+        case .custom2:
             return Model.customModels
         }
     }

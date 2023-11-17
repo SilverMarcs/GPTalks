@@ -15,7 +15,7 @@ struct SummarySettingsView: View {
     
     var body: some View {
 #if os(macOS)
-        macOS
+        settings
 #else
         iOS
 #endif

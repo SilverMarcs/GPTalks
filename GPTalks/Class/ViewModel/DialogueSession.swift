@@ -353,6 +353,13 @@ extension DialogueSession {
             print(error.localizedDescription)
         }
     }
+    
+    func removeConversation(_ conversation: Conversation) {
+        guard let index = conversations.firstIndex(where: { $0.id == conversation.id }) else {
+            return
+        }
+        removeConversation(at: index)
+    }
 
     func removeConversations(from index: Int) {
         guard index < conversations.count else {

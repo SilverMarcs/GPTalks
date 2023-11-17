@@ -5,7 +5,7 @@
 //  Created by LuoHuanyu on 2023/4/3.
 //
 
-#if os(macOS)
+// #if os(macOS)
 
 import SwiftUI
 
@@ -16,60 +16,86 @@ struct MacOSSettingsView: View {
                 .tabItem {
                     Label("General", systemImage: "gear")
                 }
-            ModelSettingsView()
+            ProviderSettingsView()
                 .tabItem {
-                    Label("Services", systemImage: "brain.head.profile")
+                    Label("Providers", systemImage: "brain.head.profile")
                 }
         }
         .frame(minWidth: 700, minHeight: 400)
     }
 }
 
-
 struct GeneralSettingsView: View {
-    
     @StateObject var configuration = AppConfiguration.shared
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-                Toggle("Markdown Enabled", isOn: configuration.$isMarkdownEnabled)
-                
-                Picker("Preferred AI Provider", selection: configuration.$preferredChatService) {
-                    ForEach(AIProvider.allCases, id: \.self) {
-                        Text($0.rawValue.capitalizingFirstLetter())
-                    }
+            Toggle("Markdown Enabled", isOn: configuration.$isMarkdownEnabled)
+
+            Picker("Preferred AI Provider", selection: configuration.$preferredChatService) {
+                ForEach(AIProvider.allCases, id: \.self) {
+                    Text($0.rawValue.capitalizingFirstLetter())
                 }
             }
-            .frame(width: 300)
+        }
+        .frame(width: 300)
     }
 }
 
-
-struct ModelSettingsView: View {
-    
+struct ProviderSettingsView: View {
+    @ObservedObject var configuration = AppConfiguration.shared
 
     enum Item: String, CaseIterable, Identifiable, Hashable {
         case openAI
         case openRouter
         case custom
-        case summaries
-        
+//        case custom2
+//        case summaries
+
         var id: String { rawValue }
-        
+
         @ViewBuilder
         var destination: some View {
+            @ObservedObject var configuration = AppConfiguration.shared
+
             switch self {
             case .openAI:
-                OpenAISettingsView()
+                ServiceSettingsView(
+                    model: configuration.$OAImodel,
+                    temperature: configuration.$OAItemperature,
+                    contextLength: configuration.$OAIcontextLength,
+                    systemPrompt: configuration.$OAIsystemPrompt,
+                    apiKey: configuration.$OAIkey,
+                    models: AIProvider.openai.models,
+                    navigationTitle: "OpenAI"
+                )
             case .openRouter:
-                OpenRouterSettingsView()
+                ServiceSettingsView(
+                    model: configuration.$ORmodel,
+                    temperature: configuration.$ORtemperature,
+                    contextLength: configuration.$ORcontextLength,
+                    systemPrompt: configuration.$ORsystemPrompt,
+                    apiKey: configuration.$Ckey,
+                    models: AIProvider.openrouter.models,
+                    navigationTitle: "OpenRouter"
+                )
             case .custom:
-                CustomSettingsView()
-            case .summaries:
-                SummarySettingsView()
+                ServiceSettingsView(
+                    model: configuration.$Cmodel,
+                    temperature: configuration.$Ctemperature,
+                    contextLength: configuration.$CcontextLength,
+                    systemPrompt: configuration.$CsystemPrompt,
+                    apiKey: configuration.$Ckey,
+                    models: AIProvider.custom.models,
+                    navigationTitle: "Custom"
+                )
+//            case .custom2:
+//                Custom2SettingsView()
+//            case .summaries:
+//                SummarySettingsView()
             }
         }
-        
+
         var label: some View {
             HStack {
                 Image(self.rawValue.lowercased())
@@ -80,33 +106,29 @@ struct ModelSettingsView: View {
             }
         }
     }
-    
+
     @State var selection: Item? = .openAI
-    
+
     var body: some View {
         NavigationView {
-            List(Item.allCases, selection: $selection) {item in
+            List(Item.allCases, selection: $selection) { item in
                 NavigationLink(
                     destination: item.destination,
                     label: { item.label }
                 )
             }
-            .listStyle(.sidebar)
         }
     }
 }
 
-#endif
-
+// #endif
 
 extension String {
-    
     func capitalizingFirstLetter() -> String {
         return prefix(1).capitalized + dropFirst()
     }
-    
+
     mutating func capitalizeFirstLetter() {
-        self = self.capitalizingFirstLetter()
+        self = capitalizingFirstLetter()
     }
-    
 }

@@ -52,8 +52,21 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.CsystemPrompt") var CsystemPrompt: String = "You are a helpful assistant."
     
-    @AppStorage("configuration.CHost") var CHost: String = ""
+    @AppStorage("configuration.CHost") var Chost: String = ""
     
     @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt3t
+    
+    /// custom2
+    @AppStorage("configuration.C2Key") var C2key = ""
+    
+    @AppStorage("configuration.C2contextLength") var C2contextLength = 30
+    
+    @AppStorage("configuration.C2temperature") var C2temperature: Double = 0.8
+    
+    @AppStorage("configuration.C2systemPrompt") var C2systemPrompt: String = "You are a helpful assistant."
+    
+    @AppStorage("configuration.C2Host") var C2host: String = ""
+    
+    @AppStorage("configuration.C2model") var C2model: Model = .gpt3t
 
 }

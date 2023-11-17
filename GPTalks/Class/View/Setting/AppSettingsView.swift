@@ -41,7 +41,15 @@ struct AppSettingsView: View {
             }
             Section("Services") {
                 NavigationLink {
-                    OpenAISettingsView()
+                    ServiceSettingsView(
+                        model: configuration.$OAImodel,
+                        temperature: configuration.$OAItemperature,
+                        contextLength: configuration.$OAIcontextLength,
+                        systemPrompt: configuration.$OAIsystemPrompt,
+                        apiKey: configuration.$OAIkey,
+                        models: AIProvider.openai.models,
+                        navigationTitle: "OpenAI"
+                    )
                 } label: {
                     HStack {
                         Image("openai")
@@ -52,7 +60,15 @@ struct AppSettingsView: View {
                     }
                 }
                 NavigationLink {
-                    OpenRouterSettingsView()
+                    ServiceSettingsView(
+                        model: configuration.$ORmodel,
+                        temperature: configuration.$ORtemperature,
+                        contextLength: configuration.$ORcontextLength,
+                        systemPrompt: configuration.$ORsystemPrompt,
+                        apiKey: configuration.$Ckey,
+                        models: AIProvider.openrouter.models,
+                        navigationTitle: "OpenRouter"
+                    )
                 } label: {
                     HStack {
                         Image("openrouter")
@@ -63,7 +79,15 @@ struct AppSettingsView: View {
                     }
                 }
                 NavigationLink {
-                    CustomSettingsView()
+                    ServiceSettingsView(
+                        model: configuration.$Cmodel,
+                        temperature: configuration.$Ctemperature,
+                        contextLength: configuration.$CcontextLength,
+                        systemPrompt: configuration.$CsystemPrompt,
+                        apiKey: configuration.$Ckey,
+                        models: AIProvider.custom.models,
+                        navigationTitle: "Custom"
+                    )
                 } label: {
                     HStack {
                         Image("custom")
@@ -73,17 +97,17 @@ struct AppSettingsView: View {
                         Text("PAI")
                     }
                 }
-                NavigationLink {
-                    SummarySettingsView()
-                } label: {
-                    HStack {
-                        Image("summaries")
-                            .resizable()
-                            .cornerRadius(10)
-                            .frame(width: 30, height: 30)
-                        Text("Summaries")
-                    }
-                }
+//                NavigationLink {
+//                    SummarySettingsView()
+//                } label: {
+//                    HStack {
+//                        Image("summaries")
+//                            .resizable()
+//                            .cornerRadius(10)
+//                            .frame(width: 30, height: 30)
+//                        Text("Summaries")
+//                    }
+//                }
             }
         }
         .navigationTitle("Settings")

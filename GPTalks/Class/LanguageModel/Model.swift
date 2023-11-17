@@ -27,6 +27,10 @@ enum Model: String, Codable {
     case orgpt4t
     case orhermes
     case ortoppy
+    
+    /// custom
+    case claude2
+    case claudeinstant
 
     var name: String {
         switch self {
@@ -56,6 +60,10 @@ enum Model: String, Codable {
             return "Hermes"
         case .ortoppy:
             return "Toppy"
+        case .claude2:
+            return "Claude 2"
+        case .claudeinstant:
+            return "Claude Inst"
         }
     }
 
@@ -91,12 +99,16 @@ enum Model: String, Codable {
             return "nousresearch/nous-hermes-llama2-13b"
         case .ortoppy:
             return "undi95/toppy-m-7b"
+        case .claude2:
+            return "claude-2"
+        case .claudeinstant:
+            return "claude-instant"
         }
     }
 
     var maxTokens: Int {
         switch self {
-        case .gpt3t, .gpt3t_16, .gpt4, .gpt4t, .orphind, .orcodellama, .ormistral, .ormythomax, .orzephyr, .orgpt3, .orgpt4t, .orhermes, .ortoppy:
+        case .gpt3t, .gpt3t_16, .gpt4, .gpt4t, .orphind, .orcodellama, .ormistral, .ormythomax, .orzephyr, .orgpt3, .orgpt4t, .orhermes, .ortoppy, .claude2, .claudeinstant:
             return 3800
         case .orpalm, .orpalmcode:
             return 2000
@@ -105,5 +117,5 @@ enum Model: String, Codable {
 
     static let openAIModels: [Model] = [.gpt3t, .gpt3t_16, .gpt4, .gpt4t]
     static let openRouterModels: [Model] = [.orphind, .orcodellama, .ormistral, .ormythomax, .orpalm, .orpalmcode, .orzephyr, .orgpt3, .orgpt4t, .orhermes, .ortoppy]
-    static let customModels: [Model] = openAIModels
+    static let customModels: [Model] = openAIModels + [.claude2, .claudeinstant]
 }
