@@ -14,7 +14,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         var temperature: Double
         var systemPrompt: String
         var contextLength: Int
-        var provider: AIProvider
+        var provider: Provider
         var model: Model
         
         init() {

@@ -33,7 +33,7 @@ struct GeneralSettingsView: View {
             Toggle("Markdown Enabled", isOn: configuration.$isMarkdownEnabled)
 
             Picker("Preferred AI Provider", selection: configuration.$preferredChatService) {
-                ForEach(AIProvider.allCases, id: \.self) {
+                ForEach(Provider.allCases, id: \.self) {
                     Text($0.rawValue.capitalizingFirstLetter())
                 }
             }
@@ -66,7 +66,7 @@ struct ProviderSettingsView: View {
                     contextLength: configuration.$OAIcontextLength,
                     systemPrompt: configuration.$OAIsystemPrompt,
                     apiKey: configuration.$OAIkey,
-                    models: AIProvider.openai.models,
+                    models: Provider.openai.models,
                     navigationTitle: "OpenAI"
                 )
             case .openRouter:
@@ -76,7 +76,7 @@ struct ProviderSettingsView: View {
                     contextLength: configuration.$ORcontextLength,
                     systemPrompt: configuration.$ORsystemPrompt,
                     apiKey: configuration.$Ckey,
-                    models: AIProvider.openrouter.models,
+                    models: Provider.openrouter.models,
                     navigationTitle: "OpenRouter"
                 )
             case .custom:
@@ -86,7 +86,7 @@ struct ProviderSettingsView: View {
                     contextLength: configuration.$CcontextLength,
                     systemPrompt: configuration.$CsystemPrompt,
                     apiKey: configuration.$Ckey,
-                    models: AIProvider.custom.models,
+                    models: Provider.custom.models,
                     navigationTitle: "Custom"
                 )
 //            case .custom2:
@@ -118,17 +118,5 @@ struct ProviderSettingsView: View {
                 )
             }
         }
-    }
-}
-
-// #endif
-
-extension String {
-    func capitalizingFirstLetter() -> String {
-        return prefix(1).capitalized + dropFirst()
-    }
-
-    mutating func capitalizeFirstLetter() {
-        self = capitalizingFirstLetter()
     }
 }

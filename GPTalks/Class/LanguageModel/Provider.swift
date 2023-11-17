@@ -8,7 +8,7 @@
 import SwiftUI
 import OpenAI
 
-enum AIProvider: String, CaseIterable, Codable {
+enum Provider: String, CaseIterable, Codable {
     case openai
     case openrouter
     case custom
@@ -21,7 +21,7 @@ enum AIProvider: String, CaseIterable, Codable {
         case .openrouter:
             return "openrouter"
         case .custom:
-            return "pawan"
+            return "custom"
         case .custom2:
             return "custom2"
         }

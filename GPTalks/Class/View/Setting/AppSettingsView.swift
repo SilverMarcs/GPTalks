@@ -32,7 +32,7 @@ struct AppSettingsView: View {
                         .lineLimit(1)
                     Spacer()
                     Picker("", selection: configuration.$preferredChatService) {
-                        ForEach(AIProvider.allCases, id: \.self) { provider in
+                        ForEach(Provider.allCases, id: \.self) { provider in
                             Text(provider.name)
                                 .tag(provider.id)
                         }
@@ -47,7 +47,7 @@ struct AppSettingsView: View {
                         contextLength: configuration.$OAIcontextLength,
                         systemPrompt: configuration.$OAIsystemPrompt,
                         apiKey: configuration.$OAIkey,
-                        models: AIProvider.openai.models,
+                        models: Provider.openai.models,
                         navigationTitle: "OpenAI"
                     )
                 } label: {
@@ -66,7 +66,7 @@ struct AppSettingsView: View {
                         contextLength: configuration.$ORcontextLength,
                         systemPrompt: configuration.$ORsystemPrompt,
                         apiKey: configuration.$Ckey,
-                        models: AIProvider.openrouter.models,
+                        models: Provider.openrouter.models,
                         navigationTitle: "OpenRouter"
                     )
                 } label: {
@@ -85,7 +85,7 @@ struct AppSettingsView: View {
                         contextLength: configuration.$CcontextLength,
                         systemPrompt: configuration.$CsystemPrompt,
                         apiKey: configuration.$Ckey,
-                        models: AIProvider.custom.models,
+                        models: Provider.custom.models,
                         navigationTitle: "Custom"
                     )
                 } label: {

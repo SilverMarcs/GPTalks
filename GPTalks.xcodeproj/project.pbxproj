@@ -11,10 +11,9 @@
 		0837E4812AFFE7B000C03059 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E4802AFFE7AF00C03059 /* Model.swift */; };
 		085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Utils.swift */; };
 		085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */; };
-		085D40C32AFD8C250033F8B5 /* AIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* AIProvider.swift */; };
+		085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* Provider.swift */; };
 		086452852B05F50C00F95C36 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 086452842B05F50C00F95C36 /* OpenAI */; };
 		0864528E2B06431E00F95C36 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0864528D2B06431E00F95C36 /* OpenAI */; };
-		08A327472AFB62CE0086C3F1 /* SummarySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A327462AFB62CE0086C3F1 /* SummarySettingsView.swift */; };
 		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
 		E4924EED29DB0A4400B69605 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E4924EEF29DB0A4400B69605 /* Localizable.strings */; };
 		E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */; };
@@ -67,8 +66,7 @@
 		0837E4802AFFE7AF00C03059 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		085D40BE2AFD66340033F8B5 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
-		085D40C22AFD8C250033F8B5 /* AIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvider.swift; sourceTree = "<group>"; };
-		08A327462AFB62CE0086C3F1 /* SummarySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySettingsView.swift; sourceTree = "<group>"; };
+		085D40C22AFD8C250033F8B5 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		08ED9EB72B02564D00849A1E /* DialogueListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListItem.swift; sourceTree = "<group>"; };
 		E4924EEE29DB0A4400B69605 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSSettingsView.swift; sourceTree = "<group>"; };
@@ -133,7 +131,7 @@
 		08723DAB2AFA4911001D59FE /* LanguageModel */ = {
 			isa = PBXGroup;
 			children = (
-				085D40C22AFD8C250033F8B5 /* AIProvider.swift */,
+				085D40C22AFD8C250033F8B5 /* Provider.swift */,
 				0837E4802AFFE7AF00C03059 /* Model.swift */,
 			);
 			path = LanguageModel;
@@ -144,7 +142,6 @@
 			children = (
 				E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */,
 				E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */,
-				08A327462AFB62CE0086C3F1 /* SummarySettingsView.swift */,
 				0837E47C2AFE57A100C03059 /* ServiceSettingsView.swift */,
 			);
 			path = Setting;
@@ -237,7 +234,7 @@
 				E4994DF029DA8AF8002981D0 /* Setting */,
 				E4C65EDF29CA9F7800AFA884 /* DialogueList */,
 				E4C65ED629CA9F7800AFA884 /* MessageList */,
-				E4C65F1629CB450900AFA884 /* UI */,
+				E4C65F1629CB450900AFA884 /* CustomUI */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -284,12 +281,12 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
-		E4C65F1629CB450900AFA884 /* UI */ = {
+		E4C65F1629CB450900AFA884 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
 				E4C65EDB29CA9F7800AFA884 /* ReplyingIndicatorView.swift */,
 			);
-			path = UI;
+			path = CustomUI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -443,7 +440,6 @@
 				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
 				E4C65EEE29CA9F7800AFA884 /* Conversation.swift in Sources */,
-				08A327472AFB62CE0086C3F1 /* SummarySettingsView.swift in Sources */,
 				E4C65EA929CA9E7E00AFA884 /* ContentView.swift in Sources */,
 				E4C65F1829CBEE2400AFA884 /* BottomInputView.swift in Sources */,
 				E4C65EFF29CA9F7800AFA884 /* KeyboardPublisher.swift in Sources */,
@@ -458,7 +454,7 @@
 				E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */,
 				E4C65EA429CA9E7E00AFA884 /* Persistence.swift in Sources */,
 				0837E47D2AFE57A100C03059 /* ServiceSettingsView.swift in Sources */,
-				085D40C32AFD8C250033F8B5 /* AIProvider.swift in Sources */,
+				085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */,
 				085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */,
 				E4C65EF029CA9F7800AFA884 /* ConversationView.swift in Sources */,
 			);

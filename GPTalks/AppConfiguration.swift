@@ -19,7 +19,7 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.isAutoGenerateTitle") var isAutoGenerateTitle: Bool = false
     
-    @AppStorage("configuration.preferredChatService") var preferredChatService: AIProvider = .openai
+    @AppStorage("configuration.preferredChatService") var preferredChatService: Provider = .openai
         
     /// openAI
     @AppStorage("configuration.OAIKey") var OAIkey = ""

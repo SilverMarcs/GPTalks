@@ -18,26 +18,12 @@ extension String {
     }
 }
 
-//    internal func trimConversation(with input: String) -> [Message] {
-//        var trimmedMessages = [Message]()
-//        if trimmedMessagesIndex > messages.endIndex - 1 {
-//            trimmedMessages.append(Message(role: "user", content: input))
-//        } else {
-//            trimmedMessages += messages[trimmedMessagesIndex...]
-//            trimmedMessages.append(Message(role: "user", content: input))
-//        }
-//
-//        let maxToken = 4096
-//        var tokenCount = trimmedMessages.tokenCount
-//        while tokenCount > maxToken {
-//            print(trimmedMessages.remove(at: 0))
-//            trimmedMessagesIndex += 1
-//            print("trimmedMessagesIndex: \(trimmedMessagesIndex)")
-//            tokenCount = trimmedMessages.tokenCount
-//            print("tokenCount:\(tokenCount)")
-//        }
-//
-//        trimmedMessages.insert(Message(role: "system", content: configuration.systemPrompt), at: 0)
-//
-//        return trimmedMessages
-//    }
+extension String {
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+
+    mutating func capitalizeFirstLetter() {
+        self = capitalizingFirstLetter()
+    }
+}
