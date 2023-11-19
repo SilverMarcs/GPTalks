@@ -65,7 +65,7 @@ struct AppSettingsView: View {
                         temperature: configuration.$ORtemperature,
                         contextLength: configuration.$ORcontextLength,
                         systemPrompt: configuration.$ORsystemPrompt,
-                        apiKey: configuration.$Ckey,
+                        apiKey: configuration.$ORkey,
                         models: Provider.openrouter.models,
                         navigationTitle: "OpenRouter"
                     )

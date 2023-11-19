@@ -43,7 +43,7 @@ struct ContentView: View {
                     
                     ToolbarItem(placement: .automatic) {
                         Button {
-                            addItem()
+                            addDialogue()
                         } label: {
                             Image(systemName: "square.and.pencil")
                         }
@@ -100,47 +100,44 @@ struct ContentView: View {
                 dialogueSessions: $dialogueSessions,
                 selectedDialogueSession: $selectedDialogueSession
             ) {
-                deleteItem($0)
+                deleteDialogues($0)
             }
         }
     }
 
 
-    private func addItem() {
+    private func addDialogue() {
         withAnimation {
-            do {
-                let session = DialogueSession()
-                dialogueSessions.insert(session, at: 0)
-                let newItem = DialogueData(context: viewContext)
-                newItem.id = session.id
-                newItem.date = session.date
-                newItem.configuration =  try JSONEncoder().encode(session.configuration)
-                try PersistenceController.shared.save()
-                DispatchQueue.main.async {
-                    selectedDialogueSession = dialogueSessions.first
-                }
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            let session = DialogueSession()
+            dialogueSessions.insert(session, at: 0)
+            let newItem = DialogueData(context: viewContext)
+            newItem.id = session.id
+            newItem.date = session.date
+        
+        do {
+            newItem.configuration =  try JSONEncoder().encode(session.configuration)
+        } catch {
+            print(error.localizedDescription)
+        }
+
+            save()
+        
+        }
+        
+        DispatchQueue.main.async {
+            selectedDialogueSession = dialogueSessions.first
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
+    private func deleteDialogues(offsets: IndexSet) {
         withAnimation {
             dialogueSessions.remove(atOffsets: offsets)
             offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try PersistenceController.shared.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
         }
+        save()
     }
     
-    private func deleteItem(_ session: DialogueSession) {
+    private func deleteDialogues(_ session: DialogueSession) {
         withAnimation {
             dialogueSessions.removeAll {
                 $0.id == session.id
@@ -148,13 +145,16 @@ struct ContentView: View {
             if let item = session.rawData {
                 viewContext.delete(item)
             }
-
-            do {
-                try PersistenceController.shared.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+        }
+        save()
+    }
+    
+    private func save() {
+        do {
+            try PersistenceController.shared.save()
+        } catch {
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
     }
     

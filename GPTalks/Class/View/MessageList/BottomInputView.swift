@@ -50,14 +50,14 @@ struct BottomInputView: View {
         Button {
             regen(session.lastConversation)
         } label: {
-            Image(systemName: "arrow.clockwise.circle.fill")
+            Image(systemName: "arrow.clockwise")
                 .resizable()
                 .scaledToFit()
                 .frame(width: imageSize, height: imageSize)
         }
         .keyboardShortcut("r", modifiers: .command)
-        .foregroundColor(session.isReplying() ? placeHolderTextColor : session.configuration.provider.accentColor)
-        .buttonStyle(.borderless)
+        .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
+        .buttonStyle(.plain)
         .disabled(session.conversations.isEmpty || session.isReplying())
     }
 
@@ -80,13 +80,13 @@ struct BottomInputView: View {
         Button {
             send(session.input)
         } label: {
-            Image(systemName: "arrow.up.circle.fill")
+            Image(systemName: session.input.isEmpty ? "paperplane" : "paperplane.fill")
                 .resizable()
                 .scaledToFit()
                 .frame(width: imageSize, height: imageSize)
         }
         .keyboardShortcut(.return, modifiers: .command)
-        .foregroundColor(session.input.isEmpty ? placeHolderTextColor : session.configuration.provider.accentColor)
+        .foregroundColor(session.isReplying() || session.input.isEmpty ? placeHolderTextColor : .secondary)
         .buttonStyle(.borderless)
         .disabled(session.input.isEmpty || session.isReplying())
     }
@@ -152,9 +152,9 @@ struct BottomInputView: View {
 
     private var imageSize: CGFloat {
         #if os(macOS)
-            20
+            18
         #else
-            22
+            24
         #endif
     }
     

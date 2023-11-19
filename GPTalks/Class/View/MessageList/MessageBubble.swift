@@ -39,18 +39,30 @@ struct Bubble: ViewModifier {
     
     func body(content: Content) -> some View {
        switch type {
-       case .text, .edit:
-           let backgroundColor = (type == .edit && isMyMessage) ? Color(.darkGray) : isMyMessage ? accentColor : Color(.secondarySystemFill)
-
+       case .text:
            content
                .padding(.horizontal, horizontalPadding)
                .padding(.vertical, verticalPadding)
-               .background(backgroundColor)
+               .background(isMyMessage ? accentColor : Color(.secondarySystemFill))
                #if os(iOS)
                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
                #endif
                .clipShape(RoundedRectangle(cornerRadius: radius))
                .foregroundColor(Color.white)
+       case .edit:
+           content
+               .padding(.horizontal, horizontalPadding)
+               .padding(.vertical, verticalPadding)
+               .background(Color(.secondarySystemFill))
+               #if os(iOS)
+               .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
+               #endif
+               .clipShape(RoundedRectangle(cornerRadius: radius))
+               .foregroundColor(colorScheme == .dark ? Color.primary: Color.black)
+              .overlay(
+                      RoundedRectangle(cornerRadius: radius)
+                          .stroke(Color.gray, lineWidth: 1)
+                  )
        }
     }
 }

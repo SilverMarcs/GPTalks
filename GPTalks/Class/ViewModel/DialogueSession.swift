@@ -173,8 +173,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         do {
             lastConversationData = appendConversation(Conversation(role: .assistant, content: "", isReplying: true))
             
-            scroll?(.bottom)
-            
             let adjustedContext = adjustContext(from: conversations, limit: configuration.contextLength, systemPrompt: configuration.systemPrompt)
             
             var messages = adjustedContext.map { $0.toChat() }
@@ -190,11 +188,8 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 for try await result in service.chatsStream(query: query) {
                     streamText += result.choices.first?.delta.content ?? ""
                     conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                        scroll?(.bottom)
                 }
             }
-            
-            scroll?(.bottom)
             
             try await streamingTask?.value
             

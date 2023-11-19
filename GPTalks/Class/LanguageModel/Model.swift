@@ -34,9 +34,9 @@ enum Model: String, Codable {
 
     var name: String {
         switch self {
-        case .gpt3t, .orgpt3:
+        case .gpt3t:
             return "GPT-3.5"
-        case .gpt3t_16:
+        case .gpt3t_16, .orgpt3:
             return "GPT-3.5 16K"
         case .gpt4:
             return "GPT-4"

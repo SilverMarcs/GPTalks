@@ -12,9 +12,8 @@
 		085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Utils.swift */; };
 		085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */; };
 		085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* Provider.swift */; };
-		086452852B05F50C00F95C36 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 086452842B05F50C00F95C36 /* OpenAI */; };
-		0864528E2B06431E00F95C36 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0864528D2B06431E00F95C36 /* OpenAI */; };
 		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
+		08F3A5272B093CD900212AAE /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08F3A5262B093CD900212AAE /* OpenAI */; };
 		E4924EED29DB0A4400B69605 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E4924EEF29DB0A4400B69605 /* Localizable.strings */; };
 		E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */; };
 		E4C65EA229CA9E7E00AFA884 /* GPTalks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA129CA9E7E00AFA884 /* GPTalks.swift */; };
@@ -105,8 +104,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */,
-				086452852B05F50C00F95C36 /* OpenAI in Frameworks */,
-				0864528E2B06431E00F95C36 /* OpenAI in Frameworks */,
+				08F3A5272B093CD900212AAE /* OpenAI in Frameworks */,
 				E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,8 +306,7 @@
 			packageProductDependencies = (
 				E4C65F0D29CAA06600AFA884 /* Splash */,
 				E4C65F1029CAA08400AFA884 /* MarkdownUI */,
-				086452842B05F50C00F95C36 /* OpenAI */,
-				0864528D2B06431E00F95C36 /* OpenAI */,
+				08F3A5262B093CD900212AAE /* OpenAI */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -387,7 +384,7 @@
 			packageReferences = (
 				E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */,
 				E4C65F0F29CAA08400AFA884 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
-				0864528C2B06431E00F95C36 /* XCLocalSwiftPackageReference "../AIPackages/OpenAI" */,
+				08F3A5252B093CD900212AAE /* XCLocalSwiftPackageReference "../test/OpenAI" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -854,9 +851,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		0864528C2B06431E00F95C36 /* XCLocalSwiftPackageReference "../AIPackages/OpenAI" */ = {
+		08F3A5252B093CD900212AAE /* XCLocalSwiftPackageReference "../test/OpenAI" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../AIPackages/OpenAI;
+			relativePath = ../test/OpenAI;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -880,11 +877,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		086452842B05F50C00F95C36 /* OpenAI */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = OpenAI;
-		};
-		0864528D2B06431E00F95C36 /* OpenAI */ = {
+		08F3A5262B093CD900212AAE /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
 		};

@@ -37,13 +37,12 @@ enum Provider: String, CaseIterable, Codable {
         case .openrouter:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.ORkey,
-                host: "https://openrouter.ai/api",
-                additionalHeaders: ["HTTP-Referer" : "https://example.com"]
+                host: "https://openrouter.ai/api"
             )
         case .custom:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.Ckey,
-                host: AppConfiguration.shared.Chost
+                host: "https://vortex.thatlukinhasguy.xyz"
             )
         case .custom2:
             return OpenAI.Configuration(
