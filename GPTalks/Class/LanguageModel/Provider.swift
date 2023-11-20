@@ -27,6 +27,31 @@ enum Provider: String, CaseIterable, Codable {
         }
     }
     
+//    func config(keys: [String: String]) -> OpenAI.Configuration {
+//        switch self {
+//        case .openai:
+//            return OpenAI.Configuration(
+//                token: AppConfiguration.shared.OAIkey,
+//                host: "https://api.openai.com"
+//            )
+//        case .openrouter:
+//            return OpenAI.Configuration(
+//                token: AppConfiguration.shared.ORkey,
+//                host: "https://openrouter.ai/api"
+//            )
+//        case .custom:
+//            return OpenAI.Configuration(
+//                token: "WVoJofdvnvpWNB1uJL6q6NdSjjf4v5_F1Zld_6mtxno",
+//                host: "https://api.naga.ac"
+//            )
+//        case .custom2:
+//            return OpenAI.Configuration(
+//                token: AppConfiguration.shared.C2key,
+//                host: "AppConfiguration.shared.C2host"
+//            )
+//        }
+//    }
+    
     var config: OpenAI.Configuration {
         switch self {
         case .openai:
@@ -41,19 +66,15 @@ enum Provider: String, CaseIterable, Codable {
             )
         case .custom:
             return OpenAI.Configuration(
-                token: AppConfiguration.shared.Ckey,
-                host: "https://vortex.thatlukinhasguy.xyz"
+                token: AppConfiguration.shared.Nkey,
+                host: "https://api.naga.ac"
             )
         case .custom2:
             return OpenAI.Configuration(
-                token: AppConfiguration.shared.C2key,
-                host: AppConfiguration.shared.C2host
+                token: AppConfiguration.shared.Ckey,
+                host: "AppConfiguration.shared.C2host"
             )
         }
-    }
-
-    func service(openAIconfiguration: OpenAI.Configuration) -> OpenAI {
-        return OpenAI(configuration: openAIconfiguration)
     }
 
     var iconName: String {
@@ -85,56 +106,17 @@ enum Provider: String, CaseIterable, Codable {
             return "Custom 2"
         }
     }
-
-    var contextLength: Int {
-        switch self {
-        case .openai:
-            return AppConfiguration.shared.OAIcontextLength
-        case .openrouter:
-            return AppConfiguration.shared.ORcontextLength
-        case .custom:
-            return AppConfiguration.shared.CcontextLength
-        case .custom2:
-            return AppConfiguration.shared.C2contextLength
-        }
-    }
-
-    var temperature: Double {
-        switch self {
-        case .openai:
-            return AppConfiguration.shared.OAItemperature
-        case .openrouter:
-            return AppConfiguration.shared.ORtemperature
-        case .custom:
-            return AppConfiguration.shared.Ctemperature
-        case .custom2:
-            return AppConfiguration.shared.C2temperature
-        }
-    }
-
-    var systemPrompt: String {
-        switch self {
-        case .openai:
-            return AppConfiguration.shared.OAIsystemPrompt
-        case .openrouter:
-            return AppConfiguration.shared.ORsystemPrompt
-        case .custom:
-            return AppConfiguration.shared.CsystemPrompt
-        case .custom2:
-            return AppConfiguration.shared.C2systemPrompt
-        }
-    }
-
+    
     var preferredModel: Model {
         switch self {
         case .openai:
-            return AppConfiguration.shared.OAImodel
+            return .gpt3t_16
         case .openrouter:
-            return AppConfiguration.shared.ORmodel
+            return .orphind
         case .custom:
-            return AppConfiguration.shared.Cmodel
+            return .gpt4t
         case .custom2:
-            return AppConfiguration.shared.C2model
+            return .gpt4t
         }
     }
 

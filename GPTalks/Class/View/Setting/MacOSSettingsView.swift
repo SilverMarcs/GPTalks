@@ -61,31 +61,31 @@ struct ProviderSettingsView: View {
             switch self {
             case .openAI:
                 ServiceSettingsView(
-                    model: configuration.$OAImodel,
-                    temperature: configuration.$OAItemperature,
-                    contextLength: configuration.$OAIcontextLength,
-                    systemPrompt: configuration.$OAIsystemPrompt,
+                    model: configuration.$model,
+                    temperature: configuration.$temperature,
+                    contextLength: configuration.$contextLength,
+                    systemPrompt: configuration.$systemPrompt,
                     apiKey: configuration.$OAIkey,
                     models: Provider.openai.models,
                     navigationTitle: "OpenAI"
                 )
             case .openRouter:
                 ServiceSettingsView(
-                    model: configuration.$ORmodel,
-                    temperature: configuration.$ORtemperature,
-                    contextLength: configuration.$ORcontextLength,
-                    systemPrompt: configuration.$ORsystemPrompt,
+                    model: configuration.$model,
+                    temperature: configuration.$temperature,
+                    contextLength: configuration.$contextLength,
+                    systemPrompt: configuration.$systemPrompt,
                     apiKey: configuration.$ORkey,
                     models: Provider.openrouter.models,
                     navigationTitle: "OpenRouter"
                 )
             case .custom:
                 ServiceSettingsView(
-                    model: configuration.$Cmodel,
-                    temperature: configuration.$Ctemperature,
-                    contextLength: configuration.$CcontextLength,
-                    systemPrompt: configuration.$CsystemPrompt,
-                    apiKey: configuration.$Ckey,
+                    model: configuration.$model,
+                    temperature: configuration.$temperature,
+                    contextLength: configuration.$contextLength,
+                    systemPrompt: configuration.$systemPrompt,
+                    apiKey: configuration.$Nkey,
                     models: Provider.custom.models,
                     navigationTitle: "Custom"
                 )

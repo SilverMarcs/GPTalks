@@ -19,10 +19,10 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         
         init() {
             provider = AppConfiguration.shared.preferredChatService
+            contextLength = AppConfiguration.shared.contextLength
+            temperature = AppConfiguration.shared.temperature
+            systemPrompt = AppConfiguration.shared.systemPrompt
             model = provider.preferredModel
-            contextLength = provider.contextLength
-            temperature = provider.temperature
-            systemPrompt = provider.systemPrompt
         }
         
     }

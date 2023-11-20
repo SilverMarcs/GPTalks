@@ -42,10 +42,10 @@ struct AppSettingsView: View {
             Section("Services") {
                 NavigationLink {
                     ServiceSettingsView(
-                        model: configuration.$OAImodel,
-                        temperature: configuration.$OAItemperature,
-                        contextLength: configuration.$OAIcontextLength,
-                        systemPrompt: configuration.$OAIsystemPrompt,
+                        model: configuration.$model,
+                        temperature: configuration.$temperature,
+                        contextLength: configuration.$contextLength,
+                        systemPrompt: configuration.$systemPrompt,
                         apiKey: configuration.$OAIkey,
                         models: Provider.openai.models,
                         navigationTitle: "OpenAI"
@@ -61,10 +61,10 @@ struct AppSettingsView: View {
                 }
                 NavigationLink {
                     ServiceSettingsView(
-                        model: configuration.$ORmodel,
-                        temperature: configuration.$ORtemperature,
-                        contextLength: configuration.$ORcontextLength,
-                        systemPrompt: configuration.$ORsystemPrompt,
+                        model: configuration.$model,
+                        temperature: configuration.$temperature,
+                        contextLength: configuration.$contextLength,
+                        systemPrompt: configuration.$systemPrompt,
                         apiKey: configuration.$ORkey,
                         models: Provider.openrouter.models,
                         navigationTitle: "OpenRouter"
@@ -80,11 +80,11 @@ struct AppSettingsView: View {
                 }
                 NavigationLink {
                     ServiceSettingsView(
-                        model: configuration.$Cmodel,
-                        temperature: configuration.$Ctemperature,
-                        contextLength: configuration.$CcontextLength,
-                        systemPrompt: configuration.$CsystemPrompt,
-                        apiKey: configuration.$Ckey,
+                        model: configuration.$model,
+                        temperature: configuration.$temperature,
+                        contextLength: configuration.$contextLength,
+                        systemPrompt: configuration.$systemPrompt,
+                        apiKey: configuration.$Nkey,
                         models: Provider.custom.models,
                         navigationTitle: "Custom"
                     )
