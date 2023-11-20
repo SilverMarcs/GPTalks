@@ -42,10 +42,7 @@ struct AppSettingsView: View {
             Section("Services") {
                 NavigationLink {
                     ServiceSettingsView(
-                        model: configuration.$model,
-                        temperature: configuration.$temperature,
-                        contextLength: configuration.$contextLength,
-                        systemPrompt: configuration.$systemPrompt,
+                        model: configuration.$OAImodel,
                         apiKey: configuration.$OAIkey,
                         models: Provider.openai.models,
                         navigationTitle: "OpenAI"
@@ -61,10 +58,7 @@ struct AppSettingsView: View {
                 }
                 NavigationLink {
                     ServiceSettingsView(
-                        model: configuration.$model,
-                        temperature: configuration.$temperature,
-                        contextLength: configuration.$contextLength,
-                        systemPrompt: configuration.$systemPrompt,
+                        model: configuration.$ORmodel,
                         apiKey: configuration.$ORkey,
                         models: Provider.openrouter.models,
                         navigationTitle: "OpenRouter"
@@ -80,12 +74,9 @@ struct AppSettingsView: View {
                 }
                 NavigationLink {
                     ServiceSettingsView(
-                        model: configuration.$model,
-                        temperature: configuration.$temperature,
-                        contextLength: configuration.$contextLength,
-                        systemPrompt: configuration.$systemPrompt,
+                        model: configuration.$Nmodel,
                         apiKey: configuration.$Nkey,
-                        models: Provider.custom.models,
+                        models: Provider.naga.models,
                         navigationTitle: "Custom"
                     )
                 } label: {

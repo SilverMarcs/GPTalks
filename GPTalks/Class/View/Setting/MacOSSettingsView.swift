@@ -16,6 +16,10 @@ struct MacOSSettingsView: View {
                 .tabItem {
                     Label("General", systemImage: "gear")
                 }
+            DefaultConfigView()
+                .tabItem {
+                    Label("Default", systemImage: "cpu")
+                }
             ProviderSettingsView()
                 .tabItem {
                     Label("Providers", systemImage: "brain.head.profile")
@@ -48,7 +52,7 @@ struct ProviderSettingsView: View {
     enum Item: String, CaseIterable, Identifiable, Hashable {
         case openAI
         case openRouter
-        case custom
+        case naga
 //        case custom2
 //        case summaries
 
@@ -61,33 +65,24 @@ struct ProviderSettingsView: View {
             switch self {
             case .openAI:
                 ServiceSettingsView(
-                    model: configuration.$model,
-                    temperature: configuration.$temperature,
-                    contextLength: configuration.$contextLength,
-                    systemPrompt: configuration.$systemPrompt,
+                    model: configuration.$OAImodel,
                     apiKey: configuration.$OAIkey,
                     models: Provider.openai.models,
                     navigationTitle: "OpenAI"
                 )
             case .openRouter:
                 ServiceSettingsView(
-                    model: configuration.$model,
-                    temperature: configuration.$temperature,
-                    contextLength: configuration.$contextLength,
-                    systemPrompt: configuration.$systemPrompt,
+                    model: configuration.$ORmodel,
                     apiKey: configuration.$ORkey,
                     models: Provider.openrouter.models,
                     navigationTitle: "OpenRouter"
                 )
-            case .custom:
+            case .naga:
                 ServiceSettingsView(
-                    model: configuration.$model,
-                    temperature: configuration.$temperature,
-                    contextLength: configuration.$contextLength,
-                    systemPrompt: configuration.$systemPrompt,
+                    model: configuration.$Nmodel,
                     apiKey: configuration.$Nkey,
-                    models: Provider.custom.models,
-                    navigationTitle: "Custom"
+                    models: Provider.naga.models,
+                    navigationTitle: "Naga"
                 )
 //            case .custom2:
 //                Custom2SettingsView()

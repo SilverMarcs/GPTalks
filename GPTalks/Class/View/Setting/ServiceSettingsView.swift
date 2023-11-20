@@ -1,23 +1,20 @@
 //
-//  PAISettingsView.swift
-//  ChatGPT
+//  DefaultConfigView.swift
+//  GPTalks
 //
-//  Created by LuoHuanyu on 2023/4/7.
+//  Created by Zabir Raihan on 21/11/2023.
 //
 
 import SwiftUI
 
 struct ServiceSettingsView: View {
     @Binding var model: Model
-    @Binding var temperature: Double
-    @Binding var contextLength: Int
-    @Binding var systemPrompt: String
     @Binding var apiKey: String
     var models: [Model]
     var navigationTitle: String
-
-    @State private var showAPIKey = false
-
+    
+    @State var showAPIKey = false
+    
     var body: some View {
         #if os(macOS)
             ScrollView {
@@ -35,7 +32,7 @@ struct ServiceSettingsView: View {
             }
         #endif
     }
-
+    
     var settings: some View {
         VStack {
             HStack {
@@ -44,7 +41,7 @@ struct ServiceSettingsView: View {
                 Picker("", selection: $model) {
                     ForEach(models, id: \.self) { model in
                         Text(model.name)
-                            .tag(model.id)
+                            .tag(model.rawValue)
                     }
                 }
                 .labelsHidden()
@@ -53,52 +50,7 @@ struct ServiceSettingsView: View {
             .padding(paddingValue)
 
             Divider()
-
-            HStack {
-                Text("Context Length")
-                Spacer()
-                Picker("", selection: $contextLength) {
-                    ForEach(Array(1 ... 10).reversed() + [30], id: \.self) { number in
-                        Text(number == 30 ? "Unlimited Messages" : "Last \(number) Messages")
-                            .tag(number)
-                    }
-                }
-                .labelsHidden()
-                .frame(width: widthValue)
-            }
-            .padding(paddingValue)
-
-            Divider()
-
-            HStack {
-                Text("Temperature")
-                Spacer()
-                HStack {
-                    Slider(value: $temperature, in: 0 ... 2, step: 0.1) {
-                    } minimumValueLabel: {
-                        Text("0")
-                    } maximumValueLabel: {
-                        Text("2")
-                    }
-                    Text(String(format: "%.2f", temperature))
-                }
-                .frame(width: widthValue)
-            }
-            .padding(paddingValue)
-
-            Divider()
-
-            HStack {
-                Text("System prompt")
-                Spacer()
-                TextField("System Prompt", text: $systemPrompt)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(width: widthValue)
-            }
-            .padding(paddingValue)
-
-            Divider()
-
+            
             HStack {
                 Text("API Key")
                 Spacer()
@@ -127,7 +79,7 @@ struct ServiceSettingsView: View {
             .padding(paddingValue)
         }
     }
-
+    
     var paddingValue: CGFloat {
         #if os(macOS)
             10
@@ -144,3 +96,4 @@ struct ServiceSettingsView: View {
         #endif
     }
 }
+

@@ -11,7 +11,7 @@ import OpenAI
 enum Provider: String, CaseIterable, Codable {
     case openai
     case openrouter
-    case custom
+    case naga
     case custom2
 
     var id: String {
@@ -20,7 +20,7 @@ enum Provider: String, CaseIterable, Codable {
             return "openai"
         case .openrouter:
             return "openrouter"
-        case .custom:
+        case .naga:
             return "custom"
         case .custom2:
             return "custom2"
@@ -64,7 +64,7 @@ enum Provider: String, CaseIterable, Codable {
                 token: AppConfiguration.shared.ORkey,
                 host: "https://openrouter.ai/api"
             )
-        case .custom:
+        case .naga:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.Nkey,
                 host: "https://api.naga.ac"
@@ -87,7 +87,7 @@ enum Provider: String, CaseIterable, Codable {
             return Color("greenColor")
         case .openrouter:
             return Color("purpleColor")
-        case .custom:
+        case .naga:
             return Color("orangeColor")
         case .custom2:
             return .accentColor
@@ -100,7 +100,7 @@ enum Provider: String, CaseIterable, Codable {
             return "OpenAI"
         case .openrouter:
             return "OpenRouter"
-        case .custom:
+        case .naga:
             return "Custom"
         case .custom2:
             return "Custom 2"
@@ -110,11 +110,11 @@ enum Provider: String, CaseIterable, Codable {
     var preferredModel: Model {
         switch self {
         case .openai:
-            return .gpt3t_16
+            return AppConfiguration.shared.OAImodel
         case .openrouter:
-            return .orphind
-        case .custom:
-            return .gpt4t
+            return AppConfiguration.shared.ORmodel
+        case .naga:
+            return AppConfiguration.shared.Nmodel
         case .custom2:
             return .gpt4t
         }
@@ -126,7 +126,7 @@ enum Provider: String, CaseIterable, Codable {
             return Model.openAIModels
         case .openrouter:
             return Model.openRouterModels
-        case .custom:
+        case .naga:
             return Model.customModels
         case .custom2:
             return Model.customModels

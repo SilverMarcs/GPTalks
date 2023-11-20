@@ -29,7 +29,7 @@ class AppConfiguration: ObservableObject {
         
     /// openAI
     @AppStorage("configuration.OAIKey") var OAIkey = ""
-    @AppStorage("configuration.model") var model: Model = .gpt3t
+    @AppStorage("configuration.model") var OAImodel: Model = .gpt3t
     
     /// openRouter
     @AppStorage("configuration.ORKey") var ORkey = ""

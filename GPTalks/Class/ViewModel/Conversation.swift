@@ -21,3 +21,19 @@ struct Conversation: Codable, Identifiable, Hashable {
 }
 
 
+extension ConversationData {
+    
+    func sync(with conversation: Conversation) {
+        id = conversation.id
+        date = conversation.date
+        role = conversation.role.rawValue
+        content = conversation.content
+        do {
+            try PersistenceController.shared.save()
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+}
+
