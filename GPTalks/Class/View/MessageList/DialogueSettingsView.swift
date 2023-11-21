@@ -41,14 +41,13 @@ struct DialogueSettingsView: View {
     }
 
     var FormContent: some View {
-        Group {
-            VStack {
+            Section {
                 HStack {
                     Text("Provider")
                         .fixedSize()
                     Spacer()
                     Text(configuration.provider.name)
-                        .frame(width: 170)
+                        .frame(width: width)
                 }
 
                 #if os(iOS)
@@ -57,7 +56,6 @@ struct DialogueSettingsView: View {
                             .fixedSize()
                         Spacer()
                         TextField("Chat title", text: $title)
-                            .focused($focusedField, equals: .title)
                             .textFieldStyle(.roundedBorder)
                             .frame(width: width)
                     }
@@ -89,29 +87,28 @@ struct DialogueSettingsView: View {
                     .frame(width: width)
                 }
 
-                VStack {
-                    Stepper(value: $configuration.temperature, in: 0 ... 2, step: 0.1) {
-                        HStack {
-                            Text("Temperature")
-                            Spacer()
-                            Text(String(format: "%.1f", configuration.temperature))
-                                .padding(.horizontal)
-                                .cornerRadius(6)
-                        }
+                Stepper(value: $configuration.temperature, in: 0 ... 2, step: 0.1) {
+                    HStack {
+                        Text("Temperature")
+                        Spacer()
+                        Text(String(format: "%.1f", configuration.temperature))
+                            .padding(.horizontal)
+                            .cornerRadius(6)
                     }
                 }
-                Section {
-                    TextField("Enter a system prompt", text: $configuration.systemPrompt, axis: .vertical)
-                        .focused($focusedField, equals: .systemPrompt)
-                        .lineLimit(4, reservesSpace: true)
-                }
+                
+
+                TextField("Enter a system prompt", text: $configuration.systemPrompt, axis: .vertical)
+                    .focused($focusedField, equals: .systemPrompt)
+                    .lineLimit(4, reservesSpace: true)
+        
             }
-        }
+    
     }
 
     private var width: CGFloat {
         #if os(iOS)
-            return 170
+            return 190
         #else
             return 150
         #endif
