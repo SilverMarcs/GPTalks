@@ -21,7 +21,7 @@ enum Provider: String, CaseIterable, Codable {
         case .openrouter:
             return "openrouter"
         case .naga:
-            return "custom"
+            return "naga"
         case .custom2:
             return "custom2"
         }
@@ -101,7 +101,7 @@ enum Provider: String, CaseIterable, Codable {
         case .openrouter:
             return "OpenRouter"
         case .naga:
-            return "Custom"
+            return "NagaAI"
         case .custom2:
             return "Custom 2"
         }

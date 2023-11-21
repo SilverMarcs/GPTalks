@@ -33,7 +33,6 @@ struct DefaultConfigView: View {
                 Section("Default Settings") {
                     settings
                 }
-                .navigationTitle(navigationTitle)
             }
         #endif
     }

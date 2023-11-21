@@ -25,7 +25,7 @@ struct MacOSSettingsView: View {
                     Label("Providers", systemImage: "brain.head.profile")
                 }
         }
-        .frame(minWidth: 700, minHeight: 400)
+        .frame(minWidth: 700, minHeight: 300)
     }
 }
 
@@ -82,7 +82,7 @@ struct ProviderSettingsView: View {
                     model: configuration.$Nmodel,
                     apiKey: configuration.$Nkey,
                     models: Provider.naga.models,
-                    navigationTitle: "Naga"
+                    navigationTitle: "NagaAI"
                 )
 //            case .custom2:
 //                Custom2SettingsView()

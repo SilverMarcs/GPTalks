@@ -99,7 +99,7 @@ struct BottomInputView: View {
             Image(systemName: "stop.circle.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageSize, height: imageSize)
+                .frame(width: imageSize + 1, height: imageSize + 1)
                 .foregroundColor(.red)
         }
         .buttonStyle(.borderless)

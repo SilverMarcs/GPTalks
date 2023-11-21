@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ConversationView: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
     let conversation: Conversation
     let accentColor: Color
 
@@ -110,6 +112,7 @@ struct ConversationView: View {
                         EmptyView()
                     } else {
                         Text(conversation.content)
+                            .foregroundColor(.primary)
                             .textSelection(.enabled)
                             .frame(minWidth: 0)
                     }

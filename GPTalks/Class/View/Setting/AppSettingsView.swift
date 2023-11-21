@@ -39,6 +39,17 @@ struct AppSettingsView: View {
                     }
                 }
             }
+            Section("Defaults") {
+                NavigationLink {
+                    DefaultConfigView()
+                } label: {
+                    HStack {
+                        Image("cpu")
+                            .renderingMode(.original)
+                        Text("Default Parameters")
+                    }
+                }
+            }
             Section("Services") {
                 NavigationLink {
                     ServiceSettingsView(
@@ -81,11 +92,11 @@ struct AppSettingsView: View {
                     )
                 } label: {
                     HStack {
-                        Image("custom")
+                        Image("naga")
                             .resizable()
                             .cornerRadius(10)
                             .frame(width: 30, height: 30)
-                        Text("PAI")
+                        Text("NagaAI")
                     }
                 }
 //                NavigationLink {
