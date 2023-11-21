@@ -35,12 +35,12 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.ORKey") var ORkey = ""
     @AppStorage("configuration.ORmodel") var ORmodel: Model = .orphind
     
-    /// custom
+    /// naga
     @AppStorage("configuration.Nkey") var Nkey = ""
     @AppStorage("configuration.Nmodel") var Nmodel: Model = .gpt4t
     
-    /// custom2
-    @AppStorage("configuration.C2Key") var Ckey = ""
-    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt3t
+    /// bing
+    @AppStorage("configuration.Bkey") var Bkey = ""
+    @AppStorage("configuration.Bmodel") var Bmodel: Model = .gpt3t
     
 }

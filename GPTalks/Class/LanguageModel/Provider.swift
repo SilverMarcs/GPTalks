@@ -12,7 +12,7 @@ enum Provider: String, CaseIterable, Codable {
     case openai
     case openrouter
     case naga
-    case custom2
+    case bing
 
     var id: String {
         switch self {
@@ -22,8 +22,8 @@ enum Provider: String, CaseIterable, Codable {
             return "openrouter"
         case .naga:
             return "naga"
-        case .custom2:
-            return "custom2"
+        case .bing:
+            return "bing"
         }
     }
     
@@ -69,10 +69,10 @@ enum Provider: String, CaseIterable, Codable {
                 token: AppConfiguration.shared.Nkey,
                 host: "https://api.naga.ac"
             )
-        case .custom2:
+        case .bing:
             return OpenAI.Configuration(
-                token: AppConfiguration.shared.Ckey,
-                host: "AppConfiguration.shared.C2host"
+                token: AppConfiguration.shared.Bkey,
+                host: "https://api.shuttleai.app"
             )
         }
     }
@@ -89,7 +89,7 @@ enum Provider: String, CaseIterable, Codable {
             return Color("purpleColor")
         case .naga:
             return Color("orangeColor")
-        case .custom2:
+        case .bing:
             return .accentColor
         }
     }
@@ -102,8 +102,8 @@ enum Provider: String, CaseIterable, Codable {
             return "OpenRouter"
         case .naga:
             return "NagaAI"
-        case .custom2:
-            return "Custom 2"
+        case .bing:
+            return "Bing"
         }
     }
     
@@ -115,8 +115,8 @@ enum Provider: String, CaseIterable, Codable {
             return AppConfiguration.shared.ORmodel
         case .naga:
             return AppConfiguration.shared.Nmodel
-        case .custom2:
-            return .gpt4t
+        case .bing:
+            return .gpt4
         }
     }
 
@@ -127,9 +127,9 @@ enum Provider: String, CaseIterable, Codable {
         case .openrouter:
             return Model.openRouterModels
         case .naga:
-            return Model.customModels
-        case .custom2:
-            return Model.customModels
+            return Model.nagaModels
+        case .bing:
+            return [.gpt4]
         }
     }
 }

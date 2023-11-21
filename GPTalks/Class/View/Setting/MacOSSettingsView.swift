@@ -53,7 +53,7 @@ struct ProviderSettingsView: View {
         case openAI
         case openRouter
         case naga
-//        case custom2
+        case bing
 //        case summaries
 
         var id: String { rawValue }
@@ -84,10 +84,13 @@ struct ProviderSettingsView: View {
                     models: Provider.naga.models,
                     navigationTitle: "NagaAI"
                 )
-//            case .custom2:
-//                Custom2SettingsView()
-//            case .summaries:
-//                SummarySettingsView()
+            case .bing:
+                ServiceSettingsView(
+                    model: configuration.$Bmodel,
+                    apiKey: configuration.$Bkey,
+                    models: Provider.bing.models,
+                    navigationTitle: "Bing"
+                )
             }
         }
 
