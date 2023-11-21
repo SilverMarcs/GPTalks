@@ -53,7 +53,7 @@ struct Bubble: ViewModifier {
            content
                .padding(.horizontal, horizontalPadding)
                .padding(.vertical, verticalPadding)
-               .background(Color(.secondarySystemFill))
+               .background(.background)
                #if os(iOS)
                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
                #endif

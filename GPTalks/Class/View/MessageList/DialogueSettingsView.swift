@@ -81,8 +81,8 @@ struct DialogueSettingsView: View {
                         .fixedSize()
                     Spacer()
                     Picker("", selection: $configuration.contextLength) {
-                        ForEach(Array(1 ... 10).reversed() + [30], id: \.self) { number in
-                            Text(number == 30 ? "Unlimited Messages" : "Last \(number) Messages")
+                        ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
+                            Text("Last \(number) Messages")
                                 .tag(number)
                         }
                     }

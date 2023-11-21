@@ -188,6 +188,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 for try await result in service.chatsStream(query: query) {
                     streamText += result.choices.first?.delta.content ?? ""
                     conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    scroll?(.bottom)
                 }
             }
             
@@ -208,12 +209,10 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             }
             removeConversation(at: conversations.count - 1)
             setErrorDesc(errorDesc: error.localizedDescription)
-            scroll?(.bottom)
         }
 
         conversations[conversations.count - 1].isReplying = false
 
-        scroll?(.bottom)
         save()
     }
     

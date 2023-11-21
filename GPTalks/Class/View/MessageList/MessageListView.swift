@@ -84,7 +84,7 @@ struct MessageListView: View {
     var contentView: some View {
            ScrollViewReader { proxy in
                ScrollView {
-                   VStack(spacing: 0) {
+                   VStack(spacing: 1) {
                        ForEach(Array(session.conversations.enumerated()), id: \.element.id) { index, conversation in
                            ConversationView(conversation: conversation, accentColor: session.configuration.provider.accentColor) { conversation in
                              Task { @MainActor in

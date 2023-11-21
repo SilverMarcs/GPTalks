@@ -21,7 +21,7 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.preferredChatService") var preferredChatService: Provider = .openai
     
-    @AppStorage("configuration.contextLength") var contextLength = 30
+    @AppStorage("configuration.contextLength") var contextLength = 20
     
     @AppStorage("configuration.temperature") var temperature: Double = 0.8
     

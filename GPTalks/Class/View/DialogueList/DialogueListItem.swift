@@ -54,7 +54,7 @@ struct ListItem: View {
                                 )
                         }
                     }
-                    .frame(maxHeight: 20)
+                    .frame(maxHeight: lastMessageMaxHeight)
                 }
             }
         }
@@ -101,6 +101,14 @@ struct ListItem: View {
         }
     }
 
+    private var lastMessageMaxHeight: CGFloat {
+        #if os(iOS)
+            40
+        #elseif os(macOS)
+            20
+        #endif
+    }
+    
     private var imageSize: CGFloat {
         #if os(iOS)
             44

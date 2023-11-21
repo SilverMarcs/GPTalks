@@ -43,8 +43,8 @@ struct DefaultConfigView: View {
                 Text("Context Length")
                 Spacer()
                 Picker("", selection: configuration.$contextLength) {
-                    ForEach(Array(1 ... 10).reversed() + [30], id: \.self) { number in
-                        Text(number == 30 ? "Unlimited Messages" : "Last \(number) Messages")
+                    ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
+                        Text("Last \(number) Messages")
                             .tag(number)
                     }
                 }
@@ -94,7 +94,7 @@ struct DefaultConfigView: View {
 
     var widthValue: CGFloat {
         #if os(macOS)
-            240
+            300
         #else
             180
         #endif

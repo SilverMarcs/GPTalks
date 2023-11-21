@@ -18,7 +18,7 @@ struct ServiceSettingsView: View {
     var body: some View {
         #if os(macOS)
             ScrollView {
-                GroupBox(label: Text("Default Settings").font(.headline).padding(.bottom, 5)) {
+                GroupBox(label: Text("Service Settings").font(.headline).padding(.bottom, 5)) {
                     settings
                 }
                 .padding()
