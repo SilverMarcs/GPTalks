@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ListItem: View {
     @State private var showRenameDialogue = false
+    @State private var showDeleteDialogue = false
     @State private var newName = ""
     @State private var sessionToRename: DialogueSession?
     @State private var searchQuery = ""
@@ -61,12 +62,19 @@ struct ListItem: View {
         .frame(minHeight: minHeight)
         .padding(.vertical, 7)
         .padding(.horizontal, 5)
-        .alert("Rename", isPresented: $showRenameDialogue, actions: {
+        .alert("Rename Session", isPresented: $showRenameDialogue, actions: {
             TextField("Enter new name", text: $newName)
             Button("Rename", action: {
                 if let session = sessionToRename {
                     session.rename(newTitle: newName)
                 }
+            })
+            Button("Cancel", role: .cancel, action: {})
+        })
+        .alert("Confirm Delete?", isPresented: $showDeleteDialogue, actions: {
+            Button("Delete", role: .destructive, action: {
+                deleteDialogueHandler(session)
+                sessionResetter()
             })
             Button("Cancel", role: .cancel, action: {})
         })
@@ -83,8 +91,7 @@ struct ListItem: View {
             }
             
             Button(role: .destructive) {
-                deleteDialogueHandler(session)
-                sessionResetter()
+                showDeleteDialogue = true
             } label: {
                 HStack {
                     Image(systemName: "trash")
@@ -94,7 +101,7 @@ struct ListItem: View {
         }
         .swipeActions(edge: .trailing) {
             Button(role: .destructive) {
-                deleteDialogueHandler(session)
+                showDeleteDialogue = true
             } label: {
                 Label("Delete", systemImage: "trash")
             }

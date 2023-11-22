@@ -218,7 +218,7 @@ struct ConversationView: View {
         if !isEditing {
             return 85
         } else {
-            return 50
+            return 52
         }
 
         #endif
