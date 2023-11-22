@@ -69,7 +69,7 @@ struct ContentView: View {
         }
         .background(.background)
 #if os(macOS)
-        .frame(minWidth: 1100, minHeight: 770)
+        .frame(minWidth: 1150, minHeight: 800)
 #else
         .sheet(isPresented: $isShowSettingView) {
             NavigationStack {
