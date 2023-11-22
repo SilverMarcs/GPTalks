@@ -48,7 +48,6 @@ struct ConversationView: View {
                         }
                     }
                 }
-//                .frame(maxHeight: exceedsMaxHeight ? maxHeight : .infinity)  // TODO: v bad
                 .padding(.trailing, 15)
                 .padding(.leading, horizontalPadding)
             } else if conversation.role == .assistant {
@@ -77,7 +76,7 @@ struct ConversationView: View {
             if isEditing {
                 editControls()
                 TextEditor(text: $editingMessage)
-                    .frame(maxHeight: exceedsMaxHeight ? maxHeight : .infinity)  // TODO: v bad
+                    .frame(maxHeight: exceedsMaxHeight ? maxHeight - 3 : .infinity)  // TODO: v bad
                     .padding(.vertical, exceedsMaxHeight ? 1.5 : 0)
                     .font(.body)
                     .focused($isFocused)
