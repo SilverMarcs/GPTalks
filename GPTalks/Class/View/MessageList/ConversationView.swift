@@ -21,34 +21,34 @@ struct ConversationView: View {
     @FocusState var isFocused: Bool
     @State var editingMessage: String = ""
     @State private var isHovered = false
-    
-    @State private var textSize: CGSize = .zero
-
-    @State private var showPopover = false
-    
-    let maxUserMessageHeight: CGFloat = 500
+//    
+//    @State private var textSize: CGSize = .zero
+//
+//    @State private var showPopover = false
+//    
+//    let maxUserMessageHeight: CGFloat = 500
 
     var body: some View {
         VStack {
             if conversation.role == .user {
                 VStack(alignment: .trailing) {
                     userMessage
-                        .frame(maxHeight: textSize.height > maxUserMessageHeight ? maxUserMessageHeight : .infinity)
+//                        .frame(maxHeight: textSize.height > maxUserMessageHeight ? maxUserMessageHeight : .infinity)
 
-                    if textSize.height > maxUserMessageHeight {
-                        Button("Show More") {
-                            showPopover = true
-                        }
-                        .clipShape(.capsule(style: .circular))
-                        .opacity(isEditing ? 0 : 1)
-                        .popover(isPresented: $showPopover) {
-                            ScrollView {
-                                Text(conversation.content)
-                            }
-                            .frame(maxWidth: 400, maxHeight: 400)
-                            .padding(10)
-                        }
-                    }
+//                    if textSize.height > maxUserMessageHeight {
+//                        Button("Show More") {
+//                            showPopover = true
+//                        }
+//                        .clipShape(.capsule(style: .circular))
+//                        .opacity(isEditing ? 0 : 1)
+//                        .popover(isPresented: $showPopover) {
+//                            ScrollView {
+//                                Text(conversation.content)
+//                            }
+//                            .frame(maxWidth: 400, maxHeight: 400)
+//                            .padding(10)
+//                        }
+//                    }
                 }
                 .padding(.trailing, 15)
                 .padding(.leading, horizontalPadding)
@@ -81,7 +81,7 @@ struct ConversationView: View {
                     .font(.body)
                     .focused($isFocused)
                     .scrollContentBackground(.hidden)
-                    .frame(maxHeight: maxUserMessageHeight - 18)
+//                    .frame(maxHeight: maxUserMessageHeight - 18)
                     .bubbleStyle(isMyMessage: true, type: .edit)
             } else {
                 optionsMenu()
@@ -90,14 +90,14 @@ struct ConversationView: View {
                     .bubbleStyle(isMyMessage: true, type: .text, accentColor: accentColor)
             }
         }
-        .background(
-            GeometryReader { proxy in
-                Color.clear
-                    .onAppear {
-                        textSize = proxy.size
-                    }
-            }
-        )
+//        .background(
+//            GeometryReader { proxy in
+//                Color.clear
+//                    .onAppear {
+//                        textSize = proxy.size
+//                    }
+//            }
+//        )
     }
 
     @ViewBuilder
