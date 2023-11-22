@@ -37,8 +37,8 @@ struct GeneralSettingsView: View {
             Toggle("Markdown Enabled", isOn: configuration.$isMarkdownEnabled)
 
             Picker("Preferred AI Provider", selection: configuration.$preferredChatService) {
-                ForEach(Provider.allCases, id: \.self) {
-                    Text($0.rawValue.capitalizingFirstLetter())
+                ForEach(Provider.allCases, id: \.self) { provider in
+                    Text(provider.name)
                 }
             }
         }
@@ -48,7 +48,7 @@ struct GeneralSettingsView: View {
 
 struct ProviderSettingsView: View {
     @ObservedObject var configuration = AppConfiguration.shared
-    @State var selection: Provider? = .openai
+    @State var selection: Provider?
 
     var body: some View {
         NavigationView {
@@ -57,6 +57,9 @@ struct ProviderSettingsView: View {
                     destination: provider.destination,
                     label: { provider.label }
                 )
+            }
+            .onAppear {
+                selection = .openai
             }
         }
     }

@@ -56,7 +56,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .custom:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.Ckey,
-                host: "https://api.mandrillai.tech"
+                host: AppConfiguration.shared.Chost
             )
         }
     }
@@ -74,9 +74,9 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .naga:
             return Color("orangeColor")
         case .bing:
-            return .accentColor
+            return Color("blueColor")
         case .custom:
-            return Color(.systemCyan)
+            return Color("brownColor")
         }
     }
 
@@ -160,8 +160,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             )
         case .custom:
             ServiceSettingsView(
-                model: configuration.$Bmodel,
-                apiKey: configuration.$Bkey,
+                model: configuration.$Cmodel,
+                apiKey: configuration.$Ckey,
                 models: self.models,
                 navigationTitle: "Custom"
             )

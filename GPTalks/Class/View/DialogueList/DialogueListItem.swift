@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ListItem: View {
+struct DialogueListItem: View {
     @State private var showRenameDialogue = false
     @State private var showDeleteDialogue = false
     @State private var newName = ""

@@ -10,6 +10,7 @@ import SwiftUI
 struct ServiceSettingsView: View {
     @Binding var model: Model
     @Binding var apiKey: String
+    @ObservedObject var configuration = AppConfiguration.shared
     var models: [Model]
     var navigationTitle: String
     
@@ -50,6 +51,19 @@ struct ServiceSettingsView: View {
             .padding(paddingValue)
 
             Divider()
+            
+            if navigationTitle == "Custom" {
+                HStack {
+                    Text("Host URL")
+                    Spacer()
+                    TextField("Include https", text: configuration.$Chost)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: widthValue)
+                }
+                .padding(paddingValue)
+                
+                Divider()
+            }
             
             HStack {
                 Text("API Key")

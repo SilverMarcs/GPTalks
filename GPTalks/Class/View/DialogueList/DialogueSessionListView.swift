@@ -31,7 +31,7 @@ struct DialogueSessionListView: View {
     
     var body: some View {
         List(filteredDialogueSessions, selection: $selectedDialogueSession) { session in
-            ListItem(session: session) { _ in
+            DialogueListItem(session: session) { _ in
                 deleteDialogueHandler(session)
             } sessionResetter: {
                 if let firstDialogue = dialogueSessions.first {

@@ -43,8 +43,9 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.Bkey") var Bkey = ""
     @AppStorage("configuration.Bmodel") var Bmodel: Model = .gpt4
     
-    /// ca
+    /// custom
     @AppStorage("configuration.Ckey") var Ckey = ""
     @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt4
+    @AppStorage("configuration.Chost") var Chost: String = ""
     
 }
