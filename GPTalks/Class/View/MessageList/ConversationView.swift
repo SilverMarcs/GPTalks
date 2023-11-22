@@ -19,13 +19,38 @@ struct ConversationView: View {
     @FocusState var isFocused: Bool
     @State var editingMessage: String = ""
     @State private var isHovered = false
+    @State private var showPopover = false
+    
+    let maxHeight: CGFloat = 500
+    private var exceedsMaxHeight: Bool {
+        conversation.content.count > 1200 || editingMessage.count > 1200
+    }
+    
 
     var body: some View {
         VStack {
             if conversation.role == .user {
-                userMessage
-                    .padding(.trailing, 15)
-                    .padding(.leading, isEditing ? horizontalPadding - 25 : horizontalPadding)
+                VStack(alignment: .trailing) {
+                    userMessage
+                    
+                    if (exceedsMaxHeight) {
+                        Button("Show More") {
+                            showPopover = true
+                        }
+                        .clipShape(.capsule(style: .circular))
+                        .opacity(isEditing ? 0 : 1)
+                        .popover(isPresented: $showPopover) {
+                            ScrollView {
+                                Text(conversation.content)
+                            }
+                            .frame(maxWidth: 400, maxHeight: 400)
+                            .padding(10)
+                        }
+                    }
+                }
+//                .frame(maxHeight: exceedsMaxHeight ? maxHeight : .infinity)  // TODO: v bad
+                .padding(.trailing, 15)
+                .padding(.leading, horizontalPadding)
             } else if conversation.role == .assistant {
                 assistantMessage
                     .padding(.leading, 15)
@@ -52,6 +77,8 @@ struct ConversationView: View {
             if isEditing {
                 editControls()
                 TextEditor(text: $editingMessage)
+                    .frame(maxHeight: exceedsMaxHeight ? maxHeight : .infinity)  // TODO: v bad
+                    .padding(.vertical, exceedsMaxHeight ? 1.5 : 0)
                     .font(.body)
                     .focused($isFocused)
                     .scrollContentBackground(.hidden)
@@ -62,6 +89,7 @@ struct ConversationView: View {
                     .transition(.opacity)
                     .animation(.easeOut(duration: 0.15), value: isHovered)
                 Text(conversation.content)
+                    .frame(maxHeight: exceedsMaxHeight ? maxHeight : .infinity)  // TODO: v bad
                     .textSelection(.enabled)
                     .bubbleStyle(isMyMessage: true, type: .text, accentColor: accentColor)
                     .transition(.opacity)
@@ -84,7 +112,6 @@ struct ConversationView: View {
                         Text(conversation.content)
                             .foregroundColor(.primary)
                             .textSelection(.enabled)
-                            .frame(minWidth: 0)
                     }
                 }
                 if conversation.isReplying {
@@ -189,7 +216,12 @@ struct ConversationView: View {
         #if os(iOS)
             return 45
         #else
+        if !isEditing {
             return 85
+        } else {
+            return 54
+        }
+
         #endif
     }
 }
