@@ -43,4 +43,8 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.Bkey") var Bkey = ""
     @AppStorage("configuration.Bmodel") var Bmodel: Model = .gpt3t
     
+    /// ca
+    @AppStorage("configuration.CAkey") var CAkey = ""
+    @AppStorage("configuration.CAmodel") var CAmodel: Model = .gpt3t
+    
 }

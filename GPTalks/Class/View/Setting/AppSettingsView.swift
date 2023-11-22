@@ -88,7 +88,7 @@ struct AppSettingsView: View {
                         model: configuration.$Nmodel,
                         apiKey: configuration.$Nkey,
                         models: Provider.naga.models,
-                        navigationTitle: "Custom"
+                        navigationTitle: "Naga"
                     )
                 } label: {
                     HStack {
@@ -97,6 +97,22 @@ struct AppSettingsView: View {
                             .cornerRadius(10)
                             .frame(width: 30, height: 30)
                         Text("NagaAI")
+                    }
+                }
+                NavigationLink {
+                    ServiceSettingsView(
+                        model: configuration.$Bmodel,
+                        apiKey: configuration.$Bkey,
+                        models: Provider.bing.models,
+                        navigationTitle: "Bing"
+                    )
+                } label: {
+                    HStack {
+                        Image("bing")
+                            .resizable()
+                            .cornerRadius(10)
+                            .frame(width: 30, height: 30)
+                        Text("Bing")
                     }
                 }
 //                NavigationLink {

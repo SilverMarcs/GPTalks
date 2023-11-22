@@ -13,6 +13,7 @@ enum Provider: String, CaseIterable, Codable {
     case openrouter
     case naga
     case bing
+//    case ca
 
     var id: String {
         switch self {
@@ -62,7 +63,8 @@ enum Provider: String, CaseIterable, Codable {
         case .openrouter:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.ORkey,
-                host: "https://openrouter.ai/api"
+                host: "https://openrouter.ai/api",
+                additionalHeaders: ["HTTP-Referer": "www.github.com/SilverMarcs"]
             )
         case .naga:
             return OpenAI.Configuration(

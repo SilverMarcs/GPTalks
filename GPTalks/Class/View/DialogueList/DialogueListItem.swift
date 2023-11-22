@@ -19,7 +19,7 @@ struct ListItem: View {
 
     var body: some View {
         NavigationLink(value: session) {
-            HStack(spacing: 10) {
+            HStack(spacing: imgToTextSpace) {
                 Image(session.configuration.provider.iconName)
                     .resizable()
                     .frame(width: imageSize, height: imageSize)
@@ -58,7 +58,7 @@ struct ListItem: View {
                 }
             }
         }
-        .frame(minHeight: 40)
+        .frame(minHeight: minHeight)
         .padding(.vertical, 7)
         .padding(.horizontal, 5)
         .alert("Rename", isPresented: $showRenameDialogue, actions: {
@@ -100,7 +100,24 @@ struct ListItem: View {
             }
         }
     }
+    
+    private var minHeight: CGFloat {
+        #if os(iOS)
+            60
+        #elseif os(macOS)
+            40
+        #endif
+    }
+    
 
+    private var imgToTextSpace: CGFloat {
+        #if os(iOS)
+            13
+        #elseif os(macOS)
+            10
+        #endif
+    }
+    
     private var lastMessageMaxHeight: CGFloat {
         #if os(iOS)
             40
