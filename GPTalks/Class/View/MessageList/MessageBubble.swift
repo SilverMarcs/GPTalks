@@ -51,7 +51,7 @@ struct Bubble: ViewModifier {
                .foregroundColor(Color.white)
        case .edit:
            content
-               .padding(.horizontal, horizontalPadding)
+               .padding(.horizontal, horizontalPadding - 5)
                .padding(.vertical, verticalPadding)
                .background(.background)
                #if os(iOS)

@@ -34,7 +34,9 @@ struct DialogueSessionListView: View {
             ListItem(session: session) { _ in
                 deleteDialogueHandler(session)
             } sessionResetter: {
-                selectedDialogueSession = nil
+                if let firstDialogue = dialogueSessions.first {
+                    selectedDialogueSession = firstDialogue
+                }
             }
         }
         .searchable(text: $searchQuery)
