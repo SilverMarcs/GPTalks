@@ -48,71 +48,14 @@ struct GeneralSettingsView: View {
 
 struct ProviderSettingsView: View {
     @ObservedObject var configuration = AppConfiguration.shared
-
-    enum Item: String, CaseIterable, Identifiable, Hashable {
-        case openAI
-        case openRouter
-        case naga
-        case bing
-//        case summaries
-
-        var id: String { rawValue }
-
-        @ViewBuilder
-        var destination: some View {
-            @ObservedObject var configuration = AppConfiguration.shared
-
-            switch self {
-            case .openAI:
-                ServiceSettingsView(
-                    model: configuration.$OAImodel,
-                    apiKey: configuration.$OAIkey,
-                    models: Provider.openai.models,
-                    navigationTitle: "OpenAI"
-                )
-            case .openRouter:
-                ServiceSettingsView(
-                    model: configuration.$ORmodel,
-                    apiKey: configuration.$ORkey,
-                    models: Provider.openrouter.models,
-                    navigationTitle: "OpenRouter"
-                )
-            case .naga:
-                ServiceSettingsView(
-                    model: configuration.$Nmodel,
-                    apiKey: configuration.$Nkey,
-                    models: Provider.naga.models,
-                    navigationTitle: "NagaAI"
-                )
-            case .bing:
-                ServiceSettingsView(
-                    model: configuration.$Bmodel,
-                    apiKey: configuration.$Bkey,
-                    models: Provider.bing.models,
-                    navigationTitle: "Bing"
-                )
-            }
-        }
-
-        var label: some View {
-            HStack {
-                Image(self.rawValue.lowercased())
-                    .resizable()
-                    .frame(width: 40, height: 40)
-                    .cornerRadius(10)
-                Text(rawValue.capitalizingFirstLetter())
-            }
-        }
-    }
-
-    @State var selection: Item? = .openAI
+    @State var selection: Provider? = .openai
 
     var body: some View {
         NavigationView {
-            List(Item.allCases, selection: $selection) { item in
+            List(Provider.allCases, selection: $selection) { provider in
                 NavigationLink(
-                    destination: item.destination,
-                    label: { item.label }
+                    destination: provider.destination,
+                    label: { provider.label }
                 )
             }
         }

@@ -51,92 +51,14 @@ struct AppSettingsView: View {
                 }
             }
             Section("Services") {
-                NavigationLink {
-                    ServiceSettingsView(
-                        model: configuration.$OAImodel,
-                        apiKey: configuration.$OAIkey,
-                        models: Provider.openai.models,
-                        navigationTitle: "OpenAI"
+                ForEach(Provider.allCases) { provider in
+                    NavigationLink(
+                        destination: provider.destination,
+                        label: { provider.label }
                     )
-                } label: {
-                    HStack {
-                        Image("openai")
-                            .resizable()
-                            .cornerRadius(10)
-                            .frame(width: 30, height: 30)
-                        Text("OpenAI")
-                    }
                 }
-                NavigationLink {
-                    ServiceSettingsView(
-                        model: configuration.$ORmodel,
-                        apiKey: configuration.$ORkey,
-                        models: Provider.openrouter.models,
-                        navigationTitle: "OpenRouter"
-                    )
-                } label: {
-                    HStack {
-                        Image("openrouter")
-                            .resizable()
-                            .cornerRadius(10)
-                            .frame(width: 30, height: 30)
-                        Text("OpenRouter")
-                    }
-                }
-                NavigationLink {
-                    ServiceSettingsView(
-                        model: configuration.$Nmodel,
-                        apiKey: configuration.$Nkey,
-                        models: Provider.naga.models,
-                        navigationTitle: "Naga"
-                    )
-                } label: {
-                    HStack {
-                        Image("naga")
-                            .resizable()
-                            .cornerRadius(10)
-                            .frame(width: 30, height: 30)
-                        Text("NagaAI")
-                    }
-                }
-                NavigationLink {
-                    ServiceSettingsView(
-                        model: configuration.$Bmodel,
-                        apiKey: configuration.$Bkey,
-                        models: Provider.bing.models,
-                        navigationTitle: "Bing"
-                    )
-                } label: {
-                    HStack {
-                        Image("bing")
-                            .resizable()
-                            .cornerRadius(10)
-                            .frame(width: 30, height: 30)
-                        Text("Bing")
-                    }
-                }
-//                NavigationLink {
-//                    SummarySettingsView()
-//                } label: {
-//                    HStack {
-//                        Image("summaries")
-//                            .resizable()
-//                            .cornerRadius(10)
-//                            .frame(width: 30, height: 30)
-//                        Text("Summaries")
-//                    }
-//                }
             }
         }
         .navigationTitle("Settings")
-    }
-}
-
-
-struct AppSettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            AppSettingsView(configuration: AppConfiguration())
-        }
     }
 }

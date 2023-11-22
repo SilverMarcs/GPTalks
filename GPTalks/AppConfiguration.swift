@@ -41,10 +41,10 @@ class AppConfiguration: ObservableObject {
     
     /// bing
     @AppStorage("configuration.Bkey") var Bkey = ""
-    @AppStorage("configuration.Bmodel") var Bmodel: Model = .gpt3t
+    @AppStorage("configuration.Bmodel") var Bmodel: Model = .gpt4
     
     /// ca
-    @AppStorage("configuration.CAkey") var CAkey = ""
-    @AppStorage("configuration.CAmodel") var CAmodel: Model = .gpt3t
+    @AppStorage("configuration.Ckey") var Ckey = ""
+    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt4
     
 }

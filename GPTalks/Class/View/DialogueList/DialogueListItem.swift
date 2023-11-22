@@ -135,7 +135,7 @@ struct ListItem: View {
     
     private var imageSize: CGFloat {
         #if os(iOS)
-            44
+            48
         #elseif os(macOS)
             36
         #endif

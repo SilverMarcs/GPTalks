@@ -110,4 +110,5 @@ enum Model: String, Codable {
     static let openRouterModels: [Model] = [.orphind, .orcodellama, .ormistral, .ormythomax, .orpalm, .orpalmcode, .orzephyr, .orgpt3, .orgpt4t, .orhermes, .ortoppy]
     static let nagaModels: [Model] = openAIModels
     static let bingModels: [Model] = [.gpt4]
+    static let customModels: [Model] = openAIModels
 }

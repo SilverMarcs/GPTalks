@@ -15,6 +15,13 @@ struct MessageListView: View {
 
     var body: some View {
         contentView
+            .alert("Delete all messages?", isPresented: $isShowDeleteWarning) {
+                Button("Cancel", role: .cancel, action: {})
+                Button("Confirm", role: .destructive, action: {
+                    session.resetErrorDesc()
+                    session.removeAllConversations()
+                })
+            }
 #if os(iOS)
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -35,17 +42,18 @@ struct MessageListView: View {
                         dialogSettings
                     }
                 }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isShowDeleteWarning.toggle()
+                    } label: {
+                        Image(systemName:"trash")
+                    }
+                }
             }
 #else
             .navigationTitle(session.title)
             .navigationSubtitle(session.configuration.model.name)
-            .alert("Delete all messages?", isPresented: $isShowDeleteWarning) {
-                Button("Cancel", role: .cancel, action: {})
-                Button("Confirm", role: .destructive, action: {
-                    session.resetErrorDesc()
-                    session.removeAllConversations()
-                })
-            }
             .toolbar {
                 ToolbarItem(placement: .navigation) {
                     Button {

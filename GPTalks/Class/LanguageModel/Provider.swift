@@ -8,12 +8,12 @@
 import SwiftUI
 import OpenAI
 
-enum Provider: String, CaseIterable, Codable {
+enum Provider: String, CaseIterable, Codable, Identifiable {
     case openai
     case openrouter
     case naga
     case bing
-//    case ca
+    case custom
 
     var id: String {
         switch self {
@@ -25,33 +25,10 @@ enum Provider: String, CaseIterable, Codable {
             return "naga"
         case .bing:
             return "bing"
+        case .custom:
+            return "custom"
         }
     }
-    
-//    func config(keys: [String: String]) -> OpenAI.Configuration {
-//        switch self {
-//        case .openai:
-//            return OpenAI.Configuration(
-//                token: AppConfiguration.shared.OAIkey,
-//                host: "https://api.openai.com"
-//            )
-//        case .openrouter:
-//            return OpenAI.Configuration(
-//                token: AppConfiguration.shared.ORkey,
-//                host: "https://openrouter.ai/api"
-//            )
-//        case .custom:
-//            return OpenAI.Configuration(
-//                token: "WVoJofdvnvpWNB1uJL6q6NdSjjf4v5_F1Zld_6mtxno",
-//                host: "https://api.naga.ac"
-//            )
-//        case .custom2:
-//            return OpenAI.Configuration(
-//                token: AppConfiguration.shared.C2key,
-//                host: "AppConfiguration.shared.C2host"
-//            )
-//        }
-//    }
     
     var config: OpenAI.Configuration {
         switch self {
@@ -76,6 +53,11 @@ enum Provider: String, CaseIterable, Codable {
                 token: AppConfiguration.shared.Bkey,
                 host: "https://api.shuttleai.app"
             )
+        case .custom:
+            return OpenAI.Configuration(
+                token: AppConfiguration.shared.Ckey,
+                host: "https://api.mandrillai.tech"
+            )
         }
     }
 
@@ -93,6 +75,8 @@ enum Provider: String, CaseIterable, Codable {
             return Color("orangeColor")
         case .bing:
             return .accentColor
+        case .custom:
+            return Color(.systemCyan)
         }
     }
 
@@ -106,6 +90,8 @@ enum Provider: String, CaseIterable, Codable {
             return "NagaAI"
         case .bing:
             return "Bing"
+        case .custom:
+            return "Custom"
         }
     }
     
@@ -118,7 +104,9 @@ enum Provider: String, CaseIterable, Codable {
         case .naga:
             return AppConfiguration.shared.Nmodel
         case .bing:
-            return .gpt4
+            return AppConfiguration.shared.Bmodel
+        case .custom:
+            return AppConfiguration.shared.Cmodel
         }
     }
 
@@ -132,6 +120,65 @@ enum Provider: String, CaseIterable, Codable {
             return Model.nagaModels
         case .bing:
             return [.gpt4]
+        case .custom:
+            return Model.customModels
+        }
+    }
+    
+    @ViewBuilder
+    var destination: some View {
+        @ObservedObject var configuration = AppConfiguration.shared
+
+        switch self {
+        case .openai:
+            ServiceSettingsView(
+                model: configuration.$OAImodel,
+                apiKey: configuration.$OAIkey,
+                models: self.models,
+                navigationTitle: "OpenAI"
+            )
+        case .openrouter:
+            ServiceSettingsView(
+                model: configuration.$ORmodel,
+                apiKey: configuration.$ORkey,
+                models: self.models,
+                navigationTitle: "OpenRouter"
+            )
+        case .naga:
+            ServiceSettingsView(
+                model: configuration.$Nmodel,
+                apiKey: configuration.$Nkey,
+                models: self.models,
+                navigationTitle: "NagaAI"
+            )
+        case .bing:
+            ServiceSettingsView(
+                model: configuration.$Bmodel,
+                apiKey: configuration.$Bkey,
+                models: self.models,
+                navigationTitle: "Bing"
+            )
+        case .custom:
+            ServiceSettingsView(
+                model: configuration.$Bmodel,
+                apiKey: configuration.$Bkey,
+                models: self.models,
+                navigationTitle: "Custom"
+            )
+        }
+    }
+    
+    var label: some View {
+        HStack {
+            Image(rawValue.lowercased())
+                .resizable()
+                .cornerRadius(10)
+            #if os(macOS)
+                .frame(width: 35, height: 35)
+            #else
+                .frame(width: 30, height: 30)
+            #endif
+            Text(name)
         }
     }
 }
