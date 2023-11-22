@@ -59,6 +59,8 @@ struct ConversationView: View {
                     .transition(.opacity)
             } else {
                 optionsMenu()
+                    .transition(.opacity)
+                    .animation(.easeOut(duration: 0.15), value: isHovered)
                 Text(conversation.content)
                     .textSelection(.enabled)
                     .bubbleStyle(isMyMessage: true, type: .text, accentColor: accentColor)
@@ -94,6 +96,8 @@ struct ConversationView: View {
             
             if !conversation.isReplying {
                 optionsMenu()
+                    .transition(.opacity)
+                    .animation(.easeOut(duration: 0.15), value: isHovered)
             }
             Spacer()
         }
