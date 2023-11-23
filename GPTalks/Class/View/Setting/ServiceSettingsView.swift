@@ -37,7 +37,7 @@ struct ServiceSettingsView: View {
     var settings: some View {
         VStack {
             HStack {
-                Text("Model")
+                Text("Default Model")
                 Spacer()
                 Picker("", selection: $model) {
                     ForEach(models, id: \.self) { model in
@@ -49,10 +49,12 @@ struct ServiceSettingsView: View {
                 .frame(width: widthValue)
             }
             .padding(paddingValue)
+            
 
-            Divider()
             
             if navigationTitle == "Custom" {
+                Divider()
+                
                 HStack {
                     Text("Host URL")
                     Spacer()
@@ -62,35 +64,39 @@ struct ServiceSettingsView: View {
                 }
                 .padding(paddingValue)
                 
-                Divider()
+
             }
             
-            HStack {
-                Text("API Key")
-                Spacer()
-
+            if navigationTitle != "GPT4Free" {
+                Divider()
+                
                 HStack {
-                    if showAPIKey {
-                        TextField("", text: $apiKey)
-                            .textFieldStyle(.roundedBorder)
-                    } else {
-                        SecureField("", text: $apiKey)
-                            .textFieldStyle(.roundedBorder)
-                    }
-                    Button {
-                        showAPIKey.toggle()
-                    } label: {
+                    Text("API Key")
+                    Spacer()
+                    
+                    HStack {
                         if showAPIKey {
-                            Image(systemName: "eye.slash")
+                            TextField("", text: $apiKey)
+                                .textFieldStyle(.roundedBorder)
                         } else {
-                            Image(systemName: "eye")
+                            SecureField("", text: $apiKey)
+                                .textFieldStyle(.roundedBorder)
                         }
+                        Button {
+                            showAPIKey.toggle()
+                        } label: {
+                            if showAPIKey {
+                                Image(systemName: "eye.slash")
+                            } else {
+                                Image(systemName: "eye")
+                            }
+                        }
+                        .buttonStyle(.borderless)
                     }
-                    .buttonStyle(.borderless)
+                    .frame(width: widthValue)
                 }
-                .frame(width: widthValue)
+                .padding(paddingValue)
             }
-            .padding(paddingValue)
         }
     }
     
