@@ -155,6 +155,9 @@ struct MessageListView: View {
                       sendMessage(proxy)
                    } stop: {
                        session.stopStreaming()
+//                       if session.lastConversation.content.isEmpty {
+//                           session.removeConversation(at: session.conversations.count - 1)
+//                       }
                    } regen: {_ in
                        if session.isReplying() {
                            return

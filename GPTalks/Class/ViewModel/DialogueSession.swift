@@ -189,7 +189,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             
             if configuration.provider == .gpt4free {
                 query = ChatQuery(model: .gpt4,
-                                  messages: ([Conversation(role: .system, content: configuration.systemPrompt)] + Array(conversations.suffix(configuration.contextLength - 2))).map({ conversation in
+                                  messages: ([Conversation(role: .system, content: configuration.systemPrompt)] + Array(conversations.suffix(configuration.contextLength - 1))).map({ conversation in
                                       conversation.toChat()
                                   }),
                                   temperature: configuration.temperature,
