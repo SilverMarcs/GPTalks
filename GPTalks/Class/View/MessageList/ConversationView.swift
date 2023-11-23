@@ -73,7 +73,7 @@ struct ConversationView: View {
             if isEditing {
                 editControls()
                 TextEditor(text: $editingMessage)
-//                    .padding(.vertical, exceedsMaxHeight ? 1.5 : 0)
+                    .padding(.vertical, textSize.height > maxUserMessageHeight ? 1.5 : 0)
                     .frame(maxHeight: textSize.height > maxUserMessageHeight ? maxUserMessageHeight  : .infinity)
                     .font(.body)
                     .focused($isFocused)
@@ -223,7 +223,7 @@ struct ConversationView: View {
         if !isEditing {
             return 85
         } else {
-            return 75
+            return 70
         }
 
         #endif

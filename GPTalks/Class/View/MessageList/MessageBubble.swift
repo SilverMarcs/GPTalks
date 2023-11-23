@@ -5,7 +5,6 @@
 //  Created by LuoHuanyu on 2023/3/16.
 //
 
-
 import SwiftUI
 
 enum MessageType {
@@ -21,48 +20,47 @@ extension View {
 
 struct Bubble: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
-    
+
     var isMyMessage: Bool
     var type: MessageType = .text
     var accentColor: Color = Color("greenColor")
-    
+
     #if os(iOS)
-    let radius: CGFloat = 19
-    let horizontalPadding: CGFloat = 11
-    let verticalPadding: CGFloat = 8
+        let radius: CGFloat = 19
+        let horizontalPadding: CGFloat = 11
+        let verticalPadding: CGFloat = 8
     #else
-    let radius: CGFloat = 15
-    let horizontalPadding: CGFloat = 11
-    let verticalPadding: CGFloat = 8
+        let radius: CGFloat = 15
+        let horizontalPadding: CGFloat = 11
+        let verticalPadding: CGFloat = 8
     #endif
-    
-    
+
     func body(content: Content) -> some View {
-       switch type {
-       case .text:
-           content
-               .padding(.horizontal, horizontalPadding)
-               .padding(.vertical, verticalPadding)
-               .background(isMyMessage ? accentColor : Color(.secondarySystemFill))
-               #if os(iOS)
-               .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
-               #endif
-               .clipShape(RoundedRectangle(cornerRadius: radius))
-               .foregroundColor(Color.white)
-       case .edit:
-           content
-               .padding(.horizontal, horizontalPadding - 5)
-               .padding(.vertical, verticalPadding)
-               .background(.background)
-               #if os(iOS)
-               .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
-               #endif
-               .clipShape(RoundedRectangle(cornerRadius: radius))
-               .foregroundColor(colorScheme == .dark ? Color.primary: Color.black)
-              .overlay(
-                      RoundedRectangle(cornerRadius: radius)
-                          .stroke(Color.gray, lineWidth: 1)
-                  )
-       }
+        switch type {
+        case .text:
+            content
+                .padding(.horizontal, horizontalPadding)
+                .padding(.vertical, verticalPadding)
+                .background(isMyMessage ? accentColor : Color(.secondarySystemFill))
+            #if os(iOS)
+                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
+            #endif
+                .clipShape(RoundedRectangle(cornerRadius: radius))
+                .foregroundColor(Color.white)
+        case .edit:
+            content
+                .padding(.horizontal, horizontalPadding - 5)
+                .padding(.vertical, verticalPadding)
+                .background(.background)
+            #if os(iOS)
+                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
+            #endif
+                .clipShape(RoundedRectangle(cornerRadius: radius))
+                .foregroundColor(colorScheme == .dark ? Color.primary : Color.black)
+                .overlay(
+                    RoundedRectangle(cornerRadius: radius)
+                        .stroke(Color.gray, lineWidth: 1)
+                )
+        }
     }
 }
