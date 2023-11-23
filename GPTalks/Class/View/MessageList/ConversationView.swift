@@ -20,12 +20,9 @@ struct ConversationView: View {
     @State var editingMessage: String = ""
     @State private var isHovered = false
     @State private var showPopover = false
+    @State private var textSize: CGSize = .zero
     
-    let maxHeight: CGFloat = 500
-    private var exceedsMaxHeight: Bool {
-        conversation.content.count > 1200 || editingMessage.count > 1200
-    }
-    
+    let maxUserMessageHeight: CGFloat = 500
 
     var body: some View {
         VStack {
@@ -33,7 +30,7 @@ struct ConversationView: View {
                 VStack(alignment: .trailing) {
                     userMessage
                     
-                    if (exceedsMaxHeight) {
+                    if textSize.height > maxUserMessageHeight {
                         Button("Show More") {
                             showPopover = true
                         }
@@ -76,8 +73,8 @@ struct ConversationView: View {
             if isEditing {
                 editControls()
                 TextEditor(text: $editingMessage)
-                    .frame(maxHeight: exceedsMaxHeight ? maxHeight - 3 : .infinity)  // TODO: v bad
-                    .padding(.vertical, exceedsMaxHeight ? 1.5 : 0)
+//                    .padding(.vertical, exceedsMaxHeight ? 1.5 : 0)
+                    .frame(maxHeight: textSize.height > maxUserMessageHeight ? maxUserMessageHeight  : .infinity)
                     .font(.body)
                     .focused($isFocused)
                     .scrollContentBackground(.hidden)
@@ -88,12 +85,20 @@ struct ConversationView: View {
                     .transition(.opacity)
                     .animation(.easeOut(duration: 0.15), value: isHovered)
                 Text(conversation.content)
-                    .frame(maxHeight: exceedsMaxHeight ? maxHeight : .infinity)  // TODO: v bad
+                    .frame(maxHeight: textSize.height > maxUserMessageHeight ? maxUserMessageHeight : .infinity)
                     .textSelection(.enabled)
                     .bubbleStyle(isMyMessage: true, type: .text, accentColor: accentColor)
                     .transition(.opacity)
             }
         }
+        .background(
+            GeometryReader { proxy in
+                Color.clear
+                    .onAppear {
+                        textSize = proxy.size
+                    }
+            }
+        )
         .animation(.default, value: isEditing)
     }
 
@@ -218,7 +223,7 @@ struct ConversationView: View {
         if !isEditing {
             return 85
         } else {
-            return 52
+            return 75
         }
 
         #endif
