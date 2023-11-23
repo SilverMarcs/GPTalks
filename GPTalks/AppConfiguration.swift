@@ -39,9 +39,9 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.Nkey") var Nkey = ""
     @AppStorage("configuration.Nmodel") var Nmodel: Model = .gpt4t
     
-    /// bing
-    @AppStorage("configuration.Bkey") var Bkey = ""
-    @AppStorage("configuration.Bmodel") var Bmodel: Model = .gpt4
+    /// gpt4free
+    @AppStorage("configuration.Gkey") var Gkey = ""
+    @AppStorage("configuration.Gmodel") var Gmodel: Model = .phind
     
     /// custom
     @AppStorage("configuration.Ckey") var Ckey = ""

@@ -12,7 +12,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     case openai
     case openrouter
     case naga
-    case bing
+    case gpt4free
     case custom
 
     var id: String {
@@ -23,8 +23,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return "openrouter"
         case .naga:
             return "naga"
-        case .bing:
-            return "bing"
+        case .gpt4free:
+            return "gpt4free"
         case .custom:
             return "custom"
         }
@@ -48,9 +48,9 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 token: AppConfiguration.shared.Nkey,
                 host: "https://api.naga.ac"
             )
-        case .bing:
+        case .gpt4free:
             return OpenAI.Configuration(
-                token: AppConfiguration.shared.Bkey,
+                token: AppConfiguration.shared.Gkey,
                 host: "http://192.168.137.1:8080"
             )
         case .custom:
@@ -73,7 +73,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return Color("purpleColor")
         case .naga:
             return Color("orangeColor")
-        case .bing:
+        case .gpt4free:
             return Color("blueColor")
         case .custom:
             return Color("brownColor")
@@ -88,8 +88,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return "OpenRouter"
         case .naga:
             return "NagaAI"
-        case .bing:
-            return "Bing"
+        case .gpt4free:
+            return "GPT4Free"
         case .custom:
             return "Custom"
         }
@@ -103,8 +103,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return AppConfiguration.shared.ORmodel
         case .naga:
             return AppConfiguration.shared.Nmodel
-        case .bing:
-            return AppConfiguration.shared.Bmodel
+        case .gpt4free:
+            return AppConfiguration.shared.Gmodel
         case .custom:
             return AppConfiguration.shared.Cmodel
         }
@@ -118,8 +118,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return Model.openRouterModels
         case .naga:
             return Model.nagaModels
-        case .bing:
-            return Model.bingModels
+        case .gpt4free:
+            return Model.gpt4freeModels
         case .custom:
             return Model.customModels
         }
@@ -151,12 +151,12 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 models: self.models,
                 navigationTitle: "NagaAI"
             )
-        case .bing:
+        case .gpt4free:
             ServiceSettingsView(
-                model: configuration.$Bmodel,
-                apiKey: configuration.$Bkey,
+                model: configuration.$Gmodel,
+                apiKey: configuration.$Gkey,
                 models: self.models,
-                navigationTitle: "Bing"
+                navigationTitle: "GPT4Free"
             )
         case .custom:
             ServiceSettingsView(

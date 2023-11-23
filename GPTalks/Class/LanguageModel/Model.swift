@@ -28,8 +28,11 @@ enum Model: String, Codable {
     case orhermes
     case ortoppy
     
-    /// custom
-    
+    /// gpt4free
+    case phind
+    case bing
+    case liaobots
+    case geekgpt
 
     var name: String {
         switch self {
@@ -59,6 +62,14 @@ enum Model: String, Codable {
             return "Hermes"
         case .ortoppy:
             return "Toppy"
+        case .phind:
+            return "Phind"
+        case .bing:
+            return "Bing"
+        case .liaobots:
+            return "LiaoBots"
+        case .geekgpt:
+            return "GeekGPT"
         }
     }
 
@@ -94,21 +105,29 @@ enum Model: String, Codable {
             return "nousresearch/nous-hermes-llama2-13b"
         case .ortoppy:
             return "undi95/toppy-m-7b"
+        case .phind:
+            return "Phind"
+        case .bing:
+            return "Bing"
+        case .liaobots:
+            return "LiaoBots"
+        case .geekgpt:
+            return "GeekGPT"
         }
     }
 
     var maxTokens: Int {
         switch self {
-        case .gpt3t, .gpt3t_16, .gpt4, .gpt4t, .orphind, .orcodellama, .ormistral, .ormythomax, .orzephyr, .orgpt3, .orgpt4t, .orhermes, .ortoppy:
-            return 3800
         case .orpalm, .orpalmcode:
             return 2000
+        default:
+            return 3800
         }
     }
 
     static let openAIModels: [Model] = [.gpt3t, .gpt3t_16, .gpt4, .gpt4t]
     static let openRouterModels: [Model] = [.orphind, .orcodellama, .ormistral, .ormythomax, .orpalm, .orpalmcode, .orzephyr, .orgpt3, .orgpt4t, .orhermes, .ortoppy]
     static let nagaModels: [Model] = openAIModels
-    static let bingModels: [Model] = [.gpt4]
+    static let gpt4freeModels: [Model] = [.bing, .liaobots, .geekgpt, .phind]
     static let customModels: [Model] = openAIModels
 }

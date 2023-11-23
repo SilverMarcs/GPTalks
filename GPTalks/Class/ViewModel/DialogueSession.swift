@@ -169,42 +169,39 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         do {
             try await Task.sleep(for: .milliseconds(260))
 
+            scroll?(.bottom)
+            
             lastConversationData = appendConversation(Conversation(role: .assistant, content: "", isReplying: true))
             
-            scroll?(.top)
+            try await Task.sleep(for: .milliseconds(260))
             scroll?(.bottom)
-          
-            let adjustedContext = adjustContext(from: conversations, limit: configuration.contextLength, systemPrompt: configuration.systemPrompt)
-            
-            var messages = adjustedContext.map { $0.toChat() }
-            
-            messages.append(.init(role: .user, content: text))
             
             let openAIconfig = configuration.provider.config
-                
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
             var query = ChatQuery(model: configuration.model.id,
-                                  messages: messages,
+                                  messages: ([Conversation(role: .system, content: configuration.systemPrompt)] + Array(conversations.suffix(configuration.contextLength - 1))).map({ conversation in
+                                      conversation.toChat()
+                                  }),
                                   temperature: configuration.temperature,
                                   maxTokens: configuration.model.maxTokens,
                                   stream: true)
             
-            if configuration.provider == .bing {
-                query = ChatQuery(model: configuration.model.id,
-                                      messages: messages,
-                                      temperature: configuration.temperature,
-                                      maxTokens: configuration.model.maxTokens,
-                                      stream: true,
-                                      provider: "Phind")
+            if configuration.provider == .gpt4free {
+                query = ChatQuery(model: .gpt4,
+                                  messages: ([Conversation(role: .system, content: configuration.systemPrompt)] + Array(conversations.suffix(configuration.contextLength - 2))).map({ conversation in
+                                      conversation.toChat()
+                                  }),
+                                  temperature: configuration.temperature,
+                                  maxTokens: configuration.model.maxTokens,
+                                  stream: true,
+                                  provider: configuration.model.id)
             }
             
             streamingTask = Task {
                 for try await result in service.chatsStream(query: query) {
                     streamText += result.choices.first?.delta.content ?? ""
                     conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-
-                    scroll?(.top)
                     scroll?(.bottom)
                 }
             }
