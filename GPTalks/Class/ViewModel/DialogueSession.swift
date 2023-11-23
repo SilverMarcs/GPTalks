@@ -167,7 +167,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         }
         
         do {
-            try await Task.sleep(for: .milliseconds(100))
+            try await Task.sleep(for: .milliseconds(260))
 
             lastConversationData = appendConversation(Conversation(role: .assistant, content: "", isReplying: true))
             
@@ -184,11 +184,20 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
-            let query = ChatQuery(model: configuration.model.id,
+            var query = ChatQuery(model: configuration.model.id,
                                   messages: messages,
                                   temperature: configuration.temperature,
                                   maxTokens: configuration.model.maxTokens,
                                   stream: true)
+            
+            if configuration.provider == .bing {
+                query = ChatQuery(model: configuration.model.id,
+                                      messages: messages,
+                                      temperature: configuration.temperature,
+                                      maxTokens: configuration.model.maxTokens,
+                                      stream: true,
+                                      provider: "Phind")
+            }
             
             streamingTask = Task {
                 for try await result in service.chatsStream(query: query) {

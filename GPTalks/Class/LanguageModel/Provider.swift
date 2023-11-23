@@ -51,7 +51,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .bing:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.Bkey,
-                host: "https://api.shuttleai.app"
+                host: "http://192.168.137.1:8080"
             )
         case .custom:
             return OpenAI.Configuration(
@@ -119,7 +119,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .naga:
             return Model.nagaModels
         case .bing:
-            return [.gpt4]
+            return Model.bingModels
         case .custom:
             return Model.customModels
         }

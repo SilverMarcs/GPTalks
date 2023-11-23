@@ -218,7 +218,7 @@ struct ConversationView: View {
 
     private var horizontalPadding: CGFloat {
         #if os(iOS)
-            return 45
+            return 15
         #else
         if !isEditing {
             return 85
