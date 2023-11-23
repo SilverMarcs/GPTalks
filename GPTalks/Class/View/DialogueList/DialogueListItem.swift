@@ -106,7 +106,7 @@ struct DialogueListItem: View {
     
     private var minHeight: CGFloat {
         #if os(iOS)
-            60
+            75
         #elseif os(macOS)
             55
         #endif
@@ -131,7 +131,7 @@ struct DialogueListItem: View {
     
     private var imageSize: CGFloat {
         #if os(iOS)
-            48
+            50
         #elseif os(macOS)
             36
         #endif
