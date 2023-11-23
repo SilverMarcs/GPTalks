@@ -108,10 +108,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         return !conversations.isEmpty && lastConversation.isReplying
     }
     
-    lazy var openAIconfig = configuration.provider.config
-        
-    lazy var service: OpenAI = OpenAI(configuration: openAIconfig)
-    
     init() {
         
     }
@@ -179,11 +175,16 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             
             messages.append(.init(role: .user, content: text))
             
+            let openAIconfig = configuration.provider.config
+                
+            let service: OpenAI = OpenAI(configuration: openAIconfig)
+            
             let query = ChatQuery(model: configuration.model.id,
                                   messages: messages,
                                   temperature: configuration.temperature,
                                   maxTokens: configuration.model.maxTokens,
                                   stream: true)
+            
             streamingTask = Task {
                 for try await result in service.chatsStream(query: query) {
                     streamText += result.choices.first?.delta.content ?? ""
