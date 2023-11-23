@@ -168,7 +168,11 @@ struct MessageListView: View {
                            })
                        }
                    }
+                   #if os(macOS)
                    .background(.bar)
+                   #else
+                   .background(.background)
+                   #endif
                }
 #if os(iOS)
                 .onReceive(keyboardWillChangePublisher) { value in

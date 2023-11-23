@@ -36,9 +36,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         date = try container.decode(Date.self, forKey: .date)
         id = try container.decode(UUID.self, forKey: .id)
         input = ""
-        
-//        service = configuration.service.service(session: self)
-        
 
         initFinished = true
     }
@@ -233,42 +230,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         scroll?(.bottom)
     }
     
-//    func createTitle() {
-//        Task { @MainActor in
-//            do {
-//                let newTitle = try await service.createTitle()
-//                let words = newTitle.split(separator: " ")
-//                let firstFiveWords = words.prefix(5).joined(separator: " ")
-//                self.rename(newTitle: String(firstFiveWords))
-//
-//               } catch let error {
-//                print(error)
-//            }
-//        }
-//    }
-    
-    func adjustContext(
-        from conversations: [Conversation],
-        limit: Int,
-        systemPrompt: String
-    ) -> [Conversation] {
-        
-        var newConversations: [Conversation] = []
-
-        if systemPrompt != "" {
-            newConversations.append(Conversation(role: .system, content: systemPrompt))
-        }
-
-        if conversations.count > limit {
-            // If the initial list size is greater than the limit, append the last 'limit' elements
-            newConversations += Array(conversations.suffix(limit))
-        } else {
-            // If the initial list size is less than or equal to the limit, append all elements
-            newConversations += conversations
-        }
-
-        return newConversations
-    }
 }
 
 
