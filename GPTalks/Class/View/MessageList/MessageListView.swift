@@ -110,6 +110,9 @@ struct MessageListView: View {
                                withAnimation {
                                    session.removeConversation(conversation)
                                }
+                               if session.conversations.isEmpty {
+                                   session.resetErrorDesc()
+                               }
                            }
                            .id(index)
                        }

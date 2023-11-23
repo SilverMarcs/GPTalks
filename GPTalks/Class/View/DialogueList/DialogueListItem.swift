@@ -16,7 +16,6 @@ struct DialogueListItem: View {
 
     @ObservedObject var session: DialogueSession
     var deleteDialogueHandler: (DialogueSession) -> Void
-    var sessionResetter: () -> Void
 
     var body: some View {
         NavigationLink(value: session) {
@@ -60,8 +59,6 @@ struct DialogueListItem: View {
             }
         }
         .frame(minHeight: minHeight)
-        .padding(.vertical, 7)
-        .padding(.horizontal, 5)
         .alert("Rename Session", isPresented: $showRenameDialogue, actions: {
             TextField("Enter new name", text: $newName)
             Button("Rename", action: {
@@ -74,7 +71,6 @@ struct DialogueListItem: View {
         .alert("Confirm Delete?", isPresented: $showDeleteDialogue, actions: {
             Button("Delete", role: .destructive, action: {
                 deleteDialogueHandler(session)
-                sessionResetter()
             })
             Button("Cancel", role: .cancel, action: {})
         })
@@ -112,7 +108,7 @@ struct DialogueListItem: View {
         #if os(iOS)
             60
         #elseif os(macOS)
-            40
+            55
         #endif
     }
     
