@@ -15,6 +15,7 @@ struct MessageListView: View {
 
     var body: some View {
         contentView
+            .background(.background)
             .alert("Delete all messages?", isPresented: $isShowDeleteWarning) {
                 Button("Cancel", role: .cancel, action: {})
                 Button("Confirm", role: .destructive, action: {

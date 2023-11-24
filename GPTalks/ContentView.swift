@@ -26,29 +26,14 @@ struct ContentView: View {
 
     var body: some View {
         NavigationSplitView {
-            contentView()
-                .toolbar {
-#if os(iOS)
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            isShowSettingView = true
-                        } label: {
-                            Image(systemName: "gear")
-                        }
-                    }
-#endif
-                    ToolbarItem {
-                        Spacer()
-                    }
-                    
-                    ToolbarItem(placement: .automatic) {
-                        Button {
-                            addDialogue()
-                        } label: {
-                            Image(systemName: "square.and.pencil")
-                        }
-                    }
-                }
+            if dialogueSessions.isEmpty {
+                DialogueListPlaceholderView()
+            } else {
+                DialogueSessionListView(dialogueSessions: $dialogueSessions,
+                                        selectedDialogueSession: $selectedDialogueSession,
+                                        deleteDialogue: deleteDialogues,
+                                        addDialogue: addDialogue)
+            }
         } detail: {
             if let selectedDialogueSession = selectedDialogueSession {
                 MessageListView(session: selectedDialogueSession)
@@ -57,62 +42,20 @@ struct ContentView: View {
                     .font(.title)
             }
         }
-        .onAppear() {
+        .onAppear {
             dialogueSessions = items.compactMap {
                 DialogueSession(rawData: $0)
-            }
-            #if os(macOS)
-            if !dialogueSessions.isEmpty {
-                selectedDialogueSession = dialogueSessions.first
-            }
-            #endif
-        }
-        .background(.background)
-#if os(macOS)
-        .frame(minWidth: 1150, minHeight: 770)
-#else
-        .sheet(isPresented: $isShowSettingView) {
-            NavigationStack {
-                AppSettingsView(configuration: configuration)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem {
-                            Button {
-                                isShowSettingView = false
-                            } label: {
-                                Text("Done")
-                                    .bold()
-                            }
-                        }
-                    }
-            }
-        }
-#endif
-    }
-    
-    
-    @ViewBuilder
-    func contentView() -> some View {
-        if dialogueSessions.isEmpty {
-            DialogueListPlaceholderView()
-        } else {
-            DialogueSessionListView(
-                dialogueSessions: $dialogueSessions,
-                selectedDialogueSession: $selectedDialogueSession
-            ) {
-                deleteDialogues($0)
             }
         }
     }
 
 
     private func addDialogue() {
-        withAnimation {
-            let session = DialogueSession()
-            dialogueSessions.insert(session, at: 0)
-            let newItem = DialogueData(context: viewContext)
-            newItem.id = session.id
-            newItem.date = session.date
+        let session = DialogueSession()
+        dialogueSessions.insert(session, at: 0)
+        let newItem = DialogueData(context: viewContext)
+        newItem.id = session.id
+        newItem.date = session.date
         
         do {
             newItem.configuration =  try JSONEncoder().encode(session.configuration)
@@ -120,13 +63,7 @@ struct ContentView: View {
             print(error.localizedDescription)
         }
 
-            save()
-        
-        }
-        
-        DispatchQueue.main.async {
-            selectedDialogueSession = dialogueSessions.first
-        }
+        save()
     }
 
     private func deleteDialogues(offsets: IndexSet) {
@@ -138,14 +75,12 @@ struct ContentView: View {
     }
     
     private func deleteDialogues(_ session: DialogueSession) {
-        withAnimation {
             dialogueSessions.removeAll {
                 $0.id == session.id
             }
             if let item = session.rawData {
                 viewContext.delete(item)
             }
-        }
         save()
     }
     
@@ -157,5 +92,4 @@ struct ContentView: View {
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
     }
-    
 }

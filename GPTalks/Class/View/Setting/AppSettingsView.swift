@@ -7,58 +7,69 @@
 
 import SwiftUI
 
+#if os(iOS)
 struct AppSettingsView: View {
-    
-    @ObservedObject var configuration: AppConfiguration
-    
-    @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var configuration: AppConfiguration = AppConfiguration.shared
     @Environment(\.dismiss) var dismiss
     
     @State var showAPIKey = false
     
     var body: some View {
-        Form {
-            Section("General") {
-                HStack {
-                    Image(systemName: "text.bubble.fill")
-                        .renderingMode(.original)
-                    Spacer()
-                    Toggle("Markdown Enabled", isOn: $configuration.isMarkdownEnabled)
-                }
-                HStack {
-                    Image(systemName: "building.2.fill")
-                        .renderingMode(.original)
-                    Text("Default Provider")
-                        .lineLimit(1)
-                    Spacer()
-                    Picker("", selection: configuration.$preferredChatService) {
-                        ForEach(Provider.allCases, id: \.self) { provider in
-                            Text(provider.name)
-                                .tag(provider.id)
+        NavigationStack {
+            Form {
+                Section("General") {
+                    HStack {
+                        Image(systemName: "text.bubble.fill")
+                            .renderingMode(.original)
+                        Spacer()
+                        Toggle("Markdown Enabled", isOn: $configuration.isMarkdownEnabled)
+                    }
+                    HStack {
+                        Image(systemName: "building.2.fill")
+                            .renderingMode(.original)
+                        Text("Default Provider")
+                            .lineLimit(1)
+                        Spacer()
+                        Picker("", selection: configuration.$preferredChatService) {
+                            ForEach(Provider.allCases, id: \.self) { provider in
+                                Text(provider.name)
+                                    .tag(provider.id)
+                            }
                         }
                     }
                 }
-            }
-            Section("Defaults") {
-                NavigationLink {
-                    DefaultConfigView()
-                } label: {
-                    HStack {
-                        Image("cpu")
-                            .renderingMode(.original)
-                        Text("Default Parameters")
+                Section("Defaults") {
+                    NavigationLink {
+                        DefaultConfigView()
+                    } label: {
+                        HStack {
+                            Image(systemName: "cpu")
+                                .renderingMode(.original)
+                            Text("Default Parameters")
+                        }
+                    }
+                }
+                Section("Services") {
+                    ForEach(Provider.allCases) { provider in
+                        NavigationLink(
+                            destination: provider.destination,
+                            label: { provider.label }
+                        )
                     }
                 }
             }
-            Section("Services") {
-                ForEach(Provider.allCases) { provider in
-                    NavigationLink(
-                        destination: provider.destination,
-                        label: { provider.label }
-                    )
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Done")
+                    }
                 }
             }
         }
-        .navigationTitle("Settings")
     }
 }
+#endif

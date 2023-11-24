@@ -9,11 +9,15 @@ import SwiftUI
 
 struct DialogueSessionListView: View {
     @State private var searchQuery = ""
+#if os(iOS)
+    @State var isShowSettingView = false
+#endif
 
     @Binding var dialogueSessions: [DialogueSession]
     @Binding var selectedDialogueSession: DialogueSession?
     
-    var deleteDialogueHandler: (DialogueSession) -> Void
+    var deleteDialogue: (DialogueSession) -> Void
+    var addDialogue: () -> Void
 
     var filteredDialogueSessions: [DialogueSession] {
         if searchQuery.isEmpty {
@@ -31,20 +35,41 @@ struct DialogueSessionListView: View {
     
     var body: some View {
         List(filteredDialogueSessions, selection: $selectedDialogueSession) { session in
-            DialogueListItem(session: session) { _ in
-                deleteDialogueHandler(session)
-                if let firstDialogue = dialogueSessions.first {
-                    selectedDialogueSession = firstDialogue
+            NavigationLink(value: session) {
+                DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+            }
+        }
+        .toolbar {
+#if os(iOS)
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    isShowSettingView = true
+                } label: {
+                    Image(systemName: "gear")
+                }
+            }
+#endif
+            ToolbarItem {
+                Spacer()
+            }      
+            ToolbarItem(placement: .automatic) {
+                Button {
+                    addDialogue()
+                } label: {
+                    Image(systemName: "square.and.pencil")
                 }
             }
         }
         .searchable(text: $searchQuery)
-#if os(iOS)
+#if os(macOS)
+        .frame(minWidth: 290)
+#else
         .listStyle(.plain)
         .navigationTitle("Chats")
         .navigationBarTitleDisplayMode(.large)
-#else
-        .frame(minWidth: 290)
+        .sheet(isPresented: $isShowSettingView) {
+            AppSettingsView()
+        }
 #endif
     }
 }

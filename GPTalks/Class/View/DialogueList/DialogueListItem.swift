@@ -15,10 +15,12 @@ struct DialogueListItem: View {
     @State private var searchQuery = ""
 
     @ObservedObject var session: DialogueSession
-    var deleteDialogueHandler: (DialogueSession) -> Void
+    var deleteDialogue: (DialogueSession) -> Void
+    
+//    var onDelete: () -> Void
 
     var body: some View {
-        NavigationLink(value: session) {
+//        NavigationLink(value: session) {
             HStack(spacing: imgToTextSpace) {
                 Image(session.configuration.provider.iconName)
                     .resizable()
@@ -57,7 +59,7 @@ struct DialogueListItem: View {
                     .frame(maxHeight: lastMessageMaxHeight)
                 }
             }
-        }
+//        }
         .frame(minHeight: minHeight)
         .alert("Rename Session", isPresented: $showRenameDialogue, actions: {
             TextField("Enter new name", text: $newName)
@@ -70,7 +72,10 @@ struct DialogueListItem: View {
         })
         .alert("Confirm Delete?", isPresented: $showDeleteDialogue, actions: {
             Button("Delete", role: .destructive, action: {
-                deleteDialogueHandler(session)
+//                deleteDialogueHandler(session)
+//                onDelete()
+                deleteDialogue(session)
+                showDeleteDialogue = false
             })
             Button("Cancel", role: .cancel, action: {})
         })

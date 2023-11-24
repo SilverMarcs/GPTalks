@@ -17,6 +17,9 @@ struct GPTalks: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+            #if os(macOS)
+                .frame(minWidth: 1150, minHeight: 770)
+            #endif
                 .onAppear() {
                     if AppConfiguration.shared.OAIkey.isEmpty {
                         showOpenAIKeyAlert = true
