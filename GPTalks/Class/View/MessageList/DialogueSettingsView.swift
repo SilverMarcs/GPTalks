@@ -33,10 +33,21 @@ struct DialogueSettingsView: View {
                 }
             }
         #else
-            Form {
-                FormContent
+            NavigationView {
+                Form {
+                    FormContent
+                }
+                .navigationTitle("Settings")
+                .toolbar {
+                    ToolbarItem {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Text("Done")
+                        }
+                    }
+                }
             }
-            .navigationTitle("Settings")
         #endif
     }
 

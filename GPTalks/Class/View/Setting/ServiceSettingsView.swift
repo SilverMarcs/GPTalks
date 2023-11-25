@@ -12,8 +12,6 @@ struct ServiceSettingsView: View {
     @Binding var apiKey: String
     @ObservedObject var configuration = AppConfiguration.shared
     var provider: Provider
-//    var models: [Model]
-//    var navigationTitle: String
     
     @State var showAPIKey = false
     
@@ -30,7 +28,7 @@ struct ServiceSettingsView: View {
                 Section("Default Settings") {
                     settings
                 }
-                .navigationTitle(navigationTitle)
+                .navigationTitle(provider.name)
             }
         #endif
     }

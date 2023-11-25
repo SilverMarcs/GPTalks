@@ -40,7 +40,7 @@ struct MessageListView: View {
                         }
                     }
                     .sheet(isPresented: $isShowSettingsView) {
-                        dialogSettings
+                        DialogueSettingsView(configuration: $session.configuration, title: $session.title)
                     }
                 }
                 
@@ -97,15 +97,11 @@ struct MessageListView: View {
                        ForEach(Array(session.conversations.enumerated()), id: \.element.id) { index, conversation in
                            ConversationView(conversation: conversation, accentColor: session.configuration.provider.accentColor) { conversation in
                              Task { @MainActor in
-                                 await session.regenerate(from: index, scroll: {
-                                     scrollToBottom(proxy: proxy, anchor: $0)
-                                 })
+                                 await session.regenerate(from: index)
                              }
                            } editHandler: { conversation in
                                Task { @MainActor in
-                                   await session.edit(from: index, conversation: conversation, scroll: {
-                                       scrollToBottom(proxy: proxy, anchor: $0)
-                                   })
+                                   await session.edit(from: index, conversation: conversation)
                                }
                            } deleteHandler: {
                                withAnimation {
@@ -114,6 +110,12 @@ struct MessageListView: View {
                                if session.conversations.isEmpty {
                                    session.resetErrorDesc()
                                }
+                           }
+                           .onAppear {
+                               scrollToBottom(proxy: proxy)
+                           }
+                           .onChange(of: conversation.content) {
+                               scrollToBottom(proxy: proxy)
                            }
                            .id(index)
                        }
@@ -126,9 +128,7 @@ struct MessageListView: View {
                                .foregroundStyle(.red)
                            Button("Retry") {
                                Task { @MainActor in
-                                   await session.retry() {
-                                       scrollToBottom(proxy: proxy, anchor: $0)
-                                   }
+                                   await session.retry()
                                }
                            }
                            .clipShape(.capsule(style: .circular))
@@ -153,20 +153,17 @@ struct MessageListView: View {
                       session: session,
                       isTextFieldFocused: _isTextFieldFocused
                    ) { _ in
-                      sendMessage(proxy)
+                       Task { @MainActor in
+                           await session.send()
+                       }
                    } stop: {
                        session.stopStreaming()
-//                       if session.lastConversation.content.isEmpty {
-//                           session.removeConversation(at: session.conversations.count - 1)
-//                       }
                    } regen: {_ in
                        if session.isReplying() {
                            return
                        }
                        Task { @MainActor in
-                           await session.regenerate(from: session.conversations.count - 1, scroll: {
-                               scrollToBottom(proxy: proxy, anchor: $0)
-                           })
+                           await session.regenerate(from: session.conversations.count - 1)
                        }
                    }
                    #if os(macOS)
@@ -180,7 +177,8 @@ struct MessageListView: View {
                     if isTextFieldFocused && value {
                         self.keyboadWillShow = value
                     }
-                }.onReceive(keyboardDidChangePublisher) { value in
+                }
+                .onReceive(keyboardDidChangePublisher) { value in
                     if isTextFieldFocused {
                         if value {
                             withAnimation(.easeOut(duration: 0.05)) {
@@ -195,37 +193,6 @@ struct MessageListView: View {
            }
        }
 
-#if os(iOS)
-    var dialogSettings: some View {
-        NavigationStack {
-            DialogueSettingsView(configuration: $session.configuration, title: $session.title)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem {
-                        Button {
-                            isShowSettingsView = false
-                        } label: {
-                            Text("Done")
-                                .bold()
-                        }
-                    }
-                }
-        }
-    }
-#endif
-    
-    func sendMessage(_ proxy: ScrollViewProxy) {
-        if session.isReplying() {
-            return
-        }
-        Task { @MainActor in
-            await session.send()
-            {
-                scrollToBottom(proxy: proxy, anchor: $0)
-            }
-        }
-    }
-    
     private func scrollToBottom(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
         proxy.scrollTo(bottomID, anchor: anchor)
     }

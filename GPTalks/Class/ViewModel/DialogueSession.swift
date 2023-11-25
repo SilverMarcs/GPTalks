@@ -119,10 +119,10 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
     
     @MainActor
-    func send(scroll: ((UnitPoint) -> Void)? = nil) async {
+    func send() async {
         let text = input
         input = ""
-        await send(text: text, scroll: scroll)
+        await send(text: text)
     }
     
     @MainActor
@@ -139,24 +139,27 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
     
     @MainActor
-    func regenerate(from index: Int, scroll: ((UnitPoint) -> Void)? = nil) async {
+    func regenerate(from index: Int) async {
         removeConversations(from: index)
-        await send(text: lastConversation.content, isRegen: true, scroll: scroll)
+        await send(text: lastConversation.content, isRegen: true)
     }
     
     @MainActor
-    func edit(from index: Int, conversation: Conversation, scroll: ((UnitPoint) -> Void)? = nil) async {
+    func edit(from index: Int, conversation: Conversation) async {
         removeConversations(from: index)
-        await send(text: conversation.content, scroll: scroll)
+        await send(text: conversation.content)
     }
     
     @MainActor
-    func retry(scroll: ((UnitPoint) -> Void)? = nil) async {
-        await send(text: lastConversation.content, isRetry: true, scroll: scroll)
+    func retry() async {
+        await send(text: lastConversation.content, isRetry: true)
     }
     
     @MainActor
-    private func send(text: String, isRegen: Bool = false, isRetry: Bool = false, scroll: ((UnitPoint) -> Void)? = nil) async {
+    private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
+        if isReplying() {
+            return
+        }
         resetErrorDesc()
         
         var streamText = ""
@@ -166,8 +169,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         }
         
         lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
-        
-        scroll?(.bottom)
         
         let openAIconfig = configuration.provider.config
         let service: OpenAI = OpenAI(configuration: openAIconfig)
@@ -190,7 +191,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             for try await result in service.chatsStream(query: query) {
                 streamText += result.choices.first?.delta.content ?? ""
                 conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                scroll?(.bottom)
             }
         }
         
@@ -217,10 +217,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         conversations[conversations.count - 1].isReplying = false
 
         save()
-        
-        scroll?(.bottom)
     }
-    
 }
 
 
@@ -271,6 +268,7 @@ extension DialogueSession {
     
     @discardableResult
     func appendConversation(_ conversation: Conversation) -> ConversationData {
+        // TODO: animation
         conversations.append(conversation)
         
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
