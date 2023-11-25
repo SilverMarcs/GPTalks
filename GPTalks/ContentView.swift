@@ -61,22 +61,15 @@ struct ContentView: View {
 
         save()
     }
-
-    private func deleteDialogues(offsets: IndexSet) {
-        withAnimation {
-            dialogueSessions.remove(atOffsets: offsets)
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-        }
-        save()
-    }
     
     private func deleteDialogues(_ session: DialogueSession) {
-            dialogueSessions.removeAll {
-                $0.id == session.id
-            }
-            if let item = session.rawData {
-                viewContext.delete(item)
-            }
+        dialogueSessions.removeAll {
+            $0.id == session.id
+        }
+        if let item = session.rawData {
+            viewContext.delete(item)
+        }
+        
         save()
     }
     

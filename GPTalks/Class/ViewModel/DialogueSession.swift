@@ -162,10 +162,10 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         var streamText = ""
         
         if !isRegen && !isRetry{
-            appendConversation(Conversation(role: .user, content: text))
+            appendConversation(Conversation(role: "user", content: text))
         }
         
-        lastConversationData = appendConversation(Conversation(role: .assistant, content: "", isReplying: true))
+        lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         
         scroll?(.bottom)
         
@@ -173,17 +173,16 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         let service: OpenAI = OpenAI(configuration: openAIconfig)
         
         var query = ChatQuery(model: configuration.model.id,
-                              messages: ([Conversation(role: .system, content: configuration.systemPrompt)] + Array(conversations.suffix(configuration.contextLength - 1))).map({ conversation in
+                              messages: ([Conversation(role: "system", content: configuration.systemPrompt)] + Array(conversations.suffix(configuration.contextLength - 1))).map({ conversation in
                                   conversation.toChat()
                               }),
                               temperature: configuration.temperature,
                               maxTokens: configuration.model.maxTokens,
-                              stream: true,
-                              provider: configuration.model.id,
-                              ignore_web: AppConfiguration.shared.ignore_web)
+                              stream: true)
         
         if configuration.provider == .gpt4free {
-            query.provider = .gpt4
+            query.model = .gpt4
+            query.provider = configuration.model.id
             query.ignore_web = AppConfiguration.shared.ignore_web
         }
         
@@ -219,7 +218,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
 
         save()
         
-        scroll?(.top)
         scroll?(.bottom)
     }
     
@@ -255,18 +253,7 @@ extension DialogueSession {
                 let conversation = Conversation(
                     id: id,
                     date: date,
-                    role: {
-                        switch role {
-                        case "user":
-                            return .user
-                        case "assistant":
-                            return .assistant
-                        case "system":
-                            return .system
-                        default:
-                            return .function
-                        }
-                    }(),
+                    role: role,
                     content: content
                 )
                 return conversation
@@ -289,7 +276,7 @@ extension DialogueSession {
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id
         data.date = conversation.date
-        data.role = conversation.role.rawValue
+        data.role = conversation.role
         data.content = conversation.content
         rawData?.conversations?.adding(data)
         data.dialogue = rawData
@@ -387,28 +374,4 @@ extension DialogueSession {
             print(error.localizedDescription)
         }
     }
-    
-
-    func getSummary(url: String) async throws -> String {
-        
-        @StateObject var configuration = AppConfiguration.shared
-        
-        let baseURL = "https://easy-text-ml.p.rapidapi.com/web2text/link"
-        let endpoint = baseURL + "?link=" + url
-        
-        guard let url = URL(string: endpoint) else {
-            throw URLError(.badURL)
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue(configuration.rapidApiKey, forHTTPHeaderField: "X-RapidAPI-Key")
-        request.addValue("easy-text-ml.p.rapidapi.com", forHTTPHeaderField: "X-RapidAPI-Host")
-        
-        let (data, _) = try await URLSession.shared.data(for: request)
-        let result = String(data: data, encoding: .utf8) ?? ""
-
-        return result
-    }
-
 }

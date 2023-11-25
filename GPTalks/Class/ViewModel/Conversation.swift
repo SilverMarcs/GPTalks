@@ -11,22 +11,34 @@ import OpenAI
 struct Conversation: Codable, Identifiable, Hashable {
     var id = UUID()
     var date = Date()
-    var role: Chat.Role
+    var role: String
     var content: String
     var isReplying: Bool = false
     
     func toChat() -> Chat {
-        return Chat(role: role, content: content)
+        var chatRole: Chat.Role = {
+            switch role {
+            case "user":
+                return Chat.Role.user
+            case "assistant":
+                return Chat.Role.assistant
+            case "system":
+                return Chat.Role.system
+            default:
+                return Chat.Role.function
+            }
+        }()
+        
+        return Chat(role: chatRole, content: content)
     }
 }
-
 
 extension ConversationData {
     
     func sync(with conversation: Conversation) {
         id = conversation.id
         date = conversation.date
-        role = conversation.role.rawValue
+        role = conversation.role
         content = conversation.content
         do {
             try PersistenceController.shared.save()

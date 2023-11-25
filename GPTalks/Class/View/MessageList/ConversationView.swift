@@ -26,7 +26,7 @@ struct ConversationView: View {
 
     var body: some View {
         VStack {
-            if conversation.role == .user {
+            if conversation.role == "user" {
                 VStack(alignment: .trailing) {
                     userMessage
                     
@@ -47,7 +47,7 @@ struct ConversationView: View {
                 }
                 .padding(.trailing, 15)
                 .padding(.leading, horizontalPadding)
-            } else if conversation.role == .assistant {
+            } else if conversation.role == "assistant" {
                 assistantMessage
                     .padding(.leading, 15)
                     .padding(.trailing, horizontalPadding)
@@ -168,7 +168,7 @@ struct ConversationView: View {
             .foregroundColor(.red)
 
             Button {
-                editHandler(Conversation(role: .user, content: editingMessage))
+                editHandler(Conversation(role: "user", content: editingMessage))
                 isEditing = false
                 isFocused = isEditing
             } label: {
@@ -183,7 +183,7 @@ struct ConversationView: View {
 
     @ViewBuilder
     private var contextMenu: some View {
-        if conversation.role == .assistant {
+        if conversation.role == "assistant" {
             Button {
                 regenHandler(conversation)
             } label: {
@@ -193,7 +193,7 @@ struct ConversationView: View {
                 }
             }
         }
-        if conversation.role == .user {
+        if conversation.role == "user" {
             Button {
                 editingMessage = conversation.content
                 isEditing = true
