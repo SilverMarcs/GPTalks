@@ -97,7 +97,6 @@ struct DialogueSettingsView: View {
                     }
                 }
                 
-
                 TextField("Enter a system prompt", text: $configuration.systemPrompt, axis: .vertical)
                     .focused($focusedField, equals: .systemPrompt)
                     .lineLimit(4, reservesSpace: true)

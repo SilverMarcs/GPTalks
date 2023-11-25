@@ -16,6 +16,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         var contextLength: Int
         var provider: Provider
         var model: Model
+        var ignore_web: String
         
         init() {
             provider = AppConfiguration.shared.preferredChatService
@@ -23,6 +24,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             temperature = AppConfiguration.shared.temperature
             systemPrompt = AppConfiguration.shared.systemPrompt
             model = provider.preferredModel
+            ignore_web = AppConfiguration.shared.ignore_web
         }
         
     }
@@ -192,7 +194,8 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                                   temperature: configuration.temperature,
                                   maxTokens: configuration.model.maxTokens,
                                   stream: true,
-                                  provider: configuration.model.id)
+                                  provider: configuration.model.id,
+                                  ignore_web: AppConfiguration.shared.ignore_web)
             }
             
             streamingTask = Task {

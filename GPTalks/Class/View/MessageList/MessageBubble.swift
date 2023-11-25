@@ -27,7 +27,7 @@ struct Bubble: ViewModifier {
 
     #if os(iOS)
         let radius: CGFloat = 19
-        let horizontalPadding: CGFloat = 11
+        let horizontalPadding: CGFloat = 14
         let verticalPadding: CGFloat = 8
     #else
         let radius: CGFloat = 15

@@ -102,7 +102,8 @@ struct DialogueListItem: View {
         }
         .swipeActions(edge: .trailing) {
             Button(role: .destructive) {
-                showDeleteDialogue = true
+//                showDeleteDialogue = true
+                deleteDialogue(session)
             } label: {
                 Label("Delete", systemImage: "trash")
             }

@@ -11,8 +11,9 @@ struct ServiceSettingsView: View {
     @Binding var model: Model
     @Binding var apiKey: String
     @ObservedObject var configuration = AppConfiguration.shared
-    var models: [Model]
-    var navigationTitle: String
+    var provider: Provider
+//    var models: [Model]
+//    var navigationTitle: String
     
     @State var showAPIKey = false
     
@@ -40,7 +41,7 @@ struct ServiceSettingsView: View {
                 Text("Default Model")
                 Spacer()
                 Picker("", selection: $model) {
-                    ForEach(models, id: \.self) { model in
+                    ForEach(provider.models, id: \.self) { model in
                         Text(model.name)
                             .tag(model.rawValue)
                     }
@@ -52,7 +53,7 @@ struct ServiceSettingsView: View {
             
 
             
-            if navigationTitle == "Custom" {
+            if provider == .custom {
                 Divider()
                 
                 HStack {
@@ -63,11 +64,25 @@ struct ServiceSettingsView: View {
                         .frame(width: widthValue)
                 }
                 .padding(paddingValue)
-                
-
             }
             
-            if navigationTitle != "GPT4Free" {
+            if provider == .gpt4free {
+                HStack {
+                    Text("Ignore Web")
+                    Spacer()
+                    Picker("", selection: $configuration.ignore_web) {
+                        ForEach(["True", "False"], id: \.self) { bool in
+                            Text(bool)
+                                .tag(bool)
+                        }
+                    }
+                    .labelsHidden()
+                    .frame(width: widthValue)
+                }
+                .padding(paddingValue)
+            }
+            
+            if provider != .gpt4free {
                 Divider()
                 
                 HStack {

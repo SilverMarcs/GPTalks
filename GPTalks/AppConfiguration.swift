@@ -26,6 +26,8 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.temperature") var temperature: Double = 0.8
     
     @AppStorage("configuration.systemPrompt") var systemPrompt: String = "You are a helpful assistant."
+    
+    @AppStorage("configuration.ignore_web") var ignore_web: String = "False"
         
     /// openAI
     @AppStorage("configuration.OAIKey") var OAIkey = ""

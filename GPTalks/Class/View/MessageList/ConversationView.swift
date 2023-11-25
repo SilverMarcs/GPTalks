@@ -72,6 +72,7 @@ struct ConversationView: View {
             Spacer()
             if isEditing {
                 editControls()
+                #if os(macOS)
                 TextEditor(text: $editingMessage)
                     .padding(.vertical, textSize.height > maxUserMessageHeight ? 1.5 : 0)
                     .frame(maxHeight: textSize.height > maxUserMessageHeight ? maxUserMessageHeight  : .infinity)
@@ -80,6 +81,12 @@ struct ConversationView: View {
                     .scrollContentBackground(.hidden)
                     .bubbleStyle(isMyMessage: true, type: .edit)
                     .transition(.opacity)
+                #else
+                TextField("", text: $editingMessage, axis: .vertical)
+                    .lineLimit(5)
+                    .bubbleStyle(isMyMessage: true, type: .edit)
+                    .transition(.opacity)
+                #endif
             } else {
                 optionsMenu()
                     .transition(.opacity)

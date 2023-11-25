@@ -26,14 +26,10 @@ struct ContentView: View {
 
     var body: some View {
         NavigationSplitView {
-            if dialogueSessions.isEmpty {
-                DialogueListPlaceholderView()
-            } else {
-                DialogueSessionListView(dialogueSessions: $dialogueSessions,
-                                        selectedDialogueSession: $selectedDialogueSession,
-                                        deleteDialogue: deleteDialogues,
-                                        addDialogue: addDialogue)
-            }
+            DialogueSessionListView(dialogueSessions: $dialogueSessions,
+                                    selectedDialogueSession: $selectedDialogueSession,
+                                    deleteDialogue: deleteDialogues,
+                                    addDialogue: addDialogue)
         } detail: {
             if let selectedDialogueSession = selectedDialogueSession {
                 MessageListView(session: selectedDialogueSession)

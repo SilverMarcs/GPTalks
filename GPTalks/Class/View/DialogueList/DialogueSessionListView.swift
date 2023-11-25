@@ -34,9 +34,11 @@ struct DialogueSessionListView: View {
     }
     
     var body: some View {
-        List(filteredDialogueSessions, selection: $selectedDialogueSession) { session in
-            NavigationLink(value: session) {
-                DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+        VStack {
+            if dialogueSessions.isEmpty {
+                placeHolder
+            } else {
+                list
             }
         }
         .toolbar {
@@ -71,6 +73,32 @@ struct DialogueSessionListView: View {
             AppSettingsView()
         }
 #endif
+    }
+    
+    @ViewBuilder
+    var list: some View {
+        List(filteredDialogueSessions, selection: $selectedDialogueSession) { session in
+            NavigationLink(value: session) {
+                DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var placeHolder: some View {
+        if dialogueSessions.isEmpty {
+            VStack {
+                Spacer()
+                Image(systemName: "message.fill")
+                    .font(.system(size: 50))
+                    .padding()
+                    .foregroundColor(.secondary)
+                Text("No Message")
+                    .font(.title3)
+                    .bold()
+                Spacer()
+            }
+        }
     }
 }
 

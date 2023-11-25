@@ -134,36 +134,31 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             ServiceSettingsView(
                 model: configuration.$OAImodel,
                 apiKey: configuration.$OAIkey,
-                models: self.models,
-                navigationTitle: "OpenAI"
+                provider: self
             )
         case .openrouter:
             ServiceSettingsView(
                 model: configuration.$ORmodel,
                 apiKey: configuration.$ORkey,
-                models: self.models,
-                navigationTitle: "OpenRouter"
+                provider: self
             )
         case .naga:
             ServiceSettingsView(
                 model: configuration.$Nmodel,
                 apiKey: configuration.$Nkey,
-                models: self.models,
-                navigationTitle: "NagaAI"
+                provider: self
             )
         case .gpt4free:
             ServiceSettingsView(
                 model: configuration.$Gmodel,
                 apiKey: configuration.$Gkey,
-                models: self.models,
-                navigationTitle: "GPT4Free"
+                provider: self
             )
         case .custom:
             ServiceSettingsView(
                 model: configuration.$Cmodel,
                 apiKey: configuration.$Ckey,
-                models: self.models,
-                navigationTitle: "Custom"
+                provider: self
             )
         }
     }
