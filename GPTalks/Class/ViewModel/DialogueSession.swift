@@ -98,7 +98,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         return lastConversation.content
     }
     
-    var lastConversationData: ConversationData?
+//    var lastConversationData: ConversationData?
     
     var streamingTask: Task<Void, Error>?
     
@@ -168,7 +168,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             appendConversation(Conversation(role: "user", content: text))
         }
         
-        lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+        let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         
         let openAIconfig = configuration.provider.config
         let service: OpenAI = OpenAI(configuration: openAIconfig)
@@ -197,13 +197,13 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         do {
             try await streamingTask?.value
             
-            lastConversationData?.sync(with: conversations[conversations.count - 1])
+            lastConversationData.sync(with: conversations[conversations.count - 1])
             
         }catch {
             // TODO: do better with stop_reason from openai
             if error.localizedDescription == "cancelled" {
                 if lastConversation.content != "" {
-                    lastConversationData?.sync(with: conversations[conversations.count - 1])
+                    lastConversationData.sync(with: conversations[conversations.count - 1])
                 } else {
                     removeConversation(at: conversations.count - 1)
                 }

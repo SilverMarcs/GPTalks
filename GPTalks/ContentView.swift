@@ -12,8 +12,7 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \DialogueData.date, ascending: false)],
-        animation: .default)
+        sortDescriptors: [NSSortDescriptor(keyPath: \DialogueData.date, ascending: false)])
     private var items: FetchedResults<DialogueData>
     
     @StateObject var configuration = AppConfiguration.shared
