@@ -16,7 +16,7 @@ struct Conversation: Codable, Identifiable, Hashable {
     var isReplying: Bool = false
     
     func toChat() -> Chat {
-        var chatRole: Chat.Role = {
+        let chatRole: Chat.Role = {
             switch role {
             case "user":
                 return Chat.Role.user

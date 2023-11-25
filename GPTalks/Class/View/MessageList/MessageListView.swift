@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MessageListView: View {
+    @Environment (\.colorScheme) var colorScheme
+    
     @ObservedObject var session: DialogueSession
     @FocusState var isTextFieldFocused: Bool
     @State var isShowSettingsView = false
@@ -166,10 +168,16 @@ struct MessageListView: View {
                            await session.regenerate(from: session.conversations.count - 1)
                        }
                    }
-                   #if os(macOS)
-                   .background(.bar)
+                   #if os(iOS)
+                   .background(
+                    ZStack {
+                        colorScheme == .dark ? Color.black.opacity(0.9) : Color.white.opacity(0.7)
+                    }
+                    .background(.bar)
+                    .ignoresSafeArea()
+                   )
                    #else
-                   .background(.background)
+                  .background(.bar)
                    #endif
                }
 #if os(iOS)

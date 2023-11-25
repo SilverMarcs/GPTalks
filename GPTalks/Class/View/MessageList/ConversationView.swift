@@ -19,31 +19,12 @@ struct ConversationView: View {
     @FocusState var isFocused: Bool
     @State var editingMessage: String = ""
     @State private var isHovered = false
-    @State private var showPopover = false
-    @State private var textSize: CGSize = .zero
-    
-    let maxUserMessageHeight: CGFloat = 500
 
     var body: some View {
         VStack {
             if conversation.role == "user" {
                 VStack(alignment: .trailing) {
                     userMessage
-                    
-                    if textSize.height > maxUserMessageHeight {
-                        Button("Show More") {
-                            showPopover = true
-                        }
-                        .clipShape(.capsule(style: .circular))
-                        .opacity(isEditing ? 0 : 1)
-                        .popover(isPresented: $showPopover) {
-                            ScrollView {
-                                Text(conversation.content)
-                            }
-                            .frame(maxWidth: 400, maxHeight: 400)
-                            .padding(10)
-                        }
-                    }
                 }
                 .padding(.trailing, 15)
                 .padding(.leading, horizontalPadding)
@@ -74,8 +55,6 @@ struct ConversationView: View {
                 editControls()
                 #if os(macOS)
                 TextEditor(text: $editingMessage)
-                    .padding(.vertical, textSize.height > maxUserMessageHeight ? 1.5 : 0)
-                    .frame(maxHeight: textSize.height > maxUserMessageHeight ? maxUserMessageHeight  : .infinity)
                     .font(.body)
                     .focused($isFocused)
                     .scrollContentBackground(.hidden)
@@ -92,21 +71,12 @@ struct ConversationView: View {
                     .transition(.opacity)
                     .animation(.easeOut(duration: 0.15), value: isHovered)
                 Text(conversation.content)
-                    .frame(maxHeight: textSize.height > maxUserMessageHeight ? maxUserMessageHeight : .infinity)
                     .textSelection(.enabled)
                     .bubbleStyle(isMyMessage: true, type: .text, accentColor: accentColor)
                     .transition(.opacity)
             }
         }
-        .background(
-            GeometryReader { proxy in
-                Color.clear
-                    .onAppear {
-                        textSize = proxy.size
-                    }
-            }
-        )
-        .animation(.default, value: isEditing)
+        .animation(.easeInOut, value: isEditing)
     }
 
     @ViewBuilder
@@ -225,7 +195,7 @@ struct ConversationView: View {
 
     private var horizontalPadding: CGFloat {
         #if os(iOS)
-            return 15
+            return 30
         #else
         if !isEditing {
             return 85
