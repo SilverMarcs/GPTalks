@@ -165,47 +165,37 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             appendConversation(Conversation(role: .user, content: text))
         }
         
+        lastConversationData = appendConversation(Conversation(role: .assistant, content: "", isReplying: true))
+        
+        scroll?(.bottom)
+        
+        let openAIconfig = configuration.provider.config
+        let service: OpenAI = OpenAI(configuration: openAIconfig)
+        
+        var query = ChatQuery(model: configuration.model.id,
+                              messages: ([Conversation(role: .system, content: configuration.systemPrompt)] + Array(conversations.suffix(configuration.contextLength - 1))).map({ conversation in
+                                  conversation.toChat()
+                              }),
+                              temperature: configuration.temperature,
+                              maxTokens: configuration.model.maxTokens,
+                              stream: true,
+                              provider: configuration.model.id,
+                              ignore_web: AppConfiguration.shared.ignore_web)
+        
+        if configuration.provider == .gpt4free {
+            query.provider = .gpt4
+            query.ignore_web = AppConfiguration.shared.ignore_web
+        }
+        
+        streamingTask = Task {
+            for try await result in service.chatsStream(query: query) {
+                streamText += result.choices.first?.delta.content ?? ""
+                conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                scroll?(.bottom)
+            }
+        }
+        
         do {
-            try await Task.sleep(for: .milliseconds(260))
-
-            scroll?(.bottom)
-            
-            lastConversationData = appendConversation(Conversation(role: .assistant, content: "", isReplying: true))
-            
-            try await Task.sleep(for: .milliseconds(260))
-            scroll?(.bottom)
-            
-            let openAIconfig = configuration.provider.config
-            let service: OpenAI = OpenAI(configuration: openAIconfig)
-            
-            var query = ChatQuery(model: configuration.model.id,
-                                  messages: ([Conversation(role: .system, content: configuration.systemPrompt)] + Array(conversations.suffix(configuration.contextLength - 1))).map({ conversation in
-                                      conversation.toChat()
-                                  }),
-                                  temperature: configuration.temperature,
-                                  maxTokens: configuration.model.maxTokens,
-                                  stream: true)
-            
-            if configuration.provider == .gpt4free {
-                query = ChatQuery(model: .gpt4,
-                                  messages: ([Conversation(role: .system, content: configuration.systemPrompt)] + Array(conversations.suffix(configuration.contextLength - 1))).map({ conversation in
-                                      conversation.toChat()
-                                  }),
-                                  temperature: configuration.temperature,
-                                  maxTokens: configuration.model.maxTokens,
-                                  stream: true,
-                                  provider: configuration.model.id,
-                                  ignore_web: AppConfiguration.shared.ignore_web)
-            }
-            
-            streamingTask = Task {
-                for try await result in service.chatsStream(query: query) {
-                    streamText += result.choices.first?.delta.content ?? ""
-                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                    scroll?(.bottom)
-                }
-            }
-            
             try await streamingTask?.value
             
             lastConversationData?.sync(with: conversations[conversations.count - 1])
@@ -294,9 +284,8 @@ extension DialogueSession {
     
     @discardableResult
     func appendConversation(_ conversation: Conversation) -> ConversationData {
-        withAnimation {
-            conversations.append(conversation)
-        }
+        conversations.append(conversation)
+        
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id
         data.date = conversation.date
