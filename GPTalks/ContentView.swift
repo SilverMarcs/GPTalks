@@ -27,7 +27,7 @@ struct ContentView: View {
         NavigationSplitView {
             DialogueSessionListView(dialogueSessions: $dialogueSessions,
                                     selectedDialogueSession: $selectedDialogueSession,
-                                    deleteDialogue: deleteDialogues,
+                                    deleteDialogue: deleteDialogue,
                                     addDialogue: addDialogue)
         } detail: {
             if let selectedDialogueSession = selectedDialogueSession {
@@ -52,6 +52,10 @@ struct ContentView: View {
         newItem.id = session.id
         newItem.date = session.date
         
+        DispatchQueue.main.async {
+            selectedDialogueSession = session
+        }
+        
         do {
             newItem.configuration =  try JSONEncoder().encode(session.configuration)
         } catch {
@@ -61,7 +65,7 @@ struct ContentView: View {
         save()
     }
     
-    private func deleteDialogues(_ session: DialogueSession) {
+    private func deleteDialogue(_ session: DialogueSession) {
         dialogueSessions.removeAll {
             $0.id == session.id
         }

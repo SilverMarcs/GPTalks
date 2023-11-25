@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ConversationView: View {
-    let conversation: Conversation
+    var conversation: Conversation
     let accentColor: Color
 
     let regenHandler: (Conversation) -> Void
@@ -23,15 +23,9 @@ struct ConversationView: View {
     var body: some View {
         VStack {
             if conversation.role == "user" {
-                VStack(alignment: .trailing) {
-                    userMessage
-                }
-                .padding(.trailing, 15)
-                .padding(.leading, horizontalPadding)
+                userMessage
             } else if conversation.role == "assistant" {
                 assistantMessage
-                    .padding(.leading, 15)
-                    .padding(.trailing, horizontalPadding)
             } else {
                 ReplyingIndicatorView()
             }
@@ -76,6 +70,8 @@ struct ConversationView: View {
                     .transition(.opacity)
             }
         }
+        .padding(.trailing, 15)
+        .padding(.leading, horizontalPadding)
         .animation(.easeInOut, value: isEditing)
     }
 
@@ -109,6 +105,8 @@ struct ConversationView: View {
             }
             Spacer()
         }
+        .padding(.leading, 15)
+        .padding(.trailing, horizontalPadding)
     }
 
     @ViewBuilder

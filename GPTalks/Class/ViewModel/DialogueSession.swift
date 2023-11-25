@@ -308,6 +308,11 @@ extension DialogueSession {
             return
         }
         removeConversation(at: index)
+        
+        
+        if conversations.isEmpty {
+            resetErrorDesc()
+        }
     }
 
     func removeConversations(from index: Int) {

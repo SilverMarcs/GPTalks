@@ -106,12 +106,7 @@ struct MessageListView: View {
                                    await session.edit(from: index, conversation: conversation)
                                }
                            } deleteHandler: {
-                               withAnimation {
-                                   session.removeConversation(conversation)
-                               }
-                               if session.conversations.isEmpty {
-                                   session.resetErrorDesc()
-                               }
+                               session.removeConversation(conversation)
                            }
                            .onAppear {
                                scrollToBottom(proxy: proxy)
