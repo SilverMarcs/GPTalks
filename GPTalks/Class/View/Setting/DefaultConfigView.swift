@@ -28,12 +28,7 @@ struct DefaultConfigView: View {
             HStack {
                 Text("Context Length")
                 Spacer()
-                Picker("", selection: configuration.$contextLength) {
-                    ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
-                        Text("Last \(number) Messages")
-                            .tag(number)
-                    }
-                }
+                contextPicker
                 .labelsHidden()
                 .frame(width: widthValue)
             }
@@ -44,15 +39,7 @@ struct DefaultConfigView: View {
             HStack {
                 Text("Temperature")
                 Spacer()
-                HStack {
-                    Slider(value: configuration.$temperature, in: 0 ... 2, step: 0.1) {
-                    } minimumValueLabel: {
-                        Text("0")
-                    } maximumValueLabel: {
-                        Text("2")
-                    }
-                    Text(String(format: "%.2f", configuration.temperature))
-                }
+                tempSlider
                 .frame(width: widthValue)
             }
             .padding(paddingValue)
@@ -62,7 +49,7 @@ struct DefaultConfigView: View {
             HStack {
                 Text("System prompt")
                 Spacer()
-                TextField("System Prompt", text: configuration.$systemPrompt)
+                systemPrompt
                     .textFieldStyle(.roundedBorder)
                     .frame(width: widthValue)
             }
@@ -79,6 +66,7 @@ struct DefaultConfigView: View {
                 }
                 Section("System Prompt") {
                     systemPrompt
+                        .lineLimit(4, reservesSpace: true)
                 }
             }
         }
@@ -108,7 +96,6 @@ struct DefaultConfigView: View {
 
     var systemPrompt: some View {
         TextField("Enter a system prompt", text: configuration.$systemPrompt, axis: .vertical)
-            .lineLimit(4, reservesSpace: true)
     }
 
     var paddingValue: CGFloat {

@@ -16,16 +16,19 @@ struct MacOSSettingsView: View {
                 .tabItem {
                     Label("General", systemImage: "gear")
                 }
+                .frame(minHeight: 200)
             DefaultConfigView()
                 .tabItem {
                     Label("Default", systemImage: "cpu")
                 }
+                .frame(minHeight: 300)
             ProviderSettingsView()
                 .tabItem {
                     Label("Providers", systemImage: "brain.head.profile")
                 }
+                .frame(minHeight: 400)
         }
-        .frame(minWidth: 700, minHeight: 300)
+        .frame(width: 650)
     }
 }
 
@@ -33,16 +36,20 @@ struct GeneralSettingsView: View {
     @StateObject var configuration = AppConfiguration.shared
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Toggle("Markdown Enabled", isOn: configuration.$isMarkdownEnabled)
+        Form {
+            Picker("Markdown Enabled", selection: configuration.$isMarkdownEnabled) {
+                Text("True").tag(true)
+                Text("False").tag(false)
+            }
+            .pickerStyle(.radioGroup)
 
-            Picker("Preferred AI Provider", selection: configuration.$preferredChatService) {
+            Picker("Preferred Provider", selection: configuration.$preferredChatService) {
                 ForEach(Provider.allCases, id: \.self) { provider in
                     Text(provider.name)
                 }
             }
+            .pickerStyle(.radioGroup)
         }
-        .frame(width: 300)
     }
 }
 
