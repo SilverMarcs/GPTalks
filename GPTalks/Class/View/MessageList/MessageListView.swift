@@ -165,11 +165,10 @@ struct MessageListView: View {
                    }
                    #if os(iOS)
                    .background(
-                    ZStack {
-                        colorScheme == .dark ? Color.black.opacity(0.9) : Color.white.opacity(0.7)
-                    }
-                    .background(.bar)
-                    .ignoresSafeArea()
+                        Color.black
+                            .opacity(0.8)
+                            .background(.ultraThinMaterial)
+                            .ignoresSafeArea()
                    )
                    #else
                   .background(.bar)

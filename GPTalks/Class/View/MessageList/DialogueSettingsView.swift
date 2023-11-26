@@ -22,55 +22,14 @@ struct DialogueSettingsView: View {
 
     var body: some View {
         #if os(macOS)
-            VStack {
-                FormContent
-            }
-            .padding()
-            .frame(width: 300, height: 220)
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self.focusedField = nil
-                }
-            }
+            macOS
         #else
-            NavigationView {
-                Form {
-                    FormContent
-                }
-                .navigationTitle("Settings")
-                .toolbar {
-                    ToolbarItem {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Text("Done")
-                        }
-                    }
-                }
-            }
+            iOS
         #endif
     }
 
-    var FormContent: some View {
-            Section {
-                HStack {
-                    Text("Provider")
-                        .fixedSize()
-                    Spacer()
-                    Text(configuration.provider.name)
-                        .frame(width: width)
-                }
-
-                #if os(iOS)
-                    HStack {
-                        Text("Title")
-                            .fixedSize()
-                        Spacer()
-                        TextField("Chat title", text: $title)
-                            .textFieldStyle(.roundedBorder)
-                            .frame(width: width)
-                    }
-                #endif
+    var macOS: some View {
+            VStack {
 
                 HStack {
                     Text("Model")
@@ -113,9 +72,80 @@ struct DialogueSettingsView: View {
                     .lineLimit(4, reservesSpace: true)
         
             }
+            .padding()
+            .frame(width: 300, height: 200)
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.focusedField = nil
+                }
+            }
     
     }
 
+    #if os(iOS)
+    var iOS: some View {
+        NavigationView {
+            Form {
+                Section("Parameters") {
+                    modelPicker
+                    contextPicker
+                    tempStepper
+                }
+                Section("System Prompt") {
+                    systemPrompt
+                }
+            }
+            .navigationTitle($title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Done")
+                    }
+                }
+            }
+        }
+    }
+    #endif
+    
+    var modelPicker: some View {
+        Picker("Model", selection: $configuration.model) {
+            ForEach(configuration.provider.models, id: \.self) { model in
+                Text(model.name)
+                    .tag(model.id)
+            }
+        }
+    }
+    
+    var contextPicker: some View {
+        Picker("Context", selection: $configuration.contextLength) {
+            ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
+                Text("Last \(number) Messages")
+                    .tag(number)
+            }
+        }
+    }
+    
+    var tempStepper: some View {
+        Stepper(value: $configuration.temperature, in: 0 ... 2, step: 0.1) {
+            HStack {
+                Text("Temperature")
+                Spacer()
+                Text(String(format: "%.1f", configuration.temperature))
+                    .padding(.horizontal)
+                    .cornerRadius(6)
+            }
+        }
+    }
+    
+    var systemPrompt: some View {
+        TextField("Enter a system prompt", text: $configuration.systemPrompt, axis: .vertical)
+            .focused($focusedField, equals: .systemPrompt)
+            .lineLimit(4, reservesSpace: true)
+    }
+    
     private var width: CGFloat {
         #if os(iOS)
             return 190

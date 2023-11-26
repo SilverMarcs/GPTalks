@@ -33,19 +33,20 @@ struct MessageMarkdownView: View {
                         FontFamilyVariant(.monospaced)
                         FontSize(.em(0.97))
                     }
-                    .padding(15)
+                    .padding(12)
                     .background(.background.secondary)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .markdownMargin(top: .zero, bottom: .em(0.8))
 
                 CodeCopyButton(text: configuration.content)
-                    .padding(11)
+                    .padding(8)
                     .opacity(isHovered ? 1 : 0)
             }
             .onHover { hovering in
-                isHovered = hovering
-            }
-        }
+               withAnimation(.easeInOut(duration: 0.15)) {
+                   isHovered = hovering
+               }
+            }        }
     }
 
     struct CodeCopyButton: View {
