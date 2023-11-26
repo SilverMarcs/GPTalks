@@ -25,37 +25,34 @@ struct MessageListView: View {
                     session.removeAllConversations()
                 })
             }
+            .navigationTitle(session.title)
 #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $isShowSettingsView) {
+                DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+            }
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Button {
-                        isShowSettingsView = true
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text(firstTwoWords(of: session.title))
-                               .bold()
-                               .foregroundColor(Color.primary)
-
-                            Image(systemName:"chevron.right")
-                                .font(.system(size: 10))
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    .sheet(isPresented: $isShowSettingsView) {
-                        DialogueSettingsView(configuration: $session.configuration, title: $session.title)
-                    }
-                }
-                
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        isShowDeleteWarning.toggle()
+                    Menu {
+                        Button {
+                            isShowSettingsView.toggle()
+                        } label: {
+                            Text("Chat Settings")
+                            Image(systemName: "gear")
+                        }
+                        
+                        Button(role: .destructive) {
+                            isShowDeleteWarning.toggle()
+                        } label: {
+                            Text("Delete All Messages")
+                            Image(systemName: "trash")
+                        }
                     } label: {
-                        Image(systemName:"trash")
+                        Image(systemName: "ellipsis.circle")
                     }
                 }
             }
 #else
-            .navigationTitle(session.title)
             .navigationSubtitle(session.configuration.model.name)
             .toolbar {
                 ToolbarItem(placement: .navigation) {
