@@ -102,11 +102,18 @@ struct DialogueListItem: View {
         }
         .swipeActions(edge: .trailing) {
             Button(role: .destructive) {
-//                showDeleteDialogue = true
                 deleteDialogue(session)
             } label: {
                 Label("Delete", systemImage: "trash")
             }
+        }
+        .swipeActions(edge: .leading) {
+            Button(role: .cancel) {
+                showRenameDialogue.toggle()
+            } label: {
+                Label("Rename", systemImage: "pencil")
+            }
+            .tint(.accentColor)
         }
     }
     

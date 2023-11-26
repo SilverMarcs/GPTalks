@@ -8,36 +8,22 @@
 import SwiftUI
 
 struct DefaultConfigView: View {
-//    @Binding var model: Model
-//    @Binding var temperature: Double
-//    @Binding var contextLength: Int
-//    @Binding var systemPrompt: String
-//    @Binding var apiKey: String
-//    var models: [Model]
-//    var navigationTitle: String
-    
     @ObservedObject var configuration: AppConfiguration = AppConfiguration.shared
-
-//    @State private var showAPIKey = false
 
     var body: some View {
         #if os(macOS)
             ScrollView {
                 GroupBox(label: Text("Default Settings").font(.headline).padding(.bottom, 5)) {
-                    settings
+                    macOS
                 }
                 .padding()
             }
         #else
-            Form {
-                Section("Default Settings") {
-                    settings
-                }
-            }
+            iOS
         #endif
     }
 
-    var settings: some View {
+    var macOS: some View {
         VStack {
             HStack {
                 Text("Context Length")
@@ -82,6 +68,47 @@ struct DefaultConfigView: View {
             }
             .padding(paddingValue)
         }
+    }
+    
+    var iOS: some View {
+        NavigationView {
+            Form {
+                Section("Default Settings") {
+                    contextPicker
+                    tempSlider
+                }
+                Section("System Prompt") {
+                    systemPrompt
+                }
+            }
+        }
+    }
+    
+    var contextPicker: some View {
+        Picker("Context Length", selection: configuration.$contextLength) {
+            ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
+                Text("Last \(number) Messages")
+                    .tag(number)
+            }
+        }
+    }
+    
+    var tempSlider: some View {
+        HStack(spacing: 15) {
+            Slider(value: configuration.$temperature, in: 0 ... 2, step: 0.1) {
+            } minimumValueLabel: {
+                Text("0")
+            } maximumValueLabel: {
+                Text("2")
+            }
+            Text(String(format: "%.2f", configuration.temperature))
+        }
+    }
+    
+
+    var systemPrompt: some View {
+        TextField("Enter a system prompt", text: configuration.$systemPrompt, axis: .vertical)
+            .lineLimit(4, reservesSpace: true)
     }
 
     var paddingValue: CGFloat {

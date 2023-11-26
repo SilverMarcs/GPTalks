@@ -43,7 +43,7 @@ struct AppSettingsView: View {
                         DefaultConfigView()
                     } label: {
                         HStack {
-                            Image(systemName: "cpu")
+                            Image(systemName: "cpu.fill")
                                 .renderingMode(.original)
                             Text("Default Parameters")
                         }

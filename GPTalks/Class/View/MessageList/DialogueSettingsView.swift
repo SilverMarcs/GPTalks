@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DialogueSettingsView: View {
     @Binding var configuration: DialogueSession.Configuration
-    @Binding var title: String
+    var title: String
 
     @FocusState private var focusedField: FocusedField?
 
@@ -95,7 +95,7 @@ struct DialogueSettingsView: View {
                     systemPrompt
                 }
             }
-            .navigationTitle($title)
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem {

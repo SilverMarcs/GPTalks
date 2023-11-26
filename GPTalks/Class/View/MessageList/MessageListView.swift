@@ -14,6 +14,7 @@ struct MessageListView: View {
     @FocusState var isTextFieldFocused: Bool
     @State var isShowSettingsView = false
     @State var isShowDeleteWarning = false
+    @State var title = ""
 
     var body: some View {
         contentView
@@ -25,11 +26,17 @@ struct MessageListView: View {
                     session.removeAllConversations()
                 })
             }
-            .navigationTitle(session.title)
+            .onChange(of: title, perform: { value in
+                session.title = value
+            })
+            .onAppear {
+                title = session.title
+            }
+            .navigationTitle($title)
 #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $isShowSettingsView) {
-                DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+                DialogueSettingsView(configuration: $session.configuration, title: session.title)
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -62,7 +69,7 @@ struct MessageListView: View {
                         Image(systemName:"slider.vertical.3")
                     }
                     .popover(isPresented: $isShowSettingsView) {
-                        DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+                        DialogueSettingsView(configuration: $session.configuration, title: session.title)
                     }
                 }
                 
