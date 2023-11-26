@@ -65,6 +65,8 @@ struct ServiceSettingsView: View {
             }
             
             if provider == .gpt4free {
+                Divider()
+                
                 HStack {
                     Text("Ignore Web")
                     Spacer()
@@ -80,37 +82,36 @@ struct ServiceSettingsView: View {
                 .padding(paddingValue)
             }
             
-            if provider != .gpt4free {
-                Divider()
+            Divider()
+            
+            HStack {
+                Text("API Key")
+                Spacer()
                 
                 HStack {
-                    Text("API Key")
-                    Spacer()
-                    
-                    HStack {
-                        if showAPIKey {
-                            TextField("", text: $apiKey)
-                                .textFieldStyle(.roundedBorder)
-                        } else {
-                            SecureField("", text: $apiKey)
-                                .textFieldStyle(.roundedBorder)
-                        }
-                        Button {
-                            showAPIKey.toggle()
-                        } label: {
-                            if showAPIKey {
-                                Image(systemName: "eye.slash")
-                            } else {
-                                Image(systemName: "eye")
-                            }
-                        }
-                        .buttonStyle(.borderless)
+                    if showAPIKey {
+                        TextField("", text: $apiKey)
+                            .textFieldStyle(.roundedBorder)
+                    } else {
+                        SecureField("", text: $apiKey)
+                            .textFieldStyle(.roundedBorder)
                     }
-                    .frame(width: widthValue)
+                    Button {
+                        showAPIKey.toggle()
+                    } label: {
+                        if showAPIKey {
+                            Image(systemName: "eye.slash")
+                        } else {
+                            Image(systemName: "eye")
+                        }
+                    }
+                    .buttonStyle(.borderless)
                 }
-                .padding(paddingValue)
+                .frame(width: widthValue)
             }
+            .padding(paddingValue)
         }
+        
     }
     
     var paddingValue: CGFloat {

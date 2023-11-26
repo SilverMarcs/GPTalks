@@ -72,8 +72,6 @@ struct DialogueListItem: View {
         })
         .alert("Confirm Delete?", isPresented: $showDeleteDialogue, actions: {
             Button("Delete", role: .destructive, action: {
-//                deleteDialogueHandler(session)
-//                onDelete()
                 deleteDialogue(session)
                 showDeleteDialogue = false
             })
@@ -102,7 +100,6 @@ struct DialogueListItem: View {
         }
         .swipeActions(edge: .trailing) {
             Button(role: .destructive) {
-//                showDeleteDialogue = true
                 deleteDialogue(session)
             } label: {
                 Label("Delete", systemImage: "trash")

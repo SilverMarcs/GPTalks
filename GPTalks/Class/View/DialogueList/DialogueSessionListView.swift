@@ -14,7 +14,7 @@ struct DialogueSessionListView: View {
 #endif
 
     @Binding var dialogueSessions: [DialogueSession]
-    @Binding var selectedDialogueSession: DialogueSession?
+//    @Binding var selectedDialogueSession: DialogueSession?
     
     var deleteDialogue: (DialogueSession) -> Void
     var addDialogue: () -> Void
@@ -77,10 +77,11 @@ struct DialogueSessionListView: View {
     
     @ViewBuilder
     var list: some View {
-        List(filteredDialogueSessions, selection: $selectedDialogueSession) { session in
-            NavigationLink(value: session) {
-                DialogueListItem(session: session, deleteDialogue: deleteDialogue)
-            }
+        List(filteredDialogueSessions, id: \.id) { session in
+           NavigationLink(destination: MessageListView(session: session)) {
+               DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+           }
+           .id(session.id)
         }
     }
     

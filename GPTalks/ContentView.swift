@@ -17,29 +17,32 @@ struct ContentView: View {
     
     @StateObject var configuration = AppConfiguration.shared
     @State var dialogueSessions: [DialogueSession] = []
-    @State var selectedDialogueSession: DialogueSession?
+//    @State var selectedDialogueSession: DialogueSession?
     
 #if os(iOS)
     @State var isShowSettingView = false
 #endif
 
     var body: some View {
-        NavigationSplitView {
+        NavigationView {
             DialogueSessionListView(dialogueSessions: $dialogueSessions,
-                                    selectedDialogueSession: $selectedDialogueSession,
                                     deleteDialogue: deleteDialogue,
                                     addDialogue: addDialogue)
-        } detail: {
-            if let selectedDialogueSession = selectedDialogueSession {
-                MessageListView(session: selectedDialogueSession)
-            } else {
-                Text("Select a chat to see it here")
-                    .font(.title)
-            }
+//            .toolbar{
+//                ToolbarItem(placement: .automatic) {
+//                    Button {
+//                        addDialogue()
+//                    } label: {
+//                        Image(systemName: "square.and.pencil")
+//                    }
+//                }
+//            }
         }
         .onAppear {
-            dialogueSessions = items.compactMap {
-                DialogueSession(rawData: $0)
+            DispatchQueue.main.async {
+                dialogueSessions = items.compactMap {
+                    DialogueSession(rawData: $0)
+                }
             }
         }
     }
@@ -52,9 +55,9 @@ struct ContentView: View {
         newItem.id = session.id
         newItem.date = session.date
         
-        DispatchQueue.main.async {
-            selectedDialogueSession = session
-        }
+//        DispatchQueue.main.async {
+//            selectedDialogueSession = session
+//        }
         
         do {
             newItem.configuration =  try JSONEncoder().encode(session.configuration)
@@ -69,6 +72,7 @@ struct ContentView: View {
         dialogueSessions.removeAll {
             $0.id == session.id
         }
+        
         if let item = session.rawData {
             viewContext.delete(item)
         }
