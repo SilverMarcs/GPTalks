@@ -17,7 +17,6 @@ struct ContentView: View {
     
     @StateObject var configuration = AppConfiguration.shared
     @State var dialogueSessions: [DialogueSession] = []
-//    @State var selectedDialogueSession: DialogueSession?
     
 #if os(iOS)
     @State var isShowSettingView = false
@@ -28,15 +27,6 @@ struct ContentView: View {
             DialogueSessionListView(dialogueSessions: $dialogueSessions,
                                     deleteDialogue: deleteDialogue,
                                     addDialogue: addDialogue)
-//            .toolbar{
-//                ToolbarItem(placement: .automatic) {
-//                    Button {
-//                        addDialogue()
-//                    } label: {
-//                        Image(systemName: "square.and.pencil")
-//                    }
-//                }
-//            }
         }
         .onAppear {
             DispatchQueue.main.async {
@@ -54,11 +44,7 @@ struct ContentView: View {
         let newItem = DialogueData(context: viewContext)
         newItem.id = session.id
         newItem.date = session.date
-        
-//        DispatchQueue.main.async {
-//            selectedDialogueSession = session
-//        }
-        
+
         do {
             newItem.configuration =  try JSONEncoder().encode(session.configuration)
         } catch {
