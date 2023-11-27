@@ -1,8 +1,8 @@
 //
 //  MessageMarkdownView.swift
-//  ChatGPT
+//  GPTalks
 //
-//  Created by LuoHuanyu on 2023/3/7.
+//  Created by Zabir Raihan on 27/11/2024.
 //
 
 import MarkdownUI
@@ -33,17 +33,19 @@ struct MessageMarkdownView: View {
                         FontFamilyVariant(.monospaced)
                         FontSize(.em(0.97))
                     }
-                    .padding(15)
+                    .padding(12)
                     .background(.background.secondary)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .markdownMargin(top: .zero, bottom: .em(0.8))
 
                 CodeCopyButton(text: configuration.content)
-                    .padding(11)
+                    .padding(8)
                     .opacity(isHovered ? 1 : 0)
             }
             .onHover { hovering in
-                isHovered = hovering
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isHovered = hovering
+                }
             }
         }
     }

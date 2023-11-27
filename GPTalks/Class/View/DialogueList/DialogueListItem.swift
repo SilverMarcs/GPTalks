@@ -1,5 +1,5 @@
 //
-//  ListItem.swift
+//  DialogueListItem.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 13/11/2023.
@@ -104,6 +104,14 @@ struct DialogueListItem: View {
             } label: {
                 Label("Delete", systemImage: "trash")
             }
+        }
+        .swipeActions(edge: .leading) {
+            Button(role: .cancel) {
+                showRenameDialogue.toggle()
+            } label: {
+                Label("Rename", systemImage: "pencil")
+            }
+            .tint(.accentColor)
         }
     }
     

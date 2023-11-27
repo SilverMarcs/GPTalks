@@ -1,8 +1,8 @@
 //
 //  ConversationView.swift
-//  ChatGPT
+//  GPTalks
 //
-//  Created by LuoHuanyu on 2023/3/3.
+//  Created by Zabir Raihan on 27/11/2024.
 //
 
 import SwiftUI
@@ -45,41 +45,92 @@ struct ConversationView: View {
     private var userMessage: some View {
         HStack(alignment: .lastTextBaseline, spacing: 0) {
             Spacer()
-            if isEditing {
-                editControls()
-                #if os(macOS)
-                TextEditor(text: $editingMessage)
-                    .font(.body)
-                    .focused($isFocused)
-                    .scrollContentBackground(.hidden)
-                    .bubbleStyle(isMyMessage: true, type: .edit)
-                    .transition(.opacity)
-                #else
-                TextField("", text: $editingMessage, axis: .vertical)
-                    .lineLimit(5)
-                    .bubbleStyle(isMyMessage: true, type: .edit)
-                    .transition(.opacity)
-                #endif
-            } else {
-                optionsMenu()
-                    .transition(.opacity)
-                    .animation(.easeOut(duration: 0.15), value: isHovered)
-                Text(conversation.content)
-                    .textSelection(.enabled)
-                    .bubbleStyle(isMyMessage: true, type: .text, accentColor: accentColor)
-                    .transition(.opacity)
-            }
+            optionsMenu()
+                .transition(.opacity)
+                .animation(.easeOut(duration: 0.15), value: isHovered)
+            Text(conversation.content)
+                .textSelection(.enabled)
+                .bubbleStyle(isMyMessage: true, type: .text, accentColor: accentColor)
         }
         .padding(.trailing, 15)
         .padding(.leading, horizontalPadding)
-        .animation(.easeInOut, value: isEditing)
+        .sheet(isPresented: $isEditing) {
+            editingView
+        }
     }
 
+    var editingView: some View {
+        #if os(macOS)
+        VStack(spacing: 15) {
+            TextEditor(text: $editingMessage)
+                .padding(10)
+                .background(.background.secondary)
+                .scrollContentBackground(.hidden)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 7, style: .continuous)
+                        .stroke(Color.secondary, lineWidth: 0.3)
+                
+                )
+         
+            editControls()
+        }
+        .padding()
+        .frame(minWidth: 550, maxWidth: 800, minHeight: 200, maxHeight: 600)
+        #else
+        NavigationView {
+            Form {
+                TextField("Editing Message", text: $editingMessage, axis: .vertical)
+            }
+            .navigationBarTitle("Editing Message")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel", role: .cancel) {
+                        isEditing = false
+                    }
+                    .foregroundStyle(.secondary)
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Update") {
+                        editHandler(Conversation(role: "user", content: editingMessage))
+                        isEditing = false
+                        isFocused = isEditing
+                    }
+                }
+
+            }
+        }
+        .presentationDetents([.medium])
+        #endif
+    }
+    
+    @ViewBuilder
+    func editControls() -> some View {
+        HStack {
+            Button("Cancel") {
+                isEditing = false
+            }
+            .keyboardShortcut(.escape, modifiers: .command)
+
+            Spacer()
+            
+            Button("Update") {
+                editHandler(Conversation(role: "user", content: editingMessage))
+                isEditing = false
+                isFocused = isEditing
+            }
+            .keyboardShortcut(.return, modifiers: .command)
+        }
+    }
+    
     @ViewBuilder
     private var assistantMessage: some View {
         HStack(alignment: .lastTextBaseline, spacing: 4) {
             VStack(alignment: .leading) {
-                if !conversation.isReplying && AppConfiguration.shared.isMarkdownEnabled {
+                if 
+//                    !conversation.isReplying && 
+                    AppConfiguration.shared.isMarkdownEnabled {
                     MessageMarkdownView(text: conversation.content)
                         .textSelection(.enabled)
                 } else {
@@ -121,32 +172,6 @@ struct ConversationView: View {
         .menuStyle(.borderlessButton)
         .frame(width: 20, height: 20)
         .opacity(isHovered ? 1 : 0)
-    }
-
-    @ViewBuilder
-    func editControls() -> some View {
-        HStack(spacing: 15) {
-            Button {
-                isEditing = false
-            } label: {
-                Image(systemName: "xmark")
-            }
-            .keyboardShortcut(.escape, modifiers: .command)
-            .buttonStyle(.borderless)
-            .foregroundColor(.red)
-
-            Button {
-                editHandler(Conversation(role: "user", content: editingMessage))
-                isEditing = false
-                isFocused = isEditing
-            } label: {
-                Image(systemName: "checkmark")
-            }
-            .keyboardShortcut(.return, modifiers: .command)
-            .buttonStyle(.borderless)
-            .foregroundColor(.green)
-        }
-        .padding(.trailing, 10)
     }
 
     @ViewBuilder
@@ -193,14 +218,9 @@ struct ConversationView: View {
 
     private var horizontalPadding: CGFloat {
         #if os(iOS)
-            return 30
+        30
         #else
-        if !isEditing {
-            return 85
-        } else {
-            return 70
-        }
-
+        85
         #endif
     }
 }

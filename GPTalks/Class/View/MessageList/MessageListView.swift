@@ -1,8 +1,8 @@
 //
 //  MessageListView.swift
-//  ChatGPT
+//  GPTalks
 //
-//  Created by LuoHuanyu on 2023/3/3.
+//  Created by Zabir Raihan on 27/11/2024.
 //
 
 import SwiftUI
@@ -14,6 +14,7 @@ struct MessageListView: View {
     @FocusState var isTextFieldFocused: Bool
     @State var isShowSettingsView = false
     @State var isShowDeleteWarning = false
+    @State var title = ""
 
     var body: some View {
         contentView
@@ -25,37 +26,40 @@ struct MessageListView: View {
                     session.removeAllConversations()
                 })
             }
+            .onChange(of: title) {
+               session.title = title
+            }
+            .onAppear {
+                title = session.title
+            }
+            .navigationTitle($title)
 #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $isShowSettingsView) {
+                DialogueSettingsView(configuration: $session.configuration, title: session.title)
+            }
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Button {
-                        isShowSettingsView = true
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text(firstTwoWords(of: session.title))
-                               .bold()
-                               .foregroundColor(Color.primary)
-
-                            Image(systemName:"chevron.right")
-                                .font(.system(size: 10))
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    .sheet(isPresented: $isShowSettingsView) {
-                        DialogueSettingsView(configuration: $session.configuration, title: $session.title)
-                    }
-                }
-                
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        isShowDeleteWarning.toggle()
+                    Menu {
+                        Button {
+                            isShowSettingsView.toggle()
+                        } label: {
+                            Text("Chat Settings")
+                            Image(systemName: "slider.vertical.3")
+                        }
+                        
+                        Button(role: .destructive) {
+                            isShowDeleteWarning.toggle()
+                        } label: {
+                            Text("Delete All Messages")
+                            Image(systemName: "trash")
+                        }
                     } label: {
-                        Image(systemName:"trash")
+                        Image(systemName: "ellipsis.circle")
                     }
                 }
             }
 #else
-            .navigationTitle(session.title)
             .navigationSubtitle(session.configuration.model.name)
             .toolbar {
                 ToolbarItem(placement: .navigation) {
@@ -65,7 +69,7 @@ struct MessageListView: View {
                         Image(systemName:"slider.vertical.3")
                     }
                     .popover(isPresented: $isShowSettingsView) {
-                        DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+                        DialogueSettingsView(configuration: $session.configuration, title: session.title)
                     }
                 }
                 
@@ -75,6 +79,7 @@ struct MessageListView: View {
                     } label: {
                         Image(systemName:"trash")
                     }
+                    .keyboardShortcut(.delete, modifiers: [.command])
                 }
             }
 #endif
@@ -165,11 +170,10 @@ struct MessageListView: View {
                    }
                    #if os(iOS)
                    .background(
-                    ZStack {
-                        colorScheme == .dark ? Color.black.opacity(0.9) : Color.white.opacity(0.7)
-                    }
-                    .background(.bar)
-                    .ignoresSafeArea()
+                        Color.black
+                            .opacity(0.9)
+                            .background(.ultraThinMaterial)
+                            .ignoresSafeArea()
                    )
                    #else
                   .background(.bar)

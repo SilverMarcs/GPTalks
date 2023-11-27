@@ -1,8 +1,8 @@
 //
 //  MessageBubble.swift
-//  ChatGPT
+//  GPTalks
 //
-//  Created by LuoHuanyu on 2023/3/16.
+//  Created by Zabir Raihan on 27/11/2024.
 //
 
 import SwiftUI

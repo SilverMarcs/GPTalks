@@ -1,14 +1,15 @@
 //
 //  MacOSSettingsView.swift
-//  ChatGPT
+//  GPTalks
 //
-//  Created by LuoHuanyu on 2023/4/3.
+//  Created by Zabir Raihan on 27/11/2024.
 //
 
 // #if os(macOS)
 
 import SwiftUI
 
+#if os(macOS)
 struct MacOSSettingsView: View {
     var body: some View {
         TabView {
@@ -16,16 +17,19 @@ struct MacOSSettingsView: View {
                 .tabItem {
                     Label("General", systemImage: "gear")
                 }
+                .frame(minHeight: 200)
             DefaultConfigView()
                 .tabItem {
                     Label("Default", systemImage: "cpu")
                 }
+                .frame(minHeight: 300)
             ProviderSettingsView()
                 .tabItem {
                     Label("Providers", systemImage: "brain.head.profile")
                 }
+                .frame(minHeight: 400)
         }
-        .frame(minWidth: 700, minHeight: 300)
+        .frame(width: 650)
     }
 }
 
@@ -33,34 +37,39 @@ struct GeneralSettingsView: View {
     @StateObject var configuration = AppConfiguration.shared
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Toggle("Markdown Enabled", isOn: configuration.$isMarkdownEnabled)
-
-            Picker("Preferred AI Provider", selection: configuration.$preferredChatService) {
-                ForEach(Provider.allCases, id: \.self) { provider in
-                    Text(provider.name)
+        ScrollView {
+            Form {
+                Picker("Markdown Enabled", selection: configuration.$isMarkdownEnabled) {
+                    Text("True").tag(true)
+                    Text("False").tag(false)
                 }
+                .pickerStyle(.radioGroup)
+                
+                Picker("Preferred Provider", selection: configuration.$preferredChatService) {
+                    ForEach(Provider.allCases, id: \.self) { provider in
+                        Text(provider.name)
+                    }
+                }
+                .pickerStyle(.radioGroup)
             }
         }
-        .frame(width: 300)
+        .padding()
     }
 }
 
 struct ProviderSettingsView: View {
     @ObservedObject var configuration = AppConfiguration.shared
-    @State var selection: Provider?
+    @State var selection: Provider = .openai
 
     var body: some View {
         NavigationView {
-            List(Provider.allCases, selection: $selection) { provider in
+            List(Provider.allCases, id: \.self, selection: $selection) { provider in
                 NavigationLink(
                     destination: provider.destination,
                     label: { provider.label }
                 )
             }
-            .onAppear {
-                selection = .openai
-            }
         }
     }
 }
+#endif

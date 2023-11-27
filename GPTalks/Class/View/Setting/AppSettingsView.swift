@@ -1,8 +1,8 @@
 //
-//  SettingsView.swift
-//  ChatGPT
+//  AppSettingsView.swift
+//  GPTalks
 //
-//  Created by LuoHuanyu on 2023/3/7.
+//  Created by Zabir Raihan on 27/11/2024.
 //
 
 import SwiftUI
@@ -43,7 +43,7 @@ struct AppSettingsView: View {
                         DefaultConfigView()
                     } label: {
                         HStack {
-                            Image(systemName: "cpu")
+                            Image(systemName: "cpu.fill")
                                 .renderingMode(.original)
                             Text("Default Parameters")
                         }

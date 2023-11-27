@@ -1,8 +1,8 @@
 //
 //  ChatGPTApp.swift
-//  ChatGPT
+//  GPTalks
 //
-//  Created by LuoHuanyu on 2023/3/22.
+//  Created by Zabir Raihan on 10/11/2023.
 //
 
 import SwiftUI
