@@ -128,7 +128,9 @@ struct ConversationView: View {
     private var assistantMessage: some View {
         HStack(alignment: .lastTextBaseline, spacing: 4) {
             VStack(alignment: .leading) {
-                if !conversation.isReplying && AppConfiguration.shared.isMarkdownEnabled {
+                if 
+//                    !conversation.isReplying && 
+                    AppConfiguration.shared.isMarkdownEnabled {
                     MessageMarkdownView(text: conversation.content)
                         .textSelection(.enabled)
                 } else {

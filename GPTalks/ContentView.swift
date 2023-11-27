@@ -48,13 +48,14 @@ struct ContentView: View {
     private func addDialogue() {
         let session = DialogueSession()
         dialogueSessions.insert(session, at: 0)
-        let newItem = DialogueData(context: viewContext)
-        newItem.id = session.id
-        newItem.date = session.date
-        
+
         DispatchQueue.main.async {
             selectedDialogueSession = session
         }
+        
+        let newItem = DialogueData(context: viewContext)
+        newItem.id = session.id
+        newItem.date = session.date
         
         do {
             newItem.configuration =  try JSONEncoder().encode(session.configuration)
@@ -66,9 +67,18 @@ struct ContentView: View {
     }
     
     private func deleteDialogue(_ session: DialogueSession) {
+        let sessionId = selectedDialogueSession?.id
+        
         dialogueSessions.removeAll {
             $0.id == session.id
         }
+        
+        DispatchQueue.main.async {
+            selectedDialogueSession = dialogueSessions.first(where: {
+                $0.id == sessionId
+            })
+        }
+        
         if let item = session.rawData {
             viewContext.delete(item)
         }

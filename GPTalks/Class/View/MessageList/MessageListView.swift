@@ -56,7 +56,6 @@ struct MessageListView: View {
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
-//                            .foregroundStyle(session.configuration.provider.accentColor)
                     }
                 }
             }

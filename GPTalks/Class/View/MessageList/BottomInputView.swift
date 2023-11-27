@@ -80,9 +80,11 @@ struct BottomInputView: View {
         Button {
             send(session.input)
         } label: {
-            Image(systemName: session.input.isEmpty ? "paperplane" : "paperplane.fill")
+            Image(systemName: "arrow.up.circle.fill")
                 .resizable()
                 .scaledToFit()
+                .disabled(session.input.isEmpty)
+                .foregroundColor(session.input.isEmpty ? Color(.darkGray) : session.configuration.provider.accentColor)
                 .frame(width: imageSize, height: imageSize)
         }
         .keyboardShortcut(.return, modifiers: .command)
