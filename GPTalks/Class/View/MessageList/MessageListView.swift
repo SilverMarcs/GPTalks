@@ -45,7 +45,7 @@ struct MessageListView: View {
                             isShowSettingsView.toggle()
                         } label: {
                             Text("Chat Settings")
-                            Image(systemName: "gear")
+                            Image(systemName: "slider.vertical.3")
                         }
                         
                         Button(role: .destructive) {
@@ -56,6 +56,7 @@ struct MessageListView: View {
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
+//                            .foregroundStyle(session.configuration.provider.accentColor)
                     }
                 }
             }
@@ -79,6 +80,7 @@ struct MessageListView: View {
                     } label: {
                         Image(systemName:"trash")
                     }
+                    .keyboardShortcut(.delete, modifiers: [.command])
                 }
             }
 #endif
@@ -170,7 +172,7 @@ struct MessageListView: View {
                    #if os(iOS)
                    .background(
                         Color.black
-                            .opacity(0.8)
+                            .opacity(0.9)
                             .background(.ultraThinMaterial)
                             .ignoresSafeArea()
                    )
