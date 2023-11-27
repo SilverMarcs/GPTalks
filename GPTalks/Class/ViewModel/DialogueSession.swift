@@ -24,7 +24,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             temperature = AppConfiguration.shared.temperature
             systemPrompt = AppConfiguration.shared.systemPrompt
             model = provider.preferredModel
-            ignore_web = AppConfiguration.shared.ignore_web
+            ignore_web = AppConfiguration.shared.ignoreWeb
         }
         
     }
@@ -184,7 +184,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         if configuration.provider == .gpt4free {
             query.model = .gpt4
             query.provider = configuration.model.id
-            query.ignore_web = AppConfiguration.shared.ignore_web
+            query.ignore_web = AppConfiguration.shared.ignoreWeb
         }
         
         streamingTask = Task {

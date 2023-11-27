@@ -77,7 +77,7 @@ struct DialogueSessionListView: View {
     
     @ViewBuilder
     var list: some View {
-        List(filteredDialogueSessions, selection: $selectedDialogueSession) { session in
+        List(filteredDialogueSessions, id: \.self, selection: $selectedDialogueSession) { session in
             NavigationLink(value: session) {
                 DialogueListItem(session: session, deleteDialogue: deleteDialogue)
             }

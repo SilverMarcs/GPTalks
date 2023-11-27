@@ -27,7 +27,7 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.systemPrompt") var systemPrompt: String = "You are a helpful assistant."
     
-    @AppStorage("configuration.ignore_web") var ignore_web: String = "False"
+    @AppStorage("configuration.ignore_web") var ignoreWeb: String = "False"
         
     /// openAI
     @AppStorage("configuration.OAIKey") var OAIkey = ""

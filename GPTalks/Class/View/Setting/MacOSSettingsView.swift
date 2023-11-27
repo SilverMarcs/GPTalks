@@ -9,6 +9,7 @@
 
 import SwiftUI
 
+#if os(macOS)
 struct MacOSSettingsView: View {
     var body: some View {
         TabView {
@@ -36,38 +37,39 @@ struct GeneralSettingsView: View {
     @StateObject var configuration = AppConfiguration.shared
 
     var body: some View {
-        Form {
-            Picker("Markdown Enabled", selection: configuration.$isMarkdownEnabled) {
-                Text("True").tag(true)
-                Text("False").tag(false)
-            }
-            .pickerStyle(.radioGroup)
-
-            Picker("Preferred Provider", selection: configuration.$preferredChatService) {
-                ForEach(Provider.allCases, id: \.self) { provider in
-                    Text(provider.name)
+        ScrollView {
+            Form {
+                Picker("Markdown Enabled", selection: configuration.$isMarkdownEnabled) {
+                    Text("True").tag(true)
+                    Text("False").tag(false)
                 }
+                .pickerStyle(.radioGroup)
+                
+                Picker("Preferred Provider", selection: configuration.$preferredChatService) {
+                    ForEach(Provider.allCases, id: \.self) { provider in
+                        Text(provider.name)
+                    }
+                }
+                .pickerStyle(.radioGroup)
             }
-            .pickerStyle(.radioGroup)
         }
+        .padding()
     }
 }
 
 struct ProviderSettingsView: View {
     @ObservedObject var configuration = AppConfiguration.shared
-    @State var selection: Provider?
+    @State var selection: Provider = .openai
 
     var body: some View {
         NavigationView {
-            List(Provider.allCases, selection: $selection) { provider in
+            List(Provider.allCases, id: \.self, selection: $selection) { provider in
                 NavigationLink(
                     destination: provider.destination,
                     label: { provider.label }
                 )
             }
-            .onAppear {
-                selection = .openai
-            }
         }
     }
 }
+#endif
