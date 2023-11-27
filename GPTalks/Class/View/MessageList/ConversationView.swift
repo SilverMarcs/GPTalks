@@ -46,17 +46,14 @@ struct ConversationView: View {
         HStack(alignment: .lastTextBaseline, spacing: 0) {
             Spacer()
             optionsMenu()
-                .opacity(isHovered ? 1 : 0)
                 .transition(.opacity)
                 .animation(.easeOut(duration: 0.15), value: isHovered)
             Text(conversation.content)
                 .textSelection(.enabled)
                 .bubbleStyle(isMyMessage: true, type: .text, accentColor: accentColor)
-                .transition(.opacity)
         }
         .padding(.trailing, 15)
         .padding(.leading, horizontalPadding)
-        .animation(.easeInOut, value: isEditing)
         .sheet(isPresented: $isEditing) {
             editingView
         }
@@ -219,14 +216,9 @@ struct ConversationView: View {
 
     private var horizontalPadding: CGFloat {
         #if os(iOS)
-            return 30
+        30
         #else
-        if !isEditing {
-            return 85
-        } else {
-            return 70
-        }
-
+        85
         #endif
     }
 }
