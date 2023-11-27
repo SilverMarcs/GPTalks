@@ -2,7 +2,7 @@
 //  MessageMarkdownView.swift
 //  ChatGPT
 //
-//  Created by LuoHuanyu on 2023/3/7.
+//  Created by Zabir Raihan on 27/11/2024.
 //
 
 import MarkdownUI

@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  ChatGPT
 //
-//  Created by LuoHuanyu on 2023/3/22.
+//  Created by Zabir Raihan on 27/11/2024.
 //
 
 import SwiftUI
@@ -37,6 +37,7 @@ struct ContentView: View {
                     .font(.title)
             }
         }
+        .accentColor(selectedDialogueSession?.configuration.provider.accentColor ?? .accentColor)
         .onAppear {
             dialogueSessions = items.compactMap {
                 DialogueSession(rawData: $0)

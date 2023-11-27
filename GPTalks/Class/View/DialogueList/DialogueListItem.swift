@@ -1,5 +1,5 @@
 //
-//  ListItem.swift
+//  DialogueListItem.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 13/11/2023.

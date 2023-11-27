@@ -2,7 +2,7 @@
 //  MacOSSettingsView.swift
 //  ChatGPT
 //
-//  Created by LuoHuanyu on 2023/4/3.
+//  Created by Zabir Raihan on 27/11/2024.
 //
 
 // #if os(macOS)
