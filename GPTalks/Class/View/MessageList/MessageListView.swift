@@ -1,6 +1,6 @@
 //
 //  MessageListView.swift
-//  ChatGPT
+//  GPTalks
 //
 //  Created by Zabir Raihan on 27/11/2024.
 //
@@ -26,8 +26,8 @@ struct MessageListView: View {
                     session.removeAllConversations()
                 })
             }
-            .onChange(of: title) { newValue in
-               session.title = newValue
+            .onChange(of: title) {
+               session.title = title
             }
             .onAppear {
                 title = session.title

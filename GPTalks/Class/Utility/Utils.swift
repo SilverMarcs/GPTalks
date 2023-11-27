@@ -1,6 +1,6 @@
 //
 //  Extnsions.swift
-//  GPTMessage
+//  GPTalks
 //
 //  Created by Zabir Raihan on 10/11/2023.
 //

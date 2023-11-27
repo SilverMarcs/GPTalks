@@ -1,5 +1,5 @@
 //
-//  DefaultConfigView.swift
+//  ServiceSettingsView.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 21/11/2023.

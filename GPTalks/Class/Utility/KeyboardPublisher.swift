@@ -1,6 +1,6 @@
 //
 //  KeyboardPublisher.swift
-//  ChatGPT
+//  GPTalks
 //
 //  Created by LuoHuanyu on 2023/3/20.
 //

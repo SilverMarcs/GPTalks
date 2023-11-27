@@ -1,6 +1,6 @@
 //
 //  DialogueSessionListView.swift
-//  ChatGPT
+//  GPTalks
 //
 //  Created by Zabir Raihan on 27/11/2024.
 //

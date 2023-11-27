@@ -1,6 +1,6 @@
 //
-//  PAISettingsView.swift
-//  ChatGPT
+//  DefaultConfigView.swift
+//  GPTalks
 //
 //  Created by LuoHuanyu on 2023/4/7.
 //
@@ -12,49 +12,49 @@ struct DefaultConfigView: View {
 
     var body: some View {
         #if os(macOS)
-            ScrollView {
-                GroupBox(label: Text("Default Settings").font(.headline).padding(.bottom, 5)) {
-                    macOS
-                }
-                .padding()
-            }
+            macOS
         #else
             iOS
         #endif
     }
 
     var macOS: some View {
-        VStack {
-            HStack {
-                Text("Context Length")
-                Spacer()
-                contextPicker
-                .labelsHidden()
-                .frame(width: widthValue)
+        ScrollView {
+            GroupBox(label: Text("Default Settings").font(.headline).padding(.bottom, 5)) {
+                VStack {
+                    HStack {
+                        Text("Context Length")
+                        Spacer()
+                        contextPicker
+                            .labelsHidden()
+                            .frame(width: widthValue)
+                    }
+                    .padding(paddingValue)
+                    
+                    Divider()
+                    
+                    HStack {
+                        Text("Temperature")
+                        Spacer()
+                        tempSlider
+                            .frame(width: widthValue)
+                    }
+                    .padding(paddingValue)
+                    
+                    Divider()
+                    
+                    HStack {
+                        Text("System prompt")
+                        Spacer()
+                        systemPrompt
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: widthValue)
+                    }
+                    .padding(paddingValue)
+                }
             }
-            .padding(paddingValue)
-
-            Divider()
-
-            HStack {
-                Text("Temperature")
-                Spacer()
-                tempSlider
-                .frame(width: widthValue)
-            }
-            .padding(paddingValue)
-
-            Divider()
-
-            HStack {
-                Text("System prompt")
-                Spacer()
-                systemPrompt
-                    .textFieldStyle(.roundedBorder)
-                    .frame(width: widthValue)
-            }
-            .padding(paddingValue)
         }
+        .padding()
     }
     
     var iOS: some View {
