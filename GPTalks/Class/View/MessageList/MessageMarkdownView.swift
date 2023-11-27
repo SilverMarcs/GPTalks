@@ -43,10 +43,11 @@ struct MessageMarkdownView: View {
                     .opacity(isHovered ? 1 : 0)
             }
             .onHover { hovering in
-               withAnimation(.easeInOut(duration: 0.15)) {
-                   isHovered = hovering
-               }
-            }        }
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isHovered = hovering
+                }
+            }
+        }
     }
 
     struct CodeCopyButton: View {
