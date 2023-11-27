@@ -25,52 +25,42 @@ struct ServiceSettingsView: View {
 
     var macOS: some View {
         ScrollView {
-            GroupBox {
-                HStack {
-                    Text("Default Model")
-                    Spacer()
-                    modelPicker
-                        .labelsHidden()
-                        .frame(width: widthValue)
-                }
-                .padding(paddingValue)
-
-                if provider == .custom {
-                    Divider()
-
+            VStack(spacing: 30) {
+                GroupBox(label: Text("Provider Settings").bold()) {
                     HStack {
-                        Text("API Key")
+                        Text("Default Model")
                         Spacer()
-                        hostUrl
-                            .textFieldStyle(.roundedBorder)
-                            .padding(paddingValue)
-                    }
-                }
-
-                if provider == .gpt4free {
-                    Divider()
-
-                    HStack {
-                        Text("Ignore Web")
-                        Spacer()
-                        ignoreWeb
+                        modelPicker
                             .labelsHidden()
                             .frame(width: widthValue)
                     }
                     .padding(paddingValue)
                 }
 
-                Divider()
+                GroupBox(label: Text("API Settings").bold()) {
+                    HStack {
+                        Text("API Key")
+                        Spacer()
 
-                HStack {
-                    Text("API Key")
-                    Spacer()
+                        apiKeyField
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: widthValue)
+                    }
+                    .padding(paddingValue)
 
-                    apiKeyField
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: widthValue)
+                    if provider == .gpt4free {
+                        Divider()
+
+                        HStack {
+                            Text("Ignore Web")
+                            Spacer()
+                            ignoreWeb
+                                .labelsHidden()
+                                .frame(width: widthValue)
+                        }
+                        .padding(paddingValue)
+                    }
                 }
-                .padding(paddingValue)
             }
         }
         .padding()
