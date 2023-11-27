@@ -6,9 +6,7 @@
         <attribute name="errorDesc" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="input" optional="YES" attributeType="String"/>
-        <attribute name="inputData" optional="YES" attributeType="Binary"/>
         <attribute name="reply" optional="YES" attributeType="String"/>
-        <attribute name="replyData" optional="YES" attributeType="Binary"/>
         <attribute name="role" optional="YES" attributeType="String"/>
         <relationship name="dialogue" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DialogueData" inverseName="conversations" inverseEntity="DialogueData"/>
     </entity>
