@@ -26,7 +26,7 @@ struct ServiceSettingsView: View {
     var macOS: some View {
         ScrollView {
             VStack(spacing: 30) {
-                GroupBox(label: Text("Provider Settings").bold()) {
+                GroupBox(label: Text("Provider Settings")) {
                     HStack {
                         Text("Default Model")
                         Spacer()
@@ -35,19 +35,7 @@ struct ServiceSettingsView: View {
                             .frame(width: widthValue)
                     }
                     .padding(paddingValue)
-                }
-
-                GroupBox(label: Text("API Settings").bold()) {
-                    HStack {
-                        Text("API Key")
-                        Spacer()
-
-                        apiKeyField
-                            .textFieldStyle(.roundedBorder)
-                            .frame(width: widthValue)
-                    }
-                    .padding(paddingValue)
-
+                    
                     if provider == .gpt4free {
                         Divider()
 
@@ -61,6 +49,32 @@ struct ServiceSettingsView: View {
                         .padding(paddingValue)
                     }
                 }
+
+                GroupBox(label: Text("API Settings")) {
+                    if provider == .custom {
+                        HStack {
+                            Text("Host URL")
+                            Spacer()
+
+                            hostUrl
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: widthValue)
+                        }
+                        .padding(paddingValue)
+                        
+                        Divider()
+                    }
+                    
+                    HStack {
+                        Text("API Key")
+                        Spacer()
+
+                        apiKeyField
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: widthValue)
+                    }
+                    .padding(paddingValue)
+                }
             }
         }
         .padding()
@@ -71,15 +85,15 @@ struct ServiceSettingsView: View {
             Section("Default Settings") {
                 modelPicker
 
-                if provider == .custom {
-                    hostUrl
-                }
-
                 if provider == .gpt4free {
                     ignoreWeb
                 }
             }
-            Section("API Key") {
+            Section("API Settings") {
+                if provider == .custom {
+                    hostUrl
+                }
+                
                 apiKeyField
             }
         }
