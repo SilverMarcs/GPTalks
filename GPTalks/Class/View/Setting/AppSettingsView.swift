@@ -57,6 +57,18 @@ struct AppSettingsView: View {
                         )
                     }
                 }
+                Section("App Icon") {
+                    NavigationLink(
+                        destination: AppIconView(),
+                        label: {
+                            HStack {
+                                Image(systemName: "app.fill")
+                                    .renderingMode(.original)
+                                Text("App Icon")
+                            }
+                        }
+                    )
+                }
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
