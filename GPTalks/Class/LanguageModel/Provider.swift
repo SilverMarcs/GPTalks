@@ -51,7 +51,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .gpt4free:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.Gkey,
-                host: "http://192.168.137.1:8080"
+                host: AppConfiguration.shared.Ghost
             )
         case .custom:
             return OpenAI.Configuration(

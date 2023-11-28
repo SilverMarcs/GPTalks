@@ -170,8 +170,8 @@ struct MessageListView: View {
                    }
                    #if os(iOS)
                    .background(
-                        Color.black
-                            .opacity(0.9)
+                    (colorScheme == .dark ? Color.black : Color.white)
+                        .opacity(colorScheme == .dark ? 0.9 : 0.8)
                             .background(.ultraThinMaterial)
                             .ignoresSafeArea()
                    )

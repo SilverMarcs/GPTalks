@@ -51,7 +51,7 @@ struct ServiceSettingsView: View {
                 }
 
                 GroupBox(label: Text("API Settings")) {
-                    if provider == .custom {
+                    if provider == .custom || provider == .gpt4free {
                         HStack {
                             Text("Host URL")
                             Spacer()
@@ -90,7 +90,7 @@ struct ServiceSettingsView: View {
                 }
             }
             Section("API Settings") {
-                if provider == .custom {
+                if provider == .custom || provider == .gpt4free {
                     hostUrl
                 }
                 
@@ -111,7 +111,7 @@ struct ServiceSettingsView: View {
 
     var hostUrl: some View {
         HStack {
-            TextField("Host URL (include https)", text: configuration.$Chost)
+            TextField("Host URL (include https)", text: provider == .custom ? configuration.$Chost : configuration.$Ghost)
         }
     }
 
@@ -125,9 +125,9 @@ struct ServiceSettingsView: View {
     var apiKeyField: some View {
         HStack {
             if showAPIKey {
-                TextField("", text: $apiKey)
+                TextField("API Key", text: $apiKey)
             } else {
-                SecureField("", text: $apiKey)
+                SecureField("API Key", text: $apiKey)
             }
             Button {
                 showAPIKey.toggle()

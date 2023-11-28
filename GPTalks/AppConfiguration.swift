@@ -44,6 +44,7 @@ class AppConfiguration: ObservableObject {
     /// gpt4free
     @AppStorage("configuration.Gkey") var Gkey = ""
     @AppStorage("configuration.Gmodel") var Gmodel: Model = .phind
+    @AppStorage("configuration.Ghost") var Ghost: String = ""
     
     /// custom
     @AppStorage("configuration.Ckey") var Ckey = ""
