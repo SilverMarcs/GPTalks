@@ -1,8 +1,8 @@
-# GPTMessage
+# GPTalks
 
 A SwiftUI multi-platform app to interact with OpenAI Chat Completions api along with some other providers
 
-# Sreenshots
+# Screenshots
 
 ## MacOS
 <img width="1262" alt="Screenshot 2023-11-28 at 12 09 07 AM" src="https://github.com/SilverMarcs/GPTalks/assets/77480421/81216934-52ce-4555-bd44-81a3d3d2f0f6">
