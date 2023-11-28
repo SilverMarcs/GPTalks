@@ -27,7 +27,7 @@ struct MacOSSettingsView: View {
                 .tabItem {
                     Label("Providers", systemImage: "brain.head.profile")
                 }
-                .frame(minHeight: 400)
+                .frame(minHeight: 350)
         }
         .frame(width: 650)
     }

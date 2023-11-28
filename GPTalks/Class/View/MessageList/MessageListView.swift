@@ -21,7 +21,7 @@ struct MessageListView: View {
             .background(.background)
             .alert("Delete all messages?", isPresented: $isShowDeleteWarning) {
                 Button("Cancel", role: .cancel, action: {})
-                Button("Confirm", role: .destructive, action: {
+                Button("Confirm", role: .none, action: {
                     session.resetErrorDesc()
                     session.removeAllConversations()
                 })
