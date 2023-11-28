@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(iOS)
 struct AppIconView: View {
     @State private var selectedIconName: String = "AppIcon3" // Default selected icon
     
@@ -71,3 +72,4 @@ struct SelectableRow: View {
 #Preview {
     AppIconView()
 }
+#endif
