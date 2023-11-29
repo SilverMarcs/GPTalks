@@ -155,8 +155,19 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         await send(text: lastConversation.content, isRetry: true)
     }
     
+    var backgroundTask: UIBackgroundTaskIdentifier = .invalid
+    
+    func endStreamingTask() {
+        if backgroundTask != .invalid {
+            UIApplication.shared.endBackgroundTask(backgroundTask)
+            backgroundTask = .invalid
+        }
+    }
+    
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
+
+        
         if isReplying() {
             return
         }
@@ -187,11 +198,20 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             query.ignore_web = AppConfiguration.shared.ignoreWeb
         }
         
+        // Start the background task when the streaming task starts
+            backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "MyStreamingTask") {
+                // This block is called when the background time is about to expire
+                // End the task if it's still running
+                self.endStreamingTask()
+            }
+        
         streamingTask = Task {
             for try await result in service.chatsStream(query: query) {
                 streamText += result.choices.first?.delta.content ?? ""
                 conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
             }
+            
+            endStreamingTask()
         }
         
         do {
