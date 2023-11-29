@@ -77,18 +77,20 @@ struct BottomInputView: View {
 
     @ViewBuilder
     private var sendButton: some View {
+        let empty = session.input.isEmpty
+        
         Button {
             send(session.input)
         } label: {
-            Image(systemName: "arrow.up.circle.fill")
+            Image(systemName: empty ? "arrow.up.circle" : "arrow.up.circle.fill")
                 .resizable()
                 .scaledToFit()
-                .disabled(session.input.isEmpty)
-                .foregroundColor(session.input.isEmpty ? Color(.darkGray) : session.configuration.provider.accentColor)
+                .disabled(empty)
+                .foregroundColor(empty ? .secondary : session.configuration.provider.accentColor)
                 .frame(width: imageSize, height: imageSize)
         }
         .keyboardShortcut(.return, modifiers: .command)
-        .foregroundColor(session.isReplying() || session.input.isEmpty ? placeHolderTextColor : .secondary)
+        .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
         .buttonStyle(.borderless)
         .disabled(session.input.isEmpty || session.isReplying())
     }
