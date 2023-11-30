@@ -89,7 +89,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         if errorDesc != "" {
             return errorDesc
         }
-        return conversations.last?.content ?? ""
+        return conversations.last?.content ?? "Start a new conversation"
     }
     
     var lastConversation: Conversation {
@@ -147,7 +147,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     func regenerate(from index: Int) async {
         if conversations[index].role != "user" {
            removeConversations(from: index)
-        } 
+        }
         await send(text: lastConversation.content, isRegen: true)
     }
     
