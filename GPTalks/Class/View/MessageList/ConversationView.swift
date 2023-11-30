@@ -75,7 +75,7 @@ struct ConversationView: View {
             editControls()
         }
         .padding()
-        .frame(minWidth: 550, maxWidth: 800, minHeight: 200, maxHeight: 600)
+        .frame(minWidth: 400, idealWidth: 550, maxWidth: 800, minHeight: 200, idealHeight: 400, maxHeight: 600)
         #else
         NavigationView {
             Form {

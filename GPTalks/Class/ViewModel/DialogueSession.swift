@@ -181,8 +181,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             appendConversation(Conversation(role: "user", content: text))
         }
         
-        let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
-        
         let openAIconfig = configuration.provider.config
         let service: OpenAI = OpenAI(configuration: openAIconfig)
         
@@ -202,12 +200,14 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         
         #if os(iOS)
         // Start the background task when the streaming task starts
-            backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "MyStreamingTask") {
-                // This block is called when the background time is about to expire
-                // End the task if it's still running
-                self.endStreamingTask()
-            }
+        backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "MyStreamingTask") {
+            // This block is called when the background time is about to expire
+            // End the task if it's still running
+            self.endStreamingTask()
+        }
         #endif
+        
+        let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         
         streamingTask = Task {
             for try await result in service.chatsStream(query: query) {
