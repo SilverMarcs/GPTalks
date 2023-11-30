@@ -154,7 +154,7 @@ struct DialogueSettingsView: View {
     }
     
     var providerPicker: some View {
-        Picker("Provider", selection: AppConfiguration.shared.$Gprovider) {
+        Picker("Provider", selection: $configuration.gpt4freeProvider) {
             ForEach(GPT4FreeProvider.allCases, id: \.self) { provider in
                 Text(provider.name)
                     .tag(provider.rawValue)
