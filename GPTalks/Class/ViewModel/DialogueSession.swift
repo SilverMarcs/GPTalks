@@ -100,8 +100,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         return lastConversation.content
     }
     
-//    var lastConversationData: ConversationData?
-    
     var streamingTask: Task<Void, Error>?
     
     
@@ -116,6 +114,11 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     //MARK: - Message Actions
     @MainActor
     func stopStreaming() {
+        if let lastConcersationContent = lastConcersationContent {
+            if lastConcersationContent.isEmpty {
+                removeConversation(at: conversations.count - 1)
+            }
+        }
         streamingTask?.cancel()
         streamingTask = nil
     }
@@ -142,7 +145,9 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     
     @MainActor
     func regenerate(from index: Int) async {
-        removeConversations(from: index)
+        if conversations[index].role != "user" {
+           removeConversations(from: index)
+        } 
         await send(text: lastConversation.content, isRegen: true)
     }
     
