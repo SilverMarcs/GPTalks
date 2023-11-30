@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DialogueSettingsView: View {
     @Binding var configuration: DialogueSession.Configuration
-    var title: String
+    var provider: Provider
 
     @FocusState private var focusedField: FocusedField?
 
@@ -30,56 +30,88 @@ struct DialogueSettingsView: View {
 
     var macOS: some View {
             VStack {
-
                 HStack {
                     Text("Model")
                         .fixedSize()
                     Spacer()
-                    Picker("", selection: $configuration.model) {
-                        ForEach(configuration.provider.models, id: \.self) { model in
-                            Text(model.name)
-                                .tag(model.id)
-                        }
+//                    Picker("", selection: $configuration.model) {
+//                        ForEach(configuration.provider.models, id: \.self) { model in
+//                            Text(model.name)
+//                                .tag(model.id)
+//                        }
+//                    }
+                    modelPicker
+                        .labelsHidden()
+                        .frame(width: width)
+                }
+                
+                if provider == .gpt4free {
+                    HStack {
+                        Text("Provider")
+                            .fixedSize()
+                        Spacer()
+//                        Picker("", selection: $configuration.model) {
+//                            ForEach(configuration.provider.models, id: \.self) { model in
+//                                Text(model.name)
+//                                    .tag(model.id)
+//                            }
+//                        }
+                        providerPicker
+                            .labelsHidden()
+                            .frame(width: width)
                     }
-                    .frame(width: width)
+                    
+                    HStack {
+                        Text("Ignore Web")
+                            .fixedSize()
+                        Spacer()
+                        ignoreWeb
+                            .labelsHidden()
+                            .frame(width: width)
+                    }
+                    
                 }
 
                 HStack {
                     Text("Context")
                         .fixedSize()
                     Spacer()
-                    Picker("", selection: $configuration.contextLength) {
-                        ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
-                            Text("Last \(number) Messages")
-                                .tag(number)
-                        }
-                    }
-                    .frame(width: width)
+//                    Picker("", selection: $configuration.contextLength) {
+//                        ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
+//                            Text("Last \(number) Messages")
+//                                .tag(number)
+//                        }
+//                    }
+                    contextPicker
+                        .labelsHidden()
+                        .frame(width: width)
                 }
 
-                Stepper(value: $configuration.temperature, in: 0 ... 2, step: 0.1) {
-                    HStack {
-                        Text("Temperature")
-                        Spacer()
-                        Text(String(format: "%.1f", configuration.temperature))
-                            .padding(.horizontal)
-                            .cornerRadius(6)
-                    }
-                }
+//                Stepper(value: $configuration.temperature, in: 0 ... 2, step: 0.1) {
+//                    HStack {
+//                        Text("Temperature")
+//                        Spacer()
+//                        Text(String(format: "%.1f", configuration.temperature))
+//                            .padding(.horizontal)
+//                            .cornerRadius(6)
+//                    }
+//                }
                 
-                TextField("Enter a system prompt", text: $configuration.systemPrompt, axis: .vertical)
-                    .focused($focusedField, equals: .systemPrompt)
-                    .lineLimit(4, reservesSpace: true)
+                tempStepper
+                
+//                TextField("Enter a system prompt", text: $configuration.systemPrompt, axis: .vertical)
+//                    .focused($focusedField, equals: .systemPrompt)
+//                    .lineLimit(4, reservesSpace: true)
+                systemPrompt
         
             }
             .padding()
-            .frame(width: 300, height: 200)
+            .frame(width: 300, height: 230)
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.focusedField = nil
                 }
             }
-    
     }
 
     #if os(iOS)
@@ -88,6 +120,8 @@ struct DialogueSettingsView: View {
             Form {
                 Section("Parameters") {
                     modelPicker
+                    providerPicker
+                    ignoreWeb
                     contextPicker
                     tempStepper
                 }
@@ -95,7 +129,7 @@ struct DialogueSettingsView: View {
                     systemPrompt
                 }
             }
-            .navigationTitle(title)
+            .navigationTitle(provider.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem {
@@ -116,6 +150,22 @@ struct DialogueSettingsView: View {
                 Text(model.name)
                     .tag(model.id)
             }
+        }
+    }
+    
+    var providerPicker: some View {
+        Picker("Provider", selection: AppConfiguration.shared.$Gprovider) {
+            ForEach(GPT4FreeProvider.allCases, id: \.self) { provider in
+                Text(provider.name)
+                    .tag(provider.rawValue)
+            }
+        }
+    }
+    
+    var ignoreWeb: some View {
+        Picker("Ignore Web", selection: $configuration.ignoreWeb) {
+            Text("True").tag("True")
+            Text("False").tag("False")
         }
     }
     

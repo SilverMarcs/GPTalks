@@ -91,7 +91,7 @@ struct BottomInputView: View {
         }
         .keyboardShortcut(.return, modifiers: .command)
         .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
-        .buttonStyle(.borderless)
+        .buttonStyle(.plain)
         .disabled(session.input.isEmpty || session.isReplying())
     }
 

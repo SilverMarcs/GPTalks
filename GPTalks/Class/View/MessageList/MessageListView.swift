@@ -36,7 +36,7 @@ struct MessageListView: View {
 #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $isShowSettingsView) {
-                DialogueSettingsView(configuration: $session.configuration, title: session.title)
+                DialogueSettingsView(configuration: $session.configuration, provider: session.configuration.provider)
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -69,7 +69,7 @@ struct MessageListView: View {
                         Image(systemName:"slider.vertical.3")
                     }
                     .popover(isPresented: $isShowSettingsView) {
-                        DialogueSettingsView(configuration: $session.configuration, title: session.title)
+                        DialogueSettingsView(configuration: $session.configuration, provider: session.configuration.provider)
                     }
                 }
                 

@@ -38,7 +38,18 @@ struct ServiceSettingsView: View {
                     
                     if provider == .gpt4free {
                         Divider()
+                        
+                        HStack {
+                            Text("Default Provider")
+                            Spacer()
+                            providerPicker
+                                .labelsHidden()
+                                .frame(width: widthValue)
+                        }
+                        .padding(paddingValue)
 
+                        Divider()
+                        
                         HStack {
                             Text("Ignore Web")
                             Spacer()
@@ -86,6 +97,7 @@ struct ServiceSettingsView: View {
                 modelPicker
 
                 if provider == .gpt4free {
+                    providerPicker
                     ignoreWeb
                 }
             }
@@ -105,6 +117,15 @@ struct ServiceSettingsView: View {
             ForEach(provider.models, id: \.self) { model in
                 Text(model.name)
                     .tag(model.rawValue)
+            }
+        }
+    }
+    
+    var providerPicker: some View {
+        Picker("Provider", selection: configuration.$Gprovider) {
+            ForEach(GPT4FreeProvider.allCases, id: \.self) { provider in
+                Text(provider.name)
+                    .tag(provider.rawValue)
             }
         }
     }
@@ -141,6 +162,7 @@ struct ServiceSettingsView: View {
             .buttonStyle(.borderless)
         }
     }
+    
 
     var paddingValue: CGFloat {
         #if os(macOS)

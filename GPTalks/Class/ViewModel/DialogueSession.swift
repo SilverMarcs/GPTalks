@@ -16,7 +16,8 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         var contextLength: Int
         var provider: Provider
         var model: Model
-        var ignore_web: String
+        var ignoreWeb: String
+        var gpt4freeProvider: GPT4FreeProvider
         
         init() {
             provider = AppConfiguration.shared.preferredChatService
@@ -24,7 +25,8 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             temperature = AppConfiguration.shared.temperature
             systemPrompt = AppConfiguration.shared.systemPrompt
             model = provider.preferredModel
-            ignore_web = AppConfiguration.shared.ignoreWeb
+            ignoreWeb = AppConfiguration.shared.ignoreWeb
+            gpt4freeProvider = AppConfiguration.shared.Gprovider
         }
         
     }
@@ -193,9 +195,11 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                               stream: true)
         
         if configuration.provider == .gpt4free {
-            query.model = .gpt4
-            query.provider = configuration.model.id
-            query.ignore_web = AppConfiguration.shared.ignoreWeb
+            query.model = configuration.model.id
+//            query.provider = AppConfiguration.shared.Gprovider.name
+//            query.ignore_web = AppConfiguration.shared.ignoreWeb
+            query.provider = configuration.gpt4freeProvider.name
+            query.ignore_web = configuration.ignoreWeb
         }
         
         #if os(iOS)
