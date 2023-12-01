@@ -80,6 +80,7 @@ struct ConversationView: View {
         NavigationView {
             Form {
                 TextField("Editing Message", text: $editingMessage, axis: .vertical)
+                    .focused($isFocused)
             }
             .navigationBarTitle("Editing Message")
             .navigationBarTitleDisplayMode(.inline)
@@ -88,7 +89,7 @@ struct ConversationView: View {
                     Button("Cancel", role: .cancel) {
                         isEditing = false
                     }
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
