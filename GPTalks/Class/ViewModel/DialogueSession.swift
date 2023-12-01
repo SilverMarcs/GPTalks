@@ -162,17 +162,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         await send(text: lastConversation.content, isRetry: true)
     }
     
-    #if os(iOS)
-    var backgroundTask: UIBackgroundTaskIdentifier = .invalid
-    
-    func endStreamingTask() {
-        if backgroundTask != .invalid {
-            UIApplication.shared.endBackgroundTask(backgroundTask)
-            backgroundTask = .invalid
-        }
-    }
-    #endif
-    
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
 
@@ -184,7 +173,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         
         var streamText = ""
         
-        if !isRegen && !isRetry{
+        if !isRegen && !isRetry {
             appendConversation(Conversation(role: "user", content: text))
         }
         
@@ -201,31 +190,17 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         
         if configuration.provider == .gpt4free {
             query.model = configuration.model.id
-//            query.provider = AppConfiguration.shared.Gprovider.name
-//            query.ignore_web = AppConfiguration.shared.ignoreWeb
             query.provider = configuration.gpt4freeProvider.name
             query.ignore_web = configuration.ignoreWeb
         }
         
-        #if os(iOS)
-        // Start the background task when the streaming task starts
-        backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "MyStreamingTask") {
-            // This block is called when the background time is about to expire
-            // End the task if it's still running
-            self.endStreamingTask()
-        }
-        #endif
-        
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         
         streamingTask = Task {
-            for try await result in service.chatsStream(query: query) {
+            for try await result in service.chatsStream(query: query, isPerplexity: configuration.provider == .perplexity ? true : false) {
                 streamText += result.choices.first?.delta.content ?? ""
                 conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
             }
-#if os(iOS)
-            endStreamingTask()
-#endif
         }
         
         do {

@@ -79,6 +79,7 @@ struct MessageListView: View {
                     } label: {
                         Image(systemName:"trash")
                     }
+                    .opacity(0)
                     .keyboardShortcut(.delete, modifiers: [.command])
                 }
             }
