@@ -113,6 +113,8 @@ struct MessageListView: View {
                                }
                            } deleteHandler: {
                                session.removeConversation(conversation)
+                           } saveHandler: {
+                               session.saveConversation(index: index)
                            }
                            .onAppear {
                                scrollToBottom(proxy: proxy)

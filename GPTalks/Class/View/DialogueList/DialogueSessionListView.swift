@@ -9,13 +9,13 @@ import SwiftUI
 
 struct DialogueSessionListView: View {
     @State private var searchQuery = ""
-#if os(iOS)
-    @State var isShowSettingView = false
-#endif
+    #if os(iOS)
+        @State var isShowSettingView = false
+    #endif
 
     @Binding var dialogueSessions: [DialogueSession]
     @Binding var selectedDialogueSession: DialogueSession?
-    
+
     var deleteDialogue: (DialogueSession) -> Void
     var addDialogue: () -> Void
 
@@ -32,25 +32,29 @@ struct DialogueSessionListView: View {
             return filteredSessions
         }
     }
-    
+
     var body: some View {
-        VStack {
+        Group {
             if dialogueSessions.isEmpty {
                 placeHolder
             } else {
-                list
+                dialoguelist
+                    .safeAreaInset(edge: .bottom) {
+                        savedlistItem
+                    }
+                    .safeAreaPadding(.bottom, 8)
             }
         }
         .toolbar {
-#if os(iOS)
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    isShowSettingView = true
-                } label: {
-                    Image(systemName: "gear")
+            #if os(iOS)
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        isShowSettingView = true
+                    } label: {
+                        Image(systemName: "gear")
+                    }
                 }
-            }
-#endif
+            #endif
             ToolbarItem {
                 Spacer()
             }
@@ -63,27 +67,52 @@ struct DialogueSessionListView: View {
             }
         }
         .searchable(text: $searchQuery)
-#if os(macOS)
-        .frame(minWidth: 290)
-#else
-        .listStyle(.plain)
-        .navigationTitle("Chats")
-        .navigationBarTitleDisplayMode(.large)
-        .sheet(isPresented: $isShowSettingView) {
-            AppSettingsView()
-        }
-#endif
+        #if os(macOS)
+            .frame(minWidth: 290)
+        #else
+            .listStyle(.plain)
+            .navigationTitle("Chats")
+            .navigationBarTitleDisplayMode(.large)
+            .sheet(isPresented: $isShowSettingView) {
+                AppSettingsView()
+            }
+        #endif
     }
-    
+
     @ViewBuilder
-    var list: some View {
+    var dialoguelist: some View {
         List(filteredDialogueSessions, selection: $selectedDialogueSession) { session in
             NavigationLink(value: session) {
                 DialogueListItem(session: session, deleteDialogue: deleteDialogue)
             }
         }
     }
-    
+
+    @State var isSelected = false
+
+    var savedlistItem: some View {
+        NavigationLink(
+            destination: SavedConversationList(dialogueSessions: $dialogueSessions),
+            isActive: $isSelected,
+            label: {
+                HStack {
+                    Image(systemName: isSelected ? "bookmark.fill" : "bookmark")
+                    Text("Bookmarked Conversations")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                }
+                .padding(7)
+            }
+        )
+        .background(
+            RoundedRectangle(cornerRadius: 5)
+                .fill(isSelected ? .secondary.opacity(0.25) : Color.clear)
+        )
+        .buttonStyle(.borderless)
+        .foregroundStyle(.primary)
+        .padding(.horizontal, 11)
+    }
+
     @ViewBuilder
     var placeHolder: some View {
         if dialogueSessions.isEmpty {
@@ -101,6 +130,3 @@ struct DialogueSessionListView: View {
         }
     }
 }
-
-
-

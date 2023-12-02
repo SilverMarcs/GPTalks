@@ -14,6 +14,7 @@ struct Conversation: Codable, Identifiable, Hashable {
     var role: String
     var content: String
     var isReplying: Bool = false
+    var saved: Bool = false
     
     func toChat() -> Chat {
         let chatRole: Chat.Role = {
@@ -40,6 +41,7 @@ extension ConversationData {
         date = conversation.date
         role = conversation.role
         content = conversation.content
+        saved = conversation.saved
         do {
             try PersistenceController.shared.save()
         } catch let error {

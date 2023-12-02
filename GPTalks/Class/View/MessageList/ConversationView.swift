@@ -14,6 +14,7 @@ struct ConversationView: View {
     let regenHandler: (Conversation) -> Void
     let editHandler: (Conversation) -> Void
     let deleteHandler: (() -> Void)
+    let saveHandler: (() -> Void)
 
     @State var isEditing: Bool = false
     @FocusState var isFocused: Bool
@@ -217,13 +218,23 @@ struct ConversationView: View {
                 }
             }
             
-            Button(role: .destructive) {
-                deleteHandler()
-            } label: {
-                Image(systemName: "eraser")
-                if showText {
+            Menu {
+                Button(role: .destructive) {
+                    deleteHandler()
+                } label: {
+                    Image(systemName: "eraser")
                     Text("Delete")
                 }
+                
+                Button {
+                    saveHandler()
+                } label: {
+                    Image(systemName: conversation.saved ? "bookmark.fill" : "bookmark")
+                    Text("Bookmark")
+                }
+            } label: {
+                Label("Options", systemImage: "ellipsis.circle")
+                    .labelStyle(.iconOnly)
             }
         }
     }

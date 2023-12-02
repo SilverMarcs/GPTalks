@@ -200,13 +200,14 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             for try await result in service.chatsStream(query: query) {
                 streamText += result.choices.first?.delta.content ?? ""
                 conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                lastConversationData.sync(with: conversations[conversations.count - 1])
             }
         }
         
         do {
             try await streamingTask?.value
             
-            lastConversationData.sync(with: conversations[conversations.count - 1])
+//            lastConversationData.sync(with: conversations[conversations.count - 1])
             
         } catch {
             // TODO: do better with stop_reason from openai
@@ -260,7 +261,8 @@ extension DialogueSession {
                     id: id,
                     date: date,
                     role: role,
-                    content: content
+                    content: content,
+                    saved: data.saved
                 )
                 return conversation
             } else {
@@ -295,6 +297,28 @@ extension DialogueSession {
         }
         
         return data
+    }
+    
+    func saveConversation(index: Int) {
+        guard index < conversations.count else {
+            print("Index out of range")
+            return
+        }
+        
+        self.conversations[index].saved.toggle()
+        
+        let conversation = conversations[index]
+        
+        if let conversationsSet = rawData?.conversations as? Set<ConversationData>,
+           let conversationData = conversationsSet.first(where: { $0.id == conversation.id }) {
+            conversationData.saved = conversation.saved
+            
+            do {
+                try PersistenceController.shared.save()
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
     }
     
     func removeConversation(at index: Int) {
