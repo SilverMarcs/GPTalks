@@ -64,6 +64,7 @@ struct ConversationView: View {
         VStack(spacing: 15) {
             TextEditor(text: $editingMessage)
                 .padding(10)
+                .font(.body)
                 .background(.background.secondary)
                 .scrollContentBackground(.hidden)
                 .overlay(

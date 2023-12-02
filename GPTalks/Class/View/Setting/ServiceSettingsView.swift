@@ -24,7 +24,7 @@ struct ServiceSettingsView: View {
     }
 
     var macOS: some View {
-        ScrollView {
+//        ScrollView {
             VStack(spacing: 30) {
                 GroupBox(label: Text("Provider Settings")) {
                     HStack {
@@ -86,8 +86,10 @@ struct ServiceSettingsView: View {
                     }
                     .padding(paddingValue)
                 }
+                
+                Spacer()
             }
-        }
+//        }
         .padding()
     }
 
@@ -132,7 +134,7 @@ struct ServiceSettingsView: View {
 
     var hostUrl: some View {
         HStack {
-            TextField("Host URL (include https)", text: provider == .custom ? configuration.$Chost : configuration.$Ghost)
+            TextField("Host URL (omit https and /v1/*/*)", text: provider == .custom ? configuration.$Chost : configuration.$Ghost)
         }
     }
 

@@ -19,44 +19,74 @@ struct DefaultConfigView: View {
     }
 
     var macOS: some View {
-        ScrollView {
-            GroupBox(label: Text("Default Settings").font(.headline).padding(.bottom, 5)) {
+        VStack(spacing: 20) {
+            GroupBox(label: Text("Config")) {
                 VStack {
                     HStack {
-                        Text("Context Length")
+                        Text("Markdown Enabled")
                         Spacer()
-                        contextPicker
-                            .labelsHidden()
-                            .frame(width: widthValue)
+                        Picker("Markdown Enabled", selection: configuration.$isMarkdownEnabled) {
+                            Text("True").tag(true)
+                            Text("False").tag(false)
+                        }
+                        .labelsHidden()
+                        .frame(width: widthValue)
                     }
                     .padding(paddingValue)
-                    
+
                     Divider()
-                    
+
                     HStack {
-                        Text("Temperature")
+                        Text("Preferred Provider")
                         Spacer()
-                        tempSlider
-                            .frame(width: widthValue)
-                    }
-                    .padding(paddingValue)
-                    
-                    Divider()
-                    
-                    HStack {
-                        Text("System prompt")
-                        Spacer()
-                        systemPrompt
-                            .textFieldStyle(.roundedBorder)
-                            .frame(width: widthValue)
+                        Picker("Preferred Provider", selection: configuration.$preferredChatService) {
+                            ForEach(Provider.allCases, id: \.self) { provider in
+                                Text(provider.name)
+                            }
+                        }
+                        .labelsHidden()
+                        .frame(width: widthValue)
                     }
                     .padding(paddingValue)
                 }
             }
+
+            GroupBox(label: Text("Parameters")) {
+                HStack {
+                    Text("Context Length")
+                    Spacer()
+                    contextPicker
+                        .labelsHidden()
+                        .frame(width: widthValue)
+                }
+                .padding(paddingValue)
+
+                Divider()
+
+                HStack {
+                    Text("Temperature")
+                    Spacer()
+                    tempSlider
+                        .frame(width: widthValue)
+                }
+                .padding(paddingValue)
+
+                Divider()
+
+                HStack {
+                    Text("System prompt")
+                    Spacer()
+                    systemPrompt
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: widthValue)
+                }
+                .padding(paddingValue)
+            }
+            Spacer()
         }
         .padding()
     }
-    
+
     var iOS: some View {
         NavigationView {
             Form {
@@ -71,7 +101,7 @@ struct DefaultConfigView: View {
             }
         }
     }
-    
+
     var contextPicker: some View {
         Picker("Context Length", selection: configuration.$contextLength) {
             ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
@@ -80,7 +110,7 @@ struct DefaultConfigView: View {
             }
         }
     }
-    
+
     var tempSlider: some View {
         HStack(spacing: 15) {
             Slider(value: configuration.$temperature, in: 0 ... 2, step: 0.1) {
@@ -92,7 +122,6 @@ struct DefaultConfigView: View {
             Text(String(format: "%.2f", configuration.temperature))
         }
     }
-    
 
     var systemPrompt: some View {
         TextField("Enter a system prompt", text: configuration.$systemPrompt, axis: .vertical)
