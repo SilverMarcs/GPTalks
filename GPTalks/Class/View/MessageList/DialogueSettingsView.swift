@@ -30,80 +30,15 @@ struct DialogueSettingsView: View {
 
     var macOS: some View {
             VStack {
-                HStack {
-                    Text("Model")
-                        .fixedSize()
-                    Spacer()
-//                    Picker("", selection: $configuration.model) {
-//                        ForEach(configuration.provider.models, id: \.self) { model in
-//                            Text(model.name)
-//                                .tag(model.id)
-//                        }
-//                    }
-                    modelPicker
-                        .labelsHidden()
-                        .frame(width: width)
-                }
+                LabeledPicker(title: "Provider", picker: _providerPicker)
                 
-                if provider == .gpt4free {
-                    HStack {
-                        Text("Provider")
-                            .fixedSize()
-                        Spacer()
-//                        Picker("", selection: $configuration.model) {
-//                            ForEach(configuration.provider.models, id: \.self) { model in
-//                                Text(model.name)
-//                                    .tag(model.id)
-//                            }
-//                        }
-                        providerPicker
-                            .labelsHidden()
-                            .frame(width: width)
-                    }
-                    
-                    HStack {
-                        Text("Ignore Web")
-                            .fixedSize()
-                        Spacer()
-                        ignoreWeb
-                            .labelsHidden()
-                            .frame(width: width)
-                    }
-                    
-                }
+                LabeledPicker(title: "Model", picker: modelPicker)
 
-                HStack {
-                    Text("Context")
-                        .fixedSize()
-                    Spacer()
-//                    Picker("", selection: $configuration.contextLength) {
-//                        ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
-//                            Text("Last \(number) Messages")
-//                                .tag(number)
-//                        }
-//                    }
-                    contextPicker
-                        .labelsHidden()
-                        .frame(width: width)
-                }
-
-//                Stepper(value: $configuration.temperature, in: 0 ... 2, step: 0.1) {
-//                    HStack {
-//                        Text("Temperature")
-//                        Spacer()
-//                        Text(String(format: "%.1f", configuration.temperature))
-//                            .padding(.horizontal)
-//                            .cornerRadius(6)
-//                    }
-//                }
-                
+                LabeledPicker(title: "Context", picker: contextPicker)
+    
                 tempStepper
                 
-//                TextField("Enter a system prompt", text: $configuration.systemPrompt, axis: .vertical)
-//                    .focused($focusedField, equals: .systemPrompt)
-//                    .lineLimit(4, reservesSpace: true)
                 systemPrompt
-        
             }
             .padding()
             .frame(width: 300, height: 230)
@@ -143,6 +78,15 @@ struct DialogueSettingsView: View {
         }
     }
     #endif
+    
+    var _providerPicker: some View {
+        Picker("Model", selection: $configuration.provider) {
+            ForEach(Provider.allCases, id: \.self) { provider in
+                Text(provider.name)
+                    .tag(provider.id)
+            }
+        }
+    }
     
     var modelPicker: some View {
         Picker("Model", selection: $configuration.model) {
