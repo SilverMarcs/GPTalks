@@ -38,11 +38,21 @@ struct DialogueSessionListView: View {
             if dialogueSessions.isEmpty {
                 placeHolder
             } else {
+                #if os(macOS)
                 dialoguelist
                     .safeAreaInset(edge: .bottom) {
                         savedlistItem
                     }
                     .safeAreaPadding(.bottom, 8)
+                #else
+                VStack {
+                    if !filteredDialogueSessions.isEmpty {
+                        savedlistItem
+                    }
+                    Divider()
+                    dialoguelist
+                }
+                #endif
             }
         }
         .toolbar {

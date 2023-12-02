@@ -47,8 +47,10 @@ struct ConversationView: View {
         HStack(alignment: .lastTextBaseline, spacing: 0) {
             Spacer()
             
+            #if os(macOS)
             optionsMenu
                 .padding(.trailing, 5)
+            #endif
             
             Text(conversation.content)
                 .textSelection(.enabled)
@@ -153,10 +155,13 @@ struct ConversationView: View {
             }
             .bubbleStyle(isMyMessage: false)
             
+            #if os(macOS)
             if !conversation.isReplying {
                 optionsMenu
                     .padding(.leading, 5)
             }
+            #endif
+            
             Spacer()
         }
         .padding(.leading, 15)
@@ -218,7 +223,15 @@ struct ConversationView: View {
                 }
             }
             
+            #if os(macOS)
             Menu {
+                Button {
+                    saveHandler()
+                } label: {
+                    Image(systemName: conversation.saved ? "bookmark.fill" : "bookmark")
+                    Text("Bookmark")
+                }
+                
                 Button(role: .destructive) {
                     deleteHandler()
                 } label: {
@@ -226,22 +239,31 @@ struct ConversationView: View {
                     Text("Delete")
                 }
                 
-                Button {
-                    saveHandler()
-                } label: {
-                    Image(systemName: conversation.saved ? "bookmark.fill" : "bookmark")
-                    Text("Bookmark")
-                }
             } label: {
                 Label("Options", systemImage: "ellipsis.circle")
                     .labelStyle(.iconOnly)
             }
+            #else
+            Button {
+                saveHandler()
+            } label: {
+                Image(systemName: conversation.saved ? "bookmark.fill" : "bookmark")
+                Text("Bookmark")
+            }
+            
+            Button(role: .destructive) {
+                deleteHandler()
+            } label: {
+                Image(systemName: "eraser")
+                Text("Delete")
+            }
+            #endif
         }
     }
 
     private var horizontalPadding: CGFloat {
         #if os(iOS)
-        30
+        60
         #else
         80
         #endif
