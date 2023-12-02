@@ -165,7 +165,7 @@ struct ConversationView: View {
 
     var optionsMenu: some View {
         Group {
-            if conversation.content.count > 300 {
+            if conversation.content.count > 350 {
                 VStack(spacing: 10) {
                     contextMenu(showText: false)
                         .buttonStyle(.plain)
@@ -184,45 +184,46 @@ struct ConversationView: View {
 
     @ViewBuilder
     func contextMenu(showText: Bool) -> some View {
-        if conversation.role == "assistant" {
-            Button {
-                regenHandler(conversation)
-            } label: {
-                Image(systemName: "arrow.clockwise")
-                if showText {
-                    Text("Regenerate")
+        Group {
+            if conversation.role == "assistant" {
+                Button {
+                    regenHandler(conversation)
+                } label: {
+                    Image(systemName: "arrow.clockwise")
+                    if showText {
+                        Text("Regenerate")
+                    }
                 }
             }
-        }
-        if conversation.role == "user" {
-            Button {
-                editingMessage = conversation.content
-                isEditing = true
-                isFocused = true
-            } label: {
-                Image(systemName: "pencil")
-                if showText {
-                    Text("Edit")
+            if conversation.role == "user" {
+                Button {
+                    editingMessage = conversation.content
+                    isEditing = true
+                    isFocused = true
+                } label: {
+                    Image(systemName: "pencil")
+                    if showText {
+                        Text("Edit")
+                    }
                 }
             }
-        }
-        
-        Button {
-            conversation.content.copyToPasteboard()
-        } label: {
-            Image(systemName: "doc")
-            if showText {
-                Text("Copy")
+            
+            Button {
+                conversation.content.copyToPasteboard()
+            } label: {
+                Image(systemName: "doc")
+                if showText {
+                    Text("Copy")
+                }
             }
-        }
-        
-        Button(role: .destructive) {
-            deleteHandler()
-        } label: {
-            Image(systemName: "eraser")
-                .foregroundStyle(.red)
-            if showText {
-                Text("Delete")
+            
+            Button(role: .destructive) {
+                deleteHandler()
+            } label: {
+                Image(systemName: "eraser")
+                if showText {
+                    Text("Delete")
+                }
             }
         }
     }
@@ -231,7 +232,7 @@ struct ConversationView: View {
         #if os(iOS)
         30
         #else
-        75
+        80
         #endif
     }
 }
