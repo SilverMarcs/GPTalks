@@ -69,6 +69,7 @@ struct ProviderSettingsView: View {
                     label: { provider.label }
                 )
             }
+            .listStyle(.sidebar)
         }
     }
 }

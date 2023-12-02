@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "openai",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/OpenAI",
+      "state" : {
+        "branch" : "main",
+        "revision" : "9c358a4afd6b32f39511bf76eddb99b77588ad45"
+      }
+    },
+    {
       "identity" : "splash",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/JohnSundell/Splash",
