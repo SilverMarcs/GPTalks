@@ -235,7 +235,7 @@ struct ConversationView: View {
                 Button(role: .destructive) {
                     deleteHandler()
                 } label: {
-                    Image(systemName: "eraser")
+                    Image(systemName: "trash")
                     Text("Delete")
                 }
                 
@@ -254,7 +254,7 @@ struct ConversationView: View {
             Button(role: .destructive) {
                 deleteHandler()
             } label: {
-                Image(systemName: "eraser")
+                Image(systemName: "trash")
                 Text("Delete")
             }
             #endif
