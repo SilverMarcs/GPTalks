@@ -22,43 +22,18 @@ struct DefaultConfigView: View {
         VStack(spacing: 20) {
             GroupBox(label: Text("Config")) {
                 VStack {
-                    HStack {
-                        Text("Markdown Enabled")
-                        Spacer()
-                        Picker("Markdown Enabled", selection: configuration.$isMarkdownEnabled) {
-                            Text("True").tag(true)
-                            Text("False").tag(false)
-                        }
-                        .labelsHidden()
-                        .frame(width: widthValue)
-                    }
+                    LabeledPicker(title: "Markdown Enabled", width: widthValue, picker: markdownEnabler)
                     .padding(paddingValue)
 
                     Divider()
-
-                    HStack {
-                        Text("Preferred Provider")
-                        Spacer()
-                        Picker("Preferred Provider", selection: configuration.$preferredChatService) {
-                            ForEach(Provider.allCases, id: \.self) { provider in
-                                Text(provider.name)
-                            }
-                        }
-                        .labelsHidden()
-                        .frame(width: widthValue)
-                    }
+ 
+                    LabeledPicker(title: "Preferred Provider", width: widthValue, picker: preferredProvider)
                     .padding(paddingValue)
                 }
             }
 
             GroupBox(label: Text("Parameters")) {
-                HStack {
-                    Text("Context Length")
-                    Spacer()
-                    contextPicker
-                        .labelsHidden()
-                        .frame(width: widthValue)
-                }
+                LabeledPicker(title: "Context Length", width: widthValue, picker: contextPicker)
                 .padding(paddingValue)
 
                 Divider()
@@ -98,6 +73,21 @@ struct DefaultConfigView: View {
                     systemPrompt
                         .lineLimit(4, reservesSpace: true)
                 }
+            }
+        }
+    }
+    
+    var markdownEnabler: some View {
+        Picker("Markdown Enabled", selection: configuration.$isMarkdownEnabled) {
+            Text("True").tag(true)
+            Text("False").tag(false)
+        }
+    }
+    
+    var preferredProvider: some View {
+        Picker("Preferred Provider", selection: configuration.$preferredChatService) {
+            ForEach(Provider.allCases, id: \.self) { provider in
+                Text(provider.name)
             }
         }
     }
