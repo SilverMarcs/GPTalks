@@ -15,6 +15,8 @@ struct DialogueSessionListView: View {
 
     @Binding var dialogueSessions: [DialogueSession]
     @Binding var selectedDialogueSession: DialogueSession?
+    
+    @State var showSavedConversations = false
 
     var deleteDialogue: (DialogueSession) -> Void
     var addDialogue: () -> Void
@@ -91,9 +93,13 @@ struct DialogueSessionListView: View {
 
     @ViewBuilder
     var dialoguelist: some View {
-        List(filteredDialogueSessions, selection: $selectedDialogueSession) { session in
-            NavigationLink(value: session) {
-                DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+        if isSelected {
+            SavedConversationList(dialogueSessions: $dialogueSessions)
+        } else {
+            List(filteredDialogueSessions, selection: $selectedDialogueSession) { session in
+                NavigationLink(value: session) {
+                    DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+                }
             }
         }
     }
@@ -101,26 +107,24 @@ struct DialogueSessionListView: View {
     @State var isSelected = false
 
     var savedlistItem: some View {
-        NavigationLink(
-            destination: SavedConversationList(dialogueSessions: $dialogueSessions),
-            isActive: $isSelected,
-            label: {
-                HStack {
-                    Image(systemName: isSelected ? "bookmark.fill" : "bookmark")
-                    Text("Bookmarked Conversations")
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                }
-                .padding(7)
+        Button {
+            isSelected.toggle()
+        } label: {
+            HStack {
+                Image(systemName: isSelected ? "bookmark.fill" : "bookmark")
+                Text("Bookmarked Conversations")
+                Spacer()
+                Image(systemName: "chevron.right")
             }
-        )
+            .padding(7)
+        }
         .background(
             RoundedRectangle(cornerRadius: 5)
                 .fill(isSelected ? .secondary.opacity(0.25) : Color.clear)
         )
         .buttonStyle(.borderless)
         .foregroundStyle(.primary)
-        .padding(.horizontal, 11)
+        .padding(.horizontal, horizontalPadding)
     }
 
     @ViewBuilder
@@ -138,5 +142,13 @@ struct DialogueSessionListView: View {
                 Spacer()
             }
         }
+    }
+    
+    private var horizontalPadding: CGFloat {
+        #if os(iOS)
+        15
+        #else
+        11
+        #endif
     }
 }
