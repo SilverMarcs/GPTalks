@@ -13,7 +13,7 @@ struct ConversationView: View {
 
     let regenHandler: (Conversation) -> Void
     let editHandler: (Conversation) -> Void
-    let deleteHandler: (() -> Void)?
+    let deleteHandler: (() -> Void)
 
     @State var isEditing: Bool = false
     @FocusState var isFocused: Bool
@@ -36,7 +36,7 @@ struct ConversationView: View {
         .padding(.vertical, 5)
         #if os(iOS)
             .contextMenu {
-                contextMenu
+                contextMenu(showText: true)
             }
         #endif
     }
@@ -45,12 +45,13 @@ struct ConversationView: View {
     private var userMessage: some View {
         HStack(alignment: .lastTextBaseline, spacing: 0) {
             Spacer()
-            optionsMenu()
-                .transition(.opacity)
-                .animation(.easeOut(duration: 0.15), value: isHovered)
+            
+            optionsMenu
+                .padding(.trailing, 5)
+            
             Text(conversation.content)
                 .textSelection(.enabled)
-                .bubbleStyle(isMyMessage: true, type: .text, accentColor: accentColor)
+                .bubbleStyle(isMyMessage: true, accentColor: accentColor)
         }
         .padding(.trailing, 15)
         .padding(.leading, horizontalPadding)
@@ -149,41 +150,46 @@ struct ConversationView: View {
                         .frame(width: 48, height: 16)
                 }
             }
-            .bubbleStyle(isMyMessage: false, type: .text)
+            .bubbleStyle(isMyMessage: false)
             
             if !conversation.isReplying {
-                optionsMenu()
-                    .transition(.opacity)
-                    .animation(.easeOut(duration: 0.15), value: isHovered)
+                optionsMenu
+                    .padding(.leading, 5)
             }
             Spacer()
         }
         .padding(.leading, 15)
         .padding(.trailing, horizontalPadding)
     }
+    
 
-    @ViewBuilder
-    private func optionsMenu() -> some View {
-        Menu {
-            contextMenu
-        } label: {
-            Label("Options", systemImage: "ellipsis.circle")
-                .labelStyle(.iconOnly)
+    var optionsMenu: some View {
+        Group {
+            if conversation.content.count > 300 {
+                VStack(spacing: 10) {
+                    contextMenu(showText: false)
+                        .buttonStyle(.plain)
+                }
+            } else {
+                HStack(spacing: 10) {
+                    contextMenu(showText: false)
+                        .buttonStyle(.plain)
+                }
+            }
         }
-        .menuIndicator(.hidden)
-        .menuStyle(.borderlessButton)
-        .frame(width: 20, height: 20)
         .opacity(isHovered ? 1 : 0)
+        .transition(.opacity)
+        .animation(.easeOut(duration: 0.15), value: isHovered)
     }
 
     @ViewBuilder
-    private var contextMenu: some View {
+    func contextMenu(showText: Bool) -> some View {
         if conversation.role == "assistant" {
             Button {
                 regenHandler(conversation)
             } label: {
-                HStack {
-                    Image(systemName: "arrow.clockwise")
+                Image(systemName: "arrow.clockwise")
+                if showText {
                     Text("Regenerate")
                 }
             }
@@ -194,25 +200,28 @@ struct ConversationView: View {
                 isEditing = true
                 isFocused = true
             } label: {
-                HStack {
-                    Image(systemName: "pencil")
+                Image(systemName: "pencil")
+                if showText {
                     Text("Edit")
                 }
             }
         }
+        
         Button {
             conversation.content.copyToPasteboard()
         } label: {
-            HStack {
-                Image(systemName: "doc.on.doc")
+            Image(systemName: "doc")
+            if showText {
                 Text("Copy")
             }
         }
+        
         Button(role: .destructive) {
-            deleteHandler?()
+            deleteHandler()
         } label: {
-            HStack {
-                Image(systemName: "trash")
+            Image(systemName: "eraser")
+                .foregroundStyle(.red)
+            if showText {
                 Text("Delete")
             }
         }
@@ -222,7 +231,7 @@ struct ConversationView: View {
         #if os(iOS)
         30
         #else
-        85
+        75
         #endif
     }
 }

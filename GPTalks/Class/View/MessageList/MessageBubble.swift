@@ -13,8 +13,8 @@ enum MessageType {
 }
 
 extension View {
-    func bubbleStyle(isMyMessage: Bool, type: MessageType = .text, accentColor: Color = Color(.systemBlue)) -> some View {
-        modifier(Bubble(isMyMessage: isMyMessage, type: type, accentColor: accentColor))
+    func bubbleStyle(isMyMessage: Bool, accentColor: Color = Color(.systemBlue)) -> some View {
+        modifier(Bubble(isMyMessage: isMyMessage, accentColor: accentColor))
     }
 }
 
@@ -36,31 +36,15 @@ struct Bubble: ViewModifier {
     #endif
 
     func body(content: Content) -> some View {
-        switch type {
-        case .text:
-            content
-                .padding(.horizontal, horizontalPadding)
-                .padding(.vertical, verticalPadding)
-                .background(isMyMessage ? accentColor : Color(.secondarySystemFill))
-            #if os(iOS)
-                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
-            #endif
-                .clipShape(RoundedRectangle(cornerRadius: radius))
-                .foregroundColor(Color.white)
-        case .edit:
-            content
-                .padding(.horizontal, horizontalPadding - 5)
-                .padding(.vertical, verticalPadding)
-                .background(.background)
-            #if os(iOS)
-                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
-            #endif
-                .clipShape(RoundedRectangle(cornerRadius: radius))
-                .foregroundColor(colorScheme == .dark ? Color.primary : Color.black)
-                .overlay(
-                    RoundedRectangle(cornerRadius: radius)
-                        .stroke(Color.gray, lineWidth: 1)
-                )
-        }
+        content
+            .padding(.horizontal, horizontalPadding)
+            .padding(.vertical, verticalPadding)
+            .background(isMyMessage ? accentColor : Color(.secondarySystemFill))
+        #if os(iOS)
+            .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
+        #endif
+            .clipShape(RoundedRectangle(cornerRadius: radius))
+            .foregroundColor(Color.white)
     }
 }
+

@@ -42,9 +42,11 @@ struct ContentView: View {
             dialogueSessions = items.compactMap {
                 DialogueSession(rawData: $0)
             }
+            #if os(macOS)
             if let firstDialogueSession = dialogueSessions.first {
                 selectedDialogueSession = firstDialogueSession
             }
+            #endif
         }
     }
 
