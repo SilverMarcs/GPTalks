@@ -4,9 +4,6 @@
 //
 //  Created by Zabir Raihan on 27/11/2024.
 //
-
-// #if os(macOS)
-
 import SwiftUI
 
 #if os(macOS)

@@ -31,6 +31,9 @@ struct DialogueSettingsView: View {
     var macOS: some View {
             VStack {
                 LabeledPicker(title: "Provider", picker: _providerPicker)
+                    .onChange(of: configuration.provider) {
+                        configuration.model = configuration.provider.preferredModel
+                    }
                 
                 LabeledPicker(title: "Model", picker: modelPicker)
 
