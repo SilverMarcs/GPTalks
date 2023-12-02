@@ -12,15 +12,19 @@ struct SavedConversationList: View {
     @State var selectedConversation: Conversation?
     
     var body: some View {
-        let savedConversations: [Conversation] = dialogueSessions.flatMap { dialogueSession -> [Conversation] in
-            return dialogueSession.conversations.filter { $0.saved }
-        }
-        
-        List(savedConversations, selection: $selectedConversation) { conversation in
-            NavigationLink(destination: MessageView(content: conversation.content)) {
-                Text(conversation.content)
+      let savedConversations: [ConversationWithTitle] = dialogueSessions.flatMap { dialogueSession -> [ConversationWithTitle] in
+          return dialogueSession.conversations.filter { $0.saved }.map { ConversationWithTitle(conversation: $0, title: dialogueSession.title) }
+      }
+
+      List(savedConversations, selection: $selectedConversation) { conversationWithTitle in
+          NavigationLink(destination: MessageView(content: conversationWithTitle.conversation.content).background(.background)) {
+              VStack(alignment: .leading) {
+                  Text(conversationWithTitle.title)
+                    .font(.headline)
+                  Text(conversationWithTitle.conversation.content)
                     .font(.system(size: 14))
                     .lineLimit(2)
+                }
             }
         }
     }
@@ -39,4 +43,10 @@ struct MessageView: View {
         }
         .background(.background)
     }
+}
+
+struct ConversationWithTitle: Identifiable {
+   let id = UUID()
+   let conversation: Conversation
+   let title: String
 }

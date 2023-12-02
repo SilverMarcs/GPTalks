@@ -109,6 +109,9 @@ struct DialogueSessionListView: View {
     var savedlistItem: some View {
         Button {
             isSelected.toggle()
+            DispatchQueue.main.async {
+                selectedDialogueSession = nil
+            }
         } label: {
             HStack {
                 Image(systemName: isSelected ? "bookmark.fill" : "bookmark")

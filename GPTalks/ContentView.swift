@@ -30,16 +30,14 @@ struct ContentView: View {
                                     deleteDialogue: deleteDialogue,
                                     addDialogue: addDialogue)
         } detail: {
-            Group {
-                if let selectedDialogueSession = selectedDialogueSession {
-                    MessageListView(session: selectedDialogueSession)
-                } else {
-                    Text("Select a chat to see it here")
-                        .font(.title)
-                }
+            if let selectedDialogueSession = selectedDialogueSession {
+                MessageListView(session: selectedDialogueSession)
+            } else {
+                Text("Select a chat to see it here")
+                    .font(.title)
             }
-            .background(.background)
         }
+        .background(.background)
         .accentColor(selectedDialogueSession?.configuration.provider.accentColor ?? .accentColor)
         .onAppear {
             dialogueSessions = items.compactMap {
