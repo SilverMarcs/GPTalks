@@ -51,9 +51,4 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.Ckey") var Ckey = ""
     @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt4
     @AppStorage("configuration.Chost") var Chost: String = ""
-    
-    /// perplexity
-    @AppStorage("configuration.Pkey") var Pkey = ""
-    @AppStorage("configuration.Pmodel") var Pmodel: Model = .gpt4
-    
 }

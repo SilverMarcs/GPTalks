@@ -27,15 +27,13 @@ enum Model: String, Codable {
     case orgpt4t
     case orhermes
     case ortoppy
+    case openchat
+    case pplx7b
+    case pplx70b
+    case mythomist
     
     /// gpt4free
     case phind
-    
-    /// perplexity
-    case pplx7b
-    case pplx70b
-    case pplx7bo
-    case pplx70bo
 
     var name: String {
         switch self {
@@ -66,13 +64,13 @@ enum Model: String, Codable {
         case .ortoppy:
             return "Toppy"
         case .pplx7b:
-            return "PPX 7B"
+            return "PPLX 7B"
         case .pplx70b:
-            return "PPX 70B"
-        case .pplx7bo:
-            return "PPX 7B Online"
-        case .pplx70bo:
-            return "PPX 70B Online"
+            return "PPLX 70B"
+        case .openchat:
+            return "OpenChat"
+        case .mythomist:
+            return "MythoMist"
         }
     }
 
@@ -109,13 +107,13 @@ enum Model: String, Codable {
         case .ortoppy:
             return "undi95/toppy-m-7b"
         case .pplx7b:
-            return "pplx-7b-chat"
+            return "perplexity/pplx-7b-online"
         case .pplx70b:
-            return "pplx-70b-chat"
-        case .pplx7bo:
-            return "pplx-7b-online"
-        case .pplx70bo:
-            return "pplx-70b-online"
+            return "perplexity/pplx-70b-online"
+        case .openchat:
+            return "openchat/openchat-7b"
+        case .mythomist:
+            return "gryphe/mythomist-7b"
         }
     }
 
@@ -129,9 +127,25 @@ enum Model: String, Codable {
     }
 
     static let openAIModels: [Model] = [.gpt3t, .gpt3t_16, .gpt4, .gpt4t]
-    static let openRouterModels: [Model] = [.orphind, .orcodellama, .ormistral, .ormythomax, .orpalm, .orpalmcode, .orzephyr, .orgpt3, .orgpt4t, .orhermes, .ortoppy]
+    static let openRouterModels: [Model] = 
+    [
+        .orphind,
+//        .orcodellama,
+//        .ormistral,
+//        .ormythomax,
+        .orpalm,
+        .orpalmcode,
+//        .orzephyr,
+//        .orgpt3,
+//        .orgpt4t,
+//        .orhermes,
+//        .ortoppy,
+//        .mythomist,
+        .openchat,
+        .pplx7b,
+        .pplx70b
+    ]
     static let nagaModels: [Model] = openAIModels
     static let gpt4freeModels: [Model] = [.gpt4, .phind]
     static let customModels: [Model] = openAIModels
-    static let perplexityModels: [Model] = [.pplx7b, .pplx70b, .pplx7bo, .pplx70bo]
 }

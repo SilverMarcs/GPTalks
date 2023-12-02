@@ -197,7 +197,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         
         streamingTask = Task {
-            for try await result in service.chatsStream(query: query, isPerplexity: configuration.provider == .perplexity ? true : false) {
+            for try await result in service.chatsStream(query: query) {
                 streamText += result.choices.first?.delta.content ?? ""
                 conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
             }

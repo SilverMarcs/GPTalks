@@ -13,7 +13,6 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     case openrouter
     case naga
     case gpt4free
-    case perplexity
     case custom
 
     var id: String {
@@ -28,8 +27,6 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return "gpt4free"
         case .custom:
             return "custom"
-        case .perplexity:
-            return "perplexity"
         }
     }
     
@@ -56,11 +53,6 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 token: AppConfiguration.shared.Gkey,
                 host: AppConfiguration.shared.Ghost
             )
-        case .perplexity:
-            return OpenAI.Configuration(
-                token: AppConfiguration.shared.Pkey,
-                host: "https://api.perplexity.ai"
-            )
         case .custom:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.Ckey,
@@ -85,8 +77,6 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .gpt4free:
             return Color("blueColor")
         case .custom:
-            return Color("brownColor")
-        case .perplexity:
             return Color("tealColor")
         }
     }
@@ -103,8 +93,6 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return "GPT4Free"
         case .custom:
             return "Custom"
-        case .perplexity:
-            return "Perplexity"
         }
     }
     
@@ -120,8 +108,6 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return AppConfiguration.shared.Gmodel
         case .custom:
             return AppConfiguration.shared.Cmodel
-        case .perplexity:
-            return AppConfiguration.shared.Pmodel
         }
     }
 
@@ -137,8 +123,6 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return Model.gpt4freeModels
         case .custom:
             return Model.customModels
-        case .perplexity:
-            return Model.perplexityModels
         }
     }
     
@@ -175,12 +159,6 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             ServiceSettingsView(
                 model: configuration.$Cmodel,
                 apiKey: configuration.$Ckey,
-                provider: self
-            )
-        case .perplexity:
-            ServiceSettingsView(
-                model: configuration.$Pmodel,
-                apiKey: configuration.$Pkey,
                 provider: self
             )
         }
