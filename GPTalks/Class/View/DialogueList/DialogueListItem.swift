@@ -18,46 +18,44 @@ struct DialogueListItem: View {
     var deleteDialogue: (DialogueSession) -> Void
 
     var body: some View {
-//        NavigationLink(value: session) {
-            HStack(spacing: imgToTextSpace) {
-                Image(session.configuration.provider.iconName)
-                    .resizable()
-                    .frame(width: imageSize, height: imageSize)
-                    .cornerRadius(imageRadius)
-                VStack(spacing: 8) {
-                    HStack {
-                        Text(session.title)
-                            .bold()
-                            .font(titleFont)
-                            .lineLimit(1)
-                        Spacer()
-                        Text(session.configuration.provider == .gpt4free ? session.configuration.gpt4freeProvider.name : session.configuration.model.name)
-                            .font(Font.system(.subheadline))
-                    }
-                    VStack {
-                        if session.isReplying() {
-                            ReplyingIndicatorView()
-                                .frame(
-                                    maxWidth: .infinity,
-                                    maxHeight: 14,
-                                    alignment: .leading
-                                )
-                        } else {
-                            Text(session.lastMessage)
-                                .font(lastMessageFont)
-                                .foregroundColor(.secondary)
-                                .lineLimit(textLineLimit)
-                                .frame(
-                                    maxWidth: .infinity,
-                                    maxHeight: .infinity,
-                                    alignment: .leading
-                                )
-                        }
-                    }
-                    .frame(maxHeight: lastMessageMaxHeight)
+        HStack(spacing: imgToTextSpace) {
+            Image(session.configuration.provider.iconName)
+                .resizable()
+                .frame(width: imageSize, height: imageSize)
+                .cornerRadius(imageRadius)
+            VStack(spacing: 8) {
+                HStack {
+                    Text(session.title)
+                        .bold()
+                        .font(titleFont)
+                        .lineLimit(1)
+                    Spacer()
+                    Text(session.configuration.provider == .gpt4free ? session.configuration.gpt4freeProvider.name : session.configuration.model.name)
+                        .font(Font.system(.subheadline))
                 }
+                VStack {
+                    if session.isReplying() {
+                        ReplyingIndicatorView()
+                            .frame(
+                                maxWidth: .infinity,
+                                maxHeight: 14,
+                                alignment: .leading
+                            )
+                    } else {
+                        Text(session.lastMessage)
+                            .font(lastMessageFont)
+                            .foregroundColor(.secondary)
+                            .lineLimit(textLineLimit)
+                            .frame(
+                                maxWidth: .infinity,
+                                maxHeight: .infinity,
+                                alignment: .leading
+                            )
+                    }
+                }
+                .frame(maxHeight: lastMessageMaxHeight)
             }
-//        }
+        }
         .frame(minHeight: minHeight)
         .alert("Rename Session", isPresented: $showRenameDialogue, actions: {
             TextField("Enter new name", text: $newName)
