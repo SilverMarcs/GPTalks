@@ -32,6 +32,10 @@ struct Conversation: Codable, Identifiable, Hashable {
         
         return Chat(role: chatRole, content: content)
     }
+    
+    func toSavedConversation() -> SavedConversation {
+        return SavedConversation(id: id, date: date, content: content, title: "Saved")
+    }
 }
 
 extension ConversationData {

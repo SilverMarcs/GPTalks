@@ -15,6 +15,8 @@ struct MessageListView: View {
     @State var isShowSettingsView = false
     @State var isShowDeleteWarning = false
     @State var title = ""
+    
+    let saveConversation: (SavedConversation) -> Void
 
     var body: some View {
         contentView
@@ -114,10 +116,18 @@ struct MessageListView: View {
                            } deleteHandler: {
                                session.removeConversation(conversation)
                            } saveHandler: {
-                               session.saveConversation(index: index)
+                               saveConversation(conversation.toSavedConversation())
                            }
                            .onAppear {
+                               #if os(iOS)
+                               DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                   withAnimation {
+                                       scrollToBottom(proxy: proxy)
+                                   }
+                               }
+                               #else
                                scrollToBottom(proxy: proxy)
+                               #endif
                            }
                            .onChange(of: conversation.content) {
                                scrollToBottom(proxy: proxy)
@@ -146,12 +156,6 @@ struct MessageListView: View {
                }
                .onTapGesture {
                    isTextFieldFocused = false
-               }
-               .onAppear() {
-                   scrollToBottom(proxy: proxy)
-               }
-               .onChange(of: session) {
-                  scrollToBottom(proxy: proxy)
                }
                .safeAreaInset(edge: .bottom, spacing: 0) {
                    BottomInputView(

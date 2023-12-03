@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct DialogueSessionListView: View {
     @State private var searchQuery = ""
@@ -17,6 +18,8 @@ struct DialogueSessionListView: View {
     @Binding var selectedDialogueSession: DialogueSession?
 
     @State var showSavedConversations = false
+    
+    @State var savedConversations: [SavedConversation] = []
 
     var deleteDialogue: (DialogueSession) -> Void
     var addDialogue: () -> Void
@@ -47,13 +50,13 @@ struct DialogueSessionListView: View {
                 }
 
                 .safeAreaInset(edge: .bottom) {
-                    savedlistItem
+                    savedlistLink
                 }
                 .safeAreaPadding(.bottom, 8)
             #else
                 VStack {
                     if !filteredDialogueSessions.isEmpty {
-                        savedlistItem
+                        savedlistLink
                             .padding(.horizontal)
                     }
                     Divider()
@@ -64,6 +67,9 @@ struct DialogueSessionListView: View {
                     }
                 }
             #endif
+        }
+        .onAppear {
+            savedConversations = fetchConversations()
         }
         .toolbar {
             #if os(iOS)
@@ -103,28 +109,32 @@ struct DialogueSessionListView: View {
     var dialoguelist: some View {
         #if os(macOS)
             if isSelected {
-                SavedConversationList(dialogueSessions: $dialogueSessions)
+                SavedConversationList(savedConversations: $savedConversations)
             } else {
-                List(filteredDialogueSessions, id: \.self, selection: $selectedDialogueSession) { session in
-                    NavigationLink(value: session) {
-                        DialogueListItem(session: session, deleteDialogue: deleteDialogue)
-                    }
-                }
+                list
             }
         #else
-            List {
-                ForEach(filteredDialogueSessions, id: \.id) { session in
-                    NavigationLink(destination: MessageListView(session: session), tag: session, selection: $selectedDialogueSession) {
-                        DialogueListItem(session: session, deleteDialogue: deleteDialogue)
-                    }
+            list
+        #endif
+    }
+    
+    var list: some View {
+        List {
+            ForEach(filteredDialogueSessions, id: \.id) { session in
+                NavigationLink(
+                    destination: MessageListView(session: session, saveConversation: saveConversation),
+                    tag: session,
+                    selection: $selectedDialogueSession)
+                {
+                    DialogueListItem(session: session, deleteDialogue: deleteDialogue)
                 }
             }
-        #endif
+        }
     }
 
     @State var isSelected = false
 
-    var savedlistItem: some View {
+    var savedlistLink: some View {
         #if os(macOS)
             Button {
                 isSelected.toggle()
@@ -146,7 +156,7 @@ struct DialogueSessionListView: View {
             .padding(.horizontal, horizontalPadding)
         #else
             NavigationLink {
-                SavedConversationList(dialogueSessions: $dialogueSessions)
+                SavedConversationList(savedConversations: $savedConversations)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")
@@ -173,6 +183,42 @@ struct DialogueSessionListView: View {
                     .bold()
                 Spacer()
             }
+        }
+    }
+    
+    private func saveConversation(conversation: SavedConversation) {
+        // Check if the conversation id already exists in the savedConversations array
+        if !savedConversations.contains(where: { $0.id == conversation.id }) {
+            savedConversations.insert(conversation, at: 0)
+            
+            let context = PersistenceController.shared.container.viewContext
+            let savedConversationData = SavedConversationData(context: context)
+            savedConversationData.id = conversation.id
+            savedConversationData.date = conversation.date
+            savedConversationData.content = conversation.content
+            savedConversationData.title = conversation.title
+
+            do {
+                try PersistenceController.shared.save()
+            } catch {
+                print("Failed to save conversation: \(error)")
+            }
+        } else {
+            print("Conversation with id \(conversation.id) already exists.")
+        }
+    }
+
+    
+    func fetchConversations() -> [SavedConversation] {
+        let context = PersistenceController.shared.container.viewContext
+        let fetchRequest = NSFetchRequest<SavedConversationData>(entityName: "SavedConversationData")
+
+        do {
+            let results = try context.fetch(fetchRequest)
+            return results.map { SavedConversation(id: $0.id!, date: $0.date!, content: $0.content!, title: $0.title!) }
+        } catch {
+            print("Failed to fetch conversations: \(error)")
+            return []
         }
     }
 

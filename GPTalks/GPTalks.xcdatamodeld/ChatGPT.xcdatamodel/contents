@@ -21,6 +21,7 @@
     </entity>
     <entity name="SavedConversationData" representedClassName="SavedConversationData" syncable="YES" codeGenerationType="class">
         <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String" defaultValueString="Conversation"/>
     </entity>

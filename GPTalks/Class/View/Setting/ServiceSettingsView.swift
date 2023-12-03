@@ -134,7 +134,7 @@ struct ServiceSettingsView: View {
 
     var hostUrl: some View {
         HStack {
-            TextField("Host URL (omit https and /v1/*/*)", text: provider == .custom ? configuration.$Chost : configuration.$Ghost)
+            TextField("Host URL (omit https and /v1/x/x)", text: provider == .custom ? configuration.$Chost : configuration.$Ghost)
         }
     }
 

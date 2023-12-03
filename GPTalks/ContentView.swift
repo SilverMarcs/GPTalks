@@ -32,12 +32,8 @@ struct ContentView: View {
                                             deleteDialogue: deleteDialogue,
                                             addDialogue: addDialogue)
                 } detail: {
-                    if let selectedDialogueSession = selectedDialogueSession {
-                        MessageListView(session: selectedDialogueSession)
-                    } else {
-                        Text("Select a chat to see it here")
-                            .font(.title)
-                    }
+                    Text("Select an item on the sidebar to view it here.")
+                        .font(.title)
                 }
                 .background(.background)
             #else
