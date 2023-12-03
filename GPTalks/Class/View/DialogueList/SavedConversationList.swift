@@ -9,31 +9,52 @@ import SwiftUI
 
 struct SavedConversationList: View {
     @Binding var savedConversations: [SavedConversation]
-    
+
     var delete: (SavedConversation) -> Void
     var renameConversation: (SavedConversation, String) -> Void
+
+    @State var searchQuery = ""
+
+    var filteredSavedConversations: [SavedConversation] {
+        if searchQuery.isEmpty {
+            return savedConversations
+        } else {
+            var filteredSessions: [SavedConversation] = []
+            for savedConversation in savedConversations {
+                if savedConversation.title.localizedCaseInsensitiveContains(searchQuery) {
+                    filteredSessions.append(savedConversation)
+                }
+            }
+            return filteredSessions
+        }
+    }
 
     var body: some View {
         List {
-            ForEach(savedConversations, id: \.id) { conversation in
+            ForEach(filteredSavedConversations, id: \.id) { conversation in
                 NavigationLink(destination: MessageView(conversation: conversation).background(.background)) {
-                    listItem(conversation: conversation, delete: delete, renameConversation: renameConversation)
+                    savedListItem(conversation: conversation, delete: delete, renameConversation: renameConversation)
                 }
             }
         }
+        .searchable(text: $searchQuery)
+//        .searchable(text: $searchQuery, placement: .navigationBarDrawer(displayMode: .always))
         .navigationTitle("Saved")
+        #if os(iOS)
+        .navigationBarTitleDisplayMode(.large)
+        #endif
     }
 }
 
-struct listItem: View {
+struct savedListItem: View {
     @ObservedObject var conversation: SavedConversation
-    
+
     @State private var isRenameAlertPresented: Bool = false
     @State private var newName: String = ""
-    
+
     var delete: (SavedConversation) -> Void
     var renameConversation: (SavedConversation, String) -> Void
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: spacing) {
             Text(conversation.title)
@@ -49,21 +70,46 @@ struct listItem: View {
                     alignment: .leading
                 )
         }
+        .padding(3)
+        .swipeActions(edge: .leading) {
+            Button(action: {
+                newName = conversation.title
+                isRenameAlertPresented = true
+            }) {
+                HStack {
+                    Image(systemName: "pencil")
+                    Text("Rename")
+                }
+            }
+        }
         .swipeActions(edge: .trailing) {
             Button(role: .destructive) {
                 delete(conversation)
             } label: {
-                Label("Delete", systemImage: "trash")
+                HStack {
+                    Image(systemName: "trash")
+                    Text("Delete")
+                }
             }
-            .tint(.red)
         }
-        .padding(3)
         .contextMenu {
             Button(action: {
                 newName = conversation.title
                 isRenameAlertPresented = true
             }) {
-                Text("Rename")
+                HStack {
+                    Image(systemName: "pencil")
+                    Text("Rename")
+                }
+            }
+
+            Button(role: .destructive) {
+                delete(conversation)
+            } label: {
+                HStack {
+                    Image(systemName: "trash")
+                    Text("Delete")
+                }
             }
         }
         .alert("Rename Save", isPresented: $isRenameAlertPresented) {
@@ -76,13 +122,12 @@ struct listItem: View {
             )
         }
     }
-    
-    
+
     private var spacing: CGFloat {
         #if os(iOS)
-        return 6
+            return 6
         #else
-        return 8
+            return 8
         #endif
     }
 }
@@ -107,11 +152,10 @@ struct MessageView: View {
         }
         .navigationTitle(conversation.title)
         #if os(iOS)
-        .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
-        .background(.background)
+            .background(.background)
     }
-    
 }
 
 class SavedConversation: Identifiable, ObservableObject {
@@ -119,7 +163,7 @@ class SavedConversation: Identifiable, ObservableObject {
     let date: Date
     let content: String
     @Published var title: String
-    
+
     init(id: UUID, date: Date, content: String, title: String) {
         self.id = id
         self.date = date

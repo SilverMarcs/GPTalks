@@ -5,8 +5,8 @@
 //  Created by Zabir Raihan on 27/11/2024.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct DialogueSessionListView: View {
     @State private var searchQuery = ""
@@ -17,9 +17,8 @@ struct DialogueSessionListView: View {
     @Binding var dialogueSessions: [DialogueSession]
     @Binding var selectedDialogueSession: DialogueSession?
 
-    @State var showSavedConversations = false
-    
     @State var savedConversations: [SavedConversation] = []
+    @State var isBookmarkSelected = false
 
     var deleteDialogue: (DialogueSession) -> Void
     var addDialogue: () -> Void
@@ -45,7 +44,11 @@ struct DialogueSessionListView: View {
                     if dialogueSessions.isEmpty {
                         placeHolder
                     } else {
-                        dialoguelist
+                        if isBookmarkSelected {
+                            SavedConversationList(savedConversations: $savedConversations, delete: deleteConversation, renameConversation: renameConversation)
+                        } else {
+                            list
+                        }
                     }
                 }
                 .safeAreaInset(edge: .bottom) {
@@ -56,13 +59,14 @@ struct DialogueSessionListView: View {
                 VStack {
                     if !filteredDialogueSessions.isEmpty {
                         savedlistLink
-                            .padding(.horizontal)
                     }
+
                     Divider()
+
                     if dialogueSessions.isEmpty {
                         placeHolder
                     } else {
-                        dialoguelist
+                        list
                     }
                 }
             #endif
@@ -70,6 +74,30 @@ struct DialogueSessionListView: View {
         .onAppear {
             savedConversations = fetchConversations()
         }
+        #if os(macOS)
+        .frame(minWidth: 290)
+        #else
+        .listStyle(.plain)
+        .navigationTitle("Chats")
+        .navigationBarTitleDisplayMode(.large)
+        .sheet(isPresented: $isShowSettingView) {
+            AppSettingsView()
+        }
+        #endif
+    }
+
+    var list: some View {
+        List {
+            ForEach(filteredDialogueSessions, id: \.id) { session in
+                NavigationLink(
+                    destination: MessageListView(session: session, saveConversation: saveConversation),
+                    tag: session,
+                    selection: $selectedDialogueSession) {
+                        DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+                    }
+            }
+        }
+        .searchable(text: $searchQuery)
         .toolbar {
             #if os(iOS)
                 ToolbarItem(placement: .topBarLeading) {
@@ -91,55 +119,15 @@ struct DialogueSessionListView: View {
                 }
             }
         }
-        .searchable(text: $searchQuery)
-        #if os(macOS)
-            .frame(minWidth: 290)
-        #else
-            .listStyle(.plain)
-            .navigationTitle("Chats")
-            .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: $isShowSettingView) {
-                AppSettingsView()
-            }
-        #endif
     }
-
-    @ViewBuilder
-    var dialoguelist: some View {
-        #if os(macOS)
-            if isSelected {
-                SavedConversationList(savedConversations: $savedConversations, delete: deleteConversation, renameConversation: renameConversation)
-            } else {
-                list
-            }
-        #else
-            list
-        #endif
-    }
-    
-    var list: some View {
-        List {
-            ForEach(filteredDialogueSessions, id: \.id) { session in
-                NavigationLink(
-                    destination: MessageListView(session: session, saveConversation: saveConversation),
-                    tag: session,
-                    selection: $selectedDialogueSession)
-                {
-                    DialogueListItem(session: session, deleteDialogue: deleteDialogue)
-                }
-            }
-        }
-    }
-
-    @State var isSelected = false
 
     var savedlistLink: some View {
         #if os(macOS)
             Button {
-                isSelected.toggle()
+                isBookmarkSelected.toggle()
             } label: {
                 HStack {
-                    Image(systemName: isSelected ? "bookmark.fill" : "bookmark")
+                    Image(systemName: isBookmarkSelected ? "bookmark.fill" : "bookmark")
                     Text("Bookmarked Conversations")
                     Spacer()
                     Image(systemName: "chevron.right")
@@ -148,7 +136,7 @@ struct DialogueSessionListView: View {
             }
             .background(
                 RoundedRectangle(cornerRadius: 5)
-                    .fill(isSelected ? .secondary.opacity(0.25) : Color.clear)
+                    .fill(isBookmarkSelected ? .secondary.opacity(0.25) : Color.clear)
             )
             .buttonStyle(.borderless)
             .foregroundStyle(.primary)
@@ -159,11 +147,13 @@ struct DialogueSessionListView: View {
             } label: {
                 HStack {
                     Image(systemName: "bookmark")
+                        .padding(.horizontal)
                     Text("Bookmarked Conversations")
                     Spacer()
-                    Image(systemName: "chevron.right")
+                    Text("\(savedConversations.count)")
+                        .foregroundColor(.secondary)
                 }
-                .padding(7)
+                .padding(.horizontal, 21)
             }
         #endif
     }
@@ -184,12 +174,12 @@ struct DialogueSessionListView: View {
             }
         }
     }
-    
+
     private func saveConversation(conversation: SavedConversation) {
         // Check if the conversation id already exists in the savedConversations array
         if !savedConversations.contains(where: { $0.id == conversation.id }) {
             savedConversations.insert(conversation, at: 0)
-            
+
             let context = PersistenceController.shared.container.viewContext
             let savedConversationData = SavedConversationData(context: context)
             savedConversationData.id = conversation.id
@@ -206,35 +196,7 @@ struct DialogueSessionListView: View {
             print("Conversation with id \(conversation.id) already exists.")
         }
     }
-    
-//    public func deleteConversation(at offsets: IndexSet) {
-//        // Delete the conversations from the array
-//        let conversationsToDelete = offsets.map { savedConversations[$0] }
-//        savedConversations.remove(atOffsets: offsets)
-//
-//        // Delete the conversations from Core Data
-//        let context = PersistenceController.shared.container.viewContext
-//        for conversation in conversationsToDelete {
-//            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = SavedConversationData.fetchRequest()
-//            fetchRequest.predicate = NSPredicate(format: "id == %@", conversation.id as CVarArg)
-//
-//            do {
-//                let results = try context.fetch(fetchRequest)
-//                if let savedConversationData = results.first as? SavedConversationData {
-//                    context.delete(savedConversationData)
-//                }
-//            } catch {
-//                print("Failed to delete conversation: \(error)")
-//            }
-//        }
-//
-//        do {
-//            try PersistenceController.shared.save()
-//        } catch {
-//            print("Failed to save context after deleting conversation: \(error)")
-//        }
-//    }
-    
+
     private func renameConversation(conversation: SavedConversation, newName: String) {
         // Update the title of the in-memory conversation object
         conversation.title = newName
@@ -256,7 +218,7 @@ struct DialogueSessionListView: View {
             print("Failed to rename conversation: \(error)")
         }
     }
-    
+
     public func deleteConversation(_ conversation: SavedConversation) {
         // Assuming `savedConversations` is an array of `SavedConversation`
         if let index = savedConversations.firstIndex(where: { $0.id == conversation.id }) {
@@ -283,19 +245,19 @@ struct DialogueSessionListView: View {
             print("Failed to save context after deleting conversation: \(error)")
         }
     }
-    
+
     func fetchConversations() -> [SavedConversation] {
         let context = PersistenceController.shared.container.viewContext
         let fetchRequest = NSFetchRequest<SavedConversationData>(entityName: "SavedConversationData")
 
         do {
             let results = try context.fetch(fetchRequest)
-            savedConversations =  results.map { SavedConversation(id: $0.id!, date: $0.date!, content: $0.content!, title: $0.title!) }
-            
+            savedConversations = results.map { SavedConversation(id: $0.id!, date: $0.date!, content: $0.content!, title: $0.title!) }
+
             savedConversations.sort {
                 $0.date < $1.date
             }
-            
+
             return savedConversations
         } catch {
             print("Failed to fetch conversations: \(error)")

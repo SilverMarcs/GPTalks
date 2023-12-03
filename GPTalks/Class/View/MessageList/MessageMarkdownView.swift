@@ -40,7 +40,9 @@ struct MessageMarkdownView: View {
 
                 CodeCopyButton(text: configuration.content)
                     .padding(8)
+                #if os(macOS)
                     .opacity(isHovered ? 1 : 0)
+                #endif
             }
             .onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.2)) {
@@ -70,7 +72,9 @@ struct MessageMarkdownView: View {
                     .padding(.horizontal, 1)
             }
             .disabled(isButtonPressed)
+            #if os(macOS)
             .background(.background)
+            #endif
             .cornerRadius(5)
         }
     }
