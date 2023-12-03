@@ -15,7 +15,7 @@ struct DialogueSessionListView: View {
 
     @Binding var dialogueSessions: [DialogueSession]
     @Binding var selectedDialogueSession: DialogueSession?
-    
+
     @State var showSavedConversations = false
 
     var deleteDialogue: (DialogueSession) -> Void
@@ -37,20 +37,20 @@ struct DialogueSessionListView: View {
 
     var body: some View {
         Group {
-                #if os(macOS)
-            Group {
-                if dialogueSessions.isEmpty {
-                    placeHolder
-                } else {
-                    dialoguelist
-                }
+            #if os(macOS)
+                Group {
+                    if dialogueSessions.isEmpty {
+                        placeHolder
+                    } else {
+                        dialoguelist
+                    }
                 }
 
                 .safeAreaInset(edge: .bottom) {
                     savedlistItem
                 }
                 .safeAreaPadding(.bottom, 8)
-                #else
+            #else
                 VStack {
                     if !filteredDialogueSessions.isEmpty {
                         savedlistItem
@@ -62,11 +62,9 @@ struct DialogueSessionListView: View {
                     } else {
                         dialoguelist
                     }
-                    
                 }
-                #endif
-            
-            }
+            #endif
+        }
         .toolbar {
             #if os(iOS)
                 ToolbarItem(placement: .topBarLeading) {
@@ -104,24 +102,23 @@ struct DialogueSessionListView: View {
     @ViewBuilder
     var dialoguelist: some View {
         #if os(macOS)
-        if isSelected {
-            SavedConversationList(dialogueSessions: $dialogueSessions)
-        } else {
-            List(filteredDialogueSessions, id: \.self, selection: $selectedDialogueSession) { session in
-                NavigationLink(value: session) {
-                    DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+            if isSelected {
+                SavedConversationList(dialogueSessions: $dialogueSessions)
+            } else {
+                List(filteredDialogueSessions, id: \.self, selection: $selectedDialogueSession) { session in
+                    NavigationLink(value: session) {
+                        DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+                    }
                 }
             }
-        }
         #else
-        List(filteredDialogueSessions) { session in
-            NavigationLink {
-               MessageListView(session: session)
-                    .accentColor(session.configuration.provider.accentColor)
-            } label: {
-                DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+            List {
+                ForEach(filteredDialogueSessions, id: \.id) { session in
+                    NavigationLink(destination: MessageListView(session: session), tag: session, selection: $selectedDialogueSession) {
+                        DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+                    }
+                }
             }
-        }
         #endif
     }
 
@@ -129,36 +126,36 @@ struct DialogueSessionListView: View {
 
     var savedlistItem: some View {
         #if os(macOS)
-        Button {
-            isSelected.toggle()
-        } label: {
-            HStack {
-                Image(systemName: isSelected ? "bookmark.fill" : "bookmark")
-                Text("Bookmarked Conversations")
-                Spacer()
-                Image(systemName: "chevron.right")
+            Button {
+                isSelected.toggle()
+            } label: {
+                HStack {
+                    Image(systemName: isSelected ? "bookmark.fill" : "bookmark")
+                    Text("Bookmarked Conversations")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                }
+                .padding(7)
             }
-            .padding(7)
-        }
-        .background(
-            RoundedRectangle(cornerRadius: 5)
-                .fill(isSelected ? .secondary.opacity(0.25) : Color.clear)
-        )
-        .buttonStyle(.borderless)
-        .foregroundStyle(.primary)
-        .padding(.horizontal, horizontalPadding)
+            .background(
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(isSelected ? .secondary.opacity(0.25) : Color.clear)
+            )
+            .buttonStyle(.borderless)
+            .foregroundStyle(.primary)
+            .padding(.horizontal, horizontalPadding)
         #else
-        NavigationLink {
-            SavedConversationList(dialogueSessions: $dialogueSessions)
-        } label: {
-            HStack {
-                Image(systemName: "bookmark")
-                Text("Bookmarked Conversations")
-                Spacer()
-                Image(systemName: "chevron.right")
+            NavigationLink {
+                SavedConversationList(dialogueSessions: $dialogueSessions)
+            } label: {
+                HStack {
+                    Image(systemName: "bookmark")
+                    Text("Bookmarked Conversations")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                }
+                .padding(7)
             }
-            .padding(7)
-        }
         #endif
     }
 
@@ -178,12 +175,12 @@ struct DialogueSessionListView: View {
             }
         }
     }
-    
+
     private var horizontalPadding: CGFloat {
         #if os(iOS)
-        15
+            15
         #else
-        11
+            11
         #endif
     }
 }
