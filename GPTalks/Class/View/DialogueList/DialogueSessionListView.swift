@@ -48,7 +48,6 @@ struct DialogueSessionListView: View {
                         dialoguelist
                     }
                 }
-
                 .safeAreaInset(edge: .bottom) {
                     savedlistLink
                 }
@@ -208,33 +207,33 @@ struct DialogueSessionListView: View {
         }
     }
     
-    public func deleteConversation(at offsets: IndexSet) {
-        // Delete the conversations from the array
-        let conversationsToDelete = offsets.map { savedConversations[$0] }
-        savedConversations.remove(atOffsets: offsets)
-
-        // Delete the conversations from Core Data
-        let context = PersistenceController.shared.container.viewContext
-        for conversation in conversationsToDelete {
-            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = SavedConversationData.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "id == %@", conversation.id as CVarArg)
-
-            do {
-                let results = try context.fetch(fetchRequest)
-                if let savedConversationData = results.first as? SavedConversationData {
-                    context.delete(savedConversationData)
-                }
-            } catch {
-                print("Failed to delete conversation: \(error)")
-            }
-        }
-
-        do {
-            try PersistenceController.shared.save()
-        } catch {
-            print("Failed to save context after deleting conversation: \(error)")
-        }
-    }
+//    public func deleteConversation(at offsets: IndexSet) {
+//        // Delete the conversations from the array
+//        let conversationsToDelete = offsets.map { savedConversations[$0] }
+//        savedConversations.remove(atOffsets: offsets)
+//
+//        // Delete the conversations from Core Data
+//        let context = PersistenceController.shared.container.viewContext
+//        for conversation in conversationsToDelete {
+//            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = SavedConversationData.fetchRequest()
+//            fetchRequest.predicate = NSPredicate(format: "id == %@", conversation.id as CVarArg)
+//
+//            do {
+//                let results = try context.fetch(fetchRequest)
+//                if let savedConversationData = results.first as? SavedConversationData {
+//                    context.delete(savedConversationData)
+//                }
+//            } catch {
+//                print("Failed to delete conversation: \(error)")
+//            }
+//        }
+//
+//        do {
+//            try PersistenceController.shared.save()
+//        } catch {
+//            print("Failed to save context after deleting conversation: \(error)")
+//        }
+//    }
     
     private func renameConversation(conversation: SavedConversation, newName: String) {
         // Update the title of the in-memory conversation object
@@ -255,6 +254,33 @@ struct DialogueSessionListView: View {
             }
         } catch {
             print("Failed to rename conversation: \(error)")
+        }
+    }
+    
+    public func deleteConversation(_ conversation: SavedConversation) {
+        // Assuming `savedConversations` is an array of `SavedConversation`
+        if let index = savedConversations.firstIndex(where: { $0.id == conversation.id }) {
+            savedConversations.remove(at: index)
+        }
+
+        // Delete the conversation from Core Data
+        let context = PersistenceController.shared.container.viewContext
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = SavedConversationData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", conversation.id as CVarArg)
+
+        do {
+            let results = try context.fetch(fetchRequest)
+            if let savedConversationData = results.first as? SavedConversationData {
+                context.delete(savedConversationData)
+            }
+        } catch {
+            print("Failed to delete conversation: \(error)")
+        }
+
+        do {
+            try PersistenceController.shared.save()
+        } catch {
+            print("Failed to save context after deleting conversation: \(error)")
         }
     }
     

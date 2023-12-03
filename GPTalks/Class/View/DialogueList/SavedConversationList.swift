@@ -10,7 +10,7 @@ import SwiftUI
 struct SavedConversationList: View {
     @Binding var savedConversations: [SavedConversation]
     
-    var delete: (IndexSet) -> Void
+    var delete: (SavedConversation) -> Void
     var renameConversation: (SavedConversation, String) -> Void
 
     var body: some View {
@@ -20,7 +20,6 @@ struct SavedConversationList: View {
                     listItem(conversation: conversation, delete: delete, renameConversation: renameConversation)
                 }
             }
-            .onDelete(perform: delete)
         }
         .navigationTitle("Saved")
     }
@@ -32,7 +31,7 @@ struct listItem: View {
     @State private var isRenameAlertPresented: Bool = false
     @State private var newName: String = ""
     
-    var delete: (IndexSet) -> Void
+    var delete: (SavedConversation) -> Void
     var renameConversation: (SavedConversation, String) -> Void
     
     var body: some View {
@@ -50,14 +49,14 @@ struct listItem: View {
                     alignment: .leading
                 )
         }
-//        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-//            Button {
-//                delete([savedConversations.firstIndex(of: conversation)!])
-//            } label: {
-//                Label("Delete", systemImage: "trash")
-//            }
-//            .tint(.red)
-//        }
+        .swipeActions(edge: .trailing) {
+            Button(role: .destructive) {
+                delete(conversation)
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+            .tint(.red)
+        }
         .padding(3)
         .contextMenu {
             Button(action: {
