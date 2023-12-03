@@ -11,51 +11,73 @@ struct SavedConversationList: View {
     @Binding var savedConversations: [SavedConversation]
     
     var delete: (IndexSet) -> Void
-    var rename: (UUID, String) -> Void
-    
-    @State private var isRenameAlertPresented = false
-    @State private var newName = ""
+    var renameConversation: (SavedConversation, String) -> Void
 
     var body: some View {
         List {
             ForEach(savedConversations, id: \.id) { conversation in
                 NavigationLink(destination: MessageView(conversation: conversation).background(.background)) {
-                    VStack(alignment: .leading, spacing: spacing) {
-                        Text(conversation.title)
-                            .font(.body)
-                            .bold()
-                        Text(conversation.content)
-                            .foregroundColor(.secondary)
-                            .lineLimit(1)
-                            .font(.body)
-                            .frame(
-                                maxWidth: .infinity,
-                                maxHeight: .infinity,
-                                alignment: .leading
-                            )
-                    }
-                    .padding(3)
-                }
-                .contextMenu {
-                    Button(action: {
-                        isRenameAlertPresented = true
-                    }) {
-                        Text("Rename")
-                    }
-                }
-                .alert("Rename Save", isPresented: $isRenameAlertPresented) {
-                    TextField("Enter new name", text: $newName)
-                    Button("Rename", action: {
-                        //rename logic here
-                    })
-                    Button("Cancel", role: .cancel, action: {}
-                    )
+                    listItem(conversation: conversation, delete: delete, renameConversation: renameConversation)
                 }
             }
             .onDelete(perform: delete)
         }
         .navigationTitle("Saved")
     }
+}
+
+struct listItem: View {
+    @ObservedObject var conversation: SavedConversation
+    
+    @State private var isRenameAlertPresented: Bool = false
+    @State private var newName: String = ""
+    
+    var delete: (IndexSet) -> Void
+    var renameConversation: (SavedConversation, String) -> Void
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: spacing) {
+            Text(conversation.title)
+                .font(.body)
+                .bold()
+            Text(conversation.content)
+                .foregroundColor(.secondary)
+                .lineLimit(1)
+                .font(.body)
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity,
+                    alignment: .leading
+                )
+        }
+//        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+//            Button {
+//                delete([savedConversations.firstIndex(of: conversation)!])
+//            } label: {
+//                Label("Delete", systemImage: "trash")
+//            }
+//            .tint(.red)
+//        }
+        .padding(3)
+        .contextMenu {
+            Button(action: {
+                newName = conversation.title
+                isRenameAlertPresented = true
+            }) {
+                Text("Rename")
+            }
+        }
+        .alert("Rename Save", isPresented: $isRenameAlertPresented) {
+            TextField("Enter new name", text: $newName)
+            Button("Rename", action: {
+                renameConversation(conversation, newName)
+                newName = ""
+            })
+            Button("Cancel", role: .cancel, action: {}
+            )
+        }
+    }
+    
     
     private var spacing: CGFloat {
         #if os(iOS)
@@ -67,7 +89,7 @@ struct SavedConversationList: View {
 }
 
 struct MessageView: View {
-    var conversation: SavedConversation
+    @ObservedObject var conversation: SavedConversation
 
     var body: some View {
         ScrollView {
@@ -93,9 +115,16 @@ struct MessageView: View {
     
 }
 
-struct SavedConversation: Identifiable {
+class SavedConversation: Identifiable, ObservableObject {
     let id: UUID
     let date: Date
     let content: String
-    var title: String
+    @Published var title: String
+    
+    init(id: UUID, date: Date, content: String, title: String) {
+        self.id = id
+        self.date = date
+        self.content = content
+        self.title = title
+    }
 }

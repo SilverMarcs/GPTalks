@@ -34,7 +34,7 @@ struct Conversation: Codable, Identifiable, Hashable {
     }
     
     func toSavedConversation() -> SavedConversation {
-        return SavedConversation(id: UUID(), date: date, content: content, title: "Saved")
+        return SavedConversation(id: UUID(), date: Date(), content: content, title: "Saved")
     }
 }
 

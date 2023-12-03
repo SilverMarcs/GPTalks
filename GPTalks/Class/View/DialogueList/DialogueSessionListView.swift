@@ -109,7 +109,7 @@ struct DialogueSessionListView: View {
     var dialoguelist: some View {
         #if os(macOS)
             if isSelected {
-                SavedConversationList(savedConversations: $savedConversations, delete: deleteConversation, rename: renameConversation)
+                SavedConversationList(savedConversations: $savedConversations, delete: deleteConversation, renameConversation: renameConversation)
             } else {
                 list
             }
@@ -156,7 +156,7 @@ struct DialogueSessionListView: View {
             .padding(.horizontal, horizontalPadding)
         #else
             NavigationLink {
-                SavedConversationList(savedConversations: $savedConversations, delete: deleteConversation, rename: renameConversation)
+                SavedConversationList(savedConversations: $savedConversations, delete: deleteConversation, renameConversation: renameConversation)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")
@@ -236,35 +236,26 @@ struct DialogueSessionListView: View {
         }
     }
     
-    func renameConversation(id: UUID, newTitle: String) {
-      // Fetch the context
-      let context = PersistenceController.shared.container.viewContext
-      
-      // Create a fetch request for the conversation with the given id
-      let fetchRequest: NSFetchRequest<NSFetchRequestResult> = SavedConversationData.fetchRequest()
-      fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-      
-      do {
-          // Fetch the conversation
-          let results = try context.fetch(fetchRequest)
-          
-          // Check if the conversation was found
-          if let savedConversationData = results.first as? SavedConversationData {
-              // Update the title
-              savedConversationData.title = newTitle
-              
-              // Save the changes
-              do {
-                  try PersistenceController.shared.save()
-              } catch {
-                  print("Failed to save conversation: \(error)")
-              }
-          } else {
-              print("Conversation with id \(id) not found.")
-          }
-      } catch {
-          print("Failed to fetch conversation: \(error)")
-      }
+    private func renameConversation(conversation: SavedConversation, newName: String) {
+        // Update the title of the in-memory conversation object
+        conversation.title = newName
+
+        // Update the corresponding Core Data entry
+        let context = PersistenceController.shared.container.viewContext
+        let fetchRequest: NSFetchRequest<SavedConversationData> = SavedConversationData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", conversation.id as CVarArg)
+
+        do {
+            let results = try context.fetch(fetchRequest)
+            if let savedConversationData = results.first {
+                savedConversationData.title = newName
+                try context.save()
+            } else {
+                print("Failed to find the conversation to rename.")
+            }
+        } catch {
+            print("Failed to rename conversation: \(error)")
+        }
     }
     
     func fetchConversations() -> [SavedConversation] {
