@@ -24,6 +24,7 @@ struct ContentView: View {
 #endif
 
     var body: some View {
+        #if os(macOS)
         NavigationSplitView {
             DialogueSessionListView(dialogueSessions: $dialogueSessions,
                                     selectedDialogueSession: $selectedDialogueSession,
@@ -49,6 +50,19 @@ struct ContentView: View {
             }
             #endif
         }
+        #else
+        NavigationStack {
+            DialogueSessionListView(dialogueSessions: $dialogueSessions,
+                                    selectedDialogueSession: $selectedDialogueSession,
+                                    deleteDialogue: deleteDialogue,
+                                    addDialogue: addDialogue)
+            .onAppear {
+                dialogueSessions = items.compactMap {
+                    DialogueSession(rawData: $0)
+                }
+            }
+        }
+        #endif
     }
 
 

@@ -12,8 +12,8 @@ struct SavedConversationList: View {
     @State var selectedConversation: Conversation?
 
     var body: some View {
-        let savedConversations: [ConversationWithTitle] = dialogueSessions.flatMap { dialogueSession -> [ConversationWithTitle] in
-            dialogueSession.conversations.filter { $0.saved }.map { ConversationWithTitle(conversation: $0, title: dialogueSession.title) }
+        let savedConversations: [SavedConversation] = dialogueSessions.flatMap { dialogueSession -> [SavedConversation] in
+            dialogueSession.conversations.filter { $0.saved }.map { SavedConversation(conversation: $0, title: dialogueSession.title) }
         }
 
         List(savedConversations, selection: $selectedConversation) { conversationWithTitle in
@@ -34,16 +34,13 @@ struct SavedConversationList: View {
                 }
                 .padding(3)
             }
-            .navigationTitle("Saved Conversations")
-            #if os(iOS)
-                .navigationBarTitleDisplayMode(.inline)
-            #endif
+            .navigationTitle("Saved")
         }
     }
 }
 
 struct MessageView: View {
-    var conversationWithTitle: ConversationWithTitle
+    var conversationWithTitle: SavedConversation
 
     var body: some View {
         ScrollView {
@@ -58,7 +55,7 @@ struct MessageView: View {
     }
 }
 
-struct ConversationWithTitle: Identifiable {
+struct SavedConversation: Identifiable {
     let id = UUID()
     let conversation: Conversation
     let title: String
