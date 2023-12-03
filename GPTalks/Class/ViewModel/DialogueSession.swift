@@ -201,14 +201,13 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 streamText += result.choices.first?.delta.content ?? ""
                 conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
             }
+            lastConversationData.sync(with: conversations[conversations.count - 1])
         }
-        
-        lastConversationData.sync(with: conversations[conversations.count - 1])
         
         do {
             try await streamingTask?.value
             
-//            lastConversationData.sync(with: conversations[conversations.count - 1])
+            lastConversationData.sync(with: conversations[conversations.count - 1])
             
         } catch {
             // TODO: do better with stop_reason from openai

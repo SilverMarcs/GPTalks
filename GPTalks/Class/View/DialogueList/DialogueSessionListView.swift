@@ -109,7 +109,7 @@ struct DialogueSessionListView: View {
     var dialoguelist: some View {
         #if os(macOS)
             if isSelected {
-                SavedConversationList(savedConversations: $savedConversations)
+                SavedConversationList(savedConversations: $savedConversations, delete: deleteConversation, rename: renameConversation)
             } else {
                 list
             }
@@ -156,7 +156,7 @@ struct DialogueSessionListView: View {
             .padding(.horizontal, horizontalPadding)
         #else
             NavigationLink {
-                SavedConversationList(savedConversations: $savedConversations)
+                SavedConversationList(savedConversations: $savedConversations, delete: deleteConversation, rename: renameConversation)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")
@@ -207,7 +207,65 @@ struct DialogueSessionListView: View {
             print("Conversation with id \(conversation.id) already exists.")
         }
     }
+    
+    public func deleteConversation(at offsets: IndexSet) {
+        // Delete the conversations from the array
+        let conversationsToDelete = offsets.map { savedConversations[$0] }
+        savedConversations.remove(atOffsets: offsets)
 
+        // Delete the conversations from Core Data
+        let context = PersistenceController.shared.container.viewContext
+        for conversation in conversationsToDelete {
+            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = SavedConversationData.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "id == %@", conversation.id as CVarArg)
+
+            do {
+                let results = try context.fetch(fetchRequest)
+                if let savedConversationData = results.first as? SavedConversationData {
+                    context.delete(savedConversationData)
+                }
+            } catch {
+                print("Failed to delete conversation: \(error)")
+            }
+        }
+
+        do {
+            try PersistenceController.shared.save()
+        } catch {
+            print("Failed to save context after deleting conversation: \(error)")
+        }
+    }
+    
+    func renameConversation(id: UUID, newTitle: String) {
+      // Fetch the context
+      let context = PersistenceController.shared.container.viewContext
+      
+      // Create a fetch request for the conversation with the given id
+      let fetchRequest: NSFetchRequest<NSFetchRequestResult> = SavedConversationData.fetchRequest()
+      fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+      
+      do {
+          // Fetch the conversation
+          let results = try context.fetch(fetchRequest)
+          
+          // Check if the conversation was found
+          if let savedConversationData = results.first as? SavedConversationData {
+              // Update the title
+              savedConversationData.title = newTitle
+              
+              // Save the changes
+              do {
+                  try PersistenceController.shared.save()
+              } catch {
+                  print("Failed to save conversation: \(error)")
+              }
+          } else {
+              print("Conversation with id \(id) not found.")
+          }
+      } catch {
+          print("Failed to fetch conversation: \(error)")
+      }
+    }
     
     func fetchConversations() -> [SavedConversation] {
         let context = PersistenceController.shared.container.viewContext
@@ -215,7 +273,13 @@ struct DialogueSessionListView: View {
 
         do {
             let results = try context.fetch(fetchRequest)
-            return results.map { SavedConversation(id: $0.id!, date: $0.date!, content: $0.content!, title: $0.title!) }
+            savedConversations =  results.map { SavedConversation(id: $0.id!, date: $0.date!, content: $0.content!, title: $0.title!) }
+            
+            savedConversations.sort {
+                $0.date < $1.date
+            }
+            
+            return savedConversations
         } catch {
             print("Failed to fetch conversations: \(error)")
             return []

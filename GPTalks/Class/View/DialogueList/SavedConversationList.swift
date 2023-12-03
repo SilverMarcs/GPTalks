@@ -9,45 +9,52 @@ import SwiftUI
 
 struct SavedConversationList: View {
     @Binding var savedConversations: [SavedConversation]
+    
+    var delete: (IndexSet) -> Void
+    var rename: (UUID, String) -> Void
+    
+    @State private var isRenameAlertPresented = false
+    @State private var newName = ""
 
     var body: some View {
-        List(savedConversations) { conversation in
-            NavigationLink(destination: MessageView(conversation: conversation).background(.background)) {
-                VStack(alignment: .leading, spacing: spacing) {
-                    Text(conversation.title)
-                        .font(.body)
-                        .bold()
-                    Text(conversation.content)
-                        .foregroundColor(.secondary)
-                        .lineLimit(1)
-                        .font(.body)
-                        .frame(
-                            maxWidth: .infinity,
-                            maxHeight: .infinity,
-                            alignment: .leading
-                        )
+        List {
+            ForEach(savedConversations, id: \.id) { conversation in
+                NavigationLink(destination: MessageView(conversation: conversation).background(.background)) {
+                    VStack(alignment: .leading, spacing: spacing) {
+                        Text(conversation.title)
+                            .font(.body)
+                            .bold()
+                        Text(conversation.content)
+                            .foregroundColor(.secondary)
+                            .lineLimit(1)
+                            .font(.body)
+                            .frame(
+                                maxWidth: .infinity,
+                                maxHeight: .infinity,
+                                alignment: .leading
+                            )
+                    }
+                    .padding(3)
                 }
-                .padding(3)
+                .contextMenu {
+                    Button(action: {
+                        isRenameAlertPresented = true
+                    }) {
+                        Text("Rename")
+                    }
+                }
+                .alert("Rename Save", isPresented: $isRenameAlertPresented) {
+                    TextField("Enter new name", text: $newName)
+                    Button("Rename", action: {
+                        //rename logic here
+                    })
+                    Button("Cancel", role: .cancel, action: {}
+                    )
+                }
             }
-            .navigationTitle("Saved")
+            .onDelete(perform: delete)
         }
-    }
-    
-    public func saveConversation(conversation: SavedConversation) {
-        savedConversations.insert(conversation, at: 0)
-        
-        let context = PersistenceController.shared.container.viewContext
-        let savedConversationData = SavedConversationData(context: context)
-        savedConversationData.id = conversation.id
-        savedConversationData.date = conversation.date
-        savedConversationData.content = conversation.content
-        savedConversationData.title = conversation.title
-
-        do {
-            try PersistenceController.shared.save()
-        } catch {
-            print("Failed to save conversation: \(error)")
-        }
+        .navigationTitle("Saved")
     }
     
     private var spacing: CGFloat {
@@ -70,6 +77,13 @@ struct MessageView: View {
                 .padding()
             Spacer()
         }
+        .toolbar {
+            Button {
+                conversation.content.copyToPasteboard()
+            } label: {
+                Text("Copy")
+            }
+        }
         .navigationTitle(conversation.title)
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
@@ -83,5 +97,5 @@ struct SavedConversation: Identifiable {
     let id: UUID
     let date: Date
     let content: String
-    let title: String
+    var title: String
 }
