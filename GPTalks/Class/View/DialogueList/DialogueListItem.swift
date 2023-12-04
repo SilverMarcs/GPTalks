@@ -103,6 +103,8 @@ struct DialogueListItem: View {
         }
         .swipeActions(edge: .leading) {
             Button(role: .cancel) {
+                sessionToRename = session
+                newName = session.title
                 showRenameDialogue.toggle()
             } label: {
                 Label("Rename", systemImage: "pencil")

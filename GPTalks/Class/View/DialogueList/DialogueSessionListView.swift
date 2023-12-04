@@ -42,7 +42,7 @@ struct DialogueSessionListView: View {
             #if os(macOS)
                 Group {
                     if dialogueSessions.isEmpty {
-                        placeHolder
+                        PlaceHolderView(imageName: "message.fill", title: "No Message")
                     } else {
                         if isBookmarkSelected {
                             SavedConversationList(savedConversations: $savedConversations, delete: deleteConversation, renameConversation: renameConversation)
@@ -64,7 +64,7 @@ struct DialogueSessionListView: View {
                     Divider()
 
                     if dialogueSessions.isEmpty {
-                        placeHolder
+                        PlaceHolderView(imageName: "message.fill", title: "No Message")
                     } else {
                         list
                     }
@@ -157,23 +157,6 @@ struct DialogueSessionListView: View {
                 .padding(.horizontal, 18)
             }
         #endif
-    }
-
-    @ViewBuilder
-    var placeHolder: some View {
-        if dialogueSessions.isEmpty {
-            VStack {
-                Spacer()
-                Image(systemName: "message.fill")
-                    .font(.system(size: 50))
-                    .padding()
-                    .foregroundColor(.secondary)
-                Text("No Message")
-                    .font(.title3)
-                    .bold()
-                Spacer()
-            }
-        }
     }
 
     private func saveConversation(conversation: SavedConversation) {

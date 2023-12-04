@@ -43,7 +43,7 @@ class AppConfiguration: ObservableObject {
     
     /// gpt4free
     @AppStorage("configuration.Gkey") var Gkey = ""
-    @AppStorage("configuration.Gprovider") var Gprovider: GPT4FreeProvider = .phind
+//    @AppStorage("configuration.Gprovider") var Gprovider: GPT4FreeProvider = .phind
     @AppStorage("configuration.Gmodel") var Gmodel: Model = .gpt4
     @AppStorage("configuration.Ghost") var Ghost: String = ""
     

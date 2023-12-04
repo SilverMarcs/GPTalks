@@ -120,7 +120,7 @@ struct MessageListView: View {
                            }
                            .onAppear {
                                #if os(iOS)
-                               DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                    withAnimation {
                                        scrollToBottom(proxy: proxy)
                                    }

@@ -30,15 +30,22 @@ struct SavedConversationList: View {
     }
 
     var body: some View {
-        List {
-            ForEach(filteredSavedConversations, id: \.id) { conversation in
-                NavigationLink(destination: MessageView(conversation: conversation).background(.background)) {
-                    savedListItem(conversation: conversation, delete: delete, renameConversation: renameConversation)
+        Group {
+            if savedConversations.isEmpty {
+                PlaceHolderView(imageName: "bookmark.slash", title: "No saved conversations")
+            } else if filteredSavedConversations.isEmpty {
+                PlaceHolderView(imageName: "exclamationmark.magnifyingglass", title: "No search results")
+            } else {
+                List {
+                    ForEach(filteredSavedConversations, id: \.id) { conversation in
+                        NavigationLink(destination: MessageView(conversation: conversation).background(.background)) {
+                            savedListItem(conversation: conversation, delete: delete, renameConversation: renameConversation)
+                        }
+                    }
                 }
             }
         }
         .searchable(text: $searchQuery)
-//        .searchable(text: $searchQuery, placement: .navigationBarDrawer(displayMode: .always))
         .navigationTitle("Saved")
         #if os(iOS)
         .navigationBarTitleDisplayMode(.large)

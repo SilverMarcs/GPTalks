@@ -265,7 +265,7 @@ struct ConversationView: View {
         #if os(iOS)
         60
         #else
-        80
+        95
         #endif
     }
 }
