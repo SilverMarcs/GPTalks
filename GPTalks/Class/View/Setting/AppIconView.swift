@@ -9,13 +9,13 @@ import SwiftUI
 
 #if os(iOS)
 struct AppIconView: View {
-    @State private var selectedIconName: String = "AppIcon2" // Default selected icon
+    @State private var selectedIconName: String = "AppIconPurple" // Default selected icon
     
     var body: some View {
         Form {
             Section {
-                SelectableRow(iconName: "AppIcon2", selectedIconName: $selectedIconName, label: "Purple Icon")
-                SelectableRow(iconName: "AppIcon3", selectedIconName: $selectedIconName, label: "Pink Icon")
+                SelectableRow(iconName: "AppIconPurple", selectedIconName: $selectedIconName, label: "Purple Icon")
+                SelectableRow(iconName: "AppIconPink", selectedIconName: $selectedIconName, label: "Pink Icon")
             }
             .navigationTitle("App Icon")
             .navigationBarTitleDisplayMode(.inline)
