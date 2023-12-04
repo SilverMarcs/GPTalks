@@ -30,7 +30,7 @@ struct DialogueSettingsView: View {
 
     var macOS: some View {
             VStack {
-                LabeledPicker(title: "Provider", picker: _providerPicker)
+                LabeledPicker(title: "Provider", picker: providerPicker)
                     .onChange(of: configuration.provider) {
                         configuration.model = configuration.provider.preferredModel
                     }
@@ -57,12 +57,18 @@ struct DialogueSettingsView: View {
         NavigationView {
             Form {
                 Section("Parameters") {
-                    modelPicker
                     providerPicker
-                    ignoreWeb
+                        .onChange(of: configuration.provider) {
+                            configuration.model = configuration.provider.preferredModel
+                        }
+                    
+                    modelPicker
+
                     contextPicker
+                    
                     tempStepper
                 }
+                
                 Section("System Prompt") {
                     systemPrompt
                 }
@@ -82,8 +88,8 @@ struct DialogueSettingsView: View {
     }
     #endif
     
-    var _providerPicker: some View {
-        Picker("Model", selection: $configuration.provider) {
+    var providerPicker: some View {
+        Picker("Provider", selection: $configuration.provider) {
             ForEach(Provider.allCases, id: \.self) { provider in
                 Text(provider.name)
                     .tag(provider.id)
@@ -97,22 +103,6 @@ struct DialogueSettingsView: View {
                 Text(model.name)
                     .tag(model.id)
             }
-        }
-    }
-    
-    var providerPicker: some View {
-        Picker("Provider", selection: $configuration.gpt4freeProvider) {
-            ForEach(GPT4FreeProvider.allCases, id: \.self) { provider in
-                Text(provider.name)
-                    .tag(provider.rawValue)
-            }
-        }
-    }
-    
-    var ignoreWeb: some View {
-        Picker("Ignore Web", selection: $configuration.ignoreWeb) {
-            Text("True").tag("True")
-            Text("False").tag("False")
         }
     }
     

@@ -24,7 +24,6 @@ struct ServiceSettingsView: View {
     }
 
     var macOS: some View {
-//        ScrollView {
             VStack(spacing: 30) {
                 GroupBox(label: Text("Provider Settings")) {
                     HStack {
@@ -35,30 +34,6 @@ struct ServiceSettingsView: View {
                             .frame(width: widthValue)
                     }
                     .padding(paddingValue)
-                    
-                    if provider == .gpt4free {
-                        Divider()
-                        
-                        HStack {
-                            Text("Default Provider")
-                            Spacer()
-                            providerPicker
-                                .labelsHidden()
-                                .frame(width: widthValue)
-                        }
-                        .padding(paddingValue)
-
-                        Divider()
-                        
-                        HStack {
-                            Text("Ignore Web")
-                            Spacer()
-                            ignoreWeb
-                                .labelsHidden()
-                                .frame(width: widthValue)
-                        }
-                        .padding(paddingValue)
-                    }
                 }
 
                 GroupBox(label: Text("API Settings")) {
@@ -89,7 +64,6 @@ struct ServiceSettingsView: View {
                 
                 Spacer()
             }
-//        }
         .padding()
     }
 
@@ -97,11 +71,6 @@ struct ServiceSettingsView: View {
         Form {
             Section("Default Settings") {
                 modelPicker
-
-                if provider == .gpt4free {
-                    providerPicker
-                    ignoreWeb
-                }
             }
             Section("API Settings") {
                 if provider == .custom || provider == .gpt4free {
@@ -119,15 +88,6 @@ struct ServiceSettingsView: View {
             ForEach(provider.models, id: \.self) { model in
                 Text(model.name)
                     .tag(model.rawValue)
-            }
-        }
-    }
-    
-    var providerPicker: some View {
-        Picker("Provider", selection: configuration.$Gprovider) {
-            ForEach(GPT4FreeProvider.allCases, id: \.self) { provider in
-                Text(provider.name)
-                    .tag(provider.rawValue)
             }
         }
     }

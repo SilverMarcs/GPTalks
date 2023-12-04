@@ -30,7 +30,7 @@ struct DialogueListItem: View {
                         .font(titleFont)
                         .lineLimit(1)
                     Spacer()
-                    Text(session.configuration.provider == .gpt4free ? session.configuration.gpt4freeProvider.name : session.configuration.model.name)
+                    Text(session.configuration.model.name)
                         .font(Font.system(.subheadline))
                 }
                 VStack {

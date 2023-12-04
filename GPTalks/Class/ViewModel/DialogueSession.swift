@@ -16,8 +16,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         var contextLength: Int
         var provider: Provider
         var model: Model
-        var ignoreWeb: String
-        var gpt4freeProvider: GPT4FreeProvider
         
         init() {
             provider = AppConfiguration.shared.preferredChatService
@@ -25,10 +23,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             temperature = AppConfiguration.shared.temperature
             systemPrompt = AppConfiguration.shared.systemPrompt
             model = provider.preferredModel
-            ignoreWeb = AppConfiguration.shared.ignoreWeb
-            gpt4freeProvider = AppConfiguration.shared.Gprovider
         }
-        
     }
     
     //MARK: - Codable
@@ -180,19 +175,13 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         let openAIconfig = configuration.provider.config
         let service: OpenAI = OpenAI(configuration: openAIconfig)
         
-        var query = ChatQuery(model: configuration.model.id,
+        let query = ChatQuery(model: configuration.model.id,
                               messages: ([Conversation(role: "system", content: configuration.systemPrompt)] + Array(conversations.suffix(configuration.contextLength - 1))).map({ conversation in
                                   conversation.toChat()
                               }),
                               temperature: configuration.temperature,
                               maxTokens: configuration.model.maxTokens,
                               stream: true)
-        
-        if configuration.provider == .gpt4free {
-            query.model = configuration.model.id
-            query.provider = configuration.gpt4freeProvider.name
-            query.ignore_web = configuration.ignoreWeb
-        }
         
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         

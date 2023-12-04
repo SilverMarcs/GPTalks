@@ -128,7 +128,7 @@ struct DialogueSessionListView: View {
             } label: {
                 HStack {
                     Image(systemName: isBookmarkSelected ? "bookmark.fill" : "bookmark")
-                    Text("Bookmarked Conversations")
+                    Text("Saved Conversations")
                     Spacer()
                     Image(systemName: "chevron.right")
                 }
@@ -148,12 +148,13 @@ struct DialogueSessionListView: View {
                 HStack {
                     Image(systemName: "bookmark")
                         .padding(.horizontal)
-                    Text("Bookmarked Conversations")
+                    Text("Saved Conversations")
                     Spacer()
                     Text("\(savedConversations.count)")
                         .foregroundColor(.secondary)
                 }
-                .padding(.horizontal, 21)
+                .foregroundColor(.primary)
+                .padding(.horizontal, 18)
             }
         #endif
     }

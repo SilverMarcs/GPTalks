@@ -81,6 +81,7 @@ struct savedListItem: View {
                     Text("Rename")
                 }
             }
+            .tint(.accentColor)
         }
         .swipeActions(edge: .trailing) {
             Button(role: .destructive) {
