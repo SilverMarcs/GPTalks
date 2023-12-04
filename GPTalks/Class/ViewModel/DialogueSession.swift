@@ -307,7 +307,10 @@ extension DialogueSession {
         guard let index = conversations.firstIndex(where: { $0.id == conversation.id }) else {
             return
         }
-        removeConversation(at: index)
+        
+        withAnimation(.easeInOut(duration: 0.2)) {
+            removeConversation(at: index)
+        }
         
         
         if conversations.isEmpty {
@@ -340,7 +343,10 @@ extension DialogueSession {
 
     
     func removeAllConversations() {
-        conversations.removeAll()
+        withAnimation {
+            conversations.removeAll()
+        }
+        
         do {
             let viewContext = PersistenceController.shared.container.viewContext
             if let conversations = rawData?.conversations as? Set<ConversationData> {

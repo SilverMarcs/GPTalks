@@ -118,17 +118,6 @@ struct MessageListView: View {
                            } saveHandler: {
                                saveConversation(conversation.toSavedConversation())
                            }
-                           .onAppear {
-                               #if os(iOS)
-                               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                   withAnimation {
-                                       scrollToBottom(proxy: proxy)
-                                   }
-                               }
-                               #else
-                               scrollToBottom(proxy: proxy)
-                               #endif
-                           }
                            .onChange(of: conversation.content) {
                                scrollToBottom(proxy: proxy)
                            }
@@ -153,6 +142,20 @@ struct MessageListView: View {
                    
                    Spacer()
                       .id(bottomID)
+               }
+               .onAppear {
+                   #if os(iOS)
+                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                       withAnimation {
+                           scrollToBottom(proxy: proxy)
+                       }
+                   }
+                   #else
+                   scrollToBottom(proxy: proxy)
+                   #endif
+               }
+               .onChange(of: session.conversations.count) {
+                   scrollToBottom(proxy: proxy)
                }
                .onTapGesture {
                    isTextFieldFocused = false
