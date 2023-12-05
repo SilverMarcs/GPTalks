@@ -32,9 +32,7 @@ struct SavedConversationList: View {
     var body: some View {
         Group {
             if savedConversations.isEmpty {
-                PlaceHolderView(imageName: "bookmark.slash", title: "No saved conversations")
-            } else if filteredSavedConversations.isEmpty {
-                PlaceHolderView(imageName: "exclamationmark.magnifyingglass", title: "No search results")
+                PlaceHolderView(imageName: "bookmark", title: "No saved conversations")
             } else {
                 List {
                     ForEach(filteredSavedConversations, id: \.id) { conversation in
@@ -43,9 +41,9 @@ struct SavedConversationList: View {
                         }
                     }
                 }
+                .searchable(text: $searchQuery)
             }
         }
-        .searchable(text: $searchQuery)
         .navigationTitle("Saved")
         #if os(iOS)
         .navigationBarTitleDisplayMode(.large)

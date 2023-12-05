@@ -10,8 +10,9 @@ import SwiftUI
 
 struct DialogueSessionListView: View {
     @State private var searchQuery = ""
+    
     #if os(iOS)
-        @State var isShowSettingView = false
+    @State var isShowSettingView = false
     #endif
 
     @Binding var dialogueSessions: [DialogueSession]
@@ -39,67 +40,47 @@ struct DialogueSessionListView: View {
 
     var body: some View {
         Group {
-            #if os(macOS)
-                Group {
-                    if dialogueSessions.isEmpty {
-                        PlaceHolderView(imageName: "message.fill", title: "No Message")
-                    } else {
-                        if isBookmarkSelected {
-                            SavedConversationList(savedConversations: $savedConversations, delete: deleteConversation, renameConversation: renameConversation)
-                        } else {
-                            list
-                        }
-                    }
-                }
-                .safeAreaInset(edge: .bottom) {
-                    savedlistLink
-                }
-                .safeAreaPadding(.bottom, 8)
-            #else
-                VStack {
-                    if !filteredDialogueSessions.isEmpty {
-                        savedlistLink
-                    }
-
-                    Divider()
-
-                    if dialogueSessions.isEmpty {
-                        PlaceHolderView(imageName: "message.fill", title: "No Message")
-                    } else {
-                        list
-                    }
-                }
-            #endif
+#if os(iOS)
+            iOSList
+#else
+            macOSList
+#endif
         }
         .onAppear {
             savedConversations = fetchConversations()
         }
-        #if os(macOS)
-        .frame(minWidth: 290)
-        #else
-        .listStyle(.plain)
-        .navigationTitle("Chats")
-        .navigationBarTitleDisplayMode(.large)
-        .sheet(isPresented: $isShowSettingView) {
-            AppSettingsView()
-        }
-        #endif
     }
+    
+    #if os(iOS)
+    var iOSList: some View {
+        VStack {
+            savedlistLink
 
-    var list: some View {
-        List {
-            ForEach(filteredDialogueSessions, id: \.id) { session in
-                NavigationLink(
-                    destination: MessageListView(session: session, saveConversation: saveConversation),
-                    tag: session,
-                    selection: $selectedDialogueSession) {
-                        DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+            Divider()
+
+            Group {
+                if dialogueSessions.isEmpty {
+                    PlaceHolderView(imageName: "message.fill", title: "No Messages")
+                } else {
+                    List(filteredDialogueSessions) { session in
+                        NavigationLink(
+                            destination: MessageListView(session: session, saveConversation: saveConversation),
+                            label: {
+                                DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+                            }
+                        )
                     }
+
+                }
             }
-        }
-        .searchable(text: $searchQuery)
-        .toolbar {
-            #if os(iOS)
+            .searchable(text: $searchQuery)
+            .listStyle(.plain)
+            .navigationTitle("Chats")
+            .navigationBarTitleDisplayMode(.large)
+            .sheet(isPresented: $isShowSettingView) {
+                AppSettingsView()
+            }
+            .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
                         isShowSettingView = true
@@ -107,18 +88,61 @@ struct DialogueSessionListView: View {
                         Image(systemName: "gear")
                     }
                 }
-            #endif
-            ToolbarItem {
-                Spacer()
-            }
-            ToolbarItem(placement: .automatic) {
-                Button {
-                    addDialogue()
-                } label: {
-                    Image(systemName: "square.and.pencil")
+                
+                ToolbarItem(placement: .automatic) {
+                    Button {
+                        addDialogue()
+                    } label: {
+                        Image(systemName: "square.and.pencil")
+                    }
                 }
             }
         }
+    }
+    #endif
+    
+
+    var macOSList: some View {
+        Group {
+            if isBookmarkSelected {
+                SavedConversationList(savedConversations: $savedConversations, delete: deleteConversation, renameConversation: renameConversation)
+            } else {
+                Group {
+                    if dialogueSessions.isEmpty {
+                        PlaceHolderView(imageName: "message", title: "No Messages")
+                    } else {
+                        List {
+                            ForEach(filteredDialogueSessions, id: \.id) { session in
+                                NavigationLink(
+                                    destination: MessageListView(session: session, saveConversation: saveConversation),
+                                    tag: session,
+                                    selection: $selectedDialogueSession) {
+                                        DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+                                    }
+                            }
+                        }
+                        .searchable(text: $searchQuery)
+                    }
+                }
+                .toolbar {
+                    ToolbarItem {
+                        Spacer()
+                    }
+                    ToolbarItem(placement: .automatic) {
+                        Button {
+                            addDialogue()
+                        } label: {
+                            Image(systemName: "square.and.pencil")
+                        }
+                    }
+                }
+            }
+        }
+        .frame(minWidth: 290)
+        .safeAreaInset(edge: .bottom) {
+            savedlistLink
+        }
+        .safeAreaPadding(.bottom, 8)
     }
 
     var savedlistLink: some View {

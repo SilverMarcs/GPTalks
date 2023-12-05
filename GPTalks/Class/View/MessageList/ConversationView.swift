@@ -229,7 +229,7 @@ struct ConversationView: View {
                     saveHandler()
                 } label: {
                     Image(systemName: "bookmark")
-                    Text("Bookmark")
+                    Text("Save")
                 }
                 
                 Button(role: .destructive) {
@@ -248,7 +248,7 @@ struct ConversationView: View {
                 saveHandler()
             } label: {
                 Image(systemName: "bookmark")
-                Text("Bookmark")
+                Text("Save")
             }
             
             Button(role: .destructive) {
