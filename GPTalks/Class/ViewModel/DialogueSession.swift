@@ -76,7 +76,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     @Published var date = Date()
     @Published var errorDesc: String = ""
     @Published var configuration: Configuration = Configuration()
-    @Published var resetMarker: Int = 0
+    @Published var resetMarker: Int?
     
     private var initFinished = false
     //MARK: - Properties
@@ -176,7 +176,22 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
 
         let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
 
-        let messages = Array(conversations.suffix(from: resetMarker + 1).suffix(configuration.contextLength - 1))
+        var messages: [Conversation]
+        
+//        if (conversations.count < 2) {
+//            messages = Array(conversations.suffix(configuration.contextLength - 1))
+//        } else {
+//            messages = Array(conversations.suffix(from: resetMarker + 1).suffix(configuration.contextLength - 1))
+//        }
+        
+        
+        if let marker = resetMarker {
+            messages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength - 1))
+        } else {
+            messages = Array(conversations.suffix(configuration.contextLength - 1))
+        }
+        
+//        messages = Array(conversations.suffix(configuration.contextLength - 1))
         
         let allMessages = [systemPrompt] + messages
         
@@ -297,6 +312,15 @@ extension DialogueSession {
     
     func removeConversation(at index: Int) {
         let conversation = conversations.remove(at: index)
+        
+        if resetMarker == index {
+            if conversations.count > 1 {
+                resetMarker = index - 1
+            } else {
+                resetMarker = nil
+            }
+        }
+        
         do {
             if let conversationsSet = rawData?.conversations as? Set<ConversationData>,
                let conversationData = conversationsSet.first(where: {
@@ -398,7 +422,9 @@ extension DialogueSession {
             rawData?.date = date
             rawData?.title = title
             rawData?.errorDesc = errorDesc
-            rawData?.resetMarker = Int64(resetMarker)
+            if let marker = resetMarker {
+                rawData?.resetMarker = Int64(marker)
+            }
             rawData?.configuration = try JSONEncoder().encode(configuration)
     
             try PersistenceController.shared.save()

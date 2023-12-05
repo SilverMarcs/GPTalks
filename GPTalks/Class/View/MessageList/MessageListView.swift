@@ -142,8 +142,14 @@ struct MessageListView: View {
                            }
                            .id(index)
                            
-                           if session.resetMarker != 0 && session.conversations.firstIndex(of: conversation) == session.resetMarker {
+                           if session.conversations.firstIndex(of: conversation) == session.resetMarker {
                                ContextResetDivider()
+                                   .padding(.vertical)
+                                   .onAppear {
+                                       withAnimation {
+                                           scrollToBottom(proxy: proxy)
+                                       }
+                                   }
                            }
                        }
                    }
@@ -204,7 +210,7 @@ struct MessageListView: View {
                    #if os(iOS)
                    .background(
                     (colorScheme == .dark ? Color.black : Color.white)
-                        .opacity(colorScheme == .dark ? 0.9 : 0.8)
+                        .opacity(colorScheme == .dark ? 0.7 : 0.6)
                             .background(.ultraThinMaterial)
                             .ignoresSafeArea()
                    )
