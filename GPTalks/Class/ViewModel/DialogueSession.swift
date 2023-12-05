@@ -258,8 +258,7 @@ extension DialogueSession {
                     id: id,
                     date: date,
                     role: role,
-                    content: content,
-                    isResetMarker: data.saved
+                    content: content
                 )
                 return conversation
             } else {

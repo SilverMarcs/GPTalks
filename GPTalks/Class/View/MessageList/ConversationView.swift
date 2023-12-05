@@ -228,7 +228,7 @@ struct ConversationView: View {
                 Button {
                     saveHandler()
                 } label: {
-                    Image(systemName: conversation.isResetMarker ? "bookmark.fill" : "bookmark")
+                    Image(systemName: "bookmark")
                     Text("Bookmark")
                 }
                 
@@ -247,7 +247,7 @@ struct ConversationView: View {
             Button {
                 saveHandler()
             } label: {
-                Image(systemName: conversation.isResetMarker ? "bookmark.fill" : "bookmark")
+                Image(systemName: "bookmark")
                 Text("Bookmark")
             }
             
