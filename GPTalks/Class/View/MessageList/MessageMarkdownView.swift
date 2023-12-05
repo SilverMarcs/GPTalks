@@ -67,7 +67,7 @@ struct MessageMarkdownView: View {
                 Image(systemName: isButtonPressed ? "checkmark" : "clipboard")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 9, height: 19)
+                    .frame(width: buttonWidth, height: buttonHeight)
                     .padding(.vertical, 1)
                     .padding(.horizontal, 1)
             }
@@ -77,6 +77,23 @@ struct MessageMarkdownView: View {
             #endif
             .cornerRadius(5)
         }
+    
+        private var buttonHeight: CGFloat {
+            #if os(macOS)
+            19
+            #else
+            22
+            #endif
+        }
+        
+        private var buttonWidth: CGFloat {
+            #if os(macOS)
+            9
+            #else
+            12
+            #endif
+        }
+        
     }
 
     private var theme: Splash.Theme {

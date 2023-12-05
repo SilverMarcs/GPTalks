@@ -207,7 +207,7 @@ struct ConversationView: View {
                     isEditing = true
                     isFocused = true
                 } label: {
-                    Image(systemName: "pencil")
+                    Image(systemName: "pencil.tip")
                     if showText {
                         Text("Edit")
                     }
@@ -228,7 +228,7 @@ struct ConversationView: View {
                 Button {
                     saveHandler()
                 } label: {
-                    Image(systemName: conversation.saved ? "bookmark.fill" : "bookmark")
+                    Image(systemName: conversation.isResetMarker ? "bookmark.fill" : "bookmark")
                     Text("Bookmark")
                 }
                 
@@ -247,7 +247,7 @@ struct ConversationView: View {
             Button {
                 saveHandler()
             } label: {
-                Image(systemName: conversation.saved ? "bookmark.fill" : "bookmark")
+                Image(systemName: conversation.isResetMarker ? "bookmark.fill" : "bookmark")
                 Text("Bookmark")
             }
             

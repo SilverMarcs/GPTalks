@@ -16,6 +16,7 @@
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="errorDesc" attributeType="String" defaultValueString=""/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="resetMarker" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="title" attributeType="String" defaultValueString="New Chat"/>
         <relationship name="conversations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ConversationData" inverseName="dialogue" inverseEntity="ConversationData"/>
     </entity>

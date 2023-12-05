@@ -76,6 +76,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     @Published var date = Date()
     @Published var errorDesc: String = ""
     @Published var configuration: Configuration = Configuration()
+    @Published var resetMarker: Int = 0
     
     private var initFinished = false
     //MARK: - Properties
@@ -159,8 +160,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
-
-        
         if isReplying() {
             return
         }
@@ -174,14 +173,20 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         
         let openAIconfig = configuration.provider.config
         let service: OpenAI = OpenAI(configuration: openAIconfig)
+
+        let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
+
+        let messages = Array(conversations.suffix(from: resetMarker + 1).suffix(configuration.contextLength - 1))
+        
+        let allMessages = [systemPrompt] + messages
         
         let query = ChatQuery(model: configuration.model.id,
-                              messages: ([Conversation(role: "system", content: configuration.systemPrompt)] + Array(conversations.suffix(configuration.contextLength - 1))).map({ conversation in
-                                  conversation.toChat()
-                              }),
-                              temperature: configuration.temperature,
-                              maxTokens: configuration.model.maxTokens,
-                              stream: true)
+                            messages: allMessages.map({ conversation in
+                                conversation.toChat()
+                            }),
+                            temperature: configuration.temperature,
+                            maxTokens: configuration.model.maxTokens,
+                            stream: true)
         
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         
@@ -232,11 +237,14 @@ extension DialogueSession {
               let conversations = rawData.conversations as? Set<ConversationData> else {
             return nil
         }
+        let resetMarker = rawData.resetMarker
+        
         self.rawData = rawData
         self.id = id
         self.date = date
         self.title = title
         self.errorDesc = errorDesc
+        self.resetMarker = Int(resetMarker)
         if let configuration = try? JSONDecoder().decode(Configuration.self, from: configurationData) {
             self.configuration = configuration
         }
@@ -251,7 +259,7 @@ extension DialogueSession {
                     date: date,
                     role: role,
                     content: content,
-                    saved: data.saved
+                    isResetMarker: data.saved
                 )
                 return conversation
             } else {
@@ -368,6 +376,21 @@ extension DialogueSession {
         save()
     }
     
+    func resetContext() {
+        if conversations.isEmpty {
+            return
+        }
+        
+        // if reset marker is already at the end of conversations, then change it to 0
+        if resetMarker == conversations.count - 1 {
+            resetMarker = 0
+        } else {
+            resetMarker = conversations.count - 1
+        }
+
+        save()
+    }
+    
     func save() {
         guard initFinished else {
             return
@@ -376,6 +399,7 @@ extension DialogueSession {
             rawData?.date = date
             rawData?.title = title
             rawData?.errorDesc = errorDesc
+            rawData?.resetMarker = Int64(resetMarker)
             rawData?.configuration = try JSONEncoder().encode(configuration)
     
             try PersistenceController.shared.save()

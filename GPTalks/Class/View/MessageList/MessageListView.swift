@@ -50,6 +50,13 @@ struct MessageListView: View {
                             Image(systemName: "slider.vertical.3")
                         }
                         
+                        Button {
+                            session.resetContext()
+                        } label: {
+                            Text("Reset Context")
+                            Image(systemName: "eraser")
+                        }
+                        
                         Button(role: .destructive) {
                             isShowDeleteWarning.toggle()
                         } label: {
@@ -122,6 +129,10 @@ struct MessageListView: View {
                                scrollToBottom(proxy: proxy)
                            }
                            .id(index)
+                           
+                           if session.resetMarker != 0 && session.conversations.firstIndex(of: conversation) == session.resetMarker {
+                               ContextResetDivider()
+                           }
                        }
                    }
                    .padding(.vertical, 5)
