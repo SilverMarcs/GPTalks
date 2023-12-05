@@ -83,13 +83,25 @@ struct MessageListView: View {
                 }
                 
                 ToolbarItem(placement: .cancellationAction) {
-                    Button {
-                        isShowDeleteWarning.toggle()
+                    Menu {
+                        Button {
+                            session.resetContext()
+                        } label: {
+                            Text("Reset Context")
+                            Image(systemName: "eraser")
+                        }
+                        .keyboardShortcut(.delete, modifiers: [.command])
+                        
+                        Button(role: .destructive) {
+                            isShowDeleteWarning.toggle()
+                        } label: {
+                            Text("Delete All Messages")
+                            Image(systemName:"trash")
+                        }
+                        .opacity(0)
                     } label: {
-                        Image(systemName:"trash")
+                        Image(systemName: "ellipsis.circle")
                     }
-                    .opacity(0)
-                    .keyboardShortcut(.delete, modifiers: [.command])
                 }
             }
 #endif
