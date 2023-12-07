@@ -75,17 +75,17 @@ struct ContentView: View {
     }
 
     private func deleteDialogue(_ session: DialogueSession) {
-        let sessionId = selectedDialogueSession?.id
+//        let sessionId = selectedDialogueSession?.id
 
         dialogueSessions.removeAll {
             $0.id == session.id
         }
 
-        DispatchQueue.main.async {
-            selectedDialogueSession = dialogueSessions.first(where: {
-                $0.id == sessionId
-            })
-        }
+//        DispatchQueue.main.async {
+//            selectedDialogueSession = dialogueSessions.first(where: {
+//                $0.id == sessionId
+//            })
+//        }
 
         if let item = session.rawData {
             viewContext.delete(item)

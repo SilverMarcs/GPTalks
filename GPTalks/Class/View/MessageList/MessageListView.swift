@@ -146,9 +146,15 @@ struct MessageListView: View {
                                ContextResetDivider()
                                    .padding(.vertical)
                                    .onAppear {
-                                       withAnimation {
-                                           scrollToBottom(proxy: proxy)
+                                       #if os(iOS)
+                                       DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                           withAnimation {
+                                               scrollToBottom(proxy: proxy)
+                                           }
                                        }
+                                       #else
+                                       scrollToBottom(proxy: proxy)
+                                       #endif
                                    }
                            }
                        }
@@ -210,7 +216,7 @@ struct MessageListView: View {
                    #if os(iOS)
                    .background(
                     (colorScheme == .dark ? Color.black : Color.white)
-                        .opacity(colorScheme == .dark ? 0.7 : 0.6)
+                        .opacity(colorScheme == .dark ? 0.9 : 0.6)
                             .background(.ultraThinMaterial)
                             .ignoresSafeArea()
                    )

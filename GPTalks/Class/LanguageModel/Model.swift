@@ -34,6 +34,7 @@ enum Model: String, Codable {
     
     /// gpt4free
     case phind
+    case bing
 
     var name: String {
         switch self {
@@ -64,13 +65,15 @@ enum Model: String, Codable {
         case .ortoppy:
             return "Toppy"
         case .pplx7b:
-            return "PPLX 7B"
+            return "Perplexity"
         case .pplx70b:
             return "PPLX 70B"
         case .openchat:
             return "OpenChat"
         case .mythomist:
             return "MythoMist"
+        case .bing:
+            return "Bing"
         }
     }
 
@@ -80,7 +83,7 @@ enum Model: String, Codable {
             return "gpt-3.5-turbo"
         case .gpt3t_16:
             return "gpt-3.5-turbo-1106"
-        case .gpt4:
+        case .gpt4, .bing:
             return "gpt-4"
         case .gpt4t:
             return "gpt-4-1106-preview"
@@ -146,6 +149,6 @@ enum Model: String, Codable {
         .pplx70b
     ]
     static let nagaModels: [Model] = openAIModels
-    static let gpt4freeModels: [Model] = [.gpt4, .phind]
+    static let gpt4freeModels: [Model] = [.bing, .phind]
     static let customModels: [Model] = openAIModels
 }

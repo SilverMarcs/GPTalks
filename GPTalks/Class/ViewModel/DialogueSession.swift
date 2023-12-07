@@ -375,6 +375,7 @@ extension DialogueSession {
     
     func removeAllConversations() {
         withAnimation {
+            resetMarker = nil
             conversations.removeAll()
         }
         
@@ -404,9 +405,9 @@ extension DialogueSession {
             return
         }
         
-        // if reset marker is already at the end of conversations, then change it to 0
+        // if reset marker is already at the end of conversations, then unset it
         if resetMarker == conversations.count - 1 {
-            resetMarker = 0
+            resetMarker = nil
         } else {
             resetMarker = conversations.count - 1
         }

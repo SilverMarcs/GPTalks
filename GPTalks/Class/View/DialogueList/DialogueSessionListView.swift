@@ -62,15 +62,16 @@ struct DialogueSessionListView: View {
                 if dialogueSessions.isEmpty {
                     PlaceHolderView(imageName: "message.fill", title: "No Messages")
                 } else {
-                    List(filteredDialogueSessions) { session in
-                        NavigationLink(
-                            destination: MessageListView(session: session, saveConversation: saveConversation),
-                            label: {
-                                DialogueListItem(session: session, deleteDialogue: deleteDialogue)
+                    List {
+                        ForEach(filteredDialogueSessions, id: \.id) { session in
+                            NavigationLink(
+                                destination: MessageListView(session: session, saveConversation: saveConversation),
+                                tag: session,
+                                selection: $selectedDialogueSession) {
+                                    DialogueListItem(session: session, deleteDialogue: deleteDialogue)
                             }
-                        )
+                        }
                     }
-
                 }
             }
             .searchable(text: $searchQuery)
