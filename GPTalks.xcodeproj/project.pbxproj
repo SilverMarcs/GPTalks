@@ -17,6 +17,9 @@
 		088CF05E2B1E3098009CFDCB /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 088CF05D2B1E3098009CFDCB /* OpenAI */; };
 		088CF0602B1E43C6009CFDCB /* PlaceHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CF05F2B1E43C6009CFDCB /* PlaceHolderView.swift */; };
 		088CF0622B1E705D009CFDCB /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CF0612B1E705D009CFDCB /* ContextResetDivider.swift */; };
+		08A1EF4E2B2604D000A88A3A /* UserMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */; };
+		08A1EF502B2606C000A88A3A /* AssistantMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */; };
+		08A1EF522B26100600A88A3A /* DialogueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF512B26100600A88A3A /* DialogueStore.swift */; };
 		08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */; };
 		08C3A16D2B1BA636006E4288 /* SavedConversationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16C2B1BA636006E4288 /* SavedConversationList.swift */; };
 		08DFA1C52B22FB85003D48D8 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DFA1C42B22FB85003D48D8 /* OpenAI */; };
@@ -76,6 +79,9 @@
 		0878E53A2B1683ED00E0D79D /* AppIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconView.swift; sourceTree = "<group>"; };
 		088CF05F2B1E43C6009CFDCB /* PlaceHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHolderView.swift; sourceTree = "<group>"; };
 		088CF0612B1E705D009CFDCB /* ContextResetDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextResetDivider.swift; sourceTree = "<group>"; };
+		08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageView.swift; sourceTree = "<group>"; };
+		08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantMessageView.swift; sourceTree = "<group>"; };
+		08A1EF512B26100600A88A3A /* DialogueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueStore.swift; sourceTree = "<group>"; };
 		08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledPicker.swift; sourceTree = "<group>"; };
 		08C3A16C2B1BA636006E4288 /* SavedConversationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedConversationList.swift; sourceTree = "<group>"; };
 		08ED9EB72B02564D00849A1E /* DialogueListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListItem.swift; sourceTree = "<group>"; };
@@ -147,6 +153,15 @@
 				0837E4802AFFE7AF00C03059 /* Model.swift */,
 			);
 			path = LanguageModel;
+			sourceTree = "<group>";
+		};
+		08A1EF4C2B2604C300A88A3A /* MessageView */ = {
+			isa = PBXGroup;
+			children = (
+				08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */,
+				08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */,
+			);
+			path = MessageView;
 			sourceTree = "<group>";
 		};
 		E4994DF029DA8AF8002981D0 /* Setting */ = {
@@ -238,6 +253,7 @@
 			children = (
 				E4C65ED329CA9F7800AFA884 /* DialogueSession.swift */,
 				E4C65ED429CA9F7800AFA884 /* Conversation.swift */,
+				08A1EF512B26100600A88A3A /* DialogueStore.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -245,6 +261,7 @@
 		E4C65ED529CA9F7800AFA884 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				08A1EF4C2B2604C300A88A3A /* MessageView */,
 				E4994DF029DA8AF8002981D0 /* Setting */,
 				E4C65EDF29CA9F7800AFA884 /* DialogueList */,
 				E4C65ED629CA9F7800AFA884 /* MessageList */,
@@ -465,6 +482,7 @@
 				E4C65EFF29CA9F7800AFA884 /* KeyboardPublisher.swift in Sources */,
 				0837E4812AFFE7B000C03059 /* Model.swift in Sources */,
 				E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */,
+				08A1EF502B2606C000A88A3A /* AssistantMessageView.swift in Sources */,
 				E4C65EF729CA9F7800AFA884 /* DialogueSessionListView.swift in Sources */,
 				E4C65EF329CA9F7800AFA884 /* ReplyingIndicatorView.swift in Sources */,
 				088CF0602B1E43C6009CFDCB /* PlaceHolderView.swift in Sources */,
@@ -473,8 +491,10 @@
 				E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */,
 				08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */,
 				E4C65EF629CA9F7800AFA884 /* AppSettingsView.swift in Sources */,
+				08A1EF522B26100600A88A3A /* DialogueStore.swift in Sources */,
 				E4C65EF129CA9F7800AFA884 /* MessageMarkdownView.swift in Sources */,
 				E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */,
+				08A1EF4E2B2604D000A88A3A /* UserMessageView.swift in Sources */,
 				E4C65EA429CA9E7E00AFA884 /* Persistence.swift in Sources */,
 				0837E47D2AFE57A100C03059 /* DefaultConfigView.swift in Sources */,
 				085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */,

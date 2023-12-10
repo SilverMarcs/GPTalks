@@ -148,7 +148,25 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
     
     @MainActor
+    func regenerate(from conversation: Conversation) async {
+        let index = conversations.firstIndex(of: conversation) ?? 0
+        
+        if conversations[index].role != "user" {
+           removeConversations(from: index)
+        }
+        await send(text: lastConversation.content, isRegen: true)
+    }
+    
+    @MainActor
     func edit(from index: Int, conversation: Conversation) async {
+        removeConversations(from: index)
+        await send(text: conversation.content)
+    }
+    
+    @MainActor
+    func edit(conversation: Conversation) async {
+        let index = conversations.firstIndex(of: conversation) ?? 0
+        
         removeConversations(from: index)
         await send(text: conversation.content)
     }

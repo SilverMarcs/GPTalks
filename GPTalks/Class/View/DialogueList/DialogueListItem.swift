@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct DialogueListItem: View {
+    @EnvironmentObject var viewModel: DialogueViewModel
+    
     @State private var showRenameDialogue = false
     @State private var showDeleteDialogue = false
     @State private var newName = ""
@@ -15,7 +17,7 @@ struct DialogueListItem: View {
     @State private var searchQuery = ""
 
     @ObservedObject var session: DialogueSession
-    var deleteDialogue: (DialogueSession) -> Void
+//    var deleteDialogue: (DialogueSession) -> Void
 
     var body: some View {
         HStack(spacing: imgToTextSpace) {
@@ -68,7 +70,7 @@ struct DialogueListItem: View {
         })
         .alert("Confirm Delete?", isPresented: $showDeleteDialogue, actions: {
             Button("Delete", role: .destructive, action: {
-                deleteDialogue(session)
+                viewModel.deleteDialogue(session)
                 showDeleteDialogue = false
             })
             Button("Cancel", role: .cancel, action: {})
@@ -96,7 +98,7 @@ struct DialogueListItem: View {
         }
         .swipeActions(edge: .trailing) {
             Button(role: .destructive) {
-                deleteDialogue(session)
+                viewModel.deleteDialogue(session)
             } label: {
                 Label("Delete", systemImage: "trash")
             }

@@ -9,17 +9,11 @@ import SwiftUI
 
 @main
 struct GPTalks: App {
-    
-    let persistenceController = PersistenceController.shared
-    
     @State var showOpenAIKeyAlert = false
-            
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
-//            #if os(macOS)
-//                .frame(minWidth: 1150, minHeight: 770)
-//            #endif
                 .onAppear() {
                     if AppConfiguration.shared.OAIkey.isEmpty {
                         showOpenAIKeyAlert = true
@@ -32,7 +26,6 @@ struct GPTalks: App {
                 } message: {
                     Text("You need set OpenAI API Key before start a conversation.")
                 }
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
 #if os(macOS)
         Settings {

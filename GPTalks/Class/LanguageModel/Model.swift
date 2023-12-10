@@ -146,7 +146,7 @@ enum Model: String, Codable {
 //        .mythomist,
         .openchat,
         .pplx7b,
-        .pplx70b
+//        .pplx70b
     ]
     static let nagaModels: [Model] = openAIModels
     static let gpt4freeModels: [Model] = [.bing, .phind]

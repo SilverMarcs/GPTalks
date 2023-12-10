@@ -11,7 +11,7 @@ struct ContextResetDivider: View {
     var body: some View {
         HStack {
             line
-            Text("Reset Context")
+            Text("Context Cleared")
                 .font(.footnote)
                 .foregroundColor(.secondary)
             line

@@ -53,6 +53,8 @@ struct ConversationView: View {
             #endif
             
             Text(conversation.content)
+//                .frame(maxHeight: 500)
+//                .frame(maxWidth: .infinity)
                 .textSelection(.enabled)
                 .bubbleStyle(isMyMessage: true, accentColor: accentColor)
         }
@@ -138,6 +140,7 @@ struct ConversationView: View {
 //                    !conversation.isReplying && 
                     AppConfiguration.shared.isMarkdownEnabled {
                     MessageMarkdownView(text: conversation.content)
+                        .frame(maxWidth: .infinity)
                         .textSelection(.enabled)
                 } else {
                     if conversation.content.isEmpty {
@@ -162,7 +165,7 @@ struct ConversationView: View {
             }
             #endif
             
-            Spacer()
+//            Spacer()
         }
         .padding(.leading, 15)
         .padding(.trailing, horizontalPadding)
@@ -225,12 +228,18 @@ struct ConversationView: View {
             
             #if os(macOS)
             Menu {
-                Button {
-                    saveHandler()
-                } label: {
-                    Image(systemName: "bookmark")
-                    Text("Save")
-                }
+//                Button {
+//                    saveHandler()
+//                } label: {
+//                    Image(systemName: "bookmark")
+//                    Text("Save")
+//                }
+                
+                ShareLink(item: conversation.content, label: {
+                    Image(systemName: "square.and.arrow.up")
+                    Text("Share")
+                    
+                })
                 
                 Button(role: .destructive) {
                     deleteHandler()
@@ -244,12 +253,18 @@ struct ConversationView: View {
                     .labelStyle(.iconOnly)
             }
             #else
-            Button {
-                saveHandler()
-            } label: {
-                Image(systemName: "bookmark")
-                Text("Save")
-            }
+//            Button {
+//                saveHandler()
+//            } label: {
+//                Image(systemName: "bookmark")
+//                Text("Save")
+//            }
+            
+            ShareLink(item: conversation.content, label: {
+                Image(systemName: "square.and.arrow.up")
+                Text("Share")
+            })
+//
             
             Button(role: .destructive) {
                 deleteHandler()
@@ -263,7 +278,7 @@ struct ConversationView: View {
 
     private var horizontalPadding: CGFloat {
         #if os(iOS)
-        60
+        55
         #else
         95
         #endif
