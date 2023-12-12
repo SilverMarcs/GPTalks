@@ -10,8 +10,6 @@ import SwiftUI
 struct BottomInputView: View {
     @ObservedObject var session: DialogueSession
     @State var isShowClearMessagesAlert = false
-//    @FocusState var isTextFieldFocused: Bool
-
 
     var body: some View {
         HStack(spacing: 12) {
@@ -129,7 +127,6 @@ struct BottomInputView: View {
     @ViewBuilder
     private var textField: some View {
         TextField("Send a message", text: $session.input, axis: .vertical)
-//            .focused($isTextFieldFocused)
             .multilineTextAlignment(.leading)
             .lineLimit(1 ... 15)
             .padding(6)
@@ -147,7 +144,6 @@ struct BottomInputView: View {
                 .foregroundColor(placeHolderTextColor)
         }
         TextEditor(text: $session.input)
-//            .focused($isTextFieldFocused)
             .font(.body)
             .frame(maxHeight: 400)
             .fixedSize(horizontal: false, vertical: true)

@@ -71,11 +71,25 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     //MARK: - State
 
     @Published var input: String = ""
-    @Published var title: String = "New Chat"
-    @Published var conversations: [Conversation] = []
+    @Published var title: String = "New Chat" {
+        didSet {
+            save()
+        }
+    }
+    @Published var conversations: [Conversation] = [] {
+        didSet {
+            save()
+        }
+    }
+    
     @Published var date = Date()
     @Published var errorDesc: String = ""
-    @Published var configuration: Configuration = Configuration()
+    @Published var configuration: Configuration = Configuration() {
+        didSet {
+            save()
+        }
+    }
+    
     @Published var resetMarker: Int?
     
     private var initFinished = false
@@ -111,6 +125,31 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     
     func removeResetContextMarker() {
         resetMarker = nil
+        
+        save()
+    }
+    
+    func setResetContextMarker(conversation: Conversation) {
+        if let index = conversations.firstIndex(of: conversation) {
+            resetMarker = index
+        }
+        
+        save()
+    }
+    
+    func resetContext() {
+        if conversations.isEmpty {
+            return
+        }
+        
+        // if reset marker is already at the end of conversations, then unset it
+        if resetMarker == conversations.count - 1 {
+            resetMarker = nil
+        } else {
+            resetMarker = conversations.count - 1
+        }
+
+        save()
     }
     
     @MainActor
@@ -437,25 +476,10 @@ extension DialogueSession {
         save()
     }
     
-    func resetContext() {
-        if conversations.isEmpty {
-            return
-        }
-        
-        // if reset marker is already at the end of conversations, then unset it
-        if resetMarker == conversations.count - 1 {
-            resetMarker = nil
-        } else {
-            resetMarker = conversations.count - 1
-        }
-
-        save()
-    }
-    
     func save() {
-        guard initFinished else {
-            return
-        }
+//        guard initFinished else {
+//            return
+//        }
         do {
             rawData?.date = date
             rawData?.title = title

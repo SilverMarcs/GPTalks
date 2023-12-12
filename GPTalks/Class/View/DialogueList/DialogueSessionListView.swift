@@ -66,7 +66,9 @@ struct DialogueSessionListView: View {
                 DialogueListItem(session: session)
             }
         }
+        #if os(iOS)
         .searchable(text: $viewModel.searchText)
+        #endif
     }
     
     var addButton: some View {

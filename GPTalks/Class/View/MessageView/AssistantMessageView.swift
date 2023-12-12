@@ -12,7 +12,7 @@ struct AssistantMessageView: View {
     var session: DialogueSession
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 8) {
             VStack(alignment: .leading) {
                 if AppConfiguration.shared.isMarkdownEnabled {
                     MessageMarkdownView(text: conversation.content)
@@ -31,15 +31,13 @@ struct AssistantMessageView: View {
             
             #if os(macOS)
             if !conversation.isReplying {
-            HStack(spacing: 12) {
                 contextMenu(showText: false)
                     .buttonStyle(.plain)
-                }
             }
             #endif
         }
         .padding(.leading, 15)
-        .padding(.trailing, 105)
+        .padding(.trailing, 95)
 #if os(iOS)
         .contextMenu {
             contextMenu(showText: true)
@@ -48,7 +46,7 @@ struct AssistantMessageView: View {
     }
 
     func contextMenu(showText: Bool) -> some View {
-        Group {
+        HStack(spacing: 12) {
             Button {
                 Task { @MainActor in
                     await session.regenerate(from: conversation)
@@ -69,6 +67,15 @@ struct AssistantMessageView: View {
                 }
             }
             
+            Button {
+                session.setResetContextMarker(conversation: conversation)
+            } label: {
+                Image(systemName: "eraser")
+                if showText {
+                    Text("Reset Context")
+                }
+            }
+            
             Button(role: .destructive) {
                 session.removeConversation(conversation)
             } label: {
@@ -78,6 +85,7 @@ struct AssistantMessageView: View {
                 }
             }
         }
+        .padding(.leading)
     }
     
 }

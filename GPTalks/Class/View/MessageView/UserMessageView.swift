@@ -16,20 +16,18 @@ struct UserMessageView: View {
     @State var editingMessage: String = ""
     
     var body: some View {
-        VStack(alignment: .trailing, spacing: 6) {
+        VStack(alignment: .trailing, spacing: 8) {
             Text(conversation.content)
                 .textSelection(.enabled)
                 .bubbleStyle(isMyMessage: true, accentColor: session.configuration.provider.accentColor)
             #if os(macOS)
-            HStack(spacing: 12) {
-                contextMenu(showText: false)
-                    .buttonStyle(.plain)
-            }
+            contextMenu(showText: false)
+                .buttonStyle(.plain)
             #endif
             
         }
         .padding(.trailing, 15)
-        .padding(.leading, 105)
+        .padding(.leading, 95)
         .sheet(isPresented: $isEditing) {
             editingView
         }
@@ -108,12 +106,12 @@ struct UserMessageView: View {
     }
     
     func contextMenu(showText: Bool) -> some View {
-        Group {
+        HStack(spacing: 12) {
             Button {
                 editingMessage = conversation.content
                 isEditing = true
             } label: {
-                Image(systemName: "pencil.tip")
+                Image(systemName: "pencil")
                 if showText {
                     Text("Edit")
                 }
@@ -128,6 +126,15 @@ struct UserMessageView: View {
                 }
             }
             
+            Button {
+                session.setResetContextMarker(conversation: conversation)
+            } label: {
+                Image(systemName: "eraser")
+                if showText {
+                    Text("Reset Context")
+                }
+            }
+            
             Button(role: .destructive) {
                 session.removeConversation(conversation)
             } label: {
@@ -137,5 +144,6 @@ struct UserMessageView: View {
                 }
             }
         }
+        .padding(.trailing)
     }
 }

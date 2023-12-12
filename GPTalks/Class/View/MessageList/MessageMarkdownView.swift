@@ -41,6 +41,7 @@ struct MessageMarkdownView: View {
                     configuration.content.copyToPasteboard()
                 } label: {
                     Text("Copy")
+                        .font(.subheadline)
                         .foregroundColor(.secondary)
                         .padding(.horizontal, 6)
                         .padding(.vertical, 3)

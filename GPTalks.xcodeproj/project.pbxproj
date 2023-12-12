@@ -47,7 +47,6 @@
 		E4C65EF629CA9F7800AFA884 /* AppSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */; };
 		E4C65EF729CA9F7800AFA884 /* DialogueSessionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EE029CA9F7800AFA884 /* DialogueSessionListView.swift */; };
 		E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EEB29CA9F7800AFA884 /* Splash.swift */; };
-		E4C65EFF29CA9F7800AFA884 /* KeyboardPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EEC29CA9F7800AFA884 /* KeyboardPublisher.swift */; };
 		E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F0D29CAA06600AFA884 /* Splash */; };
 		E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F1029CAA08400AFA884 /* MarkdownUI */; };
 		E4C65F1829CBEE2400AFA884 /* BottomInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */; };
@@ -112,7 +111,6 @@
 		E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsView.swift; sourceTree = "<group>"; };
 		E4C65EE029CA9F7800AFA884 /* DialogueSessionListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogueSessionListView.swift; sourceTree = "<group>"; };
 		E4C65EEB29CA9F7800AFA884 /* Splash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Splash.swift; sourceTree = "<group>"; };
-		E4C65EEC29CA9F7800AFA884 /* KeyboardPublisher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardPublisher.swift; sourceTree = "<group>"; };
 		E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomInputView.swift; sourceTree = "<group>"; };
 		E4C65F1F29D0649800AFA884 /* DialogueSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueSettingsView.swift; sourceTree = "<group>"; };
 		E4EF056C2A3B3744005CF741 /* GPTalks-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GPTalks-Info.plist"; sourceTree = "<group>"; };
@@ -309,7 +307,6 @@
 			isa = PBXGroup;
 			children = (
 				E4C65EEB29CA9F7800AFA884 /* Splash.swift */,
-				E4C65EEC29CA9F7800AFA884 /* KeyboardPublisher.swift */,
 				085D40BE2AFD66340033F8B5 /* Utils.swift */,
 			);
 			path = Utility;
@@ -483,7 +480,6 @@
 				E4C65EA929CA9E7E00AFA884 /* ContentView.swift in Sources */,
 				E4C65F1829CBEE2400AFA884 /* BottomInputView.swift in Sources */,
 				08827D112B28B72B0044213B /* ErrorDescView.swift in Sources */,
-				E4C65EFF29CA9F7800AFA884 /* KeyboardPublisher.swift in Sources */,
 				0837E4812AFFE7B000C03059 /* Model.swift in Sources */,
 				E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */,
 				08A1EF502B2606C000A88A3A /* AssistantMessageView.swift in Sources */,

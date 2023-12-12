@@ -11,7 +11,6 @@ struct MessageListView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var session: DialogueSession
-//    @FocusState var isTextFieldFocused: Bool
     @State var isShowSettingsView = false
     @State var isShowDeleteWarning = false
     
@@ -60,11 +59,15 @@ struct MessageListView: View {
             .onChange(of: session.conversations.count) {
                 scrollToBottom(proxy: proxy)
             }
+            #if os(iOS)
+            .onTapGesture {
+                hideKeyboard()
+            }
+            #endif
         }
     }
 
     var body: some View {
-        //        contentView
         newList
             .background(.background)
             .alert("Delete all messages?", isPresented: $isShowDeleteWarning) {
@@ -74,7 +77,7 @@ struct MessageListView: View {
                     session.removeAllConversations()
                 })
             }
-            .navigationTitle(session.title)
+            .navigationTitle($session.title)
         #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $isShowSettingsView) {
@@ -111,7 +114,7 @@ struct MessageListView: View {
         #else
             .navigationSubtitle(session.configuration.model.name)
             .toolbar {
-                ToolbarItemGroup {
+                ToolbarItem(placement: .navigation) {
                     Button {
                         isShowSettingsView = true
                     } label: {
@@ -127,6 +130,9 @@ struct MessageListView: View {
                         }
                         .padding(10)
                     }
+                }
+                
+                ToolbarItemGroup {
 
                     Picker("Provider", selection: $session.configuration.provider) {
                         ForEach(Provider.allCases, id: \.self) { provider in
@@ -324,7 +330,10 @@ struct MessageListView: View {
     }
 }
 
-#if os(iOS)
-    extension MessageListView: KeyboardReadable {
-    }
+#if canImport(UIKit)
+extension View {
+   func hideKeyboard() {
+       UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+   }
+}
 #endif
