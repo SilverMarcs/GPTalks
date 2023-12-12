@@ -8,14 +8,27 @@
 import SwiftUI
 
 struct ContextResetDivider: View {
+    @ObservedObject var session: DialogueSession
+    
     var body: some View {
-        HStack {
-            line
-            Text("Context Cleared")
-                .font(.footnote)
-                .foregroundColor(.secondary)
-            line
-            // todo button to reset it
+        VStack {
+            HStack {
+                            line
+                Text("Context Cleared")
+                    .foregroundColor(.secondary)
+                
+                Button(role: .destructive) {
+                    session.removeResetContextMarker()
+                } label: {
+                    Image(systemName: "trash")
+                }
+                .buttonStyle(.plain)
+                
+                            line
+
+            }
+            
+            Divider()
         }
     }
     
@@ -23,8 +36,4 @@ struct ContextResetDivider: View {
         Divider()
             .background(Color.gray)
     }
-}
-
-#Preview {
-    ContextResetDivider()
 }

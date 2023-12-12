@@ -11,37 +11,38 @@ struct MessageListView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var session: DialogueSession
-    @FocusState var isTextFieldFocused: Bool
+//    @FocusState var isTextFieldFocused: Bool
     @State var isShowSettingsView = false
     @State var isShowDeleteWarning = false
-    @State var title = ""
     
     private let bottomID = "bottomID"
     
     var newList: some View {
         ScrollViewReader { proxy in
             ScrollView {
-                VStack(alignment: .leading) {
+                VStack {
                     ForEach(session.conversations) { conversation in
                         if conversation.role == "user" {
                             UserMessageView(conversation: conversation, session: session)
-                                .padding(.vertical, 1)
-                        } else if conversation.content.isEmpty {
-                            ReplyingIndicatorView()
-                                .frame(width: 48, height: 16)
-                                .bubbleStyle(isMyMessage: false)
-                                .padding(.leading, 15)
-                        } else {
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                        }
+                        
+                        if conversation.role == "assistant" {
                             AssistantMessageView(conversation: conversation, session: session)
-                                .padding(.vertical, 1)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                                 .onChange(of: conversation.content) {
                                     scrollToBottom(proxy: proxy)
                                 }
                         }
 
                         if session.conversations.firstIndex(of: conversation) == session.resetMarker {
-                            ContextResetDivider()
+                            ContextResetDivider(session: session)
                                 .padding(.vertical)
+                        }
+                        
+                        if session.errorDesc != "" {
+                            ErrorDescView(session: session)
+                                .padding()
                         }
                     }
 
@@ -73,13 +74,7 @@ struct MessageListView: View {
                     session.removeAllConversations()
                 })
             }
-            .onChange(of: title) {
-                session.title = title
-            }
-            .onAppear {
-                title = session.title
-            }
-            .navigationTitle($title)
+            .navigationTitle(session.title)
         #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $isShowSettingsView) {
@@ -114,75 +109,75 @@ struct MessageListView: View {
                 }
             }
         #else
-                .navigationSubtitle(session.configuration.model.name)
-                .toolbar {
-                    ToolbarItemGroup {
-                        Button {
-                            isShowSettingsView = true
-                        } label: {
-                            Image(systemName: "slider.vertical.3")
+            .navigationSubtitle(session.configuration.model.name)
+            .toolbar {
+                ToolbarItemGroup {
+                    Button {
+                        isShowSettingsView = true
+                    } label: {
+                        Image(systemName: "square.text.square")
+                    }
+                    .popover(isPresented: $isShowSettingsView) {
+                        VStack {
+                            Text("System Prompt")
+                            TextEditor(text: $session.configuration.systemPrompt)
+                                .font(.body)
+                                .frame(width: 200, height: 70)
+                                .scrollContentBackground(.hidden)
                         }
-                        .popover(isPresented: $isShowSettingsView) {
-                            VStack {
-                                Text("System Prompt")
-                                TextEditor(text: $session.configuration.systemPrompt)
-                                    .font(.body)
-                                    .frame(width: 200, height: 70)
-                                    .scrollContentBackground(.hidden)
-                            }
-                            .padding(10)
-                        }
+                        .padding(10)
+                    }
 
-                        Picker("Provider", selection: $session.configuration.provider) {
-                            ForEach(Provider.allCases, id: \.self) { provider in
-                                Text(provider.name)
-                                    .tag(provider.id)
-                            }
-                        }
-
-                        Slider(value: $session.configuration.temperature, in: 0 ... 1, step: 0.1) {
-                        } minimumValueLabel: {
-                            Text("0")
-                        } maximumValueLabel: {
-                            Text("1")
-                        }
-                        .frame(width: 130)
-
-                        Picker("Model", selection: $session.configuration.model) {
-                            ForEach(session.configuration.provider.models, id: \.self) { model in
-                                Text(model.name)
-                                    .tag(model.id)
-                            }
-                        }
-                        .frame(width: 125)
-
-                        Picker("Context", selection: $session.configuration.contextLength) {
-                            ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
-                                Text("\(number) Messages")
-                                    .tag(number)
-                            }
-                        }
-
-                        Menu {
-                            Button {
-                                session.resetContext()
-                            } label: {
-                                Text("Reset Context")
-                                Image(systemName: "eraser")
-                            }
-                            .keyboardShortcut(.delete, modifiers: [.command])
-
-                            Button(role: .destructive) {
-                                isShowDeleteWarning.toggle()
-                            } label: {
-                                Text("Delete All Messages")
-                                Image(systemName: "trash")
-                            }
-                        } label: {
-                            Image(systemName: "ellipsis.circle")
+                    Picker("Provider", selection: $session.configuration.provider) {
+                        ForEach(Provider.allCases, id: \.self) { provider in
+                            Text(provider.name)
+                                .tag(provider.id)
                         }
                     }
+
+                    Slider(value: $session.configuration.temperature, in: 0 ... 1, step: 0.1) {
+                    } minimumValueLabel: {
+                        Text("0")
+                    } maximumValueLabel: {
+                        Text("1")
+                    }
+                    .frame(width: 130)
+
+                    Picker("Model", selection: $session.configuration.model) {
+                        ForEach(session.configuration.provider.models, id: \.self) { model in
+                            Text(model.name)
+                                .tag(model.id)
+                        }
+                    }
+                    .frame(width: 125)
+
+                    Picker("Context", selection: $session.configuration.contextLength) {
+                        ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
+                            Text("\(number) Messages")
+                                .tag(number)
+                        }
+                    }
+
+                    Menu {
+                        Button {
+                            session.resetContext()
+                        } label: {
+                            Text("Reset Context")
+                            Image(systemName: "eraser")
+                        }
+                        .keyboardShortcut(.delete, modifiers: [.command])
+
+                        Button(role: .destructive) {
+                            isShowDeleteWarning.toggle()
+                        } label: {
+                            Text("Delete All Messages")
+                            Image(systemName: "trash")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
                 }
+            }
         #endif
     }
 
@@ -198,131 +193,131 @@ struct MessageListView: View {
 
 //    private let bottomID = "bottomID"
 
-    var contentView: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                VStack(spacing: 1) {
-                    ForEach(Array(session.conversations.enumerated()), id: \.element.id) { index, conversation in
-                        ConversationView(conversation: conversation, accentColor: session.configuration.provider.accentColor) { _ in
-                            Task { @MainActor in
-                                await session.regenerate(from: index)
-                            }
-                        } editHandler: { conversation in
-                            Task { @MainActor in
-                                await session.edit(from: index, conversation: conversation)
-                            }
-                        } deleteHandler: {
-                            session.removeConversation(conversation)
-                        } saveHandler: {
-//                               saveConversation(conversation.toSavedConversation())
-                        }
-                        .onChange(of: conversation.content) {
-                            scrollToBottom(proxy: proxy)
-                        }
-                        .id(index)
-
-                        if session.conversations.firstIndex(of: conversation) == session.resetMarker {
-                            ContextResetDivider()
-                                .padding(.vertical)
-                                .onAppear {
-                                    #if os(iOS)
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                            withAnimation {
-                                                scrollToBottom(proxy: proxy)
-                                            }
-                                        }
-                                    #else
-                                        scrollToBottom(proxy: proxy)
-                                    #endif
-                                }
-                        }
-                    }
-                }
-                .padding(.vertical, 5)
-
-                if session.errorDesc != "" {
-                    VStack(spacing: 15) {
-                        Text(session.errorDesc)
-                            .foregroundStyle(.red)
-                        Button("Retry") {
-                            Task { @MainActor in
-                                await session.retry()
-                            }
-                        }
-                        .clipShape(.capsule(style: .circular))
-                    }
-                    .padding()
-                }
-
-//                   Spacer()
-//                      .id(bottomID)
-            }
-            .onAppear {
-                #if os(iOS)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        withAnimation {
-                            scrollToBottom(proxy: proxy)
-                        }
-                    }
-                #else
-                    scrollToBottom(proxy: proxy)
-                #endif
-            }
-            .onChange(of: session.conversations.count) {
-                scrollToBottom(proxy: proxy)
-            }
-            .onTapGesture {
-                isTextFieldFocused = false
-            }
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-//                   BottomInputView(
-//                      session: session,
-//                      isTextFieldFocused: _isTextFieldFocused
-//                   ) { _ in
-//                       Task { @MainActor in
-//                           await session.send()
-//                       }
-//                   } stop: {
-//                       session.stopStreaming()
-//                   } regen: {_ in
-//                       if session.isReplying() {
-//                           return
-//                       }
-//                       Task { @MainActor in
-//                           await session.regenerate(from: session.conversations.count - 1)
-//                       }
-//                   }
-//                   #if os(iOS)
-//                   .background(
-//                    (colorScheme == .dark ? Color.black : Color.white)
-//                        .opacity(colorScheme == .dark ? 0.9 : 0.6)
-//                            .background(.ultraThinMaterial)
-//                            .ignoresSafeArea()
-//                   )
-//                   #else
-//                  .background(.bar)
-//                   #endif
-            }
-            #if os(iOS)
-            .onReceive(keyboardWillChangePublisher) { value in
-                if isTextFieldFocused && value {
-                    self.keyboadWillShow = value
-                }
-            }
-            .onReceive(keyboardDidChangePublisher) { value in
-                if isTextFieldFocused {
-                    if value {
-                        withAnimation(.easeOut(duration: 0.05)) {
-                            scrollToBottom(proxy: proxy)
-                        }
-                    } else {
-                        self.keyboadWillShow = false
-                    }
-                }
-            }
-            #endif
-        }
-    }
+//    var contentView: some View {
+//        ScrollViewReader { proxy in
+//            ScrollView {
+//                VStack(spacing: 1) {
+//                    ForEach(Array(session.conversations.enumerated()), id: \.element.id) { index, conversation in
+//                        ConversationView(conversation: conversation, accentColor: session.configuration.provider.accentColor) { _ in
+//                            Task { @MainActor in
+//                                await session.regenerate(from: index)
+//                            }
+//                        } editHandler: { conversation in
+//                            Task { @MainActor in
+//                                await session.edit(from: index, conversation: conversation)
+//                            }
+//                        } deleteHandler: {
+//                            session.removeConversation(conversation)
+//                        } saveHandler: {
+////                               saveConversation(conversation.toSavedConversation())
+//                        }
+//                        .onChange(of: conversation.content) {
+//                            scrollToBottom(proxy: proxy)
+//                        }
+//                        .id(index)
+//
+//                        if session.conversations.firstIndex(of: conversation) == session.resetMarker {
+//                            ContextResetDivider()
+//                                .padding(.vertical)
+//                                .onAppear {
+//                                    #if os(iOS)
+//                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                                            withAnimation {
+//                                                scrollToBottom(proxy: proxy)
+//                                            }
+//                                        }
+//                                    #else
+//                                        scrollToBottom(proxy: proxy)
+//                                    #endif
+//                                }
+//                        }
+//                    }
+//                }
+//                .padding(.vertical, 5)
+//
+//                if session.errorDesc != "" {
+//                    VStack(spacing: 15) {
+//                        Text(session.errorDesc)
+//                            .foregroundStyle(.red)
+//                        Button("Retry") {
+//                            Task { @MainActor in
+//                                await session.retry()
+//                            }
+//                        }
+//                        .clipShape(.capsule(style: .circular))
+//                    }
+//                    .padding()
+//                }
+//
+////                   Spacer()
+////                      .id(bottomID)
+//            }
+//            .onAppear {
+//                #if os(iOS)
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                        withAnimation {
+//                            scrollToBottom(proxy: proxy)
+//                        }
+//                    }
+//                #else
+//                    scrollToBottom(proxy: proxy)
+//                #endif
+//            }
+//            .onChange(of: session.conversations.count) {
+//                scrollToBottom(proxy: proxy)
+//            }
+//            .onTapGesture {
+//                isTextFieldFocused = false
+//            }
+//            .safeAreaInset(edge: .bottom, spacing: 0) {
+////                   BottomInputView(
+////                      session: session,
+////                      isTextFieldFocused: _isTextFieldFocused
+////                   ) { _ in
+////                       Task { @MainActor in
+////                           await session.send()
+////                       }
+////                   } stop: {
+////                       session.stopStreaming()
+////                   } regen: {_ in
+////                       if session.isReplying() {
+////                           return
+////                       }
+////                       Task { @MainActor in
+////                           await session.regenerate(from: session.conversations.count - 1)
+////                       }
+////                   }
+////                   #if os(iOS)
+////                   .background(
+////                    (colorScheme == .dark ? Color.black : Color.white)
+////                        .opacity(colorScheme == .dark ? 0.9 : 0.6)
+////                            .background(.ultraThinMaterial)
+////                            .ignoresSafeArea()
+////                   )
+////                   #else
+////                  .background(.bar)
+////                   #endif
+//            }
+//            #if os(iOS)
+//            .onReceive(keyboardWillChangePublisher) { value in
+//                if isTextFieldFocused && value {
+//                    self.keyboadWillShow = value
+//                }
+//            }
+//            .onReceive(keyboardDidChangePublisher) { value in
+//                if isTextFieldFocused {
+//                    if value {
+//                        withAnimation(.easeOut(duration: 0.05)) {
+//                            scrollToBottom(proxy: proxy)
+//                        }
+//                    } else {
+//                        self.keyboadWillShow = false
+//                    }
+//                }
+//            }
+//            #endif
+//        }
+//    }
 
     private func scrollToBottom(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
         proxy.scrollTo(bottomID, anchor: anchor)

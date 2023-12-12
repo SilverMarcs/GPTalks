@@ -107,7 +107,12 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         
     }
     
-    //MARK: - Message Actions
+    //MARK: - Message Actions'
+    
+    func removeResetContextMarker() {
+        resetMarker = nil
+    }
+    
     @MainActor
     func stopStreaming() {
         if let lastConcersationContent = lastConcersationContent {
@@ -318,6 +323,10 @@ extension DialogueSession {
     
     @discardableResult
     func appendConversation(_ conversation: Conversation) -> ConversationData {
+        if conversations.isEmpty {
+            removeResetContextMarker()
+        }
+        
         // TODO: animation
         conversations.append(conversation)
         

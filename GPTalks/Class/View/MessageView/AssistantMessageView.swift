@@ -12,8 +12,7 @@ struct AssistantMessageView: View {
     var session: DialogueSession
 
     var body: some View {
-        HStack(alignment: .lastTextBaseline, spacing: 4) {
-//        VStack {
+        VStack(alignment: .leading, spacing: 6) {
             VStack(alignment: .leading) {
                 if AppConfiguration.shared.isMarkdownEnabled {
                     MessageMarkdownView(text: conversation.content)
@@ -26,31 +25,29 @@ struct AssistantMessageView: View {
                         .frame(width: 48, height: 16)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            //            .frame(maxWidth: .infinity, alignment: .leading)
             .bubbleStyle(isMyMessage: false)
             .textSelection(.enabled)
             
-//            #if os(macOS)
-//            if !conversation.isReplying {
-//                Menu {
-//                    contextMenu
-//                } label: {
-//                    Image(systemName: "ellipsis.circle")
-//                }
-//                .buttonStyle(.plain)
-//            }
-//            #endif
+            #if os(macOS)
+            if !conversation.isReplying {
+            HStack(spacing: 12) {
+                contextMenu(showText: false)
+                    .buttonStyle(.plain)
+                }
+            }
+            #endif
         }
         .padding(.leading, 15)
         .padding(.trailing, 105)
 #if os(iOS)
         .contextMenu {
-            contextMenu
+            contextMenu(showText: true)
         }
 #endif
     }
 
-    var contextMenu: some View {
+    func contextMenu(showText: Bool) -> some View {
         Group {
             Button {
                 Task { @MainActor in
@@ -58,21 +55,27 @@ struct AssistantMessageView: View {
                 }
             } label: {
                 Image(systemName: "arrow.clockwise")
-                Text("Regenerate")
+                if showText {
+                    Text("Regenerate")
+                }
             }
             
             Button {
                 conversation.content.copyToPasteboard()
             } label: {
                 Image(systemName: "doc")
-                Text("Copy")
+                if showText {
+                    Text("Copy")
+                }
             }
             
             Button(role: .destructive) {
                 session.removeConversation(conversation)
             } label: {
                 Image(systemName: "trash")
-                Text("Delete")
+                if showText {
+                    Text("Delete")
+                }
             }
         }
     }

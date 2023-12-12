@@ -11,7 +11,6 @@ import SwiftUI
 struct DialogueSessionListView: View {
     @EnvironmentObject var viewModel: DialogueViewModel
     @State var isShowSettingView = false
-    @State var selectedDialogueSession: DialogueSession?
 
     var body: some View {
         Group {

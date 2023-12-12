@@ -16,22 +16,17 @@ struct UserMessageView: View {
     @State var editingMessage: String = ""
     
     var body: some View {
-        HStack(alignment: .lastTextBaseline, spacing: 4) {
-//        VStack {
-            Spacer()
-            
-//            #if os(macOS)
-//            Menu {
-//                contextMenu
-//            } label: {
-//                Image(systemName: "ellipsis.circle")
-//            }
-//            .buttonStyle(.plain)
-//            #endif
-                        
+        VStack(alignment: .trailing, spacing: 6) {
             Text(conversation.content)
                 .textSelection(.enabled)
-                .bubbleStyle(isMyMessage: true, accentColor: .accentColor)
+                .bubbleStyle(isMyMessage: true, accentColor: session.configuration.provider.accentColor)
+            #if os(macOS)
+            HStack(spacing: 12) {
+                contextMenu(showText: false)
+                    .buttonStyle(.plain)
+            }
+            #endif
+            
         }
         .padding(.trailing, 15)
         .padding(.leading, 105)
@@ -67,7 +62,6 @@ struct UserMessageView: View {
         NavigationView {
             Form {
                 TextField("Editing Message", text: $editingMessage, axis: .vertical)
-                    .focused($isFocused)
             }
             .navigationBarTitle("Editing Message")
             .navigationBarTitleDisplayMode(.inline)
@@ -81,9 +75,10 @@ struct UserMessageView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Update") {
-                        editHandler(Conversation(role: "user", content: editingMessage))
+                        Task { @MainActor in
+                            await session.edit(conversation: conversation, editedContent: editingMessage)
+                        }
                         isEditing = false
-                        isFocused = isEditing
                     }
                 }
 
@@ -112,28 +107,34 @@ struct UserMessageView: View {
         }
     }
     
-    var contextMenu: some View {
+    func contextMenu(showText: Bool) -> some View {
         Group {
             Button {
                 editingMessage = conversation.content
                 isEditing = true
             } label: {
                 Image(systemName: "pencil.tip")
-                Text("Edit")
+                if showText {
+                    Text("Edit")
+                }
             }
             
             Button {
                 conversation.content.copyToPasteboard()
             } label: {
                 Image(systemName: "doc")
-                Text("Copy")
+                if showText {
+                    Text("Copy")
+                }
             }
             
             Button(role: .destructive) {
                 session.removeConversation(conversation)
             } label: {
                 Image(systemName: "trash")
-                Text("Delete")
+                if showText {
+                    Text("Delete")
+                }
             }
         }
     }
