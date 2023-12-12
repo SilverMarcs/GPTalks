@@ -61,11 +61,12 @@ struct DialogueSessionListView: View {
     }
     
     var list: some View {
-        List(viewModel.dialogues) { session in
+        List(viewModel.filteredDialogues) { session in
             NavigationLink(destination: MessageListView(session: session)) {
                 DialogueListItem(session: session)
             }
         }
+        .searchable(text: $viewModel.searchText)
     }
     
     var addButton: some View {

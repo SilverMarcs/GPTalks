@@ -5,26 +5,34 @@
 //  Created by Zabir Raihan on 10/12/2023.
 //
 
-//import Foundation
-import SwiftUI
+import Combine
 import CoreData
+import SwiftUI
 
 class DialogueViewModel: ObservableObject {
-    @Published var dialogues:  [DialogueSession] = []
+    @Published var dialogues: [DialogueSession] = []
+    @Published var searchText: String = ""
+    @Published var filteredDialogues: [DialogueSession] = []
     private let viewContext: NSManagedObjectContext
-    
+
     init(context: NSManagedObjectContext) {
         viewContext = context
         fetchDialogueData()
+
+        Publishers.CombineLatest($dialogues, $searchText)
+            .map { dialogues, searchText in
+                searchText.isEmpty ? dialogues : dialogues.filter { dialogue in
+                    dialogue.title.localizedCaseInsensitiveContains(searchText)
+                }
+            }
+            .assign(to: &$filteredDialogues)
     }
 
     func fetchDialogueData() {
-
         do {
             let fetchRequest = NSFetchRequest<DialogueData>(entityName: "DialogueData")
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
             let dialogueData = try PersistenceController.shared.container.viewContext.fetch(fetchRequest)
-
 
             dialogues = dialogueData.compactMap { DialogueSession(rawData: $0) }
         } catch {
@@ -48,9 +56,8 @@ class DialogueViewModel: ObservableObject {
 
         save()
     }
-    
-    func deleteDialogue(_ session: DialogueSession) {
 
+    func deleteDialogue(_ session: DialogueSession) {
         dialogues.removeAll {
             $0.id == session.id
         }
@@ -61,7 +68,7 @@ class DialogueViewModel: ObservableObject {
 
         save()
     }
-    
+
     private func save() {
         do {
             try PersistenceController.shared.save()
