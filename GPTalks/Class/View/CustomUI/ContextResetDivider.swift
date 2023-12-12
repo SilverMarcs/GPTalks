@@ -15,6 +15,7 @@ struct ContextResetDivider: View {
                 .font(.footnote)
                 .foregroundColor(.secondary)
             line
+            // todo button to reset it
         }
     }
     

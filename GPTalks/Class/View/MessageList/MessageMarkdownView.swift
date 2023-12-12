@@ -23,7 +23,6 @@ struct MessageMarkdownView: View {
     }
 
     struct CodeBlock: View {
-        @State private var isHovered = false
         let configuration: CodeBlockConfiguration
 
 //        var body: some View {
@@ -53,7 +52,7 @@ struct MessageMarkdownView: View {
         
         var body: some View {
 //            VStack(alignment: .leading, spacing: 6) {
-            HStack {
+            VStack {
                 configuration.label
                     .markdownTextStyle {
                         FontFamilyVariant(.monospaced)
@@ -63,18 +62,24 @@ struct MessageMarkdownView: View {
                     .background(.background.secondary)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .markdownMargin(top: .zero, bottom: .em(0.8))
-                CodeCopyButton(text: configuration.content)
-                #if os(macOS)
-                    .opacity(isHovered ? 1 : 0)
-                #endif
+//                Button {
+//                    configuration.content.copyToPasteboard()
+//                } label: {
+//                    Image(systemName: "clipboard")
+//                }
+                       
+//                CodeCopyButton(text: configuration.content)
+//                #if os(macOS)
+//                    .opacity(isHovered ? 1 : 0)
+//                #endif
                     .padding(.bottom, 1)
                 }
-            .onHover { hovering in
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    isHovered = hovering
-                }
+//            .onHover { hovering in
+//                withAnimation(.easeInOut(duration: 0.2)) {
+//                    isHovered = hovering
+//                }
             
-            }
+//            }
 //                Button {
 //                    
 //                } label: {

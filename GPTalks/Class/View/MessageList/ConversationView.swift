@@ -53,11 +53,10 @@ struct ConversationView: View {
             #endif
             
             Text(conversation.content)
-//                .frame(maxHeight: 500)
-//                .frame(maxWidth: .infinity)
                 .textSelection(.enabled)
                 .bubbleStyle(isMyMessage: true, accentColor: accentColor)
         }
+        .padding(.vertical)
         .padding(.trailing, 15)
         .padding(.leading, horizontalPadding)
         .sheet(isPresented: $isEditing) {

@@ -142,7 +142,7 @@ enum Model: String, Codable {
 //        .orgpt3,
 //        .orgpt4t,
 //        .orhermes,
-//        .ortoppy,
+        .ortoppy,
 //        .mythomist,
         .openchat,
         .pplx7b,

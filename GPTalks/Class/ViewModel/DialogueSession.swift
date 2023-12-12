@@ -141,6 +141,9 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     
     @MainActor
     func regenerate(from index: Int) async {
+       if isReplying() {
+           return
+       }
         if conversations[index].role != "user" {
            removeConversations(from: index)
         }
@@ -149,12 +152,19 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     
     @MainActor
     func regenerate(from conversation: Conversation) async {
-        let index = conversations.firstIndex(of: conversation) ?? 0
+//        let index = conversations.firstIndex(of: conversation) ?? 0
+//
+//        if conversations[index].role != "user" {
+//           removeConversations(from: index)
+//        }
+//        await send(text: lastConversation.content, isRegen: true)
         
-        if conversations[index].role != "user" {
-           removeConversations(from: index)
+        if let index = conversations.firstIndex(of: conversation) {
+            if conversations[index].role != "user" {
+               removeConversations(from: index)
+            }
+            await send(text: lastConversation.content, isRegen: true)
         }
-        await send(text: lastConversation.content, isRegen: true)
     }
     
     @MainActor
@@ -164,11 +174,11 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
     
     @MainActor
-    func edit(conversation: Conversation) async {
-        let index = conversations.firstIndex(of: conversation) ?? 0
-        
-        removeConversations(from: index)
-        await send(text: conversation.content)
+    func edit(conversation: Conversation, editedContent: String) async {
+        if let index = conversations.firstIndex(of: conversation) {
+            removeConversations(from: index)
+            await send(text: editedContent)
+        }
     }
     
     @MainActor

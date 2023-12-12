@@ -11,28 +11,24 @@ import SwiftUI
 struct DialogueSessionListView: View {
     @EnvironmentObject var viewModel: DialogueViewModel
     @State var isShowSettingView = false
+    @State var selectedDialogueSession: DialogueSession?
 
     var body: some View {
         Group {
             #if os(iOS)
                 iOSList
+                .listStyle(.plain)
             #else
                 macOSList
+                .listStyle(.sidebar)
             #endif
         }
     }
 
     #if os(iOS)
         var iOSList: some View {
-            List(viewModel.dialogues) { session in
-                NavigationLink {
-                    MessageListView(session: session)
-                } label: {
-                    DialogueListItem(session: session)
-                }
-            }
+            list
             .navigationTitle("Chats")
-            .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $isShowSettingView) {
                 AppSettingsView()
             }
@@ -46,36 +42,38 @@ struct DialogueSessionListView: View {
                 }
 
                 ToolbarItem(placement: .automatic) {
-                    Button {
-                        viewModel.addDialogue()
-                    } label: {
-                        Image(systemName: "square.and.pencil")
-                    }
+                    addButton
                 }
             }
         }
     #endif
 
     var macOSList: some View {
-        List(viewModel.dialogues) { session in
-            NavigationLink {
-                MessageListView(session: session)
-            } label: {
-                DialogueListItem(session: session)
-            }
-        }
+        list
         .frame(minWidth: 290)
         .toolbar {
             ToolbarItem {
                 Spacer()
             }
             ToolbarItem(placement: .automatic) {
-                Button {
-                    viewModel.addDialogue()
-                } label: {
-                    Image(systemName: "square.and.pencil")
-                }
+                addButton
             }
+        }
+    }
+    
+    var list: some View {
+        List(viewModel.dialogues) { session in
+            NavigationLink(destination: MessageListView(session: session)) {
+                DialogueListItem(session: session)
+            }
+        }
+    }
+    
+    var addButton: some View {
+        Button {
+            viewModel.addDialogue()
+        } label: {
+            Image(systemName: "square.and.pencil")
         }
     }
 }

@@ -10,11 +10,8 @@ import SwiftUI
 struct BottomInputView: View {
     @ObservedObject var session: DialogueSession
     @State var isShowClearMessagesAlert = false
-    @FocusState var isTextFieldFocused: Bool
+//    @FocusState var isTextFieldFocused: Bool
 
-    var send: (String) -> Void
-    var stop: () -> Void
-    var regen: (Conversation) -> Void
 
     var body: some View {
         HStack(spacing: 12) {
@@ -48,7 +45,9 @@ struct BottomInputView: View {
     @ViewBuilder
     private var regenButton: some View {
         Button {
-            regen(session.lastConversation)
+            Task { @MainActor in
+                await session.regenerate(from: session.conversations.count - 1)
+            }
         } label: {
             Image(systemName: "arrow.clockwise")
                 .resizable()
@@ -80,7 +79,9 @@ struct BottomInputView: View {
         let empty = session.input.isEmpty
         
         Button {
-            send(session.input)
+           Task { @MainActor in
+               await session.send()
+           }
         } label: {
             Image(systemName: empty ? "arrow.up.circle" : "arrow.up.circle.fill")
                 .resizable()
@@ -98,7 +99,7 @@ struct BottomInputView: View {
     @ViewBuilder
     private var stopButton: some View {
         Button {
-            stop()
+            session.stopStreaming()
         } label: {
             Image(systemName: "stop.circle.fill")
                 .resizable()
@@ -128,7 +129,7 @@ struct BottomInputView: View {
     @ViewBuilder
     private var textField: some View {
         TextField("Send a message", text: $session.input, axis: .vertical)
-            .focused($isTextFieldFocused)
+//            .focused($isTextFieldFocused)
             .multilineTextAlignment(.leading)
             .lineLimit(1 ... 15)
             .padding(6)
@@ -146,7 +147,7 @@ struct BottomInputView: View {
                 .foregroundColor(placeHolderTextColor)
         }
         TextEditor(text: $session.input)
-            .focused($isTextFieldFocused)
+//            .focused($isTextFieldFocused)
             .font(.body)
             .frame(maxHeight: 400)
             .fixedSize(horizontal: false, vertical: true)
