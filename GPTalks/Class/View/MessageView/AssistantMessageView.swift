@@ -24,17 +24,18 @@ struct AssistantMessageView: View {
                     ReplyingIndicatorView()
                         .frame(width: 48, height: 16)
                 }
+
             }
-//            .frame(maxWidth: .infinity, alignment: .leading)
             .bubbleStyle(isMyMessage: false)
             .textSelection(.enabled)
         }
         .padding(.vertical, 2)
-        .padding(.leading, 15)
         .padding(.trailing, 95)
+        #if os(iOS)
         .contextMenu {
             contextMenu(showText: true)
         }
+        #endif
     }
 
     func contextMenu(showText: Bool) -> some View {

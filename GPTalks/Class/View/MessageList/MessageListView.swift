@@ -7,6 +7,18 @@
 
 import SwiftUI
 
+struct LazySection<Element, Row: View>: View where Element: Identifiable {
+    let elements: [Element]
+    let row: (_ element: Element) -> Row
+
+    var body: some View {
+        ForEach(elements) { element in
+            self.row(element)
+        }
+    }
+}
+
+
 struct MessageListView: View {
     @Environment(\.colorScheme) var colorScheme
     
@@ -18,22 +30,22 @@ struct MessageListView: View {
     
     var newList: some View {
         ScrollViewReader { proxy in
-            ScrollView {
+            List {
                 VStack {
-                    ForEach(session.conversations) { conversation in
+                    ForEach(session.conversations, id: \.id) { conversation in
                         if conversation.role == "user" {
                             UserMessageView(conversation: conversation, session: session)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
                         }
                         
                         if conversation.role == "assistant" {
                             AssistantMessageView(conversation: conversation, session: session)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                                 .onChange(of: conversation.content) {
                                     scrollToBottom(proxy: proxy)
                                 }
                         }
-
+                        
                         if session.conversations.firstIndex(of: conversation) == session.resetMarker {
                             ContextResetDivider(session: session)
                                 .padding(.vertical)
@@ -44,11 +56,10 @@ struct MessageListView: View {
                                 .padding()
                         }
                     }
-
-                    Color.clear
+                    
+                    Spacer()
                         .id(bottomID)
                 }
-                .padding(.vertical, 9)
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
