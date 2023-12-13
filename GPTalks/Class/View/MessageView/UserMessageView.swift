@@ -20,22 +20,16 @@ struct UserMessageView: View {
             Text(conversation.content)
                 .textSelection(.enabled)
                 .bubbleStyle(isMyMessage: true, accentColor: session.configuration.provider.accentColor)
-            #if os(macOS)
-            contextMenu(showText: false)
-                .buttonStyle(.plain)
-            #endif
-            
         }
+        .padding(.vertical, 2)
         .padding(.trailing, 15)
         .padding(.leading, 95)
         .sheet(isPresented: $isEditing) {
             editingView
         }
-#if os(iOS)
         .contextMenu {
             contextMenu(showText: true)
         }
-#endif
     }
     
     var editingView: some View {

@@ -54,7 +54,16 @@ struct MessageListView: View {
                 BottomInputView(
                     session: session
                 )
-                .background(.bar)
+               #if os(iOS)
+               .background(
+                (colorScheme == .dark ? Color.black : Color.white)
+                    .opacity(0.7)
+                    .background(.ultraThinMaterial)
+                    .ignoresSafeArea()
+               )
+               #else
+              .background(.bar)
+               #endif
             }
             .onChange(of: session.conversations.count) {
                 scrollToBottom(proxy: proxy)
@@ -194,136 +203,6 @@ struct MessageListView: View {
     }
 
     @State var keyboadWillShow = false
-
-//    @Namespace var animation
-
-//    private let bottomID = "bottomID"
-
-//    var contentView: some View {
-//        ScrollViewReader { proxy in
-//            ScrollView {
-//                VStack(spacing: 1) {
-//                    ForEach(Array(session.conversations.enumerated()), id: \.element.id) { index, conversation in
-//                        ConversationView(conversation: conversation, accentColor: session.configuration.provider.accentColor) { _ in
-//                            Task { @MainActor in
-//                                await session.regenerate(from: index)
-//                            }
-//                        } editHandler: { conversation in
-//                            Task { @MainActor in
-//                                await session.edit(from: index, conversation: conversation)
-//                            }
-//                        } deleteHandler: {
-//                            session.removeConversation(conversation)
-//                        } saveHandler: {
-////                               saveConversation(conversation.toSavedConversation())
-//                        }
-//                        .onChange(of: conversation.content) {
-//                            scrollToBottom(proxy: proxy)
-//                        }
-//                        .id(index)
-//
-//                        if session.conversations.firstIndex(of: conversation) == session.resetMarker {
-//                            ContextResetDivider()
-//                                .padding(.vertical)
-//                                .onAppear {
-//                                    #if os(iOS)
-//                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-//                                            withAnimation {
-//                                                scrollToBottom(proxy: proxy)
-//                                            }
-//                                        }
-//                                    #else
-//                                        scrollToBottom(proxy: proxy)
-//                                    #endif
-//                                }
-//                        }
-//                    }
-//                }
-//                .padding(.vertical, 5)
-//
-//                if session.errorDesc != "" {
-//                    VStack(spacing: 15) {
-//                        Text(session.errorDesc)
-//                            .foregroundStyle(.red)
-//                        Button("Retry") {
-//                            Task { @MainActor in
-//                                await session.retry()
-//                            }
-//                        }
-//                        .clipShape(.capsule(style: .circular))
-//                    }
-//                    .padding()
-//                }
-//
-////                   Spacer()
-////                      .id(bottomID)
-//            }
-//            .onAppear {
-//                #if os(iOS)
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-//                        withAnimation {
-//                            scrollToBottom(proxy: proxy)
-//                        }
-//                    }
-//                #else
-//                    scrollToBottom(proxy: proxy)
-//                #endif
-//            }
-//            .onChange(of: session.conversations.count) {
-//                scrollToBottom(proxy: proxy)
-//            }
-//            .onTapGesture {
-//                isTextFieldFocused = false
-//            }
-//            .safeAreaInset(edge: .bottom, spacing: 0) {
-////                   BottomInputView(
-////                      session: session,
-////                      isTextFieldFocused: _isTextFieldFocused
-////                   ) { _ in
-////                       Task { @MainActor in
-////                           await session.send()
-////                       }
-////                   } stop: {
-////                       session.stopStreaming()
-////                   } regen: {_ in
-////                       if session.isReplying() {
-////                           return
-////                       }
-////                       Task { @MainActor in
-////                           await session.regenerate(from: session.conversations.count - 1)
-////                       }
-////                   }
-////                   #if os(iOS)
-////                   .background(
-////                    (colorScheme == .dark ? Color.black : Color.white)
-////                        .opacity(colorScheme == .dark ? 0.9 : 0.6)
-////                            .background(.ultraThinMaterial)
-////                            .ignoresSafeArea()
-////                   )
-////                   #else
-////                  .background(.bar)
-////                   #endif
-//            }
-//            #if os(iOS)
-//            .onReceive(keyboardWillChangePublisher) { value in
-//                if isTextFieldFocused && value {
-//                    self.keyboadWillShow = value
-//                }
-//            }
-//            .onReceive(keyboardDidChangePublisher) { value in
-//                if isTextFieldFocused {
-//                    if value {
-//                        withAnimation(.easeOut(duration: 0.05)) {
-//                            scrollToBottom(proxy: proxy)
-//                        }
-//                    } else {
-//                        self.keyboadWillShow = false
-//                    }
-//                }
-//            }
-//            #endif
-//        }
-//    }
 
     private func scrollToBottom(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
         proxy.scrollTo(bottomID, anchor: anchor)

@@ -25,24 +25,16 @@ struct AssistantMessageView: View {
                         .frame(width: 48, height: 16)
                 }
             }
-            //            .frame(maxWidth: .infinity, alignment: .leading)
+//            .frame(maxWidth: .infinity, alignment: .leading)
             .bubbleStyle(isMyMessage: false)
             .textSelection(.enabled)
-            
-            #if os(macOS)
-            if !conversation.isReplying {
-                contextMenu(showText: false)
-                    .buttonStyle(.plain)
-            }
-            #endif
         }
+        .padding(.vertical, 2)
         .padding(.leading, 15)
         .padding(.trailing, 95)
-#if os(iOS)
         .contextMenu {
             contextMenu(showText: true)
         }
-#endif
     }
 
     func contextMenu(showText: Bool) -> some View {

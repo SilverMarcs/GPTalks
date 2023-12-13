@@ -49,7 +49,7 @@ struct DialogueSessionListView: View {
 
     var macOSList: some View {
         list
-        .frame(minWidth: 290)
+        .frame(minWidth: 280)
         .toolbar {
             ToolbarItem {
                 Spacer()

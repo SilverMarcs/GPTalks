@@ -17,7 +17,7 @@ struct ContentView: View {
             NavigationSplitView {
                 DialogueSessionListView()
             }  detail: {
-                Text("Select a Chat")
+                Text("Select a Chat to see it here")
                     .font(.title)
             }
 #else

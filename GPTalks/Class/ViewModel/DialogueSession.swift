@@ -184,25 +184,15 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
     
     @MainActor
-    func regenerate(from index: Int) async {
-       if isReplying() {
-           return
-       }
-        if conversations[index].role != "user" {
-           removeConversations(from: index)
+    func regenerateLastMessage() async {
+        if conversations[conversations.count - 1].role != "user" {
+           removeConversations(from: conversations.count - 1)
         }
         await send(text: lastConversation.content, isRegen: true)
     }
     
     @MainActor
     func regenerate(from conversation: Conversation) async {
-//        let index = conversations.firstIndex(of: conversation) ?? 0
-//
-//        if conversations[index].role != "user" {
-//           removeConversations(from: index)
-//        }
-//        await send(text: lastConversation.content, isRegen: true)
-        
         if let index = conversations.firstIndex(of: conversation) {
             if conversations[index].role != "user" {
                removeConversations(from: index)
@@ -250,20 +240,11 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
 
         var messages: [Conversation]
         
-//        if (conversations.count < 2) {
-//            messages = Array(conversations.suffix(configuration.contextLength - 1))
-//        } else {
-//            messages = Array(conversations.suffix(from: resetMarker + 1).suffix(configuration.contextLength - 1))
-//        }
-        
-        
         if let marker = resetMarker {
             messages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength - 1))
         } else {
             messages = Array(conversations.suffix(configuration.contextLength - 1))
         }
-        
-//        messages = Array(conversations.suffix(configuration.contextLength - 1))
         
         let allMessages = [systemPrompt] + messages
         

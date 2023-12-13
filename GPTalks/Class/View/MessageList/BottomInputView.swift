@@ -44,7 +44,7 @@ struct BottomInputView: View {
     private var regenButton: some View {
         Button {
             Task { @MainActor in
-                await session.regenerate(from: session.conversations.count - 1)
+                await session.regenerateLastMessage()
             }
         } label: {
             Image(systemName: "arrow.clockwise")
