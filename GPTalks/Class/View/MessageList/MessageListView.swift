@@ -7,131 +7,49 @@
 
 import SwiftUI
 
-struct LazySection<Element, Row: View>: View where Element: Identifiable {
-    let elements: [Element]
-    let row: (_ element: Element) -> Row
-
-    var body: some View {
-        ForEach(elements) { element in
-            self.row(element)
-        }
-    }
-}
-
-
 struct MessageListView: View {
     @Environment(\.colorScheme) var colorScheme
-    
+
     @ObservedObject var session: DialogueSession
     @State var isShowSettingsView = false
     @State var isShowDeleteWarning = false
-    
+
     private let bottomID = "bottomID"
-    
-    var newList: some View {
-        ScrollViewReader { proxy in
+
+    var body: some View {
+        Group {
+            #if os(macOS)
+                macOsList
+            #else
+                iosList
+            #endif
+        }
+        .navigationTitle($session.title)
+        .alert("Delete all messages?", isPresented: $isShowDeleteWarning) {
+            Button("Cancel", role: .cancel, action: {})
+            Button("Confirm", role: .none, action: {
+                session.resetErrorDesc()
+                session.removeAllConversations()
+            })
+        }
+    }
+
+    #if os(macOS)
+        var macOsList: some View {
             List {
                 VStack {
-                    ForEach(session.conversations, id: \.id) { conversation in
-                        if conversation.role == "user" {
-                            UserMessageView(conversation: conversation, session: session)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                        }
-                        
-                        if conversation.role == "assistant" {
-                            AssistantMessageView(conversation: conversation, session: session)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .onChange(of: conversation.content) {
-                                    scrollToBottom(proxy: proxy)
-                                }
-                        }
-                        
-                        if session.conversations.firstIndex(of: conversation) == session.resetMarker {
-                            ContextResetDivider(session: session)
-                                .padding(.vertical)
-                        }
-                        
-                        if session.errorDesc != "" {
-                            ErrorDescView(session: session)
-                                .padding()
-                        }
+                    ForEach(session.conversations) { conversation in
+                        conversationView(conversation: conversation)
                     }
-                    
-                    Spacer()
-                        .id(bottomID)
                 }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
                     session: session
                 )
-               #if os(iOS)
-               .background(
-                (colorScheme == .dark ? Color.black : Color.white)
-                    .opacity(0.7)
-                    .background(.ultraThinMaterial)
-                    .ignoresSafeArea()
-               )
-               #else
-              .background(.bar)
-               #endif
+                .background(.bar)
             }
-            .onChange(of: session.conversations.count) {
-                scrollToBottom(proxy: proxy)
-            }
-            #if os(iOS)
-            .onTapGesture {
-                hideKeyboard()
-            }
-            #endif
-        }
-    }
-
-    var body: some View {
-        newList
             .background(.background)
-            .alert("Delete all messages?", isPresented: $isShowDeleteWarning) {
-                Button("Cancel", role: .cancel, action: {})
-                Button("Confirm", role: .none, action: {
-                    session.resetErrorDesc()
-                    session.removeAllConversations()
-                })
-            }
-            .navigationTitle($session.title)
-        #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
-            .sheet(isPresented: $isShowSettingsView) {
-                DialogueSettingsView(configuration: $session.configuration, provider: session.configuration.provider)
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Button {
-                            isShowSettingsView.toggle()
-                        } label: {
-                            Text("Chat Settings")
-                            Image(systemName: "slider.vertical.3")
-                        }
-
-                        Button {
-                            session.resetContext()
-                        } label: {
-                            Text("Reset Context")
-                            Image(systemName: "eraser")
-                        }
-
-                        Button(role: .destructive) {
-                            isShowDeleteWarning.toggle()
-                        } label: {
-                            Text("Delete All Messages")
-                            Image(systemName: "trash")
-                        }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
-                    }
-                }
-            }
-        #else
             .navigationSubtitle(session.configuration.model.name)
             .toolbar {
                 ToolbarItem(placement: .navigation) {
@@ -151,9 +69,8 @@ struct MessageListView: View {
                         .padding(10)
                     }
                 }
-                
-                ToolbarItemGroup {
 
+                ToolbarItemGroup {
                     Picker("Provider", selection: $session.configuration.provider) {
                         ForEach(Provider.allCases, id: \.self) { provider in
                             Text(provider.name)
@@ -204,26 +121,90 @@ struct MessageListView: View {
                     }
                 }
             }
-        #endif
-    }
+        }
+    #endif
 
-    func firstTwoWords(of text: String) -> String {
-        let words = text.split(separator: " ")
-        let firstTwoWords = words.prefix(2)
-        return firstTwoWords.joined(separator: " ")
-    }
+    #if os(iOS)
+        var iosList: some View {
+            ScrollView {
+                VStack {
+                    ForEach(session.conversations) { conversation in
+                        conversationView(conversation: conversation)
+                    }
+                }
+                .padding()
+            }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                BottomInputView(
+                    session: session
+                )
+                .background(
+                    (colorScheme == .dark ? Color.black : Color.white)
+                        .opacity(colorScheme == .dark ? 0.9 : 0.6)
+                        .background(.ultraThinMaterial)
+                        .ignoresSafeArea()
+                )
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $isShowSettingsView) {
+                DialogueSettingsView(configuration: $session.configuration, provider: session.configuration.provider)
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Button {
+                            isShowSettingsView.toggle()
+                        } label: {
+                            Text("Chat Settings")
+                            Image(systemName: "slider.vertical.3")
+                        }
 
-    @State var keyboadWillShow = false
+                        Button {
+                            session.resetContext()
+                        } label: {
+                            Text("Reset Context")
+                            Image(systemName: "eraser")
+                        }
+
+                        Button(role: .destructive) {
+                            isShowDeleteWarning.toggle()
+                        } label: {
+                            Text("Delete All Messages")
+                            Image(systemName: "trash")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
+                }
+            }
+        }
+    #endif
+
+    func conversationView(conversation: Conversation) -> some View {
+        Group {
+            if conversation.role == "user" {
+                UserMessageView(conversation: conversation, session: session)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+
+            if conversation.role == "assistant" {
+                AssistantMessageView(conversation: conversation, session: session)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+
+            if session.conversations.firstIndex(of: conversation) == session.resetMarker {
+                ContextResetDivider(session: session)
+                    .padding(.vertical)
+            }
+
+            if session.errorDesc != "" {
+                ErrorDescView(session: session)
+                    .padding()
+            }
+        }
+    }
 
     private func scrollToBottom(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
         proxy.scrollTo(bottomID, anchor: anchor)
     }
 }
-
-#if canImport(UIKit)
-extension View {
-   func hideKeyboard() {
-       UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-   }
-}
-#endif

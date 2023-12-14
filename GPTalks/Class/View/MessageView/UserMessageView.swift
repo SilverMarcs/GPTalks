@@ -20,9 +20,15 @@ struct UserMessageView: View {
             Text(conversation.content)
                 .textSelection(.enabled)
                 .bubbleStyle(isMyMessage: true, accentColor: session.configuration.provider.accentColor)
+#if os(macOS)
+            HStack {
+                contextMenu(showText: false)
+                    .buttonStyle(.plain)
+            }
+#endif
         }
         .padding(.vertical, 2)
-        .padding(.leading, 95)
+        .padding(.leading, horizontalPadding)
         .sheet(isPresented: $isEditing) {
             editingView
         }
@@ -140,5 +146,13 @@ struct UserMessageView: View {
             }
         }
         .padding(.trailing)
+    }
+    
+    private var horizontalPadding: CGFloat {
+        #if os(iOS)
+        50
+        #else
+        95
+        #endif
     }
 }

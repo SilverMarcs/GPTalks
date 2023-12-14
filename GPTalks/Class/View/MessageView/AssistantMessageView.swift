@@ -28,9 +28,17 @@ struct AssistantMessageView: View {
             }
             .bubbleStyle(isMyMessage: false)
             .textSelection(.enabled)
+            
+#if os(macOS)
+            HStack {
+                contextMenu(showText: false)
+                    .buttonStyle(.plain)
+            }
+            #endif
+            
         }
         .padding(.vertical, 2)
-        .padding(.trailing, 95)
+        .padding(.trailing, horizontalPadding)
         #if os(iOS)
         .contextMenu {
             contextMenu(showText: true)
@@ -81,4 +89,11 @@ struct AssistantMessageView: View {
         .padding(.leading)
     }
     
+    private var horizontalPadding: CGFloat {
+        #if os(iOS)
+        50
+        #else
+        95
+        #endif
+    }
 }

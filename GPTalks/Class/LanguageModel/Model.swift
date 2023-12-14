@@ -35,6 +35,9 @@ enum Model: String, Codable {
     /// gpt4free
     case phind
     case bing
+    
+    ///naga
+    case ngemini
 
     var name: String {
         switch self {
@@ -74,6 +77,8 @@ enum Model: String, Codable {
             return "MythoMist"
         case .bing:
             return "Bing"
+        case .ngemini:
+            return "Gemini"
         }
     }
 
@@ -117,6 +122,8 @@ enum Model: String, Codable {
             return "openchat/openchat-7b"
         case .mythomist:
             return "gryphe/mythomist-7b"
+        case .ngemini:
+            return "gemini-pro"
         }
     }
 
@@ -148,7 +155,7 @@ enum Model: String, Codable {
         .pplx7b,
 //        .pplx70b
     ]
-    static let nagaModels: [Model] = openAIModels
+    static let nagaModels: [Model] = openAIModels + [.ngemini]
     static let gpt4freeModels: [Model] = [.bing, .phind]
     static let customModels: [Model] = openAIModels
 }
