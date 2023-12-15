@@ -31,7 +31,9 @@ struct AssistantMessageView: View {
             .textSelection(.enabled)
 
             #if os(macOS)
+            if !conversation.isReplying {
                 optionsMenu
+            }
             #endif
         }
         .onHover { isHovered in

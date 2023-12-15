@@ -16,17 +16,26 @@ struct DialogueSessionListView: View {
         Group {
             #if os(iOS)
                 iOSList
-                .listStyle(.plain)
             #else
                 macOSList
-                .listStyle(.sidebar)
             #endif
         }
     }
 
     #if os(iOS)
         var iOSList: some View {
-            list
+            List(selection: $viewModel.selectedDialogue) {
+                Section {
+                    ForEach(viewModel.filteredDialogues, id: \.self) { session in
+                        NavigationLink(destination: MessageListView(session: session)) {
+                            DialogueListItem(session: session)
+                        }
+                    }
+                }
+                .listSectionSeparator(.hidden)
+            }
+            .listStyle(.plain)
+            .searchable(text: $viewModel.searchText)
             .navigationTitle("Chats")
             .sheet(isPresented: $isShowSettingView) {
                 AppSettingsView()
@@ -48,7 +57,12 @@ struct DialogueSessionListView: View {
     #endif
 
     var macOSList: some View {
-        list
+        List(viewModel.filteredDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
+            NavigationLink(destination: MessageListView(session: session)) {
+                DialogueListItem(session: session)
+            }
+        }
+        .listStyle(.sidebar)
         .frame(minWidth: 280)
         .toolbar {
             ToolbarItem {
@@ -58,17 +72,6 @@ struct DialogueSessionListView: View {
                 addButton
             }
         }
-    }
-    
-    var list: some View {
-        List(viewModel.filteredDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
-            NavigationLink(destination: MessageListView(session: session)) {
-                DialogueListItem(session: session)
-            }
-        }
-        #if os(iOS)
-        .searchable(text: $viewModel.searchText)
-        #endif
     }
     
     var addButton: some View {
