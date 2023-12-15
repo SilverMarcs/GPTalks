@@ -25,8 +25,11 @@ struct MessageMarkdownView: View {
     struct CodeBlock: View {
         let configuration: CodeBlockConfiguration
 
+        @State private var isHovered = false
+        @State private var isButtonPressed = false
+
         var body: some View {
-            VStack(alignment: .leading) {
+            ZStack(alignment: .bottomTrailing) {
                 configuration.label
                     .markdownTextStyle {
                         FontFamilyVariant(.monospaced)
@@ -37,24 +40,35 @@ struct MessageMarkdownView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .markdownMargin(top: .zero, bottom: .em(0.8))
 
-                Button {
-                    configuration.content.copyToPasteboard()
-                } label: {
-                    Text("Copy")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 3)
-                        .background(
-                            RoundedRectangle(
-                                cornerRadius: 10,
-                                style: .continuous
-                            )
-                            .fill(.background.secondary)
-                        )
-                }
-                .buttonStyle(.plain)
+                copyButton
             }
+            .onHover { hovering in
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isHovered = hovering
+                }
+            }
+        }
+
+        var copyButton: some View {
+            Button(action: {
+                self.isButtonPressed = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.isButtonPressed = false
+                }
+                configuration.content.copyToPasteboard()
+            }) {
+                Image(systemName: isButtonPressed ? "checkmark" : "doc.on.clipboard")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 12, height: 22)
+            }
+            .buttonStyle(.plain)
+            .disabled(isButtonPressed)
+            .padding(.horizontal, 11)
+            .padding(.vertical, 7)
+            #if os(macOS)
+                .opacity((isHovered || isButtonPressed) ? 1 : 0)
+            #endif
         }
     }
 

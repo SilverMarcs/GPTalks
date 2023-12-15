@@ -12,7 +12,7 @@ struct MessageListView: View {
     @EnvironmentObject var viewModel: DialogueViewModel
 
     @ObservedObject var session: DialogueSession
-    
+
     @State var isShowSettingsView = false
     @State var isShowDeleteWarning = false
 
@@ -43,12 +43,11 @@ struct MessageListView: View {
                 List {
                     conversationView
                         .id(topID)
-                
+
                     Color.clear
                         .listRowSeparator(.hidden)
                         .id(bottomID)
-
-                }                
+                }
                 .onChange(of: session.conversations.last?.content) {
                     scrollToBottomWithoutAnimation(proxy: proxy)
                 }
@@ -139,7 +138,7 @@ struct MessageListView: View {
         var iosList: some View {
             ScrollView {
                 conversationView
-                .padding()
+                    .padding()
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
@@ -196,18 +195,18 @@ struct MessageListView: View {
                     UserMessageView(conversation: conversation, session: session)
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
-                
+
                 if conversation.role == "assistant" {
                     AssistantMessageView(conversation: conversation, session: session)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                
+
                 if session.conversations.firstIndex(of: conversation) == session.resetMarker {
                     ContextResetDivider(session: session)
                         .padding(.vertical)
                 }
             }
-            
+
             if session.errorDesc != "" {
                 ErrorDescView(session: session)
             }
@@ -221,7 +220,7 @@ struct MessageListView: View {
             }
         }
     }
-        
+
     private func scrollToBottomWithoutAnimation(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
         DispatchQueue.main.async {
             proxy.scrollTo(bottomID, anchor: anchor)

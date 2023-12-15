@@ -17,7 +17,7 @@ struct AssistantMessageView: View {
         HStack(alignment: .lastTextBaseline) {
             VStack(alignment: .leading) {
                 if AppConfiguration.shared.isMarkdownEnabled {
-                    MessageMarkdownView2(text: conversation.content)
+                    MessageMarkdownView(text: conversation.content)
                 } else {
                     Text(conversation.content)
                 }
