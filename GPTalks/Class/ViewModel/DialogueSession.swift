@@ -7,6 +7,7 @@
 
 import SwiftUI
 import OpenAI
+import GoogleGenerativeAI
 
 class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Codable {
     
@@ -236,7 +237,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         let openAIconfig = configuration.provider.config
         let service: OpenAI = OpenAI(configuration: openAIconfig)
 
-        let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
+        let systemPrompt = Conversation(role: configuration.model == .ngemini ? "user" : "system", content: configuration.systemPrompt)
 
         var messages: [Conversation]
         
@@ -347,7 +348,6 @@ extension DialogueSession {
             removeResetContextMarker()
         }
         
-        // TODO: animation
         conversations.append(conversation)
         
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
@@ -396,9 +396,7 @@ extension DialogueSession {
             return
         }
         
-        withAnimation(.easeInOut(duration: 0.2)) {
-            removeConversation(at: index)
-        }
+        removeConversation(at: index)
         
         
         if conversations.isEmpty {

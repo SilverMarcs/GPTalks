@@ -27,10 +27,11 @@ enum Model: String, Codable {
     case orgpt4t
     case orhermes
     case ortoppy
-    case openchat
-    case pplx7b
+    case oropenchat
+    case orpplx7b
     case pplx70b
     case mythomist
+    case orgemini
     
     /// gpt4free
     case phind
@@ -67,17 +68,17 @@ enum Model: String, Codable {
             return "Hermes"
         case .ortoppy:
             return "Toppy"
-        case .pplx7b:
+        case .orpplx7b:
             return "Perplexity"
         case .pplx70b:
             return "PPLX 70B"
-        case .openchat:
+        case .oropenchat:
             return "OpenChat"
         case .mythomist:
             return "MythoMist"
         case .bing:
             return "Bing"
-        case .ngemini:
+        case .ngemini, .orgemini:
             return "Gemini"
         }
     }
@@ -114,11 +115,13 @@ enum Model: String, Codable {
             return "nousresearch/nous-hermes-llama2-13b"
         case .ortoppy:
             return "undi95/toppy-m-7b"
-        case .pplx7b:
+        case .orgemini:
+            return "google/gemini-pro"
+        case .orpplx7b:
             return "perplexity/pplx-7b-online"
         case .pplx70b:
             return "perplexity/pplx-70b-online"
-        case .openchat:
+        case .oropenchat:
             return "openchat/openchat-7b"
         case .mythomist:
             return "gryphe/mythomist-7b"
@@ -150,9 +153,10 @@ enum Model: String, Codable {
 //        .orgpt4t,
 //        .orhermes,
         .ortoppy,
+        .orgemini,
 //        .mythomist,
-        .openchat,
-        .pplx7b,
+        .oropenchat,
+        .orpplx7b,
 //        .pplx70b
     ]
     static let nagaModels: [Model] = openAIModels + [.ngemini]

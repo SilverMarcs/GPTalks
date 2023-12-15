@@ -19,30 +19,26 @@ struct AssistantMessageView: View {
                 } else {
                     Text(conversation.content)
                 }
-                
+
                 if conversation.isReplying {
                     ReplyingIndicatorView()
                         .frame(width: 48, height: 16)
                 }
-
             }
             .bubbleStyle(isMyMessage: false)
             .textSelection(.enabled)
-            
-#if os(macOS)
-            HStack {
+
+            #if os(macOS)
                 contextMenu(showText: false)
                     .buttonStyle(.plain)
-            }
             #endif
-            
         }
         .padding(.vertical, 2)
         .padding(.trailing, horizontalPadding)
         #if os(iOS)
-        .contextMenu {
-            contextMenu(showText: true)
-        }
+            .contextMenu {
+                contextMenu(showText: true)
+            }
         #endif
     }
 
@@ -58,7 +54,7 @@ struct AssistantMessageView: View {
                     Text("Regenerate")
                 }
             }
-            
+
             Button {
                 conversation.content.copyToPasteboard()
             } label: {
@@ -67,7 +63,7 @@ struct AssistantMessageView: View {
                     Text("Copy")
                 }
             }
-            
+
             Button {
                 session.setResetContextMarker(conversation: conversation)
             } label: {
@@ -76,7 +72,7 @@ struct AssistantMessageView: View {
                     Text("Reset Context")
                 }
             }
-            
+
             Button(role: .destructive) {
                 session.removeConversation(conversation)
             } label: {
@@ -88,12 +84,12 @@ struct AssistantMessageView: View {
         }
         .padding(.leading)
     }
-    
+
     private var horizontalPadding: CGFloat {
         #if os(iOS)
-        50
+            50
         #else
-        95
+            95
         #endif
     }
 }

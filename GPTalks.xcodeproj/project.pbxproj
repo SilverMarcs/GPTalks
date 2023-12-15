@@ -23,6 +23,7 @@
 		08A1EF522B26100600A88A3A /* DialogueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF512B26100600A88A3A /* DialogueStore.swift */; };
 		08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */; };
 		08C3A16D2B1BA636006E4288 /* SavedConversationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16C2B1BA636006E4288 /* SavedConversationList.swift */; };
+		08D5332E2B2B7F75008B4FA9 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08D5332D2B2B7F75008B4FA9 /* GoogleGenerativeAI */; };
 		08D9BB402B2A3CBB002277E2 /* MessageMarkdownView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D9BB3F2B2A3CBB002277E2 /* MessageMarkdownView2.swift */; };
 		08DFA1C52B22FB85003D48D8 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DFA1C42B22FB85003D48D8 /* OpenAI */; };
 		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
@@ -126,6 +127,7 @@
 				08DFA1C52B22FB85003D48D8 /* OpenAI in Frameworks */,
 				E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */,
 				08027CBB2B0D2D8A00ED09E6 /* OpenAI in Frameworks */,
+				08D5332E2B2B7F75008B4FA9 /* GoogleGenerativeAI in Frameworks */,
 				088CF05E2B1E3098009CFDCB /* OpenAI in Frameworks */,
 				E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */,
 			);
@@ -348,6 +350,7 @@
 				08027CBA2B0D2D8A00ED09E6 /* OpenAI */,
 				088CF05D2B1E3098009CFDCB /* OpenAI */,
 				08DFA1C42B22FB85003D48D8 /* OpenAI */,
+				08D5332D2B2B7F75008B4FA9 /* GoogleGenerativeAI */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -426,6 +429,7 @@
 				E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */,
 				E4C65F0F29CAA08400AFA884 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				08DFA1C32B22FB85003D48D8 /* XCRemoteSwiftPackageReference "OpenAI" */,
+				08D5332C2B2B7F74008B4FA9 /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -907,6 +911,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		08D5332C2B2B7F74008B4FA9 /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/generative-ai-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.2;
+			};
+		};
 		08DFA1C32B22FB85003D48D8 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/OpenAI";
@@ -941,6 +953,11 @@
 		088CF05D2B1E3098009CFDCB /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
+		};
+		08D5332D2B2B7F75008B4FA9 /* GoogleGenerativeAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08D5332C2B2B7F74008B4FA9 /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
+			productName = GoogleGenerativeAI;
 		};
 		08DFA1C42B22FB85003D48D8 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
