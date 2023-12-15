@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "generative-ai-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/generative-ai-swift",
-      "state" : {
-        "revision" : "ea39d69cb14cdb40c5c4bbe3732478b96a9737bc",
-        "version" : "0.4.2"
-      }
-    },
-    {
       "identity" : "networkimage",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/gonzalezreal/NetworkImage",
