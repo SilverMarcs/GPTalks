@@ -312,7 +312,11 @@ extension DialogueSession {
         self.date = date
         self.title = title
         self.errorDesc = errorDesc
-        self.resetMarker = Int(resetMarker)
+        if resetMarker != 0 {
+            self.resetMarker = Int(resetMarker)
+        } else {
+            self.resetMarker = nil
+        }
         if let configuration = try? JSONDecoder().decode(Configuration.self, from: configurationData) {
             self.configuration = configuration
         }
@@ -463,7 +467,7 @@ extension DialogueSession {
             rawData?.title = title
             rawData?.errorDesc = errorDesc
             if let marker = resetMarker {
-                rawData?.resetMarker = Int64(marker)
+                rawData?.resetMarker = Int16(marker)
             }
             rawData?.configuration = try JSONEncoder().encode(configuration)
     

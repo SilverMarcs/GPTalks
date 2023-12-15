@@ -57,10 +57,10 @@ struct MessageMarkdownView2: View {
                 }
                 configuration.content.copyToPasteboard()
             }) {
-                Image(systemName: isButtonPressed ? "checkmark" : "clipboard")
+                Image(systemName: isButtonPressed ? "checkmark.rectangle.portrait.fill" : "doc.on.clipboard")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: buttonWidth, height: buttonHeight)
+                    .frame(width: 12, height: 22)
             }
             .buttonStyle(.plain)
             .disabled(isButtonPressed)
@@ -68,22 +68,6 @@ struct MessageMarkdownView2: View {
             .padding(.vertical, 7)
             #if os(macOS)
                 .opacity((isHovered || isButtonPressed) ? 1 : 0)
-            #endif
-        }
-
-        private var buttonHeight: CGFloat {
-            #if os(macOS)
-                20
-            #else
-                22
-            #endif
-        }
-
-        private var buttonWidth: CGFloat {
-            #if os(macOS)
-                10
-            #else
-                12
             #endif
         }
     }
