@@ -162,6 +162,7 @@
 		08A1EF4C2B2604C300A88A3A /* MessageView */ = {
 			isa = PBXGroup;
 			children = (
+				E4C65ED929CA9F7800AFA884 /* MessageMarkdownView.swift */,
 				08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */,
 				08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */,
 				08D5332F2B2C25CC008B4FA9 /* ContextMenu.swift */,
@@ -281,7 +282,6 @@
 			children = (
 				E4C65ED729CA9F7800AFA884 /* MessageListView.swift */,
 				E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */,
-				E4C65ED929CA9F7800AFA884 /* MessageMarkdownView.swift */,
 				E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */,
 				E4C65F1F29D0649800AFA884 /* DialogueSettingsView.swift */,
 			);

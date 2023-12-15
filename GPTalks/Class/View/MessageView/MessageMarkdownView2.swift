@@ -57,7 +57,7 @@ struct MessageMarkdownView2: View {
                 }
                 configuration.content.copyToPasteboard()
             }) {
-                Image(systemName: isButtonPressed ? "checkmark.rectangle.portrait.fill" : "doc.on.clipboard")
+                Image(systemName: isButtonPressed ? "checkmark" : "doc.on.clipboard")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 12, height: 22)

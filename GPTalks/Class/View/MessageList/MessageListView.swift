@@ -9,11 +9,14 @@ import SwiftUI
 
 struct MessageListView: View {
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var viewModel: DialogueViewModel
 
     @ObservedObject var session: DialogueSession
+    
     @State var isShowSettingsView = false
     @State var isShowDeleteWarning = false
 
+    private let topID = "topID"
     private let bottomID = "bottomID"
 
     var body: some View {
@@ -36,8 +39,19 @@ struct MessageListView: View {
 
     #if os(macOS)
         var macOsList: some View {
-            List {
-                conversationView
+            ScrollViewReader { proxy in
+                List {
+                    conversationView
+                        .id(topID)
+                
+                    Color.clear
+                        .listRowSeparator(.hidden)
+                        .id(bottomID)
+
+                }                
+                .onChange(of: session.conversations.last?.content) {
+                    scrollToBottomWithoutAnimation(proxy: proxy)
+                }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
@@ -201,6 +215,16 @@ struct MessageListView: View {
     }
 
     private func scrollToBottom(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
-        proxy.scrollTo(bottomID, anchor: anchor)
+        DispatchQueue.main.async {
+            withAnimation {
+                proxy.scrollTo(bottomID, anchor: anchor)
+            }
+        }
+    }
+        
+    private func scrollToBottomWithoutAnimation(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
+        DispatchQueue.main.async {
+            proxy.scrollTo(bottomID, anchor: anchor)
+        }
     }
 }
