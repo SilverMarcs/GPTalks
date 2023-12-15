@@ -37,11 +37,7 @@ struct MessageListView: View {
     #if os(macOS)
         var macOsList: some View {
             List {
-                VStack {
-                    ForEach(session.conversations) { conversation in
-                        conversationView(conversation: conversation)
-                    }
-                }
+                conversationView
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
@@ -119,6 +115,7 @@ struct MessageListView: View {
                     } label: {
                         Image(systemName: "ellipsis.circle")
                     }
+                    .menuIndicator(.hidden)
                 }
             }
         }
@@ -127,11 +124,7 @@ struct MessageListView: View {
     #if os(iOS)
         var iosList: some View {
             ScrollView {
-                VStack {
-                    ForEach(session.conversations) { conversation in
-                        conversationView(conversation: conversation)
-                    }
-                }
+                conversationView
                 .padding()
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -166,11 +159,13 @@ struct MessageListView: View {
                             Image(systemName: "eraser")
                         }
 
-                        Button(role: .destructive) {
-                            isShowDeleteWarning.toggle()
-                        } label: {
-                            Text("Delete All Messages")
-                            Image(systemName: "trash")
+                        Section {
+                            Button(role: .destructive) {
+                                isShowDeleteWarning.toggle()
+                            } label: {
+                                Text("Delete All Messages")
+                                Image(systemName: "trash")
+                            }
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
@@ -180,23 +175,25 @@ struct MessageListView: View {
         }
     #endif
 
-    func conversationView(conversation: Conversation) -> some View {
-        Group {
-            if conversation.role == "user" {
-                UserMessageView(conversation: conversation, session: session)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+    var conversationView: some View {
+        VStack {
+            ForEach(session.conversations) { conversation in
+                if conversation.role == "user" {
+                    UserMessageView(conversation: conversation, session: session)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+                
+                if conversation.role == "assistant" {
+                    AssistantMessageView(conversation: conversation, session: session)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                
+                if session.conversations.firstIndex(of: conversation) == session.resetMarker {
+                    ContextResetDivider(session: session)
+                        .padding(.vertical)
+                }
             }
-
-            if conversation.role == "assistant" {
-                AssistantMessageView(conversation: conversation, session: session)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-
-            if session.conversations.firstIndex(of: conversation) == session.resetMarker {
-                ContextResetDivider(session: session)
-                    .padding(.vertical)
-            }
-
+            
             if session.errorDesc != "" {
                 ErrorDescView(session: session)
                     .padding()

@@ -11,19 +11,24 @@ struct UserMessageView: View {
     var conversation: Conversation
     var session: DialogueSession
 
-    @State private var isHovered = false
     @State var isEditing: Bool = false
     @State var editingMessage: String = ""
+    
+    @State private var isHovered = false
 
     var body: some View {
-        VStack(alignment: .trailing, spacing: 8) {
+        HStack(alignment: .lastTextBaseline) {
+#if os(macOS)
+            optionsMenu
+#endif
+            
             Text(conversation.content)
                 .textSelection(.enabled)
                 .bubbleStyle(isMyMessage: true, accentColor: session.configuration.provider.accentColor)
-            #if os(macOS)
-                contextMenu(showText: false)
-                    .buttonStyle(.plain)
-            #endif
+
+        }
+        .onHover { isHovered in
+            self.isHovered = isHovered
         }
         .padding(.vertical, 2)
         .padding(.leading, horizontalPadding)
@@ -32,9 +37,25 @@ struct UserMessageView: View {
         }
         #if os(iOS)
         .contextMenu {
-            contextMenu(showText: true)
+            ContextMenu(session: session, conversation: conversation, showText: true) {
+                editingMessage = conversation.content
+                isEditing = true
+            }
         }
         #endif
+    }
+    
+    var optionsMenu: some View {
+        AdaptiveStack(isHorizontal: conversation.content.count < 350) {
+                ContextMenu(session: session, conversation: conversation) {
+                    editingMessage = conversation.content
+                    isEditing = true
+                }
+
+        }
+        .opacity(isHovered ? 1 : 0)
+        .transition(.opacity)
+        .animation(.easeOut(duration: 0.15), value: isHovered)
     }
 
     var editingView: some View {
@@ -102,53 +123,11 @@ struct UserMessageView: View {
         }
     }
 
-    func contextMenu(showText: Bool) -> some View {
-        HStack(spacing: 12) {
-            Button {
-                editingMessage = conversation.content
-                isEditing = true
-            } label: {
-                Image(systemName: "pencil")
-                if showText {
-                    Text("Edit")
-                }
-            }
-
-            Button {
-                conversation.content.copyToPasteboard()
-            } label: {
-                Image(systemName: "doc")
-                if showText {
-                    Text("Copy")
-                }
-            }
-
-            Button {
-                session.setResetContextMarker(conversation: conversation)
-            } label: {
-                Image(systemName: "eraser")
-                if showText {
-                    Text("Reset Context")
-                }
-            }
-
-            Button(role: .destructive) {
-                session.removeConversation(conversation)
-            } label: {
-                Image(systemName: "trash")
-                if showText {
-                    Text("Delete")
-                }
-            }
-        }
-        .padding(.trailing)
-    }
-
     private var horizontalPadding: CGFloat {
         #if os(iOS)
             50
         #else
-            95
+        85
         #endif
     }
 }

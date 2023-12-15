@@ -10,12 +10,14 @@ import SwiftUI
 struct AssistantMessageView: View {
     var conversation: Conversation
     var session: DialogueSession
+    
+    @State var isHovered = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        HStack(alignment: .lastTextBaseline) {
             VStack(alignment: .leading) {
                 if AppConfiguration.shared.isMarkdownEnabled {
-                    MessageMarkdownView(text: conversation.content)
+                    MessageMarkdownView2(text: conversation.content)
                 } else {
                     Text(conversation.content)
                 }
@@ -29,67 +31,35 @@ struct AssistantMessageView: View {
             .textSelection(.enabled)
 
             #if os(macOS)
-                contextMenu(showText: false)
-                    .buttonStyle(.plain)
+                optionsMenu
             #endif
+        }
+        .onHover { isHovered in
+            self.isHovered = isHovered
         }
         .padding(.vertical, 2)
         .padding(.trailing, horizontalPadding)
         #if os(iOS)
             .contextMenu {
-                contextMenu(showText: true)
+                ContextMenu(session: session, conversation: conversation, showText: true) {}
             }
         #endif
     }
-
-    func contextMenu(showText: Bool) -> some View {
-        HStack(spacing: 12) {
-            Button {
-                Task { @MainActor in
-                    await session.regenerate(from: conversation)
-                }
-            } label: {
-                Image(systemName: "arrow.clockwise")
-                if showText {
-                    Text("Regenerate")
-                }
-            }
-
-            Button {
-                conversation.content.copyToPasteboard()
-            } label: {
-                Image(systemName: "doc")
-                if showText {
-                    Text("Copy")
-                }
-            }
-
-            Button {
-                session.setResetContextMarker(conversation: conversation)
-            } label: {
-                Image(systemName: "eraser")
-                if showText {
-                    Text("Reset Context")
-                }
-            }
-
-            Button(role: .destructive) {
-                session.removeConversation(conversation)
-            } label: {
-                Image(systemName: "trash")
-                if showText {
-                    Text("Delete")
-                }
-            }
+    
+    var optionsMenu: some View {
+        AdaptiveStack(isHorizontal: conversation.content.count < 350) {
+           ContextMenu(session: session, conversation: conversation) { }
         }
-        .padding(.leading)
+        .opacity(isHovered ? 1 : 0)
+        .transition(.opacity)
+        .animation(.easeOut(duration: 0.15), value: isHovered)
     }
 
     private var horizontalPadding: CGFloat {
         #if os(iOS)
             50
         #else
-            95
+            85
         #endif
     }
 }

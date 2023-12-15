@@ -7,7 +7,6 @@
 
 import SwiftUI
 import OpenAI
-import GoogleGenerativeAI
 
 class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Codable {
     
