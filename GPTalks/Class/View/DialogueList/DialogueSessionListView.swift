@@ -61,7 +61,7 @@ struct DialogueSessionListView: View {
     }
     
     var list: some View {
-        List(viewModel.filteredDialogues) { session in
+        List(viewModel.filteredDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
             NavigationLink(destination: MessageListView(session: session)) {
                 DialogueListItem(session: session)
             }

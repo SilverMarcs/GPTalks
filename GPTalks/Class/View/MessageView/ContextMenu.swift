@@ -47,24 +47,36 @@ struct ContextMenu: View {
                 }
             }
 
-            Button {
-                session.setResetContextMarker(conversation: conversation)
+            #if os(macOS)
+            Menu {
+                extraButtons
             } label: {
-                Image(systemName: "eraser")
-                if showText {
-                    Text("Reset Context")
-                }
+                Image(systemName: "ellipsis.circle")
             }
-
-            Button(role: .destructive) {
-                session.removeConversation(conversation)
-            } label: {
-                Image(systemName: "trash")
-                if showText {
-                    Text("Delete")
-                }
+            #else
+            Section {
+                extraButtons
             }
+            #endif
+        
         }
         .buttonStyle(.plain)
+    }
+    
+    @ViewBuilder
+    var extraButtons: some View {
+        Button {
+            session.setResetContextMarker(conversation: conversation)
+        } label: {
+            Image(systemName: "eraser")
+            Text("Reset Context")
+        }
+
+        Button(role: .destructive) {
+            session.removeConversation(conversation)
+        } label: {
+            Image(systemName: "trash")
+            Text("Delete")
+        }
     }
 }

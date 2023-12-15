@@ -23,7 +23,7 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.contextLength") var contextLength = 20
     
-    @AppStorage("configuration.temperature") var temperature: Double = 0.8
+    @AppStorage("configuration.temperature") var temperature: Double = 0.5
     
     @AppStorage("configuration.systemPrompt") var systemPrompt: String = "You are a helpful assistant."
     
@@ -35,7 +35,7 @@ class AppConfiguration: ObservableObject {
     
     /// openRouter
     @AppStorage("configuration.ORKey") var ORkey = ""
-    @AppStorage("configuration.ORmodel") var ORmodel: Model = .orpplx7b
+    @AppStorage("configuration.ORmodel") var ORmodel: Model = .orgemini
     
     /// naga
     @AppStorage("configuration.Nkey") var Nkey = ""
@@ -48,6 +48,6 @@ class AppConfiguration: ObservableObject {
     
     /// custom
     @AppStorage("configuration.Ckey") var Ckey = ""
-    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt4
+    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt4t
     @AppStorage("configuration.Chost") var Chost: String = ""
 }

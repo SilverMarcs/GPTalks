@@ -24,6 +24,7 @@ struct ContentView: View {
             NavigationStack {
                 DialogueSessionListView()
             }
+            .accentColor(viewModel.selectedDialogue?.configuration.provider.accentColor ?? .accentColor)
 #endif
         }
         .environmentObject(viewModel)
