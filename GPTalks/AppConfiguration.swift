@@ -35,7 +35,7 @@ class AppConfiguration: ObservableObject {
     
     /// openRouter
     @AppStorage("configuration.ORKey") var ORkey = ""
-    @AppStorage("configuration.ORmodel") var ORmodel: Model = .orphind
+    @AppStorage("configuration.ORmodel") var ORmodel: Model = .orpplx7b
     
     /// naga
     @AppStorage("configuration.Nkey") var Nkey = ""

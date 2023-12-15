@@ -236,7 +236,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         let openAIconfig = configuration.provider.config
         let service: OpenAI = OpenAI(configuration: openAIconfig)
 
-        let systemPrompt = Conversation(role: configuration.model == .ngemini ? "user" : "system", content: configuration.systemPrompt)
+        let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
 
         var messages: [Conversation]
         
@@ -253,7 +253,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                                 conversation.toChat()
                             }),
                             temperature: configuration.temperature,
-                            maxTokens: configuration.model.maxTokens,
+                            maxTokens: 3800,
                             stream: true)
         
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))

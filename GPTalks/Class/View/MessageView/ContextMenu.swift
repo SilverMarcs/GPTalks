@@ -41,7 +41,7 @@ struct ContextMenu: View {
             Button {
                 conversation.content.copyToPasteboard()
             } label: {
-                Image(systemName: "clipboard")
+                Image(systemName: "doc")
                 if showText {
                     Text("Copy")
                 }

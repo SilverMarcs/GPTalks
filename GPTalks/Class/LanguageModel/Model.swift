@@ -16,150 +16,77 @@ enum Model: String, Codable {
     case gpt4t
 
     /// openrouter
-    case orphind
-    case orcodellama
-    case ormistral
-    case ormythomax
-    case orpalm
-    case orpalmcode
     case orzephyr
-    case orgpt3
-    case orgpt4t
-    case orhermes
-    case ortoppy
-    case oropenchat
     case orpplx7b
-    case pplx70b
-    case mythomist
     case orgemini
-    
+
     /// gpt4free
     case phind
     case bing
-    
-    ///naga
-    case ngemini
+
+    /// naga
+    case nmixtral
 
     var name: String {
         switch self {
         case .gpt3t:
-            return "GPT-3.5"
-        case .gpt3t_16, .orgpt3:
-            return "GPT-3.5 16K"
+            "GPT-3.5"
+        case .gpt3t_16:
+            "GPT-3.5 16K"
         case .gpt4:
-            return "GPT-4"
-        case .gpt4t, .orgpt4t:
-            return "GPT-4 Turbo"
-        case .orphind, .phind:
-            return "Phind"
-        case .orcodellama:
-            return "CodeLlama"
-        case .ormistral:
-            return "Mistral"
-        case .ormythomax:
-            return "MythoMax"
-        case .orpalm:
-            return "Palm"
-        case .orpalmcode:
-            return "GCode"
+            "GPT-4"
+        case .gpt4t:
+            "GPT-4 Turbo"
+        case .phind:
+            "Phind"
         case .orzephyr:
-            return "Zephyr"
-        case .orhermes:
-            return "Hermes"
-        case .ortoppy:
-            return "Toppy"
+            "Zephyr"
         case .orpplx7b:
-            return "Perplexity"
-        case .pplx70b:
-            return "PPLX 70B"
-        case .oropenchat:
-            return "OpenChat"
-        case .mythomist:
-            return "MythoMist"
+            "Perplexity"
         case .bing:
-            return "Bing"
-        case .ngemini, .orgemini:
-            return "Gemini"
+            "Bing"
+        case .orgemini:
+            "Gemini"
+        case .nmixtral:
+            "Mixtral"
         }
     }
 
     var id: String {
         switch self {
         case .gpt3t, .phind:
-            return "gpt-3.5-turbo"
+            "gpt-3.5-turbo"
         case .gpt3t_16:
-            return "gpt-3.5-turbo-1106"
+            "gpt-3.5-turbo-1106"
         case .gpt4, .bing:
-            return "gpt-4"
+            "gpt-4"
         case .gpt4t:
-            return "gpt-4-1106-preview"
-        case .orphind:
-            return "phind/phind-codellama-34b-v2"
-        case .orcodellama:
-            return "meta-llama/codellama-34b-instruct"
-        case .ormistral:
-            return "open-orca/mistral-7b-openorca"
-        case .ormythomax:
-            return "gryphe/mythomax-l2-13b"
-        case .orpalm:
-            return "google/palm-2-chat-bison"
-        case .orpalmcode:
-            return "google/palm-2-codechat-bison"
+            "gpt-4-1106-preview"
         case .orzephyr:
-            return "huggingfaceh4/zephyr-7b-beta"
-        case .orgpt3:
-            return "openai/gpt-3.5-turbo-1106"
-        case .orgpt4t:
-            return "openai/gpt-4-1106-preview"
-        case .orhermes:
-            return "nousresearch/nous-hermes-llama2-13b"
-        case .ortoppy:
-            return "undi95/toppy-m-7b"
+            "huggingfaceh4/zephyr-7b-beta"
         case .orgemini:
-            return "google/gemini-pro"
+            "google/gemini-pro"
         case .orpplx7b:
-            return "perplexity/pplx-7b-online"
-        case .pplx70b:
-            return "perplexity/pplx-70b-online"
-        case .oropenchat:
-            return "openchat/openchat-7b"
-        case .mythomist:
-            return "gryphe/mythomist-7b"
-        case .ngemini:
-            return "gemini-pro"
+            "perplexity/pplx-7b-online"
+        case .nmixtral:
+            "mixtral-8x7b"
         }
     }
 
-    var maxTokens: Int {
-        switch self {
-        case .orpalm, .orpalmcode:
-            return 2000
-        default:
-            return 3800
-        }
-    }
-
-    static let openAIModels: [Model] = [.gpt3t, .gpt3t_16, .gpt4, .gpt4t]
-    static let openRouterModels: [Model] = 
-    [
-        .orphind,
-//        .orcodellama,
-//        .ormistral,
-//        .ormythomax,
-        .orpalm,
-        .orpalmcode,
-//        .orzephyr,
-//        .orgpt3,
-//        .orgpt4t,
-//        .orhermes,
-        .ortoppy,
-        .orgemini,
-//        .mythomist,
-        .oropenchat,
-        .orpplx7b,
-//        .pplx70b
-    ]
-    static let nagaModels: [Model] = openAIModels + [.ngemini]
+    static let openAIModels: [Model] =
+        [
+            .gpt3t,
+            .gpt3t_16,
+            .gpt4,
+            .gpt4t,
+        ]
+    static let openRouterModels: [Model] =
+        [
+            .orzephyr,
+            .orgemini,
+            .orpplx7b,
+        ]
+    static let nagaModels: [Model] = openAIModels + [.nmixtral]
     static let gpt4freeModels: [Model] = [.bing, .phind]
     static let customModels: [Model] = openAIModels
 }

@@ -61,10 +61,11 @@ struct MessageMarkdownView2: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: buttonWidth, height: buttonHeight)
-                    .padding([.vertical, .horizontal], 1)
             }
+            .buttonStyle(.plain)
             .disabled(isButtonPressed)
-            .padding(8)
+            .padding(.horizontal, 11)
+            .padding(.vertical, 7)
             #if os(macOS)
                 .opacity((isHovered || isButtonPressed) ? 1 : 0)
             #endif
@@ -72,7 +73,7 @@ struct MessageMarkdownView2: View {
 
         private var buttonHeight: CGFloat {
             #if os(macOS)
-                19
+                20
             #else
                 22
             #endif
@@ -80,7 +81,7 @@ struct MessageMarkdownView2: View {
 
         private var buttonWidth: CGFloat {
             #if os(macOS)
-                9
+                10
             #else
                 12
             #endif
