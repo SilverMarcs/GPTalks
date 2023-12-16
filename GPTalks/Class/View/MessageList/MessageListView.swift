@@ -15,6 +15,7 @@ struct MessageListView: View {
 
     @State var isShowSettingsView = false
     @State var isShowDeleteWarning = false
+    @State private var previousCount: Int = 0
 
     private let topID = "topID"
     private let bottomID = "bottomID"
@@ -48,8 +49,22 @@ struct MessageListView: View {
                         .listRowSeparator(.hidden)
                         .id(bottomID)
                 }
-                .onChange(of: session.conversations.last?.content) {
-                    scrollToBottomWithoutAnimation(proxy: proxy)
+//                .onChange(of: session.conversations.last?.content) {
+//                    scrollToBottomWithoutAnimation(proxy: proxy)
+//                }
+                .onChange(of: session.conversations.count) {
+                    if session.conversations.count > previousCount {
+                        scrollToBottom(proxy: proxy)
+                    }
+                    previousCount = session.conversations.count
+                }
+                .onChange(of: session.input) {
+                    scrollToBottom(proxy: proxy)
+                }
+                .onChange(of: session.resetMarker) {
+                    if session.resetMarker == session.conversations.count - 1 {
+                        scrollToBottom(proxy: proxy)
+                    }
                 }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -72,7 +87,7 @@ struct MessageListView: View {
                             Text("System Prompt")
                             TextEditor(text: $session.configuration.systemPrompt)
                                 .font(.body)
-                                .frame(width: 200, height: 70)
+                                .frame(width: 230, height: 70)
                                 .scrollContentBackground(.hidden)
                         }
                         .padding(10)
@@ -117,7 +132,6 @@ struct MessageListView: View {
                             Text("Reset Context")
                             Image(systemName: "eraser")
                         }
-                        .keyboardShortcut(.delete, modifiers: [.command])
 
                         Button(role: .destructive) {
                             isShowDeleteWarning.toggle()

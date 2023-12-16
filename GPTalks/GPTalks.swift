@@ -9,23 +9,37 @@ import SwiftUI
 
 @main
 struct GPTalks: App {
-    @State var showOpenAIKeyAlert = false
+    @StateObject private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .onAppear() {
-                    if AppConfiguration.shared.OAIkey.isEmpty {
-                        showOpenAIKeyAlert = true
+        }
+        .environmentObject(viewModel)
+        .commands {
+            CommandMenu("Session") {
+                Section {
+                    Button("Regenerate") {
+                        Task { @MainActor in
+                            await viewModel.selectedDialogue?.regenerateLastMessage()
+                        }
                     }
+                    .keyboardShortcut("r", modifiers: .command)
                 }
-                .alert("Enter OpenAI API Key", isPresented: $showOpenAIKeyAlert) {
-                    TextField("OpenAI API Key", text: AppConfiguration.shared.$OAIkey)
-                    Button("Later", role: .cancel) { }
-                    Button("Confirm", role: .none) { }
-                } message: {
-                    Text("You need set OpenAI API Key before start a conversation.")
+                
+                Section {
+                    Button("Reset Context") {
+                        viewModel.selectedDialogue?.resetContext()
+                    }
+                    .keyboardShortcut(.delete, modifiers: .command)
+                    
+                    Button("Delete all messages") {
+                        viewModel.selectedDialogue?.removeAllConversations()
+                    }
+                    .keyboardShortcut(.delete, modifiers: [.command, .shift])
                 }
+
+            }
         }
 #if os(macOS)
         Settings {

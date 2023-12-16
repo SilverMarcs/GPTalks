@@ -12,7 +12,7 @@ struct BottomInputView: View {
     @State var isShowClearMessagesAlert = false
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(alignment: .lastTextBaseline, spacing: 12) {
             regenButton
 
             inputBox
@@ -52,7 +52,6 @@ struct BottomInputView: View {
                 .scaledToFit()
                 .frame(width: imageSize, height: imageSize)
         }
-        .keyboardShortcut("r", modifiers: .command)
         .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
         .buttonStyle(.plain)
         .disabled(session.conversations.isEmpty || session.isReplying())
@@ -105,7 +104,7 @@ struct BottomInputView: View {
                 .frame(width: imageSize + 1, height: imageSize + 1)
                 .foregroundColor(.red)
         }
-        .buttonStyle(.borderless)
+        .buttonStyle(.plain)
     }
 
     @ViewBuilder

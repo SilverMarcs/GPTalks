@@ -9,7 +9,8 @@ import CoreData
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
+//    @StateObject private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
+    @EnvironmentObject var viewModel: DialogueViewModel
 
     var body: some View {
         Group {
@@ -27,7 +28,7 @@ struct ContentView: View {
             .accentColor(viewModel.selectedDialogue?.configuration.provider.accentColor ?? .accentColor)
 #endif
         }
-        .environmentObject(viewModel)
+//        .environmentObject(viewModel)
         .onAppear {
             viewModel.fetchDialogueData()
         }

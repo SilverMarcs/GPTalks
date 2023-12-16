@@ -29,7 +29,6 @@
 		08DFA1C52B22FB85003D48D8 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DFA1C42B22FB85003D48D8 /* OpenAI */; };
 		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
 		08F74EA42B0BC318006D1DD3 /* ServiceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */; };
-		E4924EED29DB0A4400B69605 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E4924EEF29DB0A4400B69605 /* Localizable.strings */; };
 		E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */; };
 		E4C65EA229CA9E7E00AFA884 /* GPTalks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA129CA9E7E00AFA884 /* GPTalks.swift */; };
 		E4C65EA429CA9E7E00AFA884 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA329CA9E7E00AFA884 /* Persistence.swift */; };
@@ -91,7 +90,6 @@
 		08D533332B2C2ED9008B4FA9 /* MessageMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMarkdownView.swift; sourceTree = "<group>"; };
 		08ED9EB72B02564D00849A1E /* DialogueListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListItem.swift; sourceTree = "<group>"; };
 		08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSettingsView.swift; sourceTree = "<group>"; };
-		E4924EEE29DB0A4400B69605 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSSettingsView.swift; sourceTree = "<group>"; };
 		E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C65EA129CA9E7E00AFA884 /* GPTalks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTalks.swift; sourceTree = "<group>"; };
@@ -299,7 +297,6 @@
 		E4C65EE829CA9F7800AFA884 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				E4924EEF29DB0A4400B69605 /* Localizable.strings */,
 				E4C65EAA29CA9E7F00AFA884 /* Assets.xcassets */,
 			);
 			path = Resource;
@@ -418,7 +415,6 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				"zh-Hans",
 				Base,
 			);
 			mainGroup = E4C65E9529CA9E7E00AFA884;
@@ -443,7 +439,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4924EED29DB0A4400B69605 /* Localizable.strings in Resources */,
 				E4C65EAF29CA9E7F00AFA884 /* Preview Assets.xcassets in Resources */,
 				E4C65EAB29CA9E7F00AFA884 /* Assets.xcassets in Resources */,
 			);
@@ -538,17 +533,6 @@
 			targetProxy = E4C65EBF29CA9E8000AFA884 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		E4924EEF29DB0A4400B69605 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E4924EEE29DB0A4400B69605 /* zh-Hans */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		E4C65EC629CA9E8000AFA884 /* Debug */ = {
