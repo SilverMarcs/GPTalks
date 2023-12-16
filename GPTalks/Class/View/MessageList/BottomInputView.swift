@@ -12,7 +12,7 @@ struct BottomInputView: View {
     @State var isShowClearMessagesAlert = false
 
     var body: some View {
-        HStack(alignment: .lastTextBaseline, spacing: 12) {
+        HStack(spacing: 12) {
             regenButton
 
             inputBox
@@ -130,7 +130,7 @@ struct BottomInputView: View {
             .lineLimit(1 ... 15)
             .padding(6)
             .padding(.horizontal, 4)
-            .frame(minHeight: imageSize)
+//            .frame(minHeight: imageSize)
     }
 
     @ViewBuilder

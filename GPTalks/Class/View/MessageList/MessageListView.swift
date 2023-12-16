@@ -150,9 +150,35 @@ struct MessageListView: View {
 
     #if os(iOS)
         var iosList: some View {
-            ScrollView {
-                conversationView
-                    .padding()
+            ScrollViewReader { proxy in
+                ScrollView {
+                    conversationView
+                        .padding()
+                        .id(topID)
+
+                 Spacer()
+                     .id(bottomID)
+                }
+                .onAppear {
+                    scrollToBottom(proxy: proxy, slow: true)
+                }
+                .onTapGesture {
+                      hideKeyboard()
+                  }
+                .onChange(of: session.conversations.count) {
+                    if session.conversations.count > previousCount {
+                        scrollToBottom(proxy: proxy)
+                    }
+                    previousCount = session.conversations.count
+                }
+                .onChange(of: session.input) {
+                    scrollToBottom(proxy: proxy)
+                }
+                .onChange(of: session.resetMarker) {
+                    if session.resetMarker == session.conversations.count - 1 {
+                        scrollToBottom(proxy: proxy)
+                    }
+                }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
@@ -227,13 +253,21 @@ struct MessageListView: View {
         }
     }
 
-    private func scrollToBottom(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
-        DispatchQueue.main.async {
-            withAnimation {
-                proxy.scrollTo(bottomID, anchor: anchor)
+    private func scrollToBottom(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom, slow: Bool = false) {
+        if slow {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                withAnimation {
+                    proxy.scrollTo(bottomID, anchor: anchor)
+                }
+            }
+        } else {
+                DispatchQueue.main.async {
+                    withAnimation {
+                        proxy.scrollTo(bottomID, anchor: anchor)
+                    }
+                }
             }
         }
-    }
 
     private func scrollToBottomWithoutAnimation(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
         DispatchQueue.main.async {
@@ -241,3 +275,11 @@ struct MessageListView: View {
         }
     }
 }
+
+#if canImport(UIKit)
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+#endif
