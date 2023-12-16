@@ -25,6 +25,12 @@ struct GPTalks: App {
                         }
                     }
                     .keyboardShortcut("r", modifiers: .command)
+                    
+                    Button("Deselect Session") {
+                        viewModel.selectedDialogue = nil
+                    }
+                    .keyboardShortcut(.escape, modifiers: .command)
+                    
                 }
                 
                 Section {
@@ -38,7 +44,6 @@ struct GPTalks: App {
                     }
                     .keyboardShortcut(.delete, modifiers: [.command, .shift])
                 }
-
             }
         }
 #if os(macOS)

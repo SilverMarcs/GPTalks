@@ -9,7 +9,6 @@ import CoreData
 import SwiftUI
 
 struct ContentView: View {
-//    @StateObject private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
     @EnvironmentObject var viewModel: DialogueViewModel
 
     var body: some View {
@@ -21,6 +20,7 @@ struct ContentView: View {
                 Text("Select a Chat to see it here")
                     .font(.title)
             }
+            .background(.background)
 #else
             NavigationStack {
                 DialogueSessionListView()
@@ -28,7 +28,6 @@ struct ContentView: View {
             .accentColor(viewModel.selectedDialogue?.configuration.provider.accentColor ?? .accentColor)
 #endif
         }
-//        .environmentObject(viewModel)
         .onAppear {
             viewModel.fetchDialogueData()
         }

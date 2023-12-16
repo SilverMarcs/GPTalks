@@ -246,7 +246,13 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             messages = Array(conversations.suffix(configuration.contextLength - 1))
         }
         
-        let allMessages = [systemPrompt] + messages
+        var allMessages: [Conversation]
+        
+        if configuration.model == .ngemini {
+            allMessages = messages
+        } else {
+            allMessages = messages + [systemPrompt]
+        }
         
         let query = ChatQuery(model: configuration.model.id,
                             messages: allMessages.map({ conversation in

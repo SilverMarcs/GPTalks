@@ -88,7 +88,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .openrouter:
             return "OpenRouter"
         case .naga:
-            return "NagaAI"
+            return "Naga"
         case .gpt4free:
             return "GPT4Free"
         case .custom:

@@ -249,6 +249,7 @@ struct MessageListView: View {
 
             if session.errorDesc != "" {
                 ErrorDescView(session: session)
+                    .padding()
             }
         }
     }

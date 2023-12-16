@@ -13,6 +13,7 @@ struct ErrorDescView: View {
     var body: some View {
         VStack(spacing: 15) {
             Text(session.errorDesc)
+                .textSelection(.enabled)
                 .foregroundStyle(.red)
             Button("Retry") {
                 Task { @MainActor in
