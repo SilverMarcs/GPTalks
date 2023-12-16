@@ -22,7 +22,6 @@
 		08A1EF502B2606C000A88A3A /* AssistantMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */; };
 		08A1EF522B26100600A88A3A /* DialogueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF512B26100600A88A3A /* DialogueViewModel.swift */; };
 		08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */; };
-		08C3A16D2B1BA636006E4288 /* SavedConversationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16C2B1BA636006E4288 /* SavedConversationList.swift */; };
 		08D533302B2C25CC008B4FA9 /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D5332F2B2C25CC008B4FA9 /* ContextMenu.swift */; };
 		08D533322B2C2D50008B4FA9 /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */; };
 		08D533342B2C2ED9008B4FA9 /* MessageMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533332B2C2ED9008B4FA9 /* MessageMarkdownView.swift */; };
@@ -84,7 +83,6 @@
 		08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantMessageView.swift; sourceTree = "<group>"; };
 		08A1EF512B26100600A88A3A /* DialogueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueViewModel.swift; sourceTree = "<group>"; };
 		08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledPicker.swift; sourceTree = "<group>"; };
-		08C3A16C2B1BA636006E4288 /* SavedConversationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedConversationList.swift; sourceTree = "<group>"; };
 		08D5332F2B2C25CC008B4FA9 /* ContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenu.swift; sourceTree = "<group>"; };
 		08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
 		08D533332B2C2ED9008B4FA9 /* MessageMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMarkdownView.swift; sourceTree = "<group>"; };
@@ -288,7 +286,6 @@
 			children = (
 				E4C65EE029CA9F7800AFA884 /* DialogueSessionListView.swift */,
 				08ED9EB72B02564D00849A1E /* DialogueListItem.swift */,
-				08C3A16C2B1BA636006E4288 /* SavedConversationList.swift */,
 				088CF05F2B1E43C6009CFDCB /* PlaceHolderView.swift */,
 			);
 			path = DialogueList;
@@ -486,7 +483,6 @@
 				E4C65EF329CA9F7800AFA884 /* ReplyingIndicatorView.swift in Sources */,
 				088CF0602B1E43C6009CFDCB /* PlaceHolderView.swift in Sources */,
 				08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */,
-				08C3A16D2B1BA636006E4288 /* SavedConversationList.swift in Sources */,
 				E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */,
 				08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */,
 				E4C65EF629CA9F7800AFA884 /* AppSettingsView.swift in Sources */,

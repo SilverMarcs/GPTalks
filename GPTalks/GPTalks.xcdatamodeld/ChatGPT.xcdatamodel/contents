@@ -19,10 +19,4 @@
         <attribute name="title" attributeType="String" defaultValueString="New Chat"/>
         <relationship name="conversations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ConversationData" inverseName="dialogue" inverseEntity="ConversationData"/>
     </entity>
-    <entity name="SavedConversationData" representedClassName="SavedConversationData" syncable="YES" codeGenerationType="class">
-        <attribute name="content" optional="YES" attributeType="String"/>
-        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="title" optional="YES" attributeType="String" defaultValueString="Conversation"/>
-    </entity>
 </model>
