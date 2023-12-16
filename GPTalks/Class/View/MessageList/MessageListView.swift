@@ -21,13 +21,33 @@ struct MessageListView: View {
     private let bottomID = "bottomID"
 
     var body: some View {
-        Group {
-            #if os(macOS)
+        ScrollViewReader { proxy in
+            Group {
+#if os(macOS)
                 macOsList
-            #else
+#else
                 iosList
-            #endif
+                    .onAppear {
+                        scrollToBottom(proxy: proxy, slow: true)
+                    }   
+#endif
+            }
+            .onChange(of: session.conversations.count) {
+                if session.conversations.count > previousCount {
+                    scrollToBottom(proxy: proxy)
+                }
+                previousCount = session.conversations.count
+            }
+            .onChange(of: session.input) {
+                scrollToBottom(proxy: proxy)
+            }
+            .onChange(of: session.resetMarker) {
+                if session.resetMarker == session.conversations.count - 1 {
+                    scrollToBottom(proxy: proxy)
+                }
+            }
         }
+        
         .navigationTitle($session.title)
         .alert("Delete all messages?", isPresented: $isShowDeleteWarning) {
             Button("Cancel", role: .cancel, action: {})
@@ -40,7 +60,6 @@ struct MessageListView: View {
 
     #if os(macOS)
         var macOsList: some View {
-            ScrollViewReader { proxy in
                 List {
                     conversationView
                         .id(topID)
@@ -49,24 +68,6 @@ struct MessageListView: View {
                         .listRowSeparator(.hidden)
                         .id(bottomID)
                 }
-//                .onChange(of: session.conversations.last?.content) {
-//                    scrollToBottomWithoutAnimation(proxy: proxy)
-//                }
-                .onChange(of: session.conversations.count) {
-                    if session.conversations.count > previousCount {
-                        scrollToBottom(proxy: proxy)
-                    }
-                    previousCount = session.conversations.count
-                }
-                .onChange(of: session.input) {
-                    scrollToBottom(proxy: proxy)
-                }
-                .onChange(of: session.resetMarker) {
-                    if session.resetMarker == session.conversations.count - 1 {
-                        scrollToBottom(proxy: proxy)
-                    }
-                }
-            }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
                     session: session
@@ -150,7 +151,6 @@ struct MessageListView: View {
 
     #if os(iOS)
         var iosList: some View {
-            ScrollViewReader { proxy in
                 ScrollView {
                     conversationView
                         .padding()
@@ -159,27 +159,9 @@ struct MessageListView: View {
                  Spacer()
                      .id(bottomID)
                 }
-                .onAppear {
-                    scrollToBottom(proxy: proxy, slow: true)
-                }
                 .onTapGesture {
                       hideKeyboard()
                   }
-                .onChange(of: session.conversations.count) {
-                    if session.conversations.count > previousCount {
-                        scrollToBottom(proxy: proxy)
-                    }
-                    previousCount = session.conversations.count
-                }
-                .onChange(of: session.input) {
-                    scrollToBottom(proxy: proxy)
-                }
-                .onChange(of: session.resetMarker) {
-                    if session.resetMarker == session.conversations.count - 1 {
-                        scrollToBottom(proxy: proxy)
-                    }
-                }
-            }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
                     session: session

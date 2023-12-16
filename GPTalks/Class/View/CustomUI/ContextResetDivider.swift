@@ -19,7 +19,8 @@ struct ContextResetDivider: View {
                 Button(role: .destructive) {
                     session.removeResetContextMarker()
                 } label: {
-                    Image(systemName: "trash")
+                    Image(systemName: "delete.backward")
+                        .foregroundColor(.secondary)
                 }
                 .buttonStyle(.plain)
             }
