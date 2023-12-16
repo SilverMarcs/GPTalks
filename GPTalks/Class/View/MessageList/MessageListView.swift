@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+#if os(macOS)
+import AppKit
+#endif
+
+
 struct MessageListView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var viewModel: DialogueViewModel
@@ -19,12 +24,31 @@ struct MessageListView: View {
 
     private let topID = "topID"
     private let bottomID = "bottomID"
+    
+    @State private var previousContent: String?
+    @State private var isUserScrolling = false
+    
+    @State private var contentChangeTimer: Timer? = nil
 
     var body: some View {
         ScrollViewReader { proxy in
             Group {
 #if os(macOS)
                 macOsList
+                    .onChange(of: session.conversations.last?.content) {
+                        if session.conversations.last?.content != previousContent && !isUserScrolling {
+                            scrollToBottomWithoutAnimation(proxy: proxy)
+                        }
+                        previousContent = session.conversations.last?.content
+
+                        contentChangeTimer?.invalidate()
+                        contentChangeTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
+                            isUserScrolling = false
+                        }
+                    }
+                    .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
+                        isUserScrolling = true
+                    }
 #else
                 iosList
                     .onAppear {
@@ -47,7 +71,6 @@ struct MessageListView: View {
                 }
             }
         }
-        
         .navigationTitle($session.title)
         .alert("Delete all messages?", isPresented: $isShowDeleteWarning) {
             Button("Cancel", role: .cancel, action: {})

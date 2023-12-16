@@ -39,12 +39,24 @@ struct Bubble: ViewModifier {
         content
             .padding(.horizontal, horizontalPadding)
             .padding(.vertical, verticalPadding)
-            .background(isMyMessage ? accentColor : Color(.secondarySystemFill))
+            .background(isMyMessage ? accentColor : bubbleBackground)
         #if os(iOS)
             .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
         #endif
             .clipShape(RoundedRectangle(cornerRadius: radius))
             .foregroundColor(Color.white)
+    }
+    
+    private var bubbleBackground: Color {
+        #if os(macOS)
+        if colorScheme == .dark {
+            return Color("bubbleDark")
+        } else {
+            return Color(.secondarySystemFill)
+        }
+        #else
+        return Color(.secondarySystemFill)
+        #endif
     }
 }
 

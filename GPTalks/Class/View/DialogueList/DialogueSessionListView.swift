@@ -25,14 +25,11 @@ struct DialogueSessionListView: View {
     #if os(iOS)
         var iOSList: some View {
             List(selection: $viewModel.selectedDialogue) {
-                Section {
-                    ForEach(viewModel.filteredDialogues, id: \.self) { session in
-                        NavigationLink(destination: MessageListView(session: session)) {
-                            DialogueListItem(session: session)
-                        }
+                ForEach(viewModel.filteredDialogues, id: \.self) { session in
+                    NavigationLink(destination: MessageListView(session: session)) {
+                        DialogueListItem(session: session)
                     }
                 }
-                .listSectionSeparator(.hidden)
             }
             .listStyle(.plain)
             .searchable(text: $viewModel.searchText)
