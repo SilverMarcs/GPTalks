@@ -13,12 +13,16 @@ struct DialogueSessionListView: View {
     @State var isShowSettingView = false
 
     var body: some View {
-        Group {
-            #if os(iOS)
-                iOSList
-            #else
-                macOSList
-            #endif
+        if viewModel.dialogues.isEmpty {
+            PlaceHolderView(imageName: "message.fill", title: "No Messages Yet")
+        } else {
+            Group {
+                #if os(iOS)
+                    iOSList
+                #else
+                    macOSList
+                #endif
+            }
         }
     }
 
