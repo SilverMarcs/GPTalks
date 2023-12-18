@@ -8,9 +8,8 @@
 import SwiftUI
 
 #if os(macOS)
-import AppKit
+    import AppKit
 #endif
-
 
 struct MessageListView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -24,37 +23,37 @@ struct MessageListView: View {
 
     private let topID = "topID"
     private let bottomID = "bottomID"
-    
+
     @State private var previousContent: String?
     @State private var isUserScrolling = false
-    
+
     @State private var contentChangeTimer: Timer? = nil
 
     var body: some View {
         ScrollViewReader { proxy in
             Group {
-#if os(macOS)
-                macOsList
-                    .onChange(of: session.conversations.last?.content) {
-                        if session.conversations.last?.content != previousContent && !isUserScrolling {
-                            scrollToBottomWithoutAnimation(proxy: proxy)
-                        }
-                        previousContent = session.conversations.last?.content
+                #if os(macOS)
+                    macOsList
+                        .onChange(of: session.conversations.last?.content) {
+                            if session.conversations.last?.content != previousContent && !isUserScrolling {
+                                scrollToBottomWithoutAnimation(proxy: proxy)
+                            }
+                            previousContent = session.conversations.last?.content
 
-                        contentChangeTimer?.invalidate()
-                        contentChangeTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
-                            isUserScrolling = false
+                            contentChangeTimer?.invalidate()
+                            contentChangeTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
+                                isUserScrolling = false
+                            }
                         }
-                    }
-                    .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-                        isUserScrolling = true
-                    }
-#else
-                iosList
-                    .onAppear {
-                        scrollToBottom(proxy: proxy, slow: true)
-                    }   
-#endif
+                        .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
+                            isUserScrolling = true
+                        }
+                #else
+                    iosList
+                        .onAppear {
+                            scrollToBottom(proxy: proxy, slow: true)
+                        }
+                #endif
             }
             .onChange(of: session.conversations.count) {
                 if session.conversations.count > previousCount {
@@ -83,14 +82,14 @@ struct MessageListView: View {
 
     #if os(macOS)
         var macOsList: some View {
-                List {
-                    conversationView
-                        .id(topID)
+            List {
+                conversationView
+                    .id(topID)
 
-                    Color.clear
-                        .listRowSeparator(.hidden)
-                        .id(bottomID)
-                }
+                Color.clear
+                    .listRowSeparator(.hidden)
+                    .id(bottomID)
+            }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
                     session: session
@@ -100,91 +99,24 @@ struct MessageListView: View {
             .background(.background)
             .navigationSubtitle(session.configuration.model.name)
             .toolbar {
-                ToolbarItem(placement: .navigation) {
-                    Button {
-                        isShowSettingsView = true
-                    } label: {
-                        Image(systemName: "square.text.square")
-                    }
-                    .popover(isPresented: $isShowSettingsView) {
-                        VStack {
-                            Text("System Prompt")
-                            TextEditor(text: $session.configuration.systemPrompt)
-                                .font(.body)
-                                .frame(width: 230, height: 70)
-                                .scrollContentBackground(.hidden)
-                        }
-                        .padding(10)
-                    }
-                }
-
-                ToolbarItemGroup {
-                    Picker("Provider", selection: $session.configuration.provider) {
-                        ForEach(Provider.allCases, id: \.self) { provider in
-                            Text(provider.name)
-                                .tag(provider.id)
-                        }
-                    }
-
-                    Slider(value: $session.configuration.temperature, in: 0 ... 1, step: 0.1) {
-                    } minimumValueLabel: {
-                        Text("0")
-                    } maximumValueLabel: {
-                        Text("1")
-                    }
-                    .frame(width: 130)
-
-                    Picker("Model", selection: $session.configuration.model) {
-                        ForEach(session.configuration.provider.models, id: \.self) { model in
-                            Text(model.name)
-                                .tag(model.id)
-                        }
-                    }
-                    .frame(width: 125)
-
-                    Picker("Context", selection: $session.configuration.contextLength) {
-                        ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
-                            Text("\(number) Messages")
-                                .tag(number)
-                        }
-                    }
-
-                    Menu {
-                        Button {
-                            session.resetContext()
-                        } label: {
-                            Text("Reset Context")
-                            Image(systemName: "eraser")
-                        }
-
-                        Button(role: .destructive) {
-                            isShowDeleteWarning.toggle()
-                        } label: {
-                            Text("Delete All Messages")
-                            Image(systemName: "trash")
-                        }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
-                    }
-                    .menuIndicator(.hidden)
-                }
+                ToolbarItems(session: session, isShowSettingsView: $isShowSettingsView, isShowDeleteWarning: $isShowDeleteWarning)
             }
         }
     #endif
 
     #if os(iOS)
         var iosList: some View {
-                ScrollView {
-                    conversationView
-                        .padding()
-                        .id(topID)
+            ScrollView {
+                conversationView
+                    .padding()
+                    .id(topID)
 
-                 Spacer()
-                     .id(bottomID)
-                }
-                .onTapGesture {
-                      hideKeyboard()
-                  }
+                Spacer()
+                    .id(bottomID)
+            }
+            .onTapGesture {
+                hideKeyboard()
+            }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
                     session: session
@@ -201,34 +133,7 @@ struct MessageListView: View {
                 DialogueSettingsView(configuration: $session.configuration, provider: session.configuration.provider)
             }
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Button {
-                            isShowSettingsView.toggle()
-                        } label: {
-                            Text("Chat Settings")
-                            Image(systemName: "slider.vertical.3")
-                        }
-
-                        Button {
-                            session.resetContext()
-                        } label: {
-                            Text("Reset Context")
-                            Image(systemName: "eraser")
-                        }
-
-                        Section {
-                            Button(role: .destructive) {
-                                isShowDeleteWarning.toggle()
-                            } label: {
-                                Text("Delete All Messages")
-                                Image(systemName: "trash")
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
-                    }
-                }
+                ToolbarItems(session: session, isShowSettingsView: $isShowSettingsView, isShowDeleteWarning: $isShowDeleteWarning)
             }
         }
     #endif
@@ -267,13 +172,13 @@ struct MessageListView: View {
                 }
             }
         } else {
-                DispatchQueue.main.async {
-                    withAnimation {
-                        proxy.scrollTo(bottomID, anchor: anchor)
-                    }
+            DispatchQueue.main.async {
+                withAnimation {
+                    proxy.scrollTo(bottomID, anchor: anchor)
                 }
             }
         }
+    }
 
     private func scrollToBottomWithoutAnimation(proxy: ScrollViewProxy, anchor: UnitPoint = .bottom) {
         DispatchQueue.main.async {
@@ -283,9 +188,9 @@ struct MessageListView: View {
 }
 
 #if canImport(UIKit)
-extension View {
-    func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    extension View {
+        func hideKeyboard() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
     }
-}
 #endif

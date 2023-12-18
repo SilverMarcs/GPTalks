@@ -13,6 +13,7 @@
 		085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Utils.swift */; };
 		085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */; };
 		085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* Provider.swift */; };
+		086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */; };
 		0878E53B2B1683ED00E0D79D /* AppIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0878E53A2B1683ED00E0D79D /* AppIconView.swift */; };
 		08827D112B28B72B0044213B /* ErrorDescView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08827D102B28B72B0044213B /* ErrorDescView.swift */; };
 		088CF05E2B1E3098009CFDCB /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 088CF05D2B1E3098009CFDCB /* OpenAI */; };
@@ -24,7 +25,7 @@
 		08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */; };
 		08D533302B2C25CC008B4FA9 /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D5332F2B2C25CC008B4FA9 /* ContextMenu.swift */; };
 		08D533322B2C2D50008B4FA9 /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */; };
-		08D533342B2C2ED9008B4FA9 /* MessageMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533332B2C2ED9008B4FA9 /* MessageMarkdownView.swift */; };
+		08D533342B2C2ED9008B4FA9 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */; };
 		08DFA1C52B22FB85003D48D8 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DFA1C42B22FB85003D48D8 /* OpenAI */; };
 		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
 		08F74EA42B0BC318006D1DD3 /* ServiceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */; };
@@ -75,6 +76,7 @@
 		085D40BE2AFD66340033F8B5 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		085D40C22AFD8C250033F8B5 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarItems.swift; sourceTree = "<group>"; };
 		0878E53A2B1683ED00E0D79D /* AppIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconView.swift; sourceTree = "<group>"; };
 		08827D102B28B72B0044213B /* ErrorDescView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorDescView.swift; sourceTree = "<group>"; };
 		088CF05F2B1E43C6009CFDCB /* PlaceHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHolderView.swift; sourceTree = "<group>"; };
@@ -85,7 +87,7 @@
 		08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledPicker.swift; sourceTree = "<group>"; };
 		08D5332F2B2C25CC008B4FA9 /* ContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenu.swift; sourceTree = "<group>"; };
 		08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
-		08D533332B2C2ED9008B4FA9 /* MessageMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMarkdownView.swift; sourceTree = "<group>"; };
+		08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
 		08ED9EB72B02564D00849A1E /* DialogueListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListItem.swift; sourceTree = "<group>"; };
 		08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSettingsView.swift; sourceTree = "<group>"; };
 		E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSSettingsView.swift; sourceTree = "<group>"; };
@@ -159,7 +161,7 @@
 				08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */,
 				08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */,
 				08D5332F2B2C25CC008B4FA9 /* ContextMenu.swift */,
-				08D533332B2C2ED9008B4FA9 /* MessageMarkdownView.swift */,
+				08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */,
 			);
 			path = MessageView;
 			sourceTree = "<group>";
@@ -277,6 +279,7 @@
 				E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */,
 				E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */,
 				E4C65F1F29D0649800AFA884 /* DialogueSettingsView.swift */,
+				086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */,
 			);
 			path = MessageList;
 			sourceTree = "<group>";
@@ -466,6 +469,7 @@
 				088CF0622B1E705D009CFDCB /* ContextResetDivider.swift in Sources */,
 				E4C65EA229CA9E7E00AFA884 /* GPTalks.swift in Sources */,
 				E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */,
+				086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */,
 				E4C65EEF29CA9F7800AFA884 /* MessageListView.swift in Sources */,
 				E4C65F2029D0649800AFA884 /* DialogueSettingsView.swift in Sources */,
 				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
@@ -490,7 +494,7 @@
 				E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */,
 				08A1EF4E2B2604D000A88A3A /* UserMessageView.swift in Sources */,
 				E4C65EA429CA9E7E00AFA884 /* Persistence.swift in Sources */,
-				08D533342B2C2ED9008B4FA9 /* MessageMarkdownView.swift in Sources */,
+				08D533342B2C2ED9008B4FA9 /* MarkdownView.swift in Sources */,
 				08D533302B2C25CC008B4FA9 /* ContextMenu.swift in Sources */,
 				0837E47D2AFE57A100C03059 /* DefaultConfigView.swift in Sources */,
 				085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */,
