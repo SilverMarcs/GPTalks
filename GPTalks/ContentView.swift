@@ -16,7 +16,13 @@ struct ContentView: View {
             DialogueSessionListView()
         } detail: {
             if let selectedDialogue = viewModel.selectedDialogue {
-                MessageListView(session: selectedDialogue)
+                #if os(macOS)
+                MacOSMessages(session: selectedDialogue)
+                    .id(selectedDialogue.id)
+                #else
+                iOSMessages(session: selectedDialogue)
+                    .id(selectedDialogue.id)
+                #endif
             } else {
                 Text("No Chat Selected")
                     .font(.title)

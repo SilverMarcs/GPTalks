@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ToolbarItems: ToolbarContent {
     @ObservedObject var session: DialogueSession
-    @Binding var isShowSettingsView: Bool
-    @Binding var isShowDeleteWarning: Bool
+    
+    @State var isShowSettingsView: Bool = false
     
     var body: some ToolbarContent {
 #if os(macOS)
@@ -23,14 +23,27 @@ struct ToolbarItems: ToolbarContent {
 #if os(iOS)
     @ToolbarContentBuilder
     var iOS: some ToolbarContent {
+        ToolbarItem(placement: .principal) {
+            Button {
+                isShowSettingsView.toggle()
+            } label: {
+                HStack(spacing: 4) {
+                    Text(session.title)
+                        .foregroundColor(.primary)
+                        .bold()
+                    Image(systemName:"chevron.right")
+                        .font(.system(size: 10))
+                        .foregroundColor(.secondary)
+                }
+            }
+            .foregroundStyle(.primary)
+            .sheet(isPresented: $isShowSettingsView) {
+                DialogueSettingsView(configuration: $session.configuration, provider: session.configuration.provider)
+            }
+        }
+        
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
-                Button {
-                    isShowSettingsView.toggle()
-                } label: {
-                    Text("Chat Settings")
-                    Image(systemName: "slider.vertical.3")
-                }
 
                 Button {
                     session.resetContext()
@@ -39,13 +52,12 @@ struct ToolbarItems: ToolbarContent {
                     Image(systemName: "eraser")
                 }
 
-                Section {
-                    Button(role: .destructive) {
-                        isShowDeleteWarning.toggle()
-                    } label: {
-                        Text("Delete All Messages")
-                        Image(systemName: "trash")
-                    }
+                Button(role: .destructive) {
+//                    isShowDeleteWarning.toggle()
+                    session.removeAllConversations()
+                } label: {
+                    Text("Delete All Messages")
+                    Image(systemName: "trash")
                 }
             } label: {
                 Image(systemName: "ellipsis.circle")
@@ -114,7 +126,8 @@ struct ToolbarItems: ToolbarContent {
                 }
 
                 Button(role: .destructive) {
-                    isShowDeleteWarning.toggle()
+//                    isShowDeleteWarning.toggle()
+                    session.removeAllConversations()
                 } label: {
                     Text("Delete All Messages")
                     Image(systemName: "trash")

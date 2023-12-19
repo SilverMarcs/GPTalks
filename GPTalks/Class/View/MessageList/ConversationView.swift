@@ -8,11 +8,29 @@
 import SwiftUI
 
 struct ConversationView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+    @ObservedObject var session: DialogueSession
+    
+    var body : some View {
+        ForEach(session.conversations) { conversation in
+            if conversation.role == "user" {
+                UserMessageView(conversation: conversation, session: session)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            
+            if conversation.role == "assistant" {
+                AssistantMessageView(conversation: conversation, session: session)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            
+            if session.conversations.firstIndex(of: conversation) == session.resetMarker {
+                ContextResetDivider(session: session)
+                    .padding(.vertical)
+            }
+        }
+        
+        if session.errorDesc != "" {
+            ErrorDescView(session: session)
+                .padding()
+        }
     }
-}
-
-#Preview {
-    ConversationView()
 }
