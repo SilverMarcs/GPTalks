@@ -10,14 +10,13 @@ import SwiftUI
 struct DialogueListItem: View {
     @EnvironmentObject var viewModel: DialogueViewModel
     
+    @ObservedObject var session: DialogueSession
+    
     @State private var showRenameDialogue = false
     @State private var showDeleteDialogue = false
     @State private var newName = ""
     @State private var sessionToRename: DialogueSession?
     @State private var searchQuery = ""
-
-    @ObservedObject var session: DialogueSession
-//    var deleteDialogue: (DialogueSession) -> Void
 
     var body: some View {
         HStack(spacing: imgToTextSpace) {

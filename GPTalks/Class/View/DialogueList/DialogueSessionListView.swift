@@ -28,11 +28,7 @@ struct DialogueSessionListView: View {
 
     #if os(iOS)
         var iOSList: some View {
-            List(viewModel.filteredDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
-                NavigationLink(destination: MessageListView(session: session)) {
-                    DialogueListItem(session: session)
-                }
-            }
+            list
             .listStyle(.plain)
             .searchable(text: $viewModel.searchText)
             .navigationTitle("Chats")
@@ -54,13 +50,9 @@ struct DialogueSessionListView: View {
             }
         }
     #endif
-
+    
     var macOSList: some View {
-        List(viewModel.filteredDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
-            NavigationLink(destination: MessageListView(session: session)) {
-                DialogueListItem(session: session)
-            }
-        }
+        list
         .listStyle(.sidebar)
         .frame(minWidth: 280)
         .toolbar {
@@ -73,11 +65,18 @@ struct DialogueSessionListView: View {
         }
     }
     
+    var list: some View {
+        List(viewModel.filteredDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
+            DialogueListItem(session: session)
+        }
+    }
+    
     var addButton: some View {
         Button {
             viewModel.addDialogue()
         } label: {
             Image(systemName: "square.and.pencil")
         }
+        .keyboardShortcut("n", modifiers: .command)
     }
 }

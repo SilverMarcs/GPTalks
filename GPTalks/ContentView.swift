@@ -12,23 +12,19 @@ struct ContentView: View {
     @EnvironmentObject var viewModel: DialogueViewModel
 
     var body: some View {
-        Group {
-#if os(macOS)
-            NavigationSplitView {
-                DialogueSessionListView()
-            }  detail: {
-                Text("Select a Chat to see it here")
+        NavigationSplitView {
+            DialogueSessionListView()
+        } detail: {
+            if let selectedDialogue = viewModel.selectedDialogue {
+                MessageListView(session: selectedDialogue)
+            } else {
+                Text("No Chat Selected")
                     .font(.title)
             }
-            .background(.background)
-#else
-            NavigationStack {
-                DialogueSessionListView()
-            }
-            .accentColor(viewModel.selectedDialogue?.configuration.provider.accentColor ?? .accentColor)
-#endif
         }
-        .onAppear {
+        .background(.background)
+        .accentColor(viewModel.selectedDialogue?.configuration.provider.accentColor ?? .accentColor)
+        .task {
             viewModel.fetchDialogueData()
         }
     }

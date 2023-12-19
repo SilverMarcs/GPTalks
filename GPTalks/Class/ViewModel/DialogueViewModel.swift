@@ -49,12 +49,6 @@ class DialogueViewModel: ObservableObject {
     func addDialogue() {
         let session = DialogueSession()
         dialogues.insert(session, at: 0)
-        
-#if os(macOS)
-        DispatchQueue.main.async {
-            self.selectedDialogue = session
-        }
-        #endif
             
         let newItem = DialogueData(context: viewContext)
         newItem.id = session.id
@@ -70,19 +64,13 @@ class DialogueViewModel: ObservableObject {
     }
     
     func deleteDialogue(_ session: DialogueSession) {
-        let sessionId = selectedDialogue?.id
+        if selectedDialogue == session {
+            selectedDialogue = nil
+        }
         
         self.dialogues.removeAll {
             $0.id == session.id
         }
-        
-#if os(macOS)
-        DispatchQueue.main.async {
-            self.selectedDialogue = self.dialogues.first(where: {
-                $0.id == sessionId
-            })
-        }
-        #endif
         
         if let item = session.rawData {
             viewContext.delete(item)

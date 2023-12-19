@@ -13,7 +13,8 @@ struct BottomInputView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            regenButton
+//            regenButton
+            resetContextButton
 
             inputBox
 
@@ -51,6 +52,21 @@ struct BottomInputView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: imageSize, height: imageSize)
+        }
+        .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
+        .buttonStyle(.plain)
+        .disabled(session.conversations.isEmpty || session.isReplying())
+    }
+    
+    @ViewBuilder
+    private var resetContextButton: some View {
+        Button {
+            session.resetContext()
+        } label: {
+            Image(systemName: "eraser")
+                .resizable()
+                .scaledToFit()
+                .frame(width: imageSize + 1, height: imageSize + 1)
         }
         .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
         .buttonStyle(.plain)
