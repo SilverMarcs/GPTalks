@@ -25,8 +25,8 @@ struct BottomInputView: View {
             }
         }
         .padding(.horizontal)
-        .padding(.top, 12)
-        .padding(.bottom, 13)
+        .padding(.top, verticalPadding)
+        .padding(.bottom, verticalPadding + 1)
         .alert(
             "Warning",
             isPresented: $isShowClearMessagesAlert
@@ -39,6 +39,14 @@ struct BottomInputView: View {
         } message: {
             Text("Remove all messages?")
         }
+    }
+    
+    private var verticalPadding: CGFloat {
+        #if os(iOS)
+        return 10
+        #else
+        return 12
+        #endif
     }
     
     @ViewBuilder
@@ -92,6 +100,10 @@ struct BottomInputView: View {
         let empty = session.input.isEmpty
         
         Button {
+            #if os(iOS)
+            hideKeyboard()
+            #endif
+            
            Task { @MainActor in
                await session.send()
            }
@@ -101,7 +113,7 @@ struct BottomInputView: View {
                 .scaledToFit()
                 .disabled(empty)
                 .foregroundColor(empty ? .secondary : session.configuration.provider.accentColor)
-                .frame(width: imageSize, height: imageSize)
+                .frame(width: imageSize + 1, height: imageSize + 1)
         }
         .keyboardShortcut(.return, modifiers: .command)
         .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
@@ -117,7 +129,7 @@ struct BottomInputView: View {
             Image(systemName: "stop.circle.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageSize + 1, height: imageSize + 1)
+                .frame(width: imageSize, height: imageSize)
                 .foregroundColor(.red)
         }
         .buttonStyle(.plain)
@@ -146,7 +158,7 @@ struct BottomInputView: View {
             .lineLimit(1 ... 15)
             .padding(6)
             .padding(.horizontal, 4)
-//            .frame(minHeight: imageSize)
+            .frame(minHeight: imageSize + 1)
     }
 
     @ViewBuilder
@@ -170,7 +182,7 @@ struct BottomInputView: View {
         #if os(macOS)
             18
         #else
-            24
+            25
         #endif
     }
     

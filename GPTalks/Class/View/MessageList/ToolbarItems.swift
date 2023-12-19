@@ -38,7 +38,7 @@ struct ToolbarItems: ToolbarContent {
             }
             .foregroundStyle(.primary)
             .sheet(isPresented: $isShowSettingsView) {
-                DialogueSettingsView(configuration: $session.configuration, provider: session.configuration.provider)
+                DialogueSettingsView(configuration: $session.configuration, title: $session.title)
             }
         }
         

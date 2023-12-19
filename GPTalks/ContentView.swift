@@ -13,15 +13,19 @@ struct ContentView: View {
 
     var body: some View {
         NavigationSplitView {
-            DialogueSessionListView()
+            #if os(macOS)
+                MacOSDialogList()
+            #else
+                IOSDialogList()
+            #endif
         } detail: {
             if let selectedDialogue = viewModel.selectedDialogue {
                 #if os(macOS)
-                MacOSMessages(session: selectedDialogue)
-                    .id(selectedDialogue.id)
+                    MacOSMessages(session: selectedDialogue)
+                        .id(selectedDialogue.id)
                 #else
-                iOSMessages(session: selectedDialogue)
-                    .id(selectedDialogue.id)
+                    iOSMessages(session: selectedDialogue)
+                        .id(selectedDialogue.id)
                 #endif
             } else {
                 Text("No Chat Selected")

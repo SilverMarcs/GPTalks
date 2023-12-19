@@ -64,11 +64,11 @@ struct MessageMarkdownView: View {
                 .contentShape(Rectangle())
             }
             .foregroundStyle(.primary)
-            #if os(macOS)
             .background(
                 .background.secondary,
                 in: RoundedRectangle(cornerRadius: 5, style: .continuous)
             )
+            #if os(macOS)
             .opacity((isHovered || isButtonPressed) ? 1 : 0)
             #endif
             .buttonStyle(.borderless)

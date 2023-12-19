@@ -45,7 +45,7 @@ struct DialogueListItem: View {
                     } else {
                         Text(session.lastMessage)
                             .font(lastMessageFont)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                             .lineLimit(textLineLimit)
                             .frame(
                                 maxWidth: .infinity,
