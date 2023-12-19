@@ -50,25 +50,34 @@ struct MessageMarkdownView: View {
         }
 
         var copyButton: some View {
-            Button(action: {
+            Button {
                 self.isButtonPressed = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     self.isButtonPressed = false
                 }
                 configuration.content.copyToPasteboard()
-            }) {
+            } label: {
                 Image(systemName: isButtonPressed ? "checkmark" : "doc.on.clipboard")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 12, height: 22)
+                .font(.system(size: 12))
+                .frame(width: 12, height: 12)
+                .padding(8)
+                .contentShape(Rectangle())
             }
-            .buttonStyle(.plain)
-            .disabled(isButtonPressed)
-            .padding(.horizontal, 11)
-            .padding(.vertical, 7)
+            .foregroundStyle(.primary)
             #if os(macOS)
-                .opacity((isHovered || isButtonPressed) ? 1 : 0)
+            .background(
+                .background.quinary.opacity(0.9),
+                in: RoundedRectangle(cornerRadius: 5, style: .continuous)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: 5, style: .continuous)
+                    .stroke(.quaternary, lineWidth: 1)
+            }
+            .opacity((isHovered || isButtonPressed) ? 1 : 0)
             #endif
+            .buttonStyle(.borderless)
+            .disabled(isButtonPressed)
+                .padding(6)
         }
     }
 

@@ -56,12 +56,9 @@ struct DialogueSessionListView: View {
         .listStyle(.sidebar)
         .frame(minWidth: 280)
         .toolbar {
-            ToolbarItem {
-                Spacer()
-            }
-            ToolbarItem(placement: .automatic) {
-                addButton
-            }
+            Spacer()
+
+            addButton
         }
     }
     
