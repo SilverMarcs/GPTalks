@@ -29,7 +29,7 @@ struct MessageMarkdownView: View {
         @State private var isButtonPressed = false
 
         var body: some View {
-            ZStack(alignment: .bottomTrailing) {
+            HStack(spacing: 6) {
                 configuration.label
                     .markdownTextStyle {
                         FontFamilyVariant(.monospaced)
@@ -66,18 +66,13 @@ struct MessageMarkdownView: View {
             .foregroundStyle(.primary)
             #if os(macOS)
             .background(
-                .background.quinary.opacity(0.9),
+                .background.secondary,
                 in: RoundedRectangle(cornerRadius: 5, style: .continuous)
             )
-            .overlay {
-                RoundedRectangle(cornerRadius: 5, style: .continuous)
-                    .stroke(.quaternary, lineWidth: 1)
-            }
             .opacity((isHovered || isButtonPressed) ? 1 : 0)
             #endif
             .buttonStyle(.borderless)
             .disabled(isButtonPressed)
-                .padding(6)
         }
     }
 

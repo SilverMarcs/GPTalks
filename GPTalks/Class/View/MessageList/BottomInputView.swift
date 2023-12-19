@@ -66,7 +66,7 @@ struct BottomInputView: View {
             Image(systemName: "eraser")
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageSize + 1, height: imageSize + 1)
+                .frame(width: imageSize, height: imageSize)
         }
         .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
         .buttonStyle(.plain)
