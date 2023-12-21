@@ -20,10 +20,7 @@ struct DialogueListItem: View {
 
     var body: some View {
         HStack(spacing: imgToTextSpace) {
-            Image(session.configuration.provider.iconName)
-                .resizable()
-                .frame(width: imageSize, height: imageSize)
-                .cornerRadius(imageRadius)
+            session.configuration.provider.logoImage
             VStack(spacing: 8) {
                 HStack {
                     Text(session.title)

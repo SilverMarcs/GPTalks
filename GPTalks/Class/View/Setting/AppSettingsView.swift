@@ -31,7 +31,7 @@ struct AppSettingsView: View {
                             .lineLimit(1)
                         Spacer()
                         Picker("", selection: configuration.$preferredChatService) {
-                            ForEach(Provider.allCases, id: \.self) { provider in
+                            ForEach(Provider.availableProviders, id: \.self) { provider in
                                 Text(provider.name)
                                     .tag(provider.id)
                             }
@@ -50,10 +50,10 @@ struct AppSettingsView: View {
                     }
                 }
                 Section("Services") {
-                    ForEach(Provider.allCases) { provider in
+                    ForEach(Provider.availableProviders) { provider in
                         NavigationLink(
                             destination: provider.destination,
-                            label: { provider.label }
+                            label: { provider.settingsLabel }
                         )
                     }
                 }

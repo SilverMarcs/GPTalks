@@ -51,11 +51,9 @@ enum Model: String, Codable {
 
     var id: String {
         switch self {
-        case .phind:
-            "gpt-3.5-turbo"
         case .gpt3:
             "gpt-3.5-turbo-1106"
-        case .gpt4, .bing:
+        case .gpt4:
             "gpt-4-1106-preview"
         case .orzephyr:
             "huggingfaceh4/zephyr-7b-beta"
@@ -71,6 +69,10 @@ enum Model: String, Codable {
             "gemini-pro"
         case .nmixtral:
             "mixtral-8x7b"
+        case .phind:
+            "phind"
+        case .bing:
+            "bing"
         }
     }
 

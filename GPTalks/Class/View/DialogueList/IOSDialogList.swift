@@ -15,7 +15,7 @@ struct IOSDialogList: View {
     
     var body: some View {
         Group {
-            if UIDevice.current.userInterfaceIdiom == .pad && UIDevice.current.systemName == "iPadOS" {
+            if isIPadOS {
                 list
                     .listStyle(.sidebar)
             } else {
@@ -34,8 +34,11 @@ struct IOSDialogList: View {
                 Button {
                     isShowSettingView = true
                 } label: {
-//                    Image(systemName: "gear")
-                    Text("Config")
+                    if isIPadOS {
+                        Image(systemName: "gear")
+                    } else {
+                        Text("Config")
+                    }
                 }
             }
             
@@ -59,6 +62,10 @@ struct IOSDialogList: View {
                 DialogueListItem(session: session)
             }
         }
+    }
+    
+    private var isIPadOS: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad && UIDevice.current.systemName == "iPadOS"
     }
 }
 #endif

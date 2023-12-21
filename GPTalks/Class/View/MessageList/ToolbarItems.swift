@@ -88,7 +88,7 @@ struct ToolbarItems: ToolbarContent {
 
         ToolbarItemGroup {
             Picker("Provider", selection: $session.configuration.provider) {
-                ForEach(Provider.allCases, id: \.self) { provider in
+                ForEach(Provider.availableProviders, id: \.self) { provider in
                     Text(provider.name)
                         .tag(provider.id)
                 }

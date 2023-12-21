@@ -90,7 +90,7 @@ struct DialogueSettingsView: View {
     
     var providerPicker: some View {
         Picker("Provider", selection: $configuration.provider) {
-            ForEach(Provider.allCases, id: \.self) { provider in
+            ForEach(Provider.availableProviders, id: \.self) { provider in
                 Text(provider.name)
                     .tag(provider.id)
             }

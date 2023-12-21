@@ -28,10 +28,10 @@ struct ProviderSettingsView: View {
 
     var body: some View {
         NavigationView {
-            List(Provider.allCases, id: \.self, selection: $selection) { provider in
+            List(Provider.availableProviders, id: \.self, selection: $selection) { provider in
                 NavigationLink(
                     destination: provider.destination,
-                    label: { provider.label }
+                    label: { provider.settingsLabel }
                 )
             }
             .listStyle(.sidebar)

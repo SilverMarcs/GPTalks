@@ -86,7 +86,7 @@ struct DefaultConfigView: View {
     
     var preferredProvider: some View {
         Picker("Preferred Provider", selection: configuration.$preferredChatService) {
-            ForEach(Provider.allCases, id: \.self) { provider in
+            ForEach(Provider.availableProviders, id: \.self) { provider in
                 Text(provider.name)
             }
         }

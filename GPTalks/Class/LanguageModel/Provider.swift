@@ -75,9 +75,9 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .naga:
             return Color("purpleColor")
         case .gpt4free:
-            return Color("blueColor")
-        case .custom:
             return Color("orangeColor")
+        case .custom:
+            return Color("blueColor")
         }
     }
 
@@ -164,17 +164,42 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         }
     }
     
-    var label: some View {
+    var logoImage: some View {
+        ProviderImage(radius: CGSize(width: imageRadius, height: imageRadius), color: self.accentColor, frame: imageSize)
+    }
+    
+    private var imageRadius: CGFloat {
+        #if os(iOS)
+            16
+        #elseif os(macOS)
+            11
+        #endif
+    }
+    
+    private var imageSize: CGFloat {
+        #if os(iOS)
+            50
+        #elseif os(macOS)
+            36
+        #endif
+    }
+    
+    var settingsLabel: some View {
         HStack {
-            Image(rawValue.lowercased())
-                .resizable()
-                .cornerRadius(10)
-            #if os(macOS)
-                .frame(width: 35, height: 35)
-            #else
-                .frame(width: 30, height: 30)
-            #endif
+            ProviderImage(color: self.accentColor, frame: frame)
             Text(name)
         }
+    }
+    
+    static var availableProviders: [Provider] {
+        return [.openai, .openrouter, .naga, .custom]
+    }
+    
+    private var frame: CGFloat {
+        #if os(macOS)
+            return 35
+        #else
+            return 30
+        #endif
     }
 }

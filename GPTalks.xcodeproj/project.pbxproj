@@ -15,6 +15,7 @@
 		0829D11B2B31938000DFFBB1 /* MacOSDialogList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D11A2B31938000DFFBB1 /* MacOSDialogList.swift */; };
 		0837E47D2AFE57A100C03059 /* DefaultConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E47C2AFE57A100C03059 /* DefaultConfigView.swift */; };
 		0837E4812AFFE7B000C03059 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E4802AFFE7AF00C03059 /* Model.swift */; };
+		0846F1F62B33D68F002A2EB2 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */; };
 		085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Utils.swift */; };
 		085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */; };
 		085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* Provider.swift */; };
@@ -81,6 +82,7 @@
 		0829D11A2B31938000DFFBB1 /* MacOSDialogList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSDialogList.swift; sourceTree = "<group>"; };
 		0837E47C2AFE57A100C03059 /* DefaultConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultConfigView.swift; sourceTree = "<group>"; };
 		0837E4802AFFE7AF00C03059 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
 		085D40BE2AFD66340033F8B5 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		085D40C22AFD8C250033F8B5 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 				088CF0612B1E705D009CFDCB /* ContextResetDivider.swift */,
 				08827D102B28B72B0044213B /* ErrorDescView.swift */,
 				08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */,
+				0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */,
 			);
 			path = CustomUI;
 			sourceTree = "<group>";
@@ -490,6 +493,7 @@
 				E4C65F1829CBEE2400AFA884 /* BottomInputView.swift in Sources */,
 				08827D112B28B72B0044213B /* ErrorDescView.swift in Sources */,
 				0837E4812AFFE7B000C03059 /* Model.swift in Sources */,
+				0846F1F62B33D68F002A2EB2 /* ProviderImage.swift in Sources */,
 				E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */,
 				08D533322B2C2D50008B4FA9 /* AdaptiveStack.swift in Sources */,
 				08A1EF502B2606C000A88A3A /* AssistantMessageView.swift in Sources */,
