@@ -7,6 +7,7 @@
 
 #if os(iOS)
     import SwiftUI
+    import VisualEffectView
 
     struct iOSMessages: View {
         @Environment(\.colorScheme) var colorScheme
@@ -16,7 +17,7 @@
 
         @State private var previousCount: Int = 0
         @State private var didUserTap: Bool = false
-        
+
         @FocusState var isTextFieldFocused: Bool
 
         var body: some View {
@@ -27,7 +28,7 @@
                             .id(conversation.id)
                             .padding(.horizontal)
                     }
-                    
+
                     if session.errorDesc != "" {
                         ErrorDescView(session: session)
                             .padding()
@@ -69,9 +70,7 @@
                     focused: _isTextFieldFocused
                 )
                 .background(
-                    (colorScheme == .dark ? Color.black : Color.white)
-                        .opacity(colorScheme == .dark ? 0.9 : 0.6)
-                        .background(.ultraThinMaterial)
+                    VisualEffect(colorTint: .black, colorTintAlpha: 0.8, blurRadius: 18, scale: 1)
                         .ignoresSafeArea()
                 )
             }

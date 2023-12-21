@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		08027CBB2B0D2D8A00ED09E6 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08027CBA2B0D2D8A00ED09E6 /* OpenAI */; };
+		081859842B34D3DA005B1DE1 /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 081859832B34D3DA005B1DE1 /* VisualEffectView */; };
 		0829D1132B3166D900DFFBB1 /* iOSMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1122B3166D900DFFBB1 /* iOSMessages.swift */; };
 		0829D1152B3166E300DFFBB1 /* MacOSMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1142B3166E300DFFBB1 /* MacOSMessages.swift */; };
 		0829D1172B317A4B00DFFBB1 /* ConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1162B317A4B00DFFBB1 /* ConversationView.swift */; };
@@ -75,6 +76,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		081859862B34D629005B1DE1 /* VisualEffectView */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = VisualEffectView; sourceTree = "<group>"; };
 		0829D1122B3166D900DFFBB1 /* iOSMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSMessages.swift; sourceTree = "<group>"; };
 		0829D1142B3166E300DFFBB1 /* MacOSMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSMessages.swift; sourceTree = "<group>"; };
 		0829D1162B317A4B00DFFBB1 /* ConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationView.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */,
 				08027CBB2B0D2D8A00ED09E6 /* OpenAI in Frameworks */,
 				088CF05E2B1E3098009CFDCB /* OpenAI in Frameworks */,
+				081859842B34D3DA005B1DE1 /* VisualEffectView in Frameworks */,
 				E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -189,6 +192,7 @@
 		E4C65E9529CA9E7E00AFA884 = {
 			isa = PBXGroup;
 			children = (
+				081859862B34D629005B1DE1 /* VisualEffectView */,
 				E4EF056C2A3B3744005CF741 /* GPTalks-Info.plist */,
 				E4C65EA029CA9E7E00AFA884 /* GPTalks */,
 				E4C65EB729CA9E8000AFA884 /* GPTalksTests */,
@@ -357,6 +361,7 @@
 				08027CBA2B0D2D8A00ED09E6 /* OpenAI */,
 				088CF05D2B1E3098009CFDCB /* OpenAI */,
 				08DFA1C42B22FB85003D48D8 /* OpenAI */,
+				081859832B34D3DA005B1DE1 /* VisualEffectView */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -434,6 +439,7 @@
 				E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */,
 				E4C65F0F29CAA08400AFA884 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				08DFA1C32B22FB85003D48D8 /* XCRemoteSwiftPackageReference "OpenAI" */,
+				081859822B34D3DA005B1DE1 /* XCRemoteSwiftPackageReference "VisualEffectView" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -907,6 +913,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		081859822B34D3DA005B1DE1 /* XCRemoteSwiftPackageReference "VisualEffectView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/efremidze/VisualEffectView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.1.5;
+			};
+		};
 		08DFA1C32B22FB85003D48D8 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/OpenAI";
@@ -937,6 +951,11 @@
 		08027CBA2B0D2D8A00ED09E6 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
+		};
+		081859832B34D3DA005B1DE1 /* VisualEffectView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 081859822B34D3DA005B1DE1 /* XCRemoteSwiftPackageReference "VisualEffectView" */;
+			productName = VisualEffectView;
 		};
 		088CF05D2B1E3098009CFDCB /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
