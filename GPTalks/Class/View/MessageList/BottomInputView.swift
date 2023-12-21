@@ -10,6 +10,8 @@ import SwiftUI
 struct BottomInputView: View {
     @ObservedObject var session: DialogueSession
     @State var isShowClearMessagesAlert = false
+    
+    @FocusState var focused: Bool
 
     var body: some View {
         HStack(spacing: 12) {
@@ -101,7 +103,7 @@ struct BottomInputView: View {
         
         Button {
             #if os(iOS)
-            hideKeyboard()
+            focused = false
             #endif
             
            Task { @MainActor in
@@ -154,6 +156,7 @@ struct BottomInputView: View {
     @ViewBuilder
     private var textField: some View {
         TextField("Send a message", text: $session.input, axis: .vertical)
+            .focused($focused)
             .multilineTextAlignment(.leading)
             .lineLimit(1 ... 15)
             .padding(6)
@@ -171,11 +174,17 @@ struct BottomInputView: View {
                 .foregroundColor(placeHolderTextColor)
         }
         TextEditor(text: $session.input)
+            .focused($focused)
             .font(.body)
             .frame(maxHeight: 400)
             .fixedSize(horizontal: false, vertical: true)
             .padding(7)
             .scrollContentBackground(.hidden)
+        Button("hidden") {
+            focused = true
+        }
+        .keyboardShortcut("l", modifiers: .command)
+        .hidden()
     }
 
     private var imageSize: CGFloat {

@@ -17,12 +17,21 @@ struct MacOSMessages: View {
     @State private var isUserScrolling = false
     @State private var previousCount: Int = 0
     @State private var contentChangeTimer: Timer? = nil
+    
+    @FocusState var isTextFieldFocused: Bool
 
     var body: some View {
         ScrollViewReader { proxy in
             List {
                 VStack {
-                    ConversationView(session: session)
+                    ForEach(session.conversations) { conversation in
+                        ConversationView(session: session, conversation: conversation)
+                            .id(conversation.id)
+                    }
+                    if session.errorDesc != "" {
+                        ErrorDescView(session: session)
+                            .padding()
+                    }
                 }
                 .id("bottomID")
             }
@@ -34,12 +43,14 @@ struct MacOSMessages: View {
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
-                    session: session
+                    session: session,
+                    focused: _isTextFieldFocused
                 )
                 .background(.bar)
             }
             .onAppear {
                 scrollToBottom(proxy: proxy, animated: false)
+                isTextFieldFocused = true
             }
             .onChange(of: session.conversations.last?.content) {
                 if session.conversations.last?.content != previousContent && !isUserScrolling {

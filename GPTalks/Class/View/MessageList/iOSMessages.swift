@@ -16,22 +16,35 @@
 
         @State private var previousCount: Int = 0
         @State private var didUserTap: Bool = false
+        
+        @FocusState var isTextFieldFocused: Bool
 
         var body: some View {
             ScrollViewReader { proxy in
                 ScrollView {
-                    ConversationView(session: session)
-                        .padding(.horizontal)
+                    ForEach(session.conversations) { conversation in
+                        ConversationView(session: session, conversation: conversation)
+                            .id(conversation.id)
+                            .padding(.horizontal)
+                    }
+                    
+                    if session.errorDesc != "" {
+                        ErrorDescView(session: session)
+                            .padding()
+                    }
 
                     Spacer()
                         .id("bottomID")
                 }
                 .onTapGesture {
                     didUserTap = true
-                    hideKeyboard()
+                    isTextFieldFocused = false
                 }
                 .onAppear {
                     scrollToBottom(proxy: proxy, animated: false)
+                }
+                .onChange(of: isTextFieldFocused) {
+                    scrollToBottom(proxy: proxy, delay: 0.2)
                 }
                 .onChange(of: session.input) {
                     scrollToBottom(proxy: proxy)
@@ -52,7 +65,8 @@
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
-                    session: session
+                    session: session,
+                    focused: _isTextFieldFocused
                 )
                 .background(
                     (colorScheme == .dark ? Color.black : Color.white)
@@ -62,19 +76,9 @@
                 )
             }
             .navigationBarTitleDisplayMode(.inline)
-            .onTapGesture {
-                hideKeyboard()
-            }
             .toolbar {
                 ToolbarItems(session: session)
             }
-        }
-    }
-
-    import UIKit
-    extension View {
-        func hideKeyboard() {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
 #endif
