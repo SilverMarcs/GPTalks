@@ -40,7 +40,10 @@ struct MessageMarkdownView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .markdownMargin(top: .zero, bottom: .em(0.8))
 
+                #if os(macOS)
+                // i aint never copying code on ios
                 copyButton
+                #endif
             }
             .onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.2)) {

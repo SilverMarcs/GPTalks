@@ -5,18 +5,17 @@
 //  Created by Zabir Raihan on 27/11/2024.
 //
 
-import SwiftUI
 import OpenAI
+import SwiftUI
 
 class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Codable {
-    
     struct Configuration: Codable {
         var temperature: Double
         var systemPrompt: String
         var contextLength: Int
         var provider: Provider
         var model: Model
-        
+
         init() {
             provider = AppConfiguration.shared.preferredChatService
             contextLength = AppConfiguration.shared.contextLength
@@ -25,9 +24,9 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             model = provider.preferredModel
         }
     }
-    
-    //MARK: - Codable
-    
+
+    // MARK: - Codable
+
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         configuration = try container.decode(Configuration.self, forKey: .configuration)
@@ -38,7 +37,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
 
         initFinished = true
     }
-    
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(configuration, forKey: .configuration)
@@ -46,29 +45,29 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         try container.encode(id, forKey: .id)
         try container.encode(date, forKey: .date)
     }
-    
+
     enum CodingKeys: CodingKey {
         case configuration
         case conversations
         case date
         case id
     }
-    
-    //MARK: - Hashable, Equatable
+
+    // MARK: - Hashable, Equatable
 
     static func == (lhs: DialogueSession, rhs: DialogueSession) -> Bool {
         lhs.id == rhs.id
     }
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
+
     var id = UUID()
-    
+
     var rawData: DialogueData?
-    
-    //MARK: - State
+
+    // MARK: - State
 
     @Published var input: String = ""
     @Published var title: String = "New Chat" {
@@ -76,12 +75,13 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             save()
         }
     }
+
     @Published var conversations: [Conversation] = [] {
         didSet {
             save()
         }
     }
-    
+
     @Published var date = Date()
     @Published var errorDesc: String = ""
     @Published var configuration: Configuration = Configuration() {
@@ -89,59 +89,58 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             save()
         }
     }
-    
+
     @Published var resetMarker: Int?
-    
+
     private var initFinished = false
-    //MARK: - Properties
-        
+
+    // MARK: - Properties
+
     var lastMessage: String {
         if errorDesc != "" {
             return errorDesc
         }
         return conversations.last?.content ?? "Start a new conversation"
     }
-    
+
     var lastConversation: Conversation {
         return conversations[conversations.count - 1]
     }
-    
+
     var lastConcersationContent: String? {
         return lastConversation.content
     }
-    
+
     var streamingTask: Task<Void, Error>?
-    
-    
+
     func isReplying() -> Bool {
         return !conversations.isEmpty && lastConversation.isReplying
     }
-    
+
     init() {
-        
     }
-    
-    //MARK: - Message Actions'
-    
+
+    // MARK: - Message Actions'
+
     func removeResetContextMarker() {
         resetMarker = nil
-        
+
         save()
     }
-    
+
     func setResetContextMarker(conversation: Conversation) {
         if let index = conversations.firstIndex(of: conversation) {
             resetMarker = index
         }
-        
+
         save()
     }
-    
+
     func resetContext() {
         if conversations.isEmpty {
             return
         }
-        
+
         // if reset marker is already at the end of conversations, then unset it
         if resetMarker == conversations.count - 1 {
             resetMarker = nil
@@ -151,7 +150,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
 
         save()
     }
-    
+
     @MainActor
     func stopStreaming() {
         if let lastConcersationContent = lastConcersationContent {
@@ -162,27 +161,27 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         streamingTask?.cancel()
         streamingTask = nil
     }
-    
+
     @MainActor
     func send() async {
         let text = input
         input = ""
         await send(text: text)
     }
-    
+
     @MainActor
     func rename(newTitle: String) {
         title = newTitle
         save()
     }
-    
+
     @MainActor
     func clearMessages() {
         withAnimation { [weak self] in
             self?.removeAllConversations()
         }
     }
-    
+
     @MainActor
     func regenerateLastMessage() async {
         if conversations.isEmpty {
@@ -190,27 +189,27 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         }
 
         if conversations[conversations.count - 1].role != "user" {
-           removeConversations(from: conversations.count - 1)
+            removeConversations(from: conversations.count - 1)
         }
         await send(text: lastConversation.content, isRegen: true)
     }
-    
+
     @MainActor
     func regenerate(from conversation: Conversation) async {
         if let index = conversations.firstIndex(of: conversation) {
             if conversations[index].role != "user" {
-               removeConversations(from: index)
+                removeConversations(from: index)
             }
             await send(text: lastConversation.content, isRegen: true)
         }
     }
-    
+
     @MainActor
     func edit(from index: Int, conversation: Conversation) async {
         removeConversations(from: index)
         await send(text: conversation.content)
     }
-    
+
     @MainActor
     func edit(conversation: Conversation, editedContent: String) async {
         if let index = conversations.firstIndex(of: conversation) {
@@ -218,12 +217,12 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             await send(text: editedContent)
         }
     }
-    
+
     @MainActor
     func retry() async {
         await send(text: lastConversation.content, isRetry: true)
     }
-    
+
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
         if let resetMarker = resetMarker {
@@ -231,62 +230,82 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 removeResetContextMarker()
             }
         }
-        
+
         if isReplying() {
             return
         }
         resetErrorDesc()
-        
+
         var streamText = ""
-        
+
         if !isRegen && !isRetry {
             appendConversation(Conversation(role: "user", content: text))
         }
-        
+
         let openAIconfig = configuration.provider.config
         let service: OpenAI = OpenAI(configuration: openAIconfig)
 
         let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
 
         var messages: [Conversation]
-        
+
         if let marker = resetMarker {
             messages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength))
         } else {
             messages = Array(conversations.suffix(configuration.contextLength - 1))
         }
-        
+
         var allMessages: [Conversation]
-        
+
         if configuration.model == .ngemini {
             allMessages = messages
         } else {
             allMessages = messages + [systemPrompt]
         }
-        
+
         let query = ChatQuery(model: configuration.model.id,
-                            messages: allMessages.map({ conversation in
-                                conversation.toChat()
-                            }),
-                            temperature: configuration.temperature,
-                            maxTokens: 3800,
-                            stream: true)
-        
+                              messages: allMessages.map({ conversation in
+                                  conversation.toChat()
+                              }),
+                              temperature: configuration.temperature,
+                              maxTokens: 3800,
+                              stream: true)
+
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
-        
-        streamingTask = Task {
-            for try await result in service.chatsStream(query: query) {
-                streamText += result.choices.first?.delta.content ?? ""
-                conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        #if os(iOS)
+            streamingTask = Task {
+                let application = UIApplication.shared
+                let taskId = application.beginBackgroundTask {
+                    // Handle expiration of background task here
+                }
+
+                // Start your network request here
+                for try await result in service.chatsStream(query: query) {
+                    streamText += result.choices.first?.delta.content ?? ""
+                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    lastConversationData.sync(with: conversations[conversations.count - 1])
+                }
+
+                // End the background task once the network request is finished
+                application.endBackgroundTask(taskId)
+
+        } #else
+            streamingTask = Task {
+                for try await result in service.chatsStream(query: query) {
+                    streamText += result.choices.first?.delta.content ?? ""
+                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                }
                 lastConversationData.sync(with: conversations[conversations.count - 1])
             }
-        }
-        
+
+        #endif
+
         do {
             try await streamingTask?.value
-            
+
             lastConversationData.sync(with: conversations[conversations.count - 1])
-            
+
         } catch {
             // TODO: do better with stop_reason from openai
             if error.localizedDescription == "cancelled" {
@@ -308,9 +327,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
 }
 
-
 extension DialogueSession {
-    
     convenience init?(rawData: DialogueData) {
         self.init()
         guard let id = rawData.id,
@@ -322,7 +339,7 @@ extension DialogueSession {
             return nil
         }
         let resetMarker = rawData.resetMarker
-        
+
         self.rawData = rawData
         self.id = id
         self.date = date
@@ -336,7 +353,7 @@ extension DialogueSession {
         if let configuration = try? JSONDecoder().decode(Configuration.self, from: configurationData) {
             self.configuration = configuration
         }
-        
+
         self.conversations = conversations.compactMap { data in
             if let id = data.id,
                let content = data.content,
@@ -353,22 +370,22 @@ extension DialogueSession {
                 return nil
             }
         }
-        
+
         self.conversations.sort {
             $0.date < $1.date
         }
 
         initFinished = true
     }
-    
+
     @discardableResult
     func appendConversation(_ conversation: Conversation) -> ConversationData {
         if conversations.isEmpty {
             removeResetContextMarker()
         }
-        
+
         conversations.append(conversation)
-        
+
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id
         data.date = conversation.date
@@ -376,19 +393,19 @@ extension DialogueSession {
         data.content = conversation.content
         rawData?.conversations?.adding(data)
         data.dialogue = rawData
-        
+
         do {
             try PersistenceController.shared.save()
         } catch let error {
             print(error.localizedDescription)
         }
-        
+
         return data
     }
-    
+
     func removeConversation(at index: Int) {
         let conversation = conversations.remove(at: index)
-        
+
         if resetMarker == index {
             if conversations.count > 1 {
                 resetMarker = index - 1
@@ -396,12 +413,12 @@ extension DialogueSession {
                 resetMarker = nil
             }
         }
-        
+
         do {
             if let conversationsSet = rawData?.conversations as? Set<ConversationData>,
                let conversationData = conversationsSet.first(where: {
-                $0.id == conversation.id
-            }) {
+                   $0.id == conversation.id
+               }) {
                 PersistenceController.shared.container.viewContext.delete(conversationData)
             }
             try PersistenceController.shared.save()
@@ -409,15 +426,14 @@ extension DialogueSession {
             print(error.localizedDescription)
         }
     }
-    
+
     func removeConversation(_ conversation: Conversation) {
         guard let index = conversations.firstIndex(where: { $0.id == conversation.id }) else {
             return
         }
-        
+
         removeConversation(at: index)
-        
-        
+
         if conversations.isEmpty {
             resetErrorDesc()
         }
@@ -428,7 +444,7 @@ extension DialogueSession {
             print("Index out of range")
             return
         }
-        
+
         let conversationsToRemove = Array(conversations[index...])
         let idsToRemove = conversationsToRemove.map { $0.id }
 
@@ -446,13 +462,12 @@ extension DialogueSession {
         }
     }
 
-    
     func removeAllConversations() {
         withAnimation {
             resetMarker = nil
             conversations.removeAll()
         }
-        
+
         do {
             let viewContext = PersistenceController.shared.container.viewContext
             if let conversations = rawData?.conversations as? Set<ConversationData> {
@@ -463,17 +478,17 @@ extension DialogueSession {
             print(error.localizedDescription)
         }
     }
-    
+
     func setErrorDesc(errorDesc: String) {
         self.errorDesc = errorDesc
         save()
     }
-    
+
     func resetErrorDesc() {
-        self.errorDesc = ""
+        errorDesc = ""
         save()
     }
-    
+
     func save() {
 //        guard initFinished else {
 //            return
@@ -486,7 +501,7 @@ extension DialogueSession {
                 rawData?.resetMarker = Int16(marker)
             }
             rawData?.configuration = try JSONEncoder().encode(configuration)
-    
+
             try PersistenceController.shared.save()
         } catch let error {
             print(error.localizedDescription)

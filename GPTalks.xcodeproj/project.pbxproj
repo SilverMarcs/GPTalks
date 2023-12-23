@@ -33,7 +33,6 @@
 		08D533302B2C25CC008B4FA9 /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D5332F2B2C25CC008B4FA9 /* ContextMenu.swift */; };
 		08D533322B2C2D50008B4FA9 /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */; };
 		08D533342B2C2ED9008B4FA9 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */; };
-		08DFA1C52B22FB85003D48D8 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DFA1C42B22FB85003D48D8 /* OpenAI */; };
 		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
 		08F74EA42B0BC318006D1DD3 /* ServiceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */; };
 		E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */; };
@@ -85,6 +84,7 @@
 		0837E47C2AFE57A100C03059 /* DefaultConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultConfigView.swift; sourceTree = "<group>"; };
 		0837E4802AFFE7AF00C03059 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
+		0858B5D12B369A78006712C1 /* OpenAI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = OpenAI; path = ../OpenAI; sourceTree = "<group>"; };
 		085D40BE2AFD66340033F8B5 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		085D40C22AFD8C250033F8B5 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
@@ -131,7 +131,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08DFA1C52B22FB85003D48D8 /* OpenAI in Frameworks */,
 				E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */,
 				08027CBB2B0D2D8A00ED09E6 /* OpenAI in Frameworks */,
 				088CF05E2B1E3098009CFDCB /* OpenAI in Frameworks */,
@@ -192,6 +191,7 @@
 		E4C65E9529CA9E7E00AFA884 = {
 			isa = PBXGroup;
 			children = (
+				0858B5D12B369A78006712C1 /* OpenAI */,
 				081859862B34D629005B1DE1 /* VisualEffectView */,
 				E4EF056C2A3B3744005CF741 /* GPTalks-Info.plist */,
 				E4C65EA029CA9E7E00AFA884 /* GPTalks */,
@@ -360,7 +360,6 @@
 				E4C65F1029CAA08400AFA884 /* MarkdownUI */,
 				08027CBA2B0D2D8A00ED09E6 /* OpenAI */,
 				088CF05D2B1E3098009CFDCB /* OpenAI */,
-				08DFA1C42B22FB85003D48D8 /* OpenAI */,
 				081859832B34D3DA005B1DE1 /* VisualEffectView */,
 			);
 			productName = ChatGPT;
@@ -438,7 +437,6 @@
 			packageReferences = (
 				E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */,
 				E4C65F0F29CAA08400AFA884 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
-				08DFA1C32B22FB85003D48D8 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				081859822B34D3DA005B1DE1 /* XCRemoteSwiftPackageReference "VisualEffectView" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
@@ -921,14 +919,6 @@
 				minimumVersion = 4.1.5;
 			};
 		};
-		08DFA1C32B22FB85003D48D8 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/OpenAI";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JohnSundell/Splash";
@@ -959,11 +949,6 @@
 		};
 		088CF05D2B1E3098009CFDCB /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = OpenAI;
-		};
-		08DFA1C42B22FB85003D48D8 /* OpenAI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08DFA1C32B22FB85003D48D8 /* XCRemoteSwiftPackageReference "OpenAI" */;
 			productName = OpenAI;
 		};
 		E4C65F0D29CAA06600AFA884 /* Splash */ = {
