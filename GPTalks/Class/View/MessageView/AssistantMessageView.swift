@@ -61,7 +61,7 @@ struct AssistantMessageView: View {
         #if os(iOS)
             50
         #else
-            85
+            65
         #endif
     }
 }

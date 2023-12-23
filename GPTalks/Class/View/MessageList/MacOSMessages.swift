@@ -50,7 +50,7 @@ struct MacOSMessages: View {
                 )
                 .background(.bar)
             }
-            .onAppear {
+            .onChange(of: viewModel.selectedDialogue) {
                 scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
                 isTextFieldFocused = true
             }

@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "markdown-webview",
-        "repositoryURL": "https://github.com/tomdai/markdown-webview?ref=iosexample.com",
-        "state": {
-          "branch": null,
-          "revision": "a50704f158366705a1fcb0f6d6424b5522cd8b17",
-          "version": "2.0.1"
-        }
-      },
-      {
         "package": "NetworkImage",
         "repositoryURL": "https://github.com/gonzalezreal/NetworkImage",
         "state": {

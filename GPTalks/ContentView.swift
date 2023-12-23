@@ -22,7 +22,7 @@ struct ContentView: View {
             if let selectedDialogue = viewModel.selectedDialogue {
                 #if os(macOS)
                     MacOSMessages(session: selectedDialogue)
-                        .id(selectedDialogue.id)
+//                        .id(selectedDialogue.id)
                 #else
                     iOSMessages(session: selectedDialogue)
                         .id(selectedDialogue.id)
