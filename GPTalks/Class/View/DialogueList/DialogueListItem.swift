@@ -83,6 +83,17 @@ struct DialogueListItem: View {
                 }
             }
             
+#if os(macOS)
+            Button {
+                viewModel.toggleArchive(session: session)
+            } label: {
+                HStack {
+                    Image(systemName: "archivebox")
+                    Text(session.isArchive ? "Unarchive" : "Archive")
+                }
+            }
+            #endif
+            
             Button(role: .destructive) {
                 showDeleteDialogue = true
             } label: {
@@ -93,11 +104,21 @@ struct DialogueListItem: View {
             }
         }
         .swipeActions(edge: .trailing) {
+            #if os(macOS)
+            Button {
+                viewModel.toggleArchive(session: session)
+            } label: {
+                Label(session.isArchive ? "Unarchive" : "Archive", systemImage: session.isArchive ? "archivebox" : "archivebox.fill")
+            }
+            .tint(.orange)
+            #endif
+            
             Button(role: .destructive) {
                 viewModel.deleteDialogue(session)
             } label: {
                 Label("Delete", systemImage: "trash")
             }
+            
         }
         .swipeActions(edge: .leading) {
             Button(role: .cancel) {

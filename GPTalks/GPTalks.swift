@@ -45,6 +45,12 @@ struct GPTalks: App {
                     .keyboardShortcut(.delete, modifiers: [.command, .shift])
                 }
             }
+            
+            CommandGroup(after: .sidebar) {
+                Button(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") {
+                    viewModel.isArchivedSelected.toggle()
+                }
+            }
         }
 #if os(macOS)
         Settings {

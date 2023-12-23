@@ -91,6 +91,8 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
 
     @Published var resetMarker: Int?
+    
+    @Published var isArchive = false
 
     private var initFinished = false
 
@@ -120,7 +122,12 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     init() {
     }
 
-    // MARK: - Message Actions'
+    // MARK: - Message Actions
+    
+    func toggleArchive() {
+        isArchive.toggle()
+        save()
+    }
 
     func removeResetContextMarker() {
         resetMarker = nil
@@ -339,12 +346,14 @@ extension DialogueSession {
             return nil
         }
         let resetMarker = rawData.resetMarker
+        let isArchive = rawData.isArchive
 
         self.rawData = rawData
         self.id = id
         self.date = date
         self.title = title
         self.errorDesc = errorDesc
+        self.isArchive = isArchive
         if resetMarker != 0 {
             self.resetMarker = Int(resetMarker)
         } else {
@@ -490,13 +499,11 @@ extension DialogueSession {
     }
 
     func save() {
-//        guard initFinished else {
-//            return
-//        }
         do {
             rawData?.date = date
             rawData?.title = title
             rawData?.errorDesc = errorDesc
+            rawData?.isArchive = isArchive
             if let marker = resetMarker {
                 rawData?.resetMarker = Int16(marker)
             }

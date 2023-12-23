@@ -13,6 +13,10 @@ class DialogueViewModel: ObservableObject {
     private let viewContext: NSManagedObjectContext
     
     @Published var dialogues: [DialogueSession] = []
+    @Published var archivedDialogues: [DialogueSession] = []
+
+    @Published var isArchivedSelected: Bool = false
+    
     @Published var searchText: String = ""
     @Published var filteredDialogues: [DialogueSession] = []
     @Published var selectedDialogue: DialogueSession?
@@ -30,22 +34,66 @@ class DialogueViewModel: ObservableObject {
             .assign(to: &$filteredDialogues)
     }
 
-    func fetchDialogueData() {
+    func fetchDialogueData(firstTime: Bool = true) {
         do {
             let fetchRequest = NSFetchRequest<DialogueData>(entityName: "DialogueData")
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
             let dialogueData = try PersistenceController.shared.container.viewContext.fetch(fetchRequest)
-
-            dialogues = dialogueData.compactMap { DialogueSession(rawData: $0) }
+            
+            let tempDialogues = dialogueData.compactMap { DialogueSession(rawData: $0) }
+            archivedDialogues = tempDialogues.filter { $0.isArchive }
+            dialogues = tempDialogues.filter { !$0.isArchive }
             
             #if os(macOS)
-            selectedDialogue = dialogues.first
+            if firstTime {
+                selectedDialogue = dialogues.first
+            }
             #endif
         } catch {
             print("DEBUG: Some error occured while fetching")
         }
     }
+    
+    func toggleArchive(session: DialogueSession) {
+        if session.isArchive {
+            unarchiveDialogue(session)
+        } else {
+            archiveDialogue(session)
+        }
+    }
 
+    func archiveDialogue(_ session: DialogueSession) {
+        session.toggleArchive()
+        
+        if let selectedDialogue = selectedDialogue, selectedDialogue.id == session.id {
+            self.selectedDialogue = nil
+        }
+        
+        DispatchQueue.main.async {
+            self.dialogues.removeAll {
+                $0.id == session.id
+            }
+            
+            self.fetchDialogueData(firstTime: false)
+        }
+    }
+    
+    func unarchiveDialogue(_ session: DialogueSession) {
+        session.toggleArchive()
+        
+        if let selectedDialogue = selectedDialogue, selectedDialogue.id == session.id {
+            self.selectedDialogue = nil
+        }
+        
+        DispatchQueue.main.async {
+            self.archivedDialogues.removeAll {
+                $0.id == session.id
+            }
+
+            self.fetchDialogueData(firstTime: false)
+        }
+    }
+    
     func addDialogue() {
         let session = DialogueSession()
         dialogues.insert(session, at: 0)

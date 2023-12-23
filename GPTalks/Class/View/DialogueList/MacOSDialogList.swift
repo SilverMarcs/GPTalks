@@ -15,13 +15,13 @@ struct MacOSDialogList: View {
             if viewModel.dialogues.isEmpty {
                 PlaceHolderView(imageName: "message.fill", title: "No Messages Yet")
             } else {
-                List(viewModel.filteredDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
+                List(viewModel.isArchivedSelected ? viewModel.archivedDialogues : viewModel.dialogues , id: \.self, selection: $viewModel.selectedDialogue) { session in
                     DialogueListItem(session: session)
                 }
             }
         }
         .listStyle(.sidebar)
-        .frame(minWidth: 260)
+        .frame(minWidth: 270)
         .toolbar {
             Spacer()
 
