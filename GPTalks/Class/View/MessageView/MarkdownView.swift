@@ -58,9 +58,9 @@ struct MessageMarkdownView: View {
                 configuration.content.copyToPasteboard()
             } label: {
                 Image(systemName: isButtonPressed ? "checkmark" : "doc.on.clipboard")
-                .font(.system(size: 12))
+                .font(.system(size: 11))
                 .frame(width: 12, height: 12)
-                .padding(8)
+                .padding(9)
                 .contentShape(Rectangle())
             }
             .foregroundStyle(.primary)

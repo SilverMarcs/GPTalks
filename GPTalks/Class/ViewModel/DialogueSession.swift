@@ -185,6 +185,10 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     
     @MainActor
     func regenerateLastMessage() async {
+        if conversations.isEmpty {
+            return
+        }
+
         if conversations[conversations.count - 1].role != "user" {
            removeConversations(from: conversations.count - 1)
         }
@@ -222,6 +226,12 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
+        if let resetMarker = resetMarker {
+            if resetMarker == 1 {
+                removeResetContextMarker()
+            }
+        }
+        
         if isReplying() {
             return
         }
@@ -241,7 +251,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         var messages: [Conversation]
         
         if let marker = resetMarker {
-            messages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength - 1))
+            messages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength))
         } else {
             messages = Array(conversations.suffix(configuration.contextLength - 1))
         }
@@ -268,8 +278,8 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             for try await result in service.chatsStream(query: query) {
                 streamText += result.choices.first?.delta.content ?? ""
                 conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                lastConversationData.sync(with: conversations[conversations.count - 1])
             }
-            lastConversationData.sync(with: conversations[conversations.count - 1])
         }
         
         do {

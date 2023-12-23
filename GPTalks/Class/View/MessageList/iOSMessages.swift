@@ -70,7 +70,7 @@
                     focused: _isTextFieldFocused
                 )
                 .background(
-                    VisualEffect(colorTint: .black, colorTintAlpha: 0.8, blurRadius: 18, scale: 1)
+                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.8, blurRadius: 18, scale: 1)
                         .ignoresSafeArea()
                 )
             }

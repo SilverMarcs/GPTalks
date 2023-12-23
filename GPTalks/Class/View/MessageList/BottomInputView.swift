@@ -134,6 +134,7 @@ struct BottomInputView: View {
                 .frame(width: imageSize, height: imageSize)
                 .foregroundColor(.red)
         }
+        .keyboardShortcut("d", modifiers: .command)
         .buttonStyle(.plain)
     }
 
