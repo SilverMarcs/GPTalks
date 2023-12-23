@@ -75,9 +75,9 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .naga:
             return Color("purpleColor")
         case .gpt4free:
-            return Color("orangeColor")
-        case .custom:
             return Color("blueColor")
+        case .custom:
+            return Color("orangeColor")
         }
     }
 
@@ -192,7 +192,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     }
     
     static var availableProviders: [Provider] {
-        return [.openai, .openrouter, .naga, .custom]
+        return [.openai, .openrouter, .naga, .custom, .gpt4free]
     }
     
     private var frame: CGFloat {

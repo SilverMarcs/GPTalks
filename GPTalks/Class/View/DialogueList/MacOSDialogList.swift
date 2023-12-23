@@ -21,7 +21,7 @@ struct MacOSDialogList: View {
             }
         }
         .listStyle(.sidebar)
-        .frame(minWidth: 280)
+        .frame(minWidth: 260)
         .toolbar {
             Spacer()
 

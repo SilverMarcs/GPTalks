@@ -23,7 +23,11 @@ struct MessageMarkdownView: View {
                 CodeBlock(configuration: $0)
             }
         #else
-        MarkdownWebView(text)
+        if text.isEmpty {
+            EmptyView()
+        } else {
+            MarkdownWebView(text)
+        }
         #endif
     }
 

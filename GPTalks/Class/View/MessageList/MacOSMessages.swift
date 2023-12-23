@@ -28,6 +28,7 @@ struct MacOSMessages: View {
                         ConversationView(session: session, conversation: conversation)
                             .id(conversation.id)
                     }
+                    
                     if session.errorDesc != "" {
                         ErrorDescView(session: session)
                             .padding()
