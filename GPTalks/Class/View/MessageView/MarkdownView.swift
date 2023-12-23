@@ -8,6 +8,7 @@
 import MarkdownUI
 import Splash
 import SwiftUI
+import MarkdownWebView
 
 struct MessageMarkdownView: View {
     @Environment(\.colorScheme) private var colorScheme
@@ -15,11 +16,15 @@ struct MessageMarkdownView: View {
     var text: String
 
     var body: some View {
+        #if os(iOS)
         Markdown(MarkdownContent(text))
             .markdownCodeSyntaxHighlighter(.splash(theme: theme))
             .markdownBlockStyle(\.codeBlock) {
                 CodeBlock(configuration: $0)
             }
+        #else
+        MarkdownWebView(text)
+        #endif
     }
 
     struct CodeBlock: View {
