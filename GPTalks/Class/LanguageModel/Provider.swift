@@ -192,7 +192,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     }
     
     static var availableProviders: [Provider] {
-        return [.openai, .openrouter, .naga, .custom, .gpt4free]
+        return [.openai, .openrouter, .naga, .gpt4free, .custom]
     }
     
     private var frame: CGFloat {

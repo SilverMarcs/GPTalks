@@ -94,11 +94,11 @@ struct ToolbarItems: ToolbarContent {
                 }
             }
 
-            Slider(value: $session.configuration.temperature, in: 0 ... 1, step: 0.1) {
+            Slider(value: $session.configuration.temperature, in: 0 ... 2, step: 0.2) {
             } minimumValueLabel: {
                 Text("0")
             } maximumValueLabel: {
-                Text("1")
+                Text("2")
             }
             .frame(width: 130)
 
