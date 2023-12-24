@@ -120,6 +120,10 @@ class DialogueViewModel: ObservableObject {
             $0.id == session.id
         }
         
+        self.archivedDialogues.removeAll {
+            $0.id == session.id
+        }
+        
         if let item = session.rawData {
             viewContext.delete(item)
         }
