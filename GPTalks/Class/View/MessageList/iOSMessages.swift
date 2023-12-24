@@ -22,20 +22,24 @@
 
         var body: some View {
             ScrollViewReader { proxy in
+                // TODO: see if can use List view here
                 ScrollView {
-                    ForEach(session.conversations) { conversation in
-                        ConversationView(session: session, conversation: conversation)
-                            .id(conversation.id)
-                            .padding(.horizontal)
+                    Group {
+                        ForEach(session.conversations) { conversation in
+                            ConversationView(session: session, conversation: conversation)
+                                .id(conversation.id)
+                                .padding(.horizontal)
+                        }
+                        
+                        if session.errorDesc != "" {
+                            ErrorDescView(session: session)
+                                .padding()
+                        }
+                        
+                        Spacer()
+                            .id("bottomID")
                     }
-
-                    if session.errorDesc != "" {
-                        ErrorDescView(session: session)
-                            .padding()
-                    }
-
-                    Spacer()
-                        .id("bottomID")
+                    .padding(.vertical)
                 }
                 .onTapGesture {
                     didUserTap = true
