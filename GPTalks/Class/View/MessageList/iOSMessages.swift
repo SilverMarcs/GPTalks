@@ -27,7 +27,6 @@
                     Group {
                         ForEach(session.conversations) { conversation in
                             ConversationView(session: session, conversation: conversation)
-                                .id(conversation.id)
                                 .padding(.horizontal)
                         }
                         

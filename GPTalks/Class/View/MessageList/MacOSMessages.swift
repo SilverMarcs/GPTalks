@@ -26,7 +26,6 @@ struct MacOSMessages: View {
                 VStack {
                     ForEach(session.conversations) { conversation in
                         ConversationView(session: session, conversation: conversation)
-                            .id(conversation.id)
                     }
                     
                     if session.errorDesc != "" {

@@ -23,7 +23,7 @@ enum Model: String, Codable {
     /// naga
     case ngemini
     case nmixtral
-    
+
     /// gpt4free
     case phind
     case bing
@@ -79,7 +79,7 @@ enum Model: String, Codable {
     static let openAIModels: [Model] =
         [
             .gpt3,
-            .gpt4
+            .gpt4,
         ]
     static let openRouterModels: [Model] =
         [
@@ -87,7 +87,7 @@ enum Model: String, Codable {
             .orperplexity,
             .orphind,
             .orgemini,
-            .ormixtral
+            .ormixtral,
         ]
     static let nagaModels: [Model] = openAIModels + [.ngemini, .nmixtral]
     static let gpt4freeModels: [Model] = openAIModels + [.bing, .phind]
