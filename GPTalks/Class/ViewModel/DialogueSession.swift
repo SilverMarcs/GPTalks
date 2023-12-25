@@ -291,7 +291,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 for try await result in service.chatsStream(query: query) {
                     streamText += result.choices.first?.delta.content ?? ""
                     conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-//                    lastConversationData.sync(with: conversations[conversations.count - 1])
+                    lastConversationData.sync(with: conversations[conversations.count - 1])
                 }
 
                 // End the background task once the network request is finished
