@@ -267,7 +267,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         if configuration.model == .ngemini {
             allMessages = messages
         } else {
-            allMessages = messages + [systemPrompt]
+            allMessages = [systemPrompt] + messages
         }
 
         let query = ChatQuery(model: configuration.model.id,
@@ -467,19 +467,19 @@ extension DialogueSession {
                 }
             }
             try PersistenceController.shared.save()
-            withAnimation {
+//            withAnimation {
                 conversations.removeSubrange(index...)
-            }
+//            }
         } catch let error {
             print(error.localizedDescription)
         }
     }
 
     func removeAllConversations() {
-        withAnimation {
+//        withAnimation {
             resetMarker = nil
             conversations.removeAll()
-        }
+//        }
 
         do {
             let viewContext = PersistenceController.shared.container.viewContext
