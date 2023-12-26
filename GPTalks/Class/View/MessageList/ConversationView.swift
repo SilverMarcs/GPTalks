@@ -14,13 +14,13 @@ struct ConversationView: View {
     var body : some View {
         if conversation.role == "user" {
             UserMessageView(conversation: conversation, session: session)
-                .transition(.move(edge: .trailing))
+                .transition(.opacity)
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
         
         if conversation.role == "assistant" {
             AssistantMessageView(conversation: conversation, session: session)
-                .transition(.move(edge: .leading))
+                .transition(.opacity)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         

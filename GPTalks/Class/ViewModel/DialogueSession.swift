@@ -93,6 +93,8 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     @Published var resetMarker: Int?
     
     @Published var isArchive = false
+    
+    @Published var isAddingConversation = false
 
     private var initFinished = false
 
@@ -389,11 +391,15 @@ extension DialogueSession {
 
     @discardableResult
     func appendConversation(_ conversation: Conversation) -> ConversationData {
+        isAddingConversation = true
+        
         if conversations.isEmpty {
             removeResetContextMarker()
         }
 
         conversations.append(conversation)
+        
+        isAddingConversation = false
 
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id
@@ -467,19 +473,15 @@ extension DialogueSession {
                 }
             }
             try PersistenceController.shared.save()
-//            withAnimation {
-                conversations.removeSubrange(index...)
-//            }
+            conversations.removeSubrange(index...)
         } catch let error {
             print(error.localizedDescription)
         }
     }
 
     func removeAllConversations() {
-//        withAnimation {
-            resetMarker = nil
-            conversations.removeAll()
-//        }
+        resetMarker = nil
+        conversations.removeAll()
 
         do {
             let viewContext = PersistenceController.shared.container.viewContext

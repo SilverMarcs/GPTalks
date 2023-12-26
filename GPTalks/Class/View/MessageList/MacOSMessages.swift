@@ -15,7 +15,7 @@ struct MacOSMessages: View {
 
     @State private var previousContent: String?
     @State private var isUserScrolling = false
-    @State private var previousCount: Int = 0
+//    @State private var previousCount: Int = 0
     @State private var contentChangeTimer: Timer? = nil
     
     @FocusState var isTextFieldFocused: Bool
@@ -23,7 +23,7 @@ struct MacOSMessages: View {
     var body: some View {
         ScrollViewReader { proxy in
             List {
-                VStack {
+                LazyVStack {
                     ForEach(session.conversations) { conversation in
                         ConversationView(session: session, conversation: conversation)
                     }
@@ -68,11 +68,14 @@ struct MacOSMessages: View {
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 isUserScrolling = true
             }
-            .onChange(of: session.conversations.count) {
-                if session.conversations.count > previousCount {
-                    scrollToBottom(proxy: proxy)
-                }
-                previousCount = session.conversations.count
+//            .onChange(of: session.conversations.count) {
+//                if session.conversations.count > previousCount {
+//                    scrollToBottom(proxy: proxy)
+//                }
+//                previousCount = session.conversations.count
+//            }
+            .onChange(of: session.isAddingConversation) {
+                scrollToBottom(proxy: proxy)    
             }
             .onChange(of: session.input) {
                 scrollToBottom(proxy: proxy)
