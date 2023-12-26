@@ -441,7 +441,9 @@ extension DialogueSession {
             return
         }
 
-        removeConversation(at: index)
+        withAnimation {
+            removeConversation(at: index)
+        }
 
         if conversations.isEmpty {
             resetErrorDesc()
@@ -465,7 +467,9 @@ extension DialogueSession {
                 }
             }
             try PersistenceController.shared.save()
-            conversations.removeSubrange(index...)
+            withAnimation {
+                conversations.removeSubrange(index...)
+            }
         } catch let error {
             print(error.localizedDescription)
         }
