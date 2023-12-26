@@ -1,5 +1,0 @@
-disabled_rules:
-  - force_cast
-  - identifier_name
-  - line_length
-  - trailing_whitespace

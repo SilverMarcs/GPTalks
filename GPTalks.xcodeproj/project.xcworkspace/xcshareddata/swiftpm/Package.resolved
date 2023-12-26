@@ -1,34 +1,59 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "NetworkImage",
-        "repositoryURL": "https://github.com/gonzalezreal/NetworkImage",
-        "state": {
-          "branch": null,
-          "revision": "7aff8d1b31148d32c5933d75557d42f6323ee3d1",
-          "version": "6.0.0"
-        }
-      },
-      {
-        "package": "Splash",
-        "repositoryURL": "https://github.com/JohnSundell/Splash",
-        "state": {
-          "branch": null,
-          "revision": "7f4df436eb78fe64fe2c32c58006e9949fa28ad8",
-          "version": "0.16.0"
-        }
-      },
-      {
-        "package": "swift-markdown-ui",
-        "repositoryURL": "https://github.com/gonzalezreal/swift-markdown-ui",
-        "state": {
-          "branch": null,
-          "revision": "5df8a4adedd6ae4eb2455ef60ff75183984daeb8",
-          "version": "2.2.0"
-        }
+  "pins" : [
+    {
+      "identity" : "markdown-webview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/markdown-webview",
+      "state" : {
+        "branch" : "main",
+        "revision" : "36549b735fb30d4b69d9dc6cafc4d2c5549f96f3"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "networkimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/NetworkImage",
+      "state" : {
+        "revision" : "7aff8d1b31148d32c5933d75557d42f6323ee3d1",
+        "version" : "6.0.0"
+      }
+    },
+    {
+      "identity" : "openai",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/OpenAI",
+      "state" : {
+        "branch" : "main",
+        "revision" : "11d9bf3785f55c1b18044c80af91807df68c7ac7"
+      }
+    },
+    {
+      "identity" : "splash",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JohnSundell/Splash",
+      "state" : {
+        "revision" : "7f4df436eb78fe64fe2c32c58006e9949fa28ad8",
+        "version" : "0.16.0"
+      }
+    },
+    {
+      "identity" : "swift-markdown-ui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/swift-markdown-ui",
+      "state" : {
+        "revision" : "5df8a4adedd6ae4eb2455ef60ff75183984daeb8",
+        "version" : "2.2.0"
+      }
+    },
+    {
+      "identity" : "visualeffectview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/VisualEffectView",
+      "state" : {
+        "branch" : "master",
+        "revision" : "a47ca84e0f0b92d8e4264a6d306f152758ffc02d"
+      }
+    }
+  ],
+  "version" : 2
 }
