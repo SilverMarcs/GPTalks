@@ -90,6 +90,7 @@ enum Model: String, Codable {
             .ormixtral,
         ]
     static let nagaModels: [Model] = openAIModels + [.ngemini, .nmixtral]
-    static let gpt4freeModels: [Model] = openAIModels + [.bing, .phind]
+    static let mandrilModels: [Model] = openAIModels + [.ngemini]
+    static let gpt4freeModels: [Model] = [.bing, .phind]
     static let customModels: [Model] = openAIModels
 }

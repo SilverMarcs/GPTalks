@@ -21,6 +21,7 @@ struct ProviderImage: View {
             Image("openaiPng")
                 .resizable()
                 .frame(width: frame - 2, height: frame - 2)
+//                .opacity(0.80)
         }
     }
 }

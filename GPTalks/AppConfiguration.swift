@@ -31,15 +31,19 @@ class AppConfiguration: ObservableObject {
         
     /// openAI
     @AppStorage("configuration.OAIKey") var OAIkey = ""
-    @AppStorage("configuration.model") var OAImodel: Model = .gpt3
+    @AppStorage("configuration.OAImodel") var OAImodel: Model = .gpt3
     
     /// openRouter
     @AppStorage("configuration.ORKey") var ORkey = ""
-    @AppStorage("configuration.ORmodel") var ORmodel: Model = .orperplexity
+    @AppStorage("configuration.ORmodel") var ORmodel: Model = .orzephyr
     
     /// naga
     @AppStorage("configuration.Nkey") var Nkey = ""
     @AppStorage("configuration.Nmodel") var Nmodel: Model = .gpt4
+    
+    /// mandril
+    @AppStorage("configuration.Mkey") var Mkey = ""
+    @AppStorage("configuration.Mmodel") var Mmodel: Model = .gpt4
     
     /// gpt4free
     @AppStorage("configuration.Gkey") var Gkey = ""

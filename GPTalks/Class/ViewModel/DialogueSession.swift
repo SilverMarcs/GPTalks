@@ -97,6 +97,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     @Published var isAddingConversation = false
 
     private var initFinished = false
+    private var isStreaming = false
 
     // MARK: - Properties
 
@@ -116,6 +117,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
 
     var streamingTask: Task<Void, Error>?
+    var viewUpdater: Task<Void, Error>?
 
     func isReplying() -> Bool {
         return !conversations.isEmpty && lastConversation.isReplying
@@ -169,6 +171,9 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         }
         streamingTask?.cancel()
         streamingTask = nil
+        
+        viewUpdater?.cancel()
+        viewUpdater = nil
     }
 
     @MainActor
@@ -245,7 +250,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         }
         resetErrorDesc()
 
-        var streamText = ""
 
         if !isRegen && !isRetry {
             appendConversation(Conversation(role: "user", content: text))
@@ -283,6 +287,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
 
         #if os(iOS)
+            var streamText = "";
             streamingTask = Task {
                 let application = UIApplication.shared
                 let taskId = application.beginBackgroundTask {
@@ -300,20 +305,34 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 application.endBackgroundTask(taskId)
 
         } #else
+            var streamText = ""
             streamingTask = Task {
+                isStreaming = true
                 for try await result in service.chatsStream(query: query) {
                     streamText += result.choices.first?.delta.content ?? ""
-                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
                 }
-//                lastConversationData.sync(with: conversations[conversations.count - 1])
+                isStreaming = false
             }
-
+        
+            viewUpdater = Task {
+                while true {
+                    try await Task.sleep(nanoseconds: 250_000_000)
+                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    lastConversationData.sync(with: conversations[conversations.count - 1])
+                    if !isStreaming {
+                        break
+                    }
+                }
+            }
         #endif
 
         do {
+            #if os(macOS)
             try await streamingTask?.value
-
-            lastConversationData.sync(with: conversations[conversations.count - 1])
+            try await viewUpdater?.value
+            #else
+            try await streamingTask?.value
+            #endif
 
         } catch {
             // TODO: do better with stop_reason from openai
@@ -442,14 +461,13 @@ extension DialogueSession {
         }
     }
 
+    @MainActor
     func removeConversation(_ conversation: Conversation) {
         guard let index = conversations.firstIndex(where: { $0.id == conversation.id }) else {
             return
         }
 
-        withAnimation {
-            removeConversation(at: index)
-        }
+        removeConversation(at: index)
 
         if conversations.isEmpty {
             resetErrorDesc()

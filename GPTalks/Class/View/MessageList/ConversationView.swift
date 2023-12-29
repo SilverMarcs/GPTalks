@@ -28,10 +28,5 @@ struct ConversationView: View {
             ContextResetDivider(session: session)
                 .padding(.vertical)
         }
-        
-        if session.errorDesc != "" {
-            ErrorDescView(session: session)
-                .padding()
-        }
     }
 }

@@ -26,6 +26,11 @@ struct MacOSMessages: View {
                     ForEach(session.conversations) { conversation in
                         ConversationView(session: session, conversation: conversation)
                     }
+                    
+                    if session.errorDesc != "" {
+                        ErrorDescView(session: session)
+                            .padding()
+                    }
                 }
                 .id("bottomID")
             }

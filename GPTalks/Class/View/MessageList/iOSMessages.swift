@@ -30,6 +30,11 @@
                                 .padding(.horizontal)
                         }
                         
+                        if session.errorDesc != "" {
+                            ErrorDescView(session: session)
+                                .padding()
+                        }
+                        
                         Spacer()
                             .id("bottomID")
                     }

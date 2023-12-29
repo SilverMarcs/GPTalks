@@ -12,6 +12,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     case openai
     case openrouter
     case naga
+    case mandril
     case gpt4free
     case custom
 
@@ -23,6 +24,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return "openrouter"
         case .naga:
             return "naga"
+        case .mandril:
+            return "mandril"
         case .gpt4free:
             return "gpt4free"
         case .custom:
@@ -48,6 +51,11 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 token: AppConfiguration.shared.Nkey,
                 host: "api.naga.ac"
             )
+        case .mandril:
+            return OpenAI.Configuration(
+                token: AppConfiguration.shared.Mkey,
+                host: "api.mandrillai.tech"
+            )
         case .gpt4free:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.Gkey,
@@ -71,13 +79,16 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .openai:
             return Color("greenColor")
         case .openrouter:
-            return Color("tealColor")
+            return Color("pinkColor")
         case .naga:
             return Color("purpleColor")
+        case .mandril:
+            return Color("tealColor")
         case .gpt4free:
             return Color("blueColor")
         case .custom:
             return Color("orangeColor")
+
         }
     }
 
@@ -89,10 +100,13 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return "OpenRouter"
         case .naga:
             return "Naga"
+        case .mandril:
+            return "Mandril"
         case .gpt4free:
             return "GPT4Free"
         case .custom:
             return "Custom"
+
         }
     }
     
@@ -104,10 +118,13 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return AppConfiguration.shared.ORmodel
         case .naga:
             return AppConfiguration.shared.Nmodel
+        case .mandril:
+            return AppConfiguration.shared.Mmodel
         case .gpt4free:
             return AppConfiguration.shared.Gmodel
         case .custom:
             return AppConfiguration.shared.Cmodel
+
         }
     }
 
@@ -119,6 +136,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return Model.openRouterModels
         case .naga:
             return Model.nagaModels
+        case .mandril:
+            return Model.mandrilModels
         case .gpt4free:
             return Model.gpt4freeModels
         case .custom:
@@ -149,6 +168,12 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 apiKey: configuration.$Nkey,
                 provider: self
             )
+        case .mandril:
+            ServiceSettingsView(
+                model: configuration.$Mmodel,
+                apiKey: configuration.$Mkey,
+                provider: self
+            )
         case .gpt4free:
             ServiceSettingsView(
                 model: configuration.$Gmodel,
@@ -162,6 +187,17 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 provider: self
             )
         }
+    }
+    
+    var settingsLabel: some View {
+        HStack {
+            ProviderImage(color: self.accentColor, frame: frame)
+            Text(name)
+        }
+    }
+    
+    static var availableProviders: [Provider] {
+        return [.openai, .openrouter, .naga, .mandril, .gpt4free, .custom]
     }
     
     var logoImage: some View {
@@ -182,17 +218,6 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         #elseif os(macOS)
             36
         #endif
-    }
-    
-    var settingsLabel: some View {
-        HStack {
-            ProviderImage(color: self.accentColor, frame: frame)
-            Text(name)
-        }
-    }
-    
-    static var availableProviders: [Provider] {
-        return [.openai, .openrouter, .naga, .gpt4free, .custom]
     }
     
     private var frame: CGFloat {
