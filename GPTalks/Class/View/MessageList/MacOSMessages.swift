@@ -15,7 +15,6 @@ struct MacOSMessages: View {
 
     @State private var previousContent: String?
     @State private var isUserScrolling = false
-//    @State private var previousCount: Int = 0
     @State private var contentChangeTimer: Timer? = nil
     
     @FocusState var isTextFieldFocused: Bool
@@ -23,19 +22,12 @@ struct MacOSMessages: View {
     var body: some View {
         ScrollViewReader { proxy in
             List {
-                LazyVStack {
+                VStack {
                     ForEach(session.conversations) { conversation in
                         ConversationView(session: session, conversation: conversation)
                     }
-                    
-                    if session.errorDesc != "" {
-                        ErrorDescView(session: session)
-                            .padding()
-                    }
-                    
                 }
                 .id("bottomID")
-                
             }
             .background(.background)
             .navigationTitle(session.title)
@@ -68,17 +60,13 @@ struct MacOSMessages: View {
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 isUserScrolling = true
             }
-//            .onChange(of: session.conversations.count) {
-//                if session.conversations.count > previousCount {
-//                    scrollToBottom(proxy: proxy)
-//                }
-//                previousCount = session.conversations.count
-//            }
             .onChange(of: session.isAddingConversation) {
-                scrollToBottom(proxy: proxy)    
+                scrollToBottom(proxy: proxy)
             }
             .onChange(of: session.input) {
-                scrollToBottom(proxy: proxy)
+                if session.input.contains("\n") || (session.input.count > 105) || (session.input.isEmpty){
+                    scrollToBottom(proxy: proxy)
+                }
             }
             .onChange(of: session.resetMarker) {
                 if (session.resetMarker == session.conversations.count - 1) || (session.resetMarker == nil) {

@@ -235,7 +235,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
         if let resetMarker = resetMarker {
-            if resetMarker == 1 {
+            if resetMarker == 0 {
                 removeResetContextMarker()
             }
         }
