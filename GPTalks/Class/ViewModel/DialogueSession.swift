@@ -211,6 +211,10 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     @MainActor
     func regenerate(from conversation: Conversation) async {
         if let index = conversations.firstIndex(of: conversation) {
+            if index <= resetMarker ?? -1 {
+                removeResetContextMarker()
+            }
+            
             if conversations[index].role != "user" {
                 removeConversations(from: index)
             }
@@ -219,14 +223,12 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
     }
 
     @MainActor
-    func edit(from index: Int, conversation: Conversation) async {
-        removeConversations(from: index)
-        await send(text: conversation.content)
-    }
-
-    @MainActor
     func edit(conversation: Conversation, editedContent: String) async {
         if let index = conversations.firstIndex(of: conversation) {
+            if index <= resetMarker ?? -1 {
+                removeResetContextMarker()
+            }
+            
             removeConversations(from: index)
             await send(text: editedContent)
         }
@@ -249,7 +251,6 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
             return
         }
         resetErrorDesc()
-
 
         if !isRegen && !isRetry {
             appendConversation(Conversation(role: "user", content: text))
@@ -345,7 +346,11 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
                 conversations[conversations.count - 1].isReplying = false
                 return
             }
-            removeConversation(at: conversations.count - 1)
+            
+            if conversations.count == 0 {
+                removeConversation(at: conversations.count - 1)
+            }
+            
             setErrorDesc(errorDesc: error.localizedDescription)
         }
 

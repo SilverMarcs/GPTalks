@@ -29,7 +29,8 @@ struct DialogueListItem: View {
                         .lineLimit(1)
                     Spacer()
                     Text(session.configuration.model.name)
-                        .font(Font.system(.subheadline))
+                        .font(.subheadline)
+                        .opacity(0.9)
                 }
                 VStack {
                     if session.isReplying() {

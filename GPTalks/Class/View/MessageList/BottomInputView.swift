@@ -27,8 +27,13 @@ struct BottomInputView: View {
             }
         }
         .padding(.horizontal)
+        #if os(iOS)
         .padding(.top, verticalPadding)
         .padding(.bottom, verticalPadding + 1)
+        #else
+        .padding(.top, verticalPadding + 1)
+        .padding(.bottom, verticalPadding + 4)
+        #endif
         .alert(
             "Warning",
             isPresented: $isShowClearMessagesAlert
@@ -76,7 +81,7 @@ struct BottomInputView: View {
             Image(systemName: "eraser")
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageSize, height: imageSize)
+                .frame(width: imageSize + 1, height: imageSize + 1)
         }
         .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
         .buttonStyle(.plain)
@@ -121,6 +126,7 @@ struct BottomInputView: View {
         .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
         .buttonStyle(.plain)
         .disabled(session.input.isEmpty || session.isReplying())
+        .fontWeight(session.input.isEmpty ? .regular : .bold)
     }
 
     @ViewBuilder
@@ -162,7 +168,7 @@ struct BottomInputView: View {
             .lineLimit(1 ... 15)
             .padding(6)
             .padding(.horizontal, 4)
-            .frame(minHeight: imageSize + 1)
+            .frame(minHeight: imageSize + 6)
     }
 
     @ViewBuilder
@@ -170,7 +176,7 @@ struct BottomInputView: View {
         if session.input.isEmpty {
             Text("Send a message")
                 .font(.body)
-                .padding(7)
+                .padding(6)
                 .padding(.leading, 4)
                 .foregroundColor(placeHolderTextColor)
         }
@@ -179,7 +185,7 @@ struct BottomInputView: View {
             .font(.body)
             .frame(maxHeight: 400)
             .fixedSize(horizontal: false, vertical: true)
-            .padding(7)
+            .padding(6)
             .scrollContentBackground(.hidden)
         Button("hidden") {
             focused = true
@@ -190,9 +196,9 @@ struct BottomInputView: View {
 
     private var imageSize: CGFloat {
         #if os(macOS)
-            18
+            20
         #else
-            25
+            29
         #endif
     }
     

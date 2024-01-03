@@ -20,7 +20,7 @@ struct ContextMenu: View {
                 Button {
                     editHandler()
                 } label: {
-                    Image(systemName: "pencil")
+                    Image(systemName: "pencil.tip")
                     if showText {
                         Text("Edit")
                     }
