@@ -28,11 +28,10 @@ struct BottomInputView: View {
         }
         .padding(.horizontal)
         #if os(iOS)
-        .padding(.top, verticalPadding)
-        .padding(.bottom, verticalPadding + 1)
+        .padding(.vertical, verticalPadding)
         #else
-        .padding(.top, verticalPadding + 1)
-        .padding(.bottom, verticalPadding + 4)
+        .padding(.top, verticalPadding)
+        .padding(.bottom, verticalPadding + 3)
         #endif
         .alert(
             "Warning",
@@ -50,9 +49,9 @@ struct BottomInputView: View {
     
     private var verticalPadding: CGFloat {
         #if os(iOS)
-        return 10
+        return 11
         #else
-        return 12
+        return 13
         #endif
     }
     
@@ -126,7 +125,7 @@ struct BottomInputView: View {
         .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
         .buttonStyle(.plain)
         .disabled(session.input.isEmpty || session.isReplying())
-        .fontWeight(session.input.isEmpty ? .regular : .bold)
+        .fontWeight(session.input.isEmpty ? .regular : .semibold)
     }
 
     @ViewBuilder

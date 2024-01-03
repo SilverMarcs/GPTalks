@@ -87,7 +87,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .gpt4free:
             return Color("blueColor")
         case .custom:
-            return Color("orangeColor")
+            return Color("niceColor")
 
         }
     }

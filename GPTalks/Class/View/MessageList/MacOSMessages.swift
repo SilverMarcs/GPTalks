@@ -74,7 +74,7 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.resetMarker) {
-                if (session.resetMarker == session.conversations.count - 1) || (session.resetMarker == nil) {
+                if (session.resetMarker == session.conversations.count - 1) {
                     scrollToBottom(proxy: proxy)
                 }
             }
