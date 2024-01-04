@@ -6,65 +6,57 @@
 //
 
 #if os(iOS)
-import SwiftUI
+    import SwiftUI
 
-struct IOSDialogList: View {
-    @EnvironmentObject var viewModel: DialogueViewModel
-    @State var isShowSettingView = false
-    
-    
-    var body: some View {
-        Group {
-            if isIPadOS {
-                list
-                    .listStyle(.inset)
-            } else {
-                list
-                    .listStyle(.plain)
-            }
-        }
-        .searchable(text: $viewModel.searchText)
-        .navigationTitle("Sessions")
-        .sheet(isPresented: $isShowSettingView) {
-            AppSettingsView()
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    isShowSettingView = true
-                } label: {
-                    if isIPadOS {
-                        Image(systemName: "gear")
-                    } else {
-                        Text("Config")
+    struct IOSDialogList: View {
+        @EnvironmentObject var viewModel: DialogueViewModel
+        @State var isShowSettingView = false
+
+        var body: some View {
+            list
+                .listStyle(.inset)
+                .searchable(text: $viewModel.searchText)
+                .navigationTitle("Sessions")
+                .sheet(isPresented: $isShowSettingView) {
+                    AppSettingsView()
+                }
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            isShowSettingView = true
+                        } label: {
+                            if isIPadOS {
+                                Image(systemName: "gear")
+                            } else {
+                                Text("Config")
+                            }
+                        }
+                    }
+
+                    ToolbarItem(placement: .automatic) {
+                        Button {
+                            viewModel.addDialogue()
+                        } label: {
+                            Image(systemName: "square.and.pencil")
+                        }
+                        .keyboardShortcut("n", modifiers: .command)
                     }
                 }
-            }
-            
-            ToolbarItem(placement: .automatic) {
-                Button {
-                    viewModel.addDialogue()
-                } label: {
-                    Image(systemName: "square.and.pencil")
+        }
+
+        @ViewBuilder
+        private var list: some View {
+            if viewModel.dialogues.isEmpty {
+                PlaceHolderView(imageName: "message.fill", title: "No Messages Yet")
+            } else {
+                List(viewModel.filteredDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
+                    DialogueListItem(session: session)
                 }
-                .keyboardShortcut("n", modifiers: .command)
             }
         }
-    }
-    
-    @ViewBuilder
-    private var list: some View {
-        if viewModel.dialogues.isEmpty {
-            PlaceHolderView(imageName: "message.fill", title: "No Messages Yet")
-        } else {
-            List(viewModel.filteredDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
-                DialogueListItem(session: session)
-            }
+
+        private var isIPadOS: Bool {
+            UIDevice.current.userInterfaceIdiom == .pad && UIDevice.current.systemName == "iPadOS"
         }
     }
-    
-    private var isIPadOS: Bool {
-        UIDevice.current.userInterfaceIdiom == .pad && UIDevice.current.systemName == "iPadOS"
-    }
-}
 #endif

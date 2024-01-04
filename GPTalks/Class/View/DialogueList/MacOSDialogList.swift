@@ -21,18 +21,18 @@ struct MacOSDialogList: View {
 //                        .frame(width: 0, height: 0)
 ////                        .hidden()
 //                        .id("scrollToTop")
-                    List(viewModel.isArchivedSelected ? viewModel.archivedDialogues : viewModel.dialogues , id: \.self, selection: $viewModel.selectedDialogue) { session in
+                    List(viewModel.dialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
                         DialogueListItem(session: session)
                             .listRowSeparator(.hidden)
                     }
                     .padding(.top, -10)
-                    .onChange(of: viewModel.dialogues.count) {
-//                        withAnimation {
-                        print("comes here")
-                        DispatchQueue.main.async {
-                            proxy.scrollTo("scrollToTop", anchor: .top)
-                        }
-                    }
+//                    .onChange(of: viewModel.dialogues.count) {
+////                        withAnimation {
+//
+//                        DispatchQueue.main.async {
+//                            proxy.scrollTo("scrollToTop", anchor: .top)
+//                        }
+//                    }
                 }
             }
         }
