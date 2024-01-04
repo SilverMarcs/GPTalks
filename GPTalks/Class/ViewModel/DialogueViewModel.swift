@@ -70,8 +70,10 @@ class DialogueViewModel: ObservableObject {
         }
         
         DispatchQueue.main.async {
-            self.dialogues.removeAll {
-                $0.id == session.id
+            withAnimation {
+                self.dialogues.removeAll {
+                    $0.id == session.id
+                }
             }
             
             self.fetchDialogueData(firstTime: false)
@@ -86,8 +88,10 @@ class DialogueViewModel: ObservableObject {
         }
         
         DispatchQueue.main.async {
-            self.archivedDialogues.removeAll {
-                $0.id == session.id
+            withAnimation {
+                self.archivedDialogues.removeAll {
+                    $0.id == session.id
+                }
             }
 
             self.fetchDialogueData(firstTime: false)
@@ -96,7 +100,9 @@ class DialogueViewModel: ObservableObject {
     
     func addDialogue() {
         let session = DialogueSession()
-        dialogues.insert(session, at: 0)
+        withAnimation {
+            dialogues.insert(session, at: 0)
+        }
             
         let newItem = DialogueData(context: viewContext)
         newItem.id = session.id
@@ -116,12 +122,16 @@ class DialogueViewModel: ObservableObject {
             selectedDialogue = nil
         }
         
-        self.dialogues.removeAll {
-            $0.id == session.id
+        withAnimation {
+            self.dialogues.removeAll {
+                $0.id == session.id
+            }
         }
         
-        self.archivedDialogues.removeAll {
-            $0.id == session.id
+        withAnimation {
+            self.archivedDialogues.removeAll {
+                $0.id == session.id
+            }
         }
         
         if let item = session.rawData {

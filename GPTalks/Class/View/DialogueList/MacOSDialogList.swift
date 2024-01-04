@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct MacOSDialogList: View {
     @EnvironmentObject var viewModel: DialogueViewModel
     
@@ -15,11 +16,28 @@ struct MacOSDialogList: View {
             if viewModel.dialogues.isEmpty {
                 PlaceHolderView(imageName: "message.fill", title: "No Messages Yet")
             } else {
-                List(viewModel.isArchivedSelected ? viewModel.archivedDialogues : viewModel.dialogues , id: \.self, selection: $viewModel.selectedDialogue) { session in
-                    DialogueListItem(session: session)
+                ScrollViewReader { proxy in
+//                    Color.clear
+//                        .frame(width: 0, height: 0)
+////                        .hidden()
+//                        .id("scrollToTop")
+                    List(viewModel.isArchivedSelected ? viewModel.archivedDialogues : viewModel.dialogues , id: \.self, selection: $viewModel.selectedDialogue) { session in
+                        DialogueListItem(session: session)
+                            .listRowSeparator(.hidden)
+                    }
+                    .padding(.top, -10)
+                    .onChange(of: viewModel.dialogues.count) {
+//                        withAnimation {
+                        print("comes here")
+                        DispatchQueue.main.async {
+                            proxy.scrollTo("scrollToTop", anchor: .top)
+                        }
+                    }
                 }
             }
         }
+        .listStyle(.inset)
+        .scrollContentBackground(.hidden)
         .frame(minWidth: 270)
         .toolbar {
             Spacer()
@@ -34,14 +52,3 @@ struct MacOSDialogList: View {
     }
 }
 
-
-// Visual effect est la pour rendre le fond effet transparent
-struct VisualEffect: NSViewRepresentable {
-
-  func makeNSView(context: Self.Context) -> NSView {
-      let test = NSVisualEffectView()
-      test.state = NSVisualEffectView.State.active  // this is this state which says transparent all of the time
-      return test }
-
-  func updateNSView(_ nsView: NSView, context: Context) { }
-}
