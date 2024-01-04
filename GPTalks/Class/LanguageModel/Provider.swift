@@ -81,13 +81,13 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .openrouter:
             return Color("pinkColor")
         case .naga:
-            return Color("purpleColor")
+            return Color("niceColor")
         case .mandril:
             return Color("tealColor")
         case .gpt4free:
             return Color("blueColor")
         case .custom:
-            return Color("niceColor")
+            return Color("purpleColor")
 
         }
     }

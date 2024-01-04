@@ -17,13 +17,12 @@ struct IOSDialogList: View {
         Group {
             if isIPadOS {
                 list
-                    .listStyle(.sidebar)
+                    .listStyle(.inset)
             } else {
                 list
                     .listStyle(.plain)
             }
         }
-
         .searchable(text: $viewModel.searchText)
         .navigationTitle("Sessions")
         .sheet(isPresented: $isShowSettingView) {

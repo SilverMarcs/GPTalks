@@ -33,3 +33,15 @@ struct MacOSDialogList: View {
         }
     }
 }
+
+
+// Visual effect est la pour rendre le fond effet transparent
+struct VisualEffect: NSViewRepresentable {
+
+  func makeNSView(context: Self.Context) -> NSView {
+      let test = NSVisualEffectView()
+      test.state = NSVisualEffectView.State.active  // this is this state which says transparent all of the time
+      return test }
+
+  func updateNSView(_ nsView: NSView, context: Context) { }
+}

@@ -51,7 +51,9 @@
                     scrollToBottom(proxy: proxy, delay: 0.2)
                 }
                 .onChange(of: session.input) {
-                    scrollToBottom(proxy: proxy)
+                    if session.input.contains("\n") || (session.input.count > 25) || (session.input.isEmpty) {
+                        scrollToBottom(proxy: proxy)
+                    }
                 }
                 .onChange(of: session.resetMarker) {
                     if session.resetMarker == session.conversations.count - 1 {
