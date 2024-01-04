@@ -17,22 +17,16 @@ struct MacOSDialogList: View {
                 PlaceHolderView(imageName: "message.fill", title: "No Messages Yet")
             } else {
                 ScrollViewReader { proxy in
-//                    Color.clear
-//                        .frame(width: 0, height: 0)
-////                        .hidden()
-//                        .id("scrollToTop")
                     List(viewModel.dialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
                         DialogueListItem(session: session)
+                            .id(session.id)
                             .listRowSeparator(.hidden)
                     }
-                    .padding(.top, -10)
-//                    .onChange(of: viewModel.dialogues.count) {
-////                        withAnimation {
-//
-//                        DispatchQueue.main.async {
-//                            proxy.scrollTo("scrollToTop", anchor: .top)
-//                        }
-//                    }
+                    .padding(.top, -11)
+                    .onChange(of: viewModel.dialogues.count) {
+                        // this is far from perfect
+                        proxy.scrollTo(viewModel.dialogues[0].id, anchor: .top)
+                    }
                 }
             }
         }
@@ -51,4 +45,3 @@ struct MacOSDialogList: View {
         }
     }
 }
-

@@ -92,6 +92,8 @@ class DialogueViewModel: ObservableObject {
     }
 
     func addDialogue() {
+        isArchivedSelected = false
+        
         let session = DialogueSession()
         withAnimation {
             allDialogues.insert(session, at: 0)
@@ -116,10 +118,6 @@ class DialogueViewModel: ObservableObject {
         }
 
         withAnimation {
-//            self.dialogues.removeAll {
-//                $0.id == session.id
-//            }
-
             self.allDialogues.removeAll {
                 $0.id == session.id
             }
