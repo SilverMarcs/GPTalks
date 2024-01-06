@@ -17,9 +17,21 @@ struct UserMessageView: View {
     @State private var isHovered = false
 
     var body: some View {
+        let lastUserMessage = session.conversations.filter{ $0.role == "user" }.last
+        
         HStack(alignment: .lastTextBaseline) {
 #if os(macOS)
             optionsMenu
+            
+            if lastUserMessage?.id == conversation.id {
+                Button("") {
+                    editingMessage = conversation.content
+                    isEditing = true
+                }
+                .frame(width: 0, height: 0)
+                .hidden()
+                .keyboardShortcut("e", modifiers: .command)
+            }
 #endif
             
             Text(conversation.content)
