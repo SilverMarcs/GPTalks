@@ -19,6 +19,7 @@ enum Model: String, Codable {
     case orperplexity
     case orgemini
     case ormixtral
+    case ordolphin
 
     /// naga
     case ngemini
@@ -44,8 +45,11 @@ enum Model: String, Codable {
             "Gemini"
         case .nmixtral, .ormixtral:
             "Mixtral"
+        case .ordolphin:
+            "Dolphin"
         case .bing:
             "Bing"
+
         }
     }
 
@@ -65,6 +69,8 @@ enum Model: String, Codable {
             "google/gemini-pro"
         case .ormixtral:
             "mistralai/mixtral-8x7b-instruct"
+        case .ordolphin:
+            "cognitivecomputations/dolphin-mixtral-8x7b"
         case .ngemini:
             "gemini-pro"
         case .nmixtral:
@@ -87,10 +93,14 @@ enum Model: String, Codable {
             .orperplexity,
             .orphind,
             .orgemini,
-            .ormixtral,
+            .ordolphin,
         ]
-    static let nagaModels: [Model] = openAIModels + [.ngemini, .nmixtral]
-    static let mandrilModels: [Model] = openAIModels + [.ngemini]
+    static let nagaModels: [Model] = 
+        openAIModels + [
+            .ngemini, 
+            .nmixtral,
+        ]
+    static let mandrilModels: [Model] = openAIModels
     static let gpt4freeModels: [Model] = [.bing, .phind]
     static let customModels: [Model] = openAIModels
 }

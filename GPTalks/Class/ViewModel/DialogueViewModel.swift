@@ -50,8 +50,6 @@ class DialogueViewModel: ObservableObject {
             let dialogueData = try PersistenceController.shared.container.viewContext.fetch(fetchRequest)
 
             allDialogues = dialogueData.compactMap { DialogueSession(rawData: $0) }
-//            archivedDialogues = tempDialogues.filter { $0.isArchive }
-//            dialogues = tempDialogues.filter { !$0.isArchive }
 
             dialogues = allDialogues.filter { !$0.isArchive }
 
@@ -70,8 +68,16 @@ class DialogueViewModel: ObservableObject {
         
         withAnimation {
             if isArchivedSelected {
+//                if selectedDialogue?.isArchive == false {
+//                    selectedDialogue = nil
+//                }
+                
                 dialogues = allDialogues.filter { $0.isArchive }
             } else {
+//                if selectedDialogue?.isArchive == true {
+//                    selectedDialogue = nil
+//                }
+                
                 dialogues = allDialogues.filter { !$0.isArchive }
             }
         }
@@ -80,9 +86,9 @@ class DialogueViewModel: ObservableObject {
     func toggleArchive(session: DialogueSession) {
         session.toggleArchive()
 
-        if let selectedDialogue = selectedDialogue, selectedDialogue.id == session.id {
-            self.selectedDialogue = nil
-        }
+//        if let selectedDialogue = selectedDialogue, selectedDialogue.id == session.id {
+//            self.selectedDialogue = nil
+//        }
 
         withAnimation {
             dialogues.removeAll {

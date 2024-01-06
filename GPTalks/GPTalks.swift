@@ -50,7 +50,7 @@ struct GPTalks: App {
                 Button(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") {
                     viewModel.toggleArchivedStatus()
                 }
-                .keyboardShortcut("a", modifiers: /*@START_MENU_TOKEN@*/.command/*@END_MENU_TOKEN@*/)
+                .keyboardShortcut("a", modifiers: [.command, .shift])
             }
         }
 #if os(macOS)

@@ -22,7 +22,7 @@ struct MacOSDialogList: View {
                             .id(session.id)
                             .listRowSeparator(.hidden)
                     }
-                    .padding(.top, -11)
+                    .padding(.top, -10)
                     .onChange(of: viewModel.dialogues.count) {
                         // this is far from perfect
                         proxy.scrollTo(viewModel.dialogues[0].id, anchor: .top)

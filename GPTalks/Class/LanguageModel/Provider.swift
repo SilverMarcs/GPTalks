@@ -79,11 +79,11 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .openai:
             return Color("greenColor")
         case .openrouter:
-            return Color("pinkColor")
+            return Color("tealColor")
         case .naga:
             return Color("niceColor")
         case .mandril:
-            return Color("tealColor")
+            return Color("pinkColor")
         case .gpt4free:
             return Color("blueColor")
         case .custom:
