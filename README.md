@@ -1,6 +1,9 @@
 # GPTalks
 
-A SwiftUI multi-platform app to interact with OpenAI Chat Completions api along with some other providers
+A SwiftUI multi-platform app to interact with OpenAI Chat Completions API along with some other providers.
+
+The code quality and organisation is quite poor at the moment and may not be following many of the Apple development conventions. I will gradually try to improve this.
+The screenshots may also be often outdated. Feel free to grab the latest MacOS release from Github release page.
 
 # Screenshots
 
