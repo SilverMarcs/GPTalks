@@ -37,7 +37,7 @@ struct GPTalks: App {
                     Button("Reset Context") {
                         viewModel.selectedDialogue?.resetContext()
                     }
-                    .keyboardShortcut(.delete, modifiers: .command)
+                    .keyboardShortcut("k", modifiers: .command)
                     
                     Button("Delete all messages") {
                         viewModel.selectedDialogue?.removeAllConversations()

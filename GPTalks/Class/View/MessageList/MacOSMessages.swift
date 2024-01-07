@@ -27,6 +27,15 @@ struct MacOSMessages: View {
                         ConversationView(session: session, conversation: conversation)
                     }
                     
+                    Button("hidden") {
+                        if let lastConversation = session.conversations.last {
+                            session.removeConversation(lastConversation)
+                        }
+                    }
+                    .keyboardShortcut(.delete, modifiers: .command)
+                    .opacity(0)
+                    .frame(width: 1, height: 1)
+                    
                     if session.errorDesc != "" {
                         ErrorDescView(session: session)
                             .padding()
