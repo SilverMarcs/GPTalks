@@ -15,7 +15,6 @@ struct DialogueListItem: View {
     @State private var showRenameDialogue = false
     @State private var showDeleteDialogue = false
     @State private var newName = ""
-    @State private var sessionToRename: DialogueSession?
     @State private var searchQuery = ""
 
     var body: some View {
@@ -59,9 +58,7 @@ struct DialogueListItem: View {
         .alert("Rename Session", isPresented: $showRenameDialogue, actions: {
             TextField("Enter new name", text: $newName)
             Button("Rename", action: {
-                if let session = sessionToRename {
-                    session.rename(newTitle: newName)
-                }
+                session.rename(newTitle: newName)
             })
             Button("Cancel", role: .cancel, action: {})
         })
@@ -74,9 +71,8 @@ struct DialogueListItem: View {
         })
         .contextMenu {
             Button {
-                sessionToRename = session
                 newName = session.title
-                showRenameDialogue = true
+                showRenameDialogue.toggle()
             } label: {
                 HStack {
                     Image(systemName: "pencil")
@@ -123,7 +119,6 @@ struct DialogueListItem: View {
         }
         .swipeActions(edge: .leading) {
             Button(role: .cancel) {
-                sessionToRename = session
                 newName = session.title
                 showRenameDialogue.toggle()
             } label: {
