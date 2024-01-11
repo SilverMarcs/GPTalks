@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 struct ContextMenu: View {
     @ObservedObject var session: DialogueSession
     var conversation: Conversation

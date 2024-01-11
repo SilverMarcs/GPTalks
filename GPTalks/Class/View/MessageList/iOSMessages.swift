@@ -48,7 +48,9 @@
                     scrollToBottom(proxy: proxy, animated: false)
                 }
                 .onChange(of: isTextFieldFocused) {
-                    scrollToBottom(proxy: proxy, delay: 0.2)
+                    if !isTextFieldFocused {
+                        scrollToBottom(proxy: proxy, delay: 0.2)
+                    }
                 }
                 .onChange(of: session.input) {
                     if session.input.contains("\n") || (session.input.count > 25) || (session.input.isEmpty) {
@@ -74,6 +76,9 @@
                     session: session,
                     focused: _isTextFieldFocused
                 )
+                .onTapGesture {
+                    isTextFieldFocused = true
+                }
                 .background(
                     VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.8, blurRadius: 18, scale: 1)
                         .ignoresSafeArea()

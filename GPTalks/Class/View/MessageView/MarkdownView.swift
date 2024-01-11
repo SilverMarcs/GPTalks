@@ -10,7 +10,7 @@ import Splash
 import SwiftUI
 import MarkdownWebView
 
-struct MessageMarkdownView: View {
+struct MarkdownView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var text: String
@@ -38,7 +38,7 @@ struct MessageMarkdownView: View {
         @State private var isButtonPressed = false
 
         var body: some View {
-            HStack(spacing: 6) {
+            ZStack(alignment: .bottomTrailing) {
                 configuration.label
                     .markdownTextStyle {
                         FontFamilyVariant(.monospaced)
@@ -49,10 +49,9 @@ struct MessageMarkdownView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .markdownMargin(top: .zero, bottom: .em(0.8))
 
-                #if os(macOS)
-                // i aint never copying code on ios
                 copyButton
-                #endif
+                    .padding(5)
+                
             }
             .onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.2)) {

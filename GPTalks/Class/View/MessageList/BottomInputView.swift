@@ -80,11 +80,17 @@ struct BottomInputView: View {
             Image(systemName: "eraser")
                 .resizable()
                 .scaledToFit()
+            #if os(macOS)
                 .frame(width: imageSize + 1, height: imageSize + 1)
+            #else
+                .frame(width: imageSize, height: imageSize)
+            #endif
         }
         .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
         .buttonStyle(.plain)
         .disabled(session.conversations.isEmpty || session.isReplying())
+        .rotationEffect(.degrees(135))
+        .padding(.horizontal, -2)
     }
 
     @ViewBuilder
