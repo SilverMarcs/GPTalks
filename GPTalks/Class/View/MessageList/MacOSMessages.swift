@@ -59,6 +59,7 @@ struct MacOSMessages: View {
             .onChange(of: viewModel.selectedDialogue) {
                 scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
                 isTextFieldFocused = true
+                scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
             }
             .onChange(of: session.conversations.last?.content) {
                 if session.conversations.last?.content != previousContent && !isUserScrolling {

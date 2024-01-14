@@ -124,7 +124,8 @@ struct BottomInputView: View {
                 .resizable()
                 .scaledToFit()
                 .disabled(empty)
-                .foregroundColor(empty ? .secondary : session.configuration.provider.accentColor)
+//                .foregroundColor(empty ? .secondary : session.configuration.provider.accentColor)
+                .foregroundColor(empty ? .secondary : .accentColor)
                 .frame(width: imageSize + 1, height: imageSize + 1)
         }
         .keyboardShortcut(.return, modifiers: .command)
@@ -142,7 +143,7 @@ struct BottomInputView: View {
             Image(systemName: "stop.circle.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageSize, height: imageSize)
+                .frame(width: imageSize + 1, height: imageSize + 1)
                 .foregroundColor(.red)
         }
         .keyboardShortcut("d", modifiers: .command)

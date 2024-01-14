@@ -15,10 +15,10 @@ struct TextSelectionView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
+            Form {
                 MarkdownWebView(content)
             }
-            .padding()
+            .padding(.top, -30)
             .navigationTitle("Select Text")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
