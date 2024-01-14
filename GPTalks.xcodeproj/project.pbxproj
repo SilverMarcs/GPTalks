@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820E06C2B5395E500401A30 /* TextSelectionView.swift */; };
 		0829D1132B3166D900DFFBB1 /* iOSMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1122B3166D900DFFBB1 /* iOSMessages.swift */; };
 		0829D1152B3166E300DFFBB1 /* MacOSMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1142B3166E300DFFBB1 /* MacOSMessages.swift */; };
 		0829D1172B317A4B00DFFBB1 /* ConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1162B317A4B00DFFBB1 /* ConversationView.swift */; };
@@ -75,6 +76,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0820E06C2B5395E500401A30 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
 		0829D1122B3166D900DFFBB1 /* iOSMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSMessages.swift; sourceTree = "<group>"; };
 		0829D1142B3166E300DFFBB1 /* MacOSMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSMessages.swift; sourceTree = "<group>"; };
 		0829D1162B317A4B00DFFBB1 /* ConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationView.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */,
 				08D5332F2B2C25CC008B4FA9 /* MessageContextMenu.swift */,
 				08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */,
+				0820E06C2B5395E500401A30 /* TextSelectionView.swift */,
 			);
 			path = MessageView;
 			sourceTree = "<group>";
@@ -489,6 +492,7 @@
 				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
 				0878E53B2B1683ED00E0D79D /* AppIconView.swift in Sources */,
+				0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */,
 				E4C65EEE29CA9F7800AFA884 /* Conversation.swift in Sources */,
 				E4C65EA929CA9E7E00AFA884 /* ContentView.swift in Sources */,
 				0829D1132B3166D900DFFBB1 /* iOSMessages.swift in Sources */,

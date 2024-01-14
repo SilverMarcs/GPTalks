@@ -14,7 +14,8 @@ enum MessageType {
 
 extension View {
     func bubbleStyle(isMyMessage: Bool, accentColor: Color = Color(.systemBlue)) -> some View {
-        modifier(Bubble(isMyMessage: isMyMessage, accentColor: accentColor))
+//        modifier(Bubble(isMyMessage: isMyMessage, accentColor: accentColor))
+        modifier(Bubble(isMyMessage: isMyMessage, accentColor: .accentColor))
     }
 }
 

@@ -15,6 +15,8 @@ struct UserMessageView: View {
     @State var editingMessage: String = ""
     
     @State private var isHovered = false
+    
+    @State var canSelectText = false
 
     var body: some View {
         let lastUserMessage = session.conversations.filter{ $0.role == "user" }.last
@@ -47,11 +49,16 @@ struct UserMessageView: View {
         .sheet(isPresented: $isEditing) {
             editingView
         }
-        #if os(iOS)
+#if os(iOS)
+        .sheet(isPresented: $canSelectText) {
+            TextSelectionView(content: conversation.content)
+        }   
         .contextMenu {
             MessageContextMenu(session: session, conversation: conversation, showText: true) {
                 editingMessage = conversation.content
                 isEditing = true
+            } toggleTextSelection: {
+                canSelectText.toggle()
             }
         }
         #endif
@@ -62,6 +69,8 @@ struct UserMessageView: View {
             MessageContextMenu(session: session, conversation: conversation) {
                     editingMessage = conversation.content
                     isEditing = true
+                } toggleTextSelection: {
+                    canSelectText.toggle()
                 }
 
         }

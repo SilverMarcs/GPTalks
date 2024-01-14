@@ -12,6 +12,8 @@ struct AssistantMessageView: View {
     var session: DialogueSession
     
     @State var isHovered = false
+    
+    @State var canSelectText = false
 
     var body: some View {
         HStack(alignment: .lastTextBaseline) {
@@ -36,6 +38,11 @@ struct AssistantMessageView: View {
             }
             #endif
         }
+#if os(iOS)
+        .sheet(isPresented: $canSelectText) {
+            TextSelectionView(content: conversation.content)
+        }
+#endif
         .onHover { isHovered in
             self.isHovered = isHovered
         }
@@ -44,6 +51,9 @@ struct AssistantMessageView: View {
         #if os(iOS)
             .contextMenu {
                 MessageContextMenu(session: session, conversation: conversation, showText: true) {}
+                toggleTextSelection: {
+                    canSelectText.toggle()
+                }
             }
         #endif
     }
@@ -51,6 +61,10 @@ struct AssistantMessageView: View {
     var optionsMenu: some View {
         AdaptiveStack(isHorizontal: conversation.content.count < 350) {
             MessageContextMenu(session: session, conversation: conversation) { }
+            toggleTextSelection: {
+                canSelectText.toggle()
+            }
+            
         }
         .opacity(isHovered ? 1 : 0)
         .transition(.opacity)

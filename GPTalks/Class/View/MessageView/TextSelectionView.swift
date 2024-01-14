@@ -6,13 +6,30 @@
 //
 
 import SwiftUI
+import MarkdownWebView
 
+#if os(iOS)
 struct TextSelectionView: View {
+    @Environment(\.dismiss) var dismiss
+    var content: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            ScrollView {
+                MarkdownWebView(content)
+            }
+            .padding()
+            .navigationTitle("Select Text")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+        
     }
 }
-
-#Preview {
-    TextSelectionView()
-}
+#endif

@@ -32,7 +32,7 @@ struct ContentView: View {
             }
         }
         .background(.background)
-        .accentColor(viewModel.selectedDialogue?.configuration.provider.accentColor ?? .accentColor)
+//        .accentColor(viewModel.selectedDialogue?.configuration.provider.accentColor ?? .accentColor)
         .task {
             viewModel.fetchDialogueData()
         }

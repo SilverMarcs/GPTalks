@@ -12,6 +12,7 @@ struct MessageContextMenu: View {
     var showText: Bool = false
     
     let editHandler: () -> Void
+    let toggleTextSelection: () -> Void
     
     var body: some View {
         Group {
@@ -45,6 +46,17 @@ struct MessageContextMenu: View {
                     Text("Copy")
                 }
             }
+            
+            #if os(iOS)
+            Button {
+                toggleTextSelection()
+            } label: {
+                Image(systemName: "textformat")
+                if showText {
+                    Text("Select Text")
+                }
+            }
+            #endif
 
             #if os(macOS)
             Menu {
@@ -61,6 +73,7 @@ struct MessageContextMenu: View {
         }
         .buttonStyle(.plain)
     }
+    
     
     @ViewBuilder
     var extraButtons: some View {
