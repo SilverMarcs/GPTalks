@@ -43,14 +43,14 @@ struct AssistantMessageView: View {
         .padding(.trailing, horizontalPadding)
         #if os(iOS)
             .contextMenu {
-                ContextMenu(session: session, conversation: conversation, showText: true) {}
+                MessageContextMenu(session: session, conversation: conversation, showText: true) {}
             }
         #endif
     }
     
     var optionsMenu: some View {
         AdaptiveStack(isHorizontal: conversation.content.count < 350) {
-           ContextMenu(session: session, conversation: conversation) { }
+            MessageContextMenu(session: session, conversation: conversation) { }
         }
         .opacity(isHovered ? 1 : 0)
         .transition(.opacity)

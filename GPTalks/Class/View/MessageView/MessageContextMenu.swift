@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-struct ContextMenu: View {
+struct MessageContextMenu: View {
     @ObservedObject var session: DialogueSession
     var conversation: Conversation
     var showText: Bool = false

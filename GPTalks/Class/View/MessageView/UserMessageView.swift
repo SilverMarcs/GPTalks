@@ -49,7 +49,7 @@ struct UserMessageView: View {
         }
         #if os(iOS)
         .contextMenu {
-            ContextMenu(session: session, conversation: conversation, showText: true) {
+            MessageContextMenu(session: session, conversation: conversation, showText: true) {
                 editingMessage = conversation.content
                 isEditing = true
             }
@@ -59,7 +59,7 @@ struct UserMessageView: View {
     
     var optionsMenu: some View {
         AdaptiveStack(isHorizontal: conversation.content.count < 350) {
-                ContextMenu(session: session, conversation: conversation) {
+            MessageContextMenu(session: session, conversation: conversation) {
                     editingMessage = conversation.content
                     isEditing = true
                 }
