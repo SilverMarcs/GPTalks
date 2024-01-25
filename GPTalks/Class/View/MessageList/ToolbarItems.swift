@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ToolbarItems: ToolbarContent {
-    @ObservedObject var session: DialogueSession
+    @Bindable var session: DialogueSession
     
     @State var isShowSettingsView: Bool = false
     

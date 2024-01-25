@@ -9,9 +9,10 @@ import SwiftUI
 
 #if os(macOS)
 struct MacOSMessages: View {
-    @EnvironmentObject var viewModel: DialogueViewModel
+//    @EnvironmentObject var viewModel: DialogueViewModel
+    @Environment(DialogueViewModel.self) private var viewModel
 
-    @ObservedObject var session: DialogueSession
+    var session: DialogueSession
 
     @State private var previousContent: String?
     @State private var isUserScrolling = false

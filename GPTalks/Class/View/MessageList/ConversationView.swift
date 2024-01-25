@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ConversationView: View {
-    @ObservedObject var session: DialogueSession
+    var session: DialogueSession
     var conversation: Conversation
     
     var body : some View {

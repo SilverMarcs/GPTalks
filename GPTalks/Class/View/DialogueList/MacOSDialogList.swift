@@ -9,7 +9,9 @@ import SwiftUI
 
 
 struct MacOSDialogList: View {
-    @EnvironmentObject var viewModel: DialogueViewModel
+//    @EnvironmentObject var viewModel: DialogueViewModel
+//    @Environment(DialogueViewModel.self) private var viewModel
+    @Bindable var viewModel: DialogueViewModel
     
     var body: some View {
         Group {

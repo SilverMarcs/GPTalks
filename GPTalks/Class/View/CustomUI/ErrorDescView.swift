@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ErrorDescView: View {
-    @ObservedObject var session: DialogueSession
+    var session: DialogueSession
     
     var body: some View {
         VStack(spacing: 15) {

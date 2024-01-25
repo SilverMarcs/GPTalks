@@ -11,9 +11,10 @@
 
     struct iOSMessages: View {
         @Environment(\.colorScheme) var colorScheme
-        @EnvironmentObject var viewModel: DialogueViewModel
-
-        @ObservedObject var session: DialogueSession
+//        @EnvironmentObject var viewModel: DialogueViewModel
+        @Environment(DialogueViewModel.self) private var viewModel
+//        @ObservedObject var session: DialogueSession
+        var session: DialogueSession
 
         @State private var previousCount: Int = 0
         @State private var didUserTap: Bool = false

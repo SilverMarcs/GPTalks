@@ -9,13 +9,15 @@
     import SwiftUI
 
     struct IOSDialogList: View {
-        @EnvironmentObject var viewModel: DialogueViewModel
+//        @EnvironmentObject var viewModel: DialogueViewModel
+        @Bindable var viewModel: DialogueViewModel
+        
         @State var isShowSettingView = false
 
         var body: some View {
             list
                 .listStyle(.inset)
-                .searchable(text: $viewModel.searchText)
+//                .searchable(text: $viewModel.searchText)
                 .navigationTitle("Sessions")
                 .sheet(isPresented: $isShowSettingView) {
                     AppSettingsView()
@@ -49,7 +51,7 @@
             if viewModel.dialogues.isEmpty {
                 PlaceHolderView(imageName: "message.fill", title: "No Messages Yet")
             } else {
-                List(viewModel.filteredDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
+                List(viewModel.dialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
                     DialogueListItem(session: session)
                 }
             }

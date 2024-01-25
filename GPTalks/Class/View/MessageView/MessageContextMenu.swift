@@ -7,7 +7,7 @@
 
 import SwiftUI
 struct MessageContextMenu: View {
-    @ObservedObject var session: DialogueSession
+    var session: DialogueSession
     var conversation: Conversation
     var showText: Bool = false
     
@@ -20,7 +20,7 @@ struct MessageContextMenu: View {
                 Button {
                     editHandler()
                 } label: {
-                    Image(systemName: "pencil.tip")
+                    Image(systemName: "pencil")
                     if showText {
                         Text("Edit")
                     }

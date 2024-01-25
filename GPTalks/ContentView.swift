@@ -9,14 +9,15 @@ import CoreData
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var viewModel: DialogueViewModel
+//    @EnvironmentObject var viewModel: DialogueViewModel
+    @Environment(DialogueViewModel.self) private var viewModel
 
     var body: some View {
         NavigationSplitView {
             #if os(macOS)
-                MacOSDialogList()
+                MacOSDialogList(viewModel: viewModel)
             #else
-                IOSDialogList()
+                IOSDialogList(viewModel: viewModel)
             #endif
         } detail: {
             if let selectedDialogue = viewModel.selectedDialogue {

@@ -9,13 +9,16 @@ import SwiftUI
 
 @main
 struct GPTalks: App {
-    @StateObject private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
+//    @StateObject private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
+    // TODO chaneg back to stateobject if needed
+    @State private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
     
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .environmentObject(viewModel)
+//        .environmentObject(viewModel)
+        .environment(viewModel)
         .commands {
             CommandMenu("Session") {
                 Section {

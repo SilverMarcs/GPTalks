@@ -9,10 +9,10 @@ import Combine
 import CoreData
 import SwiftUI
 
-class DialogueViewModel: ObservableObject {
+@Observable class DialogueViewModel {
     private let viewContext: NSManagedObjectContext
 
-    @Published var allDialogues: [DialogueSession] = [] {
+    var allDialogues: [DialogueSession] = [] {
         didSet {
             if isArchivedSelected {
                 dialogues = allDialogues.filter { $0.isArchive }
@@ -22,25 +22,25 @@ class DialogueViewModel: ObservableObject {
         }
     }
 
-    @Published var dialogues: [DialogueSession] = []
+    var dialogues: [DialogueSession] = []
 
-    @Published var isArchivedSelected: Bool = false
+    var isArchivedSelected: Bool = false
 
-    @Published var searchText: String = ""
-    @Published var filteredDialogues: [DialogueSession] = []
-    @Published var selectedDialogue: DialogueSession?
+//    var searchText: String = ""
+//    var filteredDialogues: [DialogueSession] = []
+    var selectedDialogue: DialogueSession?
 
     init(context: NSManagedObjectContext) {
         viewContext = context
         fetchDialogueData()
 
-        Publishers.CombineLatest($dialogues, $searchText)
-            .map { dialogues, searchText in
-                searchText.isEmpty ? dialogues : dialogues.filter { dialogue in
-                    dialogue.title.localizedCaseInsensitiveContains(searchText)
-                }
-            }
-            .assign(to: &$filteredDialogues)
+//        Publishers.CombineLatest(dialogues, $searchText)
+//            .map { dialogues, searchText in
+//                searchText.isEmpty ? dialogues : dialogues.filter { dialogue in
+//                    dialogue.title.localizedCaseInsensitiveContains(searchText)
+//                }
+//            }
+//            .assign(to: &$filteredDialogues)
     }
 
     func fetchDialogueData(firstTime: Bool = true) {

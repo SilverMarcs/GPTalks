@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BottomInputView: View {
-    @ObservedObject var session: DialogueSession
+    @Bindable var session: DialogueSession
     @State var isShowClearMessagesAlert = false
     
     @FocusState var focused: Bool

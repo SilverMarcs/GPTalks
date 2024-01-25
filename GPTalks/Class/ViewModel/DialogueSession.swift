@@ -8,7 +8,7 @@
 import OpenAI
 import SwiftUI
 
-class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Codable {
+@Observable class DialogueSession: Identifiable, Equatable, Hashable, Codable {
     struct Configuration: Codable {
         var temperature: Double
         var systemPrompt: String
@@ -69,32 +69,32 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
 
     // MARK: - State
 
-    @Published var input: String = ""
-    @Published var title: String = "New Chat" {
+    var input: String = ""
+    var title: String = "New Chat" {
         didSet {
             save()
         }
     }
 
-    @Published var conversations: [Conversation] = [] {
+    var conversations: [Conversation] = [] {
         didSet {
             save()
         }
     }
 
-    @Published var date = Date()
-    @Published var errorDesc: String = ""
-    @Published var configuration: Configuration = Configuration() {
+    var date = Date()
+    var errorDesc: String = ""
+    var configuration: Configuration = Configuration() {
         didSet {
             save()
         }
     }
 
-    @Published var resetMarker: Int?
+    var resetMarker: Int?
     
-    @Published var isArchive = false
+    var isArchive = false
     
-    @Published var isAddingConversation = false
+    var isAddingConversation = false
 
     private var initFinished = false
     private var isStreaming = false
@@ -162,7 +162,7 @@ class DialogueSession: ObservableObject, Identifiable, Equatable, Hashable, Coda
         save()
     }
 
-    @MainActor
+//    @MainActor
     func stopStreaming() {
         if let lastConcersationContent = lastConcersationContent {
             if lastConcersationContent.isEmpty {
@@ -466,7 +466,7 @@ extension DialogueSession {
         }
     }
 
-    @MainActor
+//    @MainActor
     func removeConversation(_ conversation: Conversation) {
         guard let index = conversations.firstIndex(where: { $0.id == conversation.id }) else {
             return
@@ -479,6 +479,7 @@ extension DialogueSession {
         }
     }
 
+//    @MainActor
     func removeConversations(from index: Int) {
         guard index < conversations.count else {
             print("Index out of range")
