@@ -47,7 +47,7 @@ struct UserMessageView: View {
         .padding(.vertical, 2)
         .padding(.leading, horizontalPadding)
         .sheet(isPresented: $isEditing) {
-            editingView
+            EditingView(editingMessage: $editingMessage, isEditing: $isEditing, session: session, conversation: conversation)
         }
 #if os(iOS)
         .sheet(isPresented: $canSelectText) {
@@ -79,70 +79,6 @@ struct UserMessageView: View {
         .animation(.easeOut(duration: 0.15), value: isHovered)
     }
 
-    var editingView: some View {
-        #if os(macOS)
-            VStack(spacing: 15) {
-                TextEditor(text: $editingMessage)
-                    .padding(10)
-                    .font(.body)
-                    .background(.background.secondary)
-                    .scrollContentBackground(.hidden)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 7, style: .continuous)
-                            .stroke(Color.secondary, lineWidth: 0.3)
-                    )
-
-                editControls
-            }
-            .padding()
-            .frame(minWidth: 400, idealWidth: 550, maxWidth: 800, minHeight: 200, idealHeight: 400, maxHeight: 600)
-        #else
-            NavigationView {
-                Form {
-                    TextField("Editing Message", text: $editingMessage, axis: .vertical)
-                }
-                .navigationBarTitle("Editing Message")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Cancel", role: .cancel) {
-                            isEditing = false
-                        }
-                        .foregroundStyle(.primary)
-                    }
-
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("Update") {
-                            Task { @MainActor in
-                                await session.edit(conversation: conversation, editedContent: editingMessage)
-                            }
-                            isEditing = false
-                        }
-                    }
-                }
-            }
-            .presentationDetents([.medium])
-        #endif
-    }
-
-    var editControls: some View {
-        HStack {
-            Button("Cancel") {
-                isEditing = false
-            }
-            .keyboardShortcut(.escape, modifiers: .command)
-
-            Spacer()
-
-            Button("Update") {
-                Task { @MainActor in
-                    await session.edit(conversation: conversation, editedContent: editingMessage)
-                }
-                isEditing = false
-            }
-            .keyboardShortcut(.return, modifiers: .command)
-        }
-    }
 
     private var horizontalPadding: CGFloat {
         #if os(iOS)

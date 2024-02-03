@@ -91,6 +91,7 @@ struct BottomInputView: View {
         .disabled(session.conversations.isEmpty || session.isReplying())
         .rotationEffect(.degrees(135))
         .padding(.horizontal, -2)
+        .contentShape(Rectangle())
     }
 
     @ViewBuilder
@@ -133,6 +134,7 @@ struct BottomInputView: View {
         .buttonStyle(.plain)
         .disabled(session.input.isEmpty || session.isReplying())
         .fontWeight(session.input.isEmpty ? .regular : .semibold)
+        .contentShape(Rectangle())
     }
 
     @ViewBuilder

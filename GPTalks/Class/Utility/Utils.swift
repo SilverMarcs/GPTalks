@@ -33,6 +33,7 @@ func scrollToBottom(proxy: ScrollViewProxy, id: String = "bottomID", anchor: Uni
    if delay > 0 {
        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: action)
    } else {
-       DispatchQueue.main.async(execute: action)
+//       DispatchQueue.main.async(execute: action)
+       action()
    }
 }

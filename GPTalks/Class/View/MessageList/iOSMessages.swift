@@ -11,42 +11,54 @@
 
     struct iOSMessages: View {
         @Environment(\.colorScheme) var colorScheme
-//        @EnvironmentObject var viewModel: DialogueViewModel
         @Environment(DialogueViewModel.self) private var viewModel
-//        @ObservedObject var session: DialogueSession
+
         var session: DialogueSession
 
-        @State private var previousCount: Int = 0
         @State private var didUserTap: Bool = false
+        @State private var showScrollButton: Bool = false
 
         @FocusState var isTextFieldFocused: Bool
 
         var body: some View {
             ScrollViewReader { proxy in
-                // TODO: see if can use List view here
-                ScrollView {
-                    Group {
+                ZStack(alignment: .bottomTrailing) {
+                    ScrollView {
                         ForEach(session.conversations) { conversation in
                             ConversationView(session: session, conversation: conversation)
-                                .padding(.horizontal)
                         }
-                        
-                        if session.errorDesc != "" {
-                            ErrorDescView(session: session)
-                                .padding()
-                        }
-                        
+                        .padding(.horizontal, 10)
+
+                        ErrorDescView(session: session)
+
                         Spacer()
                             .id("bottomID")
+                            .onAppear {
+                                showScrollButton = false
+                            }
+                            .onDisappear {
+                                showScrollButton = true
+                            }
+
+                        GeometryReader { geometry in
+                            Color.clear.preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
+                        }
+                        .frame(height: 1)
                     }
-                    .padding(.vertical)
+                    scrollBtn(proxy: proxy)
                 }
-                .onTapGesture {
-                    didUserTap = true
-                    isTextFieldFocused = false
+                .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+                    let bottomReached = value > UIScreen.main.bounds.height
+                    didUserTap = bottomReached
+                    showScrollButton = bottomReached
                 }
+                .scrollDismissesKeyboard(.immediately)
+                .listStyle(.plain)
                 .onAppear {
                     scrollToBottom(proxy: proxy, animated: false)
+                }
+                .onTapGesture {
+                    isTextFieldFocused = false
                 }
                 .onChange(of: isTextFieldFocused) {
                     if !isTextFieldFocused {
@@ -71,6 +83,9 @@
                 .onChange(of: session.conversations.count) {
                     didUserTap = false
                 }
+                .onChange(of: session.isAddingConversation) {
+                    scrollToBottom(proxy: proxy)
+                }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
@@ -90,5 +105,31 @@
                 ToolbarItems(session: session)
             }
         }
+
+        private func scrollBtn(proxy: ScrollViewProxy) -> some View {
+            Button {
+                scrollToBottom(proxy: proxy)
+            } label: {
+                Image(systemName: "arrow.down.circle.fill")
+                    .resizable()
+                    .frame(width: 32, height: 32)
+                    .foregroundStyle(.ultraThickMaterial)
+                    .background(Color.primary.opacity(0.8))
+                    .shadow(radius: 3)
+                    .clipShape(Circle())
+                    .padding(.bottom, 15)
+                    .padding(.trailing, 15)
+            }
+            .opacity(showScrollButton ? 1 : 0)
+//            .animation(.interactiveSpring, value: showScrollButton)
+        }
     }
 #endif
+
+struct ScrollOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}

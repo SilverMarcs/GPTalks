@@ -31,7 +31,7 @@ struct MessageContextMenu: View {
                         await session.regenerate(from: conversation)
                     }
                 } label: {
-                    Image(systemName: "arrow.clockwise")
+                    Image(systemName: "arrow.2.circlepath")
                     if showText {
                         Text("Regenerate")
                     }

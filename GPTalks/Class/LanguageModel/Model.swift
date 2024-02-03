@@ -12,9 +12,11 @@ enum Model: String, Codable {
     /// openai
     case gpt3
     case gpt4
+    case gpt4t
+    case gpt4x
 
     /// openrouter
-    case orzephyr
+    case ortoppy
     case orphind
     case orperplexity
     case orgemini
@@ -35,10 +37,14 @@ enum Model: String, Codable {
             "GPT-3.5"
         case .gpt4:
             "GPT-4"
+        case .gpt4t:
+            "GPT-4T"
+        case .gpt4x:
+            "GPT-4X"
         case .phind, .orphind:
             "Phind"
-        case .orzephyr:
-            "Zephyr"
+        case .ortoppy:
+            "Toppy"
         case .orperplexity:
             "Perplexity"
         case .ngemini, .orgemini:
@@ -49,18 +55,21 @@ enum Model: String, Codable {
             "Dolphin"
         case .bing:
             "Bing"
-
         }
     }
 
     var id: String {
         switch self {
         case .gpt3:
-            "gpt-3.5-turbo-1106"
+            "gpt-3.5-turbo-0125"
         case .gpt4:
+            "gpt-4"
+        case .gpt4t:
             "gpt-4-1106-preview"
-        case .orzephyr:
-            "huggingfaceh4/zephyr-7b-beta"
+        case .gpt4x:
+            "gpt-4-0125-preview"
+        case .ortoppy:
+            "undi95/toppy-m-7b:free"
         case .orperplexity:
             "perplexity/pplx-7b-online"
         case .orphind:
@@ -86,18 +95,20 @@ enum Model: String, Codable {
         [
             .gpt3,
             .gpt4,
+            .gpt4t,
+            .gpt4x,
         ]
     static let openRouterModels: [Model] =
         [
-            .orzephyr,
+            .ortoppy,
             .orperplexity,
             .orphind,
-            .orgemini,
-            .ordolphin,
+//            .orgemini,
+//            .ordolphin,
         ]
-    static let nagaModels: [Model] = 
+    static let nagaModels: [Model] =
         openAIModels + [
-            .ngemini, 
+            .ngemini,
             .nmixtral,
         ]
     static let mandrilModels: [Model] = openAIModels

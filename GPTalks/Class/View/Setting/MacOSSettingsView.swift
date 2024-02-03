@@ -34,7 +34,7 @@ struct ProviderSettingsView: View {
                     label: { provider.settingsLabel }
                 )
             }
-            .listStyle(.sidebar)
+            .listStyle(.inset)
         }
     }
 }

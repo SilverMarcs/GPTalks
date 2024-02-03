@@ -37,10 +37,7 @@ struct MacOSMessages: View {
                     .opacity(0)
                     .frame(width: 1, height: 1)
                     
-                    if session.errorDesc != "" {
-                        ErrorDescView(session: session)
-                            .padding()
-                    }
+                    ErrorDescView(session: session)
                 }
                 .id("bottomID")
             }

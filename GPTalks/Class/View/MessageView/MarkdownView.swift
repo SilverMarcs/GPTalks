@@ -17,7 +17,7 @@ struct MarkdownView: View {
 
     var body: some View {
         #if os(iOS)
-        Markdown(MarkdownContent(text))
+        Markdown(text)
             .markdownCodeSyntaxHighlighter(.splash(theme: theme))
             .markdownBlockStyle(\.codeBlock) {
                 CodeBlock(configuration: $0)
@@ -51,13 +51,14 @@ struct MarkdownView: View {
 
                 copyButton
                     .padding(5)
-                
             }
+            #if os(macOS)
             .onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.2)) {
                     isHovered = hovering
                 }
             }
+            #endif
         }
 
         var copyButton: some View {
