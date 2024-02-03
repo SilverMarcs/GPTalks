@@ -23,12 +23,14 @@ struct BottomInputView: View {
             if session.isReplying() {
                 stopButton
             } else {
+//                regenButton
                 sendButton
             }
         }
         .padding(.horizontal)
         #if os(iOS)
-        .padding(.vertical, verticalPadding)
+        .padding(.top, verticalPadding)
+        .padding(.bottom, verticalPadding + 3)
         #else
         .padding(.top, verticalPadding)
         .padding(.bottom, verticalPadding + 3)
@@ -49,7 +51,7 @@ struct BottomInputView: View {
     
     private var verticalPadding: CGFloat {
         #if os(iOS)
-        return 11
+        return 6
         #else
         return 13
         #endif
@@ -83,7 +85,7 @@ struct BottomInputView: View {
             #if os(macOS)
                 .frame(width: imageSize + 1, height: imageSize + 1)
             #else
-                .frame(width: imageSize, height: imageSize)
+                .frame(width: imageSize - 1, height: imageSize - 1)
             #endif
         }
         .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
@@ -127,7 +129,7 @@ struct BottomInputView: View {
                 .disabled(empty)
 //                .foregroundColor(empty ? .secondary : session.configuration.provider.accentColor)
                 .foregroundColor(empty ? .secondary : .accentColor)
-                .frame(width: imageSize + 1, height: imageSize + 1)
+                .frame(width: imageSize, height: imageSize)
         }
         .keyboardShortcut(.return, modifiers: .command)
         .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
@@ -145,7 +147,7 @@ struct BottomInputView: View {
             Image(systemName: "stop.circle.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageSize + 1, height: imageSize + 1)
+                .frame(width: imageSize, height: imageSize)
                 .foregroundColor(.red)
         }
         .keyboardShortcut("d", modifiers: .command)
@@ -206,7 +208,7 @@ struct BottomInputView: View {
         #if os(macOS)
             20
         #else
-            29
+            27
         #endif
     }
     

@@ -29,7 +29,13 @@
                         }
                         .padding(.horizontal, 10)
 
-                        ErrorDescView(session: session)
+                        if session.errorDesc != "" {
+                            ErrorDescView(session: session)
+                                .padding()
+                                .onAppear {
+                                    scrollToBottom(proxy: proxy)
+                                }
+                        }
 
                         Spacer()
                             .id("bottomID")
@@ -96,7 +102,7 @@
                     isTextFieldFocused = true
                 }
                 .background(
-                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.8, blurRadius: 18, scale: 1)
+                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
                         .ignoresSafeArea()
                 )
             }
@@ -124,7 +130,6 @@
 //            .animation(.interactiveSpring, value: showScrollButton)
         }
     }
-#endif
 
 struct ScrollOffsetPreferenceKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
@@ -133,3 +138,6 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
         value = nextValue()
     }
 }
+
+#endif
+

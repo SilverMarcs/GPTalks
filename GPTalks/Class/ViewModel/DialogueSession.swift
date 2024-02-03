@@ -195,6 +195,15 @@ import SwiftUI
             self?.removeAllConversations()
         }
     }
+    
+    @MainActor
+    func retry() async {
+        if lastConversation.content.isEmpty {
+            removeConversations(from: conversations.count - 1)
+        }
+        
+        await send(text: lastConversation.content, isRetry: true)
+    }
 
     @MainActor
     func regenerateLastMessage() async {
@@ -232,11 +241,6 @@ import SwiftUI
             removeConversations(from: index)
             await send(text: editedContent)
         }
-    }
-
-    @MainActor
-    func retry() async {
-        await send(text: lastConversation.content, isRetry: true)
     }
 
     @MainActor

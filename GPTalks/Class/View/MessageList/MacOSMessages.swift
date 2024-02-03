@@ -9,7 +9,6 @@ import SwiftUI
 
 #if os(macOS)
 struct MacOSMessages: View {
-//    @EnvironmentObject var viewModel: DialogueViewModel
     @Environment(DialogueViewModel.self) private var viewModel
 
     var session: DialogueSession
@@ -37,7 +36,13 @@ struct MacOSMessages: View {
                     .opacity(0)
                     .frame(width: 1, height: 1)
                     
-                    ErrorDescView(session: session)
+                    if session.errorDesc != "" {
+                        ErrorDescView(session: session)
+                            .padding()
+                            .onAppear {
+                                scrollToBottom(proxy: proxy)
+                            }
+                    }
                 }
                 .id("bottomID")
             }
