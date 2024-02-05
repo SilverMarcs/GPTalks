@@ -20,27 +20,46 @@ struct MacOSMessages: View {
     @FocusState var isTextFieldFocused: Bool
 
     var body: some View {
-        ScrollViewReader { proxy in           
-            List {
-//                ForEach(Array(session.conversations.chunked(into: 10).enumerated()), id: \.offset) { index, chunk in
-                ForEach(Array(session.conversations.chunked(fromEndInto: 10).enumerated()), id: \.offset) { index, chunk in
-                    VStack {
-                        ForEach(chunk, id: \.self) { conversation in
-                            ConversationView(session: session, conversation: conversation)
+        ScrollViewReader { proxy in
+            Group {
+                if !AppConfiguration.shared.alternateMarkdown {
+                    List {
+                        ForEach(Array(session.conversations.chunked(fromEndInto: 10).enumerated()), id: \.offset) { index, chunk in
+                            VStack {
+                                ForEach(chunk, id: \.self) { conversation in
+                                    ConversationView(session: session, conversation: conversation)
+                                }
+                            }
+                            .listRowSeparator(.hidden)
                         }
+                        
+                        DeleteBtn(proxy: proxy)
+                            .opacity(0)
+                        
+                        ErrorDescView(session: session)
+                            .listRowSeparator(.hidden)
+                        
+                        Spacer()
+                            .listRowSeparator(.hidden)
+                            .id("bottomID")
                     }
-                    .listRowSeparator(.hidden)
+                } else {
+                    List {
+                        VStack {
+                            ForEach(session.conversations) { conversation in
+                                ConversationView(session: session, conversation: conversation)
+                            }
+                            .listRowSeparator(.hidden)
+                            
+                            DeleteBtn(proxy: proxy)
+                                .opacity(0)
+                            
+                            ErrorDescView(session: session)
+                                .listRowSeparator(.hidden)
+                        }
+                        .id("bottomID")
+                    }
                 }
-                
-                DeleteBtn(proxy: proxy)
-                    .opacity(0)
-                
-                ErrorDescView(session: session)
-                    .listRowSeparator(.hidden)
-                
-                Spacer()
-                    .listRowSeparator(.hidden)
-                    .id("bottomID")
             }
             .background(.background)
             .navigationTitle(session.title)

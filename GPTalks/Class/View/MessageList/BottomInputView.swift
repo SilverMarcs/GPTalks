@@ -39,7 +39,8 @@ struct BottomInputView: View {
         }
         .buttonStyle(.plain)
         .padding(.horizontal)
-        .padding(.vertical, verticalPadding)
+        .padding(.top, verticalPadding)
+        .padding(.bottom, verticalPadding + 3)
     }
     
     private var verticalPadding: CGFloat {
