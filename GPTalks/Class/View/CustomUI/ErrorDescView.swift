@@ -11,17 +11,30 @@ struct ErrorDescView: View {
     var session: DialogueSession
 
     var body: some View {
-        VStack(spacing: 15) {
-            Text(session.errorDesc)
-                .textSelection(.enabled)
-                .foregroundStyle(.red)
-            Button("Retry") {
-                Task { @MainActor in
-                    await session.retry()
+        if session.errorDesc != "" {
+            VStack(spacing: 15) {
+                HStack {
+                    Text(session.errorDesc)
+                        .textSelection(.enabled)
+                        .foregroundStyle(.red)
+                    
+                    Button(role: .destructive) {
+                        session.resetErrorDesc()
+                    } label: {
+                        Image(systemName: "delete.backward")
+                            .foregroundColor(.red)
+                    }
+                    .buttonStyle(.plain)
                 }
+                Button("Retry") {
+                    Task { @MainActor in
+                        await session.retry()
+                    }
+                }
+                .keyboardShortcut("r", modifiers: .command)
+                .clipShape(.capsule(style: .circular))
             }
-            .keyboardShortcut("r", modifiers: .command)
-            .clipShape(.capsule(style: .circular))
+            .padding()
         }
     }
 }

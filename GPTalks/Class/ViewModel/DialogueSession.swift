@@ -135,7 +135,6 @@ import SwiftUI
 
     func removeResetContextMarker() {
         resetMarker = nil
-
         save()
     }
 
@@ -187,13 +186,6 @@ import SwiftUI
     func rename(newTitle: String) {
         title = newTitle
         save()
-    }
-
-    @MainActor
-    func clearMessages() {
-        withAnimation { [weak self] in
-            self?.removeAllConversations()
-        }
     }
     
     @MainActor
@@ -508,7 +500,8 @@ extension DialogueSession {
     }
 
     func removeAllConversations() {
-        resetMarker = nil
+        removeResetContextMarker()
+        resetErrorDesc()
         conversations.removeAll()
 
         do {

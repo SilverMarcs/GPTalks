@@ -22,27 +22,14 @@ struct MacOSMessages: View {
     var body: some View {
         ScrollViewReader { proxy in
             List {
-                VStack {
+                LazyVStack {
                     ForEach(session.conversations) { conversation in
                         ConversationView(session: session, conversation: conversation)
                     }
                     
-                    Button("hidden") {
-                        if let lastConversation = session.conversations.last {
-                            session.removeConversation(lastConversation)
-                        }
-                    }
-                    .keyboardShortcut(.delete, modifiers: .command)
-                    .opacity(0)
-                    .frame(width: 1, height: 1)
+                    DeleteBtn(proxy: proxy)
                     
-                    if session.errorDesc != "" {
-                        ErrorDescView(session: session)
-                            .padding()
-                            .onAppear {
-                                scrollToBottom(proxy: proxy)
-                            }
-                    }
+                    ErrorDescView(session: session)
                 }
                 .id("bottomID")
             }
@@ -91,8 +78,22 @@ struct MacOSMessages: View {
                     scrollToBottom(proxy: proxy)
                 }
             }
+            .onChange(of: session.errorDesc) {
+                scrollToBottom(proxy: proxy)
+            }
 //            Spacer() // enable this to change toolbar color
         }
+    }
+    
+    private func DeleteBtn(proxy: ScrollViewProxy) -> some View {
+        Button("hidden") {
+            if let lastConversation = session.conversations.last {
+                session.removeConversation(lastConversation)
+            }
+        }
+        .keyboardShortcut(.delete, modifiers: .command)
+        .opacity(0)
+        .frame(width: 1, height: 1) 
     }
 }
 #endif

@@ -29,29 +29,17 @@
                         }
                         .padding(.horizontal, 10)
 
-                        if session.errorDesc != "" {
-                            ErrorDescView(session: session)
-                                .padding()
-                                .onAppear {
-                                    scrollToBottom(proxy: proxy)
-                                }
-                        }
+                        ErrorDescView(session: session)
 
-                        Spacer()
-                            .id("bottomID")
-                            .onAppear {
-                                showScrollButton = false
-                            }
-                            .onDisappear {
-                                showScrollButton = true
-                            }
+                        ScrollSpacer
 
                         GeometryReader { geometry in
                             Color.clear.preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
                         }
-                        .frame(height: 1)
                     }
+                    
                     scrollBtn(proxy: proxy)
+                    
                 }
                 .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                     let bottomReached = value > UIScreen.main.bounds.height
@@ -80,6 +68,9 @@
                     if session.resetMarker == session.conversations.count - 1 {
                         scrollToBottom(proxy: proxy)
                     }
+                }
+                .onChange(of: session.errorDesc) {
+                    scrollToBottom(proxy: proxy)
                 }
                 .onChange(of: session.conversations.last?.content) {
                     if !didUserTap {
@@ -110,6 +101,17 @@
             .toolbar {
                 ToolbarItems(session: session)
             }
+        }
+        
+        private var ScrollSpacer: some View {
+            Spacer()
+                .id("bottomID")
+                .onAppear {
+                    showScrollButton = false
+                }
+                .onDisappear {
+                    showScrollButton = true
+                }
         }
 
         private func scrollBtn(proxy: ScrollViewProxy) -> some View {
