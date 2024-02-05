@@ -16,19 +16,19 @@ struct MarkdownView: View {
     var text: String
 
     var body: some View {
-        #if os(iOS)
-        Markdown(text)
-            .markdownCodeSyntaxHighlighter(.splash(theme: theme))
-            .markdownBlockStyle(\.codeBlock) {
-                CodeBlock(configuration: $0)
+        if AppConfiguration.shared.alternateMarkdown {
+            if text.isEmpty {
+                EmptyView()
+            } else {
+                MarkdownWebView(text)
             }
-        #else
-        if text.isEmpty {
-            EmptyView()
         } else {
-            MarkdownWebView(text)
+            Markdown(text)
+                .markdownCodeSyntaxHighlighter(.splash(theme: theme))
+                .markdownBlockStyle(\.codeBlock) {
+                    CodeBlock(configuration: $0)
+                }
         }
-        #endif
     }
 
     struct CodeBlock: View {
@@ -76,11 +76,15 @@ struct MarkdownView: View {
                 .contentShape(Rectangle())
             }
             .foregroundStyle(.primary)
+#if os(macOS)
             .background(
-                .background.secondary,
+                .background.tertiary,
                 in: RoundedRectangle(cornerRadius: 5, style: .continuous)
             )
-            #if os(macOS)
+            .overlay {
+                RoundedRectangle(cornerRadius: 5, style: .continuous)
+                    .stroke(.quaternary, lineWidth: 0.6)
+            }
             .opacity((isHovered || isButtonPressed) ? 1 : 0)
             #endif
             .buttonStyle(.borderless)

@@ -35,6 +35,8 @@ struct ErrorDescView: View {
                 .clipShape(.capsule(style: .circular))
             }
             .padding()
+        } else {
+            EmptyView()
         }
     }
 }

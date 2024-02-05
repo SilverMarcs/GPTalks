@@ -26,6 +26,12 @@ struct DefaultConfigView: View {
                     .padding(paddingValue)
 
                     Divider()
+                    
+                    LabeledPicker(title: "Alternate Markdown", width: widthValue, picker: alternateMarkdownEnabler)
+                    .padding(paddingValue)
+                    .disabled(!configuration.isMarkdownEnabled)
+
+                    Divider()
  
                     LabeledPicker(title: "Preferred Provider", width: widthValue, picker: preferredProvider)
                     .padding(paddingValue)
@@ -79,6 +85,13 @@ struct DefaultConfigView: View {
     
     var markdownEnabler: some View {
         Picker("Markdown Enabled", selection: configuration.$isMarkdownEnabled) {
+            Text("True").tag(true)
+            Text("False").tag(false)
+        }
+    }
+    
+    var alternateMarkdownEnabler: some View {
+        Picker("Markdown Enabled", selection: configuration.$alternateMarkdown) {
             Text("True").tag(true)
             Text("False").tag(false)
         }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 #if os(iOS)
-struct AppSettingsView: View {
+struct IosSettingsView: View {
     @ObservedObject var configuration: AppConfiguration = AppConfiguration.shared
     @Environment(\.dismiss) var dismiss
     
@@ -24,6 +24,15 @@ struct AppSettingsView: View {
                         Spacer()
                         Toggle("Markdown Enabled", isOn: $configuration.isMarkdownEnabled)
                     }
+                    
+                    HStack {
+                        Image(systemName: "note.text")
+                            .renderingMode(.original)
+                        Spacer()
+                        Toggle("Alternate Markdown", isOn: $configuration.alternateMarkdown)
+                    }
+                    .disabled(!configuration.isMarkdownEnabled)
+                    
                     HStack {
                         Image(systemName: "building.2.fill")
                             .renderingMode(.original)

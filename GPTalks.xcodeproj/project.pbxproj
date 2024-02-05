@@ -22,6 +22,7 @@
 		085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Utils.swift */; };
 		085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */; };
 		085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* Provider.swift */; };
+		086CDAD42B70C25A00698A87 /* FilePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 086CDAD32B70C25A00698A87 /* FilePicker */; };
 		086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */; };
 		0878E53B2B1683ED00E0D79D /* AppIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0878E53A2B1683ED00E0D79D /* AppIconView.swift */; };
 		087AC1982B6D40A7006B9386 /* EditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087AC1972B6D40A7006B9386 /* EditingView.swift */; };
@@ -51,7 +52,7 @@
 		E4C65EEE29CA9F7800AFA884 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65ED429CA9F7800AFA884 /* Conversation.swift */; };
 		E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */; };
 		E4C65EF329CA9F7800AFA884 /* ReplyingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDB29CA9F7800AFA884 /* ReplyingIndicatorView.swift */; };
-		E4C65EF629CA9F7800AFA884 /* AppSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */; };
+		E4C65EF629CA9F7800AFA884 /* IosSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDE29CA9F7800AFA884 /* IosSettingsView.swift */; };
 		E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EEB29CA9F7800AFA884 /* Splash.swift */; };
 		E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F0D29CAA06600AFA884 /* Splash */; };
 		E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F1029CAA08400AFA884 /* MarkdownUI */; };
@@ -121,7 +122,7 @@
 		E4C65ED429CA9F7800AFA884 /* Conversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		E4C65EDB29CA9F7800AFA884 /* ReplyingIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplyingIndicatorView.swift; sourceTree = "<group>"; };
-		E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsView.swift; sourceTree = "<group>"; };
+		E4C65EDE29CA9F7800AFA884 /* IosSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IosSettingsView.swift; sourceTree = "<group>"; };
 		E4C65EEB29CA9F7800AFA884 /* Splash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Splash.swift; sourceTree = "<group>"; };
 		E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomInputView.swift; sourceTree = "<group>"; };
 		E4C65F1F29D0649800AFA884 /* DialogueSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueSettingsView.swift; sourceTree = "<group>"; };
@@ -133,6 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				086CDAD42B70C25A00698A87 /* FilePicker in Frameworks */,
 				083E3B162B3A6648007BE19E /* OpenAI in Frameworks */,
 				083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */,
 				E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */,
@@ -183,7 +185,7 @@
 		E4994DF029DA8AF8002981D0 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				E4C65EDE29CA9F7800AFA884 /* AppSettingsView.swift */,
+				E4C65EDE29CA9F7800AFA884 /* IosSettingsView.swift */,
 				E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */,
 				0837E47C2AFE57A100C03059 /* DefaultConfigView.swift */,
 				08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */,
@@ -363,6 +365,7 @@
 				083E3B122B3A65C9007BE19E /* MarkdownWebView */,
 				083E3B152B3A6648007BE19E /* OpenAI */,
 				083E3B182B3A67B9007BE19E /* VisualEffectView */,
+				086CDAD32B70C25A00698A87 /* FilePicker */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -442,6 +445,7 @@
 				083E3B112B3A65C9007BE19E /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				083E3B142B3A6648007BE19E /* XCRemoteSwiftPackageReference "OpenAI" */,
 				083E3B172B3A67B9007BE19E /* XCRemoteSwiftPackageReference "VisualEffectView" */,
+				086CDAD22B70C25A00698A87 /* XCRemoteSwiftPackageReference "FilePicker" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -512,7 +516,7 @@
 				E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */,
 				08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */,
 				0829D1152B3166E300DFFBB1 /* MacOSMessages.swift in Sources */,
-				E4C65EF629CA9F7800AFA884 /* AppSettingsView.swift in Sources */,
+				E4C65EF629CA9F7800AFA884 /* IosSettingsView.swift in Sources */,
 				08A1EF522B26100600A88A3A /* DialogueViewModel.swift in Sources */,
 				0829D1192B31936C00DFFBB1 /* IOSDialogList.swift in Sources */,
 				E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */,
@@ -946,6 +950,14 @@
 				kind = branch;
 			};
 		};
+		086CDAD22B70C25A00698A87 /* XCRemoteSwiftPackageReference "FilePicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markrenaud/FilePicker";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
 		E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JohnSundell/Splash";
@@ -979,6 +991,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 083E3B172B3A67B9007BE19E /* XCRemoteSwiftPackageReference "VisualEffectView" */;
 			productName = VisualEffectView;
+		};
+		086CDAD32B70C25A00698A87 /* FilePicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 086CDAD22B70C25A00698A87 /* XCRemoteSwiftPackageReference "FilePicker" */;
+			productName = FilePicker;
 		};
 		E4C65F0D29CAA06600AFA884 /* Splash */ = {
 			isa = XCSwiftPackageProductDependency;

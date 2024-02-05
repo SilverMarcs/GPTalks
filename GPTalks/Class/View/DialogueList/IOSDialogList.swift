@@ -20,7 +20,7 @@
 //                .searchable(text: $viewModel.searchText)
                 .navigationTitle("Sessions")
                 .sheet(isPresented: $isShowSettingView) {
-                    AppSettingsView()
+                    IosSettingsView()
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {

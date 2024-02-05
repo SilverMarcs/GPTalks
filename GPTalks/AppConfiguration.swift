@@ -17,6 +17,8 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.isMarkdownEnabled") var isMarkdownEnabled: Bool = true
     
+    @AppStorage("configuration.alternateMarkdwon") var alternateMarkdown: Bool = true
+    
     @AppStorage("configuration.isAutoGenerateTitle") var isAutoGenerateTitle: Bool = false
     
     @AppStorage("configuration.preferredChatService") var preferredChatService: Provider = .openai

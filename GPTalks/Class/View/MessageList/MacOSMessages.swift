@@ -20,18 +20,26 @@ struct MacOSMessages: View {
     @FocusState var isTextFieldFocused: Bool
 
     var body: some View {
-        ScrollViewReader { proxy in
+        ScrollViewReader { proxy in           
             List {
-                LazyVStack {
-                    ForEach(session.conversations) { conversation in
-                        ConversationView(session: session, conversation: conversation)
+                ForEach(Array(session.conversations.chunked(into: 10).enumerated()), id: \.offset) { index, chunk in
+                    VStack {
+                        ForEach(chunk, id: \.self) { conversation in
+                            ConversationView(session: session, conversation: conversation)
+                        }
                     }
-                    
-                    DeleteBtn(proxy: proxy)
-                    
-                    ErrorDescView(session: session)
+                    .listRowSeparator(.hidden)
                 }
-                .id("bottomID")
+                
+                DeleteBtn(proxy: proxy)
+                    .opacity(0)
+                
+                ErrorDescView(session: session)
+                    .listRowSeparator(.hidden)
+                
+                Color.clear
+                    .listRowSeparator(.hidden)
+                    .id("bottomID")
             }
             .background(.background)
             .navigationTitle(session.title)
@@ -47,9 +55,11 @@ struct MacOSMessages: View {
                 .background(.bar)
             }
             .onChange(of: viewModel.selectedDialogue) {
-                scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+                scrollToBottom(proxy: proxy, animated: true, delay: 0.1)
                 isTextFieldFocused = true
-                scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
+                if AppConfiguration.shared.alternateMarkdown {
+                    scrollToBottom(proxy: proxy, animated: true, delay: 1)
+                }
             }
             .onChange(of: session.conversations.last?.content) {
                 if session.conversations.last?.content != previousContent && !isUserScrolling {
@@ -92,7 +102,6 @@ struct MacOSMessages: View {
             }
         }
         .keyboardShortcut(.delete, modifiers: .command)
-        .opacity(0)
         .frame(width: 1, height: 1) 
     }
 }
