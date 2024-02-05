@@ -22,7 +22,8 @@ struct MacOSMessages: View {
     var body: some View {
         ScrollViewReader { proxy in           
             List {
-                ForEach(Array(session.conversations.chunked(into: 10).enumerated()), id: \.offset) { index, chunk in
+//                ForEach(Array(session.conversations.chunked(into: 10).enumerated()), id: \.offset) { index, chunk in
+                ForEach(Array(session.conversations.chunked(fromEndInto: 10).enumerated()), id: \.offset) { index, chunk in
                     VStack {
                         ForEach(chunk, id: \.self) { conversation in
                             ConversationView(session: session, conversation: conversation)
@@ -37,7 +38,7 @@ struct MacOSMessages: View {
                 ErrorDescView(session: session)
                     .listRowSeparator(.hidden)
                 
-                Color.clear
+                Spacer()
                     .listRowSeparator(.hidden)
                     .id("bottomID")
             }
@@ -55,10 +56,11 @@ struct MacOSMessages: View {
                 .background(.bar)
             }
             .onChange(of: viewModel.selectedDialogue) {
-                scrollToBottom(proxy: proxy, animated: true, delay: 0.1)
+                scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
+                scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
                 isTextFieldFocused = true
                 if AppConfiguration.shared.alternateMarkdown {
-                    scrollToBottom(proxy: proxy, animated: true, delay: 1)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
                 }
             }
             .onChange(of: session.conversations.last?.content) {

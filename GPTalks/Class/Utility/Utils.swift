@@ -13,6 +13,11 @@ extension Array {
             Array(self[$0 ..< Swift.min($0 + size, count)])
         }
     }
+    
+    // does chunking from bottom up
+    func chunked(fromEndInto size: Int) -> [[Element]] {
+        reversed().chunked(into: size).map { $0.reversed() }.reversed()
+    }
 }
 
 extension String {
