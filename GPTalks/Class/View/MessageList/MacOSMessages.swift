@@ -97,7 +97,7 @@ struct MacOSMessages: View {
                 isUserScrolling = true
             }
             .onChange(of: session.isAddingConversation) {
-                scrollToBottom(proxy: proxy)
+                scrollToBottom(proxy: proxy, animated: true)
             }
             .onChange(of: session.input) {
                 if session.input.contains("\n") || (session.input.count > 105) {
