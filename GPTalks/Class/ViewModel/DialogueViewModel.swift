@@ -26,7 +26,21 @@ import SwiftUI
 
     var isArchivedSelected: Bool = false
 
-//    var searchText: String = ""
+    var searchText: String = "" {
+        didSet {
+            if searchText.isEmpty {
+                 if isArchivedSelected {
+                     dialogues = allDialogues.filter { $0.isArchive }
+                 } else {
+                     dialogues = allDialogues.filter { !$0.isArchive }
+                 }
+             } else {
+                 dialogues = allDialogues.filter { dialogue in
+                     dialogue.title.localizedCaseInsensitiveContains(searchText)
+                 }
+             }
+        }
+    }
 //    var filteredDialogues: [DialogueSession] = []
     var selectedDialogue: DialogueSession?
 
@@ -68,16 +82,8 @@ import SwiftUI
         
         withAnimation {
             if isArchivedSelected {
-//                if selectedDialogue?.isArchive == false {
-//                    selectedDialogue = nil
-//                }
-                
                 dialogues = allDialogues.filter { $0.isArchive }
             } else {
-//                if selectedDialogue?.isArchive == true {
-//                    selectedDialogue = nil
-//                }
-                
                 dialogues = allDialogues.filter { !$0.isArchive }
             }
         }
@@ -85,10 +91,6 @@ import SwiftUI
 
     func toggleArchive(session: DialogueSession) {
         session.toggleArchive()
-
-//        if let selectedDialogue = selectedDialogue, selectedDialogue.id == session.id {
-//            self.selectedDialogue = nil
-//        }
 
         withAnimation {
             dialogues.removeAll {

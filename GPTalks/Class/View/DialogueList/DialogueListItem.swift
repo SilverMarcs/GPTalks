@@ -81,7 +81,6 @@ struct DialogueListItem: View {
                 }
             }
             
-#if os(macOS)
             Button {
                 viewModel.toggleArchive(session: session)
             } label: {
@@ -90,7 +89,6 @@ struct DialogueListItem: View {
                     Text(session.isArchive ? "Unarchive" : "Archive")
                 }
             }
-            #endif
             
             Button(role: .destructive) {
                 showDeleteDialogue = true
@@ -102,14 +100,12 @@ struct DialogueListItem: View {
             }
         }
         .swipeActions(edge: .trailing) {
-            #if os(macOS)
             Button {
                 viewModel.toggleArchive(session: session)
             } label: {
                 Label(session.isArchive ? "Unarchive" : "Archive", systemImage: session.isArchive ? "archivebox" : "archivebox.fill")
             }
             .tint(.orange)
-            #endif
             
             Button(role: .destructive) {
                 viewModel.deleteDialogue(session)

@@ -9,28 +9,46 @@
     import SwiftUI
 
     struct IOSDialogList: View {
-//        @EnvironmentObject var viewModel: DialogueViewModel
         @Bindable var viewModel: DialogueViewModel
-        
+
         @State var isShowSettingView = false
 
         var body: some View {
             list
                 .listStyle(.inset)
-//                .searchable(text: $viewModel.searchText)
+                .searchable(text: $viewModel.searchText)
                 .navigationTitle("Sessions")
                 .sheet(isPresented: $isShowSettingView) {
                     IosSettingsView()
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            isShowSettingView = true
+                        Menu {
+                            Button {
+                                isShowSettingView = true
+                            } label: {
+                                Label(
+                                    title: { Text("Settings") },
+                                    icon: { Image(systemName: "gear") }
+                                )
+                            }
+                            
+                            Button {
+                                viewModel.toggleArchivedStatus()
+                            } label: {
+                                Label(
+                                    title: { Text(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") },
+                                    icon: { Image(systemName: viewModel.isArchivedSelected ? "archivebox.fill" : "archivebox") }
+                                )
+                            }
                         } label: {
                             if isIPadOS {
                                 Image(systemName: "gear")
                             } else {
-                                Text("Config")
+                                Label(
+                                    title: { Text("Settings") },
+                                    icon: { Image(systemName: "gear") }
+                                )
                             }
                         }
                     }
