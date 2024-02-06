@@ -33,6 +33,15 @@
                     ToolbarItem(placement: .topBarLeading) {
                         Menu {
                             Button {
+                                viewModel.toggleArchivedStatus()
+                            } label: {
+                                Label(
+                                    title: { Text(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") },
+                                    icon: { Image(systemName: viewModel.isArchivedSelected ? "archivebox.fill" : "archivebox") }
+                                )
+                            }
+                            
+                            Button {
                                 isShowSettingView = true
                             } label: {
                                 Label(
@@ -41,14 +50,6 @@
                                 )
                             }
                             
-                            Button {
-                                viewModel.toggleArchivedStatus()
-                            } label: {
-                                Label(
-                                    title: { Text(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") },
-                                    icon: { Image(systemName: viewModel.isArchivedSelected ? "archivebox.fill" : "archivebox") }
-                                )
-                            }
                         } label: {
                             if isIPadOS {
                                 Image(systemName: "gear")

@@ -13,7 +13,7 @@ struct ImageSession: View {
     @State var images: [ImagesResult.URLResult] = []
     @State var txt: String = ""
     @State var model: String = "realistic_vision_v5"
-    @State var number: Int = 3
+    @State var number: Int = 2
 
     @State var errorMsg: String = ""
     @State var feedback: String = ""
@@ -21,49 +21,57 @@ struct ImageSession: View {
     @FocusState var isFocused: Bool
 
     var body: some View {
-        List {
-            VStack {
-                ForEach(images, id: \.self) { image in
-                    AsyncImage(url: URL(string: image.url!)) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                    } placeholder: {
-                        ProgressView()
+        ScrollViewReader { proxy in
+            List {
+                VStack {
+                    ForEach(images, id: \.self) { image in
+                        AsyncImage(url: URL(string: image.url!)) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .onAppear {
+                            feedback = ""
+                        }
                     }
-                    .onAppear {
-                        feedback = ""
+                    
+                    if !errorMsg.isEmpty {
+                        Text(errorMsg)
+                            .onAppear {
+                                feedback = ""
+                            }
+                            .foregroundStyle(.red)
+                            .listRowSeparator(.hidden)
                     }
+                    
+                    if !feedback.isEmpty {
+                        Text(feedback)
+                            .listRowSeparator(.hidden)
+                    }
+                    
+                    Spacer()
+                        .id("bottomID")
                 }
+                
+                .listRowSeparator(.hidden)
             }
-            .listRowSeparator(.hidden)
-            
-            if !errorMsg.isEmpty {
-                Text(errorMsg)
-                    .onAppear {
-                        feedback = ""
-                    }
-                    .foregroundStyle(.red)
-                    .listRowSeparator(.hidden)
+            .onChange(of: images.count) {
+                scrollToBottom(proxy: proxy, animated: false)
             }
-
-            if !feedback.isEmpty {
-                Text(feedback)
-                    .listRowSeparator(.hidden)
-            }
-        }
-        .background(.background)
-        #if os(macOS)
+            .background(.background)
+#if os(macOS)
             .navigationTitle("Image Generations")
-        #endif
+#endif
             .listStyle(.plain)
             .toolbar {
                 TextField("Model", text: $model)
-                #if os(iOS)
+#if os(iOS)
                     .textInputAutocapitalization(.never)
-                #endif
+#endif
                     .frame(width: 150)
-
+                
                 Picker("Number", selection: $number) {
                     ForEach(1 ... 5, id: \.self) { number in
                         Text("Count: \(number)")
@@ -76,13 +84,22 @@ struct ImageSession: View {
                     .padding(15)
                     .background(.bar)
             }
+        }
     }
 
     var textBox: some View {
         HStack(spacing: 10) {
-            TextField("Prompt", text: $txt)
+            Button {
+                images = []
+            } label: {
+                Image(systemName: "trash")
+            }
+            .buttonStyle(.plain)
+            
+            TextField("Prompt", text: $txt, axis: .vertical)
+                .lineLimit(2)
                 .focused($isFocused)
-//                .textFieldStyle(.roundedBorder)
+            
             Button {
                 Task {
                     isFocused = false
@@ -91,6 +108,8 @@ struct ImageSession: View {
             } label: {
                 Image(systemName: "paperplane.fill")
             }
+            .buttonStyle(.plain)
+            .keyboardShortcut(.return, modifiers: .command)
             .disabled(!feedback.isEmpty || txt.isEmpty)
         }
     }
@@ -98,11 +117,8 @@ struct ImageSession: View {
     func send() async {
         errorMsg = ""
         feedback = "Generating Images..."
-
-        let openAIconfig = OpenAI.Configuration(
-            token: AppConfiguration.shared.Okey,
-            host: "app.oxyapi.uk"
-        )
+        
+        let openAIconfig = AppConfiguration.shared.preferredChatService.config
 
         let service: OpenAI = OpenAI(configuration: openAIconfig)
 
