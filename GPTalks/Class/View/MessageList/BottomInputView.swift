@@ -170,11 +170,7 @@ struct BottomInputView: View {
                 textField
             #endif
         }
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(.tertiary, lineWidth: 0.6)
-                .opacity(0.8)
-        )
+        .roundedRectangleOverlay()
     }
 
     @ViewBuilder

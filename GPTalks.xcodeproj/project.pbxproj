@@ -35,6 +35,7 @@
 		08D533302B2C25CC008B4FA9 /* MessageContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D5332F2B2C25CC008B4FA9 /* MessageContextMenu.swift */; };
 		08D533322B2C2D50008B4FA9 /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */; };
 		08D533342B2C2ED9008B4FA9 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */; };
+		08E047012B724DE400E81C91 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E047002B724DE400E81C91 /* ViewModifiers.swift */; };
 		08E913752B71F51B0071AB53 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08E913742B71F51B0071AB53 /* OpenAI */; };
 		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
 		08F74EA42B0BC318006D1DD3 /* ServiceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */; };
@@ -104,6 +105,7 @@
 		08D5332F2B2C25CC008B4FA9 /* MessageContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContextMenu.swift; sourceTree = "<group>"; };
 		08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
 		08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
+		08E047002B724DE400E81C91 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		08ED9EB72B02564D00849A1E /* DialogueListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListItem.swift; sourceTree = "<group>"; };
 		08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSettingsView.swift; sourceTree = "<group>"; };
 		E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSSettingsView.swift; sourceTree = "<group>"; };
@@ -340,6 +342,7 @@
 				08827D102B28B72B0044213B /* ErrorDescView.swift */,
 				08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */,
 				0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */,
+				08E047002B724DE400E81C91 /* ViewModifiers.swift */,
 			);
 			path = CustomUI;
 			sourceTree = "<group>";
@@ -503,6 +506,7 @@
 				E4C65EEE29CA9F7800AFA884 /* Conversation.swift in Sources */,
 				E4C65EA929CA9E7E00AFA884 /* ContentView.swift in Sources */,
 				0829D1132B3166D900DFFBB1 /* iOSMessages.swift in Sources */,
+				08E047012B724DE400E81C91 /* ViewModifiers.swift in Sources */,
 				E4C65F1829CBEE2400AFA884 /* BottomInputView.swift in Sources */,
 				08827D112B28B72B0044213B /* ErrorDescView.swift in Sources */,
 				0837E4812AFFE7B000C03059 /* Model.swift in Sources */,

@@ -7,8 +7,13 @@
 
 import OpenAI
 import SwiftUI
+#if os(iOS)
+import VisualEffectView
+#endif
 
 struct ImageSession: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @State var imageUrl: String = ""
     @State var images: [ImagesResult.URLResult] = []
     @State var txt: String = ""
@@ -19,6 +24,8 @@ struct ImageSession: View {
     @State var feedback: String = ""
 
     @FocusState var isFocused: Bool
+    
+//    var streamingTask: Task<Void, Error>?
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -36,7 +43,7 @@ struct ImageSession: View {
                             feedback = ""
                         }
                     }
-                    
+
                     if !errorMsg.isEmpty {
                         Text(errorMsg)
                             .onAppear {
@@ -45,90 +52,150 @@ struct ImageSession: View {
                             .foregroundStyle(.red)
                             .listRowSeparator(.hidden)
                     }
-                    
+
                     if !feedback.isEmpty {
                         Text(feedback)
                             .listRowSeparator(.hidden)
                     }
-                    
+
                     Spacer()
                         .id("bottomID")
                 }
-                
+                .onTapGesture {
+                    isFocused = false
+                }
+
                 .listRowSeparator(.hidden)
             }
             .onChange(of: images.count) {
                 scrollToBottom(proxy: proxy, animated: false)
             }
             .background(.background)
-#if os(macOS)
-            .navigationTitle("Image Generations")
-#endif
-            .listStyle(.plain)
-            .toolbar {
-                TextField("Model", text: $model)
-#if os(iOS)
-                    .textInputAutocapitalization(.never)
-#endif
-                    .frame(width: 150)
-                
-                Picker("Number", selection: $number) {
-                    ForEach(1 ... 5, id: \.self) { number in
-                        Text("Count: \(number)")
-                            .tag(number)
+            #if os(macOS)
+                .navigationTitle("Image Generations")
+            #endif
+                .listStyle(.plain)
+                .toolbar {
+                    TextField("Model", text: $model)
+                    #if os(iOS)
+                        .textInputAutocapitalization(.never)
+                    #endif
+                        .frame(width: 150)
+
+                    Picker("Number", selection: $number) {
+                        ForEach(1 ... 5, id: \.self) { number in
+                            Text("Count: \(number)")
+                                .tag(number)
+                        }
                     }
                 }
-            }
-            .safeAreaInset(edge: .bottom) {
-                textBox
-                    .padding(15)
-                    .background(.bar)
-            }
+                .safeAreaInset(edge: .bottom) {
+                    textBox
+                        .padding(15)
+                    #if os(iOS)
+                        .background(
+                            VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
+                                .ignoresSafeArea()
+                        )
+                    #else
+                        .background(.bar)
+                    #endif
+                    
+                }
         }
     }
 
     var textBox: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 12) {
             Button {
                 images = []
             } label: {
                 Image(systemName: "trash")
+                    .frame(width: 27, height: 27)
             }
             .buttonStyle(.plain)
-            
-            TextField("Prompt", text: $txt, axis: .vertical)
-                .lineLimit(2)
-                .focused($isFocused)
-            
-            Button {
-                Task {
-                    isFocused = false
-                    await send()
+
+            #if os(iOS)
+                TextField("Prompt", text: $txt, axis: .vertical)
+                    .padding(6)
+                    .padding(.horizontal, 4)
+                    .frame(minHeight: 33)
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(1 ... 4)
+                    .focused($isFocused)
+                    .roundedRectangleOverlay()
+            #else
+            ZStack(alignment: .leading) {
+                if txt.isEmpty {
+                    Text("Send a message")
+                        .font(.body)
+                        .padding(6)
+                        .padding(.leading, 4)
+                        .foregroundColor(Color(.placeholderTextColor))
                 }
-            } label: {
-                Image(systemName: "paperplane.fill")
+                TextEditor(text: $txt)
+                    .font(.body)
+                    .frame(maxHeight: 400)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(6)
+                    .scrollContentBackground(.hidden)
+                    .roundedRectangleOverlay()
             }
-            .buttonStyle(.plain)
-            .keyboardShortcut(.return, modifiers: .command)
-            .disabled(!feedback.isEmpty || txt.isEmpty)
+            #endif
+            
+
+                Button {
+                    Task {
+                        isFocused = false
+                        await send()
+                    }
+                } label: {
+                    Image(systemName: "paperplane.fill")
+                        .frame(width: 27, height: 27)
+                }
+//                .clipShape(Rectangle())
+                .buttonStyle(.plain)
+                .keyboardShortcut(.return, modifiers: .command)
+                .disabled(!feedback.isEmpty || txt.isEmpty)
+            
         }
     }
-
+    
     func send() async {
         errorMsg = ""
         feedback = "Generating Images..."
-        
+
+        var streamingTask: Task<Void, Error>?
         let openAIconfig = AppConfiguration.shared.preferredChatService.config
-
         let service: OpenAI = OpenAI(configuration: openAIconfig)
-
         let query2 = ImagesQuery(prompt: txt, model: model, n: Int(number), size: "1024x1024", quality: "standard")
 
-        do {
-            let results = try await service.images(query: query2)
-            images.append(contentsOf: results.data)
+        #if os(iOS)
+            streamingTask = Task {
+                let application = await UIApplication.shared
+                let taskId = await application.beginBackgroundTask {
+                    // Handle expiration of background task here
+                }
 
-            print(results)
+                // Start your network request here
+                let results = try await service.images(query: query2)
+                images.append(contentsOf: results.data)
+                print(results)
+
+                // End the background task once the network request is finished
+                await application.endBackgroundTask(taskId)
+            }
+
+        #else
+            streamingTask = Task {
+                let results = try await service.images(query: query2)
+                images.append(contentsOf: results.data)
+                print(results)
+            }
+        #endif
+
+        do {
+            try await streamingTask?.value
         } catch {
             errorMsg = error.localizedDescription
         }
