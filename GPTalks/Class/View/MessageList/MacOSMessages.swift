@@ -100,7 +100,7 @@ struct MacOSMessages: View {
                 scrollToBottom(proxy: proxy)
             }
             .onChange(of: session.input) {
-                if session.input.contains("\n") || (session.input.count > 105) || (session.input.isEmpty){
+                if session.input.contains("\n") || (session.input.count > 105) {
                     scrollToBottom(proxy: proxy)
                 }
             }

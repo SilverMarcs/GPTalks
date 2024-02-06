@@ -181,26 +181,6 @@ import SwiftUI
         input = ""
         await send(text: text)
     }
-    
-//func send() async {
-//    let openAIconfig =  OpenAI.Configuration(
-//        token: AppConfiguration.shared.Ckey,
-//        host: AppConfiguration.shared.Chost
-//    )
-//    
-//    let service: OpenAI = OpenAI(configuration: openAIconfig)
-//    
-//    let query2 = ImagesQuery(prompt: "White cat with heterochromia sitting on the kitchen table", model: "anythingv5_prtre", n: 1, size: "1024x1024", quality: "standard")
-//    
-//    do {
-//        let result = try await service.images(query: query2)
-//        
-//        print(result.created)
-//        print(result.data)
-//    } catch {
-//        print(error.localizedDescription)
-//    }
-//}
 
     @MainActor
     func rename(newTitle: String) {
@@ -257,6 +237,8 @@ import SwiftUI
 
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
+        isAddingConversation.toggle()
+        
         if let resetMarker = resetMarker {
             if resetMarker == 0 {
                 removeResetContextMarker()
@@ -431,15 +413,11 @@ extension DialogueSession {
 
     @discardableResult
     func appendConversation(_ conversation: Conversation) -> ConversationData {
-        isAddingConversation = true
-        
         if conversations.isEmpty {
             removeResetContextMarker()
         }
 
         conversations.append(conversation)
-        
-        isAddingConversation = false
 
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id

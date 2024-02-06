@@ -14,89 +14,91 @@ struct ImageSession: View {
     @State var txt: String = ""
     @State var model: String = "realistic_vision_v5"
     @State var number: Int = 3
-    
+
     @State var errorMsg: String = ""
     @State var feedback: String = ""
 
+    @FocusState var isFocused: Bool
+
     var body: some View {
         List {
-            if !errorMsg.isEmpty {
-                Text(errorMsg)
-                    .onAppear {
-                        feedback = ""
-                    }
-                    .padding()
-                    .foregroundStyle(.red)
-                    .listRowSeparator(.hidden)
-            }
-            
-            if !feedback.isEmpty {
-                Text(feedback)
-                    .listRowSeparator(.hidden)
-                    .padding()
-            }
-            
             VStack {
                 ForEach(images, id: \.self) { image in
                     AsyncImage(url: URL(string: image.url!)) { image in
-                        image.resizable()
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
                     } placeholder: {
                         ProgressView()
                     }
                     .onAppear {
                         feedback = ""
                     }
-                    .frame(width: 800, height: 800)
-                    .padding()
                 }
             }
             .listRowSeparator(.hidden)
+            
+            if !errorMsg.isEmpty {
+                Text(errorMsg)
+                    .onAppear {
+                        feedback = ""
+                    }
+                    .foregroundStyle(.red)
+                    .listRowSeparator(.hidden)
+            }
+
+            if !feedback.isEmpty {
+                Text(feedback)
+                    .listRowSeparator(.hidden)
+            }
         }
         .background(.background)
         #if os(macOS)
-        .navigationTitle("Image Generations")
+            .navigationTitle("Image Generations")
         #endif
-        .listStyle(.plain)
-        .toolbar {
-            TextField("Model", text: $model)
-#if os(iOS)
-                .textInputAutocapitalization(.never)
-            #endif
-                .frame(width: 150)
+            .listStyle(.plain)
+            .toolbar {
+                TextField("Model", text: $model)
+                #if os(iOS)
+                    .textInputAutocapitalization(.never)
+                #endif
+                    .frame(width: 150)
 
-            Picker("Number", selection: $number) {
-                ForEach(1 ... 5, id: \.self) { number in
-                    Text("Count: \(number)")
-                        .tag(number)
+                Picker("Number", selection: $number) {
+                    ForEach(1 ... 5, id: \.self) { number in
+                        Text("Count: \(number)")
+                            .tag(number)
+                    }
                 }
             }
-        }
-        .safeAreaInset(edge: .bottom) {
-            textBox
-                .padding(15)
-                .background(.bar)
-        }
-
+            .safeAreaInset(edge: .bottom) {
+                textBox
+                    .padding(15)
+                    .background(.bar)
+            }
     }
 
     var textBox: some View {
         HStack(spacing: 10) {
             TextField("Prompt", text: $txt)
-                .textFieldStyle(.roundedBorder)
+                .focused($isFocused)
+//                .textFieldStyle(.roundedBorder)
             Button {
                 Task {
+                    isFocused = false
                     await send()
                 }
             } label: {
                 Image(systemName: "paperplane.fill")
             }
+            .disabled(!feedback.isEmpty || txt.isEmpty)
         }
     }
 
     func send() async {
         errorMsg = ""
         feedback = "Generating Images..."
-        
+
         let openAIconfig = OpenAI.Configuration(
             token: AppConfiguration.shared.Okey,
             host: "app.oxyapi.uk"
@@ -108,7 +110,7 @@ struct ImageSession: View {
 
         do {
             let results = try await service.images(query: query2)
-            images = results.data
+            images.append(contentsOf: results.data)
 
             print(results)
         } catch {
