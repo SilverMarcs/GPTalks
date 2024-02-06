@@ -41,11 +41,15 @@ class AppConfiguration: ObservableObject {
     
     /// naga
     @AppStorage("configuration.Nkey") var Nkey = ""
-    @AppStorage("configuration.Nmodel") var Nmodel: Model = .gpt4
+    @AppStorage("configuration.Nmodel") var Nmodel: Model = .gpt4t
+    
+    /// oxygen
+    @AppStorage("configuration.Okey") var Okey = ""
+    @AppStorage("configuration.Omodel") var Omodel: Model = .gpt4
     
     /// mandril
     @AppStorage("configuration.Mkey") var Mkey = ""
-    @AppStorage("configuration.Mmodel") var Mmodel: Model = .gpt4
+    @AppStorage("configuration.Mmodel") var Mmodel: Model = .gpt4t
     
     /// gpt4free
     @AppStorage("configuration.Gkey") var Gkey = ""
@@ -54,6 +58,6 @@ class AppConfiguration: ObservableObject {
     
     /// custom
     @AppStorage("configuration.Ckey") var Ckey = ""
-    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt4
+    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt4t
     @AppStorage("configuration.Chost") var Chost: String = ""
 }
