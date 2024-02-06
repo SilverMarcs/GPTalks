@@ -30,6 +30,7 @@
 		08A1EF4E2B2604D000A88A3A /* UserMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */; };
 		08A1EF502B2606C000A88A3A /* AssistantMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */; };
 		08A1EF522B26100600A88A3A /* DialogueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF512B26100600A88A3A /* DialogueViewModel.swift */; };
+		08AF74742B720F5B00FB081F /* ImageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AF74732B720F5B00FB081F /* ImageSession.swift */; };
 		08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */; };
 		08D533302B2C25CC008B4FA9 /* MessageContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D5332F2B2C25CC008B4FA9 /* MessageContextMenu.swift */; };
 		08D533322B2C2D50008B4FA9 /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */; };
@@ -98,6 +99,7 @@
 		08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageView.swift; sourceTree = "<group>"; };
 		08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantMessageView.swift; sourceTree = "<group>"; };
 		08A1EF512B26100600A88A3A /* DialogueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueViewModel.swift; sourceTree = "<group>"; };
+		08AF74732B720F5B00FB081F /* ImageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSession.swift; sourceTree = "<group>"; };
 		08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledPicker.swift; sourceTree = "<group>"; };
 		08D5332F2B2C25CC008B4FA9 /* MessageContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContextMenu.swift; sourceTree = "<group>"; };
 		08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */,
 				0820E06C2B5395E500401A30 /* TextSelectionView.swift */,
 				087AC1972B6D40A7006B9386 /* EditingView.swift */,
+				08AF74732B720F5B00FB081F /* ImageSession.swift */,
 			);
 			path = MessageView;
 			sourceTree = "<group>";
@@ -491,6 +494,7 @@
 				0829D11B2B31938000DFFBB1 /* MacOSDialogList.swift in Sources */,
 				E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */,
 				086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */,
+				08AF74742B720F5B00FB081F /* ImageSession.swift in Sources */,
 				E4C65F2029D0649800AFA884 /* DialogueSettingsView.swift in Sources */,
 				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,

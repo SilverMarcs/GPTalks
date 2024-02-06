@@ -22,6 +22,14 @@
                     IosSettingsView()
                 }
                 .toolbar {
+                    ToolbarItem {
+                        NavigationLink {
+                            ImageSession()
+                        } label: {
+                            Image(systemName: "photo.on.rectangle.angled")
+                        }
+                    }
+                    
                     ToolbarItem(placement: .topBarLeading) {
                         Menu {
                             Button {
@@ -45,10 +53,7 @@
                             if isIPadOS {
                                 Image(systemName: "gear")
                             } else {
-                                Label(
-                                    title: { Text("Settings") },
-                                    icon: { Image(systemName: "gear") }
-                                )
+                                Text("Edit")
                             }
                         }
                     }

@@ -7,12 +7,9 @@
 
 import SwiftUI
 
-
 struct MacOSDialogList: View {
-//    @EnvironmentObject var viewModel: DialogueViewModel
-//    @Environment(DialogueViewModel.self) private var viewModel
     @Bindable var viewModel: DialogueViewModel
-    
+
     var body: some View {
         Group {
             if viewModel.dialogues.isEmpty {
@@ -26,7 +23,7 @@ struct MacOSDialogList: View {
                     }
                     .padding(.top, -10)
                     .onChange(of: viewModel.dialogues.count) {
-                        // this is far from perfect
+                        // this is faaar from perfect
                         proxy.scrollTo(viewModel.dialogues[0].id, anchor: .top)
                     }
                 }
@@ -37,6 +34,12 @@ struct MacOSDialogList: View {
         .frame(minWidth: 270)
         .toolbar {
             Spacer()
+
+            NavigationLink {
+                ImageSession()
+            } label: {
+                Image(systemName: "photo.on.rectangle.angled")
+            }
 
             Button {
                 viewModel.addDialogue()
