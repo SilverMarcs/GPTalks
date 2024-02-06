@@ -7,13 +7,14 @@
 
 import OpenAI
 import SwiftUI
+import Photos
 #if os(iOS)
 import VisualEffectView
 #endif
 
 struct ImageSession: View {
     @Environment(\.colorScheme) var colorScheme
-    
+
     @State var imageUrl: String = ""
     @State var images: [ImagesResult.URLResult] = []
     @State var txt: String = ""
@@ -24,48 +25,59 @@ struct ImageSession: View {
     @State var feedback: String = ""
 
     @FocusState var isFocused: Bool
-    
-//    var streamingTask: Task<Void, Error>?
+
 
     var body: some View {
         ScrollViewReader { proxy in
             List {
-                VStack {
-                    ForEach(images, id: \.self) { image in
-                        AsyncImage(url: URL(string: image.url!)) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                        } placeholder: {
-                            ProgressView()
-                        }
+//                VStack {
+                ForEach(images, id: \.self) { image in
+                    AsyncImage(url: URL(string: image.url!)) { asyncImage in
+                        asyncImage
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .contextMenu {
+                                Button(action: {
+                                    #if os(iOS)
+                                    saveImageToPhotos(url: URL(string: image.url!))
+                                    #else
+                                    saveImageToPicturesFolder(url: URL(string: image.url!))
+                                    #endif
+                                }) {
+                                    Text("Save Image")
+                                    Image(systemName: "square.and.arrow.down")
+                                }
+                            }
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .listRowSeparator(.hidden)
+                    .onAppear {
+                        feedback = ""
+                    }
+                }
+
+                if !errorMsg.isEmpty {
+                    Text(errorMsg)
                         .onAppear {
                             feedback = ""
                         }
-                    }
-
-                    if !errorMsg.isEmpty {
-                        Text(errorMsg)
-                            .onAppear {
-                                feedback = ""
-                            }
-                            .foregroundStyle(.red)
-                            .listRowSeparator(.hidden)
-                    }
-
-                    if !feedback.isEmpty {
-                        Text(feedback)
-                            .listRowSeparator(.hidden)
-                    }
-
-                    Spacer()
-                        .id("bottomID")
-                }
-                .onTapGesture {
-                    isFocused = false
+                        .foregroundStyle(.red)
+                        .listRowSeparator(.hidden)
                 }
 
-                .listRowSeparator(.hidden)
+                if !feedback.isEmpty {
+                    Text(feedback)
+                        .listRowSeparator(.hidden)
+                }
+
+                Spacer()
+                    .listRowSeparator(.hidden)
+                    .id("bottomID")
+            }
+            .listStyle(.plain)
+            .onTapGesture {
+                isFocused = false
             }
             .onChange(of: images.count) {
                 scrollToBottom(proxy: proxy, animated: false)
@@ -83,7 +95,7 @@ struct ImageSession: View {
                         .frame(width: 150)
 
                     Picker("Number", selection: $number) {
-                        ForEach(1 ... 5, id: \.self) { number in
+                        ForEach(1 ... 4, id: \.self) { number in
                             Text("Count: \(number)")
                                 .tag(number)
                         }
@@ -98,12 +110,98 @@ struct ImageSession: View {
                                 .ignoresSafeArea()
                         )
                     #else
-                        .background(.bar)
+                            .background(.bar)
                     #endif
-                    
                 }
         }
     }
+
+    #if os(iOS)
+    private func saveImageToPhotos(url: URL?) {
+        guard let url = url else { return }
+
+        // Request permission to save to the photo library
+        PHPhotoLibrary.requestAuthorization { status in
+            if status == .authorized {
+                // Download the image data
+                URLSession.shared.dataTask(with: url) { data, _, error in
+                    guard let data = data, let image = UIImage(data: data), error == nil else { return }
+
+                    // Save the image to the photo library
+                    PHPhotoLibrary.shared().performChanges({
+                        PHAssetChangeRequest.creationRequestForAsset(from: image)
+                    }) { success, error in
+                        if let error = error {
+                            print("Error saving image to Photos: \(error)")
+                        } else if success {
+                            print("Image successfully saved to Photos")
+                        }
+                    }
+                }.resume()
+            } else {
+                print("Permission to access the photo library was denied.")
+            }
+        }
+    }
+    #endif
+    
+    #if os(macOS)
+    private func saveImageToPicturesFolder(url: URL?) {
+        guard let url = url else { return }
+        
+        // Download the image data
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, let image = NSImage(data: data), error == nil else { return }
+            
+            // Get the user's Pictures folder URL
+            if let picturesFolderURL = FileManager.default.urls(for: .picturesDirectory, in: .userDomainMask).first {
+                let saveURL = picturesFolderURL.appendingPathComponent(url.lastPathComponent)
+                
+                // Save the image to the Pictures folder
+                if let tiffData = image.tiffRepresentation, let bitmapImage = NSBitmapImageRep(data: tiffData) {
+                    let imageData = bitmapImage.representation(using: .png, properties: [:]) // You can choose .jpeg or other formats
+                    do {
+                        try imageData?.write(to: saveURL)
+                        print("Image successfully saved to Pictures folder")
+                    } catch {
+                        print("Error saving image: \(error)")
+                    }
+                }
+            }
+        }.resume()
+    }
+    
+    
+    private func saveImage(url: URL?) {
+        guard let url = url else { return }
+        
+        // Download the image data
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, let image = NSImage(data: data), error == nil else { return }
+            
+            DispatchQueue.main.async {
+                // Present the save panel to the user
+                let savePanel = NSSavePanel()
+                savePanel.allowedContentTypes = [.image] // You can add more file types
+                savePanel.canCreateDirectories = true
+                savePanel.nameFieldStringValue = url.deletingPathExtension().lastPathComponent + ".png"
+                
+                if savePanel.runModal() == .OK, let saveURL = savePanel.url {
+                    // Save the image to the selected location
+                    if let tiffData = image.tiffRepresentation, let bitmapImage = NSBitmapImageRep(data: tiffData) {
+                        let imageData = bitmapImage.representation(using: .png, properties: [:])
+                        do {
+                            try imageData?.write(to: saveURL)
+                            print("Image successfully saved to \(saveURL.path)")
+                        } catch {
+                            print("Error saving image: \(error)")
+                        }
+                    }
+                }
+            }
+        }.resume()
+    }
+    #endif
 
     var textBox: some View {
         HStack(spacing: 12) {
@@ -125,42 +223,40 @@ struct ImageSession: View {
                     .focused($isFocused)
                     .roundedRectangleOverlay()
             #else
-            ZStack(alignment: .leading) {
-                if txt.isEmpty {
-                    Text("Send a message")
-                        .font(.body)
-                        .padding(6)
-                        .padding(.leading, 4)
-                        .foregroundColor(Color(.placeholderTextColor))
-                }
-                TextEditor(text: $txt)
-                    .font(.body)
-                    .frame(maxHeight: 400)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(6)
-                    .scrollContentBackground(.hidden)
-                    .roundedRectangleOverlay()
-            }
-            #endif
-            
-
-                Button {
-                    Task {
-                        isFocused = false
-                        await send()
+                ZStack(alignment: .leading) {
+                    if txt.isEmpty {
+                        Text("Send a message")
+                            .font(.body)
+                            .padding(6)
+                            .padding(.leading, 4)
+                            .foregroundColor(Color(.placeholderTextColor))
                     }
-                } label: {
-                    Image(systemName: "paperplane.fill")
-                        .frame(width: 27, height: 27)
+                    TextEditor(text: $txt)
+                        .font(.body)
+                        .frame(maxHeight: 400)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(6)
+                        .scrollContentBackground(.hidden)
+                        .roundedRectangleOverlay()
                 }
+            #endif
+
+            Button {
+                Task {
+                    isFocused = false
+                    await send()
+                }
+            } label: {
+                Image(systemName: "paperplane.fill")
+                    .frame(width: 27, height: 27)
+            }
 //                .clipShape(Rectangle())
-                .buttonStyle(.plain)
-                .keyboardShortcut(.return, modifiers: .command)
-                .disabled(!feedback.isEmpty || txt.isEmpty)
-            
+            .buttonStyle(.plain)
+            .keyboardShortcut(.return, modifiers: .command)
+            .disabled(!feedback.isEmpty || txt.isEmpty)
         }
     }
-    
+
     func send() async {
         errorMsg = ""
         feedback = "Generating Images..."
