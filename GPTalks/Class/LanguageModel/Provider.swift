@@ -43,8 +43,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .openrouter:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.ORkey,
-                host: "openrouter.ai/api",
-                additionalHeaders: ["HTTP-Referer": "www.github.com/SilverMarcs"]
+                host: "openrouter.ai/api"
             )
         case .naga:
             return OpenAI.Configuration(

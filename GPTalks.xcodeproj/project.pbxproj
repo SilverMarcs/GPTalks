@@ -16,13 +16,11 @@
 		0837E47D2AFE57A100C03059 /* DefaultConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E47C2AFE57A100C03059 /* DefaultConfigView.swift */; };
 		0837E4812AFFE7B000C03059 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E4802AFFE7AF00C03059 /* Model.swift */; };
 		083E3B132B3A65C9007BE19E /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 083E3B122B3A65C9007BE19E /* MarkdownWebView */; };
-		083E3B162B3A6648007BE19E /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 083E3B152B3A6648007BE19E /* OpenAI */; };
 		083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 083E3B182B3A67B9007BE19E /* VisualEffectView */; };
 		0846F1F62B33D68F002A2EB2 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */; };
 		085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Utils.swift */; };
 		085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */; };
 		085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* Provider.swift */; };
-		086CDAD42B70C25A00698A87 /* FilePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 086CDAD32B70C25A00698A87 /* FilePicker */; };
 		086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */; };
 		0878E53B2B1683ED00E0D79D /* AppIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0878E53A2B1683ED00E0D79D /* AppIconView.swift */; };
 		087AC1982B6D40A7006B9386 /* EditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087AC1972B6D40A7006B9386 /* EditingView.swift */; };
@@ -36,6 +34,7 @@
 		08D533302B2C25CC008B4FA9 /* MessageContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D5332F2B2C25CC008B4FA9 /* MessageContextMenu.swift */; };
 		08D533322B2C2D50008B4FA9 /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */; };
 		08D533342B2C2ED9008B4FA9 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */; };
+		08E913752B71F51B0071AB53 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08E913742B71F51B0071AB53 /* OpenAI */; };
 		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
 		08F74EA42B0BC318006D1DD3 /* ServiceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */; };
 		E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */; };
@@ -134,8 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				086CDAD42B70C25A00698A87 /* FilePicker in Frameworks */,
-				083E3B162B3A6648007BE19E /* OpenAI in Frameworks */,
+				08E913752B71F51B0071AB53 /* OpenAI in Frameworks */,
 				083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */,
 				E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */,
 				083E3B132B3A65C9007BE19E /* MarkdownWebView in Frameworks */,
@@ -363,9 +361,8 @@
 				E4C65F0D29CAA06600AFA884 /* Splash */,
 				E4C65F1029CAA08400AFA884 /* MarkdownUI */,
 				083E3B122B3A65C9007BE19E /* MarkdownWebView */,
-				083E3B152B3A6648007BE19E /* OpenAI */,
 				083E3B182B3A67B9007BE19E /* VisualEffectView */,
-				086CDAD32B70C25A00698A87 /* FilePicker */,
+				08E913742B71F51B0071AB53 /* OpenAI */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -443,9 +440,8 @@
 				E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */,
 				E4C65F0F29CAA08400AFA884 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				083E3B112B3A65C9007BE19E /* XCRemoteSwiftPackageReference "markdown-webview" */,
-				083E3B142B3A6648007BE19E /* XCRemoteSwiftPackageReference "OpenAI" */,
 				083E3B172B3A67B9007BE19E /* XCRemoteSwiftPackageReference "VisualEffectView" */,
-				086CDAD22B70C25A00698A87 /* XCRemoteSwiftPackageReference "FilePicker" */,
+				08E913732B71F51B0071AB53 /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -934,14 +930,6 @@
 				kind = branch;
 			};
 		};
-		083E3B142B3A6648007BE19E /* XCRemoteSwiftPackageReference "OpenAI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/OpenAI";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		083E3B172B3A67B9007BE19E /* XCRemoteSwiftPackageReference "VisualEffectView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/VisualEffectView";
@@ -950,12 +938,12 @@
 				kind = branch;
 			};
 		};
-		086CDAD22B70C25A00698A87 /* XCRemoteSwiftPackageReference "FilePicker" */ = {
+		08E913732B71F51B0071AB53 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/markrenaud/FilePicker";
+			repositoryURL = "https://github.com/SilverMarcs/OpenAI";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.1;
+				branch = main;
+				kind = branch;
 			};
 		};
 		E4C65F0C29CAA06600AFA884 /* XCRemoteSwiftPackageReference "Splash" */ = {
@@ -982,20 +970,15 @@
 			package = 083E3B112B3A65C9007BE19E /* XCRemoteSwiftPackageReference "markdown-webview" */;
 			productName = MarkdownWebView;
 		};
-		083E3B152B3A6648007BE19E /* OpenAI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 083E3B142B3A6648007BE19E /* XCRemoteSwiftPackageReference "OpenAI" */;
-			productName = OpenAI;
-		};
 		083E3B182B3A67B9007BE19E /* VisualEffectView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 083E3B172B3A67B9007BE19E /* XCRemoteSwiftPackageReference "VisualEffectView" */;
 			productName = VisualEffectView;
 		};
-		086CDAD32B70C25A00698A87 /* FilePicker */ = {
+		08E913742B71F51B0071AB53 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 086CDAD22B70C25A00698A87 /* XCRemoteSwiftPackageReference "FilePicker" */;
-			productName = FilePicker;
+			package = 08E913732B71F51B0071AB53 /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
 		};
 		E4C65F0D29CAA06600AFA884 /* Splash */ = {
 			isa = XCSwiftPackageProductDependency;

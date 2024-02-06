@@ -108,6 +108,7 @@ struct MacOSMessages: View {
                 if (session.resetMarker == session.conversations.count - 1) {
                     scrollToBottom(proxy: proxy)
                 }
+                isTextFieldFocused = true
             }
             .onChange(of: session.errorDesc) {
                 scrollToBottom(proxy: proxy)
