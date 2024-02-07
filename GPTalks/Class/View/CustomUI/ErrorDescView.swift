@@ -11,7 +11,7 @@ struct ErrorDescView: View {
     var session: DialogueSession
 
     var body: some View {
-        if session.errorDesc != "" {
+        if session.errorDesc != "" && !session.conversations.isEmpty {
             VStack(spacing: 15) {
                 HStack {
                     Text(session.errorDesc)

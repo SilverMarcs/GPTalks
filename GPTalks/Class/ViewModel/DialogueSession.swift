@@ -334,6 +334,7 @@ import SwiftUI
             #endif
 
         } catch {
+            isStreaming = false
             // TODO: do better with stop_reason from openai
             if error.localizedDescription == "cancelled" {
                 if lastConversation.content != "" {
@@ -342,14 +343,17 @@ import SwiftUI
                     removeConversation(at: conversations.count - 1)
                 }
                 conversations[conversations.count - 1].isReplying = false
-                return
+            } else {
+                if lastConversation.role == "assistant" && lastConversation.content == ""  {
+                    do {
+                        try await Task.sleep(nanoseconds: 250_000_000)
+                    } catch {
+                        print("couldnt sleep")
+                    }
+                    removeConversation(at: conversations.count - 1)
+                    setErrorDesc(errorDesc: error.localizedDescription)
+                }
             }
-            
-            if conversations.count == 0 {
-                removeConversation(at: conversations.count - 1)
-            }
-            
-            setErrorDesc(errorDesc: error.localizedDescription)
         }
 
         conversations[conversations.count - 1].isReplying = false

@@ -28,17 +28,20 @@ struct ImageSession: View {
 
     @State private var isZoomViewPresented = false
     
+    @State var previewUrl = ""
+    
     var body: some View {
         ScrollViewReader { proxy in
-            List {
-                ForEach(images, id: \.self) { image in
+            ScrollView {
+                ForEach(images, id: \.self.url) { image in
                     AsyncImage(url: URL(string: image.url!)) { asyncImage in
                         asyncImage
                             .resizable()
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                             .scaledToFit()
                             .onTapGesture {
-                                 isZoomViewPresented = true
+                                previewUrl = image.url!
+                                isZoomViewPresented = true
                              }
                             .contextMenu {
                                 Button(action: {
@@ -55,9 +58,11 @@ struct ImageSession: View {
                     } placeholder: {
                         ProgressView()
                     }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 3)
                     #if os(iOS)
                     .sheet(isPresented: $isZoomViewPresented) {
-                        ZoomableImageView(imageUrl: URL(string: image.url!))
+                        ZoomableImageView(imageUrl: URL(string: previewUrl))
                       }
                     #endif
                     .listRowSeparator(.hidden)
