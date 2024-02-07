@@ -26,16 +26,20 @@ struct ImageSession: View {
 
     @FocusState var isFocused: Bool
 
-
+    @State private var isZoomViewPresented = false
+    
     var body: some View {
         ScrollViewReader { proxy in
             List {
-//                VStack {
                 ForEach(images, id: \.self) { image in
                     AsyncImage(url: URL(string: image.url!)) { asyncImage in
                         asyncImage
                             .resizable()
-                            .aspectRatio(contentMode: .fit)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .scaledToFit()
+                            .onTapGesture {
+                                 isZoomViewPresented = true
+                             }
                             .contextMenu {
                                 Button(action: {
                                     #if os(iOS)
@@ -51,6 +55,11 @@ struct ImageSession: View {
                     } placeholder: {
                         ProgressView()
                     }
+                    #if os(iOS)
+                    .sheet(isPresented: $isZoomViewPresented) {
+                        ZoomableImageView(imageUrl: URL(string: image.url!))
+                      }
+                    #endif
                     .listRowSeparator(.hidden)
                     .onAppear {
                         feedback = ""
@@ -204,12 +213,14 @@ struct ImageSession: View {
     #endif
 
     var textBox: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 10) {
             Button {
                 images = []
             } label: {
                 Image(systemName: "trash")
-                    .frame(width: 27, height: 27)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: imageSize, height: imageSize)
             }
             .buttonStyle(.plain)
 
@@ -225,7 +236,7 @@ struct ImageSession: View {
             #else
                 ZStack(alignment: .leading) {
                     if txt.isEmpty {
-                        Text("Send a message")
+                        Text("Prompt")
                             .font(.body)
                             .padding(6)
                             .padding(.leading, 4)
@@ -248,9 +259,12 @@ struct ImageSession: View {
                 }
             } label: {
                 Image(systemName: "paperplane.fill")
-                    .frame(width: 27, height: 27)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: imageSize, height: imageSize)
+                    .foregroundColor(.accentColor)
             }
-//                .clipShape(Rectangle())
+//            .contentShape(Rectangle())
             .buttonStyle(.plain)
             .keyboardShortcut(.return, modifiers: .command)
             .disabled(!feedback.isEmpty || txt.isEmpty)
@@ -296,4 +310,112 @@ struct ImageSession: View {
             errorMsg = error.localizedDescription
         }
     }
+    
+    private var imageSize: CGFloat {
+        #if os(macOS)
+            20
+        #else
+            22
+        #endif
+    }
+    
+    struct ZoomableImageView: View {
+        let imageUrl: URL?
+        @State private var zoomScale: CGFloat = 1.0
+        
+        @Environment(\.dismiss) var dismiss
+        
+        var body: some View {
+            NavigationView {
+                ScrollView([.horizontal, .vertical], showsIndicators: false) {
+                    AsyncImage(url: imageUrl) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .scaleEffect(zoomScale)
+                            .gesture(
+                                MagnificationGesture()
+                                    .onChanged { value in
+                                        zoomScale = value
+                                        if zoomScale < 1.0 {
+                                            zoomScale = 1.0
+                                        }
+                                    }
+                            )
+                            .toolbar {
+                                ToolbarItem(placement: .cancellationAction) {
+                                    Button("Close") {
+                                        dismiss()
+                                    }
+                                }
+                            }
+                            .onTapGesture(count: 2) {
+                                withAnimation {
+                                    zoomScale = 1.0
+                                }
+                            }
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    
+                }
+                .background(.black)
+            }
+        }
+    }
+
 }
+
+//
+//struct ImageDetailView: View {
+//    let imageURL: URL
+//    @State private var zoomScale: CGFloat = 1.0
+//
+//    var body: some View {
+//        ScrollView([.horizontal, .vertical], showsIndicators: false) {
+//            AsyncImage(url: imageURL    ) { asyncImage in
+//                asyncImage
+//                    .resizable()
+//                    .scaledToFit()
+//                    .scaleEffect(zoomScale)
+//                    .gesture(
+//                        MagnificationGesture()
+//                            .onChanged { value in
+//                                zoomScale = value
+//                            }
+//                    )
+//            }
+//        }
+//        .edgesIgnoringSafeArea(.all)
+//    }
+//}
+
+//struct ZoomableImageView: View {
+//    let imageUrl: URL?
+//    @State private var scale: CGFloat = 1.0
+//    
+//    var body: some View {
+//        GeometryReader { geometry in
+//            AsyncImage(url: imageUrl) { image in
+//                image
+//                    .resizable()
+//                    .scaledToFit()
+//                    .scaleEffect(scale)
+//                    .frame(width: geometry.size.width, height: geometry.size.height)
+//                    .gesture(
+//                        MagnificationGesture()
+//                            .onChanged { value in
+//                                scale = value.magnitude
+//                            }
+//                            .onEnded { _ in
+//                                withAnimation {
+//                                    scale = 1.0
+//                                }
+//                            }
+//                    )
+//            } placeholder: {
+//                ProgressView()
+//            }
+//        }
+//    }
+//}
