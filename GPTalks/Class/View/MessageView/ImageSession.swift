@@ -41,6 +41,7 @@ struct ImageSession: View {
                             .scaledToFit()
                             .onTapGesture {
                                 previewUrl = image.url!
+                                isFocused  = false
                                 isZoomViewPresented = true
                              }
                             .contextMenu {
@@ -75,6 +76,7 @@ struct ImageSession: View {
                     Text(errorMsg)
                         .onAppear {
                             feedback = ""
+                            isFocused  = true
                         }
                         .foregroundStyle(.red)
                         .listRowSeparator(.hidden)
@@ -83,11 +85,22 @@ struct ImageSession: View {
                 if !feedback.isEmpty {
                     Text(feedback)
                         .listRowSeparator(.hidden)
+                        .onDisappear {
+                            isFocused = true
+                        }
                 }
 
                 Spacer()
                     .listRowSeparator(.hidden)
                     .id("bottomID")
+            }
+            #if os(macOS)
+            .padding(.vertical, 15)
+            .padding(.horizontal, 10)
+            #endif
+            .scrollDismissesKeyboard(.immediately)
+            .onAppear {
+                isFocused  = true
             }
             .listStyle(.plain)
             .onTapGesture {
@@ -323,104 +336,50 @@ struct ImageSession: View {
             22
         #endif
     }
-    
-    struct ZoomableImageView: View {
-        let imageUrl: URL?
-        @State private var zoomScale: CGFloat = 1.0
-        
-        @Environment(\.dismiss) var dismiss
-        
-        var body: some View {
-            NavigationView {
-                ScrollView([.horizontal, .vertical], showsIndicators: false) {
-                    AsyncImage(url: imageUrl) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .scaleEffect(zoomScale)
-                            .gesture(
-                                MagnificationGesture()
-                                    .onChanged { value in
-                                        zoomScale = value
-                                        if zoomScale < 1.0 {
-                                            zoomScale = 1.0
-                                        }
-                                    }
-                            )
-                            .toolbar {
-                                ToolbarItem(placement: .cancellationAction) {
-                                    Button("Close") {
-                                        dismiss()
-                                    }
-                                }
-                            }
-                            .onTapGesture(count: 2) {
-                                withAnimation {
-                                    zoomScale = 1.0
-                                }
-                            }
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    
-                }
-                .background(.black)
-            }
-        }
-    }
-
 }
 
-//
-//struct ImageDetailView: View {
-//    let imageURL: URL
-//    @State private var zoomScale: CGFloat = 1.0
-//
-//    var body: some View {
-//        ScrollView([.horizontal, .vertical], showsIndicators: false) {
-//            AsyncImage(url: imageURL    ) { asyncImage in
-//                asyncImage
-//                    .resizable()
-//                    .scaledToFit()
-//                    .scaleEffect(zoomScale)
-//                    .gesture(
-//                        MagnificationGesture()
-//                            .onChanged { value in
-//                                zoomScale = value
-//                            }
-//                    )
-//            }
-//        }
-//        .edgesIgnoringSafeArea(.all)
-//    }
-//}
+struct ZoomableImageView: View {
+    let imageUrl: URL?
+    @State private var zoomScale: CGFloat = 1.0
+    
+    @Environment(\.dismiss) var dismiss
+    
+    var body: some View {
+        NavigationView {
+            ScrollView([.horizontal, .vertical], showsIndicators: false) {
+                AsyncImage(url: imageUrl) { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .scaleEffect(zoomScale)
+                        .gesture(
+                            MagnificationGesture()
+                                .onChanged { value in
+                                    zoomScale = value
+                                    if zoomScale < 1.0 {
+                                        zoomScale = 1.0
+                                    }
+                                }
+                        )
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Close") {
+                                    dismiss()
+                                }
+                            }
+                        }
+                        .onTapGesture(count: 2) {
+                            withAnimation {
+                                zoomScale = 1.0
+                            }
+                        }
+                } placeholder: {
+                    ProgressView()
+                }
+                
+            }
+            .background(.black)
+        }
+    }
+}
 
-//struct ZoomableImageView: View {
-//    let imageUrl: URL?
-//    @State private var scale: CGFloat = 1.0
-//    
-//    var body: some View {
-//        GeometryReader { geometry in
-//            AsyncImage(url: imageUrl) { image in
-//                image
-//                    .resizable()
-//                    .scaledToFit()
-//                    .scaleEffect(scale)
-//                    .frame(width: geometry.size.width, height: geometry.size.height)
-//                    .gesture(
-//                        MagnificationGesture()
-//                            .onChanged { value in
-//                                scale = value.magnitude
-//                            }
-//                            .onEnded { _ in
-//                                withAnimation {
-//                                    scale = 1.0
-//                                }
-//                            }
-//                    )
-//            } placeholder: {
-//                ProgressView()
-//            }
-//        }
-//    }
-//}
