@@ -78,7 +78,6 @@ struct ImageSession: View {
                     Text(errorMsg)
                         .onAppear {
                             feedback = ""
-                            isFocused  = true
                         }
                         .foregroundStyle(.red)
                         .listRowSeparator(.hidden)
@@ -87,9 +86,6 @@ struct ImageSession: View {
                 if !feedback.isEmpty {
                     Text(feedback)
                         .listRowSeparator(.hidden)
-                        .onDisappear {
-                            isFocused = true
-                        }
                 }
 
                 Spacer()
@@ -110,9 +106,6 @@ struct ImageSession: View {
             .padding(.horizontal, 10)
             #endif
             .scrollDismissesKeyboard(.immediately)
-            .onAppear {
-                isFocused  = true
-            }
             .listStyle(.plain)
             .onTapGesture {
                 isFocused = false

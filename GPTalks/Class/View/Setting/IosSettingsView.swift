@@ -36,10 +36,24 @@ struct IosSettingsView: View {
                     HStack {
                         Image(systemName: "building.2.fill")
                             .renderingMode(.original)
-                        Text("Default Provider")
+                        Text("Chat Provider")
                             .lineLimit(1)
                         Spacer()
                         Picker("", selection: configuration.$preferredChatService) {
+                            ForEach(Provider.availableProviders, id: \.self) { provider in
+                                Text(provider.name)
+                                    .tag(provider.id)
+                            }
+                        }
+                    }
+                    
+                    HStack {
+                        Image(systemName: "photo.on.rectangle.angled")
+                            .renderingMode(.original)
+                        Text("Image Provider")
+                            .lineLimit(1)
+                        Spacer()
+                        Picker("", selection: configuration.$preferredImageService) {
                             ForEach(Provider.availableProviders, id: \.self) { provider in
                                 Text(provider.name)
                                     .tag(provider.id)
