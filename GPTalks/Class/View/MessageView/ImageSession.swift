@@ -16,7 +16,7 @@ struct ImageSession: View {
     @Environment(\.colorScheme) var colorScheme
 
     @State var imageUrl: String = ""
-    @State var images: [ImagesResult.URLResult] = []
+    @Binding var images: [ImagesResult.URLResult]
     @State var txt: String = ""
     @State var model: String = "realistic_vision_v5"
     @State var number: Int = 2

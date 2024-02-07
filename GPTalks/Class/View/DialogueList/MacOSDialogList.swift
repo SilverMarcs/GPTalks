@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import OpenAI
 
 struct MacOSDialogList: View {
     @Bindable var viewModel: DialogueViewModel
+    @State var images: [ImagesResult.URLResult] = []
 
     var body: some View {
         Group {
@@ -36,7 +38,7 @@ struct MacOSDialogList: View {
             Spacer()
 
             NavigationLink {
-                ImageSession()
+                ImageSession(images: $images)
             } label: {
                 Image(systemName: "photo.on.rectangle.angled")
             }

@@ -7,9 +7,11 @@
 
 #if os(iOS)
     import SwiftUI
+import OpenAI
 
     struct IOSDialogList: View {
         @Bindable var viewModel: DialogueViewModel
+        @State var images: [ImagesResult.URLResult] = []
 
         @State var isShowSettingView = false
 
@@ -24,7 +26,7 @@
                 .toolbar {
                     ToolbarItem {
                         NavigationLink {
-                            ImageSession()
+                            ImageSession(images: $images)
                         } label: {
                             Image(systemName: "photo.on.rectangle.angled")
                         }
