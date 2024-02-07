@@ -22,6 +22,7 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.isAutoGenerateTitle") var isAutoGenerateTitle: Bool = false
     
     @AppStorage("configuration.preferredChatService") var preferredChatService: Provider = .openai
+    @AppStorage("configuration.preferredImageService") var preferredImageService: Provider = .openai
     
     @AppStorage("configuration.contextLength") var contextLength = 20
     

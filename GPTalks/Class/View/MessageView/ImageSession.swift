@@ -18,8 +18,8 @@ struct ImageSession: View {
     @State var imageUrl: String = ""
     @Binding var images: [ImagesResult.URLResult]
     @State var txt: String = ""
-    @State var model: String = "realistic_vision_v5"
-    @State var number: Int = 2
+    @State var model: String = "dall-e-3"
+    @State var number: Int = 1
 
     @State var errorMsg: String = ""
     @State var feedback: String = ""
@@ -29,6 +29,8 @@ struct ImageSession: View {
     @State private var isZoomViewPresented = false
     
     @State var previewUrl = ""
+    
+    @State var showWarning = false
     
     var body: some View {
         ScrollViewReader { proxy in
@@ -93,6 +95,15 @@ struct ImageSession: View {
                 Spacer()
                     .listRowSeparator(.hidden)
                     .id("bottomID")
+            }
+            .onAppear {
+                showWarning = true
+            }
+            .alert("Images are not preserved on app close", isPresented: $showWarning) {
+                Button("Ok") {
+                    showWarning = false
+                    isFocused = true
+                }
             }
             #if os(macOS)
             .padding(.vertical, 15)
@@ -294,7 +305,7 @@ struct ImageSession: View {
         feedback = "Generating Images..."
 
         var streamingTask: Task<Void, Error>?
-        let openAIconfig = AppConfiguration.shared.preferredChatService.config
+        let openAIconfig = AppConfiguration.shared.preferredImageService.config
         let service: OpenAI = OpenAI(configuration: openAIconfig)
         let query2 = ImagesQuery(prompt: txt, model: model, n: Int(number), size: "1024x1024", quality: "standard")
 
