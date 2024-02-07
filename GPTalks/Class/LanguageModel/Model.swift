@@ -111,6 +111,7 @@ enum Model: String, Codable {
             .ngemini,
             .nmixtral,
         ]
+    static let oxygenModels: [Model] = openAIModels
     static let mandrilModels: [Model] = openAIModels
     static let gpt4freeModels: [Model] = [.bing, .phind]
     static let customModels: [Model] = openAIModels

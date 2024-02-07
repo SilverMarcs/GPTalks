@@ -6,47 +6,41 @@
 //
 
 import SwiftUI
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
 
 struct BottomInputView: View {
     @Bindable var session: DialogueSession
-    @State var isShowClearMessagesAlert = false
     
     @FocusState var focused: Bool
-
+    
+    @State private var importing = false
+    @State private var image: Image?
+    
     var body: some View {
-        HStack(spacing: 12) {
-//            regenButton
-            resetContextButton
-
-            inputBox
-
-            if session.isReplying() {
-                stopButton
-            } else {
-//                regenButton
-                sendButton
+        VStack(alignment: .leading) {
+            importedImage
+            
+            HStack(spacing: 12) {
+//                imagePicker
+                resetContextButton
+                
+                inputBox
+                
+                if session.isReplying() {
+                    stopButton
+                } else {
+                    sendButton
+                }
             }
         }
+        .buttonStyle(.plain)
         .padding(.horizontal)
-        #if os(iOS)
         .padding(.top, verticalPadding)
         .padding(.bottom, verticalPadding + 3)
-        #else
-        .padding(.top, verticalPadding)
-        .padding(.bottom, verticalPadding + 3)
-        #endif
-        .alert(
-            "Warning",
-            isPresented: $isShowClearMessagesAlert
-        ) {
-            Button(role: .destructive) {
-                session.clearMessages()
-            } label: {
-                Text("Confirm")
-            }
-        } message: {
-            Text("Remove all messages?")
-        }
     }
     
     private var verticalPadding: CGFloat {
@@ -57,21 +51,52 @@ struct BottomInputView: View {
         #endif
     }
     
-    @ViewBuilder
-    private var regenButton: some View {
-        Button {
-            Task { @MainActor in
-                await session.regenerateLastMessage()
-            }
-        } label: {
-            Image(systemName: "arrow.clockwise")
+    var importedImage: some View {
+        ZStack(alignment: .topTrailing) {
+            image?
                 .resizable()
                 .scaledToFit()
+                .frame(width: 100, height: 100)
+            
+            if image != nil {
+                Button {
+                    image = nil
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.background)
+                        .background(.primary, in: Circle())
+                }
+            }
+        }
+    }
+    
+    var imagePicker: some View {
+        Button {
+            importing = true
+        } label: {
+            Image(systemName: "photo")
                 .frame(width: imageSize, height: imageSize)
         }
-        .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
-        .buttonStyle(.plain)
-        .disabled(session.conversations.isEmpty || session.isReplying())
+        .fileImporter(
+            isPresented: $importing,
+            allowedContentTypes: [.image]
+        ) { result in
+            switch result {
+            case .success(let file):
+                print(file.absoluteString)
+                #if os(macOS)
+                if let nsImage = NSImage(contentsOf: file) {
+                    image = Image(nsImage: nsImage)
+                }
+                #else
+                if let uiImage = UIImage(contentsOfFile: file.path) {
+                    image = Image(uiImage: uiImage)
+                }
+                #endif
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
     
     @ViewBuilder
@@ -83,31 +108,16 @@ struct BottomInputView: View {
                 .resizable()
                 .scaledToFit()
             #if os(macOS)
-                .frame(width: imageSize + 1, height: imageSize + 1)
+                .frame(width: imageSize, height: imageSize)
             #else
                 .frame(width: imageSize - 1, height: imageSize - 1)
             #endif
         }
         .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
-        .buttonStyle(.plain)
         .disabled(session.conversations.isEmpty || session.isReplying())
         .rotationEffect(.degrees(135))
         .padding(.horizontal, -2)
         .contentShape(Rectangle())
-    }
-
-    @ViewBuilder
-    private var deleteButton: some View {
-        Button {
-            isShowClearMessagesAlert.toggle()
-        } label: {
-            Image(systemName: "trash")
-                .resizable()
-                .scaledToFit()
-                .frame(width: imageSize - 1, height: imageSize - 1)
-        }
-        .buttonStyle(.borderless)
-        .foregroundColor(.secondary)
     }
 
     @ViewBuilder
@@ -127,13 +137,11 @@ struct BottomInputView: View {
                 .resizable()
                 .scaledToFit()
                 .disabled(empty)
-//                .foregroundColor(empty ? .secondary : session.configuration.provider.accentColor)
                 .foregroundColor(empty ? .secondary : .accentColor)
                 .frame(width: imageSize, height: imageSize)
         }
         .keyboardShortcut(.return, modifiers: .command)
         .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
-        .buttonStyle(.plain)
         .disabled(session.input.isEmpty || session.isReplying())
         .fontWeight(session.input.isEmpty ? .regular : .semibold)
         .contentShape(Rectangle())
@@ -151,7 +159,6 @@ struct BottomInputView: View {
                 .foregroundColor(.red)
         }
         .keyboardShortcut("d", modifiers: .command)
-        .buttonStyle(.plain)
     }
 
     @ViewBuilder
@@ -163,11 +170,7 @@ struct BottomInputView: View {
                 textField
             #endif
         }
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(.tertiary, lineWidth: 0.6)
-                .opacity(0.8)
-        )
+        .roundedRectangleOverlay()
     }
 
     @ViewBuilder
@@ -206,7 +209,7 @@ struct BottomInputView: View {
 
     private var imageSize: CGFloat {
         #if os(macOS)
-            20
+            21
         #else
             27
         #endif

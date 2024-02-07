@@ -7,30 +7,56 @@
 
 #if os(iOS)
     import SwiftUI
+import OpenAI
 
     struct IOSDialogList: View {
-//        @EnvironmentObject var viewModel: DialogueViewModel
         @Bindable var viewModel: DialogueViewModel
-        
+        @State var images: [ImagesResult.URLResult] = []
+
         @State var isShowSettingView = false
 
         var body: some View {
             list
                 .listStyle(.inset)
-//                .searchable(text: $viewModel.searchText)
+                .searchable(text: $viewModel.searchText)
                 .navigationTitle("Sessions")
                 .sheet(isPresented: $isShowSettingView) {
-                    AppSettingsView()
+                    IosSettingsView()
                 }
                 .toolbar {
+                    ToolbarItem {
+                        NavigationLink {
+                            ImageSession(images: $images)
+                        } label: {
+                            Image(systemName: "photo.on.rectangle.angled")
+                        }
+                    }
+                    
                     ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            isShowSettingView = true
+                        Menu {
+                            Button {
+                                viewModel.toggleArchivedStatus()
+                            } label: {
+                                Label(
+                                    title: { Text(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") },
+                                    icon: { Image(systemName: viewModel.isArchivedSelected ? "archivebox.fill" : "archivebox") }
+                                )
+                            }
+                            
+                            Button {
+                                isShowSettingView = true
+                            } label: {
+                                Label(
+                                    title: { Text("Settings") },
+                                    icon: { Image(systemName: "gear") }
+                                )
+                            }
+                            
                         } label: {
                             if isIPadOS {
                                 Image(systemName: "gear")
                             } else {
-                                Text("Config")
+                                Text("Edit")
                             }
                         }
                     }

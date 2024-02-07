@@ -9,7 +9,6 @@ import CoreData
 import SwiftUI
 
 struct ContentView: View {
-//    @EnvironmentObject var viewModel: DialogueViewModel
     @Environment(DialogueViewModel.self) private var viewModel
 
     var body: some View {
@@ -23,9 +22,10 @@ struct ContentView: View {
             if let selectedDialogue = viewModel.selectedDialogue {
                 #if os(macOS)
                     MacOSMessages(session: selectedDialogue)
+//                        .id(selectedDialogue.id)
                 #else
                     iOSMessages(session: selectedDialogue)
-                        .id(selectedDialogue.id)
+//                        .id(selectedDialogue.id)
                 #endif
             } else {
                 Text("No Chat Selected")
@@ -33,7 +33,6 @@ struct ContentView: View {
             }
         }
         .background(.background)
-//        .accentColor(viewModel.selectedDialogue?.configuration.provider.accentColor ?? .accentColor)
         .task {
             viewModel.fetchDialogueData()
         }

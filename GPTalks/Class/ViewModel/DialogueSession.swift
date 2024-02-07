@@ -135,7 +135,6 @@ import SwiftUI
 
     func removeResetContextMarker() {
         resetMarker = nil
-
         save()
     }
 
@@ -188,13 +187,6 @@ import SwiftUI
         title = newTitle
         save()
     }
-
-    @MainActor
-    func clearMessages() {
-        withAnimation { [weak self] in
-            self?.removeAllConversations()
-        }
-    }
     
     @MainActor
     func retry() async {
@@ -245,6 +237,8 @@ import SwiftUI
 
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
+        isAddingConversation.toggle()
+        
         if let resetMarker = resetMarker {
             if resetMarker == 0 {
                 removeResetContextMarker()
@@ -340,6 +334,7 @@ import SwiftUI
             #endif
 
         } catch {
+            isStreaming = false
             // TODO: do better with stop_reason from openai
             if error.localizedDescription == "cancelled" {
                 if lastConversation.content != "" {
@@ -348,14 +343,17 @@ import SwiftUI
                     removeConversation(at: conversations.count - 1)
                 }
                 conversations[conversations.count - 1].isReplying = false
-                return
+            } else {
+                if lastConversation.role == "assistant" && lastConversation.content == ""  {
+                    do {
+                        try await Task.sleep(nanoseconds: 250_000_000)
+                    } catch {
+                        print("couldnt sleep")
+                    }
+                    removeConversation(at: conversations.count - 1)
+                    setErrorDesc(errorDesc: error.localizedDescription)
+                }
             }
-            
-            if conversations.count == 0 {
-                removeConversation(at: conversations.count - 1)
-            }
-            
-            setErrorDesc(errorDesc: error.localizedDescription)
         }
 
         conversations[conversations.count - 1].isReplying = false
@@ -419,15 +417,11 @@ extension DialogueSession {
 
     @discardableResult
     func appendConversation(_ conversation: Conversation) -> ConversationData {
-        isAddingConversation = true
-        
         if conversations.isEmpty {
             removeResetContextMarker()
         }
 
         conversations.append(conversation)
-        
-        isAddingConversation = false
 
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id
@@ -508,7 +502,8 @@ extension DialogueSession {
     }
 
     func removeAllConversations() {
-        resetMarker = nil
+        removeResetContextMarker()
+        resetErrorDesc()
         conversations.removeAll()
 
         do {

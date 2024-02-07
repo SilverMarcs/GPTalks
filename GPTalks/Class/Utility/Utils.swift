@@ -7,6 +7,19 @@
 
 import SwiftUI
 
+extension Array {
+    func chunked(into size: Int) -> [[Element]] {
+        stride(from: 0, to: count, by: size).map {
+            Array(self[$0 ..< Swift.min($0 + size, count)])
+        }
+    }
+    
+    // does chunking from bottom up
+    func chunked(fromEndInto size: Int) -> [[Element]] {
+        reversed().chunked(into: size).map { $0.reversed() }.reversed()
+    }
+}
+
 extension String {
     func copyToPasteboard() {
 #if os(iOS)
@@ -33,7 +46,7 @@ func scrollToBottom(proxy: ScrollViewProxy, id: String = "bottomID", anchor: Uni
    if delay > 0 {
        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: action)
    } else {
-//       DispatchQueue.main.async(execute: action)
-       action()
+       DispatchQueue.main.async(execute: action)
+//       action()
    }
 }
