@@ -27,14 +27,7 @@ struct ToolbarItems: ToolbarContent {
             Button {
                 isShowSettingsView.toggle()
             } label: {
-                HStack(spacing: 4) {
-                    Text(session.title)
-                        .foregroundColor(.primary)
-                        .bold()
-                    Image(systemName:"chevron.right")
-                        .font(.system(size: 10))
-                        .foregroundColor(.secondary)
-                }
+                iosNavTitle
             }
             .foregroundStyle(.primary)
             .sheet(isPresented: $isShowSettingsView) {
@@ -44,7 +37,6 @@ struct ToolbarItems: ToolbarContent {
         
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
-
                 Button {
                     session.resetContext()
                 } label: {
@@ -53,7 +45,6 @@ struct ToolbarItems: ToolbarContent {
                 }
 
                 Button(role: .destructive) {
-//                    isShowDeleteWarning.toggle()
                     session.removeAllConversations()
                 } label: {
                     Text("Delete All Messages")
@@ -62,6 +53,28 @@ struct ToolbarItems: ToolbarContent {
             } label: {
                 Image(systemName: "ellipsis.circle")
             }
+        }
+    }
+    
+    var iosNavTitle: some View {
+        HStack(spacing: 10) {
+            ProviderImage(radius: CGSize(width: 20, height: 20), color: session.configuration.provider.accentColor, frame: 32)
+            
+            VStack(alignment: .leading, spacing: 1) {
+                Text(session.title)
+                    .font(.system(size: 16))
+                    .foregroundStyle(.primary)
+                    .bold()
+                
+                Text(session.configuration.model.name)
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
+            }
+            
+            Image(systemName:"chevron.right")
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
+                .padding(.leading, -3)
         }
     }
 #endif
