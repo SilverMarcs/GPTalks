@@ -9,76 +9,78 @@ import SwiftUI
 
 struct ToolbarItems: ToolbarContent {
     @Bindable var session: DialogueSession
-    
+
     @State var isShowSettingsView: Bool = false
-    
+
     var body: some ToolbarContent {
-#if os(macOS)
-        macOS
+        #if os(macOS)
+            macOS
         #else
-        iOS
+            iOS
         #endif
     }
-    
-#if os(iOS)
-    @ToolbarContentBuilder
-    var iOS: some ToolbarContent {
-        ToolbarItem(placement: .principal) {
-            Button {
-                isShowSettingsView.toggle()
-            } label: {
-                iosNavTitle
+
+    #if os(iOS)
+        @ToolbarContentBuilder
+        var iOS: some ToolbarContent {
+            ToolbarItem(placement: .principal) {
+                Button {
+                    isShowSettingsView.toggle()
+                } label: {
+                    iosNavTitle
+                }
+                .foregroundStyle(.primary)
+                .sheet(isPresented: $isShowSettingsView) {
+                    DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+                }
             }
-            .foregroundStyle(.primary)
-            .sheet(isPresented: $isShowSettingsView) {
-                DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Button {
+                        Task {
+                            await session.regenerateLastMessage()
+                        }
+                    } label: {
+                        Text("Regenerate")
+                        Image(systemName: "arrow.2.circlepath")
+                    }
+
+                    Button(role: .destructive) {
+                        session.removeAllConversations()
+                    } label: {
+                        Text("Delete All Messages")
+                        Image(systemName: "trash")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
             }
         }
-        
-        ToolbarItem(placement: .topBarTrailing) {
-            Menu {
-                Button {
-                    session.resetContext()
-                } label: {
-                    Text("Reset Context")
-                    Image(systemName: "eraser")
+
+        var iosNavTitle: some View {
+            HStack(spacing: 10) {
+                ProviderImage(color: session.configuration.provider.accentColor, frame: 30)
+
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(session.title)
+                        .font(.system(size: 16))
+                        .foregroundStyle(.primary)
+                        .bold()
+
+                    Text(session.configuration.model.name)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
                 }
 
-                Button(role: .destructive) {
-                    session.removeAllConversations()
-                } label: {
-                    Text("Delete All Messages")
-                    Image(systemName: "trash")
-                }
-            } label: {
-                Image(systemName: "ellipsis.circle")
-            }
-        }
-    }
-    
-    var iosNavTitle: some View {
-        HStack(spacing: 10) {
-            ProviderImage(radius: CGSize(width: 20, height: 20), color: session.configuration.provider.accentColor, frame: 32)
-            
-            VStack(alignment: .leading, spacing: 1) {
-                Text(session.title)
-                    .font(.system(size: 16))
-                    .foregroundStyle(.primary)
-                    .bold()
-                
-                Text(session.configuration.model.name)
-                    .font(.system(size: 11))
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12))
                     .foregroundStyle(.secondary)
+                    .padding(.leading, -3)
             }
-            
-            Image(systemName:"chevron.right")
-                .font(.system(size: 12))
-                .foregroundStyle(.secondary)
-                .padding(.leading, -3)
         }
-    }
-#endif
-    
+    #endif
+
     @ToolbarContentBuilder
     var macOS: some ToolbarContent {
         ToolbarItem(placement: .navigation) {
@@ -123,27 +125,22 @@ struct ToolbarItems: ToolbarContent {
             }
             .frame(width: 125)
 
-            Picker("Context", selection: $session.configuration.contextLength) {
-                ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
-                    Text("\(number) Messages")
-                        .tag(number)
-                }
-            }
-
             Menu {
-                Button {
-                    session.resetContext()
-                } label: {
-                    Text("Reset Context")
-                    Image(systemName: "eraser")
+                Picker("Context Length", selection: $session.configuration.contextLength) {
+                    ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
+                        Text("\(number) Messages")
+                            .tag(number)
+                    }
                 }
 
-                Button(role: .destructive) {
-//                    isShowDeleteWarning.toggle()
+                Button("Regenerate") {
+                    Task {
+                        await session.regenerateLastMessage()
+                    }
+                }
+
+                Button("Delete All Messages") {
                     session.removeAllConversations()
-                } label: {
-                    Text("Delete All Messages")
-                    Image(systemName: "trash")
                 }
             } label: {
                 Image(systemName: "ellipsis.circle")

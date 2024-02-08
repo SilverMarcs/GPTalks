@@ -25,18 +25,19 @@ struct MessageContextMenu: View {
                         Text("Edit")
                     }
                 }
-            } else {
-                Button {
-                    Task { @MainActor in
-                        await session.regenerate(from: conversation)
-                    }
-                } label: {
-                    Image(systemName: "arrow.2.circlepath")
-                    if showText {
-                        Text("Regenerate")
-                    }
+            }
+            
+            Button {
+                Task { @MainActor in
+                    await session.regenerate(from: conversation)
+                }
+            } label: {
+                Image(systemName: "arrow.2.circlepath")
+                if showText {
+                    Text("Regenerate")
                 }
             }
+            
 
             Button {
                 conversation.content.copyToPasteboard()

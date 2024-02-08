@@ -119,6 +119,23 @@ struct BottomInputView: View {
         .padding(.horizontal, -2)
         .contentShape(Rectangle())
     }
+    
+    private var regenButton: some View {
+        Button {
+            Task { @MainActor in
+                await session.regenerateLastMessage()
+            }
+        } label: {
+            Text("Reset Context")
+            Image(systemName: "arrow.2.circlepath")
+                .resizable()
+                .scaledToFit()
+                .frame(width: imageSize, height: imageSize)
+        }
+        .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
+        .buttonStyle(.plain)
+        .disabled(session.conversations.isEmpty || session.isReplying())
+    }
 
     @ViewBuilder
     private var sendButton: some View {

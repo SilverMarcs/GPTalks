@@ -5,20 +5,23 @@
 //  Created by Zabir Raihan on 14/01/2024.
 //
 
-import SwiftUI
 import MarkdownWebView
+import SwiftUI
 
 #if os(iOS)
 struct TextSelectionView: View {
     @Environment(\.dismiss) var dismiss
     var content: String
-    
+
     var body: some View {
         NavigationView {
-            Form {
+            ScrollView {
                 MarkdownWebView(content)
+                    .padding(.horizontal)
+                    .padding(.bottom, 45)
             }
-            .padding(.top, -30)
+
+            .edgesIgnoringSafeArea(.bottom)
             .navigationTitle("Select Text")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -29,7 +32,6 @@ struct TextSelectionView: View {
                 }
             }
         }
-        
     }
 }
 #endif

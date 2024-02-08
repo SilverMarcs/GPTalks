@@ -216,10 +216,12 @@ import SwiftUI
                 removeResetContextMarker()
             }
             
-            if conversations[index].role != "user" {
+            if conversations[index].role == "assistant" {
                 removeConversations(from: index)
+                await send(text: lastConversation.content, isRegen: true)
+            } else {
+                await edit(conversation: conversation, editedContent: conversation.content)
             }
-            await send(text: lastConversation.content, isRegen: true)
         }
     }
 
