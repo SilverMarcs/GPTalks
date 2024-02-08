@@ -19,7 +19,7 @@ struct MacOSSettingsView: View {
                     Label("Providers", systemImage: "brain.head.profile")
                 }
         }
-        .frame(width: 650, height: 420)
+        .frame(width: 650, height: 480)
     }
 }
 

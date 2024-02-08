@@ -33,7 +33,12 @@ struct DefaultConfigView: View {
 
                     Divider()
  
-                    LabeledPicker(title: "Preferred Provider", width: widthValue, picker: preferredProvider)
+                    LabeledPicker(title: "Preferred Chat Provider", width: widthValue, picker: preferredProvider)
+                    .padding(paddingValue)
+                    
+                    Divider()
+                    
+                    LabeledPicker(title: "Preferred Image Provider", width: widthValue, picker: preferredImageProvider)
                     .padding(paddingValue)
                 }
             }
@@ -105,7 +110,7 @@ struct DefaultConfigView: View {
         }
     }
     
-    var preferredImahgeProvider: some View {
+    var preferredImageProvider: some View {
         Picker("Preferred Image Provider", selection: configuration.$preferredImageService) {
             ForEach(Provider.availableProviders, id: \.self) { provider in
                 Text(provider.name)
