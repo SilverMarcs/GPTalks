@@ -33,7 +33,12 @@ struct DefaultConfigView: View {
 
                     Divider()
  
-                    LabeledPicker(title: "Preferred Provider", width: widthValue, picker: preferredProvider)
+                    LabeledPicker(title: "Preferred Chat Provider", width: widthValue, picker: preferredProvider)
+                    .padding(paddingValue)
+                    
+                    Divider()
+                    
+                    LabeledPicker(title: "Preferred Image Provider", width: widthValue, picker: preferredProvider)
                     .padding(paddingValue)
                 }
             }
