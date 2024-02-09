@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
-#if os(macOS)
-import AppKit
-#else
-import UIKit
+#if os(iOS)
+import VisualEffectView
 #endif
 
 struct BottomInputView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @Bindable var session: DialogueSession
     
     @FocusState var focused: Bool
@@ -30,11 +30,13 @@ struct BottomInputView: View {
                 
                 inputBox
                 
+                #if os(macOS)
                 if session.isReplying() {
                     stopButton
                 } else {
                     sendButton
                 }
+                #endif
             }
         }
         .buttonStyle(.plain)
@@ -105,18 +107,23 @@ struct BottomInputView: View {
             session.resetContext()
         } label: {
             Image(systemName: "eraser")
+//            Image(systemName: "plus")
                 .resizable()
                 .scaledToFit()
-            #if os(macOS)
-                .frame(width: imageSize, height: imageSize)
-            #else
-                .frame(width: imageSize - 1, height: imageSize - 1)
-            #endif
+        #if os(macOS)
+            .frame(width: imageSize, height: imageSize)
+        #else
+            .padding(8)
+            .background(.gray.opacity(0.2))
+//            .background(colorScheme == .dark ? .regularMaterial : .thick)
+            .clipShape(Circle())
+            .frame(width: imageSize + 3, height: imageSize + 3)
+        #endif
         }
         .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
         .disabled(session.conversations.isEmpty || session.isReplying())
-        .rotationEffect(.degrees(135))
-        .padding(.horizontal, -2)
+//        .rotationEffect(.degrees(-45))
+//        .padding(.horizontal, -2)
         .contentShape(Rectangle())
     }
     
@@ -126,7 +133,6 @@ struct BottomInputView: View {
                 await session.regenerateLastMessage()
             }
         } label: {
-            Text("Reset Context")
             Image(systemName: "arrow.2.circlepath")
                 .resizable()
                 .scaledToFit()
@@ -155,7 +161,11 @@ struct BottomInputView: View {
                 .scaledToFit()
                 .disabled(empty)
                 .foregroundColor(empty ? .secondary : .accentColor)
+            #if os(iOS)
+                .frame(width: imageSize - 3, height: imageSize - 3)
+            #else
                 .frame(width: imageSize, height: imageSize)
+            #endif
         }
         .keyboardShortcut(.return, modifiers: .command)
         .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
@@ -172,7 +182,11 @@ struct BottomInputView: View {
             Image(systemName: "stop.circle.fill")
                 .resizable()
                 .scaledToFit()
+            #if os(macOS)
                 .frame(width: imageSize, height: imageSize)
+            #else
+                .frame(width: imageSize - 3, height: imageSize - 3)
+            #endif
                 .foregroundColor(.red)
         }
         .keyboardShortcut("d", modifiers: .command)
@@ -192,13 +206,42 @@ struct BottomInputView: View {
 
     @ViewBuilder
     private var textField: some View {
-        TextField("Send a message", text: $session.input, axis: .vertical)
-            .focused($focused)
-            .multilineTextAlignment(.leading)
-            .lineLimit(1 ... 15)
-            .padding(6)
-            .padding(.horizontal, 5)
-            .frame(minHeight: imageSize + 9)
+        ZStack(alignment: .bottomTrailing) {
+            TextField("Send a message", text: $session.input, axis: .vertical)
+                .focused($focused)
+                .multilineTextAlignment(.leading)
+                .lineLimit(1 ... 15)
+                .padding(6)
+                .padding(.horizontal, 5)
+                .frame(minHeight: imageSize + 5)
+                .background(
+                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.2, blurRadius: 18, scale: 1)
+                        .cornerRadius(18)
+                )
+            
+            if session.input.isEmpty && !session.isReplying() {
+                Button {
+                     
+                 } label: {
+                     Image(systemName: "mic.fill")
+                         .resizable()
+                         .scaledToFit()
+                         .frame(width: imageSize - 13, height: imageSize - 13)
+                         .foregroundStyle(.secondary)
+                         .opacity(0.5)
+                 }
+                 .offset(x:-10, y: -9)
+            } else {
+                if session.isReplying() {
+                    stopButton
+                        .offset(x:-4, y: -4)
+
+                } else {
+                    sendButton
+                        .offset(x:-4, y: -4)
+                }
+            }
+        }
     }
 
     @ViewBuilder
@@ -207,7 +250,7 @@ struct BottomInputView: View {
             Text("Send a message")
                 .font(.body)
                 .padding(6)
-                .padding(.leading, 4)
+                .padding(.leading, 6)
                 .foregroundColor(placeHolderTextColor)
         }
         TextEditor(text: $session.input)
@@ -228,7 +271,7 @@ struct BottomInputView: View {
         #if os(macOS)
             21
         #else
-            27
+            31
         #endif
     }
     
