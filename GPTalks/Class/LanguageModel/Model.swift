@@ -30,19 +30,20 @@ enum Model: String, Codable {
     /// gpt4free
     case phind
     case bing
+    case gemini
 
     var name: String {
         switch self {
         case .gpt3:
-            "GPT-3.5 Turbo"
+            "GPT-3.5T"
         case .gpt4:
             "GPT-4"
         case .gpt4t:
-            "GPT-4 Turbo"
+            "GPT-4T"
         case .gpt4x:
-            "GPT-4 Turbo2"
+            "GPT-4T2"
         case .phind, .orphind:
-            "Phind V2"
+            "Phind"
         case .ortoppy:
             "Toppy 7B"
         case .orperplexity:
@@ -55,6 +56,8 @@ enum Model: String, Codable {
             "Dolphin Mixtral"
         case .bing:
             "Bing"
+        case .gemini:
+            "Gemini"
         }
     }
 
@@ -88,8 +91,12 @@ enum Model: String, Codable {
             "phind"
         case .bing:
             "bing"
+        case .gemini:
+            "gemini"
         }
     }
+    
+    static var nonStreamModels: [Model] = [.gemini]
 
     static let openAIModels: [Model] =
         [
@@ -103,8 +110,8 @@ enum Model: String, Codable {
             .ortoppy,
             .orperplexity,
             .orphind,
-//            .orgemini,
-//            .ordolphin,
+            .orgemini,
+            .ordolphin,
         ]
     static let nagaModels: [Model] =
         openAIModels + [
@@ -113,6 +120,11 @@ enum Model: String, Codable {
         ]
     static let oxygenModels: [Model] = openAIModels
     static let mandrilModels: [Model] = openAIModels
-    static let gpt4freeModels: [Model] = [.bing, .phind]
+    static let gpt4freeModels: [Model] =
+        [
+            .bing,
+            .phind,
+            .gemini,
+        ]
     static let customModels: [Model] = openAIModels
 }

@@ -283,7 +283,7 @@ import SwiftUI
                               }),
                               temperature: configuration.temperature,
                               maxTokens: 3800,
-                              stream: true)
+                              stream: Model.nonStreamModels.contains(configuration.model) ? false : true)
 
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
 
@@ -296,10 +296,17 @@ import SwiftUI
                 }
 
                 // Start your network request here
-                for try await result in service.chatsStream(query: query) {
-                    streamText += result.choices.first?.delta.content ?? ""
+                if Model.nonStreamModels.contains(configuration.model) {
+                    let result = try await service.chats(query: query)
+                    streamText += result.choices.first?.message.content ?? ""
                     conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
                     lastConversationData.sync(with: conversations[conversations.count - 1])
+                } else {
+                    for try await result in service.chatsStream(query: query) {
+                        streamText += result.choices.first?.delta.content ?? ""
+                        conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                        lastConversationData.sync(with: conversations[conversations.count - 1])
+                    }
                 }
 
                 // End the background task once the network request is finished
@@ -309,9 +316,17 @@ import SwiftUI
             var streamText = ""
             streamingTask = Task {
                 isStreaming = true
-                for try await result in service.chatsStream(query: query) {
-                    streamText += result.choices.first?.delta.content ?? ""
+                
+                if Model.nonStreamModels.contains(configuration.model) {
+                    let result = try await service.chats(query: query)
+                    streamText += result.choices.first?.message.content ?? ""
+
+                } else {
+                    for try await result in service.chatsStream(query: query) {
+                        streamText += result.choices.first?.delta.content ?? ""
+                    }
                 }
+
                 isStreaming = false
             }
         

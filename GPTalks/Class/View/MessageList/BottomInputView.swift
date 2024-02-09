@@ -198,7 +198,7 @@ struct BottomInputView: View {
             .lineLimit(1 ... 15)
             .padding(6)
             .padding(.horizontal, 5)
-            .frame(minHeight: imageSize + 10)
+            .frame(minHeight: imageSize + 9)
     }
 
     @ViewBuilder
@@ -228,7 +228,7 @@ struct BottomInputView: View {
         #if os(macOS)
             21
         #else
-            26
+            27
         #endif
     }
     
