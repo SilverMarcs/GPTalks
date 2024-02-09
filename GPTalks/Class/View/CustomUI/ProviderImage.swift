@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct ProviderImage: View {
-    var radius: CGSize = CGSize(width: 10, height: 10)
+    var radius: CGFloat = 10
     var color: Color = Color("greenColor")
     var frame: CGFloat = 36
     
     var body: some View {
         ZStack  {
-            RoundedRectangle(cornerSize: radius)
+            RoundedRectangle(cornerRadius: radius)
                 .fill(color)
                 .frame(width: frame, height: frame)
             

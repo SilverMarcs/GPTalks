@@ -24,6 +24,9 @@
             ScrollViewReader { proxy in
                 ZStack(alignment: .bottomTrailing) {
                     ScrollView {
+                        Spacer()
+                            .frame(height: 10)
+                        
                         ForEach(session.conversations) { conversation in
                             ConversationView(session: session, conversation: conversation)
                         }
@@ -39,7 +42,6 @@
                     }
                     
                     scrollBtn(proxy: proxy)
-                    
                 }
                 .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                     let bottomReached = value > UIScreen.main.bounds.height
@@ -97,6 +99,7 @@
                         .ignoresSafeArea()
                 )
             }
+//            .toolbarRole(.editor) // hides back button text
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItems(session: session)

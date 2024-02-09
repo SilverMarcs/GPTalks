@@ -222,7 +222,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     }
     
     var logoImage: some View {
-        ProviderImage(radius: CGSize(width: imageRadius, height: imageRadius), color: self.accentColor, frame: imageSize)
+        ProviderImage(radius: imageRadius, color: self.accentColor, frame: imageSize)
     }
     
     private var imageRadius: CGFloat {

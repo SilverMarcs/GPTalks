@@ -24,18 +24,24 @@ struct ToolbarItems: ToolbarContent {
         @ToolbarContentBuilder
         var iOS: some ToolbarContent {
             ToolbarItem(placement: .principal) {
-                Button {
-                    isShowSettingsView.toggle()
-                } label: {
-                    iosNavTitle
-                }
-                .foregroundStyle(.primary)
-                .sheet(isPresented: $isShowSettingsView) {
-                    DialogueSettingsView(configuration: $session.configuration, title: $session.title)
-                }
-            }
+                HStack {
+                    Button {
+                        isShowSettingsView.toggle()
+                    } label: {
+                        iosNavTitle
+                    }
+                    .foregroundStyle(.primary)
+                    .sheet(isPresented: $isShowSettingsView) {
+                        DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+                    }
 
-            ToolbarItem(placement: .topBarTrailing) {
+                    Spacer()
+                }
+                .padding(.leading, -15)
+
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
                     Button {
                         Task {
@@ -55,25 +61,26 @@ struct ToolbarItems: ToolbarContent {
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
-            }
+              }
         }
 
         var iosNavTitle: some View {
-            VStack(alignment: .leading, spacing: 1) {
-                Text(session.title)
-                    .font(.system(size: 16))
-                    .foregroundStyle(.primary)
-                    .bold()
-
-                HStack(spacing: 7) {
-                    ProviderImage(radius: CGSize(width: 4, height: 4), color: session.configuration.provider.accentColor, frame: 12)
-                    Text(session.configuration.model.name)
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 8))
-                        .foregroundStyle(.secondary)
-                        .padding(.leading, -4)
+            HStack {
+                ProviderImage(radius: 9, color: session.configuration.provider.accentColor, frame: 30)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(session.title)
+                        .font(.system(size: 16))
+                        .foregroundStyle(.primary)
+                        .bold()
+                    HStack(spacing: 7) {
+                        Text(session.configuration.model.name)
+                            .font(.system(size: 11))
+                            .foregroundStyle(.secondary)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 8))
+                            .foregroundStyle(.secondary)
+                            .padding(.leading, -4)
+                    }
                 }
             }
         }
