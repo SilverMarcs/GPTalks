@@ -40,12 +40,12 @@ struct BottomInputView: View {
         .buttonStyle(.plain)
         .padding(.horizontal)
         .padding(.top, verticalPadding)
-        .padding(.bottom, verticalPadding + 3)
+        .padding(.bottom, verticalPadding + 2)
     }
     
     private var verticalPadding: CGFloat {
         #if os(iOS)
-        return 6
+        return 7
         #else
         return 13
         #endif
@@ -198,7 +198,7 @@ struct BottomInputView: View {
             .lineLimit(1 ... 15)
             .padding(6)
             .padding(.horizontal, 4)
-            .frame(minHeight: imageSize + 6)
+            .frame(minHeight: imageSize + 9)
     }
 
     @ViewBuilder
@@ -228,7 +228,7 @@ struct BottomInputView: View {
         #if os(macOS)
             21
         #else
-            27
+            26
         #endif
     }
     

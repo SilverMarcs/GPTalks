@@ -59,24 +59,22 @@ struct ToolbarItems: ToolbarContent {
         }
 
         var iosNavTitle: some View {
-            HStack(spacing: 10) {
-                ProviderImage(color: session.configuration.provider.accentColor, frame: 30)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(session.title)
+                    .font(.system(size: 16))
+                    .foregroundStyle(.primary)
+                    .bold()
 
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(session.title)
-                        .font(.system(size: 16))
-                        .foregroundStyle(.primary)
-                        .bold()
-
+                HStack(spacing: 7) {
+                    ProviderImage(radius: CGSize(width: 4, height: 4), color: session.configuration.provider.accentColor, frame: 12)
                     Text(session.configuration.model.name)
                         .font(.system(size: 11))
                         .foregroundStyle(.secondary)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 8))
+                        .foregroundStyle(.secondary)
+                        .padding(.leading, -4)
                 }
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
-                    .padding(.leading, -3)
             }
         }
     #endif

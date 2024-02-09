@@ -70,7 +70,7 @@ import SwiftUI
     // MARK: - State
 
     var input: String = ""
-    var title: String = "New Chat" {
+    var title: String = "New Session" {
         didSet {
             save()
         }

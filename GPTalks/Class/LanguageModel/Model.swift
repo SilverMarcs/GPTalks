@@ -34,25 +34,25 @@ enum Model: String, Codable {
     var name: String {
         switch self {
         case .gpt3:
-            "GPT-3.5"
+            "GPT-3.5 Turbo"
         case .gpt4:
             "GPT-4"
         case .gpt4t:
-            "GPT-4T"
+            "GPT-4 Turbo"
         case .gpt4x:
-            "GPT-4X"
+            "GPT-4 Turbo2"
         case .phind, .orphind:
-            "Phind"
+            "Phind V2"
         case .ortoppy:
-            "Toppy"
+            "Toppy 7B"
         case .orperplexity:
-            "Perplexity"
+            "Perplexity Online"
         case .ngemini, .orgemini:
-            "Gemini"
+            "Gemini Pro"
         case .nmixtral, .ormixtral:
-            "Mixtral"
+            "Mixtral 8x7B"
         case .ordolphin:
-            "Dolphin"
+            "Dolphin Mixtral"
         case .bing:
             "Bing"
         }
@@ -77,7 +77,7 @@ enum Model: String, Codable {
         case .orgemini:
             "google/gemini-pro"
         case .ormixtral:
-            "mistralai/mixtral-8x7b-instruct"
+            "nousresearch/nous-hermes-2-mixtral-8x7b-dpo"
         case .ordolphin:
             "cognitivecomputations/dolphin-mixtral-8x7b"
         case .ngemini:

@@ -13,9 +13,14 @@ struct RoundedRectangleOverlayModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                RoundedRectangle(cornerRadius: 17, style: .continuous)
+                #if os(iOS)
+                    .stroke(Color(.tertiarySystemGroupedBackground), lineWidth: 1)
+                    .opacity(0.7)
+                #else
                     .stroke(.tertiary, lineWidth: 0.6)
                     .opacity(0.8)
+                #endif
             )
     }
 }

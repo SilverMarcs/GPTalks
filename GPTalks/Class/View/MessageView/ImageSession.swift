@@ -18,7 +18,7 @@ struct ImageSession: View {
     @State var imageUrl: String = ""
     @Binding var images: [ImagesResult.URLResult]
     @State var txt: String = ""
-    @State var model: String = "dall-e-3"
+    @State var model: String = "realisticVision"
     @State var number: Int = 1
 
     @State var errorMsg: String = ""
