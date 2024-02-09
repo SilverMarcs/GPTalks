@@ -10,13 +10,15 @@ import SwiftUI
 
 // Define the custom view modifier
 struct RoundedRectangleOverlayModifier: ViewModifier {
+    @Environment(\.colorScheme) private var colorScheme
+    
     func body(content: Content) -> some View {
         content
             .overlay(
-                RoundedRectangle(cornerRadius: 17, style: .continuous)
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
                 #if os(iOS)
-                    .stroke(Color(.tertiarySystemGroupedBackground), lineWidth: 1)
-                    .opacity(0.7)
+                    .stroke(colorScheme == .dark ? Color(.tertiarySystemGroupedBackground) : Color(.tertiaryLabel), lineWidth: 1)
+                    .opacity(colorScheme == .dark ? 0.8 : 0.5)
                 #else
                     .stroke(.tertiary, lineWidth: 0.6)
                     .opacity(0.8)

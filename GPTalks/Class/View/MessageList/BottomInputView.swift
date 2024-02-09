@@ -197,8 +197,8 @@ struct BottomInputView: View {
             .multilineTextAlignment(.leading)
             .lineLimit(1 ... 15)
             .padding(6)
-            .padding(.horizontal, 4)
-            .frame(minHeight: imageSize + 9)
+            .padding(.horizontal, 5)
+            .frame(minHeight: imageSize + 10)
     }
 
     @ViewBuilder
