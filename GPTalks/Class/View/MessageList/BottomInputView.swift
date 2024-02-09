@@ -162,6 +162,8 @@ struct BottomInputView: View {
                 .disabled(empty)
                 .foregroundColor(empty ? .secondary : .accentColor)
             #if os(iOS)
+                .background(.primary)
+                .clipShape(Circle())
                 .frame(width: imageSize - 3, height: imageSize - 3)
             #else
                 .frame(width: imageSize, height: imageSize)
@@ -213,11 +215,14 @@ struct BottomInputView: View {
                 .lineLimit(1 ... 15)
                 .padding(6)
                 .padding(.horizontal, 5)
+                .padding(.trailing, 25)  // for avoiding send button
                 .frame(minHeight: imageSize + 5)
+            #if os(iOS)
                 .background(
                     VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.2, blurRadius: 18, scale: 1)
                         .cornerRadius(18)
                 )
+            #endif
             
             if session.input.isEmpty && !session.isReplying() {
                 Button {
