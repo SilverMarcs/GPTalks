@@ -13,6 +13,8 @@ struct EditingView: View {
     let session: DialogueSession
     let conversation: Conversation
     
+    @FocusState private var isTextFieldFocused: Bool
+    
     var body: some View {
         #if os(macOS)
             macOSEditingView
@@ -44,6 +46,10 @@ struct EditingView: View {
         NavigationView {
             Form {
                 TextField("Editing Message", text: $editingMessage, axis: .vertical)
+                    .focused($isTextFieldFocused)
+            }
+            .onAppear {
+                isTextFieldFocused = true
             }
             .navigationBarTitle("Editing Message")
             .navigationBarTitleDisplayMode(.inline)

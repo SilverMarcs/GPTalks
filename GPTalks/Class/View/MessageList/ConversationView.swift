@@ -14,12 +14,18 @@ struct ConversationView: View {
     var body : some View {
         if conversation.role == "user" {
             UserMessageView(conversation: conversation, session: session)
+            #if os(macOS)
+                .opacity(0.9)
+            #endif
                 .transition(.opacity)
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
         
         if conversation.role == "assistant" {
             AssistantMessageView(conversation: conversation, session: session)
+            #if os(macOS)
+                .opacity(0.9)
+            #endif
                 .transition(.opacity)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
