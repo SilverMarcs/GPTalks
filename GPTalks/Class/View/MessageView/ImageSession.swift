@@ -14,11 +14,11 @@ import VisualEffectView
 
 struct ImageSession: View {
     @Environment(\.colorScheme) var colorScheme
+    @ObservedObject var configuration: AppConfiguration = AppConfiguration.shared
 
     @State var imageUrl: String = ""
     @Binding var images: [ImagesResult.URLResult]
     @State var txt: String = ""
-    @State var model: String = "realistic_vision_v5"
     @State var number: Int = 1
 
     @State var errorMsg: String = ""
@@ -119,7 +119,7 @@ struct ImageSession: View {
             #endif
                 .listStyle(.plain)
                 .toolbar {
-                    TextField("Model", text: $model)
+                    TextField("Model", text: $configuration.defaultImageModel)
                     #if os(iOS)
                         .textInputAutocapitalization(.never)
                     #endif
@@ -300,7 +300,7 @@ struct ImageSession: View {
         var streamingTask: Task<Void, Error>?
         let openAIconfig = AppConfiguration.shared.preferredImageService.config
         let service: OpenAI = OpenAI(configuration: openAIconfig)
-        let query2 = ImagesQuery(prompt: txt, model: model, n: Int(number), size: "1024x1024", quality: "standard")
+        let query2 = ImagesQuery(prompt: txt, model: configuration.defaultImageModel, n: Int(number), size: "1024x1024", quality: "standard")
 
         #if os(iOS)
             streamingTask = Task {

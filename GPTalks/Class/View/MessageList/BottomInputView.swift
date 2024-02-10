@@ -173,7 +173,7 @@ struct BottomInputView: View {
         .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
         .disabled(session.input.isEmpty || session.isReplying())
         .fontWeight(session.input.isEmpty ? .regular : .semibold)
-        .contentShape(Rectangle())
+//        .contentShape(Rectangle())
     }
 
     @ViewBuilder
@@ -224,28 +224,33 @@ struct BottomInputView: View {
                 )
             #endif
             
-            if session.input.isEmpty && !session.isReplying() {
-                Button {
-                     
-                 } label: {
-                     Image(systemName: "mic.fill")
-                         .resizable()
-                         .scaledToFit()
-                         .frame(width: imageSize - 13, height: imageSize - 13)
-                         .foregroundStyle(.secondary)
-                         .opacity(0.5)
-                 }
-                 .offset(x:-10, y: -9)
-            } else {
-                if session.isReplying() {
-                    stopButton
-                        .offset(x:-4, y: -4)
-
+            Group {
+                if session.input.isEmpty && !session.isReplying() {
+                    Button {
+                        
+                    } label: {
+                        Image(systemName: "mic.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: imageSize - 13, height: imageSize - 13)
+                            .foregroundStyle(.secondary)
+                            .opacity(0.5)
+                    }
+                    .offset(x:-10, y: -9)
                 } else {
-                    sendButton
-                        .offset(x:-4, y: -4)
+                    if session.isReplying() {
+                        stopButton
+                            .offset(x:-4, y: -4)
+                        
+                    } else {
+                        sendButton
+                            .offset(x:-4, y: -4)
+                    }
                 }
             }
+            .padding(20) // Increase tappable area
+            .padding(-20) // Cancel out visual expansion
+            .background(Color.clear)
         }
     }
 

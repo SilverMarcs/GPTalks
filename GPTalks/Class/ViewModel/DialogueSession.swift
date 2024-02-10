@@ -97,7 +97,7 @@ import SwiftUI
     var isAddingConversation = false
 
     private var initFinished = false
-    private var isStreaming = false
+    var isStreaming = false
 
     // MARK: - Properties
 
@@ -236,6 +236,19 @@ import SwiftUI
             await send(text: editedContent)
         }
     }
+    
+    func getModels() async {
+        let openAIconfig = configuration.provider.config
+        let service: OpenAI = OpenAI(configuration: openAIconfig)
+        
+            do {
+                let models = try await service.models()
+                print(models)
+            } catch {
+                print(error)
+            }
+        
+    }
 
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
@@ -284,7 +297,8 @@ import SwiftUI
                               temperature: configuration.temperature,
                               maxTokens: 3800,
                               stream: Model.nonStreamModels.contains(configuration.model) ? false : true)
-
+        
+        
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
 
         #if os(iOS)

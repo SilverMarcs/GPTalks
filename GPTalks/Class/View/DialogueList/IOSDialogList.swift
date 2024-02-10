@@ -24,13 +24,13 @@ import OpenAI
                     IosSettingsView()
                 }
                 .toolbar {
-//                    ToolbarItem {
-//                        NavigationLink {
-//                            ImageSession(images: $images)
-//                        } label: {
-//                            Image(systemName: "photo.on.rectangle.angled")
-//                        }
-//                    }
+                    ToolbarItem {
+                        NavigationLink {
+                            ImageSession(images: $images)
+                        } label: {
+                            Image(systemName: "photo.on.rectangle.angled")
+                        }
+                    }
                     
                     ToolbarItem(placement: .topBarLeading) {
                         Menu {
