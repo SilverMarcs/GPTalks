@@ -93,8 +93,4 @@ struct EditingView: View {
             .keyboardShortcut(.return, modifiers: .command)
         }
     }
-
 }
-
-// Usage example:
-// EditingView(editingMessage: $editingMessage, isEditing: $isEditing, session: session, conversation: conversation)

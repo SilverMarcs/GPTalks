@@ -26,12 +26,10 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.preferredImageService") var preferredImageService: Provider = .openai
     @AppStorage("configuration.defaultImageModel") var defaultImageModel: String = "dall-e-3"
     
+    // config
     @AppStorage("configuration.contextLength") var contextLength = 20
-    
     @AppStorage("configuration.temperature") var temperature: Double = 0.5
-    
-    @AppStorage("configuration.systemPrompt") var systemPrompt: String = "You are a helpful assistant."
-    
+    @AppStorage("configuration.systemPrompt") var systemPrompt: String = "You are a helpful assistant."    
     @AppStorage("configuration.ignore_web") var ignoreWeb: String = "False"
         
     /// openAI

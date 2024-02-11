@@ -12,7 +12,9 @@ import HotKey
 struct GPTalks: App {
     @State private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
     
+    #if os(macOS)
     let hotKey = HotKey(key: .space, modifiers: [.option], keyDownHandler: {NSApp.activate(ignoringOtherApps: true)})
+    #endif
     
     var body: some Scene {
         WindowGroup {
