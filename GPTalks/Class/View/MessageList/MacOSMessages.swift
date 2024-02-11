@@ -16,51 +16,33 @@ struct MacOSMessages: View {
     @State private var previousContent: String?
     @State private var isUserScrolling = false
     @State private var contentChangeTimer: Timer? = nil
-    
+
     @FocusState var isTextFieldFocused: Bool
 
     var body: some View {
         ScrollViewReader { proxy in
-            Group {
-                if !AppConfiguration.shared.alternateMarkdown {
-                    List {
-                        ForEach(Array(session.conversations.chunked(fromEndInto: 10).enumerated()), id: \.offset) { index, chunk in
-                            VStack {
-                                ForEach(chunk, id: \.self) { conversation in
-                                    ConversationView(session: session, conversation: conversation)
-                                }
-                            }
-                            .listRowSeparator(.hidden)
-                        }
-                        
-                        DeleteBtn(proxy: proxy)
-                            .opacity(0)
-                        
-                        ErrorDescView(session: session)
-                            .listRowSeparator(.hidden)
-                        
-                        Spacer()
-                            .listRowSeparator(.hidden)
-                            .id("bottomID")
+            List {
+                VStack {
+                    ForEach(session.conversations) { conversation in
+                        ConversationView(session: session, conversation: conversation)
                     }
-                } else {
-                    List {
-                        VStack {
-                            ForEach(session.conversations) { conversation in
-                                ConversationView(session: session, conversation: conversation)
-                            }
-                            .listRowSeparator(.hidden)
-                            
-                            DeleteBtn(proxy: proxy)
-                                .opacity(0)
-                            
-                            ErrorDescView(session: session)
-                                .listRowSeparator(.hidden)
-                        }
+
+                    ErrorDescView(session: session)
+                }
+
+                if session.isStreaming && session.lastConversation.content.count <= 1200 {
+                    Spacer()
+                        .listRowSeparator(.hidden)
+                        .frame(height: 500)
                         .id("bottomID")
-                    }
+                } else {
+                    Spacer()
+                        .listRowSeparator(.hidden)
+                        .frame(height: 1)
+                        .id("bottomID")
                 }
             }
+
             .background(.background)
             .navigationTitle(session.title)
             .navigationSubtitle(session.configuration.model.name)
@@ -83,8 +65,8 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.conversations.last?.content) {
-                if session.conversations.last?.content != previousContent && !isUserScrolling {
-                    scrollToBottom(proxy: proxy, animated: false)
+                if session.conversations.last?.content != previousContent && !isUserScrolling && session.lastConversation.content.count > 1200 {
+                    scrollToBottom(proxy: proxy, animated: true)
                 }
                 previousContent = session.conversations.last?.content
 
@@ -105,7 +87,7 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.resetMarker) {
-                if (session.resetMarker == session.conversations.count - 1) {
+                if session.resetMarker == session.conversations.count - 1 {
                     scrollToBottom(proxy: proxy)
                 }
                 isTextFieldFocused = true
@@ -116,15 +98,26 @@ struct MacOSMessages: View {
 //            Spacer() // enable this to change toolbar color
         }
     }
-    
-    private func DeleteBtn(proxy: ScrollViewProxy) -> some View {
-        Button("hidden") {
-            if let lastConversation = session.conversations.last {
-                session.removeConversation(lastConversation)
+
+    private var alternateList: some View {
+        // not used for now
+        List {
+            ForEach(Array(session.conversations.chunked(fromEndInto: 10).enumerated()), id: \.offset) { _, chunk in
+                VStack {
+                    ForEach(chunk, id: \.self) { conversation in
+                        ConversationView(session: session, conversation: conversation)
+                    }
+                }
+                .listRowSeparator(.hidden)
             }
+
+            ErrorDescView(session: session)
+                .listRowSeparator(.hidden)
+
+            Spacer()
+                .listRowSeparator(.hidden)
+                .id("bottomID")
         }
-        .keyboardShortcut(.delete, modifiers: .command)
-        .frame(width: 1, height: 1) 
     }
 }
 #endif

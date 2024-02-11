@@ -17,7 +17,7 @@ struct ConversationView: View {
             #if os(macOS)
                 .opacity(0.9)
             #endif
-                .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .opacity))
+                .transition(.opacity)
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
         
@@ -26,7 +26,7 @@ struct ConversationView: View {
             #if os(macOS)
                 .opacity(0.9)
             #endif
-                .transition(.asymmetric(insertion: .move(edge: .leading), removal: .opacity))
+                .transition(.opacity)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         
@@ -34,5 +34,21 @@ struct ConversationView: View {
             ContextResetDivider(session: session)
                 .padding(.vertical)
         }
+        
+        DeleteBtn
+            .opacity(0)
     }
+    
+    private var DeleteBtn: some View {
+        Button("hidden") {
+            if let lastConversation = session.conversations.last {
+                session.removeConversation(lastConversation)
+            }
+        }
+        .keyboardShortcut(.delete, modifiers: .command)
+        .frame(width: 1, height: 1)
+    }
+
 }
+
+

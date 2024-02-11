@@ -474,13 +474,9 @@ extension DialogueSession {
     func removeConversation(at index: Int) {
         let conversation = conversations[index]
         
-        #if os(macOS)
-        let _ = conversations.remove(at: index)
-        #else
         withAnimation {
             let _ = conversations.remove(at: index)
         }
-        #endif
 
         if resetMarker == index {
             if conversations.count > 1 {

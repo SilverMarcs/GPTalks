@@ -28,7 +28,7 @@ import OpenAI
                         NavigationLink {
                             ImageSession(images: $images)
                         } label: {
-                            Image(systemName: "photo.on.rectangle.angled")
+                            Image(systemName: "photo")
                         }
                     }
                     

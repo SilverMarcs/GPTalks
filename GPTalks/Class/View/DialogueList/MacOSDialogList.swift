@@ -40,7 +40,7 @@ struct MacOSDialogList: View {
             NavigationLink {
                 ImageSession(images: $images)
             } label: {
-                Image(systemName: "photo.on.rectangle.angled")
+                Image(systemName: "photo")
             }
 
             Button {
