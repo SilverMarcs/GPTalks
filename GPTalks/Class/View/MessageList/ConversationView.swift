@@ -17,7 +17,7 @@ struct ConversationView: View {
             #if os(macOS)
                 .opacity(0.9)
             #endif
-                .transition(.opacity)
+                .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .opacity))
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
         
@@ -26,7 +26,7 @@ struct ConversationView: View {
             #if os(macOS)
                 .opacity(0.9)
             #endif
-                .transition(.opacity)
+                .transition(.asymmetric(insertion: .move(edge: .leading), removal: .opacity))
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         

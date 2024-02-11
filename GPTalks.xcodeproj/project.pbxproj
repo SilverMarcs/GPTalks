@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		080D542D2B7913E300273B56 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = 080D542C2B7913E300273B56 /* HotKey */; };
 		0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820E06C2B5395E500401A30 /* TextSelectionView.swift */; };
 		0829D1132B3166D900DFFBB1 /* iOSMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1122B3166D900DFFBB1 /* iOSMessages.swift */; };
 		0829D1152B3166E300DFFBB1 /* MacOSMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1142B3166E300DFFBB1 /* MacOSMessages.swift */; };
@@ -137,6 +138,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				080D542D2B7913E300273B56 /* HotKey in Frameworks */,
 				08E913752B71F51B0071AB53 /* OpenAI in Frameworks */,
 				083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */,
 				E4C65F0E29CAA06600AFA884 /* Splash in Frameworks */,
@@ -369,6 +371,7 @@
 				083E3B122B3A65C9007BE19E /* MarkdownWebView */,
 				083E3B182B3A67B9007BE19E /* VisualEffectView */,
 				08E913742B71F51B0071AB53 /* OpenAI */,
+				080D542C2B7913E300273B56 /* HotKey */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -448,6 +451,7 @@
 				083E3B112B3A65C9007BE19E /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				083E3B172B3A67B9007BE19E /* XCRemoteSwiftPackageReference "VisualEffectView" */,
 				08E913732B71F51B0071AB53 /* XCRemoteSwiftPackageReference "OpenAI" */,
+				080D542B2B7913E300273B56 /* XCRemoteSwiftPackageReference "HotKey" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -930,6 +934,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		080D542B2B7913E300273B56 /* XCRemoteSwiftPackageReference "HotKey" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/soffes/HotKey";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		083E3B112B3A65C9007BE19E /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
@@ -973,6 +985,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		080D542C2B7913E300273B56 /* HotKey */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 080D542B2B7913E300273B56 /* XCRemoteSwiftPackageReference "HotKey" */;
+			productName = HotKey;
+		};
 		083E3B122B3A65C9007BE19E /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 083E3B112B3A65C9007BE19E /* XCRemoteSwiftPackageReference "markdown-webview" */;

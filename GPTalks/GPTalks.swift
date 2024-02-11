@@ -6,18 +6,18 @@
 //
 
 import SwiftUI
+import HotKey
 
 @main
 struct GPTalks: App {
-//    @StateObject private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
-    // TODO chaneg back to stateobject if needed
     @State private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
+    
+    let hotKey = HotKey(key: .space, modifiers: [.option], keyDownHandler: {NSApp.activate(ignoringOtherApps: true)})
     
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-//        .environmentObject(viewModel)
         .environment(viewModel)
         .commands {
             CommandMenu("Session") {

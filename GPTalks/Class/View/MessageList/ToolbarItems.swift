@@ -40,18 +40,14 @@ struct ToolbarItems: ToolbarContent {
                 .padding(.leading, -15)
 
             }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Text("\(session.getMessageCountAfterResetMarker())/\(session.configuration.contextLength)")
+                    .font(.callout)
+                    .opacity(0.8)
+            }
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
-                    Button {
-                        Task {
-                            await session.regenerateLastMessage()
-                        }
-                    } label: {
-                        Text("Regenerate")
-                        Image(systemName: "arrow.2.circlepath")
-                    }
-
                     Button(role: .destructive) {
                         session.removeAllConversations()
                     } label: {
@@ -72,14 +68,25 @@ struct ToolbarItems: ToolbarContent {
                         .font(.system(size: 16))
                         .foregroundStyle(.primary)
                         .bold()
-                    HStack(spacing: 7) {
-                        Text(session.configuration.model.name)
-                            .font(.system(size: 11))
-                            .foregroundStyle(.secondary)
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 8))
-                            .foregroundStyle(.secondary)
-                            .padding(.leading, -4)
+                    HStack(spacing: 3) {
+                        Group {
+                            Text(session.configuration.model.name)
+                            //                            .padding(.horizontal, 5)
+                            //                            .background(.thickMaterial, in: RoundedRectangle(cornerRadius: 18))
+                            //                            .roundedRectangleOverlay()
+                            Text("•")
+
+                            Text(session.configuration.systemPrompt)
+                                .frame(maxWidth: 140, alignment: .leading)
+                           
+                        }
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                        
+//                        Image(systemName: "chevron.right")
+//                            .font(.system(size: 8))
+//                            .foregroundStyle(.secondary)
+//                            .padding(.leading, -4)
                     }
                 }
             }

@@ -162,7 +162,7 @@ struct BottomInputView: View {
                 .disabled(empty)
                 .foregroundColor(empty ? .secondary : .accentColor)
             #if os(iOS)
-                .background(.primary)
+                .background(.white)
                 .clipShape(Circle())
                 .frame(width: imageSize - 3, height: imageSize - 3)
             #else
@@ -259,7 +259,7 @@ struct BottomInputView: View {
         if session.input.isEmpty {
             Text("Send a message")
                 .font(.body)
-                .padding(6)
+                .padding(5)
                 .padding(.leading, 6)
                 .foregroundColor(placeHolderTextColor)
         }
@@ -268,7 +268,7 @@ struct BottomInputView: View {
             .font(.body)
             .frame(maxHeight: 400)
             .fixedSize(horizontal: false, vertical: true)
-            .padding(6)
+            .padding(5)
             .scrollContentBackground(.hidden)
         Button("hidden") {
             focused = true

@@ -237,19 +237,13 @@ import SwiftUI
         }
     }
     
-    func getModels() async {
-        let openAIconfig = configuration.provider.config
-        let service: OpenAI = OpenAI(configuration: openAIconfig)
-        
-            do {
-                let models = try await service.models()
-                print(models)
-            } catch {
-                print(error)
-            }
-        
+    public func getMessageCountAfterResetMarker() -> Int {
+        if let resetMarker = resetMarker {
+            return conversations.count - resetMarker - 1
+        }
+        return 0
     }
-
+    
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
         isAddingConversation.toggle()
@@ -452,7 +446,13 @@ extension DialogueSession {
             removeResetContextMarker()
         }
 
+        #if os(macOS)
         conversations.append(conversation)
+        #else
+        withAnimation {
+            conversations.append(conversation)
+        }
+        #endif
 
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id
@@ -472,7 +472,15 @@ extension DialogueSession {
     }
 
     func removeConversation(at index: Int) {
-        let conversation = conversations.remove(at: index)
+        let conversation = conversations[index]
+        
+        #if os(macOS)
+        let _ = conversations.remove(at: index)
+        #else
+        withAnimation {
+            let _ = conversations.remove(at: index)
+        }
+        #endif
 
         if resetMarker == index {
             if conversations.count > 1 {
@@ -535,7 +543,10 @@ extension DialogueSession {
     func removeAllConversations() {
         removeResetContextMarker()
         resetErrorDesc()
-        conversations.removeAll()
+        
+        withAnimation {
+            conversations.removeAll()
+        }
 
         do {
             let viewContext = PersistenceController.shared.container.viewContext

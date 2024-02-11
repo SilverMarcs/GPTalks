@@ -25,7 +25,7 @@ struct MacOSDialogList: View {
                     }
                     .padding(.top, -10)
                     .onChange(of: viewModel.dialogues.count) {
-                        // this is faaar from perfect
+                        // this is faaar from perfect but is required if we ant to keep list style inset which is required for animations
                         proxy.scrollTo(viewModel.dialogues[0].id, anchor: .top)
                     }
                 }
