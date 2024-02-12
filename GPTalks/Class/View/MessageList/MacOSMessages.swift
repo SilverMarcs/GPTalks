@@ -29,18 +29,19 @@ struct MacOSMessages: View {
 
                     ErrorDescView(session: session)
                 }
+                .id("bottomID")
 
-                if session.isStreaming && session.lastConversation.content.count <= 1200 {
-                    Spacer()
-                        .listRowSeparator(.hidden)
-                        .frame(height: 500)
-                        .id("bottomID")
-                } else {
-                    Spacer()
-                        .listRowSeparator(.hidden)
-                        .frame(height: 1)
-                        .id("bottomID")
-                }
+//                if session.isStreaming && session.lastConversation.content.count <= 1200 {
+//                    Spacer()
+//                        .listRowSeparator(.hidden)
+//                        .frame(height: 500)
+//                        .id("bottomID")
+//                } else {
+//                    Spacer()
+//                        .listRowSeparator(.hidden)
+//                        .frame(height: 1)
+//                        .id("bottomID")
+//                }
             }
 
             .background(.background)
@@ -65,7 +66,8 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.conversations.last?.content) {
-                if session.conversations.last?.content != previousContent && !isUserScrolling && session.lastConversation.content.count > 1200 {
+//                if session.conversations.last?.content != previousContent && !isUserScrolling && session.lastConversation.content.count > 1200 {
+                if session.conversations.last?.content != previousContent && !isUserScrolling {
                     scrollToBottom(proxy: proxy, animated: true)
                 }
                 previousContent = session.conversations.last?.content
