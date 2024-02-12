@@ -22,11 +22,11 @@ extension Array {
 
 extension String {
     func copyToPasteboard() {
-#if os(iOS)
-        UIPasteboard.general.string = self
-#else
+#if os(macOS)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(self, forType: .string)
+#else
+        UIPasteboard.general.string = self
 #endif
     }
 }

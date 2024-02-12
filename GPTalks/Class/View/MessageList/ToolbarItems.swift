@@ -20,9 +20,10 @@ struct ToolbarItems: ToolbarContent {
         #endif
     }
 
-    #if os(iOS)
+    #if !os(macOS)
         @ToolbarContentBuilder
         var iOS: some ToolbarContent {
+            #if !os(visionOS)
             ToolbarItem(placement: .principal) {
                 HStack {
                     Button {
@@ -34,12 +35,14 @@ struct ToolbarItems: ToolbarContent {
                     .sheet(isPresented: $isShowSettingsView) {
                         DialogueSettingsView(configuration: $session.configuration, title: $session.title)
                     }
+                    .buttonStyle(.plain)
 
                     Spacer()
                 }
                 .padding(.leading, -15)
-
             }
+            #endif
+            
             ToolbarItem(placement: .navigationBarTrailing) {
                 Text("\(session.getMessageCountAfterResetMarker())/\(session.configuration.contextLength)")
                     .font(.callout)

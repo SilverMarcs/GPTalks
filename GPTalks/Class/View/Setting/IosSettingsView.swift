@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-#if os(iOS)
+#if !os(macOS)
 struct IosSettingsView: View {
     @ObservedObject var configuration: AppConfiguration = AppConfiguration.shared
     @Environment(\.dismiss) var dismiss

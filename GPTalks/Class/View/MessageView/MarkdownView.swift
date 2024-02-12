@@ -6,9 +6,11 @@
 //
 
 import MarkdownUI
-import Splash
+//import Splash
 import SwiftUI
+#if !os(visionOS)
 import MarkdownWebView
+#endif
 
 struct MarkdownView: View {
     @Environment(\.colorScheme) private var colorScheme
@@ -16,18 +18,21 @@ struct MarkdownView: View {
     var text: String
 
     var body: some View {
-        if AppConfiguration.shared.alternateMarkdown {
+//        if AppConfiguration.shared.alternateMarkdown {
+        #if !os(visionOS)
             if text.isEmpty {
                 EmptyView()
             } else {
                 MarkdownWebView(text)
             }
-        } else {
+        #else
+//        } else {
             Markdown(text)
-                .markdownCodeSyntaxHighlighter(.splash(theme: theme))
+//                .markdownCodeSyntaxHighlighter(.splash(theme: theme))
                 .markdownBlockStyle(\.codeBlock) {
                     CodeBlock(configuration: $0)
                 }
+        #endif
         }
     }
 
@@ -92,12 +97,12 @@ struct MarkdownView: View {
         }
     }
 
-    private var theme: Splash.Theme {
-        switch colorScheme {
-        case .dark:
-            return .wwdc17(withFont: .init(size: 16))
-        default:
-            return .sunset(withFont: .init(size: 16))
-        }
-    }
-}
+//    private var theme: Splash.Theme {
+//        switch colorScheme {
+//        case .dark:
+//            return .wwdc17(withFont: .init(size: 16))
+//        default:
+//            return .sunset(withFont: .init(size: 16))
+//        }
+//    }
+//}

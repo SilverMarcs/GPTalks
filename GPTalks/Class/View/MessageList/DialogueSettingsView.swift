@@ -52,7 +52,7 @@ struct DialogueSettingsView: View {
             }
     }
 
-    #if os(iOS)
+#if !os(macOS)
     var iOS: some View {
         NavigationView {
             Form {

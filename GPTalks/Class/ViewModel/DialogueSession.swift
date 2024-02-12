@@ -134,7 +134,9 @@ import SwiftUI
     }
 
     func removeResetContextMarker() {
-        resetMarker = nil
+        withAnimation {
+            resetMarker = nil
+        }
         save()
     }
 
@@ -150,13 +152,12 @@ import SwiftUI
         if conversations.isEmpty {
             return
         }
-
-        // if reset marker is already at the end of conversations, then unset it
-        if resetMarker == conversations.count - 1 {
-            resetMarker = nil
-        } else {
-            resetMarker = conversations.count - 1
-        }
+            // if reset marker is already at the end of conversations, then unset it
+            if resetMarker == conversations.count - 1 {
+                    removeResetContextMarker()
+            } else {
+                resetMarker = conversations.count - 1
+            }
 
         save()
     }
@@ -341,7 +342,9 @@ import SwiftUI
             viewUpdater = Task {
                 while true {
                     try await Task.sleep(nanoseconds: 250_000_000)
-                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    withAnimation {
+                        conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    }
                     lastConversationData.sync(with: conversations[conversations.count - 1])
                     if !isStreaming {
                         break

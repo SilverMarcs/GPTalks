@@ -48,11 +48,11 @@ struct ImageSession: View {
                              }
                             .contextMenu {
                                 Button(action: {
-                                    #if os(iOS)
-                                    saveImageToPhotos(url: URL(string: image.url!))
-                                    #else
-                                    saveImageToPicturesFolder(url: URL(string: image.url!))
-                                    #endif
+//                                    #if os(iOS)
+//                                    saveImageToPhotos(url: URL(string: image.url!))
+//                                    #else
+//                                    saveImageToPicturesFolder(url: URL(string: image.url!))
+//                                    #endif
                                 }) {
                                     Text("Save Image")
                                     Image(systemName: "square.and.arrow.down")
@@ -105,7 +105,7 @@ struct ImageSession: View {
             .padding(.vertical, 15)
             .padding(.horizontal, 10)
             #endif
-            .scrollDismissesKeyboard(.immediately)
+//            .scrollDismissesKeyboard(.immediately)
             .listStyle(.plain)
             .onTapGesture {
                 isFocused = false
@@ -246,32 +246,32 @@ struct ImageSession: View {
             }
             .buttonStyle(.plain)
 
-            #if os(iOS)
-                TextField("Prompt", text: $txt, axis: .vertical)
-                    .padding(6)
-                    .padding(.horizontal, 4)
-                    .frame(minHeight: 33)
-                    .multilineTextAlignment(.leading)
-                    .lineLimit(1 ... 4)
-                    .focused($isFocused)
-                    .roundedRectangleOverlay()
-            #else
-                ZStack(alignment: .leading) {
-                    if txt.isEmpty {
-                        Text("Prompt")
-                            .font(.body)
-                            .padding(6)
-                            .padding(.leading, 4)
-                            .foregroundColor(Color(.placeholderTextColor))
-                    }
-                    TextEditor(text: $txt)
+            #if os(macOS)
+            ZStack(alignment: .leading) {
+                if txt.isEmpty {
+                    Text("Prompt")
                         .font(.body)
-                        .frame(maxHeight: 400)
-                        .fixedSize(horizontal: false, vertical: true)
                         .padding(6)
-                        .scrollContentBackground(.hidden)
-                        .roundedRectangleOverlay()
+                        .padding(.leading, 4)
+                        .foregroundColor(Color(.placeholderTextColor))
                 }
+                TextEditor(text: $txt)
+                    .font(.body)
+                    .frame(maxHeight: 400)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(6)
+                    .scrollContentBackground(.hidden)
+                    .roundedRectangleOverlay()
+            }
+            #else
+            TextField("Prompt", text: $txt, axis: .vertical)
+                .padding(6)
+                .padding(.horizontal, 4)
+                .frame(minHeight: 33)
+                .multilineTextAlignment(.leading)
+                .lineLimit(1 ... 4)
+                .focused($isFocused)
+                .roundedRectangleOverlay()
             #endif
 
             Button {

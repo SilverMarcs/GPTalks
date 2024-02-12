@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-#if os(iOS)
+#if !os(macOS)
 struct AppIconView: View {
     @State private var selectedIconName: String = "AppIconPurple" // Default selected icon
     

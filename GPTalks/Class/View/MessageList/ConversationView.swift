@@ -12,31 +12,33 @@ struct ConversationView: View {
     var conversation: Conversation
     
     var body : some View {
-        if conversation.role == "user" {
-            UserMessageView(conversation: conversation, session: session)
-            #if os(macOS)
-                .opacity(0.9)
-            #endif
-                .transition(.opacity)
-                .frame(maxWidth: .infinity, alignment: .trailing)
+        VStack(spacing: spacing) {
+            if conversation.role == "user" {
+                UserMessageView(conversation: conversation, session: session)
+#if os(macOS)
+                    .opacity(0.9)
+#endif
+                    .transition(.opacity)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            
+            if conversation.role == "assistant" {
+                AssistantMessageView(conversation: conversation, session: session)
+#if os(macOS)
+                    .opacity(0.9)
+#endif
+                    .transition(.opacity)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            
+            if session.conversations.firstIndex(of: conversation) == session.resetMarker {
+                ContextResetDivider(session: session)
+                    .padding(.vertical)
+            }
+            
+            DeleteBtn
+                .opacity(0)
         }
-        
-        if conversation.role == "assistant" {
-            AssistantMessageView(conversation: conversation, session: session)
-            #if os(macOS)
-                .opacity(0.9)
-            #endif
-                .transition(.opacity)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        
-        if session.conversations.firstIndex(of: conversation) == session.resetMarker {
-            ContextResetDivider(session: session)
-                .padding(.vertical)
-        }
-        
-        DeleteBtn
-            .opacity(0)
     }
     
     private var DeleteBtn: some View {
@@ -49,6 +51,13 @@ struct ConversationView: View {
         .frame(width: 1, height: 1)
     }
 
+    private var spacing: CGFloat {
+        #if os(macOS)
+        return 8
+        #else
+        return 2
+        #endif
+    }
 }
 
 

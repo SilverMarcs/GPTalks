@@ -25,22 +25,26 @@ struct Bubble: ViewModifier {
     var isMyMessage: Bool
     var type: MessageType = .text
     var accentColor: Color = Color("greenColor")
-
-    #if os(iOS)
-        let radius: CGFloat = 19
-        let horizontalPadding: CGFloat = 14
-        let verticalPadding: CGFloat = 8
-    #else
+    
+    #if os(macOS)
         let radius: CGFloat = 15
         let horizontalPadding: CGFloat = 11
         let verticalPadding: CGFloat = 8
+    #else
+        let radius: CGFloat = 19
+        let horizontalPadding: CGFloat = 14
+        let verticalPadding: CGFloat = 8
     #endif
-
+    
     func body(content: Content) -> some View {
         content
             .padding(.horizontal, horizontalPadding)
             .padding(.vertical, verticalPadding)
+        #if os(visionOS)
+            .background(.background.secondary)
+        #else
             .background(isMyMessage ? accentColor : bubbleBackground)
+        #endif
             .cornerRadius(radius)
             .foregroundColor(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: radius))

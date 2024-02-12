@@ -5,7 +5,7 @@
 //  Created by Zabir Raihan on 19/12/2023.
 //
 
-#if os(iOS)
+#if !os(macOS)
     import SwiftUI
     import VisualEffectView
 
@@ -43,15 +43,20 @@
                     
                     scrollBtn(proxy: proxy)
                 }
+                #if !os(visionOS)
                 .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                     let bottomReached = value > UIScreen.main.bounds.height
                     didUserTap = bottomReached
                     showScrollButton = bottomReached
                 }
-                .scrollDismissesKeyboard(.immediately)
+                .scrollDismissesKeyboard(.interactively)
+                #endif
                 .listStyle(.plain)
                 .onAppear {
-                    scrollToBottom(proxy: proxy, animated: false)
+//                    scrollToBottom(proxy: proxy, animated: false)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
                 }
                 .onTapGesture {
                     isTextFieldFocused = false
@@ -94,12 +99,18 @@
                 .onTapGesture {
                     isTextFieldFocused = true
                 }
+                #if os(iOS)
                 .background(
                     VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
                         .ignoresSafeArea()
                 )
+                #else
+                .background(.regularMaterial)
+                #endif
             }
-//            .toolbarRole(.editor) // hides back button text
+            #if os(visionOS)
+            .navigationTitle(session.title)
+            #endif
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItems(session: session)

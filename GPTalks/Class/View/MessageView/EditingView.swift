@@ -41,7 +41,7 @@ struct EditingView: View {
         .frame(minWidth: 400, idealWidth: 550, maxWidth: 800, minHeight: 200, idealHeight: 400, maxHeight: 600)
     }
     
-    #if os(iOS)
+#if !os(macOS)
     private var iOSEditingView: some View {
         NavigationView {
             Form {

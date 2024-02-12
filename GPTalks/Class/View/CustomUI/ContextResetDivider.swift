@@ -26,6 +26,9 @@ struct ContextResetDivider: View {
             }
 
             Divider()
+            #if os(visionOS)
+                .opacity(0.1)
+            #endif
         }
     }
 

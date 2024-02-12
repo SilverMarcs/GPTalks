@@ -24,7 +24,8 @@ struct ContentView: View {
                     MacOSMessages(session: selectedDialogue)
 //                        .id(selectedDialogue.id)
                 #else
-                    iOSMessages(session: selectedDialogue)
+
+                iOSMessages(session: selectedDialogue)
 //                        .id(selectedDialogue.id)
                 #endif
             } else {

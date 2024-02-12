@@ -107,7 +107,6 @@ struct BottomInputView: View {
             session.resetContext()
         } label: {
             Image(systemName: "eraser")
-//            Image(systemName: "plus")
                 .resizable()
                 .scaledToFit()
         #if os(macOS)
@@ -161,13 +160,13 @@ struct BottomInputView: View {
                 .scaledToFit()
                 .disabled(empty)
                 .foregroundColor(empty ? .secondary : .accentColor)
-            #if os(iOS)
+#if os(macOS)
+                .frame(width: imageSize, height: imageSize)
+#else
                 .background(.white)
                 .clipShape(Circle())
                 .frame(width: imageSize - 3, height: imageSize - 3)
-            #else
-                .frame(width: imageSize, height: imageSize)
-            #endif
+#endif
         }
         .keyboardShortcut(.return, modifiers: .command)
         .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)

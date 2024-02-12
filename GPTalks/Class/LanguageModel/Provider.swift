@@ -226,18 +226,18 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     }
     
     private var imageRadius: CGFloat {
-        #if os(iOS)
-            16
-        #elseif os(macOS)
+        #if os(macOS)
             11
+        #else
+            16
         #endif
     }
     
     private var imageSize: CGFloat {
-        #if os(iOS)
-            50
-        #elseif os(macOS)
+        #if os(macOS)
             36
+        #else
+            50
         #endif
     }
     

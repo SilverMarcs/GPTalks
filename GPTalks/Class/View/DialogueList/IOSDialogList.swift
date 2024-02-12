@@ -5,8 +5,8 @@
 //  Created by Zabir Raihan on 19/12/2023.
 //
 
-#if os(iOS)
-    import SwiftUI
+#if !os(macOS)
+import SwiftUI
 import OpenAI
 
     struct IOSDialogList: View {
@@ -19,18 +19,20 @@ import OpenAI
             list
                 .listStyle(.inset)
                 .searchable(text: $viewModel.searchText)
+            #if os(iOS)
                 .navigationTitle("Sessions")
+            #endif
                 .sheet(isPresented: $isShowSettingView) {
                     IosSettingsView()
                 }
                 .toolbar {
-                    ToolbarItem {
-                        NavigationLink {
-                            ImageSession(images: $images)
-                        } label: {
-                            Image(systemName: "photo")
-                        }
-                    }
+//                    ToolbarItem {
+//                        NavigationLink {
+//                            ImageSession(images: $images)
+//                        } label: {
+//                            Image(systemName: "photo")
+//                        }
+//                    }
                     
                     ToolbarItem(placement: .topBarLeading) {
                         Menu {

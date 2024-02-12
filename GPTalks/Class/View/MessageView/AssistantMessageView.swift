@@ -46,7 +46,6 @@ struct AssistantMessageView: View {
         .onHover { isHovered in
             self.isHovered = isHovered
         }
-        .padding(.vertical, 2)
         .padding(.trailing, horizontalPadding)
         #if os(iOS)
             .contextMenu {

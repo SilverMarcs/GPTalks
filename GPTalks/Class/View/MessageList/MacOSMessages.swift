@@ -61,9 +61,9 @@ struct MacOSMessages: View {
                 scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
                 scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
                 isTextFieldFocused = true
-                if AppConfiguration.shared.alternateMarkdown {
+//                if AppConfiguration.shared.alternateMarkdown {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
-                }
+//                }
             }
             .onChange(of: session.conversations.last?.content) {
 //                if session.conversations.last?.content != previousContent && !isUserScrolling && session.lastConversation.content.count > 1200 {

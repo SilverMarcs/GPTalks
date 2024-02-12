@@ -44,7 +44,6 @@ struct UserMessageView: View {
         .onHover { isHovered in
             self.isHovered = isHovered
         }
-        .padding(.vertical, 2)
         .padding(.leading, horizontalPadding)
         .sheet(isPresented: $isEditing) {
             EditingView(editingMessage: $editingMessage, isEditing: $isEditing, session: session, conversation: conversation)
