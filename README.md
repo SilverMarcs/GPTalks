@@ -1,8 +1,11 @@
 # GPTalks
 
 A SwiftUI multi-platform app to interact with OpenAI Chat Completions API along with some other providers.
+Feel free to grab the latest MacOS release from Github release page. iOS/iPadOs/visionOS is self-compile only for now through XCode.
 
-The screenshots may also be often outdated. Feel free to grab the latest MacOS release from Github release page. iOS is self-compile only for now throigh XCode.
+Currently these  services can be used:
+1. Chat Completion (with streaming)
+2. Image Generation
 
 ## Usage Instructions
 
