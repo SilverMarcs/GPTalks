@@ -43,11 +43,24 @@ struct ToolbarItems: ToolbarContent {
             }
             #endif
             
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Text("\(session.getMessageCountAfterResetMarker())/\(session.configuration.contextLength)")
-                    .font(.callout)
-                    .opacity(0.8)
-            }
+                    #if !os(visionOS)
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Text("\(session.getMessageCountAfterResetMarker())/\(session.configuration.contextLength)")
+                            .font(.callout)
+                            .opacity(0.8)
+                    }
+                    #else
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            isShowSettingsView = true
+                        } label: {
+                            Text("Config")
+                        }
+                        .sheet(isPresented: $isShowSettingsView) {
+                            DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+                        }
+                    }
+                    #endif
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
@@ -60,6 +73,7 @@ struct ToolbarItems: ToolbarContent {
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
+                .menuStyle(.button)
               }
         }
 

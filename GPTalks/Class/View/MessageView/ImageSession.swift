@@ -141,7 +141,7 @@ struct ImageSession: View {
                                 .ignoresSafeArea()
                         )
                     #else
-                            .background(.bar)
+                            .background(.regularMaterial)
                     #endif
                 }
         }
