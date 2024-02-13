@@ -122,6 +122,17 @@ import SwiftUI
     func isReplying() -> Bool {
         return !conversations.isEmpty && lastConversation.isReplying
     }
+    
+    func getModels() async {
+        let config = configuration.provider.config
+        let service: OpenAI = OpenAI(configuration: config)
+        
+        do {
+            print(try await service.models())
+        } catch {
+            print("Error: \(error)")
+        }
+    }
 
     init() {
     }
@@ -269,26 +280,20 @@ import SwiftUI
 
         let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
 
-        var messages: [Conversation]
+        var contextAdjustedMessages: [Conversation]
 
         if let marker = resetMarker {
-            messages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength))
+            contextAdjustedMessages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength))
         } else {
-            messages = Array(conversations.suffix(configuration.contextLength - 1))
+            contextAdjustedMessages = Array(conversations.suffix(configuration.contextLength - 1))
         }
 
-        var allMessages: [Conversation]
-
-        if configuration.model == .ngemini {
-            allMessages = messages
-        } else {
-            allMessages = [systemPrompt] + messages
-        }
+        let finalMessages = ([systemPrompt] + contextAdjustedMessages).map({ conversation in
+            conversation.toChat()
+        })
 
         let query = ChatQuery(model: configuration.model.id,
-                              messages: allMessages.map({ conversation in
-                                  conversation.toChat()
-                              }),
+                              messages: finalMessages,
                               temperature: configuration.temperature,
                               maxTokens: 3800,
                               stream: Model.nonStreamModels.contains(configuration.model) ? false : true)

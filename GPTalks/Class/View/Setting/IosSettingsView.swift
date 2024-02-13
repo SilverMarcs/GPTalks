@@ -25,13 +25,13 @@ struct IosSettingsView: View {
                         Toggle("Markdown Enabled", isOn: $configuration.isMarkdownEnabled)
                     }
                     
-                    HStack {
-                        Image(systemName: "note.text")
-                            .renderingMode(.original)
-                        Spacer()
-                        Toggle("Alternate Markdown", isOn: $configuration.alternateMarkdown)
-                    }
-                    .disabled(!configuration.isMarkdownEnabled)
+//                    HStack {
+//                        Image(systemName: "note.text")
+//                            .renderingMode(.original)
+//                        Spacer()
+//                        Toggle("Alternate Markdown", isOn: $configuration.alternateMarkdown)
+//                    }
+//                    .disabled(!configuration.isMarkdownEnabled)
                     
                     HStack {
                         Image(systemName: "building.2.fill")

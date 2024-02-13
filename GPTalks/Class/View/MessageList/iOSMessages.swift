@@ -15,7 +15,7 @@
 
         var session: DialogueSession
 
-        @State private var didUserTap: Bool = false
+        @State private var shouldStopScroll: Bool = false
         @State private var showScrollButton: Bool = false
 
         @FocusState var isTextFieldFocused: Bool
@@ -30,7 +30,7 @@
                         ForEach(session.conversations) { conversation in
                             ConversationView(session: session, conversation: conversation)
                         }
-                        .padding(.horizontal, 10)
+                        .padding(.horizontal, 12)
 
                         ErrorDescView(session: session)
 
@@ -46,7 +46,7 @@
                 #if !os(visionOS)
                 .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                     let bottomReached = value > UIScreen.main.bounds.height
-                    didUserTap = bottomReached
+                    shouldStopScroll = bottomReached
                     showScrollButton = bottomReached
                 }
                 .scrollDismissesKeyboard(.interactively)
@@ -80,12 +80,12 @@
                     scrollToBottom(proxy: proxy)
                 }
                 .onChange(of: session.conversations.last?.content) {
-                    if !didUserTap {
-                        scrollToBottom(proxy: proxy, animated: false)
+                    if !shouldStopScroll {
+                        scrollToBottom(proxy: proxy, animated: true)
                     }
                 }
                 .onChange(of: session.conversations.count) {
-                    didUserTap = false
+                    shouldStopScroll = false
                 }
                 .onChange(of: session.isAddingConversation) {
                     scrollToBottom(proxy: proxy)

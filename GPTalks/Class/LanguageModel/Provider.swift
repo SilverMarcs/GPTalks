@@ -11,9 +11,7 @@ import OpenAI
 enum Provider: String, CaseIterable, Codable, Identifiable {
     case openai
     case openrouter
-    case naga
-    case oxygen
-    case mandril
+    case shuttle
     case gpt4free
     case custom
 
@@ -23,12 +21,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return "openai"
         case .openrouter:
             return "openrouter"
-        case .naga:
-            return "naga"
-        case .oxygen:
-            return "oxygen"
-        case .mandril:
-            return "mandril"
+        case .shuttle:
+            return "shuttle"
         case .gpt4free:
             return "gpt4free"
         case .custom:
@@ -48,20 +42,10 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 token: AppConfiguration.shared.ORkey,
                 host: "openrouter.ai/api"
             )
-        case .naga:
+        case .shuttle:
             return OpenAI.Configuration(
-                token: AppConfiguration.shared.Nkey,
-                host: "api.naga.ac"
-            )
-        case .oxygen:
-            return OpenAI.Configuration(
-                token: AppConfiguration.shared.Okey,
-                host: "app.oxyapi.uk"
-            )
-        case .mandril:
-            return OpenAI.Configuration(
-                token: AppConfiguration.shared.Mkey,
-                host: "api.mandrillai.tech"
+                token: AppConfiguration.shared.Skey,
+                host: "api.shuttleai.app"
             )
         case .gpt4free:
             return OpenAI.Configuration(
@@ -87,16 +71,12 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return Color("greenColor")
         case .openrouter:
             return Color("pinkColor")
-        case .naga:
+        case .shuttle:
             return Color("niceColor")
-        case .oxygen:
-            return Color("purpleColor")
-        case .mandril:
-            return Color("tealColor")
         case .gpt4free:
             return Color("blueColor")
         case .custom:
-            return Color("orangeColor")
+            return Color("tealColor")
 
         }
     }
@@ -107,12 +87,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return "OpenAI"
         case .openrouter:
             return "OpenRouter"
-        case .naga:
-            return "Naga"
-        case .oxygen:
-            return "Oxygen"
-        case .mandril:
-            return "Mandril"
+        case .shuttle:
+            return "Shuttle"
         case .gpt4free:
             return "GPT4Free"
         case .custom:
@@ -127,12 +103,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return AppConfiguration.shared.OAImodel
         case .openrouter:
             return AppConfiguration.shared.ORmodel
-        case .naga:
-            return AppConfiguration.shared.Nmodel
-        case .oxygen:
-            return AppConfiguration.shared.Omodel
-        case .mandril:
-            return AppConfiguration.shared.Mmodel
+        case .shuttle:
+            return AppConfiguration.shared.Smodel
         case .gpt4free:
             return AppConfiguration.shared.Gmodel
         case .custom:
@@ -147,12 +119,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return Model.openAIModels
         case .openrouter:
             return Model.openRouterModels
-        case .naga:
-            return Model.nagaModels
-        case .oxygen:
-            return Model.oxygenModels
-        case .mandril:
-            return Model.mandrilModels
+        case .shuttle:
+            return Model.shuttleModels
         case .gpt4free:
             return Model.gpt4freeModels
         case .custom:
@@ -177,22 +145,10 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 apiKey: configuration.$ORkey,
                 provider: self
             )
-        case .naga:
+        case .shuttle:
             ServiceSettingsView(
-                model: configuration.$Nmodel,
-                apiKey: configuration.$Nkey,
-                provider: self
-            )
-        case .oxygen:
-            ServiceSettingsView(
-                model: configuration.$Omodel,
-                apiKey: configuration.$Okey,
-                provider: self
-            )
-        case .mandril:
-            ServiceSettingsView(
-                model: configuration.$Mmodel,
-                apiKey: configuration.$Mkey,
+                model: configuration.$Smodel,
+                apiKey: configuration.$Skey,
                 provider: self
             )
         case .gpt4free:
@@ -218,7 +174,13 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     }
     
     static var availableProviders: [Provider] {
-        return [.openai, .openrouter, .naga, .oxygen, .mandril, .gpt4free, .custom]
+        return [
+            .openai,
+            .openrouter, 
+            .shuttle,
+            .gpt4free,
+            .custom
+        ]
     }
     
     var logoImage: some View {

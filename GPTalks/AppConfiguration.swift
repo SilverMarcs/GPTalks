@@ -13,16 +13,14 @@ class AppConfiguration: ObservableObject {
     static let shared = AppConfiguration()
     
     /// common
-    @AppStorage("configuration.rapidApiKey") var rapidApiKey = ""
     
     @AppStorage("configuration.isMarkdownEnabled") var isMarkdownEnabled: Bool = true
     
-    @AppStorage("configuration.alternateMarkdwon") var alternateMarkdown: Bool = false
+//    @AppStorage("configuration.alternateMarkdwon") var alternateMarkdown: Bool = false
     
-    @AppStorage("configuration.isAutoGenerateTitle") var isAutoGenerateTitle: Bool = false
+//    @AppStorage("configuration.isAutoGenerateTitle") var isAutoGenerateTitle: Bool = false
     
     @AppStorage("configuration.preferredChatService") var preferredChatService: Provider = .openai
-    
     @AppStorage("configuration.preferredImageService") var preferredImageService: Provider = .openai
     @AppStorage("configuration.defaultImageModel") var defaultImageModel: String = "dall-e-3"
     
@@ -34,23 +32,15 @@ class AppConfiguration: ObservableObject {
         
     /// openAI
     @AppStorage("configuration.OAIKey") var OAIkey = ""
-    @AppStorage("configuration.OAImodel") var OAImodel: Model = .gpt3
+    @AppStorage("configuration.OAImodel") var OAImodel: Model = .gpt3t0125
     
     /// openRouter
     @AppStorage("configuration.ORKey") var ORkey = ""
     @AppStorage("configuration.ORmodel") var ORmodel: Model = .ortoppy
     
-    /// naga
-    @AppStorage("configuration.Nkey") var Nkey = ""
-    @AppStorage("configuration.Nmodel") var Nmodel: Model = .gpt4t
-    
-    /// oxygen
-    @AppStorage("configuration.Okey") var Okey = ""
-    @AppStorage("configuration.Omodel") var Omodel: Model = .gpt4
-    
-    /// mandril
-    @AppStorage("configuration.Mkey") var Mkey = ""
-    @AppStorage("configuration.Mmodel") var Mmodel: Model = .gpt4t
+    /// shuttle
+    @AppStorage("configuration.Skey") var Skey = ""
+    @AppStorage("configuration.Smodel") var Smodel: Model = .gpt4t1106
     
     /// gpt4free
     @AppStorage("configuration.Gkey") var Gkey = ""
@@ -59,6 +49,6 @@ class AppConfiguration: ObservableObject {
     
     /// custom
     @AppStorage("configuration.Ckey") var Ckey = ""
-    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt4t
+    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt4t1106
     @AppStorage("configuration.Chost") var Chost: String = ""
 }
