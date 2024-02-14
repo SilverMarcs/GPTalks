@@ -40,6 +40,7 @@
 		08E2D2272B7A69BB0065B5E8 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08E2D2262B7A69BB0065B5E8 /* MarkdownWebView */; };
 		08E913752B71F51B0071AB53 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08E913742B71F51B0071AB53 /* OpenAI */; };
 		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
+		08F4DFE42B7CA1F4004164E4 /* ParameterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F4DFE32B7CA1F4004164E4 /* ParameterView.swift */; };
 		08F74EA42B0BC318006D1DD3 /* ServiceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */; };
 		E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */; };
 		E4C65EA229CA9E7E00AFA884 /* GPTalks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA129CA9E7E00AFA884 /* GPTalks.swift */; };
@@ -108,6 +109,7 @@
 		08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
 		08E047002B724DE400E81C91 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		08ED9EB72B02564D00849A1E /* DialogueListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListItem.swift; sourceTree = "<group>"; };
+		08F4DFE32B7CA1F4004164E4 /* ParameterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterView.swift; sourceTree = "<group>"; };
 		08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSettingsView.swift; sourceTree = "<group>"; };
 		E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSSettingsView.swift; sourceTree = "<group>"; };
 		E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -195,6 +197,7 @@
 				0837E47C2AFE57A100C03059 /* DefaultConfigView.swift */,
 				08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */,
 				0878E53A2B1683ED00E0D79D /* AppIconView.swift */,
+				08F4DFE32B7CA1F4004164E4 /* ParameterView.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -506,6 +509,7 @@
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
 				0878E53B2B1683ED00E0D79D /* AppIconView.swift in Sources */,
 				0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */,
+				08F4DFE42B7CA1F4004164E4 /* ParameterView.swift in Sources */,
 				E4C65EEE29CA9F7800AFA884 /* Conversation.swift in Sources */,
 				E4C65EA929CA9E7E00AFA884 /* ContentView.swift in Sources */,
 				0829D1132B3166D900DFFBB1 /* iOSMessages.swift in Sources */,

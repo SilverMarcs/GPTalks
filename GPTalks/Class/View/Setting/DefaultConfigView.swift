@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DefaultConfigView: View {
-    @ObservedObject var configuration: AppConfiguration = AppConfiguration.shared
+    @ObservedObject var configuration: AppConfiguration = .shared
 
     var body: some View {
         #if os(macOS)
@@ -23,29 +23,29 @@ struct DefaultConfigView: View {
             GroupBox(label: Text("Config")) {
                 VStack {
                     LabeledPicker(title: "Markdown Enabled", width: widthValue, picker: markdownEnabler)
-                    .padding(paddingValue)
+                        .padding(paddingValue)
 
                     Divider()
-                    
+
 //                    LabeledPicker(title: "Alternate Markdown", width: widthValue, picker: alternateMarkdownEnabler)
 //                    .padding(paddingValue)
 //                    .disabled(!configuration.isMarkdownEnabled)
 //
 //                    Divider()
- 
+
                     LabeledPicker(title: "Preferred Chat Provider", width: widthValue, picker: preferredProvider)
-                    .padding(paddingValue)
-                    
+                        .padding(paddingValue)
+
                     Divider()
-                    
+
                     LabeledPicker(title: "Preferred Image Provider", width: widthValue, picker: preferredImageProvider)
-                    .padding(paddingValue)
+                        .padding(paddingValue)
                 }
             }
 
             GroupBox(label: Text("Parameters")) {
                 LabeledPicker(title: "Context Length", width: widthValue, picker: contextPicker)
-                .padding(paddingValue)
+                    .padding(paddingValue)
 
                 Divider()
 
@@ -68,9 +68,19 @@ struct DefaultConfigView: View {
                 }
                 .padding(paddingValue)
             }
-            Spacer()
+
+            GroupBox(label: Text("Misc")) {
+                HStack {
+                    Text("Custom Model")
+                    Spacer()
+                    customModel
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: widthValue)
+                }
+                .padding(paddingValue)
+            }
         }
-        .padding()
+        .padding(30)
     }
 
     var iOS: some View {
@@ -87,21 +97,21 @@ struct DefaultConfigView: View {
             }
         }
     }
-    
+
     var markdownEnabler: some View {
         Picker("Markdown Enabled", selection: configuration.$isMarkdownEnabled) {
             Text("True").tag(true)
             Text("False").tag(false)
         }
     }
-    
+
 //    var alternateMarkdownEnabler: some View {
 //        Picker("Markdown Enabled", selection: configuration.$alternateMarkdown) {
 //            Text("True").tag(true)
 //            Text("False").tag(false)
 //        }
 //    }
-    
+
     var preferredProvider: some View {
         Picker("Preferred Chat Provider", selection: configuration.$preferredChatService) {
             ForEach(Provider.availableProviders, id: \.self) { provider in
@@ -109,7 +119,7 @@ struct DefaultConfigView: View {
             }
         }
     }
-    
+
     var preferredImageProvider: some View {
         Picker("Preferred Image Provider", selection: configuration.$preferredImageService) {
             ForEach(Provider.availableProviders, id: \.self) { provider in
@@ -129,8 +139,7 @@ struct DefaultConfigView: View {
 
     var tempSlider: some View {
         HStack(spacing: 15) {
-            Slider(value: configuration.$temperature, in: 0 ... 2, step: 0.1) {
-            } minimumValueLabel: {
+            Slider(value: configuration.$temperature, in: 0 ... 2, step: 0.1) {} minimumValueLabel: {
                 Text("0")
             } maximumValueLabel: {
                 Text("2")
@@ -141,6 +150,10 @@ struct DefaultConfigView: View {
 
     var systemPrompt: some View {
         TextField("Enter a system prompt", text: configuration.$systemPrompt, axis: .vertical)
+    }
+
+    var customModel: some View {
+        TextField("Enter a custom model", text: configuration.$customModel, axis: .vertical)
     }
 
     var paddingValue: CGFloat {

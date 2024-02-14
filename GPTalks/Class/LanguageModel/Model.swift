@@ -24,7 +24,7 @@ enum Model: String, Codable {
     case ordolphin
     
     /// shuttle
-    case sgpt3t0125
+    case sgpt3t
     case sgpt4
     case sgpt4t
     case sgpt4bing
@@ -34,14 +34,18 @@ enum Model: String, Codable {
     case sgeminipro
     case smixtral
     case sdolphin
-    case spplxonline
-    case spplxchat
+    case spplx7bonline
+//    case spplx7bchat
+    case spplx70bonline
+//    case spplx70bchat
     
-
     /// gpt4free
     case phind
     case bing
     case gemini
+    
+    /// custom
+    case custom
 
     var name: String {
         switch self {
@@ -70,8 +74,8 @@ enum Model: String, Codable {
         case .gemini:
             "Gemini"
             
-        case .sgpt3t0125:
-            "GPT-3.5T 0125"
+        case .sgpt3t:
+            "GPT-3.5T"
         case .sgpt4:
             "GPT-4"
         case .sgpt4t:
@@ -85,15 +89,19 @@ enum Model: String, Codable {
         case .sclaudei:
             "Claude-1"
         case .sgeminipro:
-            "Gemini Pro"
+            "Gemini-P"
         case .smixtral:
             "Mixtral"
         case .sdolphin:
             "Dolphin"
-        case .spplxonline:
-            "Pplx Online"
-        case .spplxchat:
-            "Pplx Chat"
+        case .spplx7bonline:
+            "PPLX-7B"
+        case .spplx70bonline:
+            "PPLX-70B"
+
+            
+        case .custom:
+            "Custom"
         }
     }
 
@@ -126,8 +134,8 @@ enum Model: String, Codable {
         case .gemini:
             "gemini"
             
-        case .sgpt3t0125:
-            "gpt-3.5-turbo-0125"
+        case .sgpt3t:
+            "gpt-3.5-turbo"
         case .sgpt4:
             "gpt-4"
         case .sgpt4t:
@@ -146,10 +154,13 @@ enum Model: String, Codable {
             "mixtral-8x7b"
         case .sdolphin:
             "dolphin-mixtral-8x7b"
-        case .spplxonline:
+        case .spplx7bonline:
+            "pplx-7b-online"
+        case .spplx70bonline:
             "pplx-70b-online"
-        case .spplxchat:
-            "pplx-70b-chat"
+            
+        case .custom:
+            AppConfiguration.shared.customModel
         }
     }
     
@@ -161,7 +172,7 @@ enum Model: String, Codable {
             .gpt4,
             .gpt4t1106,
             .gpt4t0125,
-        ]
+        ] + [.custom]
     static let openRouterModels: [Model] =
         [
             .ortoppy,
@@ -169,10 +180,10 @@ enum Model: String, Codable {
             .orphind,
             .orgemini,
             .ordolphin,
-        ]
-    static let shuttleModels: [Model] = 
+        ] + [.custom]
+    static let shuttleModels: [Model] =
         [
-            .sgpt3t0125,
+            .sgpt3t,
             .sgpt4,
             .sgpt4t,
             .sgpt4bing,
@@ -182,9 +193,9 @@ enum Model: String, Codable {
             .sgeminipro,
             .smixtral,
             .sdolphin,
-            .spplxonline,
-            .spplxchat,
-        ]
+            .spplx7bonline,
+            .spplx70bonline,
+        ] + [.custom]
     static let gpt4freeModels: [Model] =
         [
             .bing,

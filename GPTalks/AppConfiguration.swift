@@ -51,4 +51,6 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.Ckey") var Ckey = ""
     @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt4t1106
     @AppStorage("configuration.Chost") var Chost: String = ""
+    
+    @AppStorage("configuration.customModel") var customModel: String = ""
 }
