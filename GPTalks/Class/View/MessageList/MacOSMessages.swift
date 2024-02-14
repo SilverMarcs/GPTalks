@@ -32,7 +32,7 @@ struct MacOSMessages: View {
                 .id("bottomID")
             }
             .navigationTitle(session.title)
-            .navigationSubtitle(session.configuration.model.name)
+            .navigationSubtitle("Context: \(session.getMessageCountAfterResetMarker())/\(session.configuration.contextLength)")
             .toolbar {
                 ToolbarItems(session: session)
             }

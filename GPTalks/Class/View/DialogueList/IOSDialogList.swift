@@ -11,7 +11,7 @@ import OpenAI
 
     struct IOSDialogList: View {
         @Bindable var viewModel: DialogueViewModel
-        @State var generations: [ImagesResult.URLResult] = []
+        @State var generations: [ImageObject] = []
 
         @State var isShowSettingView = false
 
@@ -28,7 +28,7 @@ import OpenAI
                 .toolbar {
                     ToolbarItem {
                         NavigationLink {
-                            ImageSession(generations: $generations)
+                            ImageCreator(generations: $generations)
                         } label: {
                             Image(systemName: "photo")
                         }

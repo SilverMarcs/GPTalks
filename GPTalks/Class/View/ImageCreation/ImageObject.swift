@@ -12,5 +12,6 @@ struct ImageObject: Codable, Identifiable, Hashable {
     var id: UUID = UUID()
     var isGenerating: Bool = false
     var prompt: String
-    var urls: [ImagesResult.URLResult]
+    var imageModel: String
+    var urls: [URL]
 }

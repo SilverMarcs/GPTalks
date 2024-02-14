@@ -5,15 +5,19 @@
 //  Created by Zabir Raihan on 14/02/2024.
 //
 
-import SwiftUI
 import NetworkImage
+import SwiftUI
 
 struct GenerationView: View {
     var generation: ImageObject
+    @Binding var shouldScroll: Bool
     
     var body: some View {
         VStack(spacing: spacing) {
-            HStack(alignment: .lastTextBaseline) {
+            Group {
+                Text(generation.imageModel)
+                    .font(.caption)
+                    .bubbleStyle(isMyMessage: false)
                 Text(generation.prompt)
                     .textSelection(.enabled)
                     .bubbleStyle(isMyMessage: true)
@@ -21,57 +25,87 @@ struct GenerationView: View {
             .padding(.leading, horizontalPadding)
             .frame(maxWidth: .infinity, alignment: .trailing)
             
-            if (generation.isGenerating) {
-                Text("Generating...")
+            if generation.isGenerating {
+                ReplyingIndicatorView()
+                    .frame(width: 48, height: 16)
+                    .bubbleStyle(isMyMessage: false)
+                    .padding(.trailing, horizontalPadding)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             
-            ForEach(generation.urls, id: \.self.url) { image in
-                NetworkImage(url: URL(string: image.url!)) { image in
-                    image
-                        .resizable()
-                        .scaledToFit()
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                    //            AsyncImage(url: URL(string: image.url!)) { asyncImage in
-                    //                asyncImage
-                    //                    .resizable()
-                    //                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    //                    .scaledToFit()
-                    //                    .onTapGesture {
-                    //                        previewUrl = image.url!
-                    //                        isFocused = false
-                    //                        isZoomViewPresented = true
-                    //                    }
-                    //                    .contextMenu {
-                    //                        Button(action: {
-                    //                            saveImage(url: URL(string: image.url!))
-                    //                        }) {
-                    //                            Text("Save Image")
-                    //                            Image(systemName: "square.and.arrow.down")
-                    //                        }
-                    //                    }
-                } placeholder: {
-                    ProgressView()
+            ForEach(generation.urls, id: \.self) { url in
+                HStack(spacing: spacing) {
+                    NetworkImage(url: url) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .frame(width: imageSize, height: imageSize)
+#if !os(macOS)
+                            .contextMenu {
+                                Button(action: {
+                                    saveImage(url: url)
+                                }) {
+                                    Text("Save Image")
+                                    Image(systemName: "square.and.arrow.down")
+                                }
+                            }
+#endif
+                    } placeholder: {
+                        ZStack(alignment: .center) {
+                            Color.secondary
+                                .opacity(0.1)
+                                .frame(width: imageSize, height: imageSize)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                            
+                            ProgressView()
+                        }
+                        .onAppear {
+                            shouldScroll = true
+                        }
+                        .onDisappear {
+                            shouldScroll = false
+                        }
+                    }
+
+                    Button {
+                        saveImage(url: url)
+                    } label: {
+                        Image(systemName: "square.and.arrow.down")
+                            .resizable()
+                            .scaledToFit()
+                            .padding(.leading, 8)
+                            .padding(.trailing, 7)
+                            .padding(.bottom, 8)
+                            .padding(.top, 6)
+                            .background(.gray.opacity(0.2))
+                            .foregroundStyle(.secondary)
+                            .clipShape(Circle())
+                            .frame(width: btnSize, height: btnSize)
+                    }
+                    .buttonStyle(.plain)
+                    
+                    Spacer()
                 }
                 .padding(.trailing, horizontalPadding)
-#if os(iOS)
-                .sheet(isPresented: $isZoomViewPresented) {
-                    ZoomableImageView(imageUrl: URL(string: previewUrl))
-                }
-#endif
-                .listRowSeparator(.hidden)
-                //                .onAppear {
-                //                    feedback = ""
-                //                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }
     
+    private var btnSize: CGFloat {
+        #if os(macOS)
+            return 28
+        #else
+            return 34
+        #endif
+    }
     
     private var horizontalPadding: CGFloat {
-        #if os(iOS)
-            50
-        #else
+        #if os(macOS)
             85
+        #else
+            50
         #endif
     }
     
@@ -79,7 +113,29 @@ struct GenerationView: View {
         #if os(macOS)
             return 10
         #else
-            return 2
+            return 10
+        #endif
+    }
+    
+    private var imageSize: CGFloat {
+        #if os(macOS)
+            400
+        #else
+            300
         #endif
     }
 }
+
+//                    .onTapGesture {
+//                        previewUrl = image.url!
+//                        isFocused = false
+//                        isZoomViewPresented = true
+//                    }
+//                    .contextMenu {
+//                        Button(action: {
+//                            saveImage(url: URL(string: image.url!))
+//                        }) {
+//                            Text("Save Image")
+//                            Image(systemName: "square.and.arrow.down")
+//                        }
+//                    }

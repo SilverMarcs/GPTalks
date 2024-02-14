@@ -101,18 +101,18 @@ struct DialogueListItem: View {
             }
         }
         .swipeActions(edge: .trailing) {
+            Button(role: .destructive) {
+                viewModel.deleteDialogue(session)
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+            
             Button {
                 viewModel.toggleArchive(session: session)
             } label: {
                 Label(session.isArchive ? "Unarchive" : "Archive", systemImage: session.isArchive ? "archivebox" : "archivebox.fill")
             }
             .tint(.orange)
-            
-            Button(role: .destructive) {
-                viewModel.deleteDialogue(session)
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
             
         }
         .swipeActions(edge: .leading) {

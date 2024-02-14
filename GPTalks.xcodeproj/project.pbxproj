@@ -15,6 +15,8 @@
 		0829D1192B31936C00DFFBB1 /* IOSDialogList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1182B31936C00DFFBB1 /* IOSDialogList.swift */; };
 		0829D11B2B31938000DFFBB1 /* MacOSDialogList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D11A2B31938000DFFBB1 /* MacOSDialogList.swift */; };
 		08376D7A2B7CBFCB003258D1 /* GenerationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08376D792B7CBFCB003258D1 /* GenerationView.swift */; };
+		08376D812B7CF0D1003258D1 /* ImageSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08376D802B7CF0D1003258D1 /* ImageSave.swift */; };
+		08376D832B7CF0F4003258D1 /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08376D822B7CF0F4003258D1 /* ZoomableImageView.swift */; };
 		0837E47D2AFE57A100C03059 /* DefaultConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E47C2AFE57A100C03059 /* DefaultConfigView.swift */; };
 		0837E4812AFFE7B000C03059 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E4802AFFE7AF00C03059 /* Model.swift */; };
 		083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 083E3B182B3A67B9007BE19E /* VisualEffectView */; };
@@ -90,6 +92,8 @@
 		0829D1182B31936C00DFFBB1 /* IOSDialogList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSDialogList.swift; sourceTree = "<group>"; };
 		0829D11A2B31938000DFFBB1 /* MacOSDialogList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSDialogList.swift; sourceTree = "<group>"; };
 		08376D792B7CBFCB003258D1 /* GenerationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationView.swift; sourceTree = "<group>"; };
+		08376D802B7CF0D1003258D1 /* ImageSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSave.swift; sourceTree = "<group>"; };
+		08376D822B7CF0F4003258D1 /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
 		0837E47C2AFE57A100C03059 /* DefaultConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultConfigView.swift; sourceTree = "<group>"; };
 		0837E4802AFFE7AF00C03059 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
@@ -198,6 +202,7 @@
 				08AF74732B720F5B00FB081F /* ImageCreator.swift */,
 				08C82E572B7CB00C0029791B /* ImageObject.swift */,
 				08376D792B7CBFCB003258D1 /* GenerationView.swift */,
+				08376D822B7CF0F4003258D1 /* ZoomableImageView.swift */,
 			);
 			path = ImageCreation;
 			sourceTree = "<group>";
@@ -348,6 +353,7 @@
 			children = (
 				E4C65EEB29CA9F7800AFA884 /* Splash.swift */,
 				085D40BE2AFD66340033F8B5 /* Utils.swift */,
+				08376D802B7CF0D1003258D1 /* ImageSave.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -518,6 +524,7 @@
 				E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */,
 				086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */,
 				08AF74742B720F5B00FB081F /* ImageCreator.swift in Sources */,
+				08376D832B7CF0F4003258D1 /* ZoomableImageView.swift in Sources */,
 				E4C65F2029D0649800AFA884 /* DialogueSettingsView.swift in Sources */,
 				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
@@ -549,6 +556,7 @@
 				E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */,
 				08A1EF4E2B2604D000A88A3A /* UserMessageView.swift in Sources */,
 				E4C65EA429CA9E7E00AFA884 /* Persistence.swift in Sources */,
+				08376D812B7CF0D1003258D1 /* ImageSave.swift in Sources */,
 				08D533342B2C2ED9008B4FA9 /* MarkdownView.swift in Sources */,
 				08D533302B2C25CC008B4FA9 /* MessageContextMenu.swift in Sources */,
 				087AC1982B6D40A7006B9386 /* EditingView.swift in Sources */,
