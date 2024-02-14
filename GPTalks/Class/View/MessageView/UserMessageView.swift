@@ -44,7 +44,6 @@ struct UserMessageView: View {
         .onHover { isHovered in
             self.isHovered = isHovered
         }
-        .padding(.leading, horizontalPadding)
         .sheet(isPresented: $isEditing) {
             EditingView(editingMessage: $editingMessage, isEditing: $isEditing, session: session, conversation: conversation)
         }
@@ -76,14 +75,5 @@ struct UserMessageView: View {
         .opacity(isHovered ? 1 : 0)
         .transition(.opacity)
         .animation(.easeOut(duration: 0.15), value: isHovered)
-    }
-
-
-    private var horizontalPadding: CGFloat {
-        #if os(iOS)
-            50
-        #else
-        65
-        #endif
     }
 }

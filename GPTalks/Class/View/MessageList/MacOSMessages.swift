@@ -30,21 +30,7 @@ struct MacOSMessages: View {
                     ErrorDescView(session: session)
                 }
                 .id("bottomID")
-
-//                if session.isStreaming && session.lastConversation.content.count <= 1200 {
-//                    Spacer()
-//                        .listRowSeparator(.hidden)
-//                        .frame(height: 500)
-//                        .id("bottomID")
-//                } else {
-//                    Spacer()
-//                        .listRowSeparator(.hidden)
-//                        .frame(height: 1)
-//                        .id("bottomID")
-//                }
             }
-
-            .background(.background)
             .navigationTitle(session.title)
             .navigationSubtitle(session.configuration.model.name)
             .toolbar {
@@ -64,7 +50,6 @@ struct MacOSMessages: View {
                 scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
             }
             .onChange(of: session.conversations.last?.content) {
-//                if session.conversations.last?.content != previousContent && !isUserScrolling && session.lastConversation.content.count > 1200 {
                 if session.conversations.last?.content != previousContent && !isUserScrolling {
                     scrollToBottom(proxy: proxy, animated: true)
                 }

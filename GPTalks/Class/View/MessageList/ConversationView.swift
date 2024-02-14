@@ -10,37 +10,37 @@ import SwiftUI
 struct ConversationView: View {
     var session: DialogueSession
     var conversation: Conversation
-    
-    var body : some View {
+
+    var body: some View {
         VStack(spacing: spacing) {
-            if conversation.role == "user" {
-                UserMessageView(conversation: conversation, session: session)
-#if os(macOS)
-                    .opacity(0.9)
-#endif
-                    .transition(.opacity)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+            Group {
+                if conversation.role == "user" {
+                    UserMessageView(conversation: conversation, session: session)
+                        .padding(.leading, horizontalPadding)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+
+                if conversation.role == "assistant" {
+                    AssistantMessageView(conversation: conversation, session: session)
+                        .padding(.trailing, horizontalPadding)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
-            
-            if conversation.role == "assistant" {
-                AssistantMessageView(conversation: conversation, session: session)
-#if os(macOS)
-                    .opacity(0.9)
-#endif
-                    .transition(.opacity)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            
+            #if os(macOS)
+            .opacity(0.9)
+            #endif
+            .transition(.opacity)
+
             if session.conversations.firstIndex(of: conversation) == session.resetMarker {
                 ContextResetDivider(session: session)
                     .padding(.vertical)
             }
-            
+
             DeleteBtn
                 .opacity(0)
         }
     }
-    
+
     private var DeleteBtn: some View {
         Button("hidden") {
             if let lastConversation = session.conversations.last {
@@ -53,11 +53,17 @@ struct ConversationView: View {
 
     private var spacing: CGFloat {
         #if os(macOS)
-        return 8
+            return 8
         #else
-        return 2
+            return 2
+        #endif
+    }
+
+    private var horizontalPadding: CGFloat {
+        #if os(iOS)
+            50
+        #else
+            65
         #endif
     }
 }
-
-

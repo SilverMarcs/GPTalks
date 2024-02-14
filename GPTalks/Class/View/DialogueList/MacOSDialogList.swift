@@ -10,7 +10,7 @@ import OpenAI
 
 struct MacOSDialogList: View {
     @Bindable var viewModel: DialogueViewModel
-    @State var images: [ImagesResult.URLResult] = []
+    @State var images: [ImageObject] = []
 
     var body: some View {
         Group {
@@ -38,7 +38,7 @@ struct MacOSDialogList: View {
             Spacer()
 
             NavigationLink {
-                ImageSession(images: $images)
+                ImageCreator(generations: $images)
             } label: {
                 Image(systemName: "photo")
             }

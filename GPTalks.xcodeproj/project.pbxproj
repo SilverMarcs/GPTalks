@@ -14,6 +14,7 @@
 		0829D1172B317A4B00DFFBB1 /* ConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1162B317A4B00DFFBB1 /* ConversationView.swift */; };
 		0829D1192B31936C00DFFBB1 /* IOSDialogList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1182B31936C00DFFBB1 /* IOSDialogList.swift */; };
 		0829D11B2B31938000DFFBB1 /* MacOSDialogList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D11A2B31938000DFFBB1 /* MacOSDialogList.swift */; };
+		08376D7A2B7CBFCB003258D1 /* GenerationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08376D792B7CBFCB003258D1 /* GenerationView.swift */; };
 		0837E47D2AFE57A100C03059 /* DefaultConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E47C2AFE57A100C03059 /* DefaultConfigView.swift */; };
 		0837E4812AFFE7B000C03059 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E4802AFFE7AF00C03059 /* Model.swift */; };
 		083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 083E3B182B3A67B9007BE19E /* VisualEffectView */; };
@@ -30,8 +31,9 @@
 		08A1EF4E2B2604D000A88A3A /* UserMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */; };
 		08A1EF502B2606C000A88A3A /* AssistantMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */; };
 		08A1EF522B26100600A88A3A /* DialogueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF512B26100600A88A3A /* DialogueViewModel.swift */; };
-		08AF74742B720F5B00FB081F /* ImageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AF74732B720F5B00FB081F /* ImageSession.swift */; };
+		08AF74742B720F5B00FB081F /* ImageCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AF74732B720F5B00FB081F /* ImageCreator.swift */; };
 		08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */; };
+		08C82E582B7CB00C0029791B /* ImageObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C82E572B7CB00C0029791B /* ImageObject.swift */; };
 		08D533302B2C25CC008B4FA9 /* MessageContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D5332F2B2C25CC008B4FA9 /* MessageContextMenu.swift */; };
 		08D533322B2C2D50008B4FA9 /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */; };
 		08D533342B2C2ED9008B4FA9 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */; };
@@ -87,6 +89,7 @@
 		0829D1162B317A4B00DFFBB1 /* ConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationView.swift; sourceTree = "<group>"; };
 		0829D1182B31936C00DFFBB1 /* IOSDialogList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSDialogList.swift; sourceTree = "<group>"; };
 		0829D11A2B31938000DFFBB1 /* MacOSDialogList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSDialogList.swift; sourceTree = "<group>"; };
+		08376D792B7CBFCB003258D1 /* GenerationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationView.swift; sourceTree = "<group>"; };
 		0837E47C2AFE57A100C03059 /* DefaultConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultConfigView.swift; sourceTree = "<group>"; };
 		0837E4802AFFE7AF00C03059 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
@@ -102,8 +105,9 @@
 		08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageView.swift; sourceTree = "<group>"; };
 		08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantMessageView.swift; sourceTree = "<group>"; };
 		08A1EF512B26100600A88A3A /* DialogueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueViewModel.swift; sourceTree = "<group>"; };
-		08AF74732B720F5B00FB081F /* ImageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSession.swift; sourceTree = "<group>"; };
+		08AF74732B720F5B00FB081F /* ImageCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCreator.swift; sourceTree = "<group>"; };
 		08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledPicker.swift; sourceTree = "<group>"; };
+		08C82E572B7CB00C0029791B /* ImageObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageObject.swift; sourceTree = "<group>"; };
 		08D5332F2B2C25CC008B4FA9 /* MessageContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContextMenu.swift; sourceTree = "<group>"; };
 		08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
 		08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
@@ -184,9 +188,18 @@
 				08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */,
 				0820E06C2B5395E500401A30 /* TextSelectionView.swift */,
 				087AC1972B6D40A7006B9386 /* EditingView.swift */,
-				08AF74732B720F5B00FB081F /* ImageSession.swift */,
 			);
 			path = MessageView;
+			sourceTree = "<group>";
+		};
+		08C82E562B7CAFF00029791B /* ImageCreation */ = {
+			isa = PBXGroup;
+			children = (
+				08AF74732B720F5B00FB081F /* ImageCreator.swift */,
+				08C82E572B7CB00C0029791B /* ImageObject.swift */,
+				08376D792B7CBFCB003258D1 /* GenerationView.swift */,
+			);
+			path = ImageCreation;
 			sourceTree = "<group>";
 		};
 		E4994DF029DA8AF8002981D0 /* Setting */ = {
@@ -287,6 +300,7 @@
 		E4C65ED529CA9F7800AFA884 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				08C82E562B7CAFF00029791B /* ImageCreation */,
 				08A1EF4C2B2604C300A88A3A /* MessageView */,
 				E4994DF029DA8AF8002981D0 /* Setting */,
 				E4C65EDF29CA9F7800AFA884 /* DialogueList */,
@@ -503,7 +517,7 @@
 				0829D11B2B31938000DFFBB1 /* MacOSDialogList.swift in Sources */,
 				E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */,
 				086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */,
-				08AF74742B720F5B00FB081F /* ImageSession.swift in Sources */,
+				08AF74742B720F5B00FB081F /* ImageCreator.swift in Sources */,
 				E4C65F2029D0649800AFA884 /* DialogueSettingsView.swift in Sources */,
 				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
@@ -527,7 +541,9 @@
 				E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */,
 				08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */,
 				0829D1152B3166E300DFFBB1 /* MacOSMessages.swift in Sources */,
+				08C82E582B7CB00C0029791B /* ImageObject.swift in Sources */,
 				E4C65EF629CA9F7800AFA884 /* IosSettingsView.swift in Sources */,
+				08376D7A2B7CBFCB003258D1 /* GenerationView.swift in Sources */,
 				08A1EF522B26100600A88A3A /* DialogueViewModel.swift in Sources */,
 				0829D1192B31936C00DFFBB1 /* IOSDialogList.swift in Sources */,
 				E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */,
