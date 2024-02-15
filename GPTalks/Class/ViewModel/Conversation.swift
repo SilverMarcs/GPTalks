@@ -13,23 +13,28 @@ struct Conversation: Codable, Identifiable, Hashable {
     var date = Date()
     var role: String
     var content: String
+    var base64Image: String = ""
     var isReplying: Bool = false
     
-    func toChat() -> Chat {
-        let chatRole: Chat.Role = {
+    func toChat() -> Message {
+        let chatRole: Message.Role = {
             switch role {
             case "user":
-                return Chat.Role.user
+                return Message.Role.user
             case "assistant":
-                return Chat.Role.assistant
+                return Message.Role.assistant
             case "system":
-                return Chat.Role.system
+                return Message.Role.system
             default:
-                return Chat.Role.function
+                return Message.Role.function
             }
         }()
         
-        return Chat(role: chatRole, content: content)
+        if !base64Image.isEmpty {
+            return Message(role: chatRole, content: [ChatContent(type: .text, value: content), ChatContent(type: .imageUrl, value: "data:image/jpeg;base64," + base64Image)])
+        } else {
+            return Message(role: chatRole, content: [ChatContent(type: .text, value: content)])
+        }
     }
 }
 

@@ -42,6 +42,10 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.Skey") var Skey = ""
     @AppStorage("configuration.Smodel") var Smodel: Model = .gpt4t1106
     
+    /// oxygen
+    @AppStorage("configuration.Okey") var Okey = ""
+    @AppStorage("configuration.Omodel") var Omodel: Model = .gpt4t1106
+    
     /// gpt4free
     @AppStorage("configuration.Gkey") var Gkey = ""
     @AppStorage("configuration.Gmodel") var Gmodel: Model = .gpt4

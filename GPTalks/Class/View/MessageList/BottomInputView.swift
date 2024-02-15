@@ -18,15 +18,18 @@ struct BottomInputView: View {
     @FocusState var focused: Bool
     
     @State private var importing = false
-    @State private var image: Image?
+//    @State private var image: Image?
     
     var body: some View {
-        VStack(alignment: .leading) {
-            importedImage
+        VStack(alignment: .leading, spacing: 10) {
+            
+            if session.inputImage != nil {
+                importedImage
+            }
             
             HStack(spacing: 12) {
-//                imagePicker
-                resetContextButton
+                imagePicker
+//                resetContextButton
                 
                 inputBox
                 
@@ -55,19 +58,22 @@ struct BottomInputView: View {
     
     var importedImage: some View {
         ZStack(alignment: .topTrailing) {
-            image?
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
-            
-            if image != nil {
+            if session.inputImage != nil {
+                Image(nsImage: session.inputImage!)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
+                    .aspectRatio(contentMode: .fill)
+                    .cornerRadius(8)
+                
                 Button {
-                    image = nil
+                    session.inputImage = nil
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundStyle(.background)
                         .background(.primary, in: Circle())
                 }
+                .padding(7)
             }
         }
     }
@@ -79,6 +85,7 @@ struct BottomInputView: View {
             Image(systemName: "photo")
                 .frame(width: imageSize, height: imageSize)
         }
+        .keyboardShortcut("i", modifiers: .command)
         .fileImporter(
             isPresented: $importing,
             allowedContentTypes: [.image]
@@ -88,11 +95,11 @@ struct BottomInputView: View {
                 print(file.absoluteString)
                 #if os(macOS)
                 if let nsImage = NSImage(contentsOf: file) {
-                    image = Image(nsImage: nsImage)
+                    session.inputImage = nsImage
                 }
                 #else
                 if let uiImage = UIImage(contentsOfFile: file.path) {
-                    image = Image(uiImage: uiImage)
+                    session.inputImage = uiImage
                 }
                 #endif
             case .failure(let error):

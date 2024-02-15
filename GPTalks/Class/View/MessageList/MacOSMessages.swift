@@ -78,7 +78,7 @@ struct MacOSMessages: View {
                 isTextFieldFocused = true
             }
             .onChange(of: session.errorDesc) {
-                scrollToBottom(proxy: proxy)
+                scrollToBottom(proxy: proxy, animated: true)
             }
 //            Spacer() // enable this to change toolbar color
         }

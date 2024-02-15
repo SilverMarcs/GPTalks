@@ -5,129 +5,142 @@
 //  Created by Zabir Raihan on 10/11/2023.
 //
 
-import SwiftUI
 import OpenAI
+import SwiftUI
 
 enum Provider: String, CaseIterable, Codable, Identifiable {
     case openai
     case openrouter
     case shuttle
+    case oxygen
     case gpt4free
     case custom
 
     var id: String {
         switch self {
         case .openai:
-            return "openai"
+            "openai"
         case .openrouter:
-            return "openrouter"
+            "openrouter"
         case .shuttle:
-            return "shuttle"
+            "shuttle"
+        case .oxygen:
+            "oxygen"
         case .gpt4free:
-            return "gpt4free"
+            "gpt4free"
         case .custom:
-            return "custom"
+            "custom"
         }
     }
-    
+
     var config: OpenAI.Configuration {
         switch self {
         case .openai:
-            return OpenAI.Configuration(
+            OpenAI.Configuration(
                 token: AppConfiguration.shared.OAIkey,
                 host: "api.openai.com"
             )
         case .openrouter:
-            return OpenAI.Configuration(
+            OpenAI.Configuration(
                 token: AppConfiguration.shared.ORkey,
                 host: "openrouter.ai/api"
             )
         case .shuttle:
-            return OpenAI.Configuration(
+            OpenAI.Configuration(
                 token: AppConfiguration.shared.Skey,
                 host: "api.shuttleai.app"
             )
+        case .oxygen:
+            OpenAI.Configuration(
+                token: AppConfiguration.shared.Okey,
+                host: "app.oxyapi.uk"
+            )
         case .gpt4free:
-            return OpenAI.Configuration(
+            OpenAI.Configuration(
                 token: AppConfiguration.shared.Gkey,
                 host: AppConfiguration.shared.Ghost
             )
         case .custom:
-            return OpenAI.Configuration(
+            OpenAI.Configuration(
                 token: AppConfiguration.shared.Ckey,
                 host: AppConfiguration.shared.Chost
             )
-
         }
     }
 
     var iconName: String {
-        return rawValue.lowercased()
+        rawValue.lowercased()
     }
-    
+
     var accentColor: Color {
         switch self {
         case .openai:
-            return Color("greenColor")
+//            Color("greenColor")
+            Color(hex: "#34AADC")
         case .openrouter:
-            return Color("pinkColor")
+            Color("pinkColor")
         case .shuttle:
-            return Color("niceColor")
+            Color("tealColor")
+        case .oxygen:
+            Color("niceColor")
         case .gpt4free:
-            return Color("blueColor")
+            Color("blueColor")
         case .custom:
-            return Color("tealColor")
-
+            Color("purpleColor")
         }
     }
 
     var name: String {
         switch self {
         case .openai:
-            return "OpenAI"
+            "OpenAI"
         case .openrouter:
-            return "OpenRouter"
+            "OpenRouter"
         case .shuttle:
-            return "Shuttle"
+            "Shuttle"
+        case .oxygen:
+            "Oxygen"
         case .gpt4free:
-            return "GPT4Free"
+            "GPT4Free"
         case .custom:
-            return "Custom"
-
+            "Custom"
         }
     }
-    
+
     var preferredModel: Model {
         switch self {
         case .openai:
-            return AppConfiguration.shared.OAImodel
+            AppConfiguration.shared.OAImodel
         case .openrouter:
-            return AppConfiguration.shared.ORmodel
+            AppConfiguration.shared.ORmodel
         case .shuttle:
-            return AppConfiguration.shared.Smodel
+            AppConfiguration.shared.Smodel
+        case .oxygen:
+            AppConfiguration.shared.Omodel
         case .gpt4free:
-            return AppConfiguration.shared.Gmodel
+            AppConfiguration.shared.Gmodel
         case .custom:
-            return AppConfiguration.shared.Cmodel
-
+            AppConfiguration.shared.Cmodel
         }
     }
 
     var models: [Model] {
         switch self {
         case .openai:
-            return Model.openAIModels
+            Model.openAIModels
         case .openrouter:
-            return Model.openRouterModels
+            Model.openRouterModels
         case .shuttle:
-            return Model.shuttleModels
+            Model.shuttleModels
+        case .oxygen:
+            Model.oxygenModels
         case .gpt4free:
-            return Model.gpt4freeModels
+            Model.gpt4freeModels
         case .custom:
-            return Model.customModels
+            Model.customModels
         }
     }
-    
+
     @ViewBuilder
     var destination: some View {
         @ObservedObject var configuration = AppConfiguration.shared
@@ -151,6 +164,12 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 apiKey: configuration.$Skey,
                 provider: self
             )
+        case .oxygen:
+            ServiceSettingsView(
+                model: configuration.$Omodel,
+                apiKey: configuration.$Okey,
+                provider: self
+            )
         case .gpt4free:
             ServiceSettingsView(
                 model: configuration.$Gmodel,
@@ -165,28 +184,29 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             )
         }
     }
-    
+
     var settingsLabel: some View {
         HStack {
             ProviderImage(color: self.accentColor, frame: frame)
             Text(name)
         }
     }
-    
+
     static var availableProviders: [Provider] {
-        return [
+        [
             .openai,
-            .openrouter, 
-            .shuttle,
+            .openrouter,
+//            .shuttle,
+            .oxygen,
             .gpt4free,
             .custom
         ]
     }
-    
+
     var logoImage: some View {
-        ProviderImage(radius: imageRadius, color: self.accentColor, frame: imageSize)
+        ProviderImage(radius: imageRadius, color: accentColor, frame: imageSize)
     }
-    
+
     private var imageRadius: CGFloat {
         #if os(macOS)
             11
@@ -194,7 +214,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             16
         #endif
     }
-    
+
     private var imageSize: CGFloat {
         #if os(macOS)
             36
@@ -202,12 +222,12 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             50
         #endif
     }
-    
+
     private var frame: CGFloat {
         #if os(macOS)
-            return 35
+            35
         #else
-            return 30
+            30
         #endif
     }
 }

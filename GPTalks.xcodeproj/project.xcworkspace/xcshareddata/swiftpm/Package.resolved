@@ -28,21 +28,21 @@
       }
     },
     {
-      "identity" : "openai",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/OpenAI",
-      "state" : {
-        "branch" : "main",
-        "revision" : "27ad53b87ca9401ad380d2f98e525ce17443ad24"
-      }
-    },
-    {
       "identity" : "swift-markdown-ui",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/gonzalezreal/swift-markdown-ui",
       "state" : {
         "revision" : "ae799d015a5374708f7b4c85f3294c05f2a564e2",
         "version" : "2.3.0"
+      }
+    },
+    {
+      "identity" : "swiftopenai",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftBeta/SwiftOpenAI",
+      "state" : {
+        "revision" : "495e4358b328391a240d977d97cc2512b4947f5f",
+        "version" : "1.3.0"
       }
     },
     {

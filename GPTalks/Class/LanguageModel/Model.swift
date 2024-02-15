@@ -14,6 +14,8 @@ enum Model: String, Codable {
     case gpt4
     case gpt4t1106
     case gpt4t0125
+    
+    case gpt4vision
 
     /// openrouter
     case ortoppy
@@ -35,9 +37,11 @@ enum Model: String, Codable {
     case smixtral
     case sdolphin
     case spplx7bonline
-//    case spplx7bchat
     case spplx70bonline
-//    case spplx70bchat
+    
+    /// oxygen
+    case ogpt4browsing
+    case odolphin
     
     /// gpt4free
     case phind
@@ -57,6 +61,9 @@ enum Model: String, Codable {
             "GPT-4T 1106"
         case .gpt4t0125:
             "GPT-4T 0125"
+        case .gpt4vision:
+            "GPT-4 Vision"
+            
         case .phind, .orphind:
             "Phind"
         case .ortoppy:
@@ -98,10 +105,13 @@ enum Model: String, Codable {
             "PPLX-7B"
         case .spplx70bonline:
             "PPLX-70B"
-
             
         case .custom:
             "Custom"
+        case .ogpt4browsing:
+            "GPT-4B"
+        case .odolphin:
+            "Dolphin"
         }
     }
 
@@ -115,6 +125,9 @@ enum Model: String, Codable {
             "gpt-4-1106-preview"
         case .gpt4t0125:
             "gpt-4-0125-preview"
+        case .gpt4vision:
+            "gpt-4-vision-preview"
+            
         case .ortoppy:
             "undi95/toppy-m-7b:free"
         case .orperplexity:
@@ -161,6 +174,10 @@ enum Model: String, Codable {
             
         case .custom:
             AppConfiguration.shared.customModel
+        case .ogpt4browsing:
+            "gpt-4-browsing"
+        case .odolphin:
+            "dolphin-2.6-mixtral-8x7b"
         }
     }
     
@@ -172,7 +189,8 @@ enum Model: String, Codable {
             .gpt4,
             .gpt4t1106,
             .gpt4t0125,
-        ] + [.custom]
+            .gpt4vision,
+        ]
     static let openRouterModels: [Model] =
         [
             .ortoppy,
@@ -196,11 +214,17 @@ enum Model: String, Codable {
             .spplx7bonline,
             .spplx70bonline,
         ] + [.custom]
+    static let oxygenModels: [Model] =
+        openAIModels +
+        [
+            .ogpt4browsing,
+            .odolphin,
+        ] + [.custom]
     static let gpt4freeModels: [Model] =
         [
             .bing,
             .phind,
             .gemini,
         ]
-    static let customModels: [Model] = openAIModels
+    static let customModels: [Model] = openAIModels + [.custom]
 }

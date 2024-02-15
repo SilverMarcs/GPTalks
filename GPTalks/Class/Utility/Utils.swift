@@ -50,3 +50,81 @@ func scrollToBottom(proxy: ScrollViewProxy, id: String = "bottomID", anchor: Uni
 //       action()
    }
 }
+
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let a, r, g, b: UInt64
+        switch hex.count {
+        case 3: // RGB (12-bit)
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6: // RGB (24-bit)
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8: // ARGB (32-bit)
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (a, r, g, b) = (255, 0, 0, 0)
+        }
+        self.init(.sRGB, red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255, opacity: Double(a) / 255)
+    }
+}
+
+#if !os(macOS)
+extension UIImage {
+    var base64: String? {
+        self.jpegData(compressionQuality: 1)?.base64EncodedString()
+    }
+}
+
+extension String {
+    var imageFromBase64: UIImage? {
+        guard let imageData = Data(base64Encoded: self, options: .ignoreUnknownCharacters) else {
+            return nil
+        }
+        return UIImage(data: imageData)
+    }
+}
+
+// uncomment later
+//let img = img
+//let base64 = img.base64
+//let rebornImg = base64?.imageFromBase64
+
+func base64EncodeImage(_ image: UIImage) -> String? {
+    guard let imageData = image.jpegData(compressionQuality: 1.0) else { return nil }
+    return imageData.base64EncodedString()
+}
+#else
+extension NSImage {
+    var base64: String? {
+        self.tiffRepresentation?.base64EncodedString()
+    }
+    
+    func base64EncodedString() -> String? {
+        guard let tiffRepresentation = tiffRepresentation,
+              let bitmapImageRep = NSBitmapImageRep(data: tiffRepresentation) else {
+            return nil
+        }
+
+        let jpegData = bitmapImageRep.representation(using: .jpeg, properties: [.compressionFactor: 1.0])
+        return jpegData?.base64EncodedString()
+    }
+}
+
+extension String {
+    var imageFromBase64: NSImage? {
+        guard let imageData = Data(base64Encoded: self, options: .ignoreUnknownCharacters) else {
+            return nil
+        }
+        return NSImage(data: imageData)
+    }
+}
+
+func base64EncodeImage(_ image: NSImage) -> String? {
+    guard let imageData = image.tiffRepresentation else { return nil }
+    return imageData.base64EncodedString()
+}
+
+#endif
