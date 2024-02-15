@@ -253,7 +253,7 @@ import SwiftUI
         if let resetMarker = resetMarker {
             return conversations.count - resetMarker - 1
         }
-        return 0
+        return min(configuration.contextLength, conversations.count)
     }
     
     @MainActor

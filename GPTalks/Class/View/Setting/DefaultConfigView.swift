@@ -90,6 +90,9 @@ struct DefaultConfigView: View {
                     contextPicker
                     tempSlider
                 }
+                Section("Misc") {
+                    customModel
+                }
                 Section("System Prompt") {
                     systemPrompt
                         .lineLimit(4, reservesSpace: true)
