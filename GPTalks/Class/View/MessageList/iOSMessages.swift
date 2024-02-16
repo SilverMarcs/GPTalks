@@ -53,10 +53,13 @@ struct iOSMessages: View {
             #endif
             .listStyle(.plain)
             .onAppear {
-//                    scrollToBottom(proxy: proxy, animated: false)
-                scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
-                scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
-                scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
+                if AppConfiguration.shared.alternateMarkdown {
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
+                } else {
+                    scrollToBottom(proxy: proxy, animated: false)
+                }
             }
             .onTapGesture {
                 isTextFieldFocused = false

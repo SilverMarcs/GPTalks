@@ -24,7 +24,6 @@ struct BottomInputView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            
             if session.inputImage != nil {
                 importedImage
             }
@@ -94,52 +93,45 @@ struct BottomInputView: View {
         }
     }
     
+    #if !os(macOS)
     var iosImagePicker: some View {
         PhotosPicker(
             selection: $selectedItem,
             matching: .images,
-            photoLibrary: .shared()) {
-//                Text("Select a photo")
-//                Image(systemName: "plus.circle.fill")
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: imageSize - 3, height: imageSize - 3)
-//                    .foregroundStyle(.secondary)
-//                    .background(.regularMaterial, in: Circle())
-//                    .opacity(0.5)
-                
-                Image(systemName: "plus")
-                    .resizable()
-                    .scaledToFit()
-                    .padding(10)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                    .background(.gray.opacity(0.2))
-                    .clipShape(Circle())
-                    .frame(width: imageSize + 3, height: imageSize + 3)
-            }
-            .onChange(of: selectedItem) { newItem in
-                // Load the selected image
-                guard let newItem = newItem else { return }
-                Task {
-                    // Retrieve selected asset in the form of Data
-                    if let data = try? await newItem.loadTransferable(type: Data.self) {
-                        // Convert Data to UIImage and assign it to inputImage
-                        session.inputImage = UIImage(data: data)
-                    }
+            photoLibrary: .shared()
+        ) {
+            Image(systemName: "plus")
+                .resizable()
+                .scaledToFit()
+                .padding(10)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+                .background(.gray.opacity(0.2))
+                .clipShape(Circle())
+                .frame(width: imageSize + 3, height: imageSize + 3)
+        }
+        .onChange(of: selectedItem) { newItem in
+            // Load the selected image
+            guard let newItem = newItem else { return }
+            Task {
+                // Retrieve selected asset in the form of Data
+                if let data = try? await newItem.loadTransferable(type: Data.self) {
+                    // Convert Data to UIImage and assign it to inputImage
+                    session.inputImage = UIImage(data: data)
                 }
             }
+        }
     }
+    #endif
     
     var imagePicker: some View {
         Button {
             importing = true
         } label: {
-//            Image(systemName: "photo.badge.plus.fill")
             Image(systemName: "plus.circle.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageSize - 3, height: imageSize - 3)
+                .frame(width: imageSize - 2, height: imageSize - 2)
                 .foregroundStyle(.secondary)
                 .opacity(0.6)
         }
@@ -174,15 +166,15 @@ struct BottomInputView: View {
             Image(systemName: "eraser")
                 .resizable()
                 .scaledToFit()
-        #if os(macOS)
-            .frame(width: imageSize, height: imageSize)
-        #else
-            .padding(8)
-            .background(.gray.opacity(0.2))
+            #if os(macOS)
+                .frame(width: imageSize, height: imageSize)
+            #else
+                .padding(8)
+                .background(.gray.opacity(0.2))
 //            .background(colorScheme == .dark ? .regularMaterial : .thick)
-            .clipShape(Circle())
-            .frame(width: imageSize + 3, height: imageSize + 3)
-        #endif
+                .clipShape(Circle())
+                .frame(width: imageSize + 3, height: imageSize + 3)
+            #endif
         }
         .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
         .disabled(session.conversations.isEmpty || session.isReplying())
@@ -216,22 +208,22 @@ struct BottomInputView: View {
             focused = false
             #endif
             
-           Task { @MainActor in
-               await session.send()
-           }
+            Task { @MainActor in
+                await session.send()
+            }
         } label: {
             Image(systemName: empty ? "arrow.up.circle" : "arrow.up.circle.fill")
                 .resizable()
                 .scaledToFit()
                 .disabled(empty)
                 .foregroundColor(empty ? .secondary : .accentColor)
-#if os(macOS)
+            #if os(macOS)
                 .frame(width: imageSize, height: imageSize)
-#else
+            #else
                 .background(.white)
                 .clipShape(Circle())
                 .frame(width: imageSize - 3, height: imageSize - 3)
-#endif
+            #endif
         }
         .keyboardShortcut(.return, modifiers: .command)
         .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
@@ -262,9 +254,9 @@ struct BottomInputView: View {
     private var inputBox: some View {
         ZStack(alignment: .leading) {
             #if os(macOS)
-                textEditor
+            textEditor
             #else
-                textField
+            textField
             #endif
         }
         .roundedRectangleOverlay()
@@ -279,7 +271,7 @@ struct BottomInputView: View {
                 .lineLimit(1 ... 15)
                 .padding(6)
                 .padding(.horizontal, 5)
-                .padding(.trailing, 25)  // for avoiding send button
+                .padding(.trailing, 25) // for avoiding send button
                 .frame(minHeight: imageSize + 5)
             #if os(iOS)
                 .background(
@@ -290,9 +282,7 @@ struct BottomInputView: View {
             
             Group {
                 if session.input.isEmpty && !session.isReplying() {
-                    Button {
-                        
-                    } label: {
+                    Button {} label: {
                         Image(systemName: "mic.fill")
                             .resizable()
                             .scaledToFit()
@@ -300,15 +290,15 @@ struct BottomInputView: View {
                             .foregroundStyle(.secondary)
                             .opacity(0.5)
                     }
-                    .offset(x:-10, y: -9)
+                    .offset(x: -10, y: -9)
                 } else {
                     if session.isReplying() {
                         stopButton
-                            .offset(x:-4, y: -4)
+                            .offset(x: -4, y: -4)
                         
                     } else {
                         sendButton
-                            .offset(x:-4, y: -4)
+                            .offset(x: -4, y: -4)
                     }
                 }
             }
@@ -343,9 +333,9 @@ struct BottomInputView: View {
 
     private var imageSize: CGFloat {
         #if os(macOS)
-            21
+        21
         #else
-            31
+        31
         #endif
     }
     

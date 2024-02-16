@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		080D542D2B7913E300273B56 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = 080D542C2B7913E300273B56 /* HotKey */; };
+		0816CA092B7F97F800D22D5C /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 0816CA082B7F97F800D22D5C /* Splash */; };
+		0816CA0B2B7F97F800D22D5C /* SplashMarkdown in Frameworks */ = {isa = PBXBuildFile; productRef = 0816CA0A2B7F97F800D22D5C /* SplashMarkdown */; };
 		0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820E06C2B5395E500401A30 /* TextSelectionView.swift */; };
 		0829D1132B3166D900DFFBB1 /* iOSMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1122B3166D900DFFBB1 /* iOSMessages.swift */; };
 		0829D1152B3166E300DFFBB1 /* MacOSMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1142B3166E300DFFBB1 /* MacOSMessages.swift */; };
@@ -144,8 +146,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				080D542D2B7913E300273B56 /* HotKey in Frameworks */,
+				0816CA092B7F97F800D22D5C /* Splash in Frameworks */,
 				083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */,
 				08D5A2912B7DFDE700BA1CE0 /* SwiftOpenAI in Frameworks */,
+				0816CA0B2B7F97F800D22D5C /* SplashMarkdown in Frameworks */,
 				08E2D2272B7A69BB0065B5E8 /* MarkdownWebView in Frameworks */,
 				08D5A2962B7E068700BA1CE0 /* OpenAI in Frameworks */,
 				08E2D21E2B7A5F800065B5E8 /* MarkdownWebView in Frameworks */,
@@ -365,6 +369,8 @@
 				08E2D2262B7A69BB0065B5E8 /* MarkdownWebView */,
 				08D5A2902B7DFDE700BA1CE0 /* SwiftOpenAI */,
 				08D5A2952B7E068700BA1CE0 /* OpenAI */,
+				0816CA082B7F97F800D22D5C /* Splash */,
+				0816CA0A2B7F97F800D22D5C /* SplashMarkdown */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -445,6 +451,7 @@
 				08E2D2252B7A69BB0065B5E8 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				08D5A28F2B7DFDE700BA1CE0 /* XCRemoteSwiftPackageReference "SwiftOpenAI" */,
 				08D5A2942B7E068700BA1CE0 /* XCLocalSwiftPackageReference "../OpenAI" */,
+				0816CA072B7F97F800D22D5C /* XCRemoteSwiftPackageReference "Splash" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -946,6 +953,14 @@
 				kind = branch;
 			};
 		};
+		0816CA072B7F97F800D22D5C /* XCRemoteSwiftPackageReference "Splash" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JohnSundell/Splash";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.16.0;
+			};
+		};
 		083E3B172B3A67B9007BE19E /* XCRemoteSwiftPackageReference "VisualEffectView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/VisualEffectView";
@@ -985,6 +1000,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 080D542B2B7913E300273B56 /* XCRemoteSwiftPackageReference "HotKey" */;
 			productName = HotKey;
+		};
+		0816CA082B7F97F800D22D5C /* Splash */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0816CA072B7F97F800D22D5C /* XCRemoteSwiftPackageReference "Splash" */;
+			productName = Splash;
+		};
+		0816CA0A2B7F97F800D22D5C /* SplashMarkdown */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0816CA072B7F97F800D22D5C /* XCRemoteSwiftPackageReference "Splash" */;
+			productName = SplashMarkdown;
 		};
 		083E3B182B3A67B9007BE19E /* VisualEffectView */ = {
 			isa = XCSwiftPackageProductDependency;

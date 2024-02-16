@@ -27,11 +27,11 @@ struct DefaultConfigView: View {
 
                     Divider()
 
-//                    LabeledPicker(title: "Alternate Markdown", width: widthValue, picker: alternateMarkdownEnabler)
-//                    .padding(paddingValue)
-//                    .disabled(!configuration.isMarkdownEnabled)
-//
-//                    Divider()
+                    LabeledPicker(title: "Alternate Markdown", width: widthValue, picker: alternateMarkdownEnabler)
+                    .padding(paddingValue)
+                    .disabled(!configuration.isMarkdownEnabled)
+
+                    Divider()
 
                     LabeledPicker(title: "Preferred Chat Provider", width: widthValue, picker: preferredProvider)
                         .padding(paddingValue)
@@ -108,12 +108,12 @@ struct DefaultConfigView: View {
         }
     }
 
-//    var alternateMarkdownEnabler: some View {
-//        Picker("Markdown Enabled", selection: configuration.$alternateMarkdown) {
-//            Text("True").tag(true)
-//            Text("False").tag(false)
-//        }
-//    }
+    var alternateMarkdownEnabler: some View {
+        Picker("Markdown Enabled", selection: configuration.$alternateMarkdown) {
+            Text("True").tag(true)
+            Text("False").tag(false)
+        }
+    }
 
     var preferredProvider: some View {
         Picker("Preferred Chat Provider", selection: configuration.$preferredChatService) {

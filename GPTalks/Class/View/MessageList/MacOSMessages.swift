@@ -45,9 +45,14 @@ struct MacOSMessages: View {
             }
             .onChange(of: viewModel.selectedDialogue) {
                 isTextFieldFocused = true
-                scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
-                scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
-                scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
+                
+                if AppConfiguration.shared.alternateMarkdown {
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
+                } else {
+                    scrollToBottom(proxy: proxy, animated: false)
+                }
             }
             .onChange(of: session.conversations.last?.content) {
                 if session.conversations.last?.content != previousContent && !isUserScrolling {
