@@ -20,13 +20,13 @@ struct Conversation: Codable, Identifiable, Hashable {
         let chatRole: Message.Role = {
             switch role {
             case "user":
-                return Message.Role.user
+                return .user
             case "assistant":
-                return Message.Role.assistant
+                return .assistant
             case "system":
-                return Message.Role.system
+                return .system
             default:
-                return Message.Role.function
+                return .function
             }
         }()
         

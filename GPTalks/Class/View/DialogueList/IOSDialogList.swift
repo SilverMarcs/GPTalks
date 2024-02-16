@@ -12,10 +12,16 @@ import OpenAI
     struct IOSDialogList: View {
         @Bindable var viewModel: DialogueViewModel
         @State var generations: [ImageObject] = []
+        @State var navigateToImages = false
+        @State var switchToChat = false
 
         @State var isShowSettingView = false
 
         var body: some View {
+            NavigationLink(destination: ImageCreator(switchToChat: $switchToChat, generations: $generations), isActive: $navigateToImages) {
+                 EmptyView()
+            }
+            
             list
                 .listStyle(.inset)
                 .searchable(text: $viewModel.searchText)
@@ -26,15 +32,31 @@ import OpenAI
                     IosSettingsView()
                 }
                 .toolbar {
-                    
-                    ToolbarItem(placement: .topBarLeading) {
-                        Menu {
-                            Picker("Select State", selection: $viewModel.selectedState) {
-                                ForEach(ContentState.allCases) { state in
-                                    Text(state.rawValue)
-                                        .tag(state)
-                                }
-                            }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                      Menu {
+//                            Picker("Select State", selection: $viewModel.selectedState) {
+//                                ForEach(ContentState.allCases) { state in
+//                                    Text(state.rawValue)
+//                                        .tag(state)
+//                                }
+//                            }
+                          Picker("Select State", selection: $viewModel.selectedState) {
+                              ForEach(ContentState.allCases) { state in
+                                  Text(state.rawValue).tag(state)
+                              }
+                          }
+                          .onChange(of: viewModel.selectedState) {
+                              if viewModel.selectedState == .images {
+                                  navigateToImages = true
+                              }
+                          }
+                          .onChange(of: switchToChat) {
+                              if switchToChat {
+                                  viewModel.selectedState = .active
+                              }
+                              switchToChat = false
+                          }
+
                             
                             Button {
                                 isShowSettingView = true

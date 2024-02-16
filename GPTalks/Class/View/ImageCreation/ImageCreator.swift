@@ -13,6 +13,7 @@ import SwiftUI
 #endif
 
 struct ImageCreator: View {
+    @Binding var switchToChat: Bool
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var configuration: AppConfiguration = .shared
 
@@ -94,7 +95,7 @@ struct ImageCreator: View {
                     #if os(iOS)
                         .textInputAutocapitalization(.never)
                     #endif
-                        .frame(width: 150)
+                        .frame(width: 110)
 
                     Picker("Number", selection: $number) {
                         ForEach(1 ... 4, id: \.self) { number in
@@ -104,6 +105,11 @@ struct ImageCreator: View {
                     }
                 }
         }
+        #if !os(macOS)
+        .onDisappear {
+            switchToChat = true
+        }
+        #endif
     }
 
     var textBox: some View {

@@ -261,6 +261,10 @@ import SwiftOpenAI
                 removeResetContextMarker()
             }
             
+            if !conversation.base64Image.isEmpty {
+                inputImage = conversation.base64Image.imageFromBase64
+            }
+            
             removeConversations(from: index)
             await send(text: editedContent)
         }
@@ -330,11 +334,25 @@ import SwiftOpenAI
                 // Start your network request here
                 if Model.nonStreamModels.contains(configuration.model) {
 //                    let result = try await service.chats(query: query)
-//                    streamText += result.choices.first?.message.content ?? ""
-//                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-//                    lastConversationData.sync(with: conversations[conversations.count - 1])
-                    setErrorDesc(errorDesc: "Use a Streaming model for now")
-                    return
+//                    streamText += result.choices.first?.message.content?.string ?? ""
+                    let result = try await service.chats(query: query)
+                    if let content = result.choices.first?.message.content {
+                      switch content {
+                      case .string(let stringValue):
+                          // Case 1: It's a simple string
+                          streamText += stringValue
+
+                      case .object(let chatContents):
+                          // Case 2: It's an array of ChatContent
+                          for chatContent in chatContents {
+                              if chatContent.type == .text {
+                                  streamText += chatContent.value
+                              }
+                          }
+                      }
+                    }
+                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    lastConversationData.sync(with: conversations[conversations.count - 1])
                 } else {
                     for try await result in service.chatsStream(query: query) {
                         streamText += result.choices.first?.delta.content ?? ""
@@ -352,11 +370,22 @@ import SwiftOpenAI
                 isStreaming = true
                 
                 if Model.nonStreamModels.contains(configuration.model) {
-//                    let result = try await service.chats(query: query)
-//                    streamText += result.choices.first?.message.content ?? ""
-                    setErrorDesc(errorDesc: "Use a Streaming model for now")
-                    return
+                    let result = try await service.chats(query: query)
+                    if let content = result.choices.first?.message.content {
+                      switch content {
+                      case .string(let stringValue):
+                          // Case 1: It's a simple string
+                          streamText += stringValue
 
+                      case .object(let chatContents):
+                          // Case 2: It's an array of ChatContent
+                          for chatContent in chatContents {
+                              if chatContent.type == .text {
+                                  streamText += chatContent.value
+                              }
+                          }
+                      }
+                    }
                 } else {
                     for try await result in service.chatsStream(query: query) {
                         streamText += result.choices.first?.delta.content ?? ""

@@ -23,7 +23,7 @@ struct ContentView: View {
             if let selectedDialogue = viewModel.selectedDialogue {
                 #if os(macOS)
                 if viewModel.selectedState == .images {
-                    ImageCreator(generations: $generations)
+                    ImageCreator(switchToChat: Binding.constant(true), generations: $generations)
                 } else {
                     MacOSMessages(session: selectedDialogue)
                         .frame(minWidth: 500)

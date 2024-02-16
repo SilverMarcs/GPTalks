@@ -10,8 +10,8 @@ import CoreData
 import SwiftUI
 
 enum ContentState: String, CaseIterable, Identifiable {
-    case archived = "Archived"
     case active = "Active"
+    case archived = "Archived"
     case images = "Images"
     
     var id: Self { self }

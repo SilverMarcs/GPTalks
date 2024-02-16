@@ -37,9 +37,9 @@ struct MacOSDialogList: View {
         }
         .listStyle(.inset)
         .scrollContentBackground(.hidden)
-        .frame(minWidth: 290)
+        .frame(minWidth: 280)
         .toolbar {
-            Spacer()
+//            Spacer()
 
             Picker("Select State", selection: $viewModel.selectedState) {
                 ForEach(ContentState.allCases) { state in
