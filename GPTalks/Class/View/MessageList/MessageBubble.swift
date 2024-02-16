@@ -48,9 +48,9 @@ struct Bubble: ViewModifier {
             .cornerRadius(radius)
             .foregroundColor(isMyMessage ? Color.white : .primary)
             .clipShape(RoundedRectangle(cornerRadius: radius))
-        #if os(iOS)
-            .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
-        #endif
+//        #if os(iOS)
+//            .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
+//        #endif
 
     }
     

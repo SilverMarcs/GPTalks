@@ -33,13 +33,13 @@ struct ToolbarItems: ToolbarContent {
                     }
                     .foregroundStyle(.primary)
                     .sheet(isPresented: $isShowSettingsView) {
-                        DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+                        DialogueSettingsView(session: session)
                     }
                     .buttonStyle(.plain)
 
                     Spacer()
                 }
-                .padding(.leading, -15)
+//                .padding(.leading, -5)
             }
             #endif
             
@@ -47,7 +47,7 @@ struct ToolbarItems: ToolbarContent {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Text("\(session.getMessageCountAfterResetMarker())/\(session.configuration.contextLength)")
                             .font(.callout)
-                            .opacity(0.8)
+                            .opacity(0.7)
                     }
                     #else
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -57,7 +57,7 @@ struct ToolbarItems: ToolbarContent {
                             Text("Config")
                         }
                         .sheet(isPresented: $isShowSettingsView) {
-                            DialogueSettingsView(configuration: $session.configuration, title: $session.title)
+                            DialogueSettingsView(session: session)
                         }
                     }
                     #endif
@@ -88,29 +88,31 @@ struct ToolbarItems: ToolbarContent {
             HStack {
                 ProviderImage(radius: 9, color: session.configuration.provider.accentColor, frame: 30)
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(session.title)
-                        .font(.system(size: 16))
-                        .foregroundStyle(.primary)
-                        .bold()
+                    HStack(spacing: 4) {
+                        Text(session.title)
+                            .font(.system(size: 16))
+                            .foregroundStyle(.primary)
+                            .bold()
+                        
+                        
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 8))
+                            .foregroundStyle(.secondary)
+                            .padding(.top, 2)
+                    }
                     HStack(spacing: 3) {
                         Group {
                             Text(session.configuration.model.name)
-                            //                            .padding(.horizontal, 5)
-                            //                            .background(.thickMaterial, in: RoundedRectangle(cornerRadius: 18))
-                            //                            .roundedRectangleOverlay()
+                            
                             Text("•")
 
-                            Text(session.configuration.systemPrompt)
-                                .frame(maxWidth: 140, alignment: .leading)
+//                            Text(session.configuration.systemPrompt)
+//                                .frame(maxWidth: 140, alignment: .leading)
+                            Text("Temperature: " + String(session.configuration.temperature))
                            
                         }
                         .font(.system(size: 11))
                         .foregroundStyle(.secondary)
-                        
-//                        Image(systemName: "chevron.right")
-//                            .font(.system(size: 8))
-//                            .foregroundStyle(.secondary)
-//                            .padding(.leading, -4)
                     }
                 }
             }

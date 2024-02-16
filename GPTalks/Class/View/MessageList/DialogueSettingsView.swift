@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct DialogueSettingsView: View {
-    @Binding var configuration: DialogueSession.Configuration
-    @Binding var title: String
+    @Bindable var session: DialogueSession
 
     @FocusState private var focusedField: FocusedField?
 
@@ -31,8 +30,8 @@ struct DialogueSettingsView: View {
     var macOS: some View {
             VStack {
                 LabeledPicker(title: "Provider", picker: providerPicker)
-                    .onChange(of: configuration.provider) {
-                        configuration.model = configuration.provider.preferredModel
+                    .onChange(of: session.configuration.provider) {
+                        session.configuration.model = session.configuration.provider.preferredModel
                     }
                 
                 LabeledPicker(title: "Model", picker: modelPicker)
@@ -58,8 +57,8 @@ struct DialogueSettingsView: View {
             Form {
                 Section("Parameters") {
                     providerPicker
-                        .onChange(of: configuration.provider) {
-                            configuration.model = configuration.provider.preferredModel
+                        .onChange(of: session.configuration.provider) {
+                            session.configuration.model = session.configuration.provider.preferredModel
                         }
                     
                     modelPicker
@@ -73,7 +72,7 @@ struct DialogueSettingsView: View {
                     systemPrompt
                 }
             }
-            .navigationTitle($title)
+            .navigationTitle($session.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem {
@@ -89,7 +88,7 @@ struct DialogueSettingsView: View {
     #endif
     
     var providerPicker: some View {
-        Picker("Provider", selection: $configuration.provider) {
+        Picker("Provider", selection: $session.configuration.provider) {
             ForEach(Provider.availableProviders, id: \.self) { provider in
                 Text(provider.name)
                     .tag(provider.id)
@@ -98,16 +97,28 @@ struct DialogueSettingsView: View {
     }
     
     var modelPicker: some View {
-        Picker("Model", selection: $configuration.model) {
-            ForEach(configuration.provider.visionModels + configuration.provider.chatModels, id: \.self) { model in
-                Text(model.name)
-                    .tag(model.id)
+        Picker("Model", selection: $session.configuration.model) {
+//            ForEach(configuration.provider.visionModels + configuration.provider.chatModels, id: \.self) { model in
+//                Text(model.name)
+//                    .tag(model.id)
+//            }
+            if session.containsConversationWithImage || session.inputImage != nil {
+                ForEach(session.configuration.provider.visionModels, id: \.self) { model in
+                    Text(model.name)
+                        .tag(model.id)
+                }
+
+            } else {
+                ForEach(session.configuration.provider.visionModels + session.configuration.provider.chatModels, id: \.self) { model in
+                    Text(model.name)
+                        .tag(model.id)
+                }
             }
         }
     }
     
     var contextPicker: some View {
-        Picker("Context", selection: $configuration.contextLength) {
+        Picker("Context", selection: $session.configuration.contextLength) {
             ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
                 Text("Last \(number) Messages")
                     .tag(number)
@@ -116,11 +127,11 @@ struct DialogueSettingsView: View {
     }
     
     var tempStepper: some View {
-        Stepper(value: $configuration.temperature, in: 0 ... 2, step: 0.1) {
+        Stepper(value: $session.configuration.temperature, in: 0 ... 2, step: 0.1) {
             HStack {
                 Text("Temperature")
                 Spacer()
-                Text(String(format: "%.1f", configuration.temperature))
+                Text(String(format: "%.1f", session.configuration.temperature))
                     .padding(.horizontal)
                     .cornerRadius(6)
             }
@@ -128,7 +139,7 @@ struct DialogueSettingsView: View {
     }
     
     var systemPrompt: some View {
-        TextField("Enter a system prompt", text: $configuration.systemPrompt, axis: .vertical)
+        TextField("Enter a system prompt", text: $session.configuration.systemPrompt, axis: .vertical)
             .focused($focusedField, equals: .systemPrompt)
             .lineLimit(4, reservesSpace: true)
     }
