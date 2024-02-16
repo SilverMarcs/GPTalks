@@ -71,32 +71,7 @@ extension Color {
     }
 }
 
-#if !os(macOS)
-extension UIImage {
-    var base64: String? {
-        self.jpegData(compressionQuality: 1)?.base64EncodedString()
-    }
-}
-
-extension String {
-    var imageFromBase64: UIImage? {
-        guard let imageData = Data(base64Encoded: self, options: .ignoreUnknownCharacters) else {
-            return nil
-        }
-        return UIImage(data: imageData)
-    }
-}
-
-// uncomment later
-//let img = img
-//let base64 = img.base64
-//let rebornImg = base64?.imageFromBase64
-
-func base64EncodeImage(_ image: UIImage) -> String? {
-    guard let imageData = image.jpegData(compressionQuality: 1.0) else { return nil }
-    return imageData.base64EncodedString()
-}
-#else
+#if os(macOS)
 extension NSImage {
     var base64: String? {
         self.tiffRepresentation?.base64EncodedString()
@@ -121,10 +96,41 @@ extension String {
         return NSImage(data: imageData)
     }
 }
+//
+//func base64EncodeImage(_ image: NSImage) -> String? {
+//    guard let imageData = image.tiffRepresentation else { return nil }
+//    return imageData.base64EncodedString()
+//}
 
-func base64EncodeImage(_ image: NSImage) -> String? {
-    guard let imageData = image.tiffRepresentation else { return nil }
-    return imageData.base64EncodedString()
+#else
+extension UIImage {
+    var base64: String? {
+        self.jpegData(compressionQuality: 1)?.base64EncodedString()
+    }
+    
+    func base64EncodedString() -> String? {
+        guard let imageData = self.jpegData(compressionQuality: 1.0) else { return nil }
+        return imageData.base64EncodedString()
+    }
 }
+
+extension String {
+    var imageFromBase64: UIImage? {
+        guard let imageData = Data(base64Encoded: self, options: .ignoreUnknownCharacters) else {
+            return nil
+        }
+        return UIImage(data: imageData)
+    }
+}
+
+// uncomment later
+//let img = img
+//let base64 = img.base64
+//let rebornImg = base64?.imageFromBase64
+
+//func base64EncodeImage(_ image: UIImage) -> String? {
+//    guard let imageData = image.jpegData(compressionQuality: 1.0) else { return nil }
+//    return imageData.base64EncodedString()
+//}
 
 #endif

@@ -64,6 +64,13 @@ struct ToolbarItems: ToolbarContent {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
+                    Button {
+                        session.resetContext()
+                    } label: {
+                        Text("Reset Context")
+                        Image(systemName: "eraser")
+                    }
+                    
                     Button(role: .destructive) {
                         session.removeAllConversations()
                     } label: {

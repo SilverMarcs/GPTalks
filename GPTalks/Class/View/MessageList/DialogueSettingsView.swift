@@ -99,7 +99,7 @@ struct DialogueSettingsView: View {
     
     var modelPicker: some View {
         Picker("Model", selection: $configuration.model) {
-            ForEach(configuration.provider.chatModels, id: \.self) { model in
+            ForEach(configuration.provider.visionModels + configuration.provider.chatModels, id: \.self) { model in
                 Text(model.name)
                     .tag(model.id)
             }

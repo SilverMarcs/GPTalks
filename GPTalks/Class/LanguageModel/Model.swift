@@ -65,9 +65,9 @@ enum Model: String, Codable {
         case .gpt4:
             "GPT-4"
         case .gpt4t1106:
-            "GPT-4T"
+            "GPT-4T (Old)"
         case .gpt4t0125:
-            "GPT-4T2"
+            "GPT-4T"
         case .gpt4vision:
             "GPT-4V"
             

@@ -23,14 +23,25 @@ struct UserMessageView: View {
         
         VStack(alignment: .trailing, spacing: 11) {
             if !conversation.base64Image.isEmpty {
-                Image(nsImage: NSImage(data: Data(base64Encoded: conversation.base64Image)!)!)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: 400, maxHeight: 350, alignment: .center)
-                    .aspectRatio(contentMode: .fill)
-                    .cornerRadius(10)
-                    .padding(.trailing, 2)
-                    .padding(.top, -4)
+#if os(macOS)
+                    Image(nsImage: NSImage(data: Data(base64Encoded: conversation.base64Image)!)!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(maxWidth: 400, maxHeight: 350, alignment: .center)
+                        .aspectRatio(contentMode: .fill)
+                        .cornerRadius(10)
+                        .padding(.trailing, 2)
+                        .padding(.top, -4)
+#else
+                    Image(uiImage: UIImage(data: Data(base64Encoded: conversation.base64Image)!)!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(maxWidth: 400, maxHeight: 350, alignment: .center)
+                        .aspectRatio(contentMode: .fill)
+                        .cornerRadius(10)
+                        .padding(.trailing, 2)
+                        .padding(.top, -4)
+#endif
             }
                 
             HStack(alignment: .lastTextBaseline) {

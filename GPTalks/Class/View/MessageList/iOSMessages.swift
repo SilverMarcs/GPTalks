@@ -90,6 +90,21 @@ struct iOSMessages: View {
             .onChange(of: session.isAddingConversation) {
                 scrollToBottom(proxy: proxy)
             }
+            .onChange(of: session.inputImage) {
+                if session.inputImage != nil {
+                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
+                        session.configuration.model = session.configuration.provider.visionModels[0]
+                    }
+                    scrollToBottom(proxy: proxy, animated: true)
+                }
+            }
+            .onChange(of: session.configuration.provider) {
+                if session.containsConversationWithImage {
+                    session.configuration.model = session.configuration.provider.visionModels[0]
+                } else {
+                    session.configuration.model = session.configuration.provider.preferredModel
+                }
+            }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             BottomInputView(
@@ -101,7 +116,7 @@ struct iOSMessages: View {
             }
         #if os(iOS)
             .background(
-                VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
+                VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.8, blurRadius: 18, scale: 1)
                     .ignoresSafeArea()
             )
             #else

@@ -9,6 +9,7 @@ import SwiftUI
 #if os(iOS)
 import VisualEffectView
 #endif
+import PhotosUI
 
 struct BottomInputView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -19,6 +20,8 @@ struct BottomInputView: View {
     
     @State private var importing = false
     
+    @State var selectedItem: PhotosPickerItem? = nil
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             
@@ -27,7 +30,12 @@ struct BottomInputView: View {
             }
             
             HStack(spacing: 12) {
+                #if os(macOS)
                 imagePicker
+                #else
+                iosImagePicker
+                #endif
+//                resetContextButton
                 
                 inputBox
                 
@@ -57,13 +65,22 @@ struct BottomInputView: View {
     
     var importedImage: some View {
         ZStack(alignment: .topTrailing) {
-            if session.inputImage != nil {
-                Image(nsImage: session.inputImage!)
+            if let inputImage = session.inputImage {
+                #if os(macOS)
+                Image(nsImage: inputImage)
                     .resizable()
                     .scaledToFill()
                     .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
                     .aspectRatio(contentMode: .fill)
                     .cornerRadius(6)
+                #else
+                Image(uiImage: inputImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
+                    .aspectRatio(contentMode: .fill)
+                    .cornerRadius(6)
+                #endif
                 
                 Button {
                     session.inputImage = nil
@@ -75,6 +92,43 @@ struct BottomInputView: View {
                 .padding(7)
             }
         }
+    }
+    
+    var iosImagePicker: some View {
+        PhotosPicker(
+            selection: $selectedItem,
+            matching: .images,
+            photoLibrary: .shared()) {
+//                Text("Select a photo")
+//                Image(systemName: "plus.circle.fill")
+//                    .resizable()
+//                    .scaledToFit()
+//                    .frame(width: imageSize - 3, height: imageSize - 3)
+//                    .foregroundStyle(.secondary)
+//                    .background(.regularMaterial, in: Circle())
+//                    .opacity(0.5)
+                
+                Image(systemName: "plus")
+                    .resizable()
+                    .scaledToFit()
+                    .padding(10)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+                    .background(.gray.opacity(0.2))
+                    .clipShape(Circle())
+                    .frame(width: imageSize + 3, height: imageSize + 3)
+            }
+            .onChange(of: selectedItem) { newItem in
+                // Load the selected image
+                guard let newItem = newItem else { return }
+                Task {
+                    // Retrieve selected asset in the form of Data
+                    if let data = try? await newItem.loadTransferable(type: Data.self) {
+                        // Convert Data to UIImage and assign it to inputImage
+                        session.inputImage = UIImage(data: data)
+                    }
+                }
+            }
     }
     
     var imagePicker: some View {
@@ -229,7 +283,7 @@ struct BottomInputView: View {
                 .frame(minHeight: imageSize + 5)
             #if os(iOS)
                 .background(
-                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.2, blurRadius: 18, scale: 1)
+                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.5, blurRadius: 18, scale: 1)
                         .cornerRadius(18)
                 )
             #endif

@@ -209,47 +209,6 @@ import SwiftOpenAI
         let text = input
         input = ""
         await send(text: text)
-        
-//        var openAI = SwiftOpenAI(apiKey: "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")
-//        // Define a text message to be used in conjunction with an image.
-//        let message = "What appears in the photo?"
-//
-//        // URL of the image to be analyzed.
-//        let imageVisionURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/M31bobo.jpg/640px-M31bobo.jpg"
-//
-//        do {
-//            // Create a message object for chat completion with image input.
-//            let myMessage = MessageChatImageInput(
-//                text: message, // The text part of the message.
-//                imageURL: imageVisionURL, // URL of the image to be included in the chat.
-//                role: .user // The role assigned to the message, here 'user'.
-//            )
-//            
-//            // Define optional parameters for the chat completion request.
-//            let optionalParameters: ChatCompletionsOptionalParameters = .init(
-//                temperature: 0.5, // Set the creativity level of the response.
-//                stop: ["stopstring"], // Define a stop string for the model to end responses.
-//                stream: false, // Disable streaming to get complete responses at once.
-//                maxTokens: 1200 // Limit the maximum number of tokens (words) in the response.
-//            )
-//            
-//            // Request chat completions from the OpenAI API with image input.
-//            let result = try await openAI.createChatCompletionsWithImageInput(
-//                model: .gpt4(.gpt_4_vision_preview), // Specify the model, here GPT-4 vision preview.
-//                messages: [myMessage], // Provide the message with image input.
-//                optionalParameters: optionalParameters // Include the optional parameters.
-//            )
-//            
-//            // Print the result of the chat completion.
-//            print("Result \(result?.choices.first?.message)")
-//            
-//            // Update the message with the content of the first response, if available.
-//            print(result?.choices.first?.message.content ?? "No value")
-//            
-//        } catch {
-//            // Handle any errors encountered during the chat completion process.
-//            print("Error: \(error)")
-//        }
     }
 
     @MainActor
@@ -370,10 +329,12 @@ import SwiftOpenAI
 
                 // Start your network request here
                 if Model.nonStreamModels.contains(configuration.model) {
-                    let result = try await service.chats(query: query)
-                    streamText += result.choices.first?.message.content ?? ""
-                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                    lastConversationData.sync(with: conversations[conversations.count - 1])
+//                    let result = try await service.chats(query: query)
+//                    streamText += result.choices.first?.message.content ?? ""
+//                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+//                    lastConversationData.sync(with: conversations[conversations.count - 1])
+                    setErrorDesc(errorDesc: "Use a Streaming model for now")
+                    return
                 } else {
                     for try await result in service.chatsStream(query: query) {
                         streamText += result.choices.first?.delta.content ?? ""

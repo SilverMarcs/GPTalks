@@ -26,23 +26,14 @@ import OpenAI
                     IosSettingsView()
                 }
                 .toolbar {
-                    ToolbarItem {
-                        NavigationLink {
-                            ImageCreator(generations: $generations)
-                        } label: {
-                            Image(systemName: "photo")
-                        }
-                    }
                     
                     ToolbarItem(placement: .topBarLeading) {
                         Menu {
-                            Button {
-                                viewModel.toggleArchivedStatus()
-                            } label: {
-                                Label(
-                                    title: { Text(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") },
-                                    icon: { Image(systemName: viewModel.isArchivedSelected ? "archivebox.fill" : "archivebox") }
-                                )
+                            Picker("Select State", selection: $viewModel.selectedState) {
+                                ForEach(ContentState.allCases) { state in
+                                    Text(state.rawValue)
+                                        .tag(state)
+                                }
                             }
                             
                             Button {
@@ -58,7 +49,7 @@ import OpenAI
                             if isIPadOS {
                                 Image(systemName: "gear")
                             } else {
-                                Text("Edit")
+                                Text("More")
                             }
                         }
                     }
@@ -76,10 +67,10 @@ import OpenAI
 
         @ViewBuilder
         private var list: some View {
-            if viewModel.dialogues.isEmpty {
-                PlaceHolderView(imageName: "message.fill", title: "No Messages Yet")
+            if viewModel.shouldShowPlaceholder {
+                PlaceHolderView(imageName: "message.fill", title: viewModel.placeHolderText)
             } else {
-                List(viewModel.dialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
+                List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
                     DialogueListItem(session: session)
                 }
             }
