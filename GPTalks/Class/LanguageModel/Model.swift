@@ -61,15 +61,15 @@ enum Model: String, Codable {
     var name: String {
         switch self {
         case .gpt3t0125:
-            "GPT-3.5T 0125"
+            "GPT-3.5T"
         case .gpt4:
             "GPT-4"
         case .gpt4t1106:
-            "GPT-4T 1106"
+            "GPT-4T"
         case .gpt4t0125:
-            "GPT-4T 0125"
+            "GPT-4T2"
         case .gpt4vision:
-            "GPT-4 Vision"
+            "GPT-4V"
             
         case .phind, .orphind:
             "Phind"
@@ -113,10 +113,9 @@ enum Model: String, Codable {
 //        case .spplx70bonline:
 //            "PPLX-70B"
             
-        case .customChat:
-            "Custom"
+
         case .ogpt4browsing:
-            "GPT-4 Browse"
+            "GPT-4B"
         case .odolphin:
             "Dolphin"
             
@@ -125,6 +124,8 @@ enum Model: String, Codable {
         case .dalle2:
             "DALL-E-2"
 
+        case .customChat:
+            "Custom"
         case .customVision:
             "Custom Vision"
         case .customImage:

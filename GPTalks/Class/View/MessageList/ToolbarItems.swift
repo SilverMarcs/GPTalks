@@ -175,6 +175,10 @@ struct ToolbarItems: ToolbarContent {
                         await session.regenerateLastMessage()
                     }
                 }
+                
+                Button("Reset Context") {
+                    session.resetContext()
+                }
 
                 Button("Delete All Messages") {
                     session.removeAllConversations()

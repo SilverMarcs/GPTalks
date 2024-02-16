@@ -14,7 +14,7 @@ struct GenerationView: View {
     
     var body: some View {
         VStack(spacing: spacing) {
-            Group {
+            VStack(alignment: .trailing, spacing: 5) {
                 Text(generation.imageModel)
                     .font(.caption)
                     .bubbleStyle(isMyMessage: false)

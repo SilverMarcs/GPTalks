@@ -83,7 +83,14 @@ struct ImageCreator: View {
             #endif
                 .listStyle(.plain)
                 .toolbar {
+                    Picker("Preferred Image Provider", selection: configuration.$preferredImageService) {
+                        ForEach(Provider.availableProviders, id: \.self) { provider in
+                            Text(provider.name)
+                        }
+                    }
+                    
                     TextField("Model", text: $configuration.defaultImageModel)
+                        .textFieldStyle(.roundedBorder)
                     #if os(iOS)
                         .textInputAutocapitalization(.never)
                     #endif

@@ -9,112 +9,114 @@ import Combine
 import CoreData
 import SwiftUI
 
+enum ContentState: String, CaseIterable, Identifiable {
+    case archived = "Archived"
+    case active = "Active"
+    case images = "Images"
+    
+    var id: Self { self }
+}
+
 @Observable class DialogueViewModel {
     private let viewContext: NSManagedObjectContext
 
     var allDialogues: [DialogueSession] = [] {
         didSet {
-            if isArchivedSelected {
-                archivedDialogues = allDialogues.filter { $0.isArchive }
-            } else {
-                activeDialogues = allDialogues.filter { !$0.isArchive }
+            switch selectedState {
+                case .archived:
+                    archivedDialogues = allDialogues.filter { $0.isArchive }
+                    break
+                case .active:
+                    activeDialogues = allDialogues.filter { !$0.isArchive }
+                    break
+                case .images:
+                    // Update your view model or perform actions for the images state
+                    break
             }
         }
     }
+    
+    var activeDialogues: [DialogueSession] = []
 
-    
-//    var allDialogues: [DialogueSession] = []
+    var archivedDialogues: [DialogueSession] = []
 
-    var dialogues: [DialogueSession] = []
-    
-    var activeDialogues: [DialogueSession] = [] 
-//    {
-//        didSet {
-//            allDialogues.filter { !$0.isArchive }
-//        }
-//    }
-    
-    var archivedDialogues: [DialogueSession] = [] 
-//    {
-//        didSet {
-//            allDialogues.filter { $0.isArchive }
-//        }
-//    }
-
-//    var isArchivedSelected: Bool = false {
-//        didSet {
-//            withAnimation {
-//                if isArchivedSelected {
-//                    dialogues = archivedDialogues
-//                } else {
-//                    dialogues = activeDialogues
-//                }
-//            }
-//        }
-//    }
-    
     var isArchivedSelected: Bool = false
+    
+    var selectedState: ContentState = .active
 
     var searchText: String = "" {
         didSet {
-//            if searchText.isEmpty {
-//                 if isArchivedSelected {
-////                     dialogues = allDialogues.filter { $0.isArchive }
-//                     archivedDialogues = allDialogues
-//
-//                 } else {
-////                     dialogues = allDialogues.filter { !$0.isArchive }
-//                     activeDialogues = allDialogues
-//                 }
-//             } else {
             if !searchText.isEmpty {
-                 if isArchivedSelected {
-                     archivedDialogues = allDialogues.filter { dialogue in
-                         dialogue.title.localizedCaseInsensitiveContains(searchText)
-                     }
-                 } else {
-                     activeDialogues = allDialogues.filter { dialogue in
-                         dialogue.title.localizedCaseInsensitiveContains(searchText)
-                     }
-                 }
+                switch selectedState {
+                    case .archived:
+                        archivedDialogues = allDialogues.filter { dialogue in
+                            dialogue.title.localizedCaseInsensitiveContains(searchText)
+                        }
+                        break
+                    case .active:
+                        activeDialogues = allDialogues.filter { dialogue in
+                            dialogue.title.localizedCaseInsensitiveContains(searchText)
+                        }
+                        break
+                    case .images:
+                        // Update your view model or perform actions for the images state
+                        break
+                }
             } else {
-                if isArchivedSelected {
+                
+                switch selectedState {
+                    case .archived:
                     archivedDialogues = allDialogues.filter { $0.isArchive }
-                } else {
+                        break
+                    case .active:
                     activeDialogues = allDialogues.filter { !$0.isArchive }
+                    
+                        break
+                    case .images:
+                        // Update your view model or perform actions for the images state
+                        break
                 }
             }
         }
     }
-//    var filteredDialogues: [DialogueSession] = []
+
     var selectedDialogue: DialogueSession?
 
     init(context: NSManagedObjectContext) {
         viewContext = context
         fetchDialogueData()
-
-//        Publishers.CombineLatest(dialogues, $searchText)
-//            .map { dialogues, searchText in
-//                searchText.isEmpty ? dialogues : dialogues.filter { dialogue in
-//                    dialogue.title.localizedCaseInsensitiveContains(searchText)
-//                }
-//            }
-//            .assign(to: &$filteredDialogues)
     }
-    
+
     var shouldShowPlaceholder: Bool {
-        if isArchivedSelected {
-            return archivedDialogues.isEmpty
-        } else {
-            return activeDialogues.isEmpty
+        switch selectedState {
+            case .archived:
+                return archivedDialogues.isEmpty
+            case .active:
+                return activeDialogues.isEmpty
+            case .images:
+                return true
+        }
+    }
+
+    var currentDialogues: [DialogueSession] {
+        switch selectedState {
+            case .archived:
+            return archivedDialogues
+            case .active:
+            return activeDialogues
+            case .images:
+                return []
         }
     }
     
-    var currentDialogues: [DialogueSession] {
-        if isArchivedSelected {
-            return archivedDialogues
-        } else {
-            return activeDialogues
+    var placeHolderText: String {
+        switch selectedState {
+            case .archived:
+                return "No archived chats"
+            case .active:
+                return "No active chats"
+            case .images:
+                return "Generate Images"
         }
     }
 
@@ -126,8 +128,6 @@ import SwiftUI
 
             allDialogues = dialogueData.compactMap { DialogueSession(rawData: $0) }
 
-            dialogues = allDialogues.filter { !$0.isArchive } // why cant i get rid of this?
-            
             activeDialogues = allDialogues.filter { !$0.isArchive }
             archivedDialogues = allDialogues.filter { $0.isArchive }
 
@@ -143,20 +143,13 @@ import SwiftUI
 
     func toggleArchivedStatus() {
         isArchivedSelected.toggle()
-        
-//        withAnimation {
-//            if isArchivedSelected {
-//                dialogues = allDialogues.filter { $0.isArchive }
-//            } else {
-//                dialogues = allDialogues.filter { !$0.isArchive }
-//            }
-//        }
     }
 
     func toggleArchive(session: DialogueSession) {
         session.toggleArchive()
         
-        if isArchivedSelected {
+        switch selectedState {
+            case .archived:
             withAnimation {
                 archivedDialogues.removeAll {
                     $0.id == session.id
@@ -166,22 +159,27 @@ import SwiftUI
                     $0.date > $1.date
                 }
             }
-            } else {
-                withAnimation {
-                    activeDialogues.removeAll {
-                        $0.id == session.id
-                    }
-                    archivedDialogues.append(session)
-                    archivedDialogues.sort {
-                        $0.date > $1.date
-                    }
+                break
+            case .active:
+            withAnimation {
+                activeDialogues.removeAll {
+                    $0.id == session.id
                 }
+                archivedDialogues.append(session)
+                archivedDialogues.sort {
+                    $0.date > $1.date
+                }
+            }
+            
+                break
+            case .images:
+                break
         }
     }
 
     func addDialogue() {
-        isArchivedSelected = false
-        
+        selectedState = .active
+
         let session = DialogueSession()
         withAnimation {
             allDialogues.insert(session, at: 0)

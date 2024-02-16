@@ -10,24 +10,28 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(DialogueViewModel.self) private var viewModel
+    @State var generations: [ImageObject] = []
 
     var body: some View {
         NavigationSplitView {
             #if os(macOS)
                 MacOSDialogList(viewModel: viewModel)
-//                .toolbar(removing: .sidebarToggle)
             #else
                 IOSDialogList(viewModel: viewModel)
             #endif
         } detail: {
             if let selectedDialogue = viewModel.selectedDialogue {
                 #if os(macOS)
+                if viewModel.selectedState == .images {
+                    ImageCreator(generations: $generations)
+                } else {
                     MacOSMessages(session: selectedDialogue)
-//                        .id(selectedDialogue.id)
+                        .frame(minWidth: 500)
+                }
                 #else
 
                 iOSMessages(session: selectedDialogue)
-//                        .id(selectedDialogue.id)
+
                 #endif
             } else {
                 Text("No Chat Selected")

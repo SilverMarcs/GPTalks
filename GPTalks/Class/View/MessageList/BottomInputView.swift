@@ -18,7 +18,6 @@ struct BottomInputView: View {
     @FocusState var focused: Bool
     
     @State private var importing = false
-//    @State private var image: Image?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -86,9 +85,9 @@ struct BottomInputView: View {
             Image(systemName: "plus.circle.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageSize - 2, height: imageSize - 2)
+                .frame(width: imageSize - 3, height: imageSize - 3)
                 .foregroundStyle(.secondary)
-                .opacity(0.7)
+                .opacity(0.6)
         }
         .keyboardShortcut("i", modifiers: .command)
         .fileImporter(
