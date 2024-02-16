@@ -169,7 +169,7 @@ struct ToolbarItems: ToolbarContent {
                     }
                 }
             }
-            .frame(width: 125)
+            .frame(width: 110)
 
             Menu {
                 Picker("Context Length", selection: $session.configuration.contextLength) {

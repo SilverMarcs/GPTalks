@@ -29,24 +29,16 @@ enum Model: String, Codable {
     case ordolphin
     
     /// shuttle
-//    case sgpt3t
-//    case sgpt4
-//    case sgpt4t
-//    case sgpt4bing
-//    case scodegpt3
-//    case internetgpt3
-//    case sclaudei
-//    case sgeminipro
-//    case smixtral
-//    case sdolphin
-//    case spplx7bonline
-//    case spplx70bonline
+    case sgpt4bing
+    case sgeminipro
+    case smixtral
+    case sdolphin
+    case spplx7bonline
+    case spplx70bonline
     
     /// oxygen
     case ogpt4browsing
     case odolphin
-    
-    
     
     /// gpt4free
     case phind
@@ -78,7 +70,7 @@ enum Model: String, Codable {
         case .orperplexity:
             "Pplx Online"
         case .orgemini:
-            "Gemini Pro"
+            "Gemini"
         case .ormixtral:
             "Mixtral 8x7B"
         case .ordolphin:
@@ -87,32 +79,19 @@ enum Model: String, Codable {
             "Bing"
         case .gemini:
             "Gemini"
-            
-//        case .sgpt3t:
-//            "GPT-3.5T"
-//        case .sgpt4:
-//            "GPT-4"
-//        case .sgpt4t:
-//            "GPT-4T"
-//        case .sgpt4bing:
-//            "Bing"
-//        case .scodegpt3:
-//            "GPT3-C"
-//        case .internetgpt3:
-//            "GPT3-I"
-//        case .sclaudei:
-//            "Claude-1"
-//        case .sgeminipro:
-//            "Gemini-P"
-//        case .smixtral:
-//            "Mixtral"
-//        case .sdolphin:
-//            "Dolphin"
-//        case .spplx7bonline:
-//            "PPLX-7B"
-//        case .spplx70bonline:
-//            "PPLX-70B"
-            
+
+        case .sgpt4bing:
+            "Bing"
+        case .sgeminipro:
+            "Gemini"
+        case .smixtral:
+            "Mixtral"
+        case .sdolphin:
+            "Dolphin"
+        case .spplx7bonline:
+            "PPLX-7B"
+        case .spplx70bonline:
+            "PPLX-70B"
 
         case .ogpt4browsing:
             "GPT-4B"
@@ -171,30 +150,18 @@ enum Model: String, Codable {
         case .odolphin:
             "dolphin-2.6-mixtral-8x7b"
             
-//        case .sgpt3t:
-//            "gpt-3.5-turbo"
-//        case .sgpt4:
-//            "gpt-4"
-//        case .sgpt4t:
-//            "gpt-4-turbo-preview"
-//        case .sgpt4bing:
-//            "gpt-4-bing"
-//        case .scodegpt3:
-//            "code-gpt"
-//        case .internetgpt3:
-//            "internet-gpt"
-//        case .sclaudei:
-//            "claude-instant"
-//        case .sgeminipro:
-//            "gemini-pro"
-//        case .smixtral:
-//            "mixtral-8x7b"
-//        case .sdolphin:
-//            "dolphin-mixtral-8x7b"
-//        case .spplx7bonline:
-//            "pplx-7b-online"
-//        case .spplx70bonline:
-//            "pplx-70b-online"
+        case .sgpt4bing:
+            "gpt-4-bing"
+        case .sgeminipro:
+            "gemini-pro"
+        case .smixtral:
+            "mixtral-8x7b"
+        case .sdolphin:
+            "dolphin-mixtral-8x7b"
+        case .spplx7bonline:
+            "pplx-7b-online"
+        case .spplx70bonline:
+            "pplx-70b-online"
             
         case .dalle3:
             "Dall-e-3"
@@ -263,21 +230,15 @@ enum Model: String, Codable {
     
     static let customVisionModels: [Model] = [.customVision]
     
-    static let shuttleModels: [Model] = [.customChat]
-//        [
-//            .sgpt3t,
-//            .sgpt4,
-//            .sgpt4t,
-//            .sgpt4bing,
-//            .scodegpt3,
-//            .internetgpt3,
-//            .sclaudei,
-//            .sgeminipro,
-//            .smixtral,
-//            .sdolphin,
-//            .spplx7bonline,
-//            .spplx70bonline,
-//        ] + [.custom]
+    static let shuttleModels: [Model] =
+        [
+            .sgpt4bing,
+            .sgeminipro,
+            .smixtral,
+            .sdolphin,
+            .spplx7bonline,
+            .spplx70bonline,
+        ] + [.customChat]
     static let oxygenModels: [Model] =
         openAIModels +
         [

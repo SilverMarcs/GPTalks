@@ -79,13 +79,13 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .openrouter:
             Color("pinkColor")
         case .shuttle:
-            Color("tealColor")
+            Color("purpleColor")
         case .oxygen:
             Color("niceColor")
         case .gpt4free:
             Color("blueColor")
         case .custom:
-            Color("purpleColor")
+            Color("tealColor")
         }
     }
 
@@ -239,7 +239,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         [
             .openai,
             .openrouter,
-//            .shuttle,
+            .shuttle,
             .oxygen,
             .gpt4free,
             .custom
