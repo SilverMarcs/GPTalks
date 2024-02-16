@@ -75,8 +75,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     var accentColor: Color {
         switch self {
         case .openai:
-//            Color("greenColor")
-            Color(hex: "#34AADC")
+            Color("greenColor")
         case .openrouter:
             Color("pinkColor")
         case .shuttle:
@@ -124,7 +123,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         }
     }
 
-    var models: [Model] {
+    var chatModels: [Model] {
         switch self {
         case .openai:
             Model.openAIModels
@@ -138,6 +137,50 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             Model.gpt4freeModels
         case .custom:
             Model.customModels
+        }
+    }
+    
+    var visionModels: [Model] {
+        switch self {
+        case .openai:
+            Model.openAIVisionModels
+        case .openrouter:
+//            Model.openRouterVisionModels
+            Model.customVisionModels
+        case .shuttle:
+//            Model.shuttleVisionModels
+            Model.customVisionModels
+        case .oxygen:
+//            Model.oxygenVisionModels
+            Model.openAIVisionModels
+        case .gpt4free:
+//            Model.gpt4freeVisionModels
+            Model.customVisionModels
+        case .custom:
+//            Model.customVisionModels
+            Model.openAIVisionModels
+        }
+    }
+    
+    var imageModels: [Model] {
+        switch self {
+        case .openai:
+            Model.openAIImageModels
+        case .openrouter:
+//            Model.openRouterImageModels
+            Model.customImageModels
+        case .shuttle:
+//            Model.shuttleImageModels
+            Model.customImageModels
+        case .oxygen:
+//            Model.oxygenImageModels
+            Model.customImageModels
+        case .gpt4free:
+//            Model.gpt4freeImageModels
+            Model.customImageModels
+        case .custom:
+//            Model.customImageModels
+            Model.customImageModels
         }
     }
 

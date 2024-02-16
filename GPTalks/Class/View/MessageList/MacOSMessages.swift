@@ -80,6 +80,22 @@ struct MacOSMessages: View {
             .onChange(of: session.errorDesc) {
                 scrollToBottom(proxy: proxy, animated: true)
             }
+            .onChange(of: session.inputImage) {
+                if session.inputImage != nil {
+                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
+                        session.configuration.model = session.configuration.provider.visionModels[0]
+                    }
+                    scrollToBottom(proxy: proxy, animated: true)
+                }
+            }
+            .onChange(of: session.configuration.provider) {
+                if session.containsConversationWithImage {
+                    session.configuration.model = session.configuration.provider.visionModels[0]
+                } else {
+                    session.configuration.model = session.configuration.provider.preferredModel
+                }
+            }
+
 //            Spacer() // enable this to change toolbar color
         }
     }

@@ -147,9 +147,17 @@ struct ToolbarItems: ToolbarContent {
             .frame(width: 130)
 
             Picker("Model", selection: $session.configuration.model) {
-                ForEach(session.configuration.provider.models, id: \.self) { model in
-                    Text(model.name)
-                        .tag(model.id)
+                if session.containsConversationWithImage || session.inputImage != nil {
+                    ForEach(session.configuration.provider.visionModels, id: \.self) { model in
+                        Text(model.name)
+                            .tag(model.id)
+                    }
+
+                } else {
+                    ForEach(session.configuration.provider.visionModels + session.configuration.provider.chatModels, id: \.self) { model in
+                        Text(model.name)
+                            .tag(model.id)
+                    }
                 }
             }
             .frame(width: 125)

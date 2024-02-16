@@ -54,10 +54,6 @@
 		E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA529CA9E7E00AFA884 /* GPTalks.xcdatamodeld */; };
 		E4C65EA929CA9E7E00AFA884 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA829CA9E7E00AFA884 /* ContentView.swift */; };
 		E4C65EAB29CA9E7F00AFA884 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4C65EAA29CA9E7F00AFA884 /* Assets.xcassets */; };
-		E4C65EAF29CA9E7F00AFA884 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4C65EAE29CA9E7F00AFA884 /* Preview Assets.xcassets */; };
-		E4C65EB929CA9E8000AFA884 /* ChatGPTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EB829CA9E8000AFA884 /* ChatGPTTests.swift */; };
-		E4C65EC329CA9E8000AFA884 /* ChatGPTUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EC229CA9E8000AFA884 /* ChatGPTUITests.swift */; };
-		E4C65EC529CA9E8000AFA884 /* ChatGPTUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EC429CA9E8000AFA884 /* ChatGPTUITestsLaunchTests.swift */; };
 		E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65ED329CA9F7800AFA884 /* DialogueSession.swift */; };
 		E4C65EEE29CA9F7800AFA884 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65ED429CA9F7800AFA884 /* Conversation.swift */; };
 		E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */; };
@@ -129,12 +125,8 @@
 		E4C65EA629CA9E7E00AFA884 /* ChatGPT.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ChatGPT.xcdatamodel; sourceTree = "<group>"; };
 		E4C65EA829CA9E7E00AFA884 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E4C65EAA29CA9E7F00AFA884 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E4C65EAE29CA9E7F00AFA884 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E4C65EB429CA9E8000AFA884 /* GPTalksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPTalksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4C65EB829CA9E8000AFA884 /* ChatGPTTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTTests.swift; sourceTree = "<group>"; };
 		E4C65EBE29CA9E8000AFA884 /* GPTalksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPTalksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4C65EC229CA9E8000AFA884 /* ChatGPTUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTUITests.swift; sourceTree = "<group>"; };
-		E4C65EC429CA9E8000AFA884 /* ChatGPTUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E4C65ED329CA9F7800AFA884 /* DialogueSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogueSession.swift; sourceTree = "<group>"; };
 		E4C65ED429CA9F7800AFA884 /* Conversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
@@ -229,8 +221,6 @@
 			children = (
 				E4EF056C2A3B3744005CF741 /* GPTalks-Info.plist */,
 				E4C65EA029CA9E7E00AFA884 /* GPTalks */,
-				E4C65EB729CA9E8000AFA884 /* GPTalksTests */,
-				E4C65EC129CA9E8000AFA884 /* GPTalksTestsUITests */,
 				E4C65E9F29CA9E7E00AFA884 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -255,34 +245,8 @@
 				E4C65EA329CA9E7E00AFA884 /* Persistence.swift */,
 				E4C65EE829CA9F7800AFA884 /* Resource */,
 				E4C65EA529CA9E7E00AFA884 /* GPTalks.xcdatamodeld */,
-				E4C65EAD29CA9E7F00AFA884 /* Preview Content */,
 			);
 			path = GPTalks;
-			sourceTree = "<group>";
-		};
-		E4C65EAD29CA9E7F00AFA884 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				E4C65EAE29CA9E7F00AFA884 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		E4C65EB729CA9E8000AFA884 /* GPTalksTests */ = {
-			isa = PBXGroup;
-			children = (
-				E4C65EB829CA9E8000AFA884 /* ChatGPTTests.swift */,
-			);
-			path = GPTalksTests;
-			sourceTree = "<group>";
-		};
-		E4C65EC129CA9E8000AFA884 /* GPTalksTestsUITests */ = {
-			isa = PBXGroup;
-			children = (
-				E4C65EC229CA9E8000AFA884 /* ChatGPTUITests.swift */,
-				E4C65EC429CA9E8000AFA884 /* ChatGPTUITestsLaunchTests.swift */,
-			);
-			path = GPTalksTestsUITests;
 			sourceTree = "<group>";
 		};
 		E4C65ED129CA9F7800AFA884 /* Class */ = {
@@ -498,7 +462,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4C65EAF29CA9E7F00AFA884 /* Preview Assets.xcassets in Resources */,
 				E4C65EAB29CA9E7F00AFA884 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -579,7 +542,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4C65EB929CA9E8000AFA884 /* ChatGPTTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -587,8 +549,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4C65EC529CA9E8000AFA884 /* ChatGPTUITestsLaunchTests.swift in Sources */,
-				E4C65EC329CA9E8000AFA884 /* ChatGPTUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

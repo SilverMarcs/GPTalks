@@ -109,7 +109,12 @@ import SwiftOpenAI
     var isAddingConversation = false
 
     private var initFinished = false
+    
     var isStreaming = false
+    
+    var containsConversationWithImage: Bool {
+        conversations.contains(where: { !$0.base64Image.isEmpty })
+    }
 
     // MARK: - Properties
 
@@ -415,6 +420,7 @@ import SwiftOpenAI
         #endif
 
         do {
+            inputImage = nil
             #if os(macOS)
             try await streamingTask?.value
             try await viewUpdater?.value

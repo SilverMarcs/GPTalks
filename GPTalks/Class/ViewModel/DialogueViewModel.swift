@@ -15,30 +15,75 @@ import SwiftUI
     var allDialogues: [DialogueSession] = [] {
         didSet {
             if isArchivedSelected {
-                dialogues = allDialogues.filter { $0.isArchive }
+                archivedDialogues = allDialogues.filter { $0.isArchive }
             } else {
-                dialogues = allDialogues.filter { !$0.isArchive }
+                activeDialogues = allDialogues.filter { !$0.isArchive }
             }
         }
     }
 
-    var dialogues: [DialogueSession] = []
+    
+//    var allDialogues: [DialogueSession] = []
 
+    var dialogues: [DialogueSession] = []
+    
+    var activeDialogues: [DialogueSession] = [] 
+//    {
+//        didSet {
+//            allDialogues.filter { !$0.isArchive }
+//        }
+//    }
+    
+    var archivedDialogues: [DialogueSession] = [] 
+//    {
+//        didSet {
+//            allDialogues.filter { $0.isArchive }
+//        }
+//    }
+
+//    var isArchivedSelected: Bool = false {
+//        didSet {
+//            withAnimation {
+//                if isArchivedSelected {
+//                    dialogues = archivedDialogues
+//                } else {
+//                    dialogues = activeDialogues
+//                }
+//            }
+//        }
+//    }
+    
     var isArchivedSelected: Bool = false
 
     var searchText: String = "" {
         didSet {
-            if searchText.isEmpty {
+//            if searchText.isEmpty {
+//                 if isArchivedSelected {
+////                     dialogues = allDialogues.filter { $0.isArchive }
+//                     archivedDialogues = allDialogues
+//
+//                 } else {
+////                     dialogues = allDialogues.filter { !$0.isArchive }
+//                     activeDialogues = allDialogues
+//                 }
+//             } else {
+            if !searchText.isEmpty {
                  if isArchivedSelected {
-                     dialogues = allDialogues.filter { $0.isArchive }
+                     archivedDialogues = allDialogues.filter { dialogue in
+                         dialogue.title.localizedCaseInsensitiveContains(searchText)
+                     }
                  } else {
-                     dialogues = allDialogues.filter { !$0.isArchive }
+                     activeDialogues = allDialogues.filter { dialogue in
+                         dialogue.title.localizedCaseInsensitiveContains(searchText)
+                     }
                  }
-             } else {
-                 dialogues = allDialogues.filter { dialogue in
-                     dialogue.title.localizedCaseInsensitiveContains(searchText)
-                 }
-             }
+            } else {
+                if isArchivedSelected {
+                    archivedDialogues = allDialogues.filter { $0.isArchive }
+                } else {
+                    activeDialogues = allDialogues.filter { !$0.isArchive }
+                }
+            }
         }
     }
 //    var filteredDialogues: [DialogueSession] = []
@@ -56,6 +101,22 @@ import SwiftUI
 //            }
 //            .assign(to: &$filteredDialogues)
     }
+    
+    var shouldShowPlaceholder: Bool {
+        if isArchivedSelected {
+            return archivedDialogues.isEmpty
+        } else {
+            return activeDialogues.isEmpty
+        }
+    }
+    
+    var currentDialogues: [DialogueSession] {
+        if isArchivedSelected {
+            return archivedDialogues
+        } else {
+            return activeDialogues
+        }
+    }
 
     func fetchDialogueData(firstTime: Bool = true) {
         do {
@@ -65,11 +126,14 @@ import SwiftUI
 
             allDialogues = dialogueData.compactMap { DialogueSession(rawData: $0) }
 
-            dialogues = allDialogues.filter { !$0.isArchive }
+            dialogues = allDialogues.filter { !$0.isArchive } // why cant i get rid of this?
+            
+            activeDialogues = allDialogues.filter { !$0.isArchive }
+            archivedDialogues = allDialogues.filter { $0.isArchive }
 
             #if os(macOS)
                 if firstTime {
-                    selectedDialogue = dialogues.first
+                    selectedDialogue = activeDialogues.first
                 }
             #endif
         } catch {
@@ -80,22 +144,38 @@ import SwiftUI
     func toggleArchivedStatus() {
         isArchivedSelected.toggle()
         
-        withAnimation {
-            if isArchivedSelected {
-                dialogues = allDialogues.filter { $0.isArchive }
-            } else {
-                dialogues = allDialogues.filter { !$0.isArchive }
-            }
-        }
+//        withAnimation {
+//            if isArchivedSelected {
+//                dialogues = allDialogues.filter { $0.isArchive }
+//            } else {
+//                dialogues = allDialogues.filter { !$0.isArchive }
+//            }
+//        }
     }
 
     func toggleArchive(session: DialogueSession) {
         session.toggleArchive()
-
-        withAnimation {
-            dialogues.removeAll {
-                $0.id == session.id
+        
+        if isArchivedSelected {
+            withAnimation {
+                archivedDialogues.removeAll {
+                    $0.id == session.id
+                }
+                activeDialogues.append(session)
+                activeDialogues.sort {
+                    $0.date > $1.date
+                }
             }
+            } else {
+                withAnimation {
+                    activeDialogues.removeAll {
+                        $0.id == session.id
+                    }
+                    archivedDialogues.append(session)
+                    archivedDialogues.sort {
+                        $0.date > $1.date
+                    }
+                }
         }
     }
 

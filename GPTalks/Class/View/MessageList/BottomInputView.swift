@@ -29,7 +29,6 @@ struct BottomInputView: View {
             
             HStack(spacing: 12) {
                 imagePicker
-//                resetContextButton
                 
                 inputBox
                 
@@ -42,6 +41,7 @@ struct BottomInputView: View {
                 #endif
             }
         }
+        .animation(.default, value: session.inputImage)
         .buttonStyle(.plain)
         .padding(.horizontal)
         .padding(.top, verticalPadding)
@@ -64,7 +64,7 @@ struct BottomInputView: View {
                     .scaledToFill()
                     .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
                     .aspectRatio(contentMode: .fill)
-                    .cornerRadius(8)
+                    .cornerRadius(6)
                 
                 Button {
                     session.inputImage = nil
@@ -82,8 +82,13 @@ struct BottomInputView: View {
         Button {
             importing = true
         } label: {
-            Image(systemName: "photo")
-                .frame(width: imageSize, height: imageSize)
+//            Image(systemName: "photo.badge.plus.fill")
+            Image(systemName: "plus.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: imageSize - 2, height: imageSize - 2)
+                .foregroundStyle(.secondary)
+                .opacity(0.7)
         }
         .keyboardShortcut("i", modifiers: .command)
         .fileImporter(

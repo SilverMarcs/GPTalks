@@ -33,7 +33,7 @@ struct Conversation: Codable, Identifiable, Hashable {
         if !base64Image.isEmpty {
             return Message(role: chatRole, content: [ChatContent(type: .text, value: content), ChatContent(type: .imageUrl, value: "data:image/jpeg;base64," + base64Image)])
         } else {
-            return Message(role: chatRole, content: [ChatContent(type: .text, value: content)])
+            return Message(role: chatRole, content: content)
         }
     }
 }

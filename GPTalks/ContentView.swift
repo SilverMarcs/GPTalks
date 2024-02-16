@@ -15,6 +15,7 @@ struct ContentView: View {
         NavigationSplitView {
             #if os(macOS)
                 MacOSDialogList(viewModel: viewModel)
+//                .toolbar(removing: .sidebarToggle)
             #else
                 IOSDialogList(viewModel: viewModel)
             #endif

@@ -22,7 +22,6 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.preferredChatService") var preferredChatService: Provider = .openai
     @AppStorage("configuration.preferredImageService") var preferredImageService: Provider = .openai
-    @AppStorage("configuration.defaultImageModel") var defaultImageModel: String = "dall-e-3"
     
     // config
     @AppStorage("configuration.contextLength") var contextLength = 20
@@ -57,4 +56,6 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.Chost") var Chost: String = ""
     
     @AppStorage("configuration.customModel") var customModel: String = ""
+    @AppStorage("configuration.defaultImageModel") var defaultImageModel: String = "dall-e-3"
+    @AppStorage("configuration.customVisionModel") var customVisionModel: String = ""
 }

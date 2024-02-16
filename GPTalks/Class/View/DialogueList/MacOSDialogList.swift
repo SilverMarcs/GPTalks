@@ -14,37 +14,41 @@ struct MacOSDialogList: View {
 
     var body: some View {
         Group {
-            if viewModel.dialogues.isEmpty {
+            if viewModel.shouldShowPlaceholder {
                 PlaceHolderView(imageName: "message.fill", title: "No Messages Yet")
             } else {
                 ScrollViewReader { proxy in
-                    List(viewModel.dialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
+                    List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
                         DialogueListItem(session: session)
                             .id(session.id)
                             .listRowSeparator(.hidden)
                     }
+                    .animation(.default, value: viewModel.isArchivedSelected)
                     .padding(.top, -10)
-                    .onChange(of: viewModel.dialogues.count) {
-                        // this is faaar from perfect but is required if we ant to keep list style inset which is required for animations
-                        if !viewModel.dialogues.isEmpty {
-                            proxy.scrollTo(viewModel.dialogues[0].id, anchor: .top)
-                        }
+                    .onChange(of: viewModel.activeDialogues.count) {
+//                         this is faaar from perfect but is required if we ant to keep list style inset which is required for animations
+//                        if !viewModel.isArchivedSelected {
+                            if !viewModel.activeDialogues.isEmpty {
+                                proxy.scrollTo(viewModel.activeDialogues[0].id, anchor: .top)
+                            }
+//                        } p
                     }
                 }
             }
         }
         .listStyle(.inset)
         .scrollContentBackground(.hidden)
-        .frame(minWidth: 270)
+        .frame(minWidth: 280)
         .toolbar {
-            Spacer()
+//            Spacer()
 
-            NavigationLink {
-                ImageCreator(generations: $images)
-            } label: {
-                Image(systemName: "photo")
+            Picker("Archived", selection: $viewModel.isArchivedSelected) {
+                Text("Archived").tag(true) // Archived
+                Text("Active").tag(false) // Active
             }
-
+            
+            Spacer()
+            
             Button {
                 viewModel.addDialogue()
             } label: {

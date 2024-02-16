@@ -18,7 +18,8 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="isArchive" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="resetMarker" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
-        <attribute name="title" attributeType="String" defaultValueString="New Chat"/>
+        <attribute name="title" attributeType="String" defaultValueString="New Session"/>
+        <attribute name="visionEnabled" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <relationship name="conversations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ConversationData" inverseName="dialogue" inverseEntity="ConversationData"/>
     </entity>
 </model>
