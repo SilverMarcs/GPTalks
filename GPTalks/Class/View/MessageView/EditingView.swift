@@ -45,8 +45,9 @@ struct EditingView: View {
     private var iOSEditingView: some View {
         NavigationView {
             Form {
-                TextField("Editing Message", text: $editingMessage, axis: .vertical)
+                SelectableTextField(text: $editingMessage)
                     .focused($isTextFieldFocused)
+
             }
             .onAppear {
                 isTextFieldFocused = true
@@ -94,3 +95,41 @@ struct EditingView: View {
         }
     }
 }
+
+#if os(iOS)
+import UIKit
+
+struct SelectableTextField: UIViewRepresentable {
+    @Binding var text: String
+    
+    func makeUIView(context: Context) -> UITextField {
+        let textField = UITextField()
+        textField.delegate = context.coordinator
+        return textField
+    }
+    
+    func updateUIView(_ uiView: UITextField, context: Context) {
+        uiView.text = text
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, UITextFieldDelegate {
+        var parent: SelectableTextField
+        
+        init(_ textField: SelectableTextField) {
+            self.parent = textField
+        }
+        
+        func textFieldDidBeginEditing(_ textField: UITextField) {
+            textField.selectedTextRange = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument)
+        }
+        
+        func textFieldDidChangeSelection(_ textField: UITextField) {
+            parent.text = textField.text ?? ""
+        }
+    }
+}
+#endif
