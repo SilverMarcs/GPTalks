@@ -64,7 +64,11 @@ struct GPTalks: App {
                 .keyboardShortcut("a", modifiers: [.command, .shift])
                 
                 Button("Image Generations") {
-                    viewModel.selectedState = .images
+                    if viewModel.selectedState == .images {
+                        viewModel.selectedState = .active
+                    } else {
+                        viewModel.selectedState = .images
+                    }
                 }
                 .keyboardShortcut("i", modifiers: [.command, .shift])
             }

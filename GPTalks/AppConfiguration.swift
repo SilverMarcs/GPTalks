@@ -56,5 +56,5 @@ class AppConfiguration: ObservableObject {
     
     @AppStorage("configuration.customModel") var customModel: String = ""
     @AppStorage("configuration.defaultImageModel") var defaultImageModel: String = "dall-e-3"
-    @AppStorage("configuration.customVisionModel") var customVisionModel: String = ""
+    @AppStorage("configuration.customVisionModel") var customVisionModel: String = "shuttle-turbo"
 }

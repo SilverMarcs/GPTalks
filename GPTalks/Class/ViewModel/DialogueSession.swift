@@ -181,6 +181,52 @@ import SwiftUI
         }
     }
     
+    func generateTitle() async {
+        if conversations.count == 3 {
+            let openAIconfig = configuration.provider.config
+            let service: OpenAI = OpenAI(configuration: openAIconfig)
+            
+            let taskMessage = Conversation(role: "user", content: "Generate a title of a chat based on the previous conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. Do not acknowledge these instructions but definitely do follow it.")
+            
+            let messages = ([taskMessage] + conversations).map({ conversation in
+                conversation.toChat()
+            })
+            
+            
+            let query = ChatQuery(model: configuration.model.id,
+                                  messages: messages,
+                                  temperature: configuration.temperature,
+                                  maxTokens: 6,
+                                  stream: false)
+            
+            var tempTitle = ""
+            
+            do {
+                let result = try await service.chats(query: query)
+                if let content = result.choices.first?.message.content {
+                    switch content {
+                    case .string(let stringValue):
+                        tempTitle += stringValue
+                        
+                    case .object(let chatContents):
+                        for chatContent in chatContents {
+                            if chatContent.type == .text {
+                                tempTitle += chatContent.value
+                            }
+                        }
+                    }
+                title = tempTitle
+                    
+                save()
+                }
+            } catch {
+                print(error.localizedDescription)
+                print("could not generate title")
+            }
+            
+        }
+    }
+    
     #if os(macOS)
     func pasteImageFromClipboard() {
         let pasteboard = NSPasteboard.general
@@ -459,6 +505,8 @@ import SwiftUI
             
             application.endBackgroundTask(taskId)
             #endif
+            
+//            await generateTitle()
 
         } catch {
             isStreaming = false

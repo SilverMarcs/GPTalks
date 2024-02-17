@@ -29,6 +29,7 @@ enum Model: String, Codable {
     case ordolphin
     
     /// shuttle
+    case shuttleTurbo
     case sgpt4bing
     case sgeminipro
     case smixtral
@@ -80,6 +81,8 @@ enum Model: String, Codable {
         case .gemini:
             "Gemini"
 
+        case .shuttleTurbo:
+            "Shuttle"
         case .sgpt4bing:
             "Bing"
         case .sgeminipro:
@@ -109,6 +112,7 @@ enum Model: String, Codable {
             "Custom Vision"
         case .customImage:
             "Custom Image"
+
         }
     }
 
@@ -150,6 +154,8 @@ enum Model: String, Codable {
         case .odolphin:
             "dolphin-2.6-mixtral-8x7b"
             
+        case .shuttleTurbo:
+            "shuttle-turbo"
         case .sgpt4bing:
             "gpt-4-bing"
         case .sgeminipro:
@@ -232,6 +238,7 @@ enum Model: String, Codable {
     
     static let shuttleModels: [Model] =
         [
+            .shuttleTurbo,
             .sgpt4bing,
             .sgeminipro,
             .smixtral,
