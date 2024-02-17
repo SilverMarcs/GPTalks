@@ -163,6 +163,24 @@ import SwiftUI
         save()
     }
     
+    func forkSession(conversation: Conversation) -> [Conversation] {
+        // Assuming 'conversations' is an array of Conversation objects available in this scope
+        if let index = conversations.firstIndex(of: conversation) {
+            // Create a new array containing all conversations up to and including the one at the found index
+            var forkedConversations = Array(conversations.prefix(through: index))
+            
+            // Remove all conversations after the found index from the original conversations array
+            forkedConversations.removeSubrange((index + 1)...)
+
+            // Return the forked conversations
+            return forkedConversations
+        } else {
+            // If the conversation is not found, you might want to handle this case differently.
+            // For now, returning an empty array or the original list based on your requirements might be a good idea.
+            return []
+        }
+    }
+    
     #if os(macOS)
     func pasteImageFromClipboard() {
         let pasteboard = NSPasteboard.general

@@ -7,6 +7,7 @@
 
 import SwiftUI
 struct MessageContextMenu: View {
+    @Environment(DialogueViewModel.self) private var viewModel
     var session: DialogueSession
     var conversation: Conversation
     var showText: Bool = false
@@ -84,6 +85,15 @@ struct MessageContextMenu: View {
             Image(systemName: "eraser")
             Text("Reset Context")
         }
+        
+        Button {
+            let forkedConvos = session.forkSession(conversation: conversation)
+            viewModel.addDialogue(conversations: forkedConvos)
+        } label: {
+            Image(systemName: "arrow.branch")
+            Text("Fork Session")
+        }
+
 
         Button(role: .destructive) {
             session.removeConversation(conversation)
