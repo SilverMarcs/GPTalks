@@ -118,6 +118,7 @@ struct BottomInputView: View {
                 if let data = try? await newItem.loadTransferable(type: Data.self) {
                     // Convert Data to UIImage and assign it to inputImage
                     session.inputImage = UIImage(data: data)
+                    selectedItem = nil
                 }
             }
         }

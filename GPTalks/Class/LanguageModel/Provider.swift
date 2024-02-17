@@ -241,8 +241,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             .openrouter,
             .shuttle,
             .oxygen,
-            .gpt4free,
-            .custom
+//            .gpt4free,
+            .custom,
         ]
     }
 

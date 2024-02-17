@@ -18,15 +18,21 @@ struct AssistantMessageView: View {
     var body: some View {
         HStack(alignment: .lastTextBaseline) {
             VStack(alignment: .leading) {
-                if AppConfiguration.shared.isMarkdownEnabled {
-                    MarkdownView(text: conversation.content)
+                if !conversation.content.isEmpty {
+                    if AppConfiguration.shared.isMarkdownEnabled {
+                        MarkdownView(text: conversation.content)
+                    } else {
+                        Text(conversation.content)
+                    }
                 } else {
-                    Text(conversation.content)
+                    EmptyView()
                 }
 
                 if conversation.isReplying {
                     ReplyingIndicatorView()
                         .frame(width: 48, height: 16)
+                } else {
+                    EmptyView()
                 }
             }
             .bubbleStyle(isMyMessage: false)

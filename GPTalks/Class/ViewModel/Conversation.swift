@@ -8,7 +8,7 @@
 import SwiftUI
 import OpenAI
 
-struct Conversation: Codable, Identifiable, Hashable {
+struct Conversation: Codable, Identifiable, Hashable, Equatable {
     var id = UUID()
     var date = Date()
     var role: String

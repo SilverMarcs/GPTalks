@@ -29,7 +29,7 @@ struct GenerationView: View {
                 ReplyingIndicatorView()
                     .frame(width: 48, height: 16)
                     .bubbleStyle(isMyMessage: false)
-                    .padding(.trailing, horizontalPadding)
+//                    .padding(.trailing, horizontalPadding)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             
@@ -68,6 +68,7 @@ struct GenerationView: View {
                         }
                     }
 
+                    #if os(macOS)
                     Button {
                         saveImage(url: url)
                     } label: {
@@ -84,10 +85,11 @@ struct GenerationView: View {
                             .frame(width: btnSize, height: btnSize)
                     }
                     .buttonStyle(.plain)
+                    #endif
                     
                     Spacer()
                 }
-                .padding(.trailing, horizontalPadding)
+                .padding(.trailing, horizontalPadding - 20)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
@@ -105,7 +107,7 @@ struct GenerationView: View {
         #if os(macOS)
             85
         #else
-            50
+            40
         #endif
     }
     
@@ -121,7 +123,7 @@ struct GenerationView: View {
         #if os(macOS)
             400
         #else
-            300
+            325
         #endif
     }
 }

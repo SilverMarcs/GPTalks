@@ -17,31 +17,37 @@ struct UserMessageView: View {
     @State private var isHovered = false
     
     @State var canSelectText = false
+    
+    @State var showPreview: Bool = false
 
     var body: some View {
         let lastUserMessage = session.conversations.filter { $0.role == "user" }.last
         
-        VStack(alignment: .trailing, spacing: 11) {
+        VStack(alignment: .trailing, spacing: 5) {
             if !conversation.base64Image.isEmpty {
+                    HStack {
+                        Text("image")
+                        Image(systemName: "photo.fill")
+                    }
+                    .bubbleStyle(isMyMessage: false, compact: true)
+                    .onTapGesture {
+                        showPreview = true
+                    }
+                    .popover(isPresented: $showPreview) {
 #if os(macOS)
-                    Image(nsImage: NSImage(data: Data(base64Encoded: conversation.base64Image)!)!)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(maxWidth: 400, maxHeight: 350, alignment: .center)
-                        .aspectRatio(contentMode: .fill)
-                        .cornerRadius(10)
-                        .padding(.trailing, 2)
-                        .padding(.top, -4)
+                        Image(nsImage: NSImage(data: Data(base64Encoded: conversation.base64Image)!)!)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
+                            .presentationCompactAdaptation((.popover))
 #else
-                    Image(uiImage: UIImage(data: Data(base64Encoded: conversation.base64Image)!)!)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(maxWidth: 400, maxHeight: 350, alignment: .center)
-                        .aspectRatio(contentMode: .fill)
-                        .cornerRadius(10)
-                        .padding(.trailing, 2)
-                        .padding(.top, -4)
+                        Image(uiImage: UIImage(data: Data(base64Encoded: conversation.base64Image)!)!)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
+                            .presentationCompactAdaptation((.popover))
 #endif
+                    }
             }
                 
             HStack(alignment: .lastTextBaseline) {

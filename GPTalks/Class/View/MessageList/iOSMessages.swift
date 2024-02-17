@@ -25,7 +25,7 @@ struct iOSMessages: View {
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
                     Spacer()
-                        .frame(height: 10)
+                        .frame(height: 12)
 
                     ForEach(session.conversations) { conversation in
                         ConversationView(session: session, conversation: conversation)

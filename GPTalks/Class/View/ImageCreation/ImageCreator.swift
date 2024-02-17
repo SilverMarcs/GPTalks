@@ -28,25 +28,7 @@ struct ImageCreator: View {
 
     var body: some View {
         ScrollViewReader { proxy in
-            List {
-                VStack {
-                    ForEach(generations) { generation in
-                        GenerationView(generation: generation, shouldScroll: $shouldScroll)
-                            .padding(.horizontal, 7)
-
-                        Spacer()
-                            .frame(height: 30)
-                    }
-                    .listRowSeparator(.hidden)
-
-                    if !errorMsg.isEmpty {
-                        Text(errorMsg)
-                            .foregroundStyle(.red)
-                            .listRowSeparator(.hidden)
-                    }
-                }
-                .id("bottomID")
-            }
+            list
             .onChange(of: shouldScroll) {
                 scrollToBottom(proxy: proxy, animated: true)
             }
@@ -77,33 +59,33 @@ struct ImageCreator: View {
             .onChange(of: generations.count) {
                 scrollToBottom(proxy: proxy, animated: true)
             }
-            .background(.background)
+//            .background(.background)
             #if os(macOS)
-                .navigationTitle("Image Generations")
-//                .navigationSubtitle("subtitle")
+            .navigationTitle("Image Generations")
+//            .navigationSubtitle("subtitle")
             #endif
-                .listStyle(.plain)
-                .toolbar {
-                    Picker("Preferred Image Provider", selection: configuration.$preferredImageService) {
-                        ForEach(Provider.availableProviders, id: \.self) { provider in
-                            Text(provider.name)
-                        }
-                    }
-                    
-                    TextField("Model", text: $configuration.defaultImageModel)
-                        .textFieldStyle(.roundedBorder)
-                    #if os(iOS)
-                        .textInputAutocapitalization(.never)
-                    #endif
-                        .frame(width: 110)
-
-                    Picker("Number", selection: $number) {
-                        ForEach(1 ... 4, id: \.self) { number in
-                            Text("Count: \(number)")
-                                .tag(number)
-                        }
+            .listStyle(.plain)
+            .toolbar {
+                Picker("Preferred Image Provider", selection: configuration.$preferredImageService) {
+                    ForEach(Provider.availableProviders, id: \.self) { provider in
+                        Text(provider.name)
                     }
                 }
+                
+                TextField("Model", text: $configuration.defaultImageModel)
+                    .textFieldStyle(.roundedBorder)
+                #if os(iOS)
+                    .textInputAutocapitalization(.never)
+                #endif
+                    .frame(width: 110)
+
+                Picker("Number", selection: $number) {
+                    ForEach(1 ... 4, id: \.self) { number in
+                        Text("Count: \(number)")
+                            .tag(number)
+                    }
+                }
+            }
         }
         #if !os(macOS)
         .onDisappear {
@@ -174,9 +156,8 @@ struct ImageCreator: View {
         errorMsg = ""
 
         var streamingTask: Task<Void, Error>?
-//        let openAIconfig = AppConfiguration.shared.preferredImageService.config
-//        let service = OpenAI(configuration: openAIconfig)
         let query = ImagesQuery(prompt: prompt, model: configuration.defaultImageModel, n: Int(number), size: "1024x1024", quality: "standard")
+//        let query = ImagesQuery(prompt: prompt, model: configuration.defaultImageModel, n: Int(number), quality: .standard, size: ._1024)
 
         #if os(iOS)
             streamingTask = Task {
@@ -185,10 +166,6 @@ struct ImageCreator: View {
                     // Handle expiration of background task here
                 }
 
-                // Start your network request here
-//                let results = try await service.generations(query: query2)
-//                generations.append(contentsOf: results.data)
-//                print(results)
                 try await sendHelper(query: query)
 
                 // End the background task once the network request is finished
@@ -197,9 +174,6 @@ struct ImageCreator: View {
 
         #else
             streamingTask = Task {
-//                let results = try await service.images(query: query2)
-//                generations.append(ImageObject(prompt: txt, urls: results.data))
-
                 try await sendHelper(query: query)
             }
         #endif
@@ -236,6 +210,47 @@ struct ImageCreator: View {
         }
         print(results)
     }
+    
+    var list: some View {
+        #if os(macOS)
+        List {
+            VStack {
+                ForEach(generations) { generation in
+                    GenerationView(generation: generation, shouldScroll: $shouldScroll)
+                        .padding(.horizontal, 7)
+
+                    Spacer()
+                        .frame(height: 30)
+                }
+                .listRowSeparator(.hidden)
+
+                if !errorMsg.isEmpty {
+                    Text(errorMsg)
+                        .foregroundStyle(.red)
+                        .listRowSeparator(.hidden)
+                }
+            }
+            .id("bottomID")
+        }
+        #else
+        ScrollView {
+            ForEach(generations, id: \.self) { generation in
+                GenerationView(generation: generation, shouldScroll: $shouldScroll)
+                    .id(generation.id)
+
+            }
+            .padding(.horizontal, 12)
+
+                if !errorMsg.isEmpty {
+                    Text(errorMsg)
+                        .foregroundStyle(.red)
+                }
+            
+                Spacer()
+                .id("bottomID")
+            }
+        #endif
+    }
 
     private var imageSize: CGFloat {
         #if os(macOS)
@@ -245,3 +260,4 @@ struct ImageCreator: View {
         #endif
     }
 }
+

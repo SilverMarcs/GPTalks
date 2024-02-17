@@ -45,7 +45,6 @@ import SwiftOpenAI
         try container.encode(conversations, forKey: .conversations)
         try container.encode(id, forKey: .id)
         try container.encode(date, forKey: .date)
-//        try container.encode(title, forKey: .title)
     }
 
     enum CodingKeys: CodingKey {
@@ -53,9 +52,6 @@ import SwiftOpenAI
         case conversations
         case date
         case id
-//        case title
-//        case isArchive
-//        case resetMarker
     }
 
     // MARK: - Hashable, Equatable
@@ -323,15 +319,12 @@ import SwiftOpenAI
         
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
 
-        #if os(iOS)
-            var streamText = "";
+        var streamText = "";
+    
+#if os(iOS)
             streamingTask = Task {
-                let application = UIApplication.shared
-                let taskId = application.beginBackgroundTask {
-                    // Handle expiration of background task here
-                }
-
-                // Start your network request here
+                isStreaming = true
+                
                 if Model.nonStreamModels.contains(configuration.model) {
 //                    let result = try await service.chats(query: query)
 //                    streamText += result.choices.first?.message.content?.string ?? ""
@@ -339,11 +332,9 @@ import SwiftOpenAI
                     if let content = result.choices.first?.message.content {
                       switch content {
                       case .string(let stringValue):
-                          // Case 1: It's a simple string
                           streamText += stringValue
 
                       case .object(let chatContents):
-                          // Case 2: It's an array of ChatContent
                           for chatContent in chatContents {
                               if chatContent.type == .text {
                                   streamText += chatContent.value
@@ -351,34 +342,28 @@ import SwiftOpenAI
                           }
                       }
                     }
-                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                    lastConversationData.sync(with: conversations[conversations.count - 1])
                 } else {
                     for try await result in service.chatsStream(query: query) {
                         streamText += result.choices.first?.delta.content ?? ""
-                        conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                        lastConversationData.sync(with: conversations[conversations.count - 1])
                     }
                 }
-
-                // End the background task once the network request is finished
-                application.endBackgroundTask(taskId)
-
-        } #else
-            var streamText = ""
+                
+                isStreaming = false
+        }
+#else
             streamingTask = Task {
                 isStreaming = true
                 
                 if Model.nonStreamModels.contains(configuration.model) {
+//                    let result = try await service.chats(query: query)
+//                    streamText += result.choices.first?.message.content?.string ?? ""
                     let result = try await service.chats(query: query)
                     if let content = result.choices.first?.message.content {
                       switch content {
                       case .string(let stringValue):
-                          // Case 1: It's a simple string
                           streamText += stringValue
 
                       case .object(let chatContents):
-                          // Case 2: It's an array of ChatContent
                           for chatContent in chatContents {
                               if chatContent.type == .text {
                                   streamText += chatContent.value
@@ -394,20 +379,31 @@ import SwiftOpenAI
 
                 isStreaming = false
             }
+#endif
         
-            viewUpdater = Task {
-                while true {
-                    try await Task.sleep(nanoseconds: 250_000_000)
+        viewUpdater = Task {
+            while true {
+                #if os(macOS)
+                try await Task.sleep(nanoseconds: 300_000_000)
+                #else
+                try await Task.sleep(nanoseconds: 200_000_000)
+                #endif
+                        
+                if AppConfiguration.shared.isMarkdownEnabled {
+                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                } else {
                     withAnimation {
                         conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
                     }
-                    lastConversationData.sync(with: conversations[conversations.count - 1])
-                    if !isStreaming {
-                        break
-                    }
+                }
+                
+                lastConversationData.sync(with: conversations[conversations.count - 1])
+                
+                if !isStreaming {
+                    break
                 }
             }
-        #endif
+        }
 
         do {
             inputImage = nil
@@ -415,7 +411,15 @@ import SwiftOpenAI
             try await streamingTask?.value
             try await viewUpdater?.value
             #else
+            let application = UIApplication.shared
+            let taskId = application.beginBackgroundTask {
+                // Handle expiration of background task here
+            }
+            
             try await streamingTask?.value
+            try await viewUpdater?.value
+            
+            application.endBackgroundTask(taskId)
             #endif
 
         } catch {
