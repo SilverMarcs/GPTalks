@@ -7,7 +7,6 @@
 
 import OpenAI
 import SwiftUI
-import SwiftOpenAI
 
 @Observable class DialogueSession: Identifiable, Equatable, Hashable, Codable {
     struct Configuration: Codable {
@@ -109,7 +108,15 @@ import SwiftOpenAI
     var isStreaming = false
     
     var containsConversationWithImage: Bool {
-        conversations.contains(where: { !$0.base64Image.isEmpty })
+        let contextAdjustedMessages: [Conversation]
+        
+        if let marker = resetMarker {
+            contextAdjustedMessages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength))
+        } else {
+            contextAdjustedMessages = Array(conversations.suffix(configuration.contextLength - 1))
+        }
+        
+        return contextAdjustedMessages.contains(where: { !$0.base64Image.isEmpty })
     }
 
     // MARK: - Properties
@@ -318,6 +325,8 @@ import SwiftOpenAI
         
         
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+        
+        isAddingConversation.toggle()
 
         var streamText = "";
     
@@ -384,7 +393,7 @@ import SwiftOpenAI
         viewUpdater = Task {
             while true {
                 #if os(macOS)
-                try await Task.sleep(nanoseconds: 300_000_000)
+                try await Task.sleep(nanoseconds: 250_000_000)
                 #else
                 try await Task.sleep(nanoseconds: 200_000_000)
                 #endif

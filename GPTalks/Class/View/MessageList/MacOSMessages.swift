@@ -81,6 +81,10 @@ struct MacOSMessages: View {
                     scrollToBottom(proxy: proxy)
                 }
                 isTextFieldFocused = true
+                
+                if session.containsConversationWithImage {
+                    session.configuration.model = session.configuration.provider.visionModels[0]
+                }
             }
             .onChange(of: session.errorDesc) {
                 scrollToBottom(proxy: proxy, animated: true)

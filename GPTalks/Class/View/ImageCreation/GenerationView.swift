@@ -17,7 +17,7 @@ struct GenerationView: View {
             VStack(alignment: .trailing, spacing: 5) {
                 Text(generation.imageModel)
                     .font(.caption)
-                    .bubbleStyle(isMyMessage: false)
+                    .bubbleStyle(isMyMessage: false, compact: true)
                 Text(generation.prompt)
                     .textSelection(.enabled)
                     .bubbleStyle(isMyMessage: true)

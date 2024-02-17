@@ -46,15 +46,6 @@
       }
     },
     {
-      "identity" : "swiftopenai",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftBeta/SwiftOpenAI",
-      "state" : {
-        "revision" : "495e4358b328391a240d977d97cc2512b4947f5f",
-        "version" : "1.3.0"
-      }
-    },
-    {
       "identity" : "visualeffectview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SilverMarcs/VisualEffectView",

@@ -38,7 +38,7 @@ struct UserMessageView: View {
                         Image(nsImage: NSImage(data: Data(base64Encoded: conversation.base64Image)!)!)
                             .resizable()
                             .scaledToFit()
-                            .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
+                            .frame(maxWidth: 600, maxHeight: 600, alignment: .center)
                             .presentationCompactAdaptation((.popover))
 #else
                         Image(uiImage: UIImage(data: Data(base64Encoded: conversation.base64Image)!)!)

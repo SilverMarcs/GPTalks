@@ -78,6 +78,10 @@ struct iOSMessages: View {
                 if session.resetMarker == session.conversations.count - 1 {
                     scrollToBottom(proxy: proxy)
                 }
+                
+                if session.containsConversationWithImage {
+                    session.configuration.model = session.configuration.provider.visionModels[0]
+                }
             }
             .onChange(of: session.errorDesc) {
                 scrollToBottom(proxy: proxy)
