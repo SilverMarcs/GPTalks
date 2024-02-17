@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 #if os(macOS)
 struct MacOSMessages: View {
@@ -104,8 +105,21 @@ struct MacOSMessages: View {
                     session.configuration.model = session.configuration.provider.preferredModel
                 }
             }
-
-//            Spacer() // enable this to change toolbar color
+            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
+                if let itemProvider = providers.first {
+                    itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in
+                        DispatchQueue.main.async {
+                            if let image = image as? NSImage {
+                                session.inputImage = image
+                            } else {
+                                print("Could not load image: \(String(describing: error))")
+                            }
+                        }
+                    }
+                    return true
+                }
+                return false
+            }
         }
     }
 

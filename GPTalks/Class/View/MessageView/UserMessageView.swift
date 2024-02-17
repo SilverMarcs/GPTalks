@@ -26,7 +26,7 @@ struct UserMessageView: View {
         VStack(alignment: .trailing, spacing: 5) {
             if !conversation.base64Image.isEmpty {
                     HStack {
-                        Text("image")
+                        Text("Image")
                         Image(systemName: "photo.fill")
                     }
                     .bubbleStyle(isMyMessage: false, compact: true)

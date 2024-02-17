@@ -8,6 +8,7 @@
 #if !os(macOS)
 import SwiftUI
 import VisualEffectView
+import UniformTypeIdentifiers
 
 struct iOSMessages: View {
     @Environment(\.colorScheme) var colorScheme
@@ -111,6 +112,21 @@ struct iOSMessages: View {
                 } else {
                     session.configuration.model = session.configuration.provider.preferredModel
                 }
+            }
+            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
+                if let itemProvider = providers.first {
+                    itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in
+                        DispatchQueue.main.async {
+                            if let image = image as? UIImage {
+                                session.inputImage = image
+                            } else {
+                                print("Could not load image: \(String(describing: error))")
+                            }
+                        }
+                    }
+                    return true
+                }
+                return false
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {

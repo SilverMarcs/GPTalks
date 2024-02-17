@@ -77,14 +77,13 @@ extension NSImage {
         self.tiffRepresentation?.base64EncodedString()
     }
     
-    func base64EncodedString() -> String? {
-        guard let tiffRepresentation = tiffRepresentation,
-              let bitmapImageRep = NSBitmapImageRep(data: tiffRepresentation) else {
+    func base64EncodedString(compressionFactor: CGFloat = 0.5) -> String? {
+        guard let imageData = self.tiffRepresentation,
+              let imageRep = NSBitmapImageRep(data: imageData),
+              let jpegData = imageRep.representation(using: .jpeg, properties: [.compressionFactor: compressionFactor]) else {
             return nil
         }
-
-        let jpegData = bitmapImageRep.representation(using: .jpeg, properties: [.compressionFactor: 1.0])
-        return jpegData?.base64EncodedString()
+        return jpegData.base64EncodedString()
     }
 }
 
@@ -96,22 +95,21 @@ extension String {
         return NSImage(data: imageData)
     }
 }
-//
-//func base64EncodeImage(_ image: NSImage) -> String? {
-//    guard let imageData = image.tiffRepresentation else { return nil }
-//    return imageData.base64EncodedString()
-//}
+
 
 #else
 extension UIImage {
     var base64: String? {
-        self.jpegData(compressionQuality: 1)?.base64EncodedString()
+        self.jpegData(compressionQuality: 0.5)?.base64EncodedString()
     }
     
-    func base64EncodedString() -> String? {
-        guard let imageData = self.jpegData(compressionQuality: 1.0) else { return nil }
-        return imageData.base64EncodedString()
+    func base64EncodedString(compressionQuality: CGFloat = 0.5) -> String? {
+        guard let jpegData = self.jpegData(compressionQuality: compressionQuality) else {
+           return nil
+        }
+        return jpegData.base64EncodedString()
     }
+    
 }
 
 extension String {
@@ -122,15 +120,5 @@ extension String {
         return UIImage(data: imageData)
     }
 }
-
-// uncomment later
-//let img = img
-//let base64 = img.base64
-//let rebornImg = base64?.imageFromBase64
-
-//func base64EncodeImage(_ image: UIImage) -> String? {
-//    guard let imageData = image.jpegData(compressionQuality: 1.0) else { return nil }
-//    return imageData.base64EncodedString()
-//}
 
 #endif

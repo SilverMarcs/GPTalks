@@ -108,15 +108,7 @@ import SwiftUI
     var isStreaming = false
     
     var containsConversationWithImage: Bool {
-        let contextAdjustedMessages: [Conversation]
-        
-        if let marker = resetMarker {
-            contextAdjustedMessages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength))
-        } else {
-            contextAdjustedMessages = Array(conversations.suffix(configuration.contextLength - 1))
-        }
-        
-        return contextAdjustedMessages.contains(where: { !$0.base64Image.isEmpty })
+        conversations.contains(where: { !$0.base64Image.isEmpty })
     }
 
     // MARK: - Properties
@@ -395,7 +387,7 @@ import SwiftUI
                 #if os(macOS)
                 try await Task.sleep(nanoseconds: 250_000_000)
                 #else
-                try await Task.sleep(nanoseconds: 200_000_000)
+                try await Task.sleep(nanoseconds: 150_000_000)
                 #endif
                         
                 if AppConfiguration.shared.isMarkdownEnabled {
