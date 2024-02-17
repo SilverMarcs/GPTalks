@@ -162,6 +162,25 @@ import SwiftUI
         }
         save()
     }
+    
+    #if os(macOS)
+    func pasteImageFromClipboard() {
+        let pasteboard = NSPasteboard.general
+
+        // Check for file URLs on the pasteboard
+        if let fileURLs = pasteboard.readObjects(forClasses: [NSURL.self], options: nil) as? [URL],
+           let fileURL = fileURLs.first {
+            // Attempt to create an NSImage from the file URL
+            if let image = NSImage(contentsOf: fileURL) {
+                self.inputImage = image
+            }
+        }
+        // If there are no file URLs, attempt to read image data directly
+        else if let image = pasteboard.readObjects(forClasses: [NSImage.self], options: nil)?.first as? NSImage {
+            self.inputImage = image
+        }
+    }
+    #endif
 
     func setResetContextMarker(conversation: Conversation) {
         if let index = conversations.firstIndex(of: conversation) {

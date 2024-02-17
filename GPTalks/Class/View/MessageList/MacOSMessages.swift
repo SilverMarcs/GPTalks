@@ -47,6 +47,13 @@ struct MacOSMessages: View {
             .onChange(of: viewModel.selectedDialogue) {
                 isTextFieldFocused = true
                 
+                NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (event) -> NSEvent? in
+                    if event.modifierFlags.contains(.command) && event.characters == "v" {
+                        session.pasteImageFromClipboard()
+                    }
+                    return event
+                }
+                
                 if AppConfiguration.shared.alternateMarkdown {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.4)

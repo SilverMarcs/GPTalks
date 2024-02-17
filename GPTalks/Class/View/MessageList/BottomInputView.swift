@@ -89,6 +89,7 @@ struct BottomInputView: View {
                         .background(.primary, in: Circle())
                 }
                 .padding(7)
+                .keyboardShortcut(.escape, modifiers: .command)
             }
         }
     }
