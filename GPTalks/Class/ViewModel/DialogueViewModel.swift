@@ -49,31 +49,38 @@ enum ContentState: String, CaseIterable, Identifiable {
             if !searchText.isEmpty {
                 switch selectedState {
                     case .archived:
-                        archivedDialogues = allDialogues.filter { dialogue in
-                            dialogue.title.localizedCaseInsensitiveContains(searchText)
+                        let filteredDialogues = allDialogues.filter { dialogue in
+                            let isTitleMatch = dialogue.title.localizedCaseInsensitiveContains(searchText)
+                            let isContentMatch = dialogue.conversations.contains { conversation in
+                                conversation.content.localizedCaseInsensitiveContains(searchText)
+                            }
+                            return isTitleMatch || isContentMatch
                         }
+                        archivedDialogues = filteredDialogues.isEmpty ? allDialogues : filteredDialogues
                         break
                     case .active:
-                        activeDialogues = allDialogues.filter { dialogue in
-                            dialogue.title.localizedCaseInsensitiveContains(searchText)
+                        let filteredDialogues = allDialogues.filter { dialogue in
+                            let isTitleMatch = dialogue.title.localizedCaseInsensitiveContains(searchText)
+                            let isContentMatch = dialogue.conversations.contains { conversation in
+                                conversation.content.localizedCaseInsensitiveContains(searchText)
+                            }
+                            return isTitleMatch || isContentMatch
                         }
-                        break
+                        activeDialogues = filteredDialogues.isEmpty ? allDialogues : filteredDialogues
+                    break
                     case .images:
-                        // Update your view model or perform actions for the images state
                         break
                 }
             } else {
                 
                 switch selectedState {
                     case .archived:
-                    archivedDialogues = allDialogues.filter { $0.isArchive }
+                        archivedDialogues = allDialogues.filter { $0.isArchive }
                         break
                     case .active:
-                    activeDialogues = allDialogues.filter { !$0.isArchive }
-                    
+                        activeDialogues = allDialogues.filter { !$0.isArchive }
                         break
                     case .images:
-                        // Update your view model or perform actions for the images state
                         break
                 }
             }

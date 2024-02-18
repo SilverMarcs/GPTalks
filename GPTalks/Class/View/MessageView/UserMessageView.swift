@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct UserMessageView: View {
+    @Environment(DialogueViewModel.self) private var viewModel
+    
     var conversation: Conversation
     var session: DialogueSession
 
@@ -66,8 +68,9 @@ struct UserMessageView: View {
                 #endif
                     
                 Text(conversation.content)
+                    .bubbleStyle(isMyMessage: conversation.content.contains(viewModel.searchText) ? false : true, accentColor: session.configuration.provider.accentColor)
+                    .background(conversation.content.contains(viewModel.searchText) ? .yellow : .clear, in: RoundedRectangle(cornerRadius: radius))
                     .textSelection(.enabled)
-                    .bubbleStyle(isMyMessage: true, accentColor: session.configuration.provider.accentColor)
             }
         }
         .onHover { isHovered in
@@ -103,5 +106,13 @@ struct UserMessageView: View {
         .opacity(isHovered ? 1 : 0)
         .transition(.opacity)
         .animation(.easeOut(duration: 0.15), value: isHovered)
+    }
+    
+    private var radius: CGFloat {
+        #if os(macOS)
+            15
+        #else
+            18
+        #endif
     }
 }

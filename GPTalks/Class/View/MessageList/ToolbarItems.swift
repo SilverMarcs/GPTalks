@@ -40,14 +40,6 @@ struct ToolbarItems: ToolbarContent {
         }
 
         ToolbarItemGroup {
-            providerPicker
-
-            tempSlider
-                .frame(width: 130)
-
-            modelPicker
-                .frame(width: 110)
-
             Menu {
                 Section {
                     Button("Generate Title") {
@@ -56,11 +48,11 @@ struct ToolbarItems: ToolbarContent {
                 }
                 Section {
                     contextPicker
-                    
+
                     Button("Regenerate") {
                         Task { await session.regenerateLastMessage() }
                     }
-                    
+
                     Button("Reset Context") {
                         session.resetContext()
                     }
@@ -73,6 +65,40 @@ struct ToolbarItems: ToolbarContent {
                 Image(systemName: "ellipsis.circle")
             }
             .menuIndicator(.hidden)
+                
+            providerPicker
+
+            tempSlider
+                .frame(width: 130)
+
+            modelPicker
+                .frame(width: 110)
+
+//            Menu {
+//                Section {
+//                    Button("Generate Title") {
+//                        Task { await session.generateTitle() }
+//                    }
+//                }
+//                Section {
+//                    contextPicker
+//                    
+//                    Button("Regenerate") {
+//                        Task { await session.regenerateLastMessage() }
+//                    }
+//                    
+//                    Button("Reset Context") {
+//                        session.resetContext()
+//                    }
+//                }
+//
+//                Button("Delete All Messages") {
+//                    session.removeAllConversations()
+//                }
+//            } label: {
+//                Image(systemName: "ellipsis.circle")
+//            }
+//            .menuIndicator(.hidden)
         }
     }
     

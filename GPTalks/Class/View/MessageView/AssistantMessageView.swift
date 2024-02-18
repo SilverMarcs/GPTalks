@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AssistantMessageView: View {
+    @Environment(DialogueViewModel.self) private var viewModel
     var conversation: Conversation
     var session: DialogueSession
     
@@ -36,6 +37,7 @@ struct AssistantMessageView: View {
                 }
             }
             .bubbleStyle(isMyMessage: false)
+            .background(conversation.content.contains(viewModel.searchText) ? .yellow : .clear, in: RoundedRectangle(cornerRadius: radius))
             .textSelection(.enabled)
 
             #if os(macOS)
@@ -75,6 +77,14 @@ struct AssistantMessageView: View {
         .animation(.easeOut(duration: 0.15), value: isHovered)
     }
 
+    private var radius: CGFloat {
+        #if os(macOS)
+            15
+        #else
+            18
+        #endif
+    }
+    
     private var horizontalPadding: CGFloat {
         #if os(iOS)
             50

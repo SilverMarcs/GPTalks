@@ -24,6 +24,8 @@ import OpenAI
             
             list
                 .listStyle(.inset)
+                .animation(.default, value: viewModel.selectedState)
+                .animation(.default, value: viewModel.searchText)
                 .searchable(text: $viewModel.searchText)
             #if os(iOS)
                 .navigationTitle("Sessions")

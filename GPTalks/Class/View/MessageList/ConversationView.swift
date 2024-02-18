@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ConversationView: View {
+//    @Environment(DialogueViewModel.self) private var viewModel
     var session: DialogueSession
     var conversation: Conversation
 

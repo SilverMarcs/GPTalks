@@ -21,10 +21,12 @@ struct MacOSDialogList: View {
                         DialogueListItem(session: session)
                             .id(session.id)
                             .listRowSeparator(.hidden)
-//                            .accentColor(.accentColor) // to keep row colors untouched
+                            .accentColor(.accentColor) // to keep row colors untouched
                     }
-//                    .accentColor(.blue) // to chaneg list seldction color
+                    .accentColor(Color("niceColorLighter")) // to change list seldction color
+                    .searchable(text: $viewModel.searchText, placement: .toolbar)
                     .animation(.default, value: viewModel.selectedState)
+                    .animation(.default, value: viewModel.searchText)
                     .padding(.top, -10)
                     .onChange(of: viewModel.activeDialogues.count) {
 //                         this is faaar from perfect but is required if we ant to keep list style inset which is required for animations
@@ -58,3 +60,35 @@ struct MacOSDialogList: View {
         }
     }
 }
+
+
+//struct SearchBarView: View {
+//    @Binding var text: String
+//    var placeholder: String = "Search"
+//    
+//    var body: some View {
+//        HStack {
+//            Image(systemName: "magnifyingglass")
+//            
+//            TextField(placeholder, text: $text)
+//                .textFieldStyle(.plain)
+//                
+//            if !text.isEmpty {
+//                Button {
+//                    self.text = ""
+//                } label:  {
+//                    Image(systemName: "xmark.circle.fill")
+////                        .foregroundColor(.gray)
+//                }
+//                .buttonStyle(.plain)
+//            }
+//        }
+//        .padding(6)
+////        .background(RoundedRectangle(cornerRadius: 6).fill(Color(.gray).opacity(0.2)))
+//        .background(RoundedRectangle(cornerRadius: 6).fill(.ultraThinMaterial))
+//        .overlay(
+//            RoundedRectangle(cornerRadius: 7)
+//                .stroke(Color.gray, lineWidth: 0.4) // Adjust the lineWidth to make the border thinner or thicker
+//        )
+//    }
+//}

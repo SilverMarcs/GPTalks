@@ -26,6 +26,7 @@ struct ContentView: View {
                     ImageCreator(switchToChat: Binding.constant(true), generations: $generations)
                 } else {
                     MacOSMessages(session: selectedDialogue)
+//                        .id(selectedDialogue.id)
                         .frame(minWidth: 500)
                 }
                 #else

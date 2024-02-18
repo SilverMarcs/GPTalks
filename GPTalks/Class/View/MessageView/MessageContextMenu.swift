@@ -61,6 +61,7 @@ struct MessageContextMenu: View {
             #endif
 
             #if os(macOS)
+            
             Menu {
                 extraButtons
             } label: {
@@ -79,21 +80,22 @@ struct MessageContextMenu: View {
     
     @ViewBuilder
     var extraButtons: some View {
-        Button {
-            session.setResetContextMarker(conversation: conversation)
-        } label: {
-            Image(systemName: "eraser")
-            Text("Reset Context")
+        Section {
+            Button {
+                session.setResetContextMarker(conversation: conversation)
+            } label: {
+                Image(systemName: "eraser")
+                Text("Reset Context")
+            }
+            
+            Button {
+                let forkedConvos = session.forkSession(conversation: conversation)
+                viewModel.addDialogue(conversations: forkedConvos)
+            } label: {
+                Image(systemName: "arrow.branch")
+                Text("Fork Session")
+            }
         }
-        
-        Button {
-            let forkedConvos = session.forkSession(conversation: conversation)
-            viewModel.addDialogue(conversations: forkedConvos)
-        } label: {
-            Image(systemName: "arrow.branch")
-            Text("Fork Session")
-        }
-
 
         Button(role: .destructive) {
             session.removeConversation(conversation)
@@ -101,5 +103,6 @@ struct MessageContextMenu: View {
             Image(systemName: "trash")
             Text("Delete")
         }
+        .tint(.red)
     }
 }
