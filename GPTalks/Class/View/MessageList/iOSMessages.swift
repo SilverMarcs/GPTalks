@@ -148,6 +148,7 @@ struct iOSMessages: View {
             if !viewModel.searchText.isEmpty {
                 HStack {
                     Text("Clear Search Results")
+                        .font(.callout)
                     Spacer()
                     Button {
                         withAnimation {

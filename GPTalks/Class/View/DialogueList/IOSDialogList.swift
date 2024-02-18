@@ -38,7 +38,8 @@ import OpenAI
                       Menu {
                           Picker("Select State", selection: $viewModel.selectedState) {
                               ForEach(ContentState.allCases) { state in
-                                  Text(state.rawValue).tag(state)
+                                  Label("\(state.rawValue)", systemImage: state.image)
+                                      .tag(state)
                               }
                           }
                           .onChange(of: viewModel.selectedState) {

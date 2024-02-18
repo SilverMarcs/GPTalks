@@ -15,6 +15,17 @@ enum ContentState: String, CaseIterable, Identifiable {
     case images = "Images"
     
     var id: Self { self }
+    
+    var image : String {
+        switch self {
+            case .active:
+                return "tray.full"
+            case .archived:
+                return "archivebox"
+            case .images:
+                return "photo"
+        }
+    }
 }
 
 @Observable class DialogueViewModel {
@@ -49,13 +60,10 @@ enum ContentState: String, CaseIterable, Identifiable {
             if !searchText.isEmpty {
                 switch selectedState {
                     case .archived:
-//                        let filteredDialogues = allDialogues.filter { dialogue in
                         let filteredDialogues = archivedDialogues.filter { dialogue in
-//                            let isTitleMatch = dialogue.title.localizedCaseInsensitiveContains(searchText)
                             let isContentMatch = dialogue.conversations.contains { conversation in
                                 conversation.content.localizedCaseInsensitiveContains(searchText)
                             }
-//                            return isTitleMatch || isContentMatch
                             return isContentMatch
                         }
                     #if os(macOS) // macos has a bug where if no matches, search bar disappears
@@ -65,13 +73,10 @@ enum ContentState: String, CaseIterable, Identifiable {
                     #endif
                         break
                     case .active:
-//                        let filteredDialogues = allDialogues.filter { dialogue in
                         let filteredDialogues = activeDialogues.filter { dialogue in
-//                            let isTitleMatch = dialogue.title.localizedCaseInsensitiveContains(searchText)
                             let isContentMatch = dialogue.conversations.contains { conversation in
                                 conversation.content.localizedCaseInsensitiveContains(searchText)
                             }
-//                            return isTitleMatch || isContentMatch
                             return isContentMatch
                         }
                     #if os(macOS) // macos has a bug where if no matches, search bar disappears
