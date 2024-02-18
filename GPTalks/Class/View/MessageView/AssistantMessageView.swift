@@ -37,7 +37,7 @@ struct AssistantMessageView: View {
                 }
             }
             .bubbleStyle(isMyMessage: false)
-            .background(conversation.content.contains(viewModel.searchText) ? .yellow : .clear, in: RoundedRectangle(cornerRadius: radius))
+            .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow : .clear, in: RoundedRectangle(cornerRadius: radius))
             .textSelection(.enabled)
 
             #if os(macOS)

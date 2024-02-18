@@ -49,25 +49,37 @@ enum ContentState: String, CaseIterable, Identifiable {
             if !searchText.isEmpty {
                 switch selectedState {
                     case .archived:
-                        let filteredDialogues = allDialogues.filter { dialogue in
-                            let isTitleMatch = dialogue.title.localizedCaseInsensitiveContains(searchText)
+//                        let filteredDialogues = allDialogues.filter { dialogue in
+                        let filteredDialogues = archivedDialogues.filter { dialogue in
+//                            let isTitleMatch = dialogue.title.localizedCaseInsensitiveContains(searchText)
                             let isContentMatch = dialogue.conversations.contains { conversation in
                                 conversation.content.localizedCaseInsensitiveContains(searchText)
                             }
-                            return isTitleMatch || isContentMatch
+//                            return isTitleMatch || isContentMatch
+                            return isContentMatch
                         }
-                        archivedDialogues = filteredDialogues.isEmpty ? allDialogues : filteredDialogues
+                    #if os(macOS) // macos has a bug where if no matches, search bar disappears
+                        archivedDialogues = filteredDialogues.isEmpty ? archivedDialogues : filteredDialogues
+                    #else
+                        archivedDialogues = filteredDialogues
+                    #endif
                         break
                     case .active:
-                        let filteredDialogues = allDialogues.filter { dialogue in
-                            let isTitleMatch = dialogue.title.localizedCaseInsensitiveContains(searchText)
+//                        let filteredDialogues = allDialogues.filter { dialogue in
+                        let filteredDialogues = activeDialogues.filter { dialogue in
+//                            let isTitleMatch = dialogue.title.localizedCaseInsensitiveContains(searchText)
                             let isContentMatch = dialogue.conversations.contains { conversation in
                                 conversation.content.localizedCaseInsensitiveContains(searchText)
                             }
-                            return isTitleMatch || isContentMatch
+//                            return isTitleMatch || isContentMatch
+                            return isContentMatch
                         }
-                        activeDialogues = filteredDialogues.isEmpty ? allDialogues : filteredDialogues
-                    break
+                    #if os(macOS) // macos has a bug where if no matches, search bar disappears
+                        activeDialogues = filteredDialogues.isEmpty ? activeDialogues : filteredDialogues
+                    #else
+                        activeDialogues = filteredDialogues
+                    #endif
+                        break
                     case .images:
                         break
                 }
@@ -97,9 +109,9 @@ enum ContentState: String, CaseIterable, Identifiable {
     var shouldShowPlaceholder: Bool {
         switch selectedState {
             case .archived:
-                return archivedDialogues.isEmpty
+                return archivedDialogues.isEmpty || (!searchText.isEmpty && archivedDialogues.isEmpty)
             case .active:
-                return activeDialogues.isEmpty
+                return activeDialogues.isEmpty  || (!searchText.isEmpty && activeDialogues.isEmpty)
             case .images:
                 return true
         }
@@ -119,9 +131,9 @@ enum ContentState: String, CaseIterable, Identifiable {
     var placeHolderText: String {
         switch selectedState {
             case .archived:
-                return "No archived chats"
+                return (!searchText.isEmpty && archivedDialogues.isEmpty) ? "No Search Results" : "No archived chats"
             case .active:
-                return "No active chats"
+                return (!searchText.isEmpty && activeDialogues.isEmpty) ? "No Search Results" : "No active chats"
             case .images:
                 return "Generate Images"
         }

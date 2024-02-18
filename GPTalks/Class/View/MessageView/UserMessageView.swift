@@ -68,8 +68,8 @@ struct UserMessageView: View {
                 #endif
                     
                 Text(conversation.content)
-                    .bubbleStyle(isMyMessage: conversation.content.contains(viewModel.searchText) ? false : true, accentColor: session.configuration.provider.accentColor)
-                    .background(conversation.content.contains(viewModel.searchText) ? .yellow : .clear, in: RoundedRectangle(cornerRadius: radius))
+                    .bubbleStyle(isMyMessage: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? false : true, accentColor: session.configuration.provider.accentColor)
+                    .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow : .clear, in: RoundedRectangle(cornerRadius: radius))
                     .textSelection(.enabled)
             }
         }

@@ -69,7 +69,6 @@
 		E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EEB29CA9F7800AFA884 /* Splash.swift */; };
 		E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E4C65F1029CAA08400AFA884 /* MarkdownUI */; };
 		E4C65F1829CBEE2400AFA884 /* BottomInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */; };
-		E4C65F2029D0649800AFA884 /* DialogueSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65F1F29D0649800AFA884 /* DialogueSettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,7 +142,6 @@
 		E4C65EDE29CA9F7800AFA884 /* IosSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IosSettingsView.swift; sourceTree = "<group>"; };
 		E4C65EEB29CA9F7800AFA884 /* Splash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Splash.swift; sourceTree = "<group>"; };
 		E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomInputView.swift; sourceTree = "<group>"; };
-		E4C65F1F29D0649800AFA884 /* DialogueSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueSettingsView.swift; sourceTree = "<group>"; };
 		E4EF056C2A3B3744005CF741 /* GPTalks-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GPTalks-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -305,7 +303,6 @@
 			children = (
 				E4C65F1729CBEE2400AFA884 /* BottomInputView.swift */,
 				E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */,
-				E4C65F1F29D0649800AFA884 /* DialogueSettingsView.swift */,
 				086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */,
 				0829D1122B3166D900DFFBB1 /* iOSMessages.swift */,
 				0829D1142B3166E300DFFBB1 /* MacOSMessages.swift */,
@@ -516,7 +513,6 @@
 				086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */,
 				08AF74742B720F5B00FB081F /* ImageCreator.swift in Sources */,
 				08376D832B7CF0F4003258D1 /* ZoomableImageView.swift in Sources */,
-				E4C65F2029D0649800AFA884 /* DialogueSettingsView.swift in Sources */,
 				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
 				08D5A2932B7DFE2E00BA1CE0 /* OpenAIService.swift in Sources */,

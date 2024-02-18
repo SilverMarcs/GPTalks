@@ -12,11 +12,13 @@ import UniformTypeIdentifiers
 struct MacOSMessages: View {
     @Environment(DialogueViewModel.self) private var viewModel
 
-    var session: DialogueSession
+    @Bindable var session: DialogueSession
 
     @State private var previousContent: String?
     @State private var isUserScrolling = false
     @State private var contentChangeTimer: Timer? = nil
+    
+    @State var isShowSysPrompt: Bool = false
 
     @FocusState var isTextFieldFocused: Bool
 
@@ -24,11 +26,7 @@ struct MacOSMessages: View {
         ScrollViewReader { proxy in
             normalList
             .navigationTitle(session.isGeneratingTitle ? "Generating Title..." : session.title)
-//            .navigationSubtitle("Context: \(session.getMessageCountAfterResetMarker())/\(session.configuration.contextLength)")
             .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
-            .toolbar {
-                ToolbarItems(session: session)
-            }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
                     session: session,
@@ -118,6 +116,87 @@ struct MacOSMessages: View {
                     return true
                 }
                 return false
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigation) {
+                    Menu {
+                        Section {
+                            Button("Generate Title") {
+                                Task { await session.generateTitle() }
+                            }
+                            
+                            Button("System Prompt") {
+                                isShowSysPrompt = true
+                            }
+                        }
+                        
+                        Section {
+                            ContextPicker(session: session)
+
+                            Button("Regenerate") {
+                                Task { await session.regenerateLastMessage() }
+                            }
+
+                            Button("Reset Context") {
+                                session.resetContext()
+                            }
+                        }
+
+                        Button("Delete All Messages") {
+                            session.removeAllConversations()
+                        }
+                    } label: {
+                        Image(systemName: "slider.vertical.3")
+                    }
+                    .menuIndicator(.hidden)
+                    
+                    Button {
+                        isShowSysPrompt = true
+                    } label: {
+                        Image(systemName: "square.text.square")
+                    }
+                }
+
+                ToolbarItemGroup {
+                        
+                    ProviderPicker(session: session)
+
+                    TempSlider(session: session)
+                        .frame(width: 130)
+
+                    ModelPicker(session: session)
+                        .frame(width: 90)
+                }
+            }
+            .sheet(isPresented: $isShowSysPrompt) {
+                VStack {
+                    HStack {
+                        Button("Hidden") {
+                            
+                        }
+                        .opacity(0)
+                        
+                        Spacer()
+                        
+                        Text("System Prompt")
+                            .bold()
+                        
+                        Spacer()
+                        
+                        Button("Done") {
+                            isShowSysPrompt = false
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                    
+                    Divider()
+                    
+                    TextEditor(text: $session.configuration.systemPrompt)
+                        .font(.body)
+                        .frame(width: 300, height: 150)
+                        .scrollContentBackground(.hidden)
+                }
+                .padding(10)
             }
         }
     }

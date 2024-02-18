@@ -144,6 +144,24 @@ struct iOSMessages: View {
                 sysPromptSheet
             }
         }
+        .safeAreaInset(edge: .top) {
+            if !viewModel.searchText.isEmpty {
+                HStack {
+                    Text("Clear Search Results")
+                    Spacer()
+                    Button {
+                        withAnimation {
+                            viewModel.searchText = ""
+                        }
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                    }
+                    .foregroundStyle(.secondary)
+                }
+                .padding(10)
+                .background(.bar)
+            }
+        }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             BottomInputView(
                 session: session,
