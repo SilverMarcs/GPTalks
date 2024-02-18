@@ -130,12 +130,15 @@ struct BottomInputView: View {
         Button {
             importing = true
         } label: {
-            Image(systemName: "plus.circle.fill")
+            Image(systemName: "plus")
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageSize - 2, height: imageSize - 2)
+                .padding(6)
+                .fontWeight(.semibold)
                 .foregroundStyle(.secondary)
-                .opacity(0.6)
+                .background(.gray.opacity(0.2))
+                .clipShape(Circle())
+                .frame(width: imageSize + 2, height: imageSize + 2)
         }
         .keyboardShortcut("i", modifiers: .command)
         .fileImporter(
@@ -229,8 +232,9 @@ struct BottomInputView: View {
         }
         .keyboardShortcut(.return, modifiers: .command)
         .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
-        .disabled(session.input.isEmpty || session.isReplying())
-        .fontWeight(session.input.isEmpty ? .regular : .semibold)
+        .disabled(empty || session.isReplying())
+        .fontWeight(empty ? .regular : .semibold)
+        .animation(.interactiveSpring, value: empty)
 //        .contentShape(Rectangle())
     }
 

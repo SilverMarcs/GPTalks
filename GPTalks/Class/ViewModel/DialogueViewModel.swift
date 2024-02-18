@@ -144,6 +144,24 @@ enum ContentState: String, CaseIterable, Identifiable {
     func toggleArchivedStatus() {
         isArchivedSelected.toggle()
     }
+    
+    func toggleChatTypes() {
+        if isArchivedSelected {
+            isArchivedSelected.toggle()
+            selectedState = .active
+        } else {
+            isArchivedSelected.toggle()
+            selectedState = .archived
+        }
+    }
+    
+    func tggleImageAndChat() {
+        if selectedState == .images {
+            selectedState = .active
+        } else {
+            selectedState = .images
+        }
+    }
 
     func toggleArchive(session: DialogueSession) {
         session.toggleArchive()

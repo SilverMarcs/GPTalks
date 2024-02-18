@@ -22,16 +22,7 @@ struct MacOSMessages: View {
 
     var body: some View {
         ScrollViewReader { proxy in
-            List {
-                VStack {
-                    ForEach(session.conversations) { conversation in
-                        ConversationView(session: session, conversation: conversation)
-                    }
-
-                    ErrorDescView(session: session)
-                }
-                .id("bottomID")
-            }
+            normalList
             .navigationTitle(session.title)
             .navigationSubtitle("Context: \(session.getMessageCountAfterResetMarker())/\(session.configuration.contextLength)")
             .toolbar {
@@ -130,6 +121,19 @@ struct MacOSMessages: View {
         }
     }
 
+    private var normalList: some View {
+        List {
+            VStack {
+                ForEach(session.conversations) { conversation in
+                    ConversationView(session: session, conversation: conversation)
+                }
+
+                ErrorDescView(session: session)
+            }
+            .id("bottomID")
+        }
+    }
+    
     private var alternateList: some View {
         // not used for now
         List {
