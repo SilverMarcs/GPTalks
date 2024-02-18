@@ -45,9 +45,9 @@ struct EditingView: View {
     private var iOSEditingView: some View {
         NavigationView {
             Form {
-                SelectableTextField(text: $editingMessage)
+//                SelectableTextField(text: $editingMessage)
+                TextField("System Prompt", text: $editingMessage, axis: .vertical)
                     .focused($isTextFieldFocused)
-
             }
             .onAppear {
                 isTextFieldFocused = true
@@ -72,7 +72,7 @@ struct EditingView: View {
                 }
             }
         }
-        .presentationDetents([.medium])
+//        .presentationDetents([.medium])
     }
     #endif
     

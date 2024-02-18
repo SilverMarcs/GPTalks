@@ -52,15 +52,23 @@ struct GPTalks: App {
             }
             
             CommandGroup(after: .sidebar) {
-                Button(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") {
-                    viewModel.toggleChatTypes()
+                Section {
+                    Button("Toggle Markdown") {
+                        AppConfiguration.shared.isMarkdownEnabled.toggle()
+                    }
                 }
-                .keyboardShortcut("a", modifiers: [.command, .shift])
                 
-                Button("Image Generations") {
-                    viewModel.tggleImageAndChat()
+                Section {
+                    Button(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") {
+                        viewModel.toggleChatTypes()
+                    }
+                    .keyboardShortcut("a", modifiers: [.command, .shift])
+                    
+                    Button("Image Generations") {
+                        viewModel.tggleImageAndChat()
+                    }
+                    .keyboardShortcut("i", modifiers: [.command, .shift])
                 }
-                .keyboardShortcut("i", modifiers: [.command, .shift])
             }
         }
 #if os(macOS)

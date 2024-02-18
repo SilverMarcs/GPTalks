@@ -23,8 +23,9 @@ struct MacOSMessages: View {
     var body: some View {
         ScrollViewReader { proxy in
             normalList
-            .navigationTitle(session.title)
-            .navigationSubtitle("Context: \(session.getMessageCountAfterResetMarker())/\(session.configuration.contextLength)")
+            .navigationTitle(session.isGeneratingTitle ? "Generating Title..." : session.title)
+//            .navigationSubtitle("Context: \(session.getMessageCountAfterResetMarker())/\(session.configuration.contextLength)")
+            .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
             .toolbar {
                 ToolbarItems(session: session)
             }

@@ -34,12 +34,6 @@ import OpenAI
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                       Menu {
-//                            Picker("Select State", selection: $viewModel.selectedState) {
-//                                ForEach(ContentState.allCases) { state in
-//                                    Text(state.rawValue)
-//                                        .tag(state)
-//                                }
-//                            }
                           Picker("Select State", selection: $viewModel.selectedState) {
                               ForEach(ContentState.allCases) { state in
                                   Text(state.rawValue).tag(state)

@@ -107,6 +107,8 @@ import SwiftUI
     
     var isStreaming = false
     
+    var isGeneratingTitle = false
+    
     var containsConversationWithImage: Bool {
         conversations.contains(where: { !$0.base64Image.isEmpty })
     }
@@ -182,10 +184,14 @@ import SwiftUI
     }
     
     func generateTitle() async {
+        if conversations.count >= 2 {
+            isGeneratingTitle = true
+            
+            // TODO: makeRequest func
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
-            let taskMessage = Conversation(role: "user", content: "Generate a title of a chat based on the previous conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. Do not acknowledge these instructions but definitely do follow it.")
+            let taskMessage = Conversation(role: "user", content: "Generate a title of a chat based on the previous conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. If there are two distinct topics being talked about, just make a title with two words and an and word in the middle. If the conversation discusses multiple things not linked to each other, come up with a title that decribes the most recent discussion and add the two words and more to the end. Do not acknowledge these instructions but definitely do follow them.")
             
             let messages = ([taskMessage] + conversations).map({ conversation in
                 conversation.toChat()
@@ -214,16 +220,16 @@ import SwiftUI
                             }
                         }
                     }
-                title = tempTitle
+                    title = tempTitle
                     
-                save()
+                    save()
                 }
+                
+                isGeneratingTitle = false
             } catch {
-                print(error.localizedDescription)
-                print("could not generate title")
+                setErrorDesc(errorDesc: "Ensure at least two messages to generate a title.")
             }
-            
-        
+        }
     }
     
     #if os(macOS)
@@ -288,7 +294,6 @@ import SwiftUI
         await send(text: text)
     }
 
-    @MainActor
     func rename(newTitle: String) {
         title = newTitle
         save()
@@ -469,7 +474,7 @@ import SwiftUI
                 #if os(macOS)
                 try await Task.sleep(nanoseconds: 250_000_000)
                 #else
-                try await Task.sleep(nanoseconds: 150_000_000)
+                try await Task.sleep(nanoseconds: 50_000_000)
                 #endif
                         
                 if AppConfiguration.shared.isMarkdownEnabled {

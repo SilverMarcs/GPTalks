@@ -55,7 +55,7 @@ struct Bubble: ViewModifier {
         }
         #else
         if compact {
-            9
+            10
         } else {
             13
         }
@@ -71,7 +71,7 @@ struct Bubble: ViewModifier {
         }
         #else
         if compact {
-            5
+            6
         } else {
             8
         }

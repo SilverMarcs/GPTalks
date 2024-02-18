@@ -7,8 +7,8 @@
 
 #if !os(macOS)
 import SwiftUI
-import VisualEffectView
 import UniformTypeIdentifiers
+import VisualEffectView
 
 struct iOSMessages: View {
     @Environment(\.colorScheme) var colorScheme
@@ -18,6 +18,11 @@ struct iOSMessages: View {
 
     @State private var shouldStopScroll: Bool = false
     @State private var showScrollButton: Bool = false
+
+    @State private var showSysPromptSheet: Bool = false
+
+    @State private var showRenameDialogue = false
+    @State private var newName = ""
 
     @FocusState var isTextFieldFocused: Bool
 
@@ -79,7 +84,7 @@ struct iOSMessages: View {
                 if session.resetMarker == session.conversations.count - 1 {
                     scrollToBottom(proxy: proxy)
                 }
-                
+
                 if session.containsConversationWithImage {
                     session.configuration.model = session.configuration.provider.visionModels[0]
                 }
@@ -115,7 +120,7 @@ struct iOSMessages: View {
             }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
-                    itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in
+                    itemProvider.loadObject(ofClass: UIImage.self) { image, error in
                         DispatchQueue.main.async {
                             if let image = image as? UIImage {
                                 session.inputImage = image
@@ -128,16 +133,23 @@ struct iOSMessages: View {
                 }
                 return false
             }
+            .alert("Rename Session", isPresented: $showRenameDialogue) {
+                TextField("Enter new name", text: $newName)
+                Button("Rename", action: {
+                    session.rename(newTitle: newName)
+                })
+                Button("Cancel", role: .cancel, action: {})
+            }
+            .sheet(isPresented: $showSysPromptSheet) {
+                sysPromptSheet
+            }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             BottomInputView(
                 session: session,
                 focused: _isTextFieldFocused
             )
-//            .onTapGesture {
-//                isTextFieldFocused = true
-//            }
-        #if os(iOS)
+            #if os(iOS)
             .background(
                 VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.8, blurRadius: 18, scale: 1)
                     .ignoresSafeArea()
@@ -146,12 +158,109 @@ struct iOSMessages: View {
             .background(.regularMaterial)
             #endif
         }
-//        #if os(visionOS)
-//        .navigationTitle(session.title)
-//        #endif
+        #if os(visionOS)
+        .navigationTitle(session.title)
+        #endif
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItems(session: session)
+            ToolbarItem(placement: .principal) {
+                navTitle
+            }
+
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
+                    Section {
+                        Menu {
+                            Button {
+                                Task { await session.generateTitle() }
+                            } label: {
+                                Label("Generate", systemImage: "wand.and.stars")
+                            }
+
+                            Button {
+                                newName = session.title
+                                showRenameDialogue.toggle()
+                            } label: {
+                                Label("Rename", systemImage: "rectangle.and.pencil.and.ellipsis")
+                            }
+
+                        } label: {
+                            Label("Title", systemImage: "textformat.alt")
+                        }
+
+                        Menu {
+                            Button {
+                                showSysPromptSheet.toggle()
+                            } label: {
+                                Label("Edit", systemImage: "rectangle.and.pencil.and.ellipsis")
+                            }
+
+                        } label: {
+                            Label("System Prompt", systemImage: "square.text.square")
+                        }
+                    }
+
+                    Section {
+                        Menu {
+                            ProviderPicker(session: session)
+                        } label: {
+                            Label("Provider", systemImage: "building.2")
+                        }
+
+                        Menu {
+                            ModelPicker(session: session)
+                        } label: {
+                            Label("Model", systemImage: "cube.box")
+                        }
+
+                        Menu {
+                            TempPicker(session: session)
+                        } label: {
+                            Label("Temperature", systemImage: "thermometer.sun")
+                        }
+
+                        Menu {
+                            ContextPicker(session: session)
+                        } label: {
+                            Label("Context", systemImage: "clock.arrow.circlepath")
+                        }
+                    }
+
+                    Section {
+                        Menu {
+                            Button(role: .destructive) {
+                                session.removeAllConversations()
+                            } label: {
+                                Label("All Messages", systemImage: "trash")
+                            }
+                        } label: {
+                            Label("Delete Messages", systemImage: "trash")
+                        }
+                    }
+                } label: {
+                    Label("Config", systemImage: "ellipsis.circle")
+                }
+            }
+        }
+    }
+
+    private var navTitle: some View {
+        HStack {
+            ProviderImage(radius: 9, color: session.configuration.provider.accentColor, frame: 30)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(session.isGeneratingTitle ? "Generating Title..." : session.title)
+                    .font(.system(size: 16))
+                    .foregroundStyle(.primary)
+                    .bold()
+                
+                HStack(spacing: 3) {
+                    Text(session.configuration.systemPrompt)
+                        .frame(maxWidth: 200, alignment: .leading)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                }
+            }
+            Spacer()
         }
     }
 
@@ -181,7 +290,22 @@ struct iOSMessages: View {
                 .padding(.trailing, 15)
         }
         .opacity(showScrollButton ? 1 : 0)
-//            .animation(.interactiveSpring, value: showScrollButton)
+    }
+
+    private var sysPromptSheet: some View {
+        NavigationView {
+            Form {
+                TextField("System Prompt", text: $session.configuration.systemPrompt, axis: .vertical)
+                    .lineLimit(4, reservesSpace: true)
+            }
+            .navigationTitle("System Prompt")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button("Done") {
+                    showSysPromptSheet = false
+                }
+            }
+        }
     }
 }
 
