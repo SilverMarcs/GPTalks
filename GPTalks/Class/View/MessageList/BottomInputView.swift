@@ -32,11 +32,15 @@ struct BottomInputView: View {
                 #if os(macOS)
                 imagePicker
                 #else
-                iosImagePicker
+//                iosImagePicker
+                iosMore
                 #endif
 //                resetContextButton
                 
                 inputBox
+                    .onTapGesture {
+                        focused = true
+                    }
                 
                 #if os(macOS)
                 if session.isReplying() {
@@ -95,12 +99,54 @@ struct BottomInputView: View {
     }
     
     #if !os(macOS)
-    var iosImagePicker: some View {
-        PhotosPicker(
-            selection: $selectedItem,
-            matching: .images,
-            photoLibrary: .shared()
-        ) {
+//    var iosImagePicker: some View {
+//        PhotosPicker(
+//            selection: $selectedItem,
+//            matching: .images,
+//            photoLibrary: .shared()
+//        ) {
+//            Image(systemName: "plus")
+//                .resizable()
+//                .scaledToFit()
+//                .padding(10)
+//                .fontWeight(.semibold)
+//                .foregroundStyle(.secondary)
+//                .background(.gray.opacity(0.2))
+//                .clipShape(Circle())
+//                .frame(width: imageSize + 3, height: imageSize + 3)
+//        }
+//        .onChange(of: selectedItem) { newItem in
+//            // Load the selected image
+//            guard let newItem = newItem else { return }
+//            Task {
+//                // Retrieve selected asset in the form of Data
+//                if let data = try? await newItem.loadTransferable(type: Data.self) {
+//                    // Convert Data to UIImage and assign it to inputImage
+//                    session.inputImage = UIImage(data: data)
+//                    selectedItem = nil
+//                }
+//            }
+//        }
+//    }
+    
+    var iosMore: some View {
+        Menu {
+            Button {
+                session.resetContext()
+            } label: {
+                Label("Reset Context", systemImage: "eraser.fill")
+            }
+            
+            Button {
+                Task {
+                    await session.regenerateLastMessage()
+                }
+            } label: {
+                Label("Regenerate", systemImage: "arrow.2.circlepath")
+            }
+            
+            iosImagePicker
+        } label: {
             Image(systemName: "plus")
                 .resizable()
                 .scaledToFit()
@@ -110,6 +156,19 @@ struct BottomInputView: View {
                 .background(.gray.opacity(0.2))
                 .clipShape(Circle())
                 .frame(width: imageSize + 3, height: imageSize + 3)
+        }
+        .padding(20) // Increase tappable area
+        .padding(-20) // Cancel out visual expansion
+        .background(Color.clear)
+    }
+    
+    var iosImagePicker: some View {
+        PhotosPicker(
+            selection: $selectedItem,
+            matching: .images,
+            photoLibrary: .shared()
+        ) {
+            Label("Add Image", systemImage: "photo.fill")
         }
         .onChange(of: selectedItem) { newItem in
             // Load the selected image
@@ -124,6 +183,7 @@ struct BottomInputView: View {
             }
         }
     }
+    
     #endif
     
     var imagePicker: some View {

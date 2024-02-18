@@ -11,7 +11,7 @@ import OpenAI
 
     struct IOSDialogList: View {
         @Bindable var viewModel: DialogueViewModel
-        @State var generations: [ImageObject] = []
+        @State var generations: [ImageGeneration] = []
         @State var navigateToImages = false
         @State var switchToChat = false
 

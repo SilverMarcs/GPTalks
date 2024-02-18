@@ -8,7 +8,7 @@
 import Foundation
 import OpenAI
 
-struct ImageObject: Codable, Identifiable, Hashable {
+struct ImageGeneration: Codable, Identifiable, Hashable {
     var id: UUID = UUID()
     var isGenerating: Bool = false
     var prompt: String

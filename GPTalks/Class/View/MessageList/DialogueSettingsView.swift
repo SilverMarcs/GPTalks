@@ -55,24 +55,30 @@ struct DialogueSettingsView: View {
     var iOS: some View {
         NavigationView {
             Form {
-                Section("Parameters") {
-                    providerPicker
-                        .onChange(of: session.configuration.provider) {
-                            session.configuration.model = session.configuration.provider.preferredModel
-                        }
-                    
-                    modelPicker
-
-                    contextPicker
-                    
-                    tempStepper
+//                Section("Parameters") {
+//                    providerPicker
+//                        .onChange(of: session.configuration.provider) {
+//                            session.configuration.model = session.configuration.provider.preferredModel
+//                        }
+//                    
+//                    modelPicker
+//
+//                    contextPicker
+//                    
+//                    tempStepper
+//                }
+                
+                Section("Session Title") {
+                    TextField("Enter a title", text: $session.title, axis: .vertical)
+//                        .focused($focusedField, equals: .systemPrompt)
+//                        .lineLimit(4, reservesSpace: true)
                 }
                 
                 Section("System Prompt") {
                     systemPrompt
                 }
             }
-            .navigationTitle($session.title)
+            .navigationTitle("More Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem {
@@ -98,10 +104,6 @@ struct DialogueSettingsView: View {
     
     var modelPicker: some View {
         Picker("Model", selection: $session.configuration.model) {
-//            ForEach(configuration.provider.visionModels + configuration.provider.chatModels, id: \.self) { model in
-//                Text(model.name)
-//                    .tag(model.id)
-//            }
             if session.containsConversationWithImage || session.inputImage != nil {
                 ForEach(session.configuration.provider.visionModels, id: \.self) { model in
                     Text(model.name)

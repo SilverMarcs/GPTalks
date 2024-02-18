@@ -182,7 +182,6 @@ import SwiftUI
     }
     
     func generateTitle() async {
-        if conversations.count == 3 {
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
@@ -224,7 +223,7 @@ import SwiftUI
                 print("could not generate title")
             }
             
-        }
+        
     }
     
     #if os(macOS)

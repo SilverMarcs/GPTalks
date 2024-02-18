@@ -17,7 +17,7 @@ struct ImageCreator: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var configuration: AppConfiguration = .shared
 
-    @Binding var generations: [ImageObject]
+    @Binding var generations: [ImageGeneration]
     @State var prompt: String = ""
     @State var number: Int = 1
 
@@ -189,7 +189,7 @@ struct ImageCreator: View {
         let openAIconfig = AppConfiguration.shared.preferredImageService.config
         let service = OpenAI(configuration: openAIconfig)
         // Step 1: Create an ImageObject with the prompt and empty URLs.
-        let tempImageObject = ImageObject(isGenerating: true, prompt: prompt, imageModel: configuration.defaultImageModel, urls: [])
+        let tempImageObject = ImageGeneration(isGenerating: true, prompt: prompt, imageModel: configuration.defaultImageModel, urls: [])
 
         // Add this temporary object to your collection.
         generations.append(tempImageObject)

@@ -14,7 +14,7 @@ struct iOSMessages: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(DialogueViewModel.self) private var viewModel
 
-    var session: DialogueSession
+    @Bindable var session: DialogueSession
 
     @State private var shouldStopScroll: Bool = false
     @State private var showScrollButton: Bool = false
@@ -134,9 +134,9 @@ struct iOSMessages: View {
                 session: session,
                 focused: _isTextFieldFocused
             )
-            .onTapGesture {
-                isTextFieldFocused = true
-            }
+//            .onTapGesture {
+//                isTextFieldFocused = true
+//            }
         #if os(iOS)
             .background(
                 VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.8, blurRadius: 18, scale: 1)
@@ -146,9 +146,9 @@ struct iOSMessages: View {
             .background(.regularMaterial)
             #endif
         }
-        #if os(visionOS)
-        .navigationTitle(session.title)
-        #endif
+//        #if os(visionOS)
+//        .navigationTitle(session.title)
+//        #endif
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItems(session: session)

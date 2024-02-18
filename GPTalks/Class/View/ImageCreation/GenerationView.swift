@@ -9,7 +9,7 @@ import NetworkImage
 import SwiftUI
 
 struct GenerationView: View {
-    var generation: ImageObject
+    var generation: ImageGeneration
     @Binding var shouldScroll: Bool
     
     var body: some View {

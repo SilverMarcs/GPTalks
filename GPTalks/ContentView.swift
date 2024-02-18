@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(DialogueViewModel.self) private var viewModel
-    @State var generations: [ImageObject] = []
+    @State var generations: [ImageGeneration] = []
 
     var body: some View {
         NavigationSplitView {
