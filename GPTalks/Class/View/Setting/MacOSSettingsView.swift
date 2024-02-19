@@ -11,7 +11,7 @@ struct MacOSSettingsView: View {
     var body: some View {
         TabView {
             DefaultConfigView()
-                .frame(width: 650, height: 570)
+                .frame(width: 650, height: 620)
                 .tabItem {
                     Label("Default", systemImage: "cpu")
                 }

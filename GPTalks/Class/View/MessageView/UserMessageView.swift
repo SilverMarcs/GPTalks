@@ -23,54 +23,11 @@ struct UserMessageView: View {
     @State var showPreview: Bool = false
 
     var body: some View {
-        let lastUserMessage = session.conversations.filter { $0.role == "user" }.last
-        
-        VStack(alignment: .trailing, spacing: 5) {
-            if !conversation.base64Image.isEmpty {
-                    HStack {
-                        Text("Image")
-                        Image(systemName: "photo.fill")
-                    }
-                    .bubbleStyle(isMyMessage: false, compact: true)
-                    .onTapGesture {
-                        showPreview = true
-                    }
-                    .popover(isPresented: $showPreview) {
-#if os(macOS)
-                        Image(nsImage: NSImage(data: Data(base64Encoded: conversation.base64Image)!)!)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxWidth: 600, maxHeight: 600, alignment: .center)
-                            .presentationCompactAdaptation((.popover))
-#else
-                        Image(uiImage: UIImage(data: Data(base64Encoded: conversation.base64Image)!)!)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
-                            .presentationCompactAdaptation((.popover))
-#endif
-                    }
-            }
-                
-            HStack(alignment: .lastTextBaseline) {
-                #if os(macOS)
-                    optionsMenu
-                    
-                    if lastUserMessage?.id == conversation.id {
-                        Button("") {
-                            editingMessage = conversation.content
-                            isEditing = true
-                        }
-                        .frame(width: 0, height: 0)
-                        .hidden()
-                        .keyboardShortcut("e", modifiers: .command)
-                    }
-                #endif
-                    
-                Text(conversation.content)
-                    .bubbleStyle(isMyMessage: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? false : true, accentColor: session.configuration.provider.accentColor)
-                    .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow : .clear, in: RoundedRectangle(cornerRadius: radius))
-                    .textSelection(.enabled)
+        Group {
+            if AppConfiguration.shared.alternatChatUi {
+                alternateUI
+            } else {
+                originalUI
             }
         }
         .onHover { isHovered in
@@ -94,6 +51,105 @@ struct UserMessageView: View {
         #endif
     }
     
+    var alternateUI: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "person.circle.fill") // TODO: Replace with your avatar image
+                .resizable()
+                .scaledToFit()
+                .frame(width: 17, height: 17)
+                .foregroundStyle(.secondary)
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("User")
+                    .font(.title3)
+                    .bold()
+                Text(conversation.content)
+                    .textSelection(.enabled)
+                
+                if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
+                    editBtn
+                }
+                
+                HStack {
+                    Spacer()
+                    
+                    MessageContextMenu2(session: session, conversation: conversation) {
+                        editingMessage = conversation.content
+                        isEditing = true
+                    } toggleTextSelection: {
+                        canSelectText.toggle()
+                    }
+                }
+                .opacity(isHovered ? 1 : 0)
+                .transition(.opacity)
+                .animation(.easeOut(duration: 0.15), value: isHovered)
+            }
+
+            Spacer()
+        }
+        .padding(.top)
+        .padding(.horizontal)
+        .padding(.horizontal, 8)
+        .frame(maxWidth: .infinity, alignment: .topLeading) // Align content to the top left
+    }
+    
+    var originalUI: some View {
+        VStack(alignment: .trailing, spacing: 5) {
+            if !conversation.base64Image.isEmpty {
+                HStack {
+                    Text("Image")
+                    Image(systemName: "photo.fill")
+                }
+                .bubbleStyle(isMyMessage: false, compact: true)
+                .onTapGesture {
+                    showPreview = true
+                }
+                .popover(isPresented: $showPreview) {
+#if os(macOS)
+                    Image(nsImage: NSImage(data: Data(base64Encoded: conversation.base64Image)!)!)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: 600, maxHeight: 600, alignment: .center)
+                        .presentationCompactAdaptation((.popover))
+#else
+                    Image(uiImage: UIImage(data: Data(base64Encoded: conversation.base64Image)!)!)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
+                        .presentationCompactAdaptation((.popover))
+#endif
+                }
+            }
+            
+            HStack(alignment: .lastTextBaseline) {
+#if os(macOS)
+                optionsMenu
+                
+                if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
+                    editBtn
+                }
+#endif
+                
+                Text(conversation.content)
+                    .bubbleStyle(isMyMessage: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? false : true, accentColor: session.configuration.provider.accentColor)
+                    .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow : .clear, in: RoundedRectangle(cornerRadius: radius))
+                    .textSelection(.enabled)
+            }
+        }
+            .padding(.leading, horizontalPadding)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+    }
+    
+    var editBtn: some View {
+        Button("") {
+            editingMessage = conversation.content
+            isEditing = true
+        }
+        .frame(width: 0, height: 0)
+        .hidden()
+        .keyboardShortcut("e", modifiers: .command)
+    }
+    
     var optionsMenu: some View {
         AdaptiveStack(isHorizontal: conversation.content.count < 350) {
             MessageContextMenu(session: session, conversation: conversation) {
@@ -106,6 +162,14 @@ struct UserMessageView: View {
         .opacity(isHovered ? 1 : 0)
         .transition(.opacity)
         .animation(.easeOut(duration: 0.15), value: isHovered)
+    }
+    
+    private var horizontalPadding: CGFloat {
+        #if os(iOS)
+            50
+        #else
+            65
+        #endif
     }
     
     private var radius: CGFloat {

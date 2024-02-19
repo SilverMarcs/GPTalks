@@ -32,6 +32,11 @@ struct DefaultConfigView: View {
                     .disabled(!configuration.isMarkdownEnabled)
 
                     Divider()
+                    
+                    LabeledPicker(title: "Alternate Chat UI", width: widthValue, picker: alternateChatUi)
+                        .padding(paddingValue)
+
+                    Divider()
 
                     LabeledPicker(title: "Preferred Chat Provider", width: widthValue, picker: preferredProvider)
                         .padding(paddingValue)
@@ -110,6 +115,13 @@ struct DefaultConfigView: View {
 
     var alternateMarkdownEnabler: some View {
         Picker("Markdown Enabled", selection: configuration.$alternateMarkdown) {
+            Text("True").tag(true)
+            Text("False").tag(false)
+        }
+    }
+    
+    var alternateChatUi: some View {
+        Picker("Markdown Enabled", selection: configuration.$alternatChatUi) {
             Text("True").tag(true)
             Text("False").tag(false)
         }

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ConversationView: View {
-//    @Environment(DialogueViewModel.self) private var viewModel
     var session: DialogueSession
     var conversation: Conversation
 
@@ -17,14 +16,10 @@ struct ConversationView: View {
             Group {
                 if conversation.role == "user" {
                     UserMessageView(conversation: conversation, session: session)
-                        .padding(.leading, horizontalPadding)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
 
                 if conversation.role == "assistant" {
                     AssistantMessageView(conversation: conversation, session: session)
-                        .padding(.trailing, horizontalPadding)
-                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
             #if os(macOS)
@@ -35,6 +30,7 @@ struct ConversationView: View {
             if session.conversations.firstIndex(of: conversation) == session.resetMarker {
                 ContextResetDivider(session: session)
                     .padding(.vertical)
+                    .padding(.horizontal, 8)
             }
 
             DeleteBtn
@@ -54,7 +50,11 @@ struct ConversationView: View {
 
     private var spacing: CGFloat {
         #if os(macOS)
+        if AppConfiguration.shared.alternatChatUi {
+            return 0
+        } else {
             return 8
+        }
         #else
             return 2
         #endif

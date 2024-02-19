@@ -60,27 +60,27 @@ enum ContentState: String, CaseIterable, Identifiable {
             if !searchText.isEmpty {
                 switch selectedState {
                     case .archived:
-                        let filteredDialogues = archivedDialogues.filter { dialogue in
+                        let filteredDialogues = allDialogues.filter { dialogue in
                             let isContentMatch = dialogue.conversations.contains { conversation in
                                 conversation.content.localizedCaseInsensitiveContains(searchText)
                             }
                             return isContentMatch
                         }
                     #if os(macOS) // macos has a bug where if no matches, search bar disappears
-                        archivedDialogues = filteredDialogues.isEmpty ? archivedDialogues : filteredDialogues
+                        archivedDialogues = filteredDialogues.isEmpty ? allDialogues : filteredDialogues
                     #else
                         archivedDialogues = filteredDialogues
                     #endif
                         break
                     case .active:
-                        let filteredDialogues = activeDialogues.filter { dialogue in
+                        let filteredDialogues = allDialogues.filter { dialogue in
                             let isContentMatch = dialogue.conversations.contains { conversation in
                                 conversation.content.localizedCaseInsensitiveContains(searchText)
                             }
                             return isContentMatch
                         }
                     #if os(macOS) // macos has a bug where if no matches, search bar disappears
-                        activeDialogues = filteredDialogues.isEmpty ? activeDialogues : filteredDialogues
+                        activeDialogues = filteredDialogues.isEmpty ? allDialogues : filteredDialogues
                     #else
                         activeDialogues = filteredDialogues
                     #endif

@@ -19,7 +19,9 @@ struct ErrorDescView: View {
                         .foregroundStyle(.red)
                     
                     Button(role: .destructive) {
-                        session.resetErrorDesc()
+                        withAnimation {
+                            session.resetErrorDesc()
+                        }
                     } label: {
                         Image(systemName: "delete.backward")
                             .foregroundColor(.red)

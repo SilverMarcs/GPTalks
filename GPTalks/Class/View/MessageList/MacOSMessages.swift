@@ -25,6 +25,7 @@ struct MacOSMessages: View {
     var body: some View {
         ScrollViewReader { proxy in
             normalList
+//            .animation(.default, value: session.input.isEmpty)
             .navigationTitle(session.isGeneratingTitle ? "Generating Title..." : session.title)
             .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -202,15 +203,36 @@ struct MacOSMessages: View {
     }
 
     private var normalList: some View {
-        List {
-            VStack {
-                ForEach(session.conversations) { conversation in
-                    ConversationView(session: session, conversation: conversation)
+        Group {
+            if AppConfiguration.shared.alternatChatUi {
+                List {
+                    VStack {
+                        ForEach(session.conversations) { conversation in
+                            ConversationView(session: session, conversation: conversation)
+                        }
+                        
+                        ErrorDescView(session: session)
+                        
+                        Color.clear
+                            .frame(height: 30)
+                    }
+                    .padding(.horizontal, -8)
+                    .id("bottomID")
                 }
-
-                ErrorDescView(session: session)
+                .listStyle(.plain)
+                
+            } else {
+                List {
+                    VStack {
+                        ForEach(session.conversations) { conversation in
+                            ConversationView(session: session, conversation: conversation)
+                        }
+                        
+                        ErrorDescView(session: session)
+                    }
+                    .id("bottomID")
+                }
             }
-            .id("bottomID")
         }
     }
     

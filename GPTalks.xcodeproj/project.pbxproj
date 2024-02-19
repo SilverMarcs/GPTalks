@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0803E14A2B8338FA00D588C3 /* MessageContextMenu2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0803E1492B8338FA00D588C3 /* MessageContextMenu2.swift */; };
 		080D542D2B7913E300273B56 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = 080D542C2B7913E300273B56 /* HotKey */; };
 		0816CA092B7F97F800D22D5C /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 0816CA082B7F97F800D22D5C /* Splash */; };
 		0816CA0B2B7F97F800D22D5C /* SplashMarkdown in Frameworks */ = {isa = PBXBuildFile; productRef = 0816CA0A2B7F97F800D22D5C /* SplashMarkdown */; };
@@ -89,6 +90,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0803E1492B8338FA00D588C3 /* MessageContextMenu2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContextMenu2.swift; sourceTree = "<group>"; };
 		081B02702B81B1A2006AF219 /* ImageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSession.swift; sourceTree = "<group>"; };
 		081B02722B81B1EF006AF219 /* AISession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AISession.swift; sourceTree = "<group>"; };
 		0820E06C2B5395E500401A30 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */,
 				08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */,
 				08D5332F2B2C25CC008B4FA9 /* MessageContextMenu.swift */,
+				0803E1492B8338FA00D588C3 /* MessageContextMenu2.swift */,
 				08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */,
 				0820E06C2B5395E500401A30 /* TextSelectionView.swift */,
 				087AC1972B6D40A7006B9386 /* EditingView.swift */,
@@ -512,6 +515,7 @@
 				E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */,
 				086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */,
 				08AF74742B720F5B00FB081F /* ImageCreator.swift in Sources */,
+				0803E14A2B8338FA00D588C3 /* MessageContextMenu2.swift in Sources */,
 				08376D832B7CF0F4003258D1 /* ZoomableImageView.swift in Sources */,
 				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
