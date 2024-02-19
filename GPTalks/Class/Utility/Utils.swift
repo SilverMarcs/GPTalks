@@ -85,7 +85,7 @@ extension NSImage {
         self.tiffRepresentation?.base64EncodedString()
     }
     
-    func base64EncodedString(compressionFactor: CGFloat = 0.5) -> String? {
+    func base64EncodedString(compressionFactor: CGFloat = 0.7) -> String? {
         guard let imageData = self.tiffRepresentation,
               let imageRep = NSBitmapImageRep(data: imageData),
               let jpegData = imageRep.representation(using: .jpeg, properties: [.compressionFactor: compressionFactor]) else {
@@ -108,10 +108,10 @@ extension String {
 #else
 extension UIImage {
     var base64: String? {
-        self.jpegData(compressionQuality: 0.5)?.base64EncodedString()
+        self.jpegData(compressionQuality: 0.7)?.base64EncodedString()
     }
     
-    func base64EncodedString(compressionQuality: CGFloat = 0.5) -> String? {
+    func base64EncodedString(compressionQuality: CGFloat = 0.7) -> String? {
         guard let jpegData = self.jpegData(compressionQuality: compressionQuality) else {
            return nil
         }

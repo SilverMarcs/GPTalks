@@ -29,6 +29,10 @@ struct UserMessageView: View {
             } else {
                 originalUI
             }
+            
+//            if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
+//                editBtn
+//            }
         }
         .onHover { isHovered in
             self.isHovered = isHovered
@@ -53,7 +57,7 @@ struct UserMessageView: View {
     
     var alternateUI: some View {
         HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "person.circle.fill") // TODO: Replace with your avatar image
+            Image(systemName: "person.circle.fill")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 17, height: 17)
@@ -66,15 +70,23 @@ struct UserMessageView: View {
                 Text("User")
                     .font(.title3)
                     .bold()
+                
                 Text(conversation.content)
                     .textSelection(.enabled)
                 
-                if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
-                    editBtn
+                #if !os(macOS)
+                if !conversation.base64Image.isEmpty {
+                    userImage
+                        .bubbleStyle(isMyMessage: false, compact: true)
                 }
-                
-#if os(macOS)
+                #else
+
                 HStack {
+                    if !conversation.base64Image.isEmpty {
+                        userImage
+                            .bubbleStyle(isMyMessage: false, compact: true)
+                    }
+                    
                     Spacer()
                     
                     MessageContextMenu2(session: session, conversation: conversation) {
@@ -83,21 +95,20 @@ struct UserMessageView: View {
                     } toggleTextSelection: {
                         canSelectText.toggle()
                     }
+                    .opacity(isHovered ? 1 : 0)
+                    .transition(.opacity)
+                    .animation(.easeOut(duration: 0.15), value: isHovered)
                 }
-                .opacity(isHovered ? 1 : 0)
-                .transition(.opacity)
-                .animation(.easeOut(duration: 0.15), value: isHovered)
                 #endif
             }
 
             Spacer()
         }
-        #if os(macOS)
-        .padding(.top)
-        .padding(.horizontal)
-        .padding(.horizontal, 8)
-        #else
         .padding()
+        #if os(macOS)
+        .padding(.horizontal, 8)
+//        .padding(.bottom, -2)
+        .padding(.bottom, -6)
         #endif
         .frame(maxWidth: .infinity, alignment: .topLeading) // Align content to the top left
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
@@ -107,38 +118,14 @@ struct UserMessageView: View {
     var originalUI: some View {
         VStack(alignment: .trailing, spacing: 5) {
             if !conversation.base64Image.isEmpty {
-                HStack {
-                    Text("Image")
-                    Image(systemName: "photo.fill")
-                }
-                .bubbleStyle(isMyMessage: false, compact: true)
-                .onTapGesture {
-                    showPreview = true
-                }
-                .popover(isPresented: $showPreview) {
-#if os(macOS)
-                    Image(nsImage: NSImage(data: Data(base64Encoded: conversation.base64Image)!)!)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: 600, maxHeight: 600, alignment: .center)
-                        .presentationCompactAdaptation((.popover))
-#else
-                    Image(uiImage: UIImage(data: Data(base64Encoded: conversation.base64Image)!)!)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
-                        .presentationCompactAdaptation((.popover))
-#endif
-                }
+                userImage
+                    .bubbleStyle(isMyMessage: false, compact: true)
             }
             
             HStack(alignment: .lastTextBaseline) {
 #if os(macOS)
                 optionsMenu
                 
-                if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
-                    editBtn
-                }
 #endif
                 
                 Text(conversation.content)
@@ -159,6 +146,31 @@ struct UserMessageView: View {
         .frame(width: 0, height: 0)
         .hidden()
         .keyboardShortcut("e", modifiers: .command)
+    }
+    
+    var userImage: some View {
+            HStack {
+                Text("Image")
+                Image(systemName: "photo.on.rectangle")
+            }
+            .onTapGesture {
+                showPreview = true
+            }
+            .popover(isPresented: $showPreview) {
+#if os(macOS)
+                Image(nsImage: NSImage(data: Data(base64Encoded: conversation.base64Image)!)!)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 600, maxHeight: 600, alignment: .center)
+                    .presentationCompactAdaptation((.popover))
+#else
+                Image(uiImage: UIImage(data: Data(base64Encoded: conversation.base64Image)!)!)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
+                    .presentationCompactAdaptation((.popover))
+#endif
+            }
     }
     
     var optionsMenu: some View {

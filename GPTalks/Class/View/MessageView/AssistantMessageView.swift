@@ -33,12 +33,12 @@ struct AssistantMessageView: View {
             self.isHovered = isHovered
         }
         #if os(iOS)
-            .contextMenu {
-                MessageContextMenu(session: session, conversation: conversation, showText: true) {}
-                toggleTextSelection: {
-                    canSelectText.toggle()
-                }
+        .contextMenu {
+            MessageContextMenu(session: session, conversation: conversation, showText: true) {}
+            toggleTextSelection: {
+                canSelectText.toggle()
             }
+        }
         #endif
     }
     
@@ -98,15 +98,12 @@ struct AssistantMessageView: View {
 
             Spacer()
         }
-
-        #if os(macOS)
         .padding()
-        .padding(.bottom, -6)
-        .padding(.top)
+        #if os(macOS)
         .padding(.horizontal, 8)
+        .padding(.bottom, -5)
         .background(.background.tertiary)
         #else
-        .padding()
         .background(.background.secondary)
         #endif
 

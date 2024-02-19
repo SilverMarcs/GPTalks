@@ -29,8 +29,9 @@ struct ConversationView: View {
 
             if session.conversations.firstIndex(of: conversation) == session.resetMarker {
                 ContextResetDivider(session: session)
-                    .padding(.vertical)
-                    .padding(.horizontal, 8)
+//                    .padding(.vertical, 8)
+//                    .padding(.horizontal, 8)
+                    .padding()
             }
 
             DeleteBtn
@@ -51,7 +52,7 @@ struct ConversationView: View {
     private var spacing: CGFloat {
         #if os(macOS)
         if AppConfiguration.shared.alternatChatUi {
-            return 0
+            return -8
         } else {
             return 8
         }
