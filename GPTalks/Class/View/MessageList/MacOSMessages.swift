@@ -25,7 +25,6 @@ struct MacOSMessages: View {
     var body: some View {
         ScrollViewReader { proxy in
             normalList
-            .animation(.default, value: session.isReplying())
             .navigationTitle(session.isGeneratingTitle ? "Generating Title..." : session.title)
             .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -54,7 +53,7 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.conversations.last?.content) {
-                if session.conversations.last?.content != previousContent && !isUserScrolling && session.lastConversation.content.count > 1200 {
+                if session.conversations.last?.content != previousContent && !isUserScrolling {
                     scrollToBottom(proxy: proxy, animated: true)
                 }
                 previousContent = session.conversations.last?.content
@@ -214,15 +213,9 @@ struct MacOSMessages: View {
                         
                         ErrorDescView(session: session)
                         
-                        if session.isReplying() && session.lastConversation.content.count <= 1200 {
-                            Color.clear
-                                .listRowSeparator(.hidden)
-                                .frame(height: 500)
-                        } else {
-                            Color.clear
-                                .listRowSeparator(.hidden)
-                                .frame(height: 20)
-                        }
+                        Color.clear
+                            .listRowSeparator(.hidden)
+                            .frame(height: 20)
                     }
                     .padding(.horizontal, -8)
                     .id("bottomID")
