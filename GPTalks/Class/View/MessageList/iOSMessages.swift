@@ -148,17 +148,23 @@ struct iOSMessages: View {
         .safeAreaInset(edge: .top) {
             if !viewModel.searchText.isEmpty {
                 HStack {
-                    Text("Clear Search Results")
+                    Text("Searched:")
+                        .bold()
                         .font(.callout)
+                    Text(viewModel.searchText)
+                        .font(.callout)
+                    
                     Spacer()
+                    
                     Button {
                         withAnimation {
                             viewModel.searchText = ""
                         }
                     } label: {
-                        Image(systemName: "xmark.circle.fill")
+//                        Image(systemName: "xmark.circle.fill")
+                        Text("Clear")
                     }
-                    .foregroundStyle(.secondary)
+//                    .foregroundStyle(.secondary)
                 }
                 .padding(10)
                 .background(.bar)
@@ -171,21 +177,22 @@ struct iOSMessages: View {
             )
             #if os(iOS)
             .background(
-                VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.8, blurRadius: 18, scale: 1)
+                VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
                     .ignoresSafeArea()
             )
             #else
             .background(.regularMaterial)
             #endif
         }
-        #if os(visionOS)
-        .navigationTitle(session.title)
-        #endif
+//        #if os(visionOS)
+//        .navigationTitle(session.title)
+//        #endif
+        .navigationTitle(session.configuration.model.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .principal) {
-                navTitle
-            }
+//            ToolbarItem(placement: .principal) {
+//                navTitle
+//            }
 
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {

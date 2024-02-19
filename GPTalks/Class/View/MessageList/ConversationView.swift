@@ -32,8 +32,10 @@ struct ConversationView: View {
                     .padding()
             }
 
+            #if os(macOS)
             DeleteBtn
                 .opacity(0)
+            #endif
         }
     }
 
@@ -55,7 +57,11 @@ struct ConversationView: View {
             return 8
         }
         #else
+        if AppConfiguration.shared.alternatChatUi {
+            return -8
+        } else {
             return 2
+        }
         #endif
     }
 

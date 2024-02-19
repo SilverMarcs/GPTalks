@@ -356,7 +356,7 @@ struct BottomInputView: View {
                 .frame(minHeight: imageSize + 5)
             #if os(iOS)
                 .background(
-                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.5, blurRadius: 18, scale: 1)
+                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
                         .cornerRadius(18)
                 )
             #endif

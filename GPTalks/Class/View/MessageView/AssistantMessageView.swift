@@ -103,11 +103,11 @@ struct AssistantMessageView: View {
         .padding(.horizontal, 8)
         .padding(.bottom, -5)
         .background(.background.tertiary)
+        .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow : .clear)
         #else
+        .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
         .background(.background.secondary)
         #endif
-
-        .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow : .clear)
         .animation(.default, value: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText))
         .border(.quinary, width: 1)
         .frame(maxWidth: .infinity, alignment: .topLeading)
