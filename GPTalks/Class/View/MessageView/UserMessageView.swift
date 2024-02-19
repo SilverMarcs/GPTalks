@@ -10,6 +10,8 @@ import SwiftUI
 struct UserMessageView: View {
     @Environment(DialogueViewModel.self) private var viewModel
     
+    @State private var isExpanded = false
+    
     var conversation: Conversation
     var session: DialogueSession
 
@@ -71,13 +73,34 @@ struct UserMessageView: View {
                     .font(.title3)
                     .bold()
                 
-                Text(conversation.content)
+                #if os(macOS)
+                Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n\n...")
                     .textSelection(.enabled)
-                
+                #else
+                Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "...")
+                    .textSelection(.enabled)
+                #endif
+                          
                 #if !os(macOS)
-                if !conversation.base64Image.isEmpty {
-                    userImage
-                        .bubbleStyle(isMyMessage: false, compact: true)
+                HStack {
+                    if !conversation.base64Image.isEmpty {
+                        userImage
+                            .bubbleStyle(isMyMessage: false, compact: true)
+                    }
+                    
+                    Spacer()
+                    
+                    if conversation.content.count > 300 {
+                        Button(action: {
+                            withAnimation {
+                                self.isExpanded.toggle()
+                            }
+                        }) {
+                            Image(systemName: isExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
+                        }
+                        .buttonStyle(.plain)
+                        .imageScale(.medium)
+                    }
                 }
                 #else
 
@@ -89,11 +112,25 @@ struct UserMessageView: View {
                     
                     Spacer()
                     
-                    MessageContextMenu2(session: session, conversation: conversation) {
-                        editingMessage = conversation.content
-                        isEditing = true
-                    } toggleTextSelection: {
-                        canSelectText.toggle()
+                    Group {
+                        if conversation.content.count > 300 {
+                            Button(action: {
+                                withAnimation {
+                                    self.isExpanded.toggle()
+                                }
+                            }) {
+                                Image(systemName: isExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
+                            }
+                            .buttonStyle(.plain)
+                            .imageScale(.medium)
+                        }
+                        
+                        MessageContextMenu2(session: session, conversation: conversation) {
+                            editingMessage = conversation.content
+                            isEditing = true
+                        } toggleTextSelection: {
+                            canSelectText.toggle()
+                        }
                     }
                     .opacity(isHovered ? 1 : 0)
                     .transition(.opacity)
@@ -107,8 +144,9 @@ struct UserMessageView: View {
         .padding()
         #if os(macOS)
         .padding(.horizontal, 8)
-//        .padding(.bottom, -2)
         .padding(.bottom, -6) // need at least -2 padding here
+        #else
+        .padding(.vertical, -10)
         #endif
         .frame(maxWidth: .infinity, alignment: .topLeading) // Align content to the top left
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
@@ -123,10 +161,10 @@ struct UserMessageView: View {
             }
             
             HStack(alignment: .lastTextBaseline) {
-#if os(macOS)
+                #if os(macOS)
                 optionsMenu
                 
-#endif
+                #endif
                 
                 Text(conversation.content)
                     .bubbleStyle(isMyMessage: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? false : true, accentColor: session.configuration.provider.accentColor)
@@ -134,11 +172,10 @@ struct UserMessageView: View {
                     .textSelection(.enabled)
             }
         }
-            .padding(.leading, horizontalPadding)
-            .frame(maxWidth: .infinity, alignment: .trailing)
+        .padding(.leading, horizontalPadding)
+        .frame(maxWidth: .infinity, alignment: .trailing)
     }
     
-
     var editBtn: some View {
         Button("") {
             editingMessage = conversation.content
@@ -151,28 +188,30 @@ struct UserMessageView: View {
     }
     
     var userImage: some View {
-            HStack {
-                Text("Image")
-                Image(systemName: "photo.on.rectangle")
-            }
-            .onTapGesture {
-                showPreview = true
-            }
-            .popover(isPresented: $showPreview) {
-#if os(macOS)
-                Image(nsImage: NSImage(data: Data(base64Encoded: conversation.base64Image)!)!)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 600, maxHeight: 600, alignment: .center)
-                    .presentationCompactAdaptation((.popover))
-#else
-                Image(uiImage: UIImage(data: Data(base64Encoded: conversation.base64Image)!)!)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
-                    .presentationCompactAdaptation((.popover))
-#endif
-            }
+        HStack {
+            Text("Image")
+            Image(systemName: "photo.on.rectangle")
+//                .symbolRenderingMode(.palette)
+//                .foregroundStyle(.blue, .orange)
+        }
+        .onTapGesture {
+            showPreview = true
+        }
+        .popover(isPresented: $showPreview) {
+            #if os(macOS)
+            Image(nsImage: NSImage(data: Data(base64Encoded: conversation.base64Image)!)!)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 600, maxHeight: 600, alignment: .center)
+                .presentationCompactAdaptation((.popover))
+            #else
+            Image(uiImage: UIImage(data: Data(base64Encoded: conversation.base64Image)!)!)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
+                .presentationCompactAdaptation((.popover))
+            #endif
+        }
     }
     
     var optionsMenu: some View {
@@ -191,17 +230,46 @@ struct UserMessageView: View {
     
     private var horizontalPadding: CGFloat {
         #if os(iOS)
-            50
+        50
         #else
-            65
+        65
         #endif
     }
     
     private var radius: CGFloat {
         #if os(macOS)
-            15
+        15
         #else
-            18
+        18
         #endif
+    }
+}
+
+
+import SwiftUI
+
+struct MeasureSizeModifier: ViewModifier {
+    @Binding var isTruncated: Bool
+    var maxHeight: CGFloat
+    
+    func body(content: Content) -> some View {
+        content
+            .background(
+                GeometryReader { geometryProxy in
+                    Color.clear
+                        .onAppear {
+                            let isContentTruncated = geometryProxy.size.height > maxHeight
+                            if isTruncated != isContentTruncated {
+                                isTruncated = isContentTruncated
+                            }
+                        }
+                }
+            )
+    }
+}
+
+extension View {
+    func measureSize(isTruncated: Binding<Bool>, maxHeight: CGFloat) -> some View {
+        modifier(MeasureSizeModifier(isTruncated: isTruncated, maxHeight: maxHeight))
     }
 }

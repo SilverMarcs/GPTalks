@@ -71,7 +71,11 @@ struct AssistantMessageView: View {
                     .font(.title3)
                     .bold()
                 
-                MarkdownView(text: conversation.content)
+                if AppConfiguration.shared.isMarkdownEnabled {
+                    MarkdownView(text: conversation.content)
+                } else {
+                    Text(conversation.content)
+                }
                 
                 if conversation.isReplying {
                     ReplyingIndicatorView()
