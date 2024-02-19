@@ -30,9 +30,9 @@ struct UserMessageView: View {
                 originalUI
             }
             
-//            if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
-//                editBtn
-//            }
+            if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
+                editBtn
+            }
         }
         .onHover { isHovered in
             self.isHovered = isHovered
@@ -108,7 +108,7 @@ struct UserMessageView: View {
         #if os(macOS)
         .padding(.horizontal, 8)
 //        .padding(.bottom, -2)
-        .padding(.bottom, -6)
+        .padding(.bottom, -6) // need at least -2 padding here
         #endif
         .frame(maxWidth: .infinity, alignment: .topLeading) // Align content to the top left
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
@@ -138,6 +138,7 @@ struct UserMessageView: View {
             .frame(maxWidth: .infinity, alignment: .trailing)
     }
     
+
     var editBtn: some View {
         Button("") {
             editingMessage = conversation.content
@@ -146,6 +147,7 @@ struct UserMessageView: View {
         .frame(width: 0, height: 0)
         .hidden()
         .keyboardShortcut("e", modifiers: .command)
+        .padding(4)
     }
     
     var userImage: some View {
