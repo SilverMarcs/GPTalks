@@ -213,7 +213,7 @@ struct BottomInputView: View {
                 .foregroundStyle(.secondary)
                 .background(.gray.opacity(0.2))
                 .clipShape(Circle())
-                .frame(width: imageSize + 2, height: imageSize + 2)
+                .frame(width: imageSize + 1, height: imageSize + 1)
         }
         .keyboardShortcut("i", modifiers: .command)
         .fileImporter(
@@ -298,7 +298,7 @@ struct BottomInputView: View {
                 .disabled(empty)
                 .foregroundColor(empty ? .secondary : .accentColor)
             #if os(macOS)
-                .frame(width: imageSize, height: imageSize)
+                .frame(width: imageSize + 1, height: imageSize + 1)
             #else
                 .background(.white)
                 .clipShape(Circle())
@@ -308,7 +308,7 @@ struct BottomInputView: View {
         .keyboardShortcut(.return, modifiers: .command)
         .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
         .disabled(empty || session.isReplying())
-        .fontWeight(empty ? .regular : .semibold)
+        .fontWeight(.semibold)
         .animation(.interactiveSpring, value: empty)
 //        .contentShape(Rectangle())
     }

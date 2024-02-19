@@ -104,10 +104,12 @@ struct AssistantMessageView: View {
         .padding(.bottom, -6)
         .padding(.top)
         .padding(.horizontal, 8)
+        .background(.background.tertiary)
         #else
         .padding()
-        #endif
         .background(.background.secondary)
+        #endif
+
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow : .clear)
         .animation(.default, value: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText))
         .border(.quinary, width: 1)
@@ -145,6 +147,7 @@ struct AssistantMessageView: View {
             #endif
         }
         .padding(.trailing, horizontalPadding)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var radius: CGFloat {

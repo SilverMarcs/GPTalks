@@ -25,9 +25,7 @@ struct MacOSMessages: View {
     var body: some View {
         ScrollViewReader { proxy in
             normalList
-//            .animation(.default, value: session.input.isEmpty)
             .animation(.default, value: session.isReplying())
-//            .animation(.default, value: session.isAddingConversation)tell me 5 good jokes
             .navigationTitle(session.isGeneratingTitle ? "Generating Title..." : session.title)
             .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -56,7 +54,7 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.conversations.last?.content) {
-                if session.conversations.last?.content != previousContent && !isUserScrolling {
+                if session.conversations.last?.content != previousContent && !isUserScrolling && session.lastConversation.content.count > 1200 {
                     scrollToBottom(proxy: proxy, animated: true)
                 }
                 previousContent = session.conversations.last?.content
@@ -211,12 +209,20 @@ struct MacOSMessages: View {
                     VStack {
                         ForEach(session.conversations) { conversation in
                             ConversationView(session: session, conversation: conversation)
+                                .id(conversation.id)
                         }
                         
                         ErrorDescView(session: session)
                         
-                        Color.clear
-                            .frame(height: 30)
+                        if session.isReplying() && session.lastConversation.content.count <= 1200 {
+                            Color.clear
+                                .listRowSeparator(.hidden)
+                                .frame(height: 500)
+                        } else {
+                            Color.clear
+                                .listRowSeparator(.hidden)
+                                .frame(height: 20)
+                        }
                     }
                     .padding(.horizontal, -8)
                     .id("bottomID")
