@@ -361,7 +361,7 @@ import SwiftUI
     
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
-        isAddingConversation.toggle()
+//        isAddingConversation.toggle()
         
         if let resetMarker = resetMarker {
             if resetMarker == 0 {

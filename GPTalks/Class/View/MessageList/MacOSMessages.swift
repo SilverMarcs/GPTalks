@@ -26,6 +26,8 @@ struct MacOSMessages: View {
         ScrollViewReader { proxy in
             normalList
 //            .animation(.default, value: session.input.isEmpty)
+            .animation(.default, value: session.isReplying())
+            .animation(.default, value: session.isAddingConversation)
             .navigationTitle(session.isGeneratingTitle ? "Generating Title..." : session.title)
             .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
             .safeAreaInset(edge: .bottom, spacing: 0) {

@@ -58,6 +58,9 @@ struct UserMessageView: View {
                 .scaledToFit()
                 .frame(width: 17, height: 17)
                 .foregroundStyle(.secondary)
+                #if !os(macOS)
+                .padding(.top, 3)
+                #endif
 
             VStack(alignment: .leading, spacing: 6) {
                 Text("User")
@@ -70,6 +73,7 @@ struct UserMessageView: View {
                     editBtn
                 }
                 
+#if os(macOS)
                 HStack {
                     Spacer()
                     
@@ -83,13 +87,18 @@ struct UserMessageView: View {
                 .opacity(isHovered ? 1 : 0)
                 .transition(.opacity)
                 .animation(.easeOut(duration: 0.15), value: isHovered)
+                #endif
             }
 
             Spacer()
         }
+        #if os(macOS)
         .padding(.top)
         .padding(.horizontal)
         .padding(.horizontal, 8)
+        #else
+        .padding()
+        #endif
         .frame(maxWidth: .infinity, alignment: .topLeading) // Align content to the top left
     }
     

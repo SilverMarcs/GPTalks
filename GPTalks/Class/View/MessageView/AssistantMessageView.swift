@@ -62,6 +62,9 @@ struct AssistantMessageView: View {
                 .scaledToFit()
                 .frame(width: 18, height: 18)
                 .foregroundColor(Color("niceColorLighter"))
+            #if !os(macOS)
+                .padding(.top, 3)
+            #endif
 
             VStack(alignment: .leading, spacing: 6) {
                 Text("Assistant")
@@ -78,6 +81,7 @@ struct AssistantMessageView: View {
                     EmptyView()
                 }
                 
+                #if os(macOS)
                 HStack {
                     Spacer()
 
@@ -89,13 +93,20 @@ struct AssistantMessageView: View {
                 .opacity(isHovered ? 1 : 0)
                 .transition(.opacity)
                 .animation(.easeOut(duration: 0.15), value: isHovered)
+                #endif
             }
 
             Spacer()
         }
-        .padding(.bottom, -6)
+
+        #if os(macOS)
         .padding()
+        .padding(.bottom, -6)
+        .padding(.top)
         .padding(.horizontal, 8)
+        #else
+        .padding()
+        #endif
         .background(.background.secondary)
         .border(.quinary, width: 1)
         .frame(maxWidth: .infinity, alignment: .topLeading)

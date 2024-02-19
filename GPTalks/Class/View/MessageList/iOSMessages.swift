@@ -36,7 +36,7 @@ struct iOSMessages: View {
                     ForEach(session.conversations) { conversation in
                         ConversationView(session: session, conversation: conversation)
                     }
-                    .padding(.horizontal, 12)
+                    .padding(.horizontal, AppConfiguration.shared.alternatChatUi ? 0 :  12)
 
                     ErrorDescView(session: session)
 
