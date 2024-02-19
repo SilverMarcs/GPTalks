@@ -46,6 +46,7 @@ struct iOSMessages: View {
                         Color.clear.preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
                     }
                 }
+                .animation(.default, value: session.isReplying())
 
                 scrollBtn(proxy: proxy)
             }

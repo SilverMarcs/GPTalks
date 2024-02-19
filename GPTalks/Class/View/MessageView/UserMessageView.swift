@@ -100,6 +100,8 @@ struct UserMessageView: View {
         .padding()
         #endif
         .frame(maxWidth: .infinity, alignment: .topLeading) // Align content to the top left
+        .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
+        .animation(.default, value: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText))
     }
     
     var originalUI: some View {

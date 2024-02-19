@@ -27,7 +27,7 @@ struct MacOSMessages: View {
             normalList
 //            .animation(.default, value: session.input.isEmpty)
             .animation(.default, value: session.isReplying())
-            .animation(.default, value: session.isAddingConversation)
+//            .animation(.default, value: session.isAddingConversation)tell me 5 good jokes
             .navigationTitle(session.isGeneratingTitle ? "Generating Title..." : session.title)
             .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
             .safeAreaInset(edge: .bottom, spacing: 0) {
