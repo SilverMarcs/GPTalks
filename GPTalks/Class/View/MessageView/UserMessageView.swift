@@ -26,14 +26,14 @@ struct UserMessageView: View {
 
     var body: some View {
         Group {
+            if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
+                editBtn
+            }
+            
             if AppConfiguration.shared.alternatChatUi {
                 alternateUI
             } else {
                 originalUI
-            }
-            
-            if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
-                editBtn
             }
         }
         .onHover { isHovered in
@@ -222,14 +222,23 @@ struct UserMessageView: View {
     }
     
     var optionsMenu: some View {
-        AdaptiveStack(isHorizontal: conversation.content.count < 350) {
+//        AdaptiveStack(isHorizontal: conversation.content.count < 350) {
+        Menu {
             MessageContextMenu(session: session, conversation: conversation) {
                 editingMessage = conversation.content
                 isEditing = true
             } toggleTextSelection: {
                 canSelectText.toggle()
             }
+            .labelStyle(.titleAndIcon)
+            
+        } label: {
+            Image(systemName: "ellipsis.circle")
+                .buttonStyle(.plain)
         }
+        .buttonStyle(.plain)
+        .labelsHidden()
+        .menuIndicator(.hidden)
         .opacity(isHovered ? 1 : 0)
         .transition(.opacity)
         .animation(.easeOut(duration: 0.15), value: isHovered)

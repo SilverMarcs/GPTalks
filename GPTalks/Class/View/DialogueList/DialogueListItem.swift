@@ -77,19 +77,18 @@ struct DialogueListItem: View {
         }
         .contextMenu {
             renameButton
+                .labelStyle(.titleAndIcon)
             
             archiveButton
+                .labelStyle(.titleAndIcon)
             
-            if session.isArchive {
-                deleteButton
-            }
+            deleteButton
+                .labelStyle(.titleAndIcon)
         }
         .swipeActions(edge: .trailing) {
+            deleteButton
+            
             archiveButton
-
-            if session.isArchive {
-                deleteButton
-            }
 
         }
         .swipeActions(edge: .leading) {
@@ -101,7 +100,7 @@ struct DialogueListItem: View {
         Button {
             viewModel.toggleArchive(session: session)
         } label: {
-            Label(session.isArchive ? "Unarchive" : "Archive", systemImage: session.isArchive ? "archivebox" : "archivebox.fill")
+            Label(session.isArchive ? "Unarchive" : "Archive", systemImage: "archivebox")
         }
         .tint(.orange)
     }

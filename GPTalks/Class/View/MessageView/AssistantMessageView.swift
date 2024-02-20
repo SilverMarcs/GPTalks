@@ -44,13 +44,20 @@ struct AssistantMessageView: View {
     }
     
     var optionsMenu: some View {
-        AdaptiveStack(isHorizontal: conversation.content.count < 350) {
+//        AdaptiveStack(isHorizontal: conversation.content.count < 350) {
+        Menu {
             MessageContextMenu(session: session, conversation: conversation) { }
             toggleTextSelection: {
                 canSelectText.toggle()
             }
+            .labelStyle(.titleAndIcon)
             
+        } label: {
+            Image(systemName: "ellipsis.circle")
         }
+        .buttonStyle(.plain)
+        .labelsHidden()
+        .menuIndicator(.hidden)
         .opacity(isHovered ? 1 : 0)
         .transition(.opacity)
         .animation(.easeOut(duration: 0.15), value: isHovered)

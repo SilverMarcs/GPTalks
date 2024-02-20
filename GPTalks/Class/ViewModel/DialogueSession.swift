@@ -185,9 +185,7 @@ import SwiftUI
     
     func generateTitle(forced: Bool = false) async {
         if (!forced && conversations.count == 2) || (forced && conversations.count >= 1) {
-            withAnimation {
-                isGeneratingTitle = true
-            }
+            isGeneratingTitle = true
             
             // TODO: makeRequest func
             let openAIconfig = configuration.provider.config
@@ -228,9 +226,7 @@ import SwiftUI
                     
                     save()
                 }
-                withAnimation {
                     isGeneratingTitle = false
-                }
             } catch {
                 setErrorDesc(errorDesc: "Ensure at least two messages to generate a title.")
             }
@@ -410,8 +406,6 @@ import SwiftUI
         
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         
-        await generateTitle(forced: false)
-        
         isAddingConversation.toggle()
 
         var streamText = "";
@@ -503,7 +497,9 @@ import SwiftUI
         do {
             inputImage = nil
             #if os(macOS)
+            await generateTitle(forced: false)
             try await streamingTask?.value
+//            await generateTitle(forced: false)
             try await viewUpdater?.value
             #else
             let application = UIApplication.shared
@@ -511,7 +507,9 @@ import SwiftUI
                 // Handle expiration of background task here
             }
             
+            await generateTitle(forced: false)
             try await streamingTask?.value
+//            await generateTitle(forced: false)
             try await viewUpdater?.value
             
             application.endBackgroundTask(taskId)
