@@ -1,108 +1,78 @@
 //
-//  ContextMenu.swift
+//  MessageContextMenu2.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 15/12/2023.
+//  Created by Zabir Raihan on 19/02/2024.
 //
 
 import SwiftUI
+
 struct MessageContextMenu: View {
     @Environment(DialogueViewModel.self) private var viewModel
     var session: DialogueSession
     var conversation: Conversation
-    var showText: Bool = false
     
     let editHandler: () -> Void
     let toggleTextSelection: () -> Void
     
+    @State private var itemSize = CGSize.zero
+    
+    
     var body: some View {
-        Group {
-            if conversation.role == "user" {
-                Button {
-                    editHandler()
-                } label: {
-                    Image(systemName: "pencil")
-                    if showText {
-                        Text("Edit")
+        HStack(spacing: 10) {
+            Group {
+                Section {
+                    if conversation.role == "user" {
+                        Button {
+                            editHandler()
+                        } label: {
+                            Label("Edit", systemImage: "applepencil.tip")
+                        }
+                    }
+                    
+                    Button {
+                        Task { @MainActor in
+                            await session.regenerate(from: conversation)
+                        }
+                    } label: {
+                        Label("Regenerate", systemImage: "arrow.2.circlepath")
+                    }
+                    
+                    Button {
+                        conversation.content.copyToPasteboard()
+                    } label: {
+                        Label("Copy", systemImage: "paperclip")
                     }
                 }
-            }
-            
-            Button {
-                Task { @MainActor in
-                    await session.regenerate(from: conversation)
+                
+                Section {
+                    Button {
+                        session.setResetContextMarker(conversation: conversation)
+                    } label: {
+                        Label("Reset Cntext", systemImage: "eraser")
+                    }
+                    
+                    Button {
+                        let forkedConvos = session.forkSession(conversation: conversation)
+                        viewModel.addDialogue(conversations: forkedConvos)
+                    } label: {
+                        Label("Fork Session", systemImage: "arrow.branch")
+                    }
                 }
-            } label: {
-                Image(systemName: "arrow.2.circlepath")
-                if showText {
-                    Text("Regenerate")
-                }
-            }
-            
-
-            Button {
-                conversation.content.copyToPasteboard()
-            } label: {
-                Image(systemName: "doc")
-                if showText {
-                    Text("Copy")
-                }
-            }
-            
-            #if os(iOS)
-            Button {
-                toggleTextSelection()
-            } label: {
-                Image(systemName: "textformat")
-                if showText {
-                    Text("Select Text")
+                
+                Section {
+                    
+                    Button(role: .destructive) {
+                        session.removeConversation(conversation)
+                    } label: {
+                        Label("Delete Message", systemImage: "minus.diamond")
+                    }
+                    .tint(.red)
+                    
                 }
             }
-            #endif
-
-            #if os(macOS)
-            
-            Menu {
-                extraButtons
-            } label: {
-                Image(systemName: "ellipsis.circle")
-            }
-            #else
-            Section {
-                extraButtons
-            }
-            #endif
-        
+            .buttonStyle(.plain)
+            .imageScale(.medium)
         }
-        .buttonStyle(.plain)
-    }
-    
-    
-    @ViewBuilder
-    var extraButtons: some View {
-        Section {
-            Button {
-                session.setResetContextMarker(conversation: conversation)
-            } label: {
-                Image(systemName: "eraser")
-                Text("Reset Context")
-            }
-            
-            Button {
-                let forkedConvos = session.forkSession(conversation: conversation)
-                viewModel.addDialogue(conversations: forkedConvos)
-            } label: {
-                Image(systemName: "arrow.branch")
-                Text("Fork Session")
-            }
-        }
-
-        Button(role: .destructive) {
-            session.removeConversation(conversation)
-        } label: {
-            Image(systemName: "trash")
-            Text("Delete")
-        }
-        .tint(.red)
     }
 }

@@ -34,10 +34,11 @@ struct AssistantMessageView: View {
         }
         #if os(iOS)
         .contextMenu {
-            MessageContextMenu(session: session, conversation: conversation, showText: true) {}
+            MessageContextMenu(session: session, conversation: conversation) {}
             toggleTextSelection: {
                 canSelectText.toggle()
             }
+            .labelStyle(.titleAndIcon)
         }
         #endif
     }
@@ -89,10 +90,11 @@ struct AssistantMessageView: View {
                 HStack {
                     Spacer()
 
-                    MessageContextMenu2(session: session, conversation: conversation) { }
+                    MessageContextMenu(session: session, conversation: conversation) { }
                     toggleTextSelection: {
                         canSelectText.toggle()
                     }
+                    .labelStyle(.iconOnly)
                 }
                 .opacity(isHovered ? 1 : 0)
                 .transition(.opacity)

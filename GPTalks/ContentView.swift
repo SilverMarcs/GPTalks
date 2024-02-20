@@ -32,6 +32,7 @@ struct ContentView: View {
                 #else
 
                 iOSMessages(session: selectedDialogue)
+                    .id(selectedDialogue.id)
 
                 #endif
             } else {

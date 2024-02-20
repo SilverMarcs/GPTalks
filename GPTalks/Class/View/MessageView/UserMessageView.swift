@@ -47,12 +47,13 @@ struct UserMessageView: View {
             TextSelectionView(content: conversation.content)
         }
         .contextMenu {
-            MessageContextMenu(session: session, conversation: conversation, showText: true) {
+            MessageContextMenu(session: session, conversation: conversation) {
                 editingMessage = conversation.content
                 isEditing = true
             } toggleTextSelection: {
                 canSelectText.toggle()
             }
+            .labelStyle(.titleAndIcon)
         }
         #endif
     }
@@ -86,6 +87,8 @@ struct UserMessageView: View {
                     if !conversation.base64Image.isEmpty {
                         userImage
                             .bubbleStyle(isMyMessage: false, compact: true)
+                    } else {
+                        EmptyView()
                     }
                     
                     Spacer()
@@ -100,6 +103,8 @@ struct UserMessageView: View {
                         }
                         .buttonStyle(.plain)
                         .imageScale(.medium)
+                    } else {
+                        EmptyView()
                     }
                 }
                 #else
@@ -125,12 +130,13 @@ struct UserMessageView: View {
                             .imageScale(.medium)
                         }
                         
-                        MessageContextMenu2(session: session, conversation: conversation) {
+                        MessageContextMenu(session: session, conversation: conversation) {
                             editingMessage = conversation.content
                             isEditing = true
                         } toggleTextSelection: {
                             canSelectText.toggle()
                         }
+                        .labelStyle(.iconOnly)
                     }
                     .opacity(isHovered ? 1 : 0)
                     .transition(.opacity)
@@ -146,7 +152,8 @@ struct UserMessageView: View {
         .padding(.horizontal, 8)
         .padding(.bottom, -6) // need at least -2 padding here
         #else
-        .padding(.vertical, -10)
+        .padding(.top, -9)
+        .padding(.bottom, -14)
         #endif
         .frame(maxWidth: .infinity, alignment: .topLeading) // Align content to the top left
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)

@@ -34,7 +34,7 @@ struct IosSettingsView: View {
                     .disabled(!configuration.isMarkdownEnabled)
                     
                     HStack {
-                        Image(systemName: "note.text")
+                        Image(systemName: "quote.bubble")
                             .renderingMode(.original)
                         Spacer()
                         Toggle("Alternate Chat UI", isOn: $configuration.alternatChatUi)
