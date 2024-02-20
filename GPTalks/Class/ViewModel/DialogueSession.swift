@@ -184,7 +184,7 @@ import SwiftUI
     }
     
     func generateTitle(forced: Bool = false) async {
-        if (!forced && conversations.count == 1) || (forced && conversations.count >= 1) {
+        if (!forced && conversations.count == 2) || (forced && conversations.count >= 1) {
             withAnimation {
                 isGeneratingTitle = true
             }
