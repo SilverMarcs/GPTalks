@@ -199,7 +199,7 @@ struct iOSMessages: View {
                     Section {
                         Menu {
                             Button {
-                                Task { await session.generateTitle() }
+                                Task { await session.generateTitle(forced: true) }
                             } label: {
                                 Label("Generate", systemImage: "wand.and.stars")
                             }

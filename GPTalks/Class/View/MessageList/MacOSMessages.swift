@@ -122,7 +122,7 @@ struct MacOSMessages: View {
                     Menu {
                         Section {
                             Button("Generate Title") {
-                                Task { await session.generateTitle() }
+                                Task { await session.generateTitle(forced: true) }
                             }
                             
                             Button("System Prompt") {

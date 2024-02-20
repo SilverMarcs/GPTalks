@@ -183,9 +183,11 @@ import SwiftUI
         }
     }
     
-    func generateTitle() async {
-        if conversations.count >= 2 {
-            isGeneratingTitle = true
+    func generateTitle(forced: Bool = false) async {
+        if (!forced && conversations.count == 1) || (forced && conversations.count >= 1) {
+            withAnimation {
+                isGeneratingTitle = true
+            }
             
             // TODO: makeRequest func
             let openAIconfig = configuration.provider.config
@@ -220,12 +222,15 @@ import SwiftUI
                             }
                         }
                     }
-                    title = tempTitle
+                    withAnimation {
+                        title = tempTitle
+                    }
                     
                     save()
                 }
-                
-                isGeneratingTitle = false
+                withAnimation {
+                    isGeneratingTitle = false
+                }
             } catch {
                 setErrorDesc(errorDesc: "Ensure at least two messages to generate a title.")
             }
@@ -404,6 +409,8 @@ import SwiftUI
         
         
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+        
+        await generateTitle(forced: false)
         
         isAddingConversation.toggle()
 

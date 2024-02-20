@@ -57,74 +57,71 @@ struct DialogueListItem: View {
             }
         }
         .frame(minHeight: minHeight)
-        .alert("Rename Session", isPresented: $showRenameDialogue, actions: {
+        .alert("Rename Session", isPresented: $showRenameDialogue) {
             TextField("Enter new name", text: $newName)
-            Button("Rename", action: {
+            Button("Rename") {
                 session.rename(newTitle: newName)
-            })
-            Button("Cancel", role: .cancel, action: {})
-        })
-        .alert("Confirm Delete?", isPresented: $showDeleteDialogue, actions: {
-            Button("Delete", role: .destructive, action: {
+            }
+            Button("Cancel", role: .cancel) {
+                
+            }
+        }
+        .alert("Confirm Delete?", isPresented: $showDeleteDialogue) {
+            Button("Delete", role: .destructive) {
                 viewModel.deleteDialogue(session)
                 showDeleteDialogue = false
-            })
-            Button("Cancel", role: .cancel, action: {})
-        })
+            }
+            Button("Cancel", role: .cancel) {
+                
+            }
+        }
         .contextMenu {
-            Button {
-                newName = session.title
-                showRenameDialogue.toggle()
-            } label: {
-                HStack {
-                    Image(systemName: "pencil")
-                    Text("Rename")
-                }
-            }
+            renameButton
             
-            Button {
-                viewModel.toggleArchive(session: session)
-            } label: {
-                HStack {
-                    Image(systemName: "archivebox")
-                    Text(session.isArchive ? "Unarchive" : "Archive")
-                }
-            }
+            archiveButton
             
-            Button(role: .destructive) {
-                showDeleteDialogue = true
-            } label: {
-                HStack {
-                    Image(systemName: "trash")
-                    Text("Delete")
-                }
+            if session.isArchive {
+                deleteButton
             }
         }
         .swipeActions(edge: .trailing) {
+            archiveButton
 
-            Button {
-                viewModel.toggleArchive(session: session)
-            } label: {
-                Label(session.isArchive ? "Unarchive" : "Archive", systemImage: session.isArchive ? "archivebox" : "archivebox.fill")
+            if session.isArchive {
+                deleteButton
             }
-            .tint(.orange)
-            
-            Button(role: .destructive) {
-                viewModel.deleteDialogue(session)
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
-            
+
         }
         .swipeActions(edge: .leading) {
-            Button {
-                newName = session.title
-                showRenameDialogue.toggle()
-            } label: {
-                Label("Rename", systemImage: "pencil")
-            }
-            .tint(.accentColor)
+            renameButton
         }
+    }
+    
+    var archiveButton: some View {
+        Button {
+            viewModel.toggleArchive(session: session)
+        } label: {
+            Label(session.isArchive ? "Unarchive" : "Archive", systemImage: session.isArchive ? "archivebox" : "archivebox.fill")
+        }
+        .tint(.orange)
+    }
+    
+    var deleteButton: some View {
+        Button(role: .destructive) {
+            viewModel.deleteDialogue(session)
+        } label: {
+            Label("Delete", systemImage: "trash")
+        }
+    }
+    
+    var renameButton: some View {
+        Button {
+            newName = session.title
+            showRenameDialogue.toggle()
+        } label: {
+            Label("Rename", systemImage: "pencil")
+        }
+        .tint(.accentColor)
     }
     
     private var minHeight: CGFloat {
