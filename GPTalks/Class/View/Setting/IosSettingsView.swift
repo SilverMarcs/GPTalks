@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-#if os(iOS)
+#if !os(macOS)
 struct IosSettingsView: View {
     @ObservedObject var configuration: AppConfiguration = AppConfiguration.shared
     @Environment(\.dismiss) var dismiss
@@ -30,6 +30,14 @@ struct IosSettingsView: View {
                             .renderingMode(.original)
                         Spacer()
                         Toggle("Alternate Markdown", isOn: $configuration.alternateMarkdown)
+                    }
+                    .disabled(!configuration.isMarkdownEnabled)
+                    
+                    HStack {
+                        Image(systemName: "quote.bubble")
+                            .renderingMode(.original)
+                        Spacer()
+                        Toggle("Alternate Chat UI", isOn: $configuration.alternatChatUi)
                     }
                     .disabled(!configuration.isMarkdownEnabled)
                     

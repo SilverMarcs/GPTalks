@@ -85,7 +85,7 @@ struct ServiceSettingsView: View {
 
     var modelPicker: some View {
         Picker("Default Model", selection: $model) {
-            ForEach(provider.models, id: \.self) { model in
+            ForEach(provider.chatModels, id: \.self) { model in
                 Text(model.name)
                     .tag(model.rawValue)
             }

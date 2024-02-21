@@ -8,7 +8,9 @@
 import MarkdownUI
 import Splash
 import SwiftUI
+#if !os(visionOS)
 import MarkdownWebView
+#endif
 
 struct MarkdownView: View {
     @Environment(\.colorScheme) private var colorScheme
@@ -27,7 +29,7 @@ struct MarkdownView: View {
                 .markdownCodeSyntaxHighlighter(.splash(theme: theme))
                 .markdownBlockStyle(\.codeBlock) {
                     CodeBlock(configuration: $0)
-                }
+            }
         }
     }
 

@@ -5,10 +5,11 @@
 //  Created by Zabir Raihan on 14/01/2024.
 //
 
-import MarkdownWebView
 import SwiftUI
 
 #if os(iOS)
+import MarkdownWebView
+
 struct TextSelectionView: View {
     @Environment(\.dismiss) var dismiss
     var content: String

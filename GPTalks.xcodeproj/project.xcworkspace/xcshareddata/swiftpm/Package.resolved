@@ -1,12 +1,21 @@
 {
   "pins" : [
     {
+      "identity" : "hotkey",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/soffes/HotKey",
+      "state" : {
+        "branch" : "main",
+        "revision" : "4d02d80de143d69b7eeb5962729591a157a57ede"
+      }
+    },
+    {
       "identity" : "markdown-webview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SilverMarcs/markdown-webview",
       "state" : {
         "branch" : "main",
-        "revision" : "8755a9149b12c37c223f1a203e0571e665c59926"
+        "revision" : "54991b75e4945fdbaa6f8ac0d570d295a6a99874"
       }
     },
     {
@@ -23,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SilverMarcs/OpenAI",
       "state" : {
-        "branch" : "main",
-        "revision" : "27ad53b87ca9401ad380d2f98e525ce17443ad24"
+        "branch" : "MacPaw.gpt_vision",
+        "revision" : "03a166cc68b42d39839b2707c95709fb9d546de3"
       }
     },
     {

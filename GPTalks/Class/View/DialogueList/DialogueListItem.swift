@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct DialogueListItem: View {
-//    @EnvironmentObject var viewModel: DialogueViewModel
     @Environment(DialogueViewModel.self) private var viewModel
     
     var session: DialogueSession
@@ -28,9 +27,11 @@ struct DialogueListItem: View {
                         .font(titleFont)
                         .lineLimit(1)
                     Spacer()
+                    #if !os(visionOS)
                     Text(session.configuration.model.name)
                         .font(.subheadline)
                         .opacity(0.9)
+                    #endif
                 }
                 VStack {
                     if session.isReplying() {
@@ -56,137 +57,134 @@ struct DialogueListItem: View {
             }
         }
         .frame(minHeight: minHeight)
-        .alert("Rename Session", isPresented: $showRenameDialogue, actions: {
+        .alert("Rename Session", isPresented: $showRenameDialogue) {
             TextField("Enter new name", text: $newName)
-            Button("Rename", action: {
+            Button("Rename") {
                 session.rename(newTitle: newName)
-            })
-            Button("Cancel", role: .cancel, action: {})
-        })
-        .alert("Confirm Delete?", isPresented: $showDeleteDialogue, actions: {
-            Button("Delete", role: .destructive, action: {
+            }
+            Button("Cancel", role: .cancel) {
+                
+            }
+        }
+        .alert("Confirm Delete?", isPresented: $showDeleteDialogue) {
+            Button("Delete", role: .destructive) {
                 viewModel.deleteDialogue(session)
                 showDeleteDialogue = false
-            })
-            Button("Cancel", role: .cancel, action: {})
-        })
+            }
+            Button("Cancel", role: .cancel) {
+                
+            }
+        }
         .contextMenu {
-            Button {
-                newName = session.title
-                showRenameDialogue.toggle()
-            } label: {
-                HStack {
-                    Image(systemName: "pencil")
-                    Text("Rename")
-                }
-            }
+            renameButton
+                .labelStyle(.titleAndIcon)
             
-            Button {
-                viewModel.toggleArchive(session: session)
-            } label: {
-                HStack {
-                    Image(systemName: "archivebox")
-                    Text(session.isArchive ? "Unarchive" : "Archive")
-                }
-            }
+            archiveButton
+                .labelStyle(.titleAndIcon)
             
-            Button(role: .destructive) {
-                showDeleteDialogue = true
-            } label: {
-                HStack {
-                    Image(systemName: "trash")
-                    Text("Delete")
-                }
-            }
+            deleteButton
+                .labelStyle(.titleAndIcon)
         }
         .swipeActions(edge: .trailing) {
-            Button {
-                viewModel.toggleArchive(session: session)
-            } label: {
-                Label(session.isArchive ? "Unarchive" : "Archive", systemImage: session.isArchive ? "archivebox" : "archivebox.fill")
-            }
-            .tint(.orange)
+            deleteButton
             
-            Button(role: .destructive) {
-                viewModel.deleteDialogue(session)
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
-            
+            archiveButton
+
         }
         .swipeActions(edge: .leading) {
-            Button(role: .cancel) {
-                newName = session.title
-                showRenameDialogue.toggle()
-            } label: {
-                Label("Rename", systemImage: "pencil")
-            }
-            .tint(.accentColor)
+            renameButton
         }
     }
     
+    var archiveButton: some View {
+        Button {
+            viewModel.toggleArchive(session: session)
+        } label: {
+            Label(session.isArchive ? "Unarchive" : "Archive", systemImage: "archivebox")
+        }
+        .tint(.orange)
+    }
+    
+    var deleteButton: some View {
+        Button(role: .destructive) {
+            viewModel.deleteDialogue(session)
+        } label: {
+            Label("Delete", systemImage: "trash")
+        }
+    }
+    
+    var renameButton: some View {
+        Button {
+            newName = session.title
+            showRenameDialogue.toggle()
+        } label: {
+            Label("Rename", systemImage: "pencil")
+        }
+        .tint(.accentColor)
+    }
+    
     private var minHeight: CGFloat {
-        #if os(iOS)
-            75
-        #elseif os(macOS)
+        #if os(macOS)
             55
+        #else
+            75
         #endif
     }
     
 
     private var imgToTextSpace: CGFloat {
-        #if os(iOS)
-            13
-        #elseif os(macOS)
-            10
+        #if os(macOS)
+        10
+        #else
+        13
         #endif
     }
-    
+
     private var lastMessageMaxHeight: CGFloat {
-        #if os(iOS)
-            40
-        #elseif os(macOS)
-            20
+        #if os(macOS)
+        20
+        #else
+        40
         #endif
     }
-    
+
     private var imageSize: CGFloat {
-        #if os(iOS)
-            50
-        #elseif os(macOS)
-            36
+        #if os(macOS)
+        36
+        #else
+        50
         #endif
     }
 
     private var imageRadius: CGFloat {
-        #if os(iOS)
-            16
-        #elseif os(macOS)
-            11
+        #if os(macOS)
+        11
+        #else
+        16
         #endif
     }
 
     private var titleFont: Font {
-        #if os(iOS)
-            Font.system(.headline)
-        #elseif os(macOS)
-            Font.system(.body)
+        #if os(macOS)
+        Font.system(.body)
+        #else
+        Font.system(.headline)
         #endif
     }
 
     private var lastMessageFont: Font {
-        #if os(iOS)
-            Font.system(.subheadline)
-        #elseif os(macOS)
-            Font.system(.body)
+        #if os(macOS)
+        Font.system(.body)
+        #else
+        Font.system(.subheadline)
         #endif
     }
 
     private var textLineLimit: Int {
-        #if os(iOS)
-            2
-        #elseif os(macOS)
-            1
+        #if os(macOS)
+        1
+        #else
+        2
         #endif
     }
 }

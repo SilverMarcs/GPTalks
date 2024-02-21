@@ -5,43 +5,55 @@
 //  Created by Zabir Raihan on 19/12/2023.
 //
 
-#if os(iOS)
-    import SwiftUI
+#if !os(macOS)
+import SwiftUI
 import OpenAI
 
     struct IOSDialogList: View {
         @Bindable var viewModel: DialogueViewModel
-        @State var images: [ImagesResult.URLResult] = []
+        @State var generations: [ImageGeneration] = []
+        @State var navigateToImages = false
+        @State var switchToChat = false
 
         @State var isShowSettingView = false
 
         var body: some View {
+            NavigationLink(destination: ImageCreator(switchToChat: $switchToChat, generations: $generations), isActive: $navigateToImages) {
+                 EmptyView()
+            }
+            
             list
                 .listStyle(.inset)
+                .animation(.default, value: viewModel.selectedState)
+                .animation(.default, value: viewModel.searchText)
                 .searchable(text: $viewModel.searchText)
+            #if os(iOS)
                 .navigationTitle("Sessions")
+            #endif
                 .sheet(isPresented: $isShowSettingView) {
                     IosSettingsView()
                 }
                 .toolbar {
-//                    ToolbarItem {
-//                        NavigationLink {
-//                            ImageSession(images: $images)
-//                        } label: {
-//                            Image(systemName: "photo.on.rectangle.angled")
-//                        }
-//                    }
-                    
-                    ToolbarItem(placement: .topBarLeading) {
-                        Menu {
-                            Button {
-                                viewModel.toggleArchivedStatus()
-                            } label: {
-                                Label(
-                                    title: { Text(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") },
-                                    icon: { Image(systemName: viewModel.isArchivedSelected ? "archivebox.fill" : "archivebox") }
-                                )
-                            }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                      Menu {
+                          Picker("Select State", selection: $viewModel.selectedState) {
+                              ForEach(ContentState.allCases) { state in
+                                  Label("\(state.rawValue)", systemImage: state.image)
+                                      .tag(state)
+                              }
+                          }
+                          .onChange(of: viewModel.selectedState) {
+                              if viewModel.selectedState == .images {
+                                  navigateToImages = true
+                              }
+                          }
+                          .onChange(of: switchToChat) {
+                              if switchToChat {
+                                  viewModel.selectedState = .active
+                              }
+                              switchToChat = false
+                          }
+
                             
                             Button {
                                 isShowSettingView = true
@@ -56,7 +68,7 @@ import OpenAI
                             if isIPadOS {
                                 Image(systemName: "gear")
                             } else {
-                                Text("Edit")
+                                Text("More")
                             }
                         }
                     }
@@ -74,10 +86,10 @@ import OpenAI
 
         @ViewBuilder
         private var list: some View {
-            if viewModel.dialogues.isEmpty {
-                PlaceHolderView(imageName: "message.fill", title: "No Messages Yet")
+            if viewModel.shouldShowPlaceholder {
+                PlaceHolderView(imageName: "message.fill", title: viewModel.placeHolderText)
             } else {
-                List(viewModel.dialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
+                List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
                     DialogueListItem(session: session)
                 }
             }

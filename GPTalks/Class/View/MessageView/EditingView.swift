@@ -13,6 +13,8 @@ struct EditingView: View {
     let session: DialogueSession
     let conversation: Conversation
     
+    @FocusState private var isTextFieldFocused: Bool
+    
     var body: some View {
         #if os(macOS)
             macOSEditingView
@@ -39,11 +41,16 @@ struct EditingView: View {
         .frame(minWidth: 400, idealWidth: 550, maxWidth: 800, minHeight: 200, idealHeight: 400, maxHeight: 600)
     }
     
-    #if os(iOS)
+#if !os(macOS)
     private var iOSEditingView: some View {
         NavigationView {
             Form {
-                TextField("Editing Message", text: $editingMessage, axis: .vertical)
+//                SelectableTextField(text: $editingMessage)
+                TextField("System Prompt", text: $editingMessage, axis: .vertical)
+                    .focused($isTextFieldFocused)
+            }
+            .onAppear {
+                isTextFieldFocused = true
             }
             .navigationBarTitle("Editing Message")
             .navigationBarTitleDisplayMode(.inline)
@@ -65,7 +72,7 @@ struct EditingView: View {
                 }
             }
         }
-        .presentationDetents([.medium])
+//        .presentationDetents([.medium])
     }
     #endif
     
@@ -87,8 +94,42 @@ struct EditingView: View {
             .keyboardShortcut(.return, modifiers: .command)
         }
     }
-
 }
 
-// Usage example:
-// EditingView(editingMessage: $editingMessage, isEditing: $isEditing, session: session, conversation: conversation)
+#if os(iOS)
+import UIKit
+
+struct SelectableTextField: UIViewRepresentable {
+    @Binding var text: String
+    
+    func makeUIView(context: Context) -> UITextField {
+        let textField = UITextField()
+        textField.delegate = context.coordinator
+        return textField
+    }
+    
+    func updateUIView(_ uiView: UITextField, context: Context) {
+        uiView.text = text
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, UITextFieldDelegate {
+        var parent: SelectableTextField
+        
+        init(_ textField: SelectableTextField) {
+            self.parent = textField
+        }
+        
+        func textFieldDidBeginEditing(_ textField: UITextField) {
+            textField.selectedTextRange = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument)
+        }
+        
+        func textFieldDidChangeSelection(_ textField: UITextField) {
+            parent.text = textField.text ?? ""
+        }
+    }
+}
+#endif

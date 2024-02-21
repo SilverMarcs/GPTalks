@@ -11,15 +11,16 @@ struct MacOSSettingsView: View {
     var body: some View {
         TabView {
             DefaultConfigView()
+                .frame(width: 650, height: 620)
                 .tabItem {
                     Label("Default", systemImage: "cpu")
                 }
             ProviderSettingsView()
+                .frame(width: 650, height: 370)
                 .tabItem {
                     Label("Providers", systemImage: "brain.head.profile")
                 }
         }
-        .frame(width: 650, height: 480)
     }
 }
 

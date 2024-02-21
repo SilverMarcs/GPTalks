@@ -6,18 +6,20 @@
 //
 
 import SwiftUI
+import HotKey
 
 @main
 struct GPTalks: App {
-//    @StateObject private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
-    // TODO chaneg back to stateobject if needed
     @State private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
+    
+    #if os(macOS)
+    let hotKey = HotKey(key: .space, modifiers: [.option], keyDownHandler: {NSApp.activate(ignoringOtherApps: true)})
+    #endif
     
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-//        .environmentObject(viewModel)
         .environment(viewModel)
         .commands {
             CommandMenu("Session") {
@@ -50,10 +52,23 @@ struct GPTalks: App {
             }
             
             CommandGroup(after: .sidebar) {
-                Button(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") {
-                    viewModel.toggleArchivedStatus()
+                Section {
+                    Button("Toggle Markdown") {
+                        AppConfiguration.shared.isMarkdownEnabled.toggle()
+                    }
                 }
-                .keyboardShortcut("a", modifiers: [.command, .shift])
+                
+                Section {
+                    Button(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") {
+                        viewModel.toggleChatTypes()
+                    }
+                    .keyboardShortcut("a", modifiers: [.command, .shift])
+                    
+                    Button("Image Generations") {
+                        viewModel.tggleImageAndChat()
+                    }
+                    .keyboardShortcut("i", modifiers: [.command, .shift])
+                }
             }
         }
 #if os(macOS)

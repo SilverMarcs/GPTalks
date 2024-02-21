@@ -7,150 +7,68 @@
 
 import SwiftUI
 
-struct ToolbarItems: ToolbarContent {
+struct TempPicker: View {
+    @Bindable var session: DialogueSession
+    
+    var body: some View {
+        Picker("Temperature", selection: $session.configuration.temperature) {
+            ForEach(stride(from: 0.0, through: 2.0, by: 0.2).map { $0 }, id: \.self) { temp in
+                Text(String(format: "%.1f", temp)).tag(temp)
+            }
+        }
+    }
+}
+
+struct ProviderPicker: View {
     @Bindable var session: DialogueSession
 
-    @State var isShowSettingsView: Bool = false
-
-    var body: some ToolbarContent {
-        #if os(macOS)
-            macOS
-        #else
-            iOS
-        #endif
+    var body: some View {
+        Picker("Provider", selection: $session.configuration.provider) {
+            ForEach(Provider.availableProviders, id: \.self) { provider in
+                Text(provider.name).tag(provider.id)
+            }
+        }
     }
+}
 
-    #if os(iOS)
-        @ToolbarContentBuilder
-        var iOS: some ToolbarContent {
-            ToolbarItem(placement: .principal) {
-                HStack {
-                    Button {
-                        isShowSettingsView.toggle()
-                    } label: {
-                        iosNavTitle
-                    }
-                    .foregroundStyle(.primary)
-                    .sheet(isPresented: $isShowSettingsView) {
-                        DialogueSettingsView(configuration: $session.configuration, title: $session.title)
-                    }
+struct TempSlider: View {
+    @Bindable var session: DialogueSession
 
-                    Spacer()
-                }
-                .padding(.leading, -15)
-
-            }
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Menu {
-                    Button {
-                        Task {
-                            await session.regenerateLastMessage()
-                        }
-                    } label: {
-                        Text("Regenerate")
-                        Image(systemName: "arrow.2.circlepath")
-                    }
-
-                    Button(role: .destructive) {
-                        session.removeAllConversations()
-                    } label: {
-                        Text("Delete All Messages")
-                        Image(systemName: "trash")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                }
-              }
+    var body: some View {
+        Slider(value: $session.configuration.temperature, in: 0 ... 2, step: 0.2) {} minimumValueLabel: {
+            Text("0")
+        } maximumValueLabel: {
+            Text("2")
         }
+    }
+}
 
-        var iosNavTitle: some View {
-            HStack {
-                ProviderImage(radius: 9, color: session.configuration.provider.accentColor, frame: 30)
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(session.title)
-                        .font(.system(size: 16))
-                        .foregroundStyle(.primary)
-                        .bold()
-                    HStack(spacing: 7) {
-                        Text(session.configuration.model.name)
-                            .font(.system(size: 11))
-                            .foregroundStyle(.secondary)
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 8))
-                            .foregroundStyle(.secondary)
-                            .padding(.leading, -4)
-                    }
+struct ModelPicker: View {
+    @Bindable var session: DialogueSession
+
+    var body: some View {
+        Picker("Model", selection: $session.configuration.model) {
+            if session.containsConversationWithImage || session.inputImage != nil {
+                ForEach(session.configuration.provider.visionModels, id: \.self) { model in
+                    Text(model.name).tag(model.id)
+                }
+            } else {
+                ForEach(session.configuration.provider.visionModels + session.configuration.provider.chatModels, id: \.self) { model in
+                    Text(model.name).tag(model.id)
                 }
             }
         }
-    #endif
+    }
+}
 
-    @ToolbarContentBuilder
-    var macOS: some ToolbarContent {
-        ToolbarItem(placement: .navigation) {
-            Button {
-                isShowSettingsView = true
-            } label: {
-                Image(systemName: "square.text.square")
+struct ContextPicker: View {
+    @Bindable var session: DialogueSession
+
+    var body: some View {
+        Picker("Context Length", selection: $session.configuration.contextLength) {
+            ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
+                Text("\(number) Messages").tag(number)
             }
-            .popover(isPresented: $isShowSettingsView) {
-                VStack {
-                    Text("System Prompt")
-                    TextEditor(text: $session.configuration.systemPrompt)
-                        .font(.body)
-                        .frame(width: 230, height: 70)
-                        .scrollContentBackground(.hidden)
-                }
-                .padding(10)
-            }
-        }
-
-        ToolbarItemGroup {
-            Picker("Provider", selection: $session.configuration.provider) {
-                ForEach(Provider.availableProviders, id: \.self) { provider in
-                    Text(provider.name)
-                        .tag(provider.id)
-                }
-            }
-
-            Slider(value: $session.configuration.temperature, in: 0 ... 2, step: 0.2) {
-            } minimumValueLabel: {
-                Text("0")
-            } maximumValueLabel: {
-                Text("2")
-            }
-            .frame(width: 130)
-
-            Picker("Model", selection: $session.configuration.model) {
-                ForEach(session.configuration.provider.models, id: \.self) { model in
-                    Text(model.name)
-                        .tag(model.id)
-                }
-            }
-            .frame(width: 125)
-
-            Menu {
-                Picker("Context Length", selection: $session.configuration.contextLength) {
-                    ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
-                        Text("\(number) Messages")
-                            .tag(number)
-                    }
-                }
-
-                Button("Regenerate") {
-                    Task {
-                        await session.regenerateLastMessage()
-                    }
-                }
-
-                Button("Delete All Messages") {
-                    session.removeAllConversations()
-                }
-            } label: {
-                Image(systemName: "ellipsis.circle")
-            }
-            .menuIndicator(.hidden)
         }
     }
 }

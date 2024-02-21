@@ -70,6 +70,13 @@ import SwiftUI
     // MARK: - State
 
     var input: String = ""
+    
+    #if os(macOS)
+    var inputImage: NSImage?
+    #else
+    var inputImage: UIImage?
+    #endif
+    
     var title: String = "New Session" {
         didSet {
             save()
@@ -97,7 +104,12 @@ import SwiftUI
     var isAddingConversation = false
 
     private var initFinished = false
-    private var isStreaming = false
+    
+    var isStreaming = false
+    
+    var containsConversationWithImage: Bool {
+        conversations.contains(where: { !$0.base64Image.isEmpty })
+    }
 
     // MARK: - Properties
 
@@ -122,6 +134,17 @@ import SwiftUI
     func isReplying() -> Bool {
         return !conversations.isEmpty && lastConversation.isReplying
     }
+    
+    func getModels() async {
+        let config = configuration.provider.config
+        let service: OpenAI = OpenAI(configuration: config)
+        
+        do {
+            print(try await service.models())
+        } catch {
+            print("Error: \(error)")
+        }
+    }
 
     init() {
     }
@@ -134,9 +157,84 @@ import SwiftUI
     }
 
     func removeResetContextMarker() {
-        resetMarker = nil
+        withAnimation {
+            resetMarker = nil
+        }
         save()
     }
+    
+    func forkSession(conversation: Conversation) -> [Conversation] {
+        // Assuming 'conversations' is an array of Conversation objects available in this scope
+        if let index = conversations.firstIndex(of: conversation) {
+            // Create a new array containing all conversations up to and including the one at the found index
+            var forkedConversations = Array(conversations.prefix(through: index))
+            
+            // Remove all conversations after the found index from the original conversations array
+            forkedConversations.removeSubrange((index + 1)...)
+
+            // Return the forked conversations
+            return forkedConversations
+        } else {
+            // If the conversation is not found, you might want to handle this case differently.
+            // For now, returning an empty array or the original list based on your requirements might be a good idea.
+            return []
+        }
+    }
+    
+    func generateTitle(forced: Bool = false) async {
+        if (!forced && conversations.count == 2) || (forced && conversations.count >= 1) {
+            // TODO: makeRequest func
+            let openAIconfig = configuration.provider.config
+            let service: OpenAI = OpenAI(configuration: openAIconfig)
+            
+            let taskMessage = Conversation(role: "user", content: "Generate a title of a chat based on the previous conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. If there are two distinct topics being talked about, just make a title with two words and an and word in the middle. If the conversation discusses multiple things not linked to each other, come up with a title that decribes the most recent discussion and add the two words and more to the end. Do not acknowledge these instructions but definitely do follow them.")
+            
+            let messages = ([taskMessage] + conversations).map({ conversation in
+                conversation.toChat()
+            })
+            
+            
+            let query = ChatQuery(messages: messages, 
+                                  model: configuration.model.id,
+                                  maxTokens: 6,
+                                  stream: false)
+            
+            var tempTitle = ""
+            
+            do {
+                let result = try await service.chats(query: query)
+                tempTitle += result.choices.first?.message.content?.string ?? ""
+
+                withAnimation {
+                    title = tempTitle
+                }
+                
+                save()
+                
+            } catch {
+                print("Ensure at least two messages to generate a title.")
+            }
+        }
+    }
+    
+    #if os(macOS)
+    func pasteImageFromClipboard() {
+        let pasteboard = NSPasteboard.general
+
+        // Check for file URLs on the pasteboard
+        if let fileURLs = pasteboard.readObjects(forClasses: [NSURL.self], options: nil) as? [URL],
+           let fileURL = fileURLs.first {
+            // Attempt to create an NSImage from the file URL
+            if let image = NSImage(contentsOf: fileURL) {
+                self.inputImage = image
+            }
+        }
+        // If there are no file URLs, attempt to read image data directly
+        else if let image = pasteboard.readObjects(forClasses: [NSImage.self], options: nil)?.first as? NSImage {
+            self.inputImage = image
+        }
+    }
+    #endif
 
     func setResetContextMarker(conversation: Conversation) {
         if let index = conversations.firstIndex(of: conversation) {
@@ -150,13 +248,12 @@ import SwiftUI
         if conversations.isEmpty {
             return
         }
-
-        // if reset marker is already at the end of conversations, then unset it
-        if resetMarker == conversations.count - 1 {
-            resetMarker = nil
-        } else {
-            resetMarker = conversations.count - 1
-        }
+            // if reset marker is already at the end of conversations, then unset it
+            if resetMarker == conversations.count - 1 {
+                    removeResetContextMarker()
+            } else {
+                resetMarker = conversations.count - 1
+            }
 
         save()
     }
@@ -182,7 +279,6 @@ import SwiftUI
         await send(text: text)
     }
 
-    @MainActor
     func rename(newTitle: String) {
         title = newTitle
         save()
@@ -232,28 +328,38 @@ import SwiftUI
                 removeResetContextMarker()
             }
             
+            if !conversation.base64Image.isEmpty {
+                inputImage = conversation.base64Image.imageFromBase64
+            }
+            
             removeConversations(from: index)
             await send(text: editedContent)
         }
     }
-
+    
+    public func getMessageCountAfterResetMarker() -> Int {
+        if let resetMarker = resetMarker {
+            return conversations.count - resetMarker - 1
+        }
+        return min(configuration.contextLength, conversations.count)
+    }
+    
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
-        isAddingConversation.toggle()
-        
         if let resetMarker = resetMarker {
             if resetMarker == 0 {
                 removeResetContextMarker()
             }
         }
 
-        if isReplying() {
-            return
-        }
         resetErrorDesc()
 
         if !isRegen && !isRetry {
-            appendConversation(Conversation(role: "user", content: text))
+            if inputImage == nil {
+                appendConversation(Conversation(role: "user", content: text))
+           } else {
+                appendConversation(Conversation(role: "user", content: text, base64Image: (inputImage?.base64EncodedString())!))
+           }
         }
 
         let openAIconfig = configuration.provider.config
@@ -261,66 +367,81 @@ import SwiftUI
 
         let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
 
-        var messages: [Conversation]
+        var contextAdjustedMessages: [Conversation]
 
-        if let marker = resetMarker {
-            messages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength))
+        if let marker = resetMarker, conversations.count > marker + 1 {
+            contextAdjustedMessages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength))
         } else {
-            messages = Array(conversations.suffix(configuration.contextLength - 1))
+            contextAdjustedMessages = Array(conversations.suffix(configuration.contextLength - 1))
         }
 
-        var allMessages: [Conversation]
+        let finalMessages = ([systemPrompt] + contextAdjustedMessages).map({ conversation in
+            conversation.toChat()
+        })
 
-        if configuration.model == .ngemini {
-            allMessages = messages
-        } else {
-            allMessages = [systemPrompt] + messages
-        }
-
-        let query = ChatQuery(model: configuration.model.id,
-                              messages: allMessages.map({ conversation in
-                                  conversation.toChat()
-                              }),
-                              temperature: configuration.temperature,
+        let query = ChatQuery(messages: finalMessages, 
+                              model: configuration.model.id,
                               maxTokens: 3800,
+                              temperature: configuration.temperature,
                               stream: Model.nonStreamModels.contains(configuration.model) ? false : true)
-
+        
+        
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+        
+        isAddingConversation.toggle()
 
-        #if os(iOS)
-            var streamText = "";
-            streamingTask = Task {
-                let application = UIApplication.shared
-                let taskId = application.beginBackgroundTask {
-                    // Handle expiration of background task here
-                }
-
-                // Start your network request here
-                if Model.nonStreamModels.contains(configuration.model) {
-                    let result = try await service.chats(query: query)
-                    streamText += result.choices.first?.message.content ?? ""
-                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                    lastConversationData.sync(with: conversations[conversations.count - 1])
-                } else {
-                    for try await result in service.chatsStream(query: query) {
-                        streamText += result.choices.first?.delta.content ?? ""
-                        conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                        lastConversationData.sync(with: conversations[conversations.count - 1])
-                    }
-                }
-
-                // End the background task once the network request is finished
-                application.endBackgroundTask(taskId)
-
-        } #else
-            var streamText = ""
+        var streamText = "";
+    
+#if os(iOS)
             streamingTask = Task {
                 isStreaming = true
                 
                 if Model.nonStreamModels.contains(configuration.model) {
                     let result = try await service.chats(query: query)
-                    streamText += result.choices.first?.message.content ?? ""
-
+                    streamText += result.choices.first?.message.content?.string ?? ""
+//                    let result = try await service.chats(query: query)
+//                    if let content = result.choices.first?.message.content {
+//                      switch content {
+//                      case .string(let stringValue):
+//                          streamText += stringValue
+//
+//                      case .object(let chatContents):
+//                          for chatContent in chatContents {
+//                              if chatContent.type == .text {
+//                                  streamText += chatContent.value
+//                              }
+//                          }
+//                      }
+//                    }
+                } else {
+                    for try await result in service.chatsStream(query: query) {
+                        streamText += result.choices.first?.delta.content ?? ""
+                    }
+                }
+                
+                isStreaming = false
+        }
+#else
+            streamingTask = Task {
+                isStreaming = true
+                
+                if Model.nonStreamModels.contains(configuration.model) {
+                    let result = try await service.chats(query: query)
+                    streamText += result.choices.first?.message.content?.string ?? ""
+//                    let result = try await service.chats(query: query)
+//                    if let content = result.choices.first?.message.content {
+//                      switch content {
+//                      case .string(let stringValue):
+//                          streamText += stringValue
+//
+//                      case .object(let chatContents):
+//                          for chatContent in chatContents {
+//                              if chatContent.type == .text {
+//                                  streamText += chatContent.value
+//                              }
+//                          }
+//                      }
+//                    }
                 } else {
                     for try await result in service.chatsStream(query: query) {
                         streamText += result.choices.first?.delta.content ?? ""
@@ -329,27 +450,52 @@ import SwiftUI
 
                 isStreaming = false
             }
+#endif
         
-            viewUpdater = Task {
-                while true {
-                    try await Task.sleep(nanoseconds: 250_000_000)
+        viewUpdater = Task {
+            while true {
+                #if os(macOS)
+                try await Task.sleep(nanoseconds: 250_000_000)
+                #else
+                try await Task.sleep(nanoseconds: 50_000_000)
+                #endif
+                
+                if AppConfiguration.shared.isMarkdownEnabled {
                     conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                    lastConversationData.sync(with: conversations[conversations.count - 1])
-                    if !isStreaming {
-                        break
+                } else {
+                    withAnimation {
+                        conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
                     }
                 }
+                
+                lastConversationData.sync(with: conversations[conversations.count - 1])
+                
+                if !isStreaming {
+//                    await generateTitle(forced: false)
+                    break
+                }
             }
-        #endif
+        }
 
         do {
+            inputImage = nil
             #if os(macOS)
             try await streamingTask?.value
             try await viewUpdater?.value
             #else
+            let application = UIApplication.shared
+            let taskId = application.beginBackgroundTask {
+                // Handle expiration of background task here
+            }
+            
             try await streamingTask?.value
+            try await viewUpdater?.value
+            
+            application.endBackgroundTask(taskId)
             #endif
-
+            
+//            await generateTitle(forced: false)
+            
         } catch {
             isStreaming = false
             // TODO: do better with stop_reason from openai
@@ -368,12 +514,15 @@ import SwiftUI
                         print("couldnt sleep")
                     }
                     removeConversation(at: conversations.count - 1)
-                    setErrorDesc(errorDesc: error.localizedDescription)
                 }
             }
+            setErrorDesc(errorDesc: error.localizedDescription)
         }
+        
 
         conversations[conversations.count - 1].isReplying = false
+        
+//        await generateTitle(forced: false)
 
         save()
     }
@@ -412,13 +561,15 @@ extension DialogueSession {
             if let id = data.id,
                let content = data.content,
                let role = data.role,
-               let date = data.date {
-                let conversation = Conversation(
-                    id: id,
-                    date: date,
-                    role: role,
-                    content: content
-                )
+               let date = data.date,
+               let base64Image = data.base64Image {
+               let conversation = Conversation(
+                 id: id,
+                 date: date,
+                 role: role,
+                 content: content,
+                 base64Image: base64Image
+               )
                 return conversation
             } else {
                 return nil
@@ -438,13 +589,20 @@ extension DialogueSession {
             removeResetContextMarker()
         }
 
+        #if os(macOS)
         conversations.append(conversation)
+        #else
+        withAnimation {
+            conversations.append(conversation)
+        }
+        #endif
 
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id
         data.date = conversation.date
         data.role = conversation.role
         data.content = conversation.content
+        data.base64Image = conversation.base64Image
         rawData?.conversations?.adding(data)
         data.dialogue = rawData
 
@@ -458,7 +616,11 @@ extension DialogueSession {
     }
 
     func removeConversation(at index: Int) {
-        let conversation = conversations.remove(at: index)
+        let conversation = conversations[index]
+        
+        withAnimation {
+            let _ = conversations.remove(at: index)
+        }
 
         if resetMarker == index {
             if conversations.count > 1 {
@@ -521,7 +683,10 @@ extension DialogueSession {
     func removeAllConversations() {
         removeResetContextMarker()
         resetErrorDesc()
-        conversations.removeAll()
+        
+        withAnimation {
+            conversations.removeAll()
+        }
 
         do {
             let viewContext = PersistenceController.shared.container.viewContext

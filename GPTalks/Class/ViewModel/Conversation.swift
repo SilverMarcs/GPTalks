@@ -8,28 +8,35 @@
 import SwiftUI
 import OpenAI
 
-struct Conversation: Codable, Identifiable, Hashable {
+struct Conversation: Codable, Identifiable, Hashable, Equatable {
     var id = UUID()
     var date = Date()
     var role: String
     var content: String
+    var base64Image: String = ""
     var isReplying: Bool = false
     
-    func toChat() -> Chat {
-        let chatRole: Chat.Role = {
+    func toChat() -> ChatQuery.ChatCompletionMessageParam {
+        let chatRole: ChatQuery.ChatCompletionMessageParam.Role = {
             switch role {
             case "user":
-                return Chat.Role.user
+                return .user
             case "assistant":
-                return Chat.Role.assistant
+                return .assistant
             case "system":
-                return Chat.Role.system
+                return .system
             default:
-                return Chat.Role.function
+                return .tool
             }
         }()
         
-        return Chat(role: chatRole, content: content)
+        if !base64Image.isEmpty {
+//            return Message(role: chatRole, content: [ChatContent(type: .text, value: content), ChatContent(type: .imageUrl, value: "data:image/jpeg;base64," + base64Image)])
+            return .init(role: chatRole, content: [.init(chatCompletionContentPartTextParam: .init(text: content)), .init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: ("data:image/jpeg;base64," + base64Image), detail: .auto)))])!
+        } else {
+//            return Message(role: chatRole, content: content)
+            return .init(role: chatRole, content: content)!
+        }
     }
 }
 
