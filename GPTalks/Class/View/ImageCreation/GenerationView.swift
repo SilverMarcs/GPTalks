@@ -5,7 +5,7 @@
 //  Created by Zabir Raihan on 14/02/2024.
 //
 
-import NetworkImage
+//import NetworkImage
 import SwiftUI
 
 struct GenerationView: View {
@@ -24,7 +24,7 @@ struct GenerationView: View {
             #endif
             
             VStack(alignment: .leading, spacing: 6) {
-                Text(generation.imageModel)
+                Text(generation.model)
                     .font(.title3)
                     .bold()
                 
@@ -32,15 +32,34 @@ struct GenerationView: View {
                     .textSelection(.enabled)
                 
                 if generation.isGenerating {
-                    ReplyingIndicatorView()
-                        .frame(width: 48, height: 16)
-                        .bubbleStyle(isMyMessage: false)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    HStack {
+                        ReplyingIndicatorView()
+                            .frame(width: 48, height: 16)
+                            .bubbleStyle(isMyMessage: false)
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        Button {
+                            generation.stopGenerating()
+                        } label: {
+                            Image(systemName: "stop.circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.red)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                
+                if !generation.errorDesc.isEmpty {
+                    Text(generation.errorDesc)
+                        .foregroundColor(.red)
                 }
                 
                 // TODO: make grid
                 ForEach(generation.urls, id: \.self) { url in 
-                    NetworkImage(url: url) { image in
+                    AsyncImage(url: url) { image in
                         image
                             .resizable()
                             .scaledToFit()

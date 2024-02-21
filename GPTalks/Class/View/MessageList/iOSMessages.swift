@@ -30,11 +30,8 @@ struct iOSMessages: View {
         ScrollViewReader { proxy in
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
-                    LazyVStack {
-                        ForEach(session.conversations) { conversation in
-                            ConversationView(session: session, conversation: conversation)
-                        }
-//                        .padding(.horizontal, AppConfiguration.shared.alternatChatUi ? 0 :  12)
+                    ForEach(session.conversations) { conversation in
+                        ConversationView(session: session, conversation: conversation)
                     }
                     .padding(.horizontal, AppConfiguration.shared.alternatChatUi ? 0 :  12)
                     .padding(.vertical, 12)
@@ -211,7 +208,7 @@ struct iOSMessages: View {
                             }
 
                         } label: {
-                            Label("Title", systemImage: "textformat.alt")
+                            Label(session.title, systemImage: "textformat.alt")
                         }
 
                         Menu {
@@ -222,7 +219,7 @@ struct iOSMessages: View {
                             }
 
                         } label: {
-                            Label("System Prompt", systemImage: "square.text.square")
+                            Label(session.configuration.systemPrompt, systemImage: "square.text.square")
                         }
                     }
 
@@ -230,25 +227,25 @@ struct iOSMessages: View {
                         Menu {
                             ProviderPicker(session: session)
                         } label: {
-                            Label("Provider", systemImage: "building.2")
+                            Label(session.configuration.provider.name, systemImage: "building.2")
                         }
 
                         Menu {
                             ModelPicker(session: session)
                         } label: {
-                            Label("Model", systemImage: "cube.box")
+                            Label(session.configuration.model.name, systemImage: "cube.box")
                         }
 
                         Menu {
                             TempPicker(session: session)
                         } label: {
-                            Label("Temperature", systemImage: "thermometer.sun")
+                            Label("Temperature: " + String(session.configuration.temperature), systemImage: "thermometer.sun")
                         }
 
                         Menu {
                             ContextPicker(session: session)
                         } label: {
-                            Label("Context", systemImage: "clock.arrow.circlepath")
+                            Label("Context: " + String(session.configuration.contextLength), systemImage: "clock.arrow.circlepath")
                         }
                     }
 

@@ -60,45 +60,56 @@ struct ImageCreator: View {
                         dismiss()
                     }
                 }
-                
 #endif
-                ToolbarItem(placement: .confirmationAction) {
+                ToolbarItem(placement: .primaryAction) {
                     Menu {
                         Menu {
-                            Picker("Provider", selection: $imageSession.configuration.provider) {
-                                ForEach(Provider.availableProviders, id: \.self) { provider in
-                                    Text(provider.name)
-                                }
-                            }
+                            providerPicker
                         } label: {
-                            Label("Provider", systemImage: "building.2")
+                            Label(imageSession.configuration.provider.name, systemImage: "building.2")
                         }
                         
                         Menu {
-                            Picker("Model", selection: $imageSession.configuration.model) {
-                                ForEach(imageSession.configuration.provider.imageModels, id: \.self) { model in
-                                    Text(model.name)
-                                }
-                            }
+                            modelPicker
                         } label: {
-                            Label("Model", systemImage: "cpu")
+                            Label(imageSession.configuration.model.name, systemImage: "cpu")
                         }
                         
                         Menu {
-                            Picker("Number", selection: $imageSession.configuration.count) {
-                                ForEach(1 ... 4, id: \.self) { number in
-                                    Text("Count: \(number)")
-                                        .tag(number)
-                                }
-                            }
+                            countPicker
                         } label: {
-                            Label("Count", systemImage: "number")
+                            Label("Count: " + String(imageSession.configuration.count), systemImage: "number")
                         }
                         
                     } label: {
                         Image(systemName: "ellipsis.circle")
                     }
                 }
+            }
+        }
+    }
+    
+    var modelPicker: some View {
+        Picker("Model", selection: $imageSession.configuration.model) {
+            ForEach(imageSession.configuration.provider.imageModels, id: \.self) { model in
+                Text(model.name)
+            }
+        }
+    }
+    
+    var providerPicker: some View {
+        Picker("Provider", selection: $imageSession.configuration.provider) {
+            ForEach(Provider.availableProviders, id: \.self) { provider in
+                Text(provider.name)
+            }
+        }
+    }
+    
+    var countPicker: some View {
+        Picker("Number", selection: $imageSession.configuration.count) {
+            ForEach(1 ... 4, id: \.self) { number in
+                Text("Count: \(number)")
+                    .tag(number)
             }
         }
     }
