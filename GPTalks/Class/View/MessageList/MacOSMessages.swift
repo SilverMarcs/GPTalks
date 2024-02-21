@@ -25,7 +25,7 @@ struct MacOSMessages: View {
     var body: some View {
         ScrollViewReader { proxy in
             normalList
-            .navigationTitle(session.isGeneratingTitle ? "Generating Title..." : session.title)
+            .navigationTitle(session.title)
             .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 BottomInputView(
@@ -205,7 +205,7 @@ struct MacOSMessages: View {
         Group {
             if AppConfiguration.shared.alternatChatUi {
                 List {
-                    VStack {
+                    LazyVStack {
                         ForEach(session.conversations) { conversation in
                             ConversationView(session: session, conversation: conversation)
                                 .id(conversation.id)

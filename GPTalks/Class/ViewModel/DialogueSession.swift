@@ -107,8 +107,6 @@ import SwiftUI
     
     var isStreaming = false
     
-    var isGeneratingTitle = false
-    
     var containsConversationWithImage: Bool {
         conversations.contains(where: { !$0.base64Image.isEmpty })
     }
@@ -184,9 +182,7 @@ import SwiftUI
     }
     
     func generateTitle(forced: Bool = false) async {
-        if (!forced && conversations.count == 2) || (forced && conversations.count >= 1) {
-            isGeneratingTitle = true
-            
+        if (!forced) || (forced && conversations.count >= 1) {
             // TODO: makeRequest func
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
@@ -226,9 +222,8 @@ import SwiftUI
                     
                     save()
                 }
-                    isGeneratingTitle = false
             } catch {
-                setErrorDesc(errorDesc: "Ensure at least two messages to generate a title.")
+                print("Ensure at least two messages to generate a title.")
             }
         }
     }
@@ -477,7 +472,9 @@ import SwiftUI
                 #else
                 try await Task.sleep(nanoseconds: 50_000_000)
                 #endif
-                        
+                
+                await generateTitle(forced: false)
+                
                 if AppConfiguration.shared.isMarkdownEnabled {
                     conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
                 } else {
@@ -497,9 +494,7 @@ import SwiftUI
         do {
             inputImage = nil
             #if os(macOS)
-            await generateTitle(forced: false)
             try await streamingTask?.value
-//            await generateTitle(forced: false)
             try await viewUpdater?.value
             #else
             let application = UIApplication.shared
@@ -507,16 +502,11 @@ import SwiftUI
                 // Handle expiration of background task here
             }
             
-            await generateTitle(forced: false)
             try await streamingTask?.value
-//            await generateTitle(forced: false)
             try await viewUpdater?.value
             
             application.endBackgroundTask(taskId)
             #endif
-            
-//            await generateTitle()
-
         } catch {
             isStreaming = false
             // TODO: do better with stop_reason from openai

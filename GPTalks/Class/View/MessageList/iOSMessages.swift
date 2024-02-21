@@ -275,7 +275,7 @@ struct iOSMessages: View {
         HStack {
             ProviderImage(radius: 9, color: session.configuration.provider.accentColor, frame: 30)
             VStack(alignment: .leading, spacing: 1) {
-                Text(session.isGeneratingTitle ? "Generating Title..." : session.title)
+                Text(session.title)
                     .font(.system(size: 16))
                     .foregroundStyle(.primary)
                     .bold()
