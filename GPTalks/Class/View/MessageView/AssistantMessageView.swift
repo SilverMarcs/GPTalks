@@ -79,11 +79,14 @@ struct AssistantMessageView: View {
                     .font(.title3)
                     .bold()
                 
-                if AppConfiguration.shared.isMarkdownEnabled {
-                    MarkdownView(text: conversation.content)
-                } else {
-                    Text(conversation.content)
+                Group {
+                    if AppConfiguration.shared.isMarkdownEnabled {
+                        MarkdownView(text: conversation.content)
+                    } else {
+                        Text(conversation.content)
+                    }
                 }
+                .textSelection(.enabled)
                 
                 if conversation.isReplying {
                     ReplyingIndicatorView()
