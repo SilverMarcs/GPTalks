@@ -36,6 +36,7 @@ struct MacOSMessages: View {
             }
             .onChange(of: viewModel.selectedDialogue) {
                 isTextFieldFocused = true
+                viewModel.selectedState = .active
                 
                 NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (event) -> NSEvent? in
                     if event.modifierFlags.contains(.command) && event.characters == "v" {

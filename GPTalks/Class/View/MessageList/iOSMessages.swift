@@ -30,13 +30,14 @@ struct iOSMessages: View {
         ScrollViewReader { proxy in
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
-                    Spacer()
-                        .frame(height: 12)
-
-                    ForEach(session.conversations) { conversation in
-                        ConversationView(session: session, conversation: conversation)
+                    LazyVStack {
+                        ForEach(session.conversations) { conversation in
+                            ConversationView(session: session, conversation: conversation)
+                        }
+//                        .padding(.horizontal, AppConfiguration.shared.alternatChatUi ? 0 :  12)
                     }
                     .padding(.horizontal, AppConfiguration.shared.alternatChatUi ? 0 :  12)
+                    .padding(.vertical, 12)
 
                     ErrorDescView(session: session)
 

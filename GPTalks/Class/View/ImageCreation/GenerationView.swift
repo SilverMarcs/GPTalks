@@ -13,86 +13,60 @@ struct GenerationView: View {
     @Binding var shouldScroll: Bool
     
     var body: some View {
-        VStack(spacing: spacing) {
-            VStack(alignment: .trailing, spacing: 5) {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "sparkle")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 18, height: 18)
+                .foregroundColor(Color("niceColorLighter"))
+            #if !os(macOS)
+                .padding(.top, 3)
+            #endif
+            
+            VStack(alignment: .leading, spacing: 6) {
                 Text(generation.imageModel)
-                    .font(.caption)
-                    .bubbleStyle(isMyMessage: false, compact: true)
+                    .font(.title3)
+                    .bold()
+                
                 Text(generation.prompt)
                     .textSelection(.enabled)
-                    .bubbleStyle(isMyMessage: true)
-            }
-            .padding(.leading, horizontalPadding)
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            
-            if generation.isGenerating {
-                ReplyingIndicatorView()
-                    .frame(width: 48, height: 16)
-                    .bubbleStyle(isMyMessage: false)
-//                    .padding(.trailing, horizontalPadding)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            
-            ForEach(generation.urls, id: \.self) { url in
-                HStack(spacing: spacing) {
+                
+                if generation.isGenerating {
+                    ReplyingIndicatorView()
+                        .frame(width: 48, height: 16)
+                        .bubbleStyle(isMyMessage: false)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                
+                // TODO: make grid
+                ForEach(generation.urls, id: \.self) { url in 
                     NetworkImage(url: url) { image in
                         image
                             .resizable()
                             .scaledToFit()
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                             .frame(width: imageSize, height: imageSize)
-#if !os(macOS)
                             .contextMenu {
-                                Button(action: {
+                                Button {
                                     saveImage(url: url)
-                                }) {
-                                    Text("Save Image")
-                                    Image(systemName: "square.and.arrow.down")
+                                } label: {
+                                    Label("Save Image", systemImage: "square.and.arrow.down")
                                 }
                             }
-#endif
                     } placeholder: {
                         ZStack(alignment: .center) {
                             Color.secondary
                                 .opacity(0.1)
                                 .frame(width: imageSize, height: imageSize)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                            
+                                
                             ProgressView()
                         }
-                        .onAppear {
-                            shouldScroll = true
-                        }
-                        .onDisappear {
-                            shouldScroll = false
-                        }
                     }
-
-                    #if os(macOS)
-                    Button {
-                        saveImage(url: url)
-                    } label: {
-                        Image(systemName: "square.and.arrow.down")
-                            .resizable()
-                            .scaledToFit()
-                            .padding(.leading, 8)
-                            .padding(.trailing, 7)
-                            .padding(.bottom, 8)
-                            .padding(.top, 6)
-                            .background(.gray.opacity(0.2))
-                            .foregroundStyle(.secondary)
-                            .clipShape(Circle())
-                            .frame(width: btnSize, height: btnSize)
-                    }
-                    .buttonStyle(.plain)
-                    #endif
-                    
-                    Spacer()
                 }
-                .padding(.trailing, horizontalPadding - 20)
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
+        .frame(maxWidth: .infinity, alignment: .topLeading)
     }
     
     private var btnSize: CGFloat {
@@ -127,17 +101,3 @@ struct GenerationView: View {
         #endif
     }
 }
-
-//                    .onTapGesture {
-//                        previewUrl = image.url!
-//                        isFocused = false
-//                        isZoomViewPresented = true
-//                    }
-//                    .contextMenu {
-//                        Button(action: {
-//                            saveImage(url: URL(string: image.url!))
-//                        }) {
-//                            Text("Save Image")
-//                            Image(systemName: "square.and.arrow.down")
-//                        }
-//                    }

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(DialogueViewModel.self) private var viewModel
-    @State var generations: [ImageGeneration] = []
+    @State var imageSession: ImageSession = .init()
 
     var body: some View {
         NavigationSplitView {
@@ -23,10 +23,12 @@ struct ContentView: View {
             if let selectedDialogue = viewModel.selectedDialogue {
                 #if os(macOS)
                 if viewModel.selectedState == .images {
-                    ImageCreator(switchToChat: Binding.constant(true), generations: $generations)
+                    ImageCreator(imageSession: imageSession)
+                        .onChange(of: viewModel.selectedDialogue) {
+                            viewModel.selectedState = .active
+                        }
                 } else {
                     MacOSMessages(session: selectedDialogue)
-//                        .id(selectedDialogue.id)
                         .frame(minWidth: 500)
                 }
                 #else

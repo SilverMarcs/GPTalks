@@ -99,35 +99,6 @@ struct BottomInputView: View {
     }
     
     #if !os(macOS)
-//    var iosImagePicker: some View {
-//        PhotosPicker(
-//            selection: $selectedItem,
-//            matching: .images,
-//            photoLibrary: .shared()
-//        ) {
-//            Image(systemName: "plus")
-//                .resizable()
-//                .scaledToFit()
-//                .padding(10)
-//                .fontWeight(.semibold)
-//                .foregroundStyle(.secondary)
-//                .background(.gray.opacity(0.2))
-//                .clipShape(Circle())
-//                .frame(width: imageSize + 3, height: imageSize + 3)
-//        }
-//        .onChange(of: selectedItem) { newItem in
-//            // Load the selected image
-//            guard let newItem = newItem else { return }
-//            Task {
-//                // Retrieve selected asset in the form of Data
-//                if let data = try? await newItem.loadTransferable(type: Data.self) {
-//                    // Convert Data to UIImage and assign it to inputImage
-//                    session.inputImage = UIImage(data: data)
-//                    selectedItem = nil
-//                }
-//            }
-//        }
-//    }
     
     var iosMore: some View {
         Menu {
@@ -176,29 +147,7 @@ struct BottomInputView: View {
         .padding(-20) // Cancel out visual expansion
         .background(Color.clear)
     }
-    
-//    var iosImagePicker: some View {
-//        PhotosPicker(
-//            selection: $selectedItem,
-//            matching: .images,
-//            photoLibrary: .shared()
-//        ) {
-//            Label("Add Image", systemImage: "photo.fill")
-//        }
-//        .onChange(of: selectedItem) { newItem in
-//            // Load the selected image
-//            guard let newItem = newItem else { return }
-//            Task {
-//                // Retrieve selected asset in the form of Data
-//                if let data = try? await newItem.loadTransferable(type: Data.self) {
-//                    // Convert Data to UIImage and assign it to inputImage
-//                    session.inputImage = UIImage(data: data)
-//                    selectedItem = nil
-//                }
-//            }
-//        }
-//    }
-    
+
     #endif
     
     var imagePicker: some View {
@@ -251,15 +200,12 @@ struct BottomInputView: View {
             #else
                 .padding(8)
                 .background(.gray.opacity(0.2))
-//            .background(colorScheme == .dark ? .regularMaterial : .thick)
                 .clipShape(Circle())
                 .frame(width: imageSize + 3, height: imageSize + 3)
             #endif
         }
         .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
         .disabled(session.conversations.isEmpty || session.isReplying())
-//        .rotationEffect(.degrees(-45))
-//        .padding(.horizontal, -2)
         .contentShape(Rectangle())
     }
     

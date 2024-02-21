@@ -37,7 +37,7 @@ struct ServiceSettingsView: View {
                 }
 
                 GroupBox(label: Text("API Settings")) {
-                    if provider == .custom || provider == .gpt4free {
+                    if provider == .custom {
                         HStack {
                             Text("Host URL")
                             Spacer()
@@ -73,7 +73,7 @@ struct ServiceSettingsView: View {
                 modelPicker
             }
             Section("API Settings") {
-                if provider == .custom || provider == .gpt4free {
+                if provider == .custom {
                     hostUrl
                 }
                 
@@ -94,14 +94,7 @@ struct ServiceSettingsView: View {
 
     var hostUrl: some View {
         HStack {
-            TextField("Host URL (omit https and /v1/x/x)", text: provider == .custom ? configuration.$Chost : configuration.$Ghost)
-        }
-    }
-
-    var ignoreWeb: some View {
-        Picker("Ignore Web", selection: configuration.$ignoreWeb) {
-            Text("True").tag("True")
-            Text("False").tag("False")
+            TextField("Host URL (omit https and /v1/x/x)", text: configuration.$Chost)
         }
     }
 

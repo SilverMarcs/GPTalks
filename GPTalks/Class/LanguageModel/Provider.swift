@@ -10,24 +10,15 @@ import SwiftUI
 
 enum Provider: String, CaseIterable, Codable, Identifiable {
     case openai
-    case openrouter
-    case shuttle
     case oxygen
-    case gpt4free
     case custom
 
     var id: String {
         switch self {
         case .openai:
             "openai"
-        case .openrouter:
-            "openrouter"
-        case .shuttle:
-            "shuttle"
         case .oxygen:
             "oxygen"
-        case .gpt4free:
-            "gpt4free"
         case .custom:
             "custom"
         }
@@ -40,25 +31,10 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 token: AppConfiguration.shared.OAIkey,
                 host: "api.openai.com"
             )
-        case .openrouter:
-            OpenAI.Configuration(
-                token: AppConfiguration.shared.ORkey,
-                host: "openrouter.ai/api"
-            )
-        case .shuttle:
-            OpenAI.Configuration(
-                token: AppConfiguration.shared.Skey,
-                host: "api.shuttleai.app"
-            )
         case .oxygen:
             OpenAI.Configuration(
                 token: AppConfiguration.shared.Okey,
                 host: "app.oxyapi.uk"
-            )
-        case .gpt4free:
-            OpenAI.Configuration(
-                token: AppConfiguration.shared.Gkey,
-                host: AppConfiguration.shared.Ghost
             )
         case .custom:
             OpenAI.Configuration(
@@ -76,14 +52,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .openai:
             Color("greenColor")
-        case .openrouter:
-            Color("pinkColor")
-        case .shuttle:
-            Color("purpleColor")
         case .oxygen:
             Color("niceColor")
-        case .gpt4free:
-            Color("blueColor")
         case .custom:
             Color("tealColor")
         }
@@ -93,14 +63,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .openai:
             "OpenAI"
-        case .openrouter:
-            "OpenRouter"
-        case .shuttle:
-            "Shuttle"
         case .oxygen:
             "Oxygen"
-        case .gpt4free:
-            "GPT4Free"
         case .custom:
             "Custom"
         }
@@ -110,14 +74,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .openai:
             AppConfiguration.shared.OAImodel
-        case .openrouter:
-            AppConfiguration.shared.ORmodel
-        case .shuttle:
-            AppConfiguration.shared.Smodel
         case .oxygen:
             AppConfiguration.shared.Omodel
-        case .gpt4free:
-            AppConfiguration.shared.Gmodel
         case .custom:
             AppConfiguration.shared.Cmodel
         }
@@ -126,17 +84,11 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     var chatModels: [Model] {
         switch self {
         case .openai:
-            Model.openAIModels
-        case .openrouter:
-            Model.openRouterModels
-        case .shuttle:
-            Model.shuttleModels
+            Model.openAIChatModels
         case .oxygen:
-            Model.oxygenModels
-        case .gpt4free:
-            Model.gpt4freeModels
+            Model.oxygenChatModels
         case .custom:
-            Model.customModels
+            [Model.customChat]
         }
     }
     
@@ -144,20 +96,9 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .openai:
             Model.openAIVisionModels
-        case .openrouter:
-//            Model.openRouterVisionModels
-            Model.customVisionModels
-        case .shuttle:
-//            Model.shuttleVisionModels
-            Model.customVisionModels
         case .oxygen:
-//            Model.oxygenVisionModels
-            Model.openAIVisionModels
-        case .gpt4free:
-//            Model.gpt4freeVisionModels
-            Model.customVisionModels
+            Model.oxygenVisionModels
         case .custom:
-//            Model.customVisionModels
             Model.openAIVisionModels
         }
     }
@@ -166,21 +107,10 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .openai:
             Model.openAIImageModels
-        case .openrouter:
-//            Model.openRouterImageModels
-            Model.customImageModels
-        case .shuttle:
-//            Model.shuttleImageModels
-            Model.customImageModels
         case .oxygen:
-//            Model.oxygenImageModels
-            Model.customImageModels
-        case .gpt4free:
-//            Model.gpt4freeImageModels
-            Model.customImageModels
+            Model.oxygenImageModels
         case .custom:
-//            Model.customImageModels
-            Model.customImageModels
+            [Model.customImage]
         }
     }
 
@@ -195,28 +125,10 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 apiKey: configuration.$OAIkey,
                 provider: self
             )
-        case .openrouter:
-            ServiceSettingsView(
-                model: configuration.$ORmodel,
-                apiKey: configuration.$ORkey,
-                provider: self
-            )
-        case .shuttle:
-            ServiceSettingsView(
-                model: configuration.$Smodel,
-                apiKey: configuration.$Skey,
-                provider: self
-            )
         case .oxygen:
             ServiceSettingsView(
                 model: configuration.$Omodel,
                 apiKey: configuration.$Okey,
-                provider: self
-            )
-        case .gpt4free:
-            ServiceSettingsView(
-                model: configuration.$Gmodel,
-                apiKey: configuration.$Gkey,
                 provider: self
             )
         case .custom:
@@ -238,10 +150,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     static var availableProviders: [Provider] {
         [
             .openai,
-//            .openrouter,
-//            .shuttle,
             .oxygen,
-//            .gpt4free,
             .custom,
         ]
     }

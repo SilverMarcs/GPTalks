@@ -383,7 +383,7 @@ import SwiftUI
                               model: configuration.model.id,
                               maxTokens: 3800,
                               temperature: configuration.temperature,
-                              stream: Model.nonStreamModels.contains(configuration.model) ? false : true)
+                              stream: true)
         
         
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
@@ -392,66 +392,15 @@ import SwiftUI
 
         var streamText = "";
     
-#if os(iOS)
             streamingTask = Task {
                 isStreaming = true
-                
-                if Model.nonStreamModels.contains(configuration.model) {
-                    let result = try await service.chats(query: query)
-                    streamText += result.choices.first?.message.content?.string ?? ""
-//                    let result = try await service.chats(query: query)
-//                    if let content = result.choices.first?.message.content {
-//                      switch content {
-//                      case .string(let stringValue):
-//                          streamText += stringValue
-//
-//                      case .object(let chatContents):
-//                          for chatContent in chatContents {
-//                              if chatContent.type == .text {
-//                                  streamText += chatContent.value
-//                              }
-//                          }
-//                      }
-//                    }
-                } else {
                     for try await result in service.chatsStream(query: query) {
                         streamText += result.choices.first?.delta.content ?? ""
                     }
-                }
-                
-                isStreaming = false
-        }
-#else
-            streamingTask = Task {
-                isStreaming = true
-                
-                if Model.nonStreamModels.contains(configuration.model) {
-                    let result = try await service.chats(query: query)
-                    streamText += result.choices.first?.message.content?.string ?? ""
-//                    let result = try await service.chats(query: query)
-//                    if let content = result.choices.first?.message.content {
-//                      switch content {
-//                      case .string(let stringValue):
-//                          streamText += stringValue
-//
-//                      case .object(let chatContents):
-//                          for chatContent in chatContents {
-//                              if chatContent.type == .text {
-//                                  streamText += chatContent.value
-//                              }
-//                          }
-//                      }
-//                    }
-                } else {
-                    for try await result in service.chatsStream(query: query) {
-                        streamText += result.choices.first?.delta.content ?? ""
-                    }
-                }
 
                 isStreaming = false
             }
-#endif
-        
+
         viewUpdater = Task {
             while true {
                 #if os(macOS)

@@ -168,7 +168,7 @@ struct DefaultConfigView: View {
     }
 
     var customModel: some View {
-        TextField("Enter a custom model", text: configuration.$customModel, axis: .vertical)
+        TextField("Enter a custom model", text: configuration.$customChatModel, axis: .vertical)
     }
 
     var paddingValue: CGFloat {

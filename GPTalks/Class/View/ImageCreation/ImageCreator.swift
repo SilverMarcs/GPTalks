@@ -13,35 +13,35 @@ import SwiftUI
 #endif
 
 struct ImageCreator: View {
-    @Binding var switchToChat: Bool
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var configuration: AppConfiguration = .shared
-
-    @Binding var generations: [ImageGeneration]
-    @State var prompt: String = ""
-    @State var number: Int = 1
-
-    @State var errorMsg: String = ""
-    @FocusState var isTextFieldFocused: Bool
-    @State var showWarning = false
-    @State var shouldScroll = false
+    @Environment(\.dismiss) var dismiss
+    
+    @Bindable var imageSession: ImageSession
 
     var body: some View {
         ScrollViewReader { proxy in
             list
-            .onChange(of: shouldScroll) {
-                scrollToBottom(proxy: proxy, animated: true)
-            }
+            .navigationTitle("Image Generations")
+            #if !os(macOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
             .onAppear {
-                isTextFieldFocused = true
-//                generations.append(ImageObject(prompt: "batman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v superman", imageModel: "dall-e-3", urls: [URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!, URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!]))
-//                generations.append(ImageObject(isGenerating: false, prompt: "batman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v superman", imageModel: "dall-e-3", urls: [URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!]))
-//                generations.append(ImageObject(prompt: "batman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v superman", imageModel: "dall-e-3", urls: [URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!, URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!]))
-//                generations.append(ImageObject(isGenerating: true, prompt: "batman v superman", imageModel: "dall-e-3", urls: []))
+                imageSession.addDummies()
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                textBox
-                    .padding(15)
+                HStack(spacing: 12) {
+                    clearGenerations
+                    
+                    inputBox
+
+                    #if os(macOS)
+                    sendButton
+                    #endif
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal)
+                .padding(.top, verticalPadding)
+                .padding(.bottom, verticalPadding + 2)
                 #if os(iOS)
                     .background(
                         VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
@@ -53,170 +53,71 @@ struct ImageCreator: View {
                     .background(.regularMaterial)
                 #endif
             }
-            .onTapGesture {
-                isTextFieldFocused = false
-            }
-            .onChange(of: generations.count) {
-                scrollToBottom(proxy: proxy, animated: true)
-            }
-//            .background(.background)
-            #if os(macOS)
-            .navigationTitle("Image Generations")
-//            .navigationSubtitle("subtitle")
-            #endif
-            .listStyle(.plain)
             .toolbar {
-                Picker("Preferred Image Provider", selection: configuration.$preferredImageService) {
-                    ForEach(Provider.availableProviders, id: \.self) { provider in
-                        Text(provider.name)
+#if !os(macOS)
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close") {
+                        dismiss()
                     }
                 }
                 
-                TextField("Model", text: $configuration.defaultImageModel)
-                    .textFieldStyle(.roundedBorder)
-                #if os(iOS)
-                    .textInputAutocapitalization(.never)
-                #endif
-                    .frame(width: 110)
-
-                Picker("Number", selection: $number) {
-                    ForEach(1 ... 4, id: \.self) { number in
-                        Text("Count: \(number)")
-                            .tag(number)
+#endif
+                ToolbarItem(placement: .confirmationAction) {
+                    Menu {
+                        Menu {
+                            Picker("Provider", selection: $imageSession.configuration.provider) {
+                                ForEach(Provider.availableProviders, id: \.self) { provider in
+                                    Text(provider.name)
+                                }
+                            }
+                        } label: {
+                            Label("Provider", systemImage: "building.2")
+                        }
+                        
+                        Menu {
+                            Picker("Model", selection: $imageSession.configuration.model) {
+                                ForEach(imageSession.configuration.provider.imageModels, id: \.self) { model in
+                                    Text(model.name)
+                                }
+                            }
+                        } label: {
+                            Label("Model", systemImage: "cpu")
+                        }
+                        
+                        Menu {
+                            Picker("Number", selection: $imageSession.configuration.count) {
+                                ForEach(1 ... 4, id: \.self) { number in
+                                    Text("Count: \(number)")
+                                        .tag(number)
+                                }
+                            }
+                        } label: {
+                            Label("Count", systemImage: "number")
+                        }
+                        
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
                     }
                 }
             }
         }
-        #if !os(macOS)
-        .onDisappear {
-            switchToChat = true
-        }
-        #endif
     }
-
-    var textBox: some View {
-        HStack(spacing: 10) {
-            Button {
-                generations = []
-            } label: {
-                Image(systemName: "trash")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: imageSize, height: imageSize)
-            }
-            .buttonStyle(.plain)
-
-            #if os(macOS)
-                ZStack(alignment: .leading) {
-                    if prompt.isEmpty {
-                        Text("Prompt")
-                            .font(.body)
-                            .padding(6)
-                            .padding(.leading, 4)
-                            .foregroundColor(Color(.placeholderTextColor))
-                    }
-                    TextEditor(text: $prompt)
-                        .font(.body)
-                        .frame(maxHeight: 400)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(6)
-                        .scrollContentBackground(.hidden)
-                        .roundedRectangleOverlay()
-                }
-            #else
-                TextField("Prompt", text: $prompt, axis: .vertical)
-                    .padding(6)
-                    .padding(.horizontal, 4)
-                    .frame(minHeight: 33)
-                    .multilineTextAlignment(.leading)
-                    .lineLimit(1 ... 4)
-                    .focused($isTextFieldFocused)
-                    .roundedRectangleOverlay()
-            #endif
-
-            Button {
-                Task {
-                    isTextFieldFocused = false
-                    await send()
-                }
-            } label: {
-                Image(systemName: "paperplane.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: imageSize, height: imageSize)
-                    .foregroundColor(.accentColor)
-            }
-            .buttonStyle(.plain)
-            .keyboardShortcut(.return, modifiers: .command)
-            .disabled(prompt.isEmpty)
-        }
-    }
-
-    func send() async {
-        errorMsg = ""
-
-        var streamingTask: Task<Void, Error>?
-//        let query = ImagesQuery(prompt: prompt, model: configuration.defaultImageModel, n: Int(number), size: "1024x1024", quality: "standard")
-        let query = ImagesQuery(prompt: prompt, model: configuration.defaultImageModel, n: Int(number), quality: .standard, size: ._1024)
-
+    
+    private var verticalPadding: CGFloat {
         #if os(iOS)
-            streamingTask = Task {
-                let application = UIApplication.shared
-                let taskId = application.beginBackgroundTask {
-                    // Handle expiration of background task here
-                }
-
-                try await sendHelper(query: query)
-
-                // End the background task once the network request is finished
-                application.endBackgroundTask(taskId)
-            }
-
+        return 7
         #else
-            streamingTask = Task {
-                try await sendHelper(query: query)
-            }
+        return 13
         #endif
-
-        do {
-            try await streamingTask?.value
-        } catch {
-            errorMsg = error.localizedDescription
-        }
     }
     
-    func sendHelper(query: ImagesQuery) async throws {
-        let openAIconfig = AppConfiguration.shared.preferredImageService.config
-        let service = OpenAI(configuration: openAIconfig)
-        // Step 1: Create an ImageObject with the prompt and empty URLs.
-        let tempImageObject = ImageGeneration(isGenerating: true, prompt: prompt, imageModel: configuration.defaultImageModel, urls: [])
-
-        // Add this temporary object to your collection.
-        generations.append(tempImageObject)
-
-        // Step 2: Perform the asynchronous operation to fetch URLs.
-        let results = try await service.images(query: query)
-
-        // Step 3: Find the ImageObject in your collection and update it with the URLs.
-        if let index = generations.firstIndex(where: { $0.id == tempImageObject.id }) {
-            let urlObjects = results.data.compactMap { urlResult -> URL? in
-                guard let urlString = urlResult.url, let url = URL(string: urlString) else {
-                    return nil
-                }
-                return url
-            }
-            generations[index].urls = urlObjects
-            generations[index].isGenerating = false
-        }
-        print(results)
-    }
-    
+    @ViewBuilder
     var list: some View {
         #if os(macOS)
         List {
             VStack {
-                ForEach(generations) { generation in
-                    GenerationView(generation: generation, shouldScroll: $shouldScroll)
+                ForEach(imageSession.generations) { generation in
+                    GenerationView(generation: generation, shouldScroll: Binding.constant(false))
                         .padding(.horizontal, 7)
 
                     Spacer()
@@ -224,40 +125,157 @@ struct ImageCreator: View {
                 }
                 .listRowSeparator(.hidden)
 
-                if !errorMsg.isEmpty {
-                    Text(errorMsg)
-                        .foregroundStyle(.red)
-                        .listRowSeparator(.hidden)
-                }
+//                if !errorMsg.isEmpty {
+//                    Text(errorMsg)
+//                        .foregroundStyle(.red)
+//                        .listRowSeparator(.hidden)
+//                }
             }
             .id("bottomID")
         }
+        .listStyle(.plain)
         #else
         ScrollView {
-            ForEach(generations, id: \.self) { generation in
-                GenerationView(generation: generation, shouldScroll: $shouldScroll)
-                    .id(generation.id)
-
-            }
-            .padding(.horizontal, 12)
-
-                if !errorMsg.isEmpty {
-                    Text(errorMsg)
-                        .foregroundStyle(.red)
+            LazyVStack {
+                ForEach(imageSession.generations, id: \.self) { generation in
+                    GenerationView(generation: generation, shouldScroll: Binding.constant(false))
+                        .listRowSeparator(.hidden)
+                        .id(generation.id)
+                    
                 }
+//                .padding(.horizontal, 12)
+            }
+            .padding(.horizontal)
+
+//                if !errorMsg.isEmpty {
+//                    Text(errorMsg)
+//                        .foregroundStyle(.red)
+//                }
             
                 Spacer()
                 .id("bottomID")
+                .listRowSeparator(.hidden)
             }
         #endif
     }
 
     private var imageSize: CGFloat {
         #if os(macOS)
-            20
+        21
         #else
-            22
+        31
         #endif
     }
+    
+    @ViewBuilder
+    private var clearGenerations: some View {
+        Button {
+            imageSession.generations = []
+        } label: {
+            Image(systemName: "trash")
+                .resizable()
+                .scaledToFit()
+                .frame(width: imageSize, height: imageSize)
+        }
+    }
+    
+    @ViewBuilder
+    private var sendButton: some View {
+        let empty = imageSession.input.isEmpty
+        
+        Button {
+            Task { @MainActor in
+                await imageSession.send()
+            }
+        } label: {
+            Image(systemName: empty ? "arrow.up.circle" : "arrow.up.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .disabled(empty)
+                .foregroundColor(empty ? .secondary : .accentColor)
+            #if os(macOS)
+                .frame(width: imageSize + 1, height: imageSize + 1)
+            #else
+                .background(.white)
+                .clipShape(Circle())
+                .frame(width: imageSize - 3, height: imageSize - 3)
+            #endif
+        }
+        .keyboardShortcut(.return, modifiers: .command)
+        .foregroundColor(.secondary)
+        .disabled(empty)
+        .fontWeight(.semibold)
+        .animation(.interactiveSpring, value: empty)
+//        .contentShape(Rectangle())
+    }
+    
+    @ViewBuilder
+    private var inputBox: some View {
+        ZStack(alignment: .leading) {
+            #if os(macOS)
+            textEditor
+            #else
+            textField
+            #endif
+        }
+        .roundedRectangleOverlay()
+    }
+    
+    private var textField: some View {
+        ZStack(alignment: .bottomTrailing) {
+            TextField("Send a message", text: $imageSession.input, axis: .vertical)
+                .multilineTextAlignment(.leading)
+                .lineLimit(1 ... 15)
+                .padding(6)
+                .padding(.horizontal, 5)
+                .padding(.trailing, 25) // for avoiding send button
+                .frame(minHeight: imageSize + 5)
+            #if os(iOS)
+                .background(
+                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
+                        .cornerRadius(18)
+                )
+            #endif
+            
+            Group {
+                sendButton
+                    .offset(x: -4, y: -4)
+            }
+            .padding(20) // Increase tappable area
+            .padding(-20) // Cancel out visual expansion
+            .background(Color.clear)
+        }
+    }
+
+    @ViewBuilder
+    private var textEditor: some View {
+        if imageSession.input.isEmpty {
+            Text("Generate Images")
+                .font(.body)
+                .padding(5)
+                .padding(.leading, 6)
+                .foregroundColor(placeHolderTextColor)
+        }
+        TextEditor(text: $imageSession.input)
+            .font(.body)
+            .frame(maxHeight: 400)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(5)
+            .scrollContentBackground(.hidden)
+//        Button("hidden") {
+//            focused = true
+//        }
+//        .keyboardShortcut("l", modifiers: .command)
+//        .hidden()
+    }
+    
+    private var placeHolderTextColor: Color {
+        #if os(macOS)
+        Color(.placeholderTextColor)
+        #else
+        Color(.placeholderText)
+        #endif
+    }
+    
 }
 

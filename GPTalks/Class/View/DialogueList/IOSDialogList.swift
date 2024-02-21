@@ -11,18 +11,18 @@ import OpenAI
 
     struct IOSDialogList: View {
         @Bindable var viewModel: DialogueViewModel
-        @State var generations: [ImageGeneration] = []
+        @State var imageSession: ImageSession = .init()
         @State var navigateToImages = false
-        @State var switchToChat = false
 
         @State var isShowSettingView = false
 
         var body: some View {
-            NavigationLink(destination: ImageCreator(switchToChat: $switchToChat, generations: $generations), isActive: $navigateToImages) {
-                 EmptyView()
-            }
-            
             list
+                .fullScreenCover(isPresented: $navigateToImages, onDismiss: {navigateToImages = false}) {
+                    NavigationStack {
+                        ImageCreator(imageSession: imageSession)
+                    }
+                }
                 .listStyle(.inset)
                 .animation(.default, value: viewModel.selectedState)
                 .animation(.default, value: viewModel.searchText)
@@ -47,11 +47,8 @@ import OpenAI
                                   navigateToImages = true
                               }
                           }
-                          .onChange(of: switchToChat) {
-                              if switchToChat {
-                                  viewModel.selectedState = .active
-                              }
-                              switchToChat = false
+                          .onChange(of: navigateToImages) {
+                              viewModel.selectedState = .active
                           }
 
                             

@@ -37,11 +37,8 @@ enum ContentState: String, CaseIterable, Identifiable {
                 case .archived:
                     archivedDialogues = allDialogues.filter { $0.isArchive }
                     break
-                case .active:
+            case .active, .images:
                     activeDialogues = allDialogues.filter { !$0.isArchive }
-                    break
-                case .images:
-                    // Update your view model or perform actions for the images state
                     break
             }
         }
@@ -72,7 +69,7 @@ enum ContentState: String, CaseIterable, Identifiable {
                         archivedDialogues = filteredDialogues
                     #endif
                         break
-                    case .active:
+                case .active, .images:
                         let filteredDialogues = allDialogues.filter { dialogue in
                             let isContentMatch = dialogue.conversations.contains { conversation in
                                 conversation.content.localizedCaseInsensitiveContains(searchText)
@@ -85,8 +82,6 @@ enum ContentState: String, CaseIterable, Identifiable {
                         activeDialogues = filteredDialogues
                     #endif
                         break
-                    case .images:
-                        break
                 }
             } else {
                 
@@ -94,10 +89,8 @@ enum ContentState: String, CaseIterable, Identifiable {
                     case .archived:
                         archivedDialogues = allDialogues.filter { $0.isArchive }
                         break
-                    case .active:
+                case .active, .images:
                         activeDialogues = allDialogues.filter { !$0.isArchive }
-                        break
-                    case .images:
                         break
                 }
             }
@@ -115,10 +108,8 @@ enum ContentState: String, CaseIterable, Identifiable {
         switch selectedState {
             case .archived:
                 return archivedDialogues.isEmpty || (!searchText.isEmpty && archivedDialogues.isEmpty)
-            case .active:
+        case .active, .images:
                 return activeDialogues.isEmpty  || (!searchText.isEmpty && activeDialogues.isEmpty)
-            case .images:
-                return true
         }
     }
 
@@ -126,10 +117,8 @@ enum ContentState: String, CaseIterable, Identifiable {
         switch selectedState {
             case .archived:
             return archivedDialogues
-            case .active:
+        case .active, .images:
             return activeDialogues
-            case .images:
-                return []
         }
     }
     
@@ -137,10 +126,8 @@ enum ContentState: String, CaseIterable, Identifiable {
         switch selectedState {
             case .archived:
                 return (!searchText.isEmpty && archivedDialogues.isEmpty) ? "No Search Results" : "No archived chats"
-            case .active:
+        case .active, .images:
                 return (!searchText.isEmpty && activeDialogues.isEmpty) ? "No Search Results" : "No active chats"
-            case .images:
-                return "Generate Images"
         }
     }
 
