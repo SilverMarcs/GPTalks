@@ -161,10 +161,8 @@ struct iOSMessages: View {
                             viewModel.searchText = ""
                         }
                     } label: {
-//                        Image(systemName: "xmark.circle.fill")
                         Text("Clear")
                     }
-//                    .foregroundStyle(.secondary)
                 }
                 .padding(10)
                 .background(.bar)

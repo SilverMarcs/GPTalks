@@ -238,8 +238,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     static var availableProviders: [Provider] {
         [
             .openai,
-            .openrouter,
-            .shuttle,
+//            .openrouter,
+//            .shuttle,
             .oxygen,
 //            .gpt4free,
             .custom,

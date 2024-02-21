@@ -182,7 +182,7 @@ import SwiftUI
     }
     
     func generateTitle(forced: Bool = false) async {
-        if (!forced) || (forced && conversations.count >= 1) {
+        if (!forced && conversations.count == 2) || (forced && conversations.count >= 1) {
             // TODO: makeRequest func
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
@@ -194,9 +194,8 @@ import SwiftUI
             })
             
             
-            let query = ChatQuery(model: configuration.model.id,
-                                  messages: messages,
-                                  temperature: configuration.temperature,
+            let query = ChatQuery(messages: messages, 
+                                  model: configuration.model.id,
                                   maxTokens: 6,
                                   stream: false)
             
@@ -204,24 +203,14 @@ import SwiftUI
             
             do {
                 let result = try await service.chats(query: query)
-                if let content = result.choices.first?.message.content {
-                    switch content {
-                    case .string(let stringValue):
-                        tempTitle += stringValue
-                        
-                    case .object(let chatContents):
-                        for chatContent in chatContents {
-                            if chatContent.type == .text {
-                                tempTitle += chatContent.value
-                            }
-                        }
-                    }
-                    withAnimation {
-                        title = tempTitle
-                    }
-                    
-                    save()
+                tempTitle += result.choices.first?.message.content?.string ?? ""
+
+                withAnimation {
+                    title = tempTitle
                 }
+                
+                save()
+                
             } catch {
                 print("Ensure at least two messages to generate a title.")
             }
@@ -357,8 +346,6 @@ import SwiftUI
     
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
-//        isAddingConversation.toggle()
-        
         if let resetMarker = resetMarker {
             if resetMarker == 0 {
                 removeResetContextMarker()
@@ -382,7 +369,7 @@ import SwiftUI
 
         var contextAdjustedMessages: [Conversation]
 
-        if let marker = resetMarker {
+        if let marker = resetMarker, conversations.count > marker + 1 {
             contextAdjustedMessages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength))
         } else {
             contextAdjustedMessages = Array(conversations.suffix(configuration.contextLength - 1))
@@ -392,10 +379,10 @@ import SwiftUI
             conversation.toChat()
         })
 
-        let query = ChatQuery(model: configuration.model.id,
-                              messages: finalMessages,
-                              temperature: configuration.temperature,
+        let query = ChatQuery(messages: finalMessages, 
+                              model: configuration.model.id,
                               maxTokens: 3800,
+                              temperature: configuration.temperature,
                               stream: Model.nonStreamModels.contains(configuration.model) ? false : true)
         
         
@@ -410,22 +397,22 @@ import SwiftUI
                 isStreaming = true
                 
                 if Model.nonStreamModels.contains(configuration.model) {
-//                    let result = try await service.chats(query: query)
-//                    streamText += result.choices.first?.message.content?.string ?? ""
                     let result = try await service.chats(query: query)
-                    if let content = result.choices.first?.message.content {
-                      switch content {
-                      case .string(let stringValue):
-                          streamText += stringValue
-
-                      case .object(let chatContents):
-                          for chatContent in chatContents {
-                              if chatContent.type == .text {
-                                  streamText += chatContent.value
-                              }
-                          }
-                      }
-                    }
+                    streamText += result.choices.first?.message.content?.string ?? ""
+//                    let result = try await service.chats(query: query)
+//                    if let content = result.choices.first?.message.content {
+//                      switch content {
+//                      case .string(let stringValue):
+//                          streamText += stringValue
+//
+//                      case .object(let chatContents):
+//                          for chatContent in chatContents {
+//                              if chatContent.type == .text {
+//                                  streamText += chatContent.value
+//                              }
+//                          }
+//                      }
+//                    }
                 } else {
                     for try await result in service.chatsStream(query: query) {
                         streamText += result.choices.first?.delta.content ?? ""
@@ -439,22 +426,22 @@ import SwiftUI
                 isStreaming = true
                 
                 if Model.nonStreamModels.contains(configuration.model) {
-//                    let result = try await service.chats(query: query)
-//                    streamText += result.choices.first?.message.content?.string ?? ""
                     let result = try await service.chats(query: query)
-                    if let content = result.choices.first?.message.content {
-                      switch content {
-                      case .string(let stringValue):
-                          streamText += stringValue
-
-                      case .object(let chatContents):
-                          for chatContent in chatContents {
-                              if chatContent.type == .text {
-                                  streamText += chatContent.value
-                              }
-                          }
-                      }
-                    }
+                    streamText += result.choices.first?.message.content?.string ?? ""
+//                    let result = try await service.chats(query: query)
+//                    if let content = result.choices.first?.message.content {
+//                      switch content {
+//                      case .string(let stringValue):
+//                          streamText += stringValue
+//
+//                      case .object(let chatContents):
+//                          for chatContent in chatContents {
+//                              if chatContent.type == .text {
+//                                  streamText += chatContent.value
+//                              }
+//                          }
+//                      }
+//                    }
                 } else {
                     for try await result in service.chatsStream(query: query) {
                         streamText += result.choices.first?.delta.content ?? ""
@@ -473,8 +460,6 @@ import SwiftUI
                 try await Task.sleep(nanoseconds: 50_000_000)
                 #endif
                 
-                await generateTitle(forced: false)
-                
                 if AppConfiguration.shared.isMarkdownEnabled {
                     conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
                 } else {
@@ -486,6 +471,7 @@ import SwiftUI
                 lastConversationData.sync(with: conversations[conversations.count - 1])
                 
                 if !isStreaming {
+//                    await generateTitle(forced: false)
                     break
                 }
             }
@@ -507,6 +493,9 @@ import SwiftUI
             
             application.endBackgroundTask(taskId)
             #endif
+            
+//            await generateTitle(forced: false)
+            
         } catch {
             isStreaming = false
             // TODO: do better with stop_reason from openai
@@ -532,6 +521,8 @@ import SwiftUI
         
 
         conversations[conversations.count - 1].isReplying = false
+        
+//        await generateTitle(forced: false)
 
         save()
     }

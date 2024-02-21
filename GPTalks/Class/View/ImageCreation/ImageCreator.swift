@@ -156,8 +156,8 @@ struct ImageCreator: View {
         errorMsg = ""
 
         var streamingTask: Task<Void, Error>?
-        let query = ImagesQuery(prompt: prompt, model: configuration.defaultImageModel, n: Int(number), size: "1024x1024", quality: "standard")
-//        let query = ImagesQuery(prompt: prompt, model: configuration.defaultImageModel, n: Int(number), quality: .standard, size: ._1024)
+//        let query = ImagesQuery(prompt: prompt, model: configuration.defaultImageModel, n: Int(number), size: "1024x1024", quality: "standard")
+        let query = ImagesQuery(prompt: prompt, model: configuration.defaultImageModel, n: Int(number), quality: .standard, size: ._1024)
 
         #if os(iOS)
             streamingTask = Task {

@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "openai",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/OpenAI",
+      "state" : {
+        "branch" : "MacPaw.gpt_vision",
+        "revision" : "03a166cc68b42d39839b2707c95709fb9d546de3"
+      }
+    },
+    {
       "identity" : "splash",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/JohnSundell/Splash",
@@ -43,15 +52,6 @@
       "state" : {
         "revision" : "ae799d015a5374708f7b4c85f3294c05f2a564e2",
         "version" : "2.3.0"
-      }
-    },
-    {
-      "identity" : "swiftopenai",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/SwiftOpenAI",
-      "state" : {
-        "branch" : "main",
-        "revision" : "fe32e4c69e7d8b310ff292d639f8fd1956d54a82"
       }
     },
     {

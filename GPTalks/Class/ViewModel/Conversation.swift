@@ -16,8 +16,8 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
     var base64Image: String = ""
     var isReplying: Bool = false
     
-    func toChat() -> Message {
-        let chatRole: Message.Role = {
+    func toChat() -> ChatQuery.ChatCompletionMessageParam {
+        let chatRole: ChatQuery.ChatCompletionMessageParam.Role = {
             switch role {
             case "user":
                 return .user
@@ -26,14 +26,16 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
             case "system":
                 return .system
             default:
-                return .function
+                return .tool
             }
         }()
         
         if !base64Image.isEmpty {
-            return Message(role: chatRole, content: [ChatContent(type: .text, value: content), ChatContent(type: .imageUrl, value: "data:image/jpeg;base64," + base64Image)])
+//            return Message(role: chatRole, content: [ChatContent(type: .text, value: content), ChatContent(type: .imageUrl, value: "data:image/jpeg;base64," + base64Image)])
+            return .init(role: chatRole, content: [.init(chatCompletionContentPartTextParam: .init(text: content)), .init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: ("data:image/jpeg;base64," + base64Image), detail: .auto)))])!
         } else {
-            return Message(role: chatRole, content: content)
+//            return Message(role: chatRole, content: content)
+            return .init(role: chatRole, content: content)!
         }
     }
 }
