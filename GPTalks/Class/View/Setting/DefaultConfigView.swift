@@ -11,8 +11,10 @@ struct DefaultConfigView: View {
     @ObservedObject var configuration: AppConfiguration = .shared
 
     var body: some View {
-        #if os(macOS)
-            macOS
+#if os(macOS)
+        ScrollView {
+        macOS
+    }
         #else
             iOS
         #endif
@@ -74,16 +76,38 @@ struct DefaultConfigView: View {
                 .padding(paddingValue)
             }
 
-            GroupBox(label: Text("Misc")) {
-                HStack {
-                    Text("Custom Model")
-                    Spacer()
-                    customModel
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: widthValue)
+            DisclosureGroup("Custom Models") {
+                GroupBox {
+                    HStack {
+                        Text("Custom Chat")
+                        Spacer()
+                        customChatModel
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: widthValue)
+                    }
+                    .padding(paddingValue)
+                    
+                    HStack {
+                        Text("Custom Image")
+                        Spacer()
+                        customImageModel
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: widthValue)
+                    }
+                    .padding(paddingValue)
+                    
+                    HStack {
+                        Text("Custom Vision")
+                        Spacer()
+                        customVisionModel
+                            .textFieldStyle(.roundedBorder)
+                            .frame(width: widthValue)
+                    }
+                    .padding(paddingValue)
                 }
-                .padding(paddingValue)
             }
+            
+            Spacer()
         }
         .padding(30)
     }
@@ -95,8 +119,10 @@ struct DefaultConfigView: View {
                     contextPicker
                     tempSlider
                 }
-                Section("Misc") {
-                    customModel
+                Section("Custom Models") {
+                    customChatModel
+                    customImageModel
+                    customVisionModel
                 }
                 Section("System Prompt") {
                     systemPrompt
@@ -167,8 +193,16 @@ struct DefaultConfigView: View {
         TextField("Enter a system prompt", text: configuration.$systemPrompt, axis: .vertical)
     }
 
-    var customModel: some View {
-        TextField("Enter a custom model", text: configuration.$customChatModel, axis: .vertical)
+    var customChatModel: some View {
+        TextField("Enter a custom chat model", text: configuration.$customChatModel, axis: .vertical)
+    }
+    
+    var customImageModel: some View {
+        TextField("Enter a custom image model", text: configuration.$customImageModel, axis: .vertical)
+    }
+    
+    var customVisionModel: some View {
+        TextField("Enter a custom vision model", text: configuration.$customVisionModel, axis: .vertical)
     }
 
     var paddingValue: CGFloat {

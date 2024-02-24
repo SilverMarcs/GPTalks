@@ -96,7 +96,7 @@ enum Model: String, Codable {
         case .customVision:
             AppConfiguration.shared.customVisionModel
         case .customImage:
-            AppConfiguration.shared.defaultImageModel
+            AppConfiguration.shared.customImageModel
         }
     }
 

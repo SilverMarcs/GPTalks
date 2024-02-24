@@ -17,16 +17,26 @@ struct ImageCreator: View {
     @Environment(\.dismiss) var dismiss
     
     @Bindable var imageSession: ImageSession
+    
+    @FocusState private var isFocused: Bool
 
     var body: some View {
         ScrollViewReader { proxy in
             list
+            #if os(macOS)
             .navigationTitle("Image Generations")
-            #if !os(macOS)
+            .navigationSubtitle(imageSession.configuration.model == .customImage ? imageSession.configuration.model .id : imageSession.configuration.model .name)
+            #else
+            .navigationTitle(imageSession.configuration.model == .customImage ? imageSession.configuration.model .id : imageSession.configuration.model .name)
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .onAppear {
                 imageSession.addDummies()
+            }
+            .onChange(of: imageSession.generations) {
+                withAnimation {
+                    scrollToBottom(proxy: proxy)
+                }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 HStack(spacing: 12) {
@@ -54,14 +64,22 @@ struct ImageCreator: View {
                 #endif
             }
             .toolbar {
-#if !os(macOS)
+#if os(macOS)
+
+                providerPicker
+
+                modelPicker
+                    .frame(maxWidth: 110)
+        
+                countPicker
+#else
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") {
                         dismiss()
                     }
                 }
-#endif
-                ToolbarItem(placement: .primaryAction) {
+                    
+                ToolbarItem {
                     Menu {
                         Menu {
                             providerPicker
@@ -85,41 +103,9 @@ struct ImageCreator: View {
                         Image(systemName: "ellipsis.circle")
                     }
                 }
+#endif
             }
         }
-    }
-    
-    var modelPicker: some View {
-        Picker("Model", selection: $imageSession.configuration.model) {
-            ForEach(imageSession.configuration.provider.imageModels, id: \.self) { model in
-                Text(model.name)
-            }
-        }
-    }
-    
-    var providerPicker: some View {
-        Picker("Provider", selection: $imageSession.configuration.provider) {
-            ForEach(Provider.availableProviders, id: \.self) { provider in
-                Text(provider.name)
-            }
-        }
-    }
-    
-    var countPicker: some View {
-        Picker("Number", selection: $imageSession.configuration.count) {
-            ForEach(1 ... 4, id: \.self) { number in
-                Text("Count: \(number)")
-                    .tag(number)
-            }
-        }
-    }
-    
-    private var verticalPadding: CGFloat {
-        #if os(iOS)
-        return 7
-        #else
-        return 13
-        #endif
     }
     
     @ViewBuilder
@@ -136,11 +122,6 @@ struct ImageCreator: View {
                 }
                 .listRowSeparator(.hidden)
 
-//                if !errorMsg.isEmpty {
-//                    Text(errorMsg)
-//                        .foregroundStyle(.red)
-//                        .listRowSeparator(.hidden)
-//                }
             }
             .id("bottomID")
         }
@@ -151,22 +132,19 @@ struct ImageCreator: View {
                 ForEach(imageSession.generations, id: \.self) { generation in
                     GenerationView(generation: generation, shouldScroll: Binding.constant(false))
                         .listRowSeparator(.hidden)
-                        .id(generation.id)
-                    
+                        .id(generation.id)                    
                 }
-//                .padding(.horizontal, 12)
             }
             .padding(.horizontal)
-
-//                if !errorMsg.isEmpty {
-//                    Text(errorMsg)
-//                        .foregroundStyle(.red)
-//                }
+            .padding(.vertical)
             
                 Spacer()
                 .id("bottomID")
                 .listRowSeparator(.hidden)
             }
+        .onTapGesture {
+            isFocused = false
+        }
         #endif
     }
 
@@ -183,10 +161,19 @@ struct ImageCreator: View {
         Button {
             imageSession.generations = []
         } label: {
-            Image(systemName: "trash")
+            Image(systemName: "eraser")
                 .resizable()
                 .scaledToFit()
-                .frame(width: imageSize, height: imageSize)
+                .foregroundStyle(.secondary)
+            #if os(macOS)
+                .padding(5)
+                .frame(width: imageSize + 1, height: imageSize + 1)
+            #else
+                .padding(8)
+                .frame(width: imageSize + 3, height: imageSize + 3)
+            #endif
+                .background(.gray.opacity(0.2))
+                .clipShape(Circle())
         }
     }
     
@@ -196,28 +183,26 @@ struct ImageCreator: View {
         
         Button {
             Task { @MainActor in
+                isFocused = false
+                
                 await imageSession.send()
             }
         } label: {
-            Image(systemName: empty ? "arrow.up.circle" : "arrow.up.circle.fill")
+            Image(systemName: "arrow.up.circle.fill")
                 .resizable()
                 .scaledToFit()
-                .disabled(empty)
-                .foregroundColor(empty ? .secondary : .accentColor)
             #if os(macOS)
                 .frame(width: imageSize + 1, height: imageSize + 1)
             #else
-                .background(.white)
+                .background(empty ? .clear : .white)
                 .clipShape(Circle())
                 .frame(width: imageSize - 3, height: imageSize - 3)
             #endif
+                .foregroundColor(.accentColor)
         }
         .keyboardShortcut(.return, modifiers: .command)
-        .foregroundColor(.secondary)
-        .disabled(empty)
+        .opacity(empty ? 0.5 : 1)
         .fontWeight(.semibold)
-        .animation(.interactiveSpring, value: empty)
-//        .contentShape(Rectangle())
     }
     
     @ViewBuilder
@@ -235,6 +220,7 @@ struct ImageCreator: View {
     private var textField: some View {
         ZStack(alignment: .bottomTrailing) {
             TextField("Send a message", text: $imageSession.input, axis: .vertical)
+                .focused($isFocused)
                 .multilineTextAlignment(.leading)
                 .lineLimit(1 ... 15)
                 .padding(6)
@@ -273,11 +259,6 @@ struct ImageCreator: View {
             .fixedSize(horizontal: false, vertical: true)
             .padding(5)
             .scrollContentBackground(.hidden)
-//        Button("hidden") {
-//            focused = true
-//        }
-//        .keyboardShortcut("l", modifiers: .command)
-//        .hidden()
     }
     
     private var placeHolderTextColor: Color {
@@ -288,5 +269,38 @@ struct ImageCreator: View {
         #endif
     }
     
+    
+    var modelPicker: some View {
+        Picker("Model", selection: $imageSession.configuration.model) {
+            ForEach(imageSession.configuration.provider.imageModels, id: \.self) { model in
+                Text(imageSession.configuration.model == .customImage ? model.id : model.name)
+            }
+        }
+    }
+    
+    var providerPicker: some View {
+        Picker("Provider", selection: $imageSession.configuration.provider) {
+            ForEach(Provider.availableProviders, id: \.self) { provider in
+                Text(provider.name)
+            }
+        }
+    }
+    
+    var countPicker: some View {
+        Picker("N", selection: $imageSession.configuration.count) {
+            ForEach(1 ... 4, id: \.self) { number in
+                Text("N: \(number)")
+                    .tag(number)
+            }
+        }
+    }
+    
+    private var verticalPadding: CGFloat {
+        #if os(iOS)
+        return 7
+        #else
+        return 13
+        #endif
+    }
 }
 

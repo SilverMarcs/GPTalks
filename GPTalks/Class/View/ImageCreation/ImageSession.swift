@@ -26,7 +26,7 @@ import SwiftUI
         init() {
             count = 1
             provider = AppConfiguration.shared.preferredImageService
-            model = .absolutereality_v181
+            model = .dalle3
             quality = .standard
         }
     }
@@ -45,7 +45,8 @@ import SwiftUI
 
         let query = ImagesQuery(prompt: input, model: configuration.model.id, n: configuration.count, quality: configuration.quality, size: ._1024)
 
-        let tempImageGeneration = ImageGeneration(prompt: input, imageModel: configuration.model.name)
+        
+        let tempImageGeneration = ImageGeneration(prompt: input, imageModel: configuration.model == .customImage ? configuration.model.id : configuration.model.name)
 
         generations.append(tempImageGeneration)
 

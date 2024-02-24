@@ -23,7 +23,7 @@ struct GenerationView: View {
                 .padding(.top, 3)
             #endif
             
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: VSpacing) {
                 Text(generation.model)
                     .font(.title3)
                     .bold()
@@ -36,7 +36,6 @@ struct GenerationView: View {
                         ReplyingIndicatorView()
                             .frame(width: 48, height: 16)
                             .bubbleStyle(isMyMessage: false)
-//                            .frame(maxWidth: .infinity, alignment: .leading)
                         
                         Button {
                             generation.stopGenerating()
@@ -65,6 +64,7 @@ struct GenerationView: View {
                             .scaledToFit()
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                             .frame(width: imageSize, height: imageSize)
+                        #if !os(macOS)
                             .contextMenu {
                                 Button {
                                     saveImage(url: url)
@@ -72,6 +72,7 @@ struct GenerationView: View {
                                     Label("Save Image", systemImage: "square.and.arrow.down")
                                 }
                             }
+                        #endif
                     } placeholder: {
                         ZStack(alignment: .center) {
                             Color.secondary
@@ -83,9 +84,24 @@ struct GenerationView: View {
                         }
                     }
                 }
+                
+                Color.clear
+                #if os(macOS)
+                    .frame(height: 10)
+                #else
+                    .frame(height: 30)
+                #endif
             }
         }
         .frame(maxWidth: .infinity, alignment: .topLeading)
+    }
+    
+    private var VSpacing: CGFloat {
+        #if os(macOS)
+            return 6
+        #else
+            return 10
+        #endif
     }
     
     private var btnSize: CGFloat {

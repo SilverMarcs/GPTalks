@@ -86,7 +86,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .openai:
             Model.openAIChatModels
         case .oxygen:
-            Model.oxygenChatModels
+            Model.oxygenChatModels + [Model.customChat]
         case .custom:
             [Model.customChat]
         }
@@ -99,7 +99,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .oxygen:
             Model.oxygenVisionModels
         case .custom:
-            Model.openAIVisionModels
+            [Model.customVision]
         }
     }
     
@@ -108,7 +108,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .openai:
             Model.openAIImageModels
         case .oxygen:
-            Model.oxygenImageModels
+            Model.oxygenImageModels + [Model.customImage]
         case .custom:
             [Model.customImage]
         }

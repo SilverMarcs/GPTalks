@@ -181,8 +181,9 @@ import SwiftUI
         }
     }
     
+    @MainActor
     func generateTitle(forced: Bool = false) async {
-        if (!forced && conversations.count == 2) || (forced && conversations.count >= 1) {
+        if (!forced && conversations.count == 1) || (forced && conversations.count >= 1) {
             // TODO: makeRequest func
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
@@ -196,7 +197,7 @@ import SwiftUI
             
             let query = ChatQuery(messages: messages, 
                                   model: configuration.model.id,
-                                  maxTokens: 6,
+                                  maxTokens: 5,
                                   stream: false)
             
             var tempTitle = ""
@@ -212,7 +213,11 @@ import SwiftUI
                 save()
                 
             } catch {
-                print("Ensure at least two messages to generate a title.")
+                if forced {
+                    print("Ensure at least two messages to generate a title.")
+                } else {
+                    print("genuine error.")
+                }
             }
         }
     }
@@ -362,6 +367,8 @@ import SwiftUI
            }
         }
 
+        await generateTitle(forced: false)
+        
         let openAIconfig = configuration.provider.config
         let service: OpenAI = OpenAI(configuration: openAIconfig)
 
@@ -381,7 +388,7 @@ import SwiftUI
 
         let query = ChatQuery(messages: finalMessages, 
                               model: configuration.model.id,
-                              maxTokens: 3800,
+//                              maxTokens: 3800,
                               temperature: configuration.temperature,
                               stream: true)
         
@@ -406,7 +413,7 @@ import SwiftUI
                 #if os(macOS)
                 try await Task.sleep(nanoseconds: 250_000_000)
                 #else
-                try await Task.sleep(nanoseconds: 50_000_000)
+                try await Task.sleep(nanoseconds: 100_000_000)
                 #endif
                 
                 if AppConfiguration.shared.isMarkdownEnabled {
@@ -420,7 +427,6 @@ import SwiftUI
                 lastConversationData.sync(with: conversations[conversations.count - 1])
                 
                 if !isStreaming {
-//                    await generateTitle(forced: false)
                     break
                 }
             }
@@ -442,8 +448,6 @@ import SwiftUI
             
             application.endBackgroundTask(taskId)
             #endif
-            
-//            await generateTitle(forced: false)
             
         } catch {
             isStreaming = false
@@ -470,8 +474,6 @@ import SwiftUI
         
 
         conversations[conversations.count - 1].isReplying = false
-        
-//        await generateTitle(forced: false)
 
         save()
     }

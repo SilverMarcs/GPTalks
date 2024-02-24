@@ -41,6 +41,6 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.Chost") var Chost: String = ""
     
     @AppStorage("configuration.customChatModel") var customChatModel: String = ""
-    @AppStorage("configuration.defaultImageModel") var defaultImageModel: String = ""
+    @AppStorage("configuration.customImageModel") var customImageModel: String = ""
     @AppStorage("configuration.customVisionModel") var customVisionModel: String = ""
 }
