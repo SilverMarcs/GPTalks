@@ -30,7 +30,7 @@ struct UserMessageView: View {
                 editBtn
             }
             
-            if AppConfiguration.shared.alternatChatUi {
+            if AppConfiguration.shared.alternateChatUi {
                 alternateUI
             } else {
                 originalUI

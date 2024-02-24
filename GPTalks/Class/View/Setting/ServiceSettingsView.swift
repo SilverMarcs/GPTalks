@@ -24,6 +24,7 @@ struct ServiceSettingsView: View {
     }
 
     var macOS: some View {
+        ScrollView {
             VStack(spacing: 30) {
                 GroupBox(label: Text("Provider Settings")) {
                     HStack {
@@ -35,36 +36,72 @@ struct ServiceSettingsView: View {
                     }
                     .padding(paddingValue)
                 }
-
+            
                 GroupBox(label: Text("API Settings")) {
                     if provider == .custom {
                         HStack {
                             Text("Host URL")
                             Spacer()
-
+                        
                             hostUrl
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: widthValue)
                         }
                         .padding(paddingValue)
-                        
+                    
                         Divider()
                     }
-                    
+                
                     HStack {
                         Text("API Key")
                         Spacer()
-
+                    
                         apiKeyField
                             .textFieldStyle(.roundedBorder)
                             .frame(width: widthValue)
                     }
                     .padding(paddingValue)
                 }
-                
+            
+                if provider == .custom {
+                    GroupBox(label: Text("Custom Models")) {
+                        HStack {
+                            Text("Chat")
+                            Spacer()
+                            CustomChatModel()
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 250)
+                        }
+                        .padding(paddingValue)
+                    
+                        Divider()
+                    
+                        HStack {
+                            Text("Image")
+                            Spacer()
+                            CustomImageModel()
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 250)
+                        }
+                        .padding(paddingValue)
+                    
+                        Divider()
+                    
+                        HStack {
+                            Text("Vision")
+                            Spacer()
+                            CustomVisionModel()
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 250)
+                        }
+                        .padding(paddingValue)
+                    }
+                }
+            
                 Spacer()
             }
-        .padding()
+            .padding()
+        }
     }
 
     var iOS: some View {
@@ -78,6 +115,25 @@ struct ServiceSettingsView: View {
                 }
                 
                 apiKeyField
+            }
+            
+            if provider == .custom {
+                Section("Custom Models") {
+                    HStack {
+                        Text("Chat: ")
+                        CustomChatModel()
+                    }
+                    
+                    HStack {
+                        Text("Image: ")
+                        CustomImageModel()
+                    }
+                    
+                    HStack {
+                        Text("Vision: ")
+                        CustomVisionModel()
+                    }
+                }
             }
         }
         .navigationTitle(provider.name)
@@ -118,7 +174,6 @@ struct ServiceSettingsView: View {
         }
     }
     
-
     var paddingValue: CGFloat {
         #if os(macOS)
             10

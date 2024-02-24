@@ -14,8 +14,8 @@ class AppConfiguration: ObservableObject {
     
     /// common
     @AppStorage("configuration.isMarkdownEnabled") var isMarkdownEnabled: Bool = true
-    @AppStorage("configuration.alternateMarkdwon") var alternateMarkdown: Bool = false
-    @AppStorage("configuration.alternatChatUi") var alternatChatUi: Bool = false
+    @AppStorage("configuration.alternateMarkdown") var alternateMarkdown: Bool = false
+    @AppStorage("configuration.alternateChatUi") var alternateChatUi: Bool = false
     
     @AppStorage("configuration.isAutoGenerateTitle") var isAutoGenerateTitle: Bool = false
     

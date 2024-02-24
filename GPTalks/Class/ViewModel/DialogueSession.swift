@@ -183,7 +183,8 @@ import SwiftUI
     
     @MainActor
     func generateTitle(forced: Bool = false) async {
-        if (!forced && conversations.count == 1) || (forced && conversations.count >= 1) {
+//        if (!forced && conversations.count == 1) || (forced && conversations.count >= 1) {
+        if conversations.count == 1 || conversations.count == 2 {
             // TODO: makeRequest func
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
@@ -366,8 +367,6 @@ import SwiftUI
                 appendConversation(Conversation(role: "user", content: text, base64Image: (inputImage?.base64EncodedString())!))
            }
         }
-
-        await generateTitle(forced: false)
         
         let openAIconfig = configuration.provider.config
         let service: OpenAI = OpenAI(configuration: openAIconfig)
@@ -472,6 +471,7 @@ import SwiftUI
             setErrorDesc(errorDesc: error.localizedDescription)
         }
         
+        await generateTitle(forced: false)
 
         conversations[conversations.count - 1].isReplying = false
 

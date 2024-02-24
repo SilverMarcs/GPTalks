@@ -40,13 +40,13 @@ struct Bubble: ViewModifier {
 
     private var radius: CGFloat {
         #if os(macOS)
-        if AppConfiguration.shared.alternatChatUi {
+        if AppConfiguration.shared.alternateChatUi {
             5
         } else {
             15
         }
         #else
-        if AppConfiguration.shared.alternatChatUi {
+        if AppConfiguration.shared.alternateChatUi {
             8
         } else {
             18

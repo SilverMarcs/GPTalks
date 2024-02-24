@@ -57,7 +57,7 @@ enum Model: String, Codable {
             
 
         case .customChat:
-            "Custom"
+            "Custom Chat"
         case .customVision:
             "Custom Vision"
         case .customImage:

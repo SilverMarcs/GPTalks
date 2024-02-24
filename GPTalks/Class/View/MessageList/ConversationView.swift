@@ -51,13 +51,13 @@ struct ConversationView: View {
 
     private var spacing: CGFloat {
         #if os(macOS)
-        if AppConfiguration.shared.alternatChatUi {
+        if AppConfiguration.shared.alternateChatUi {
             return -8
         } else {
             return 8
         }
         #else
-        if AppConfiguration.shared.alternatChatUi {
+        if AppConfiguration.shared.alternateChatUi {
             return -8
         } else {
             return 2

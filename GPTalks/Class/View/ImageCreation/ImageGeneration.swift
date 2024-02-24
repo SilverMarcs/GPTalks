@@ -7,6 +7,9 @@
 
 import Foundation
 import OpenAI
+#if os(iOS)
+import UIKit
+#endif
 
 @Observable class ImageGeneration: Identifiable, Hashable, Equatable {
     static func == (lhs: ImageGeneration, rhs: ImageGeneration) -> Bool {
@@ -53,7 +56,18 @@ import OpenAI
         }
         
         do {
+            #if os(macOS)
             try await generatingTask?.value
+            #else
+            let application = UIApplication.shared
+            let taskId = application.beginBackgroundTask {
+                // Handle expiration of background task here
+            }
+            
+            try await generatingTask?.value
+            
+            application.endBackgroundTask(taskId)
+            #endif
             isGenerating = false
         } catch {
             errorDesc = error.localizedDescription

@@ -17,7 +17,7 @@ struct IosSettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("General") {
+                Section("Appearance") {
                     HStack {
                         Image(systemName: "text.bubble.fill")
                             .renderingMode(.original)
@@ -29,18 +29,21 @@ struct IosSettingsView: View {
                         Image(systemName: "note.text")
                             .renderingMode(.original)
                         Spacer()
-                        Toggle("Alternate Markdown", isOn: $configuration.alternateMarkdown)
+                        Toggle("Alternate Markdown UI", isOn: $configuration.alternateMarkdown)
                     }
                     .disabled(!configuration.isMarkdownEnabled)
                     
                     HStack {
-                        Image(systemName: "quote.bubble")
+                        Image(systemName: "textformat.abc")
                             .renderingMode(.original)
                         Spacer()
-                        Toggle("Alternate Chat UI", isOn: $configuration.alternatChatUi)
+                        Toggle("Alternate Chat UI", isOn: $configuration.alternateChatUi)
                     }
                     .disabled(!configuration.isMarkdownEnabled)
                     
+                }
+                
+                Section("Preferred Services") {
                     HStack {
                         Image(systemName: "building.2.fill")
                             .renderingMode(.original)
@@ -69,9 +72,10 @@ struct IosSettingsView: View {
                         }
                     }
                 }
+                
                 Section("Defaults") {
                     NavigationLink {
-                        DefaultConfigView()
+                        IosDefaultConfigView()
                     } label: {
                         HStack {
                             Image(systemName: "cpu.fill")
@@ -80,6 +84,7 @@ struct IosSettingsView: View {
                         }
                     }
                 }
+                
                 Section("Services") {
                     ForEach(Provider.availableProviders) { provider in
                         NavigationLink(
@@ -88,6 +93,7 @@ struct IosSettingsView: View {
                         )
                     }
                 }
+                
                 Section("App Icon") {
                     NavigationLink(
                         destination: AppIconView(),

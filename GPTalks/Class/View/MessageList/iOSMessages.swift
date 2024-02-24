@@ -33,7 +33,7 @@ struct iOSMessages: View {
                     ForEach(session.conversations) { conversation in
                         ConversationView(session: session, conversation: conversation)
                     }
-                    .padding(.horizontal, AppConfiguration.shared.alternatChatUi ? 0 :  12)
+                    .padding(.horizontal, AppConfiguration.shared.alternateChatUi ? 0 :  12)
                     .padding(.vertical, 12)
 
                     ErrorDescView(session: session)

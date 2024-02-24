@@ -29,10 +29,11 @@ struct ImageCreator: View {
             #else
             .navigationTitle(imageSession.configuration.model == .customImage ? imageSession.configuration.model .id : imageSession.configuration.model .name)
             .navigationBarTitleDisplayMode(.inline)
+            .scrollDismissesKeyboard(.immediately)
             #endif
-            .onAppear {
-                imageSession.addDummies()
-            }
+//            .onAppear {
+//                imageSession.addDummies()
+//            }
             .onChange(of: imageSession.generations) {
                 withAnimation {
                     scrollToBottom(proxy: proxy)

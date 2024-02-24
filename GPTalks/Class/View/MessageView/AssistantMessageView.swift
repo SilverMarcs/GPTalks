@@ -18,7 +18,7 @@ struct AssistantMessageView: View {
 
     var body: some View {
         Group {
-            if AppConfiguration.shared.alternatChatUi {
+            if AppConfiguration.shared.alternateChatUi {
                 alternateUI
             } else {
                 originalUI

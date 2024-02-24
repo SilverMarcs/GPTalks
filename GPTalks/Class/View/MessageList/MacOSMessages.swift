@@ -204,7 +204,7 @@ struct MacOSMessages: View {
 
     private var normalList: some View {
         Group {
-            if AppConfiguration.shared.alternatChatUi {
+            if AppConfiguration.shared.alternateChatUi {
                 List {
                     LazyVStack {
                         ForEach(session.conversations) { conversation in
