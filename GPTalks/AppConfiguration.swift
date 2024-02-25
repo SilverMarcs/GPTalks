@@ -30,14 +30,16 @@ class AppConfiguration: ObservableObject {
     /// openAI
     @AppStorage("configuration.OAIKey") var OAIkey = ""
     @AppStorage("configuration.OAImodel") var OAImodel: Model = .gpt3t0125
+    @AppStorage("configuration.OAIImageModel") var OAIImageModel: Model = .dalle3
 
     /// oxygen
     @AppStorage("configuration.Okey") var Okey = ""
     @AppStorage("configuration.Omodel") var Omodel: Model = .gpt4t0125
+    @AppStorage("configuration.OImageModel") var OImageModel: Model = .absolutereality_v181
     
     /// custom
     @AppStorage("configuration.Ckey") var Ckey = ""
-    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt3t0125
+//    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt3t0125
     @AppStorage("configuration.Chost") var Chost: String = ""
     
     @AppStorage("configuration.customChatModel") var customChatModel: String = ""

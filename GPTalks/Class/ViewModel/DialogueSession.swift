@@ -21,7 +21,7 @@ import SwiftUI
             contextLength = AppConfiguration.shared.contextLength
             temperature = AppConfiguration.shared.temperature
             systemPrompt = AppConfiguration.shared.systemPrompt
-            model = provider.preferredModel
+            model = provider.preferredChatModel
         }
     }
 

@@ -70,14 +70,25 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         }
     }
 
-    var preferredModel: Model {
+    var preferredChatModel: Model {
         switch self {
         case .openai:
             AppConfiguration.shared.OAImodel
         case .oxygen:
             AppConfiguration.shared.Omodel
         case .custom:
-            AppConfiguration.shared.Cmodel
+            .customChat
+        }
+    }
+    
+    var preferredImageModel: Model {
+        switch self {
+        case .openai:
+            AppConfiguration.shared.OAIImageModel
+        case .oxygen:
+            AppConfiguration.shared.OImageModel
+        case .custom:
+            .customImage
         }
     }
 
@@ -86,7 +97,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .openai:
             Model.openAIChatModels
         case .oxygen:
-            Model.oxygenChatModels + [Model.customChat]
+            Model.oxygenChatModels
         case .custom:
             [Model.customChat]
         }
@@ -108,7 +119,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .openai:
             Model.openAIImageModels
         case .oxygen:
-            Model.oxygenImageModels + [Model.customImage]
+            Model.oxygenImageModels
         case .custom:
             [Model.customImage]
         }
@@ -121,19 +132,22 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .openai:
             ServiceSettingsView(
-                model: configuration.$OAImodel,
+                chatModel: configuration.$OAImodel,
+                imageModel: configuration.$OAIImageModel,
                 apiKey: configuration.$OAIkey,
                 provider: self
             )
         case .oxygen:
             ServiceSettingsView(
-                model: configuration.$Omodel,
+                chatModel: configuration.$Omodel,
+                imageModel: configuration.$OImageModel,
                 apiKey: configuration.$Okey,
                 provider: self
             )
         case .custom:
             ServiceSettingsView(
-                model: configuration.$Cmodel,
+                chatModel: Binding.constant(.customChat),
+                imageModel: Binding.constant(.customImage),
                 apiKey: configuration.$Ckey,
                 provider: self
             )

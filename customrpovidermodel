@@ -1,0 +1,1709 @@
+diff --git a/GPTalks.xcodeproj/project.pbxproj b/GPTalks.xcodeproj/project.pbxproj
+index dab80dc..80683a1 100644
+--- a/GPTalks.xcodeproj/project.pbxproj
++++ b/GPTalks.xcodeproj/project.pbxproj
+@@ -21,9 +21,11 @@
+ 		0837E4812AFFE7B000C03059 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E4802AFFE7AF00C03059 /* Model.swift */; };
+ 		083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 083E3B182B3A67B9007BE19E /* VisualEffectView */; };
+ 		0846F1F62B33D68F002A2EB2 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */; };
++		0859BAF62B7E73CC004D9542 /* ProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0859BAF52B7E73CC004D9542 /* ProviderView.swift */; };
++		0859BAF82B7E87C5004D9542 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0859BAF72B7E87C5004D9542 /* Provider.swift */; };
+ 		085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Utils.swift */; };
+ 		085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */; };
+-		085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* Provider.swift */; };
++		085D40C32AFD8C250033F8B5 /* ProviderOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* ProviderOld.swift */; };
+ 		086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */; };
+ 		0878E53B2B1683ED00E0D79D /* AppIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0878E53A2B1683ED00E0D79D /* AppIconView.swift */; };
+ 		087AC1982B6D40A7006B9386 /* EditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087AC1972B6D40A7006B9386 /* EditingView.swift */; };
+@@ -36,6 +38,7 @@
+ 		08AF74742B720F5B00FB081F /* ImageCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AF74732B720F5B00FB081F /* ImageCreator.swift */; };
+ 		08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */; };
+ 		08C82E582B7CB00C0029791B /* ImageObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C82E572B7CB00C0029791B /* ImageObject.swift */; };
++		08CA8B2B2B7E98A50041BF4D /* ProviderVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA8B2A2B7E98A50041BF4D /* ProviderVM.swift */; };
+ 		08D533302B2C25CC008B4FA9 /* MessageContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D5332F2B2C25CC008B4FA9 /* MessageContextMenu.swift */; };
+ 		08D533322B2C2D50008B4FA9 /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */; };
+ 		08D533342B2C2ED9008B4FA9 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */; };
+@@ -55,9 +58,6 @@
+ 		E4C65EA929CA9E7E00AFA884 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA829CA9E7E00AFA884 /* ContentView.swift */; };
+ 		E4C65EAB29CA9E7F00AFA884 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4C65EAA29CA9E7F00AFA884 /* Assets.xcassets */; };
+ 		E4C65EAF29CA9E7F00AFA884 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4C65EAE29CA9E7F00AFA884 /* Preview Assets.xcassets */; };
+-		E4C65EB929CA9E8000AFA884 /* ChatGPTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EB829CA9E8000AFA884 /* ChatGPTTests.swift */; };
+-		E4C65EC329CA9E8000AFA884 /* ChatGPTUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EC229CA9E8000AFA884 /* ChatGPTUITests.swift */; };
+-		E4C65EC529CA9E8000AFA884 /* ChatGPTUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EC429CA9E8000AFA884 /* ChatGPTUITestsLaunchTests.swift */; };
+ 		E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65ED329CA9F7800AFA884 /* DialogueSession.swift */; };
+ 		E4C65EEE29CA9F7800AFA884 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65ED429CA9F7800AFA884 /* Conversation.swift */; };
+ 		E4C65EF229CA9F7800AFA884 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */; };
+@@ -99,9 +99,11 @@
+ 		0837E47C2AFE57A100C03059 /* DefaultConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultConfigView.swift; sourceTree = "<group>"; };
+ 		0837E4802AFFE7AF00C03059 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+ 		0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
++		0859BAF52B7E73CC004D9542 /* ProviderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderView.swift; sourceTree = "<group>"; };
++		0859BAF72B7E87C5004D9542 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+ 		085D40BE2AFD66340033F8B5 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+ 		085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
+-		085D40C22AFD8C250033F8B5 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
++		085D40C22AFD8C250033F8B5 /* ProviderOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderOld.swift; sourceTree = "<group>"; };
+ 		086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarItems.swift; sourceTree = "<group>"; };
+ 		0878E53A2B1683ED00E0D79D /* AppIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconView.swift; sourceTree = "<group>"; };
+ 		087AC1972B6D40A7006B9386 /* EditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingView.swift; sourceTree = "<group>"; };
+@@ -114,6 +116,7 @@
+ 		08AF74732B720F5B00FB081F /* ImageCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCreator.swift; sourceTree = "<group>"; };
+ 		08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledPicker.swift; sourceTree = "<group>"; };
+ 		08C82E572B7CB00C0029791B /* ImageObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageObject.swift; sourceTree = "<group>"; };
++		08CA8B2A2B7E98A50041BF4D /* ProviderVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderVM.swift; sourceTree = "<group>"; };
+ 		08D5332F2B2C25CC008B4FA9 /* MessageContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContextMenu.swift; sourceTree = "<group>"; };
+ 		08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
+ 		08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
+@@ -131,10 +134,7 @@
+ 		E4C65EAA29CA9E7F00AFA884 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+ 		E4C65EAE29CA9E7F00AFA884 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+ 		E4C65EB429CA9E8000AFA884 /* GPTalksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPTalksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+-		E4C65EB829CA9E8000AFA884 /* ChatGPTTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTTests.swift; sourceTree = "<group>"; };
+ 		E4C65EBE29CA9E8000AFA884 /* GPTalksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPTalksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+-		E4C65EC229CA9E8000AFA884 /* ChatGPTUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTUITests.swift; sourceTree = "<group>"; };
+-		E4C65EC429CA9E8000AFA884 /* ChatGPTUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTUITestsLaunchTests.swift; sourceTree = "<group>"; };
+ 		E4C65ED329CA9F7800AFA884 /* DialogueSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogueSession.swift; sourceTree = "<group>"; };
+ 		E4C65ED429CA9F7800AFA884 /* Conversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+ 		E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
+@@ -181,8 +181,11 @@
+ 		08723DAB2AFA4911001D59FE /* LanguageModel */ = {
+ 			isa = PBXGroup;
+ 			children = (
+-				085D40C22AFD8C250033F8B5 /* Provider.swift */,
++				085D40C22AFD8C250033F8B5 /* ProviderOld.swift */,
+ 				0837E4802AFFE7AF00C03059 /* Model.swift */,
++				0859BAF52B7E73CC004D9542 /* ProviderView.swift */,
++				0859BAF72B7E87C5004D9542 /* Provider.swift */,
++				08CA8B2A2B7E98A50041BF4D /* ProviderVM.swift */,
+ 			);
+ 			path = LanguageModel;
+ 			sourceTree = "<group>";
+@@ -229,8 +232,6 @@
+ 			children = (
+ 				E4EF056C2A3B3744005CF741 /* GPTalks-Info.plist */,
+ 				E4C65EA029CA9E7E00AFA884 /* GPTalks */,
+-				E4C65EB729CA9E8000AFA884 /* GPTalksTests */,
+-				E4C65EC129CA9E8000AFA884 /* GPTalksTestsUITests */,
+ 				E4C65E9F29CA9E7E00AFA884 /* Products */,
+ 			);
+ 			sourceTree = "<group>";
+@@ -268,23 +269,6 @@
+ 			path = "Preview Content";
+ 			sourceTree = "<group>";
+ 		};
+-		E4C65EB729CA9E8000AFA884 /* GPTalksTests */ = {
+-			isa = PBXGroup;
+-			children = (
+-				E4C65EB829CA9E8000AFA884 /* ChatGPTTests.swift */,
+-			);
+-			path = GPTalksTests;
+-			sourceTree = "<group>";
+-		};
+-		E4C65EC129CA9E8000AFA884 /* GPTalksTestsUITests */ = {
+-			isa = PBXGroup;
+-			children = (
+-				E4C65EC229CA9E8000AFA884 /* ChatGPTUITests.swift */,
+-				E4C65EC429CA9E8000AFA884 /* ChatGPTUITestsLaunchTests.swift */,
+-			);
+-			path = GPTalksTestsUITests;
+-			sourceTree = "<group>";
+-		};
+ 		E4C65ED129CA9F7800AFA884 /* Class */ = {
+ 			isa = PBXGroup;
+ 			children = (
+@@ -531,6 +515,8 @@
+ 				E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */,
+ 				086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */,
+ 				08AF74742B720F5B00FB081F /* ImageCreator.swift in Sources */,
++				0859BAF62B7E73CC004D9542 /* ProviderView.swift in Sources */,
++				0859BAF82B7E87C5004D9542 /* Provider.swift in Sources */,
+ 				08376D832B7CF0F4003258D1 /* ZoomableImageView.swift in Sources */,
+ 				E4C65F2029D0649800AFA884 /* DialogueSettingsView.swift in Sources */,
+ 				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
+@@ -556,6 +542,7 @@
+ 				E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */,
+ 				08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */,
+ 				0829D1152B3166E300DFFBB1 /* MacOSMessages.swift in Sources */,
++				08CA8B2B2B7E98A50041BF4D /* ProviderVM.swift in Sources */,
+ 				08C82E582B7CB00C0029791B /* ImageObject.swift in Sources */,
+ 				E4C65EF629CA9F7800AFA884 /* IosSettingsView.swift in Sources */,
+ 				08376D7A2B7CBFCB003258D1 /* GenerationView.swift in Sources */,
+@@ -569,7 +556,7 @@
+ 				08D533302B2C25CC008B4FA9 /* MessageContextMenu.swift in Sources */,
+ 				087AC1982B6D40A7006B9386 /* EditingView.swift in Sources */,
+ 				0837E47D2AFE57A100C03059 /* DefaultConfigView.swift in Sources */,
+-				085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */,
++				085D40C32AFD8C250033F8B5 /* ProviderOld.swift in Sources */,
+ 				0829D1172B317A4B00DFFBB1 /* ConversationView.swift in Sources */,
+ 				085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */,
+ 			);
+@@ -579,7 +566,6 @@
+ 			isa = PBXSourcesBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				E4C65EB929CA9E8000AFA884 /* ChatGPTTests.swift in Sources */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -587,8 +573,6 @@
+ 			isa = PBXSourcesBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				E4C65EC529CA9E8000AFA884 /* ChatGPTUITestsLaunchTests.swift in Sources */,
+-				E4C65EC329CA9E8000AFA884 /* ChatGPTUITests.swift in Sources */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+diff --git a/GPTalks/AppConfiguration.swift b/GPTalks/AppConfiguration.swift
+index 11e24e7..2338f0e 100644
+--- a/GPTalks/AppConfiguration.swift
++++ b/GPTalks/AppConfiguration.swift
+@@ -20,7 +20,7 @@ class AppConfiguration: ObservableObject {
+     
+ //    @AppStorage("configuration.isAutoGenerateTitle") var isAutoGenerateTitle: Bool = false
+     
+-    @AppStorage("configuration.preferredChatService") var preferredChatService: Provider = .openai
++    @AppStorage("configuration.preferredChatService") var preferredChatService: String = ""
+     @AppStorage("configuration.preferredImageService") var preferredImageService: Provider = .openai
+     @AppStorage("configuration.defaultImageModel") var defaultImageModel: String = "dall-e-3"
+     
+diff --git a/GPTalks/Class/LanguageModel/Provider.swift b/GPTalks/Class/LanguageModel/Provider.swift
+index ae24fb5..e630b76 100644
+--- a/GPTalks/Class/LanguageModel/Provider.swift
++++ b/GPTalks/Class/LanguageModel/Provider.swift
+@@ -1,233 +1,89 @@
+ //
+-//  AIProvider.swift
+-//  GPTMessage
++//  Provider.swift
++//  GPTalks
+ //
+-//  Created by Zabir Raihan on 10/11/2023.
++//  Created by Zabir Raihan on 16/02/2024.
+ //
+ 
+-import OpenAI
+ import SwiftUI
++import CoreData
++import Foundation
++
++struct ProviderData: Codable {
++    var id: UUID
++    var name: String
++    var accentColor: String?
++    var preferredModel: String?
++    var apiKey: String?
++    var hostUrl: String?
++    var chatModels: [String]?
++    var imageModels: [String]?
++    var visionModels: [String]?
++}
+ 
+-enum Provider: String, CaseIterable, Codable, Identifiable {
+-    case openai
+-    case openrouter
+-    case shuttle
+-    case oxygen
+-    case gpt4free
+-    case custom
+-
+-    var id: String {
+-        switch self {
+-        case .openai:
+-            "openai"
+-        case .openrouter:
+-            "openrouter"
+-        case .shuttle:
+-            "shuttle"
+-        case .oxygen:
+-            "oxygen"
+-        case .gpt4free:
+-            "gpt4free"
+-        case .custom:
+-            "custom"
+-        }
+-    }
+-
+-    var config: OpenAI.Configuration {
+-        switch self {
+-        case .openai:
+-            OpenAI.Configuration(
+-                token: AppConfiguration.shared.OAIkey,
+-                host: "api.openai.com"
+-            )
+-        case .openrouter:
+-            OpenAI.Configuration(
+-                token: AppConfiguration.shared.ORkey,
+-                host: "openrouter.ai/api"
+-            )
+-        case .shuttle:
+-            OpenAI.Configuration(
+-                token: AppConfiguration.shared.Skey,
+-                host: "api.shuttleai.app"
+-            )
+-        case .oxygen:
+-            OpenAI.Configuration(
+-                token: AppConfiguration.shared.Okey,
+-                host: "app.oxyapi.uk"
+-            )
+-        case .gpt4free:
+-            OpenAI.Configuration(
+-                token: AppConfiguration.shared.Gkey,
+-                host: AppConfiguration.shared.Ghost
+-            )
+-        case .custom:
+-            OpenAI.Configuration(
+-                token: AppConfiguration.shared.Ckey,
+-                host: AppConfiguration.shared.Chost
+-            )
+-        }
+-    }
+-
+-    var iconName: String {
+-        rawValue.lowercased()
++extension Provider {
++    func toProviderData() -> ProviderData {
++        return ProviderData(
++            id: self.id ?? UUID(),
++            name: self.name ?? "",
++            accentColor: self.accentColor,
++            preferredModel: self.preferredModel,
++            apiKey: self.apiKey,
++            hostUrl: self.hostUrl,
++            chatModels: self.chatModels as? [String],
++            imageModels: self.imageModels as? [String],
++            visionModels: self.visionModels as? [String]
++        )
+     }
++}
+ 
+-    var accentColor: Color {
+-        switch self {
+-        case .openai:
+-//            Color("greenColor")
+-            Color(hex: "#34AADC")
+-        case .openrouter:
+-            Color("pinkColor")
+-        case .shuttle:
+-            Color("tealColor")
+-        case .oxygen:
+-            Color("niceColor")
+-        case .gpt4free:
+-            Color("blueColor")
+-        case .custom:
+-            Color("purpleColor")
++extension Provider {
++    static func create(name: String, accentColor: String, preferredModel: String, apiKey: String, hostUrl: String, in context: NSManagedObjectContext) {
++        let newProvider = Provider(context: context)
++        newProvider.id = UUID()
++        newProvider.name = name
++        newProvider.accentColor = accentColor
++        newProvider.preferredModel = preferredModel
++        newProvider.apiKey = apiKey
++        newProvider.hostUrl = hostUrl
++        do {
++            try context.save()
++        } catch {
++            let nsError = error as NSError
++            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+         }
+     }
+-
+-    var name: String {
+-        switch self {
+-        case .openai:
+-            "OpenAI"
+-        case .openrouter:
+-            "OpenRouter"
+-        case .shuttle:
+-            "Shuttle"
+-        case .oxygen:
+-            "Oxygen"
+-        case .gpt4free:
+-            "GPT4Free"
+-        case .custom:
+-            "Custom"
++    
++    static func fetchAllProviders(in context: NSManagedObjectContext) -> [Provider] {
++        let request: NSFetchRequest<Provider> = Provider.fetchRequest()
++        do {
++            return try context.fetch(request)
++        } catch {
++            return []
+         }
+     }
+-
+-    var preferredModel: Model {
+-        switch self {
+-        case .openai:
+-            AppConfiguration.shared.OAImodel
+-        case .openrouter:
+-            AppConfiguration.shared.ORmodel
+-        case .shuttle:
+-            AppConfiguration.shared.Smodel
+-        case .oxygen:
+-            AppConfiguration.shared.Omodel
+-        case .gpt4free:
+-            AppConfiguration.shared.Gmodel
+-        case .custom:
+-            AppConfiguration.shared.Cmodel
++    
++    static func update(provider: Provider, newName: String, newAccentColor: String, newPreferredModel: String, apiKey: String, hostUrl: String, in context: NSManagedObjectContext) {
++            provider.name = newName
++            provider.accentColor = newAccentColor
++            provider.preferredModel = newPreferredModel
++            provider.apiKey = apiKey
++            provider.hostUrl = hostUrl
++            do {
++                try context.save()
++            } catch {
++                let nsError = error as NSError
++                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
++            }
+         }
+-    }
+-
+-    var models: [Model] {
+-        switch self {
+-        case .openai:
+-            Model.openAIModels
+-        case .openrouter:
+-            Model.openRouterModels
+-        case .shuttle:
+-            Model.shuttleModels
+-        case .oxygen:
+-            Model.oxygenModels
+-        case .gpt4free:
+-            Model.gpt4freeModels
+-        case .custom:
+-            Model.customModels
++        
++        static func delete(provider: Provider, in context: NSManagedObjectContext) {
++            context.delete(provider)
++            do {
++                try context.save()
++            } catch {
++                let nsError = error as NSError
++                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
++            }
+         }
+-    }
+-
+-    @ViewBuilder
+-    var destination: some View {
+-        @ObservedObject var configuration = AppConfiguration.shared
+-
+-        switch self {
+-        case .openai:
+-            ServiceSettingsView(
+-                model: configuration.$OAImodel,
+-                apiKey: configuration.$OAIkey,
+-                provider: self
+-            )
+-        case .openrouter:
+-            ServiceSettingsView(
+-                model: configuration.$ORmodel,
+-                apiKey: configuration.$ORkey,
+-                provider: self
+-            )
+-        case .shuttle:
+-            ServiceSettingsView(
+-                model: configuration.$Smodel,
+-                apiKey: configuration.$Skey,
+-                provider: self
+-            )
+-        case .oxygen:
+-            ServiceSettingsView(
+-                model: configuration.$Omodel,
+-                apiKey: configuration.$Okey,
+-                provider: self
+-            )
+-        case .gpt4free:
+-            ServiceSettingsView(
+-                model: configuration.$Gmodel,
+-                apiKey: configuration.$Gkey,
+-                provider: self
+-            )
+-        case .custom:
+-            ServiceSettingsView(
+-                model: configuration.$Cmodel,
+-                apiKey: configuration.$Ckey,
+-                provider: self
+-            )
+-        }
+-    }
+-
+-    var settingsLabel: some View {
+-        HStack {
+-            ProviderImage(color: self.accentColor, frame: frame)
+-            Text(name)
+-        }
+-    }
+-
+-    static var availableProviders: [Provider] {
+-        [
+-            .openai,
+-            .openrouter,
+-//            .shuttle,
+-            .oxygen,
+-            .gpt4free,
+-            .custom
+-        ]
+-    }
+-
+-    var logoImage: some View {
+-        ProviderImage(radius: imageRadius, color: accentColor, frame: imageSize)
+-    }
+-
+-    private var imageRadius: CGFloat {
+-        #if os(macOS)
+-            11
+-        #else
+-            16
+-        #endif
+-    }
+-
+-    private var imageSize: CGFloat {
+-        #if os(macOS)
+-            36
+-        #else
+-            50
+-        #endif
+-    }
+-
+-    private var frame: CGFloat {
+-        #if os(macOS)
+-            35
+-        #else
+-            30
+-        #endif
+-    }
+ }
+diff --git a/GPTalks/Class/LanguageModel/ProviderOld.swift b/GPTalks/Class/LanguageModel/ProviderOld.swift
+new file mode 100644
+index 0000000..19b1aea
+--- /dev/null
++++ b/GPTalks/Class/LanguageModel/ProviderOld.swift
+@@ -0,0 +1,234 @@
++//
++//  AIProvider.swift
++//  GPTMessage
++//
++//  Created by Zabir Raihan on 10/11/2023.
++//
++
++import OpenAI
++import SwiftUI
++import CoreData
++
++enum ProviderOld: String, CaseIterable, Codable, Identifiable {
++    case openai
++    case openrouter
++    case shuttle
++    case oxygen
++    case gpt4free
++    case custom
++
++    var id: String {
++        switch self {
++        case .openai:
++            "openai"
++        case .openrouter:
++            "openrouter"
++        case .shuttle:
++            "shuttle"
++        case .oxygen:
++            "oxygen"
++        case .gpt4free:
++            "gpt4free"
++        case .custom:
++            "custom"
++        }
++    }
++
++    var config: OpenAI.Configuration {
++        switch self {
++        case .openai:
++            OpenAI.Configuration(
++                token: AppConfiguration.shared.OAIkey,
++                host: "api.openai.com"
++            )
++        case .openrouter:
++            OpenAI.Configuration(
++                token: AppConfiguration.shared.ORkey,
++                host: "openrouter.ai/api"
++            )
++        case .shuttle:
++            OpenAI.Configuration(
++                token: AppConfiguration.shared.Skey,
++                host: "api.shuttleai.app"
++            )
++        case .oxygen:
++            OpenAI.Configuration(
++                token: AppConfiguration.shared.Okey,
++                host: "app.oxyapi.uk"
++            )
++        case .gpt4free:
++            OpenAI.Configuration(
++                token: AppConfiguration.shared.Gkey,
++                host: AppConfiguration.shared.Ghost
++            )
++        case .custom:
++            OpenAI.Configuration(
++                token: AppConfiguration.shared.Ckey,
++                host: AppConfiguration.shared.Chost
++            )
++        }
++    }
++
++    var iconName: String {
++        rawValue.lowercased()
++    }
++
++    var accentColor: Color {
++        switch self {
++        case .openai:
++//            Color("greenColor")
++            Color(hex: "#34AADC")
++        case .openrouter:
++            Color("pinkColor")
++        case .shuttle:
++            Color("tealColor")
++        case .oxygen:
++            Color("niceColor")
++        case .gpt4free:
++            Color("blueColor")
++        case .custom:
++            Color("purpleColor")
++        }
++    }
++
++    var name: String {
++        switch self {
++        case .openai:
++            "OpenAI"
++        case .openrouter:
++            "OpenRouter"
++        case .shuttle:
++            "Shuttle"
++        case .oxygen:
++            "Oxygen"
++        case .gpt4free:
++            "GPT4Free"
++        case .custom:
++            "Custom"
++        }
++    }
++
++    var preferredModel: Model {
++        switch self {
++        case .openai:
++            AppConfiguration.shared.OAImodel
++        case .openrouter:
++            AppConfiguration.shared.ORmodel
++        case .shuttle:
++            AppConfiguration.shared.Smodel
++        case .oxygen:
++            AppConfiguration.shared.Omodel
++        case .gpt4free:
++            AppConfiguration.shared.Gmodel
++        case .custom:
++            AppConfiguration.shared.Cmodel
++        }
++    }
++
++    var models: [Model] {
++        switch self {
++        case .openai:
++            Model.openAIModels
++        case .openrouter:
++            Model.openRouterModels
++        case .shuttle:
++            Model.shuttleModels
++        case .oxygen:
++            Model.oxygenModels
++        case .gpt4free:
++            Model.gpt4freeModels
++        case .custom:
++            Model.customModels
++        }
++    }
++
++    @ViewBuilder
++    var destination: some View {
++        @ObservedObject var configuration = AppConfiguration.shared
++
++        switch self {
++        case .openai:
++            ServiceSettingsView(
++                model: configuration.$OAImodel,
++                apiKey: configuration.$OAIkey,
++                provider: self
++            )
++        case .openrouter:
++            ServiceSettingsView(
++                model: configuration.$ORmodel,
++                apiKey: configuration.$ORkey,
++                provider: self
++            )
++        case .shuttle:
++            ServiceSettingsView(
++                model: configuration.$Smodel,
++                apiKey: configuration.$Skey,
++                provider: self
++            )
++        case .oxygen:
++            ServiceSettingsView(
++                model: configuration.$Omodel,
++                apiKey: configuration.$Okey,
++                provider: self
++            )
++        case .gpt4free:
++            ServiceSettingsView(
++                model: configuration.$Gmodel,
++                apiKey: configuration.$Gkey,
++                provider: self
++            )
++        case .custom:
++            ServiceSettingsView(
++                model: configuration.$Cmodel,
++                apiKey: configuration.$Ckey,
++                provider: self
++            )
++        }
++    }
++
++    var settingsLabel: some View {
++        HStack {
++            ProviderImage(color: self.accentColor, frame: frame)
++            Text(name)
++        }
++    }
++
++    static var availableProviders: [ProviderOld] {
++        [
++            .openai,
++            .openrouter,
++//            .shuttle,
++            .oxygen,
++            .gpt4free,
++            .custom
++        ]
++    }
++
++    var logoImage: some View {
++        ProviderImage(radius: imageRadius, color: accentColor, frame: imageSize)
++    }
++
++    private var imageRadius: CGFloat {
++        #if os(macOS)
++            11
++        #else
++            16
++        #endif
++    }
++
++    private var imageSize: CGFloat {
++        #if os(macOS)
++            36
++        #else
++            50
++        #endif
++    }
++
++    private var frame: CGFloat {
++        #if os(macOS)
++            35
++        #else
++            30
++        #endif
++    }
++}
+diff --git a/GPTalks/Class/LanguageModel/ProviderVM.swift b/GPTalks/Class/LanguageModel/ProviderVM.swift
+new file mode 100644
+index 0000000..d5f6ef2
+--- /dev/null
++++ b/GPTalks/Class/LanguageModel/ProviderVM.swift
+@@ -0,0 +1,124 @@
++//
++//  ProviderVM.swift
++//  GPTalks
++//
++//  Created by Zabir Raihan on 16/02/2024.
++//
++
++import SwiftUI
++import CoreData
++
++@Observable class ProviderVM {
++    let viewContext: NSManagedObjectContext
++    var providers: [Provider] = []
++    
++    init(context: NSManagedObjectContext) {
++        viewContext = context
++        fetchProviders()
++    }
++
++    func fetchProviders() {
++        let request: NSFetchRequest<Provider> = Provider.fetchRequest()
++        request.sortDescriptors = [NSSortDescriptor(keyPath: \Provider.name, ascending: true)]
++        
++        do {
++            providers = try viewContext.fetch(request)
++        } catch {
++            print("DEBUG: Some error occurred while fetching: \(error.localizedDescription)")
++        }
++    }
++    
++    func getDefaultProvider(id: String) -> Provider {
++        let id = UUID(uuidString: id)!
++    
++        return providers.first { $0.id == id }!
++    }
++    
++    func addProvider(name: String, accentColor: String, preferredModel: String, apiKey: String, hostUrl: String, chatModelsInput: String, imageModelsInput: String, visionModelsInput: String) {
++            let newProvider = Provider(context: viewContext)
++            newProvider.id = UUID()
++            newProvider.name = name
++            newProvider.accentColor = accentColor
++            newProvider.preferredModel = preferredModel
++            newProvider.apiKey = apiKey
++            newProvider.hostUrl = hostUrl
++            newProvider.chatModels = chatModelsInput.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) } as NSArray
++            newProvider.imageModels = imageModelsInput.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) } as NSArray
++            newProvider.visionModels = visionModelsInput.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) } as NSArray
++            
++            saveContext()
++            fetchProviders()
++        }
++        
++        func updateProvider(provider: Provider, name: String, accentColor: String, preferredModel: String, apiKey: String, hostUrl: String, chatModelsInput: String, imageModelsInput: String, visionModelsInput: String) {
++            provider.name = name
++            provider.accentColor = accentColor
++            provider.preferredModel = preferredModel
++            provider.apiKey = apiKey
++            provider.hostUrl = hostUrl
++            provider.chatModels = chatModelsInput.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) } as NSArray
++            provider.imageModels = imageModelsInput.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) } as NSArray
++            provider.visionModels = visionModelsInput.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) } as NSArray
++            
++            saveContext()
++            fetchProviders()
++        }
++        
++        func deleteProvider(provider: Provider) {
++            viewContext.delete(provider)
++            saveContext()
++            fetchProviders()
++        }
++    
++        func deleteProviders(at offsets: IndexSet) {
++            for index in offsets {
++                let provider = providers[index]
++                viewContext.delete(provider)
++            }
++            saveContext()
++            fetchProviders()
++        }
++        
++        private func saveContext() {
++            do {
++                try viewContext.save()
++            } catch {
++                print("Error saving context: \(error.localizedDescription)")
++            }
++        }
++}
++
++
++extension ProviderVM {
++    func createOrUpdateProvider(from providerData: ProviderData) {
++        let provider: Provider
++        if let existingProvider = fetchProvider(withId: providerData.id) {
++            provider = existingProvider
++        } else {
++            provider = Provider(context: viewContext)
++            provider.id = providerData.id
++        }
++        
++        provider.name = providerData.name
++        provider.accentColor = providerData.accentColor
++        provider.preferredModel = providerData.preferredModel
++        provider.apiKey = providerData.apiKey
++        provider.hostUrl = providerData.hostUrl
++        provider.chatModels = providerData.chatModels as NSArray?
++        provider.imageModels = providerData.imageModels as NSArray?
++        provider.visionModels = providerData.visionModels as NSArray?
++        
++        saveContext()
++    }
++    
++    private func fetchProvider(withId id: UUID) -> Provider? {
++        let request: NSFetchRequest<Provider> = Provider.fetchRequest()
++        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
++        do {
++            return try viewContext.fetch(request).first
++        } catch {
++            print("Error fetching provider with ID \(id): \(error)")
++            return nil
++        }
++    }
++}
+diff --git a/GPTalks/Class/LanguageModel/ProviderView.swift b/GPTalks/Class/LanguageModel/ProviderView.swift
+new file mode 100644
+index 0000000..11153d2
+--- /dev/null
++++ b/GPTalks/Class/LanguageModel/ProviderView.swift
+@@ -0,0 +1,187 @@
++//
++//  ProviderView.swift
++//  GPTalks
++//
++//  Created by Zabir Raihan on 16/02/2024.
++//
++
++import CoreData
++import SwiftUI
++
++struct ProvidersView: View {
++//    @Environment(\.managedObjectContext) private var viewContext
++//    @FetchRequest(
++//        sortDescriptors: [NSSortDescriptor(keyPath: \Provider.name, ascending: true)],
++//        animation: .default)
++//    private var providerVM.providers: FetchedResults<Provider>
++    @Bindable var providerVM: ProviderVM
++    
++    @State private var showingAddProvider = false
++    
++    var body: some View {
++        List {
++            ForEach(providerVM.providers) { provider in
++                ProviderRow(provider: provider)
++            }
++            .onDelete(perform: providerVM.deleteProviders)
++        }
++        .navigationTitle("Providers")
++        .toolbar {
++            ToolbarItem {
++                Button(action: { showingAddProvider = true }) {
++                    Label("Add Provider", systemImage: "plus")
++                }
++            }
++        }
++        .sheet(isPresented: $showingAddProvider) {
++//            AddProviderView().environment(\.managedObjectContext, self.viewContext)
++            AddProviderView()
++        }
++    }
++    
++//    private func deleteProviders(offsets: IndexSet) {
++//        withAnimation {
++////            offsets.map { providerVM.providers[$0] }.forEach(viewContext.delete)
++//            offsets.map { providerVM.providers[$0] }.forEach(viewContext.delete)
++//            do {
++//                try viewContext.save()
++//            } catch {
++//                // Handle the Core Data error.
++//            }
++//        }
++//    }
++}
++
++struct ProviderRow: View {
++    @Environment(ProviderVM.self) private var providerVM
++    var provider: Provider
++    @State private var showingEditProvider = false
++    
++    var body: some View {
++        HStack {
++            VStack(alignment: .leading) {
++                Text(provider.name ?? "Unknown")
++                    .font(.headline)
++                Text("Model: \(provider.preferredModel ?? "N/A")")
++                    .font(.subheadline)
++            }
++            Spacer()
++            Button(action: { showingEditProvider = true }) {
++                Image(systemName: "pencil")
++            }
++            .buttonStyle(BorderlessButtonStyle())
++            .sheet(isPresented: $showingEditProvider) {
++                EditProviderView(provider: provider)
++            }
++        }
++    }
++}
++
++struct EditProviderView: View {
++    @Environment(ProviderVM.self) private var providerVM
++    @Environment(\.dismiss) private var dismiss
++    var provider: Provider
++    
++    @State private var name: String
++    @State private var accentColor: String
++    @State private var preferredModel: String
++    @State private var apiKey: String
++    @State private var hostUrl: String
++    @State private var chatModelsInput: String
++    @State private var imageModelsInput: String
++    @State private var visionModelsInput: String
++    
++    init(provider: Provider) {
++        self.provider = provider
++        _name = State(initialValue: provider.name ?? "")
++        _accentColor = State(initialValue: provider.accentColor ?? "")
++        _preferredModel = State(initialValue: provider.preferredModel ?? "")
++        _apiKey = State(initialValue: provider.apiKey ?? "")
++        _hostUrl = State(initialValue: provider.hostUrl ?? "")
++        _chatModelsInput = State(initialValue: (provider.chatModels as? [String] ?? []).joined(separator: ","))
++        _imageModelsInput = State(initialValue: (provider.imageModels as? [String] ?? []).joined(separator: ","))
++        _visionModelsInput = State(initialValue: (provider.visionModels as? [String] ?? []).joined(separator: ","))
++    }
++    
++    var body: some View {
++        Form {
++            TextField("Name", text: $name)
++           TextField("Accent Color", text: $accentColor)
++           TextField("Preferred Model", text: $preferredModel)
++           TextField("API Key", text: $apiKey)
++           TextField("Host URL", text: $hostUrl)
++               
++           // Model Inputs
++           TextField("Chat Models (comma separated)", text: $chatModelsInput)
++           TextField("Image Models (comma separated)", text: $imageModelsInput)
++           TextField("Vision Models (comma separated)", text: $visionModelsInput)
++               
++           Button("Save Changes") {
++               updateProvider()
++           }
++        }
++        .navigationTitle("Edit Provider")
++        .toolbar {
++            ToolbarItem(placement: .cancellationAction) {
++                Button("Cancel") {
++                    dismiss()
++                }
++            }
++        }
++        .formStyle(.grouped)
++    }
++    
++    private func updateProvider() {
++        providerVM.updateProvider(provider: provider, name: name, accentColor: accentColor, preferredModel: preferredModel, apiKey: apiKey, hostUrl: hostUrl, chatModelsInput: chatModelsInput, imageModelsInput: imageModelsInput, visionModelsInput: visionModelsInput)
++        dismiss()
++    }
++}
++
++struct AddProviderView: View {
++    @Environment(ProviderVM.self) private var providerVM
++    @Environment(\.dismiss) private var dismiss
++    
++    @State private var name: String = ""
++    @State private var accentColor: String = ""
++    @State private var preferredModel: String = ""
++    @State private var apiKey: String = ""
++    @State private var hostUrl: String = ""
++    @State private var chatModelsInput: String = ""
++    @State private var imageModelsInput: String = ""
++    @State private var visionModelsInput: String = ""
++    
++    var body: some View {
++        Form {
++            TextField("Name", text: $name)
++            TextField("Accent Color", text: $accentColor)
++            TextField("Preferred Model", text: $preferredModel)
++            TextField("API Key", text: $apiKey)
++            TextField("Host URL", text: $hostUrl)
++                
++            // Model Inputs
++            TextField("Chat Models (comma separated)", text: $chatModelsInput)
++            TextField("Image Models (comma separated)", text: $imageModelsInput)
++            TextField("Vision Models (comma separated)", text: $visionModelsInput)
++                
++            Button("Add Provider") {
++                providerVM.addProvider(name: name, accentColor: accentColor, preferredModel: preferredModel, apiKey: apiKey, hostUrl: hostUrl, chatModelsInput: chatModelsInput, imageModelsInput: imageModelsInput, visionModelsInput: visionModelsInput)
++                       dismiss()
++            }
++        }
++        .formStyle(.grouped)
++        .navigationTitle("Add Provider")
++        .toolbar {
++            ToolbarItem(placement: .cancellationAction) {
++                Button("Cancel") {
++                    dismiss()
++                }
++            }
++        }
++    }
++}
++
++//struct ProvidersView_Previews: PreviewProvider {
++//    static var previews: some View {
++//        ProvidersView().environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
++//    }
++//}
+diff --git a/GPTalks/Class/View/DialogueList/IOSDialogList.swift b/GPTalks/Class/View/DialogueList/IOSDialogList.swift
+index 874292f..d12234b 100644
+--- a/GPTalks/Class/View/DialogueList/IOSDialogList.swift
++++ b/GPTalks/Class/View/DialogueList/IOSDialogList.swift
+@@ -10,7 +10,7 @@ import SwiftUI
+ import OpenAI
+ 
+     struct IOSDialogList: View {
+-        @Bindable var viewModel: DialogueViewModel
++        @Bindable var dialogVM: DialogueViewModel
+         @State var generations: [ImageObject] = []
+ 
+         @State var isShowSettingView = false
+@@ -18,7 +18,7 @@ import OpenAI
+         var body: some View {
+             list
+                 .listStyle(.inset)
+-                .searchable(text: $viewModel.searchText)
++                .searchable(text: $dialogVM.searchText)
+             #if os(iOS)
+                 .navigationTitle("Sessions")
+             #endif
+@@ -37,11 +37,11 @@ import OpenAI
+                     ToolbarItem(placement: .topBarLeading) {
+                         Menu {
+                             Button {
+-                                viewModel.toggleArchivedStatus()
++                                dialogVM.toggleArchivedStatus()
+                             } label: {
+                                 Label(
+-                                    title: { Text(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") },
+-                                    icon: { Image(systemName: viewModel.isArchivedSelected ? "archivebox.fill" : "archivebox") }
++                                    title: { Text(dialogVM.isArchivedSelected ? "Active Chats" : "Archived Chats") },
++                                    icon: { Image(systemName: dialogVM.isArchivedSelected ? "archivebox.fill" : "archivebox") }
+                                 )
+                             }
+                             
+@@ -65,7 +65,7 @@ import OpenAI
+ 
+                     ToolbarItem(placement: .automatic) {
+                         Button {
+-                            viewModel.addDialogue()
++                            dialogVM.addDialogue()
+                         } label: {
+                             Image(systemName: "square.and.pencil")
+                         }
+@@ -76,10 +76,10 @@ import OpenAI
+ 
+         @ViewBuilder
+         private var list: some View {
+-            if viewModel.dialogues.isEmpty {
++            if dialogVM.dialogues.isEmpty {
+                 PlaceHolderView(imageName: "message.fill", title: "No Messages Yet")
+             } else {
+-                List(viewModel.dialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
++                List(dialogVM.dialogues, id: \.self, selection: $dialogVM.selectedDialogue) { session in
+                     DialogueListItem(session: session)
+                 }
+             }
+diff --git a/GPTalks/Class/View/DialogueList/MacOSDialogList.swift b/GPTalks/Class/View/DialogueList/MacOSDialogList.swift
+index 373c1a4..031f50b 100644
+--- a/GPTalks/Class/View/DialogueList/MacOSDialogList.swift
++++ b/GPTalks/Class/View/DialogueList/MacOSDialogList.swift
+@@ -9,25 +9,25 @@ import SwiftUI
+ import OpenAI
+ 
+ struct MacOSDialogList: View {
+-    @Bindable var viewModel: DialogueViewModel
++    @Bindable var dialogVM: DialogueViewModel
+     @State var images: [ImageObject] = []
+ 
+     var body: some View {
+         Group {
+-            if viewModel.dialogues.isEmpty {
++            if dialogVM.dialogues.isEmpty {
+                 PlaceHolderView(imageName: "message.fill", title: "No Messages Yet")
+             } else {
+                 ScrollViewReader { proxy in
+-                    List(viewModel.dialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
++                    List(dialogVM.dialogues, id: \.self, selection: $dialogVM.selectedDialogue) { session in
+                         DialogueListItem(session: session)
+                             .id(session.id)
+                             .listRowSeparator(.hidden)
+                     }
+                     .padding(.top, -10)
+-                    .onChange(of: viewModel.dialogues.count) {
++                    .onChange(of: dialogVM.dialogues.count) {
+                         // this is faaar from perfect but is required if we ant to keep list style inset which is required for animations
+-                        if !viewModel.dialogues.isEmpty {
+-                            proxy.scrollTo(viewModel.dialogues[0].id, anchor: .top)
++                        if !dialogVM.dialogues.isEmpty {
++                            proxy.scrollTo(dialogVM.dialogues[0].id, anchor: .top)
+                         }
+                     }
+                 }
+@@ -46,7 +46,7 @@ struct MacOSDialogList: View {
+             }
+ 
+             Button {
+-                viewModel.addDialogue()
++                dialogVM.addDialogue()
+             } label: {
+                 Image(systemName: "square.and.pencil")
+             }
+diff --git a/GPTalks/Class/View/ImageCreation/ImageCreator.swift b/GPTalks/Class/View/ImageCreation/ImageCreator.swift
+index f2a648a..7bcb601 100644
+--- a/GPTalks/Class/View/ImageCreation/ImageCreator.swift
++++ b/GPTalks/Class/View/ImageCreation/ImageCreator.swift
+@@ -51,10 +51,10 @@ struct ImageCreator: View {
+             }
+             .onAppear {
+                 isTextFieldFocused = true
+-                generations.append(ImageObject(prompt: "batman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v superman", imageModel: "dall-e-3", urls: [URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!, URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!]))
+-                generations.append(ImageObject(isGenerating: false, prompt: "batman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v superman", imageModel: "dall-e-3", urls: [URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!]))
+-                generations.append(ImageObject(prompt: "batman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v superman", imageModel: "dall-e-3", urls: [URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!, URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!]))
+-                generations.append(ImageObject(isGenerating: true, prompt: "batman v superman", imageModel: "dall-e-3", urls: []))
++//                generations.append(ImageObject(prompt: "batman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v superman", imageModel: "dall-e-3", urls: [URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!, URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!]))
++//                generations.append(ImageObject(isGenerating: false, prompt: "batman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v superman", imageModel: "dall-e-3", urls: [URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!]))
++//                generations.append(ImageObject(prompt: "batman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v superman", imageModel: "dall-e-3", urls: [URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!, URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!]))
++//                generations.append(ImageObject(isGenerating: true, prompt: "batman v superman", imageModel: "dall-e-3", urls: []))
+             }
+             .safeAreaInset(edge: .bottom, spacing: 0) {
+                 textBox
+diff --git a/GPTalks/Class/View/MessageList/DialogueSettingsView.swift b/GPTalks/Class/View/MessageList/DialogueSettingsView.swift
+index 6e52ec8..306412e 100644
+--- a/GPTalks/Class/View/MessageList/DialogueSettingsView.swift
++++ b/GPTalks/Class/View/MessageList/DialogueSettingsView.swift
+@@ -8,6 +8,7 @@
+ import SwiftUI
+ 
+ struct DialogueSettingsView: View {
++    @Environment(ProviderVM.self) private var providerVM
+     @Binding var configuration: DialogueSession.Configuration
+     @Binding var title: String
+ 
+@@ -90,9 +91,13 @@ struct DialogueSettingsView: View {
+     
+     var providerPicker: some View {
+         Picker("Provider", selection: $configuration.provider) {
+-            ForEach(Provider.availableProviders, id: \.self) { provider in
+-                Text(provider.name)
+-                    .tag(provider.id)
++//            ForEach(Provider.availableProviders, id: \.self) { provider in
++//                Text(provider.name)
++//                    .tag(provider.id)
++//            }
++            ForEach(providerVM.providers, id: \.self) { provider in
++                Text(provider.name ?? "Unknown")
++                    .tag(provider.id ?? UUID()) // Assuming id is also optional
+             }
+         }
+     }
+diff --git a/GPTalks/Class/View/MessageList/MacOSMessages.swift b/GPTalks/Class/View/MessageList/MacOSMessages.swift
+index 33c1e16..55e11c6 100644
+--- a/GPTalks/Class/View/MessageList/MacOSMessages.swift
++++ b/GPTalks/Class/View/MessageList/MacOSMessages.swift
+@@ -9,7 +9,7 @@ import SwiftUI
+ 
+ #if os(macOS)
+ struct MacOSMessages: View {
+-    @Environment(DialogueViewModel.self) private var viewModel
++    @Environment(DialogueViewModel.self) private var dialogVM
+ 
+     var session: DialogueSession
+ 
+@@ -43,7 +43,7 @@ struct MacOSMessages: View {
+                 )
+                 .background(.bar)
+             }
+-            .onChange(of: viewModel.selectedDialogue) {
++            .onChange(of: dialogVM.selectedDialogue) {
+                 isTextFieldFocused = true
+                 scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
+                 scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+diff --git a/GPTalks/Class/View/MessageList/ToolbarItems.swift b/GPTalks/Class/View/MessageList/ToolbarItems.swift
+index 238c8ed..08263ce 100644
+--- a/GPTalks/Class/View/MessageList/ToolbarItems.swift
++++ b/GPTalks/Class/View/MessageList/ToolbarItems.swift
+@@ -132,9 +132,13 @@ struct ToolbarItems: ToolbarContent {
+ 
+         ToolbarItemGroup {
+             Picker("Provider", selection: $session.configuration.provider) {
+-                ForEach(Provider.availableProviders, id: \.self) { provider in
+-                    Text(provider.name)
+-                        .tag(provider.id)
++//                ForEach(ProviderOld.availableProviders, id: \.self) { provider in
++//                    Text(provider.name)
++//                        .tag(provider.id)
++//                }
++                ForEach(providerVM.providers, id: \.self) { provider in
++                    Text(provider.name ?? "Unknown")
++                        .tag(provider.id ?? UUID()) // Assuming id is also optional
+                 }
+             }
+ 
+diff --git a/GPTalks/Class/View/MessageList/iOSMessages.swift b/GPTalks/Class/View/MessageList/iOSMessages.swift
+index 9ad3aab..83edfe5 100644
+--- a/GPTalks/Class/View/MessageList/iOSMessages.swift
++++ b/GPTalks/Class/View/MessageList/iOSMessages.swift
+@@ -11,7 +11,7 @@ import VisualEffectView
+ 
+ struct iOSMessages: View {
+     @Environment(\.colorScheme) var colorScheme
+-    @Environment(DialogueViewModel.self) private var viewModel
++    @Environment(DialogueViewModel.self) private var dialogVM
+ 
+     var session: DialogueSession
+ 
+diff --git a/GPTalks/Class/View/Setting/DefaultConfigView.swift b/GPTalks/Class/View/Setting/DefaultConfigView.swift
+index 61e4a50..d8ff914 100644
+--- a/GPTalks/Class/View/Setting/DefaultConfigView.swift
++++ b/GPTalks/Class/View/Setting/DefaultConfigView.swift
+@@ -9,6 +9,7 @@ import SwiftUI
+ 
+ struct DefaultConfigView: View {
+     @ObservedObject var configuration: AppConfiguration = .shared
++    @Environment(ProviderVM.self) private var providerVM
+ 
+     var body: some View {
+         #if os(macOS)
+@@ -117,16 +118,24 @@ struct DefaultConfigView: View {
+ 
+     var preferredProvider: some View {
+         Picker("Preferred Chat Provider", selection: configuration.$preferredChatService) {
+-            ForEach(Provider.availableProviders, id: \.self) { provider in
+-                Text(provider.name)
++//            ForEach(ProviderOld.availableProviders, id: \.self) { provider in
++//                Text(provider.name)
++//            }
++            ForEach(providerVM.providers, id: \.self) { provider in
++                Text(provider.name ?? "Unknown")
++                    .tag(provider.id ?? UUID()) // Assuming id is also optional
+             }
+         }
+     }
+ 
+     var preferredImageProvider: some View {
+         Picker("Preferred Image Provider", selection: configuration.$preferredImageService) {
+-            ForEach(Provider.availableProviders, id: \.self) { provider in
+-                Text(provider.name)
++//            ForEach(ProviderOld.availableProviders, id: \.self) { provider in
++//                Text(provider.name)
++//            }
++            ForEach(providerVM.providers, id: \.self) { provider in
++                Text(provider.name ?? "Unknown")
++                    .tag(provider.id ?? UUID()) // Assuming id is also optional
+             }
+         }
+     }
+diff --git a/GPTalks/Class/View/Setting/IosSettingsView.swift b/GPTalks/Class/View/Setting/IosSettingsView.swift
+index 11efa62..56ad752 100644
+--- a/GPTalks/Class/View/Setting/IosSettingsView.swift
++++ b/GPTalks/Class/View/Setting/IosSettingsView.swift
+@@ -40,7 +40,7 @@ struct IosSettingsView: View {
+                             .lineLimit(1)
+                         Spacer()
+                         Picker("", selection: configuration.$preferredChatService) {
+-                            ForEach(Provider.availableProviders, id: \.self) { provider in
++                            ForEach(ProviderOld.availableProviders, id: \.self) { provider in
+                                 Text(provider.name)
+                                     .tag(provider.id)
+                             }
+@@ -54,7 +54,7 @@ struct IosSettingsView: View {
+                             .lineLimit(1)
+                         Spacer()
+                         Picker("", selection: configuration.$preferredImageService) {
+-                            ForEach(Provider.availableProviders, id: \.self) { provider in
++                            ForEach(ProviderOld.availableProviders, id: \.self) { provider in
+                                 Text(provider.name)
+                                     .tag(provider.id)
+                             }
+@@ -73,7 +73,7 @@ struct IosSettingsView: View {
+                     }
+                 }
+                 Section("Services") {
+-                    ForEach(Provider.availableProviders) { provider in
++                    ForEach(ProviderOld.availableProviders) { provider in
+                         NavigationLink(
+                             destination: provider.destination,
+                             label: { provider.settingsLabel }
+diff --git a/GPTalks/Class/View/Setting/MacOSSettingsView.swift b/GPTalks/Class/View/Setting/MacOSSettingsView.swift
+index b4f33cb..d6dd810 100644
+--- a/GPTalks/Class/View/Setting/MacOSSettingsView.swift
++++ b/GPTalks/Class/View/Setting/MacOSSettingsView.swift
+@@ -14,28 +14,29 @@ struct MacOSSettingsView: View {
+                 .tabItem {
+                     Label("Default", systemImage: "cpu")
+                 }
+-            ProviderSettingsView()
+-                .tabItem {
+-                    Label("Providers", systemImage: "brain.head.profile")
+-                }
++//            ProviderSettingsView()
++//                .tabItem {
++//                    Label("Providers", systemImage: "brain.head.profile")
++//                }
+         }
+         .frame(width: 650, height: 520)
+     }
+ }
+ 
+-struct ProviderSettingsView: View {
+-    @State var selection: Provider = .openai
+-
+-    var body: some View {
+-        NavigationView {
+-            List(Provider.availableProviders, id: \.self, selection: $selection) { provider in
+-                NavigationLink(
+-                    destination: provider.destination,
+-                    label: { provider.settingsLabel }
+-                )
+-            }
+-            .listStyle(.inset)
+-        }
+-    }
+-}
++//struct ProviderSettingsView: View {
++//    @State var selection: ProviderOld = .openai
++//    @Environment(ProviderVM.self) private var providerVM
++//
++//    var body: some View {
++//        NavigationView {
++//            List(ProviderOld.availableProviders, id: \.self, selection: $selection) { provider in
++//                NavigationLink(
++//                    destination: provider.destination,
++//                    label: { provider.settingsLabel }
++//                )
++//            }
++//            .listStyle(.inset)
++//        }
++//    }
++//}
+ #endif
+diff --git a/GPTalks/Class/View/Setting/ServiceSettingsView.swift b/GPTalks/Class/View/Setting/ServiceSettingsView.swift
+index 604c7dc..b799f65 100644
+--- a/GPTalks/Class/View/Setting/ServiceSettingsView.swift
++++ b/GPTalks/Class/View/Setting/ServiceSettingsView.swift
+@@ -11,7 +11,7 @@ struct ServiceSettingsView: View {
+     @Binding var model: Model
+     @Binding var apiKey: String
+     @ObservedObject var configuration = AppConfiguration.shared
+-    var provider: Provider
++    var provider: ProviderOld
+ 
+     @State var showAPIKey = false
+ 
+diff --git a/GPTalks/Class/ViewModel/DialogueSession.swift b/GPTalks/Class/ViewModel/DialogueSession.swift
+index 665ab6f..bb0c3c2 100644
+--- a/GPTalks/Class/ViewModel/DialogueSession.swift
++++ b/GPTalks/Class/ViewModel/DialogueSession.swift
+@@ -11,6 +11,8 @@ import SwiftOpenAI
+ 
+ @Observable class DialogueSession: Identifiable, Equatable, Hashable, Codable {
+     struct Configuration: Codable {
++        @Environment(ProviderVM.self) private var providerVM
++        
+         var temperature: Double
+         var systemPrompt: String
+         var contextLength: Int
+@@ -18,11 +20,11 @@ import SwiftOpenAI
+         var model: Model
+ 
+         init() {
+-            provider = AppConfiguration.shared.preferredChatService
++            provider = providerVM.getDefaultProvider(id: AppConfiguration.shared.preferredChatService)
+             contextLength = AppConfiguration.shared.contextLength
+             temperature = AppConfiguration.shared.temperature
+             systemPrompt = AppConfiguration.shared.systemPrompt
+-            model = provider.preferredModel
++//            model = provider.preferredModel
+         }
+     }
+ 
+diff --git a/GPTalks/Class/ViewModel/DialogueViewModel.swift b/GPTalks/Class/ViewModel/DialogueViewModel.swift
+index 3794fab..3e7d019 100644
+--- a/GPTalks/Class/ViewModel/DialogueViewModel.swift
++++ b/GPTalks/Class/ViewModel/DialogueViewModel.swift
+@@ -5,7 +5,7 @@
+ //  Created by Zabir Raihan on 10/12/2023.
+ //
+ 
+-import Combine
++//import Combine
+ import CoreData
+ import SwiftUI
+ 
+diff --git a/GPTalks/ContentView.swift b/GPTalks/ContentView.swift
+index 3920ce0..d5d5c1a 100644
+--- a/GPTalks/ContentView.swift
++++ b/GPTalks/ContentView.swift
+@@ -9,19 +9,27 @@ import CoreData
+ import SwiftUI
+ 
+ struct ContentView: View {
+-    @Environment(DialogueViewModel.self) private var viewModel
++    @Environment(DialogueViewModel.self) private var dialogVM
++    @Environment(ProviderVM.self) private var providerVM
+ 
+     var body: some View {
+         NavigationSplitView {
+             #if os(macOS)
+-                MacOSDialogList(viewModel: viewModel)
++                MacOSDialogList(dialogVM: dialogVM)
+             #else
+-                IOSDialogList(viewModel: viewModel)
++                IOSDialogList(dialogVM: dialogVM)
+             #endif
+         } detail: {
+-            if let selectedDialogue = viewModel.selectedDialogue {
++            if let selectedDialogue = dialogVM.selectedDialogue {
+                 #if os(macOS)
+                     MacOSMessages(session: selectedDialogue)
++                    .toolbar {
++                        NavigationLink {
++                            ProvidersView(providerVM: providerVM)
++                        } label: {
++                            Image(systemName: "square.and.arrow.up")
++                        }
++                    }
+ //                        .id(selectedDialogue.id)
+                 #else
+ 
+@@ -35,7 +43,7 @@ struct ContentView: View {
+         }
+         .background(.background)
+         .task {
+-            viewModel.fetchDialogueData()
++            dialogVM.fetchDialogueData()
+         }
+     }
+ }
+diff --git a/GPTalks/GPTalks.swift b/GPTalks/GPTalks.swift
+index f4bcf15..c9422fc 100644
+--- a/GPTalks/GPTalks.swift
++++ b/GPTalks/GPTalks.swift
+@@ -10,7 +10,9 @@ import HotKey
+ 
+ @main
+ struct GPTalks: App {
+-    @State private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
++    let persistenceController = PersistenceController.shared
++    @State private var dialogVM = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
++    @State private var providerVM = ProviderVM(context: PersistenceController.shared.container.viewContext)
+     
+     #if os(macOS)
+     let hotKey = HotKey(key: .space, modifiers: [.option], keyDownHandler: {NSApp.activate(ignoringOtherApps: true)})
+@@ -20,19 +22,21 @@ struct GPTalks: App {
+         WindowGroup {
+             ContentView()
+         }
+-        .environment(viewModel)
++        .environment(dialogVM)
++        .environment(providerVM)
++        .environment(\.managedObjectContext, persistenceController.container.viewContext)
+         .commands {
+             CommandMenu("Session") {
+                 Section {
+                     Button("Regenerate") {
+                         Task { @MainActor in
+-                            await viewModel.selectedDialogue?.regenerateLastMessage()
++                            await dialogVM.selectedDialogue?.regenerateLastMessage()
+                         }
+                     }
+                     .keyboardShortcut("r", modifiers: .command)
+                     
+                     Button("Deselect Session") {
+-                        viewModel.selectedDialogue = nil
++                        dialogVM.selectedDialogue = nil
+                     }
+                     .keyboardShortcut(.escape, modifiers: .command)
+                     
+@@ -40,20 +44,20 @@ struct GPTalks: App {
+                 
+                 Section {
+                     Button("Reset Context") {
+-                        viewModel.selectedDialogue?.resetContext()
++                        dialogVM.selectedDialogue?.resetContext()
+                     }
+                     .keyboardShortcut("k", modifiers: .command)
+                     
+                     Button("Delete all messages") {
+-                        viewModel.selectedDialogue?.removeAllConversations()
++                        dialogVM.selectedDialogue?.removeAllConversations()
+                     }
+                     .keyboardShortcut(.delete, modifiers: [.command, .shift])
+                 }
+             }
+             
+             CommandGroup(after: .sidebar) {
+-                Button(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") {
+-                    viewModel.toggleArchivedStatus()
++                Button(dialogVM.isArchivedSelected ? "Active Chats" : "Archived Chats") {
++                    dialogVM.toggleArchivedStatus()
+                 }
+                 .keyboardShortcut("a", modifiers: [.command, .shift])
+             }
+diff --git a/GPTalks/GPTalks.xcdatamodeld/ChatGPT.xcdatamodel/contents b/GPTalks/GPTalks.xcdatamodeld/ChatGPT.xcdatamodel/contents
+index c1acc4e..06fa2cc 100644
+--- a/GPTalks/GPTalks.xcdatamodeld/ChatGPT.xcdatamodel/contents
++++ b/GPTalks/GPTalks.xcdatamodeld/ChatGPT.xcdatamodel/contents
+@@ -21,4 +21,15 @@
+         <attribute name="title" attributeType="String" defaultValueString="New Chat"/>
+         <relationship name="conversations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ConversationData" inverseName="dialogue" inverseEntity="ConversationData"/>
+     </entity>
++    <entity name="Provider" representedClassName="Provider" syncable="YES" codeGenerationType="class">
++        <attribute name="accentColor" optional="YES" attributeType="String"/>
++        <attribute name="apiKey" optional="YES" attributeType="String"/>
++        <attribute name="chatModels" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
++        <attribute name="hostUrl" optional="YES" attributeType="String"/>
++        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
++        <attribute name="imageModels" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
++        <attribute name="name" optional="YES" attributeType="String"/>
++        <attribute name="preferredModel" optional="YES" attributeType="String"/>
++        <attribute name="visionModels" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
++    </entity>
+ </model>
+\ No newline at end of file
+diff --git a/GPTalks/Persistence.swift b/GPTalks/Persistence.swift
+index 7250428..5eb489d 100644
+--- a/GPTalks/Persistence.swift
++++ b/GPTalks/Persistence.swift
+@@ -24,17 +24,6 @@ struct PersistenceController {
+         }
+         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+             if let error = error as NSError? {
+-                // Replace this implementation with code to handle the error appropriately.
+-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+-
+-                /*
+-                 Typical reasons for an error here include:
+-                 * The parent directory does not exist, cannot be created, or disallows writing.
+-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
+-                 * The device is out of space.
+-                 * The store could not be migrated to the current model version.
+-                 Check the error message to determine what the actual problem was.
+-                 */
+                 fatalError("Unresolved error \(error), \(error.userInfo)")
+             } else {
+                 print("[CoreData] \(storeDescription.description)")
+diff --git a/GPTalksTests/ChatGPTTests.swift b/GPTalksTests/ChatGPTTests.swift
+deleted file mode 100644
+index 4ae1cf9..0000000
+--- a/GPTalksTests/ChatGPTTests.swift
++++ /dev/null
+@@ -1,35 +0,0 @@
+-//
+-//  ChatGPTTests.swift
+-//  ChatGPTTests
+-//
+-//  Created by LuoHuanyu on 2023/3/22.
+-//
+-
+-import XCTest
+-
+-final class ChatGPTTests: XCTestCase {
+-
+-    override func setUpWithError() throws {
+-        // Put setup code here. This method is called before the invocation of each test method in the class.
+-    }
+-
+-    override func tearDownWithError() throws {
+-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+-    }
+-
+-    func testExample() throws {
+-        // This is an example of a functional test case.
+-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+-        // Any test you write for XCTest can be annotated as throws and async.
+-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
+-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+-    }
+-
+-    func testPerformanceExample() throws {
+-        // This is an example of a performance test case.
+-        measure {
+-            // Put the code you want to measure the time of here.
+-        }
+-    }
+-
+-}
+diff --git a/GPTalksTestsUITests/ChatGPTUITests.swift b/GPTalksTestsUITests/ChatGPTUITests.swift
+deleted file mode 100644
+index daf4e52..0000000
+--- a/GPTalksTestsUITests/ChatGPTUITests.swift
++++ /dev/null
+@@ -1,41 +0,0 @@
+-//
+-//  ChatGPTUITests.swift
+-//  ChatGPTUITests
+-//
+-//  Created by LuoHuanyu on 2023/3/22.
+-//
+-
+-import XCTest
+-
+-final class ChatGPTUITests: XCTestCase {
+-
+-    override func setUpWithError() throws {
+-        // Put setup code here. This method is called before the invocation of each test method in the class.
+-
+-        // In UI tests it is usually best to stop immediately when a failure occurs.
+-        continueAfterFailure = false
+-
+-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+-    }
+-
+-    override func tearDownWithError() throws {
+-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+-    }
+-
+-    func testExample() throws {
+-        // UI tests must launch the application that they test.
+-        let app = XCUIApplication()
+-        app.launch()
+-
+-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+-    }
+-
+-    func testLaunchPerformance() throws {
+-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
+-            // This measures how long it takes to launch your application.
+-            measure(metrics: [XCTApplicationLaunchMetric()]) {
+-                XCUIApplication().launch()
+-            }
+-        }
+-    }
+-}
+diff --git a/GPTalksTestsUITests/ChatGPTUITestsLaunchTests.swift b/GPTalksTestsUITests/ChatGPTUITestsLaunchTests.swift
+deleted file mode 100644
+index 8e5546f..0000000
+--- a/GPTalksTestsUITests/ChatGPTUITestsLaunchTests.swift
++++ /dev/null
+@@ -1,32 +0,0 @@
+-//
+-//  ChatGPTUITestsLaunchTests.swift
+-//  ChatGPTUITests
+-//
+-//  Created by LuoHuanyu on 2023/3/22.
+-//
+-
+-import XCTest
+-
+-final class ChatGPTUITestsLaunchTests: XCTestCase {
+-
+-    override class var runsForEachTargetApplicationUIConfiguration: Bool {
+-        true
+-    }
+-
+-    override func setUpWithError() throws {
+-        continueAfterFailure = false
+-    }
+-
+-    func testLaunch() throws {
+-        let app = XCUIApplication()
+-        app.launch()
+-
+-        // Insert steps here to perform after app launch but before taking a screenshot,
+-        // such as logging into a test account or navigating somewhere in the app
+-
+-        let attachment = XCTAttachment(screenshot: app.screenshot())
+-        attachment.name = "Launch Screen"
+-        attachment.lifetime = .keepAlways
+-        add(attachment)
+-    }
+-}

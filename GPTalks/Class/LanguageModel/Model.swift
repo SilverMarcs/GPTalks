@@ -57,12 +57,11 @@ enum Model: String, Codable {
             
 
         case .customChat:
-            "Custom Chat"
+            self.id.isEmpty ? "Custom Chat" : self.id
         case .customVision:
-            "Custom Vision"
+            self.id.isEmpty ? "Custom Vision" : self.id
         case .customImage:
-            "Custom Image"
-
+            self.id.isEmpty ? "Custom Image" : self.id
         }
     }
 
@@ -124,7 +123,7 @@ enum Model: String, Codable {
         [
             .ogpt4browsing,
             .odolphin,
-        ] + [.customChat]
+        ]
     
     static let oxygenVisionModels: [Model] =
         openAIVisionModels

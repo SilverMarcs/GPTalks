@@ -25,9 +25,9 @@ struct ImageCreator: View {
             list
             #if os(macOS)
             .navigationTitle("Image Generations")
-            .navigationSubtitle(imageSession.configuration.model == .customImage ? imageSession.configuration.model .id : imageSession.configuration.model .name)
+            .navigationSubtitle(imageSession.configuration.model.name)
             #else
-            .navigationTitle(imageSession.configuration.model == .customImage ? imageSession.configuration.model .id : imageSession.configuration.model .name)
+            .navigationTitle(imageSession.configuration.model.name)
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.immediately)
             #endif
@@ -274,7 +274,7 @@ struct ImageCreator: View {
     var modelPicker: some View {
         Picker("Model", selection: $imageSession.configuration.model) {
             ForEach(imageSession.configuration.provider.imageModels, id: \.self) { model in
-                Text(imageSession.configuration.model == .customImage ? model.id : model.name)
+                Text(model.name)
             }
         }
     }

@@ -100,7 +100,7 @@ struct MacOSMessages: View {
                 if session.containsConversationWithImage {
                     session.configuration.model = session.configuration.provider.visionModels[0]
                 } else {
-                    session.configuration.model = session.configuration.provider.preferredModel
+                    session.configuration.model = session.configuration.provider.preferredChatModel
                 }
             }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in

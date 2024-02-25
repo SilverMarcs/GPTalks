@@ -26,7 +26,7 @@ import SwiftUI
         init() {
             count = 1
             provider = AppConfiguration.shared.preferredImageService
-            model = .dalle3
+            model = AppConfiguration.shared.preferredImageService.preferredImageModel
             quality = .standard
         }
     }

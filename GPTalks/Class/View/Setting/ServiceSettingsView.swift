@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ServiceSettingsView: View {
-    @Binding var model: Model
+    @Binding var chatModel: Model
+    @Binding var imageModel: Model
     @Binding var apiKey: String
     @ObservedObject var configuration = AppConfiguration.shared
     var provider: Provider
@@ -28,9 +29,18 @@ struct ServiceSettingsView: View {
             VStack(spacing: 30) {
                 GroupBox(label: Text("Provider Settings")) {
                     HStack {
-                        Text("Default Model")
+                        Text("Default Chat Model")
                         Spacer()
-                        modelPicker
+                        chatModelPicker
+                            .labelsHidden()
+                            .frame(width: widthValue)
+                    }
+                    .padding(paddingValue)
+                    
+                    HStack {
+                        Text("Default Image Model")
+                        Spacer()
+                        imageModelPicker
                             .labelsHidden()
                             .frame(width: widthValue)
                     }
@@ -106,8 +116,9 @@ struct ServiceSettingsView: View {
 
     var iOS: some View {
         Form {
-            Section("Default Settings") {
-                modelPicker
+            Section("Default Models") {
+                chatModelPicker
+                imageModelPicker
             }
             Section("API Settings") {
                 if provider == .custom {
@@ -139,9 +150,18 @@ struct ServiceSettingsView: View {
         .navigationTitle(provider.name)
     }
 
-    var modelPicker: some View {
-        Picker("Default Model", selection: $model) {
+    var chatModelPicker: some View {
+        Picker("Default Chat Model", selection: $chatModel) {
             ForEach(provider.chatModels, id: \.self) { model in
+                Text(model.name)
+                    .tag(model.rawValue)
+            }
+        }
+    }
+    
+    var imageModelPicker: some View {
+        Picker("Default Image Model", selection: $imageModel) {
+            ForEach(provider.imageModels, id: \.self) { model in
                 Text(model.name)
                     .tag(model.rawValue)
             }
