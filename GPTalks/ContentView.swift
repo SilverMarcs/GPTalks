@@ -25,7 +25,7 @@ struct ContentView: View {
                 if viewModel.selectedState == .images {
                     ImageCreator(imageSession: imageSession)
                         .onChange(of: viewModel.selectedDialogue) {
-                            viewModel.selectedState = .active
+                            viewModel.selectedState = .recent
                         }
                 } else {
                     MacOSMessages(session: selectedDialogue)

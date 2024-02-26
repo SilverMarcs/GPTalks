@@ -28,7 +28,8 @@ import OpenAI
                 .animation(.default, value: viewModel.searchText)
                 .searchable(text: $viewModel.searchText)
             #if os(iOS)
-                .navigationTitle("Sessions")
+//                .navigationTitle("Sessions")
+                .navigationTitle(viewModel.selectedState.rawValue)
             #endif
                 .sheet(isPresented: $isShowSettingView) {
                     IosSettingsView()
@@ -48,7 +49,7 @@ import OpenAI
                               }
                           }
                           .onChange(of: navigateToImages) {
-                              viewModel.selectedState = .active
+                              viewModel.selectedState = .recent
                           }
 
                             

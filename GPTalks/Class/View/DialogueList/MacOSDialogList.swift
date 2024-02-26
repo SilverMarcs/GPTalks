@@ -29,7 +29,7 @@ struct MacOSDialogList: View {
                     .animation(.default, value: viewModel.searchText)
                     .padding(.top, -10)
                     .onChange(of: viewModel.activeDialogues.count) {
-//                         this is faaar from perfect but is required if we ant to keep list style inset which is required for animations
+//                         this is faaar from perfect but is required if we want to keep list style inset which is required for animations
                         if !viewModel.activeDialogues.isEmpty {
                             proxy.scrollTo(viewModel.activeDialogues[0].id, anchor: .top)
                         }
@@ -39,9 +39,9 @@ struct MacOSDialogList: View {
         }
         .listStyle(.inset)
         .scrollContentBackground(.hidden)
-        .frame(minWidth: 280)
+        .frame(minWidth: 290)
         .toolbar {
-//            Spacer()
+            Spacer()
 
             Picker("Select State", selection: $viewModel.selectedState) {
                 ForEach(ContentState.allCases) { state in
@@ -60,35 +60,3 @@ struct MacOSDialogList: View {
         }
     }
 }
-
-
-//struct SearchBarView: View {
-//    @Binding var text: String
-//    var placeholder: String = "Search"
-//    
-//    var body: some View {
-//        HStack {
-//            Image(systemName: "magnifyingglass")
-//            
-//            TextField(placeholder, text: $text)
-//                .textFieldStyle(.plain)
-//                
-//            if !text.isEmpty {
-//                Button {
-//                    self.text = ""
-//                } label:  {
-//                    Image(systemName: "xmark.circle.fill")
-////                        .foregroundColor(.gray)
-//                }
-//                .buttonStyle(.plain)
-//            }
-//        }
-//        .padding(6)
-////        .background(RoundedRectangle(cornerRadius: 6).fill(Color(.gray).opacity(0.2)))
-//        .background(RoundedRectangle(cornerRadius: 6).fill(.ultraThinMaterial))
-//        .overlay(
-//            RoundedRectangle(cornerRadius: 7)
-//                .stroke(Color.gray, lineWidth: 0.4) // Adjust the lineWidth to make the border thinner or thicker
-//        )
-//    }
-//}

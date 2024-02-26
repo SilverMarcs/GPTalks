@@ -5,12 +5,12 @@
 //  Created by Zabir Raihan on 10/12/2023.
 //
 
-import Combine
 import CoreData
 import SwiftUI
 
 enum ContentState: String, CaseIterable, Identifiable {
-    case active = "Active"
+    case recent = "Recents"
+    case all = "Active"   //excludes archived
     case archived = "Archived"
     case images = "Images"
     
@@ -18,12 +18,14 @@ enum ContentState: String, CaseIterable, Identifiable {
     
     var image : String {
         switch self {
-            case .active:
-                return "tray.full"
+            case .recent:
+                "tray.full"
+            case .all:
+                "tray.2"
             case .archived:
-                return "archivebox"
+                "archivebox"
             case .images:
-                return "photo"
+                "photo"
         }
     }
 }
@@ -37,7 +39,7 @@ enum ContentState: String, CaseIterable, Identifiable {
                 case .archived:
                     archivedDialogues = allDialogues.filter { $0.isArchive }
                     break
-            case .active, .images:
+            case .recent, .images, .all:
                     activeDialogues = allDialogues.filter { !$0.isArchive }
                     break
             }
@@ -50,7 +52,7 @@ enum ContentState: String, CaseIterable, Identifiable {
 
     var isArchivedSelected: Bool = false
     
-    var selectedState: ContentState = .active
+    var selectedState: ContentState = .recent
 
     var searchText: String = "" {
         didSet {
@@ -69,7 +71,7 @@ enum ContentState: String, CaseIterable, Identifiable {
                         archivedDialogues = filteredDialogues
                     #endif
                         break
-                case .active, .images:
+                case .recent, .images, .all:
                         let filteredDialogues = allDialogues.filter { dialogue in
                             let isContentMatch = dialogue.conversations.contains { conversation in
                                 conversation.content.localizedCaseInsensitiveContains(searchText)
@@ -89,7 +91,7 @@ enum ContentState: String, CaseIterable, Identifiable {
                     case .archived:
                         archivedDialogues = allDialogues.filter { $0.isArchive }
                         break
-                case .active, .images:
+                case .recent, .images, .all:
                         activeDialogues = allDialogues.filter { !$0.isArchive }
                         break
                 }
@@ -108,7 +110,7 @@ enum ContentState: String, CaseIterable, Identifiable {
         switch selectedState {
             case .archived:
                 return archivedDialogues.isEmpty || (!searchText.isEmpty && archivedDialogues.isEmpty)
-        case .active, .images:
+            case .recent, .images, .all:
                 return activeDialogues.isEmpty  || (!searchText.isEmpty && activeDialogues.isEmpty)
         }
     }
@@ -116,9 +118,15 @@ enum ContentState: String, CaseIterable, Identifiable {
     var currentDialogues: [DialogueSession] {
         switch selectedState {
             case .archived:
-            return archivedDialogues
-        case .active, .images:
-            return activeDialogues
+                archivedDialogues
+            case .all:
+                activeDialogues
+            case .recent, .images:
+            #if os(iOS)
+            Array(activeDialogues.prefix(6))
+            #else
+            Array(activeDialogues.prefix(10))
+            #endif
         }
     }
     
@@ -126,7 +134,7 @@ enum ContentState: String, CaseIterable, Identifiable {
         switch selectedState {
             case .archived:
                 return (!searchText.isEmpty && archivedDialogues.isEmpty) ? "No Search Results" : "No archived chats"
-        case .active, .images:
+        case .recent, .images, .all:
                 return (!searchText.isEmpty && activeDialogues.isEmpty) ? "No Search Results" : "No active chats"
         }
     }
@@ -159,7 +167,7 @@ enum ContentState: String, CaseIterable, Identifiable {
     func toggleChatTypes() {
         if isArchivedSelected {
             isArchivedSelected.toggle()
-            selectedState = .active
+            selectedState = .recent
         } else {
             isArchivedSelected.toggle()
             selectedState = .archived
@@ -168,7 +176,7 @@ enum ContentState: String, CaseIterable, Identifiable {
     
     func tggleImageAndChat() {
         if selectedState == .images {
-            selectedState = .active
+            selectedState = .recent
         } else {
             selectedState = .images
         }
@@ -189,7 +197,7 @@ enum ContentState: String, CaseIterable, Identifiable {
                 }
             }
                 break
-            case .active:
+            case .recent, .all:
             withAnimation {
                 activeDialogues.removeAll {
                     $0.id == session.id
@@ -207,7 +215,7 @@ enum ContentState: String, CaseIterable, Identifiable {
     }
 
     func addDialogue(conversations: [Conversation] = []) {
-        selectedState = .active
+        selectedState = .recent
 
         let session = DialogueSession()
         

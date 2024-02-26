@@ -410,9 +410,9 @@ import SwiftUI
         viewUpdater = Task {
             while true {
                 #if os(macOS)
-                try await Task.sleep(nanoseconds: 250_000_000)
+                try await Task.sleep(nanoseconds: 200_000_000)
                 #else
-                try await Task.sleep(nanoseconds: 100_000_000)
+                try await Task.sleep(nanoseconds: 50_000_000)
                 #endif
                 
                 if AppConfiguration.shared.isMarkdownEnabled {
@@ -470,12 +470,12 @@ import SwiftUI
             }
             setErrorDesc(errorDesc: error.localizedDescription)
         }
-        
-        await generateTitle(forced: false)
 
         conversations[conversations.count - 1].isReplying = false
 
         save()
+        
+        await generateTitle(forced: false)
     }
 }
 

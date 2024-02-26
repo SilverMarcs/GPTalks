@@ -65,6 +65,7 @@ struct iOSMessages: View {
                 } else {
                     scrollToBottom(proxy: proxy, animated: false)
                 }
+                isTextFieldFocused = true
             }
             .onTapGesture {
                 isTextFieldFocused = false
