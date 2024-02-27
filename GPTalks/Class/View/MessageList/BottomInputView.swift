@@ -105,7 +105,7 @@ struct BottomInputView: View {
             Button {
                 session.resetContext()
             } label: {
-                Label("Reset Context", systemImage: "eraser.fill")
+                Label("Reset Context", systemImage: "eraser")
             }
             
             Button {
@@ -119,7 +119,7 @@ struct BottomInputView: View {
             Button {
                 importing = true
             } label: {
-                Label("Add Image", systemImage: "photo.fill")
+                Label("Add Image", systemImage: "photo")
             }
             
         } label: {

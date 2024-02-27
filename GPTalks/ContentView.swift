@@ -7,6 +7,7 @@
 
 import CoreData
 import SwiftUI
+import SwiftSoup
 
 struct ContentView: View {
     @Environment(DialogueViewModel.self) private var viewModel

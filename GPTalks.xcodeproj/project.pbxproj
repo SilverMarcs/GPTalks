@@ -28,6 +28,8 @@
 		083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 083E3B182B3A67B9007BE19E /* VisualEffectView */; };
 		0846F1F62B33D68F002A2EB2 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */; };
 		084A7D392B7FC79F007B38F1 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 084A7D382B7FC79F007B38F1 /* OpenAI */; };
+		08545C3A2B8D0DD500592108 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 08545C392B8D0DD500592108 /* SwiftSoup */; };
+		08545C3C2B8D16F800592108 /* WebScrapeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08545C3B2B8D16F800592108 /* WebScrapeService.swift */; };
 		085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Utils.swift */; };
 		085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */; };
 		085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* Provider.swift */; };
@@ -106,6 +108,7 @@
 		0837E47C2AFE57A100C03059 /* IosDefaultConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosDefaultConfigView.swift; sourceTree = "<group>"; };
 		0837E4802AFFE7AF00C03059 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
+		08545C3B2B8D16F800592108 /* WebScrapeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebScrapeService.swift; sourceTree = "<group>"; };
 		085D40BE2AFD66340033F8B5 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		085D40C22AFD8C250033F8B5 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
@@ -164,6 +167,7 @@
 				08E2D21E2B7A5F800065B5E8 /* MarkdownWebView in Frameworks */,
 				08C594FE2B7FD52C009AB268 /* OpenAI in Frameworks */,
 				E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */,
+				08545C3A2B8D0DD500592108 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,9 +191,11 @@
 		08723DAB2AFA4911001D59FE /* LanguageModel */ = {
 			isa = PBXGroup;
 			children = (
+				08D5A2922B7DFE2E00BA1CE0 /* OpenAIService.swift */,
 				085D40C22AFD8C250033F8B5 /* Provider.swift */,
 				0837E4802AFFE7AF00C03059 /* Model.swift */,
 				081B02722B81B1EF006AF219 /* AISession.swift */,
+				08545C3B2B8D16F800592108 /* WebScrapeService.swift */,
 			);
 			path = LanguageModel;
 			sourceTree = "<group>";
@@ -282,7 +288,6 @@
 				E4C65ED329CA9F7800AFA884 /* DialogueSession.swift */,
 				E4C65ED429CA9F7800AFA884 /* Conversation.swift */,
 				08A1EF512B26100600A88A3A /* DialogueViewModel.swift */,
-				08D5A2922B7DFE2E00BA1CE0 /* OpenAIService.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -386,6 +391,7 @@
 				08F039CB2B7FD833000F3185 /* MarkdownWebView */,
 				08F039CE2B7FD8AE000F3185 /* MarkdownWebView */,
 				08FBEEAA2B85C57A00726E87 /* OpenAI */,
+				08545C392B8D0DD500592108 /* SwiftSoup */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -466,6 +472,7 @@
 				0816CA072B7F97F800D22D5C /* XCRemoteSwiftPackageReference "Splash" */,
 				08F039CD2B7FD8AE000F3185 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				08FBEEA92B85C57A00726E87 /* XCRemoteSwiftPackageReference "OpenAI" */,
+				08545C382B8D0DD500592108 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -518,6 +525,7 @@
 				0803E14A2B8338FA00D588C3 /* MessageContextMenu.swift in Sources */,
 				08376D832B7CF0F4003258D1 /* ZoomableImageView.swift in Sources */,
 				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
+				08545C3C2B8D16F800592108 /* WebScrapeService.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
 				08D5A2932B7DFE2E00BA1CE0 /* OpenAIService.swift in Sources */,
 				0878E53B2B1683ED00E0D79D /* AppIconView.swift in Sources */,
@@ -977,6 +985,14 @@
 				kind = branch;
 			};
 		};
+		08545C382B8D0DD500592108 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.1;
+			};
+		};
 		08F039CD2B7FD8AE000F3185 /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
@@ -1027,6 +1043,11 @@
 		084A7D382B7FC79F007B38F1 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
+		};
+		08545C392B8D0DD500592108 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08545C382B8D0DD500592108 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
 		};
 		08C594FA2B7FCEA4009AB268 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;

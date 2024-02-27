@@ -381,16 +381,25 @@ import SwiftUI
             contextAdjustedMessages = Array(conversations.suffix(configuration.contextLength - 1))
         }
 
-        let finalMessages = ([systemPrompt] + contextAdjustedMessages).map({ conversation in
+        var finalMessages = ([systemPrompt] + contextAdjustedMessages).map({ conversation in
             conversation.toChat()
         })
+        
+        var summaryText = ""
+        
+        if let summaryQuery = await getSummaryText(inputText: text) {
+            summaryText = summaryQuery
+        }
+        
+        if !summaryText.isEmpty {
+            finalMessages.append(.init(role: .user, content: "Summarize the following text. Note that there may be contents in the text thats commonly found on article websites such as writer name or adverisement or others. Ignore them and give me summary of the main content only. Also ignore the URL i sent as I am also giving you the contents o fthe url together with it")!)
+            finalMessages.append(.init(role: .user, content: summaryText)!)
+        }
 
         let query = ChatQuery(messages: finalMessages, 
                               model: configuration.model.id,
-//                              maxTokens: 3800,
                               temperature: configuration.temperature,
-                              stream: true)
-        
+                              stream: true)        
         
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         
@@ -398,14 +407,14 @@ import SwiftUI
 
         var streamText = "";
     
-            streamingTask = Task {
-                isStreaming = true
-                    for try await result in service.chatsStream(query: query) {
-                        streamText += result.choices.first?.delta.content ?? ""
-                    }
+        streamingTask = Task {
+            isStreaming = true
+                for try await result in service.chatsStream(query: query) {
+                    streamText += result.choices.first?.delta.content ?? ""
+                }
 
-                isStreaming = false
-            }
+            isStreaming = false
+        }
 
         viewUpdater = Task {
             while true {
