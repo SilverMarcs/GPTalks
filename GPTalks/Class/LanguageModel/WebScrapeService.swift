@@ -11,13 +11,13 @@ import SwiftSoup
 func getSummaryText(inputText: String) async -> String? {
     let preProcessed = inputText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
 
-    let urlString = findURL(in: preProcessed)!
-    
-    do {
-        let pTexts = try await fetchAndParseHTMLAsync(from: urlString)
-        return pTexts.joined()
-    } catch {
-        print("Failed to fetch or parse HTML: \(error.localizedDescription)")
+    if let urlString = findURL(in: preProcessed) {
+        do {
+            let pTexts = try await fetchAndParseHTMLAsync(from: urlString)
+            return pTexts.joined()
+        } catch {
+            print("Failed to fetch or parse HTML: \(error.localizedDescription)")
+        }
     }
     
     return nil
