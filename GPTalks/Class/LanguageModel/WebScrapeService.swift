@@ -8,20 +8,16 @@
 import Foundation
 import SwiftSoup
 
-@MainActor
 func getSummaryText(inputText: String) async -> String? {
     let preProcessed = inputText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
 
-    if preProcessed.contains("summarize") || preProcessed.contains("summarise") {
-        let urlString = findURL(in: preProcessed)!
-        
-        do {
-            let pTexts = try await fetchAndParseHTMLAsync(from: urlString)
-            return pTexts.joined()
-//                print(allText)
-        } catch {
-            print("Failed to fetch or parse HTML: \(error.localizedDescription)")
-        }
+    let urlString = findURL(in: preProcessed)!
+    
+    do {
+        let pTexts = try await fetchAndParseHTMLAsync(from: urlString)
+        return pTexts.joined()
+    } catch {
+        print("Failed to fetch or parse HTML: \(error.localizedDescription)")
     }
     
     return nil
@@ -83,21 +79,26 @@ func fetchAndParseHTMLAsync(from urlString: String) async throws -> [String] {
 
 // Modify parseHTML to use a completion handler
 func parseHTML(_ html: String, completion: @escaping (Result<[String], Error>) -> Void) {
-do {
-    let doc: Document = try SwiftSoup.parse(html)
-    let pTags: Elements = try doc.select("p")
-    
-    var pTexts = [String]()
-    for pTag in pTags.array() {
-        let pText = try pTag.text()
-        pTexts.append(pText)
+    do {
+        let doc: Document = try SwiftSoup.parse(html)
+        
+        var articleTexts = [String]()
+        
+        // Extract text from relevant HTML tags
+        let tagsToExtract = ["p", "span", "article", "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "li", "td", "th"]
+        for tag in tagsToExtract {
+            let elements: Elements = try doc.select(tag)
+            for element in elements.array() {
+                let text = try element.text()
+                articleTexts.append(text)
+            }
+        }
+        
+        completion(.success(articleTexts))
+    } catch Exception.Error(let type, let message) {
+        print("Error: \(type) \(message)")
+        completion(.failure(NSError(domain: "ParseError", code: 0, userInfo: [NSLocalizedDescriptionKey: "\(type) \(message)"])))
+    } catch {
+        completion(.failure(error))
     }
-    
-    completion(.success(pTexts))
-} catch Exception.Error(let type, let message) {
-    print("Error: \(type) \(message)")
-    completion(.failure(NSError(domain: "ParseError", code: 0, userInfo: [NSLocalizedDescriptionKey: "\(type) \(message)"])))
-} catch {
-    completion(.failure(error))
-}
 }

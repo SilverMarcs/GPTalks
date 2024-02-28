@@ -392,7 +392,7 @@ import SwiftUI
         }
         
         if !summaryText.isEmpty {
-            finalMessages.append(.init(role: .user, content: "Summarize the following text. Note that there may be contents in the text thats commonly found on article websites such as writer name or adverisement or others. Ignore them and give me summary of the main content only. Also ignore the URL i sent as I am also giving you the contents o fthe url together with it")!)
+            finalMessages.append(.init(role: .user, content: "Take the following text content as context. Note that there may be contents in the text thats commonly found on article websites such as writer name or adverisement or others. Ignore them and observe the main content only. Also ignore the URL sent as I am also giving you the contents of the url together with it.Observe the content and fufill the user's request. If nothing is specified, provide a summary of the text content.")!)
             finalMessages.append(.init(role: .user, content: summaryText)!)
         }
 
