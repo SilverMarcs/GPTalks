@@ -12,6 +12,8 @@ struct GenerationView: View {
     var generation: ImageGeneration
     @Binding var shouldScroll: Bool
     
+    var removeGeneration: () -> Void
+    
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
             Image(systemName: "sparkle")
@@ -93,6 +95,15 @@ struct GenerationView: View {
                 #endif
             }
         }
+        #if !os(macOS)
+            .contextMenu {
+                Button {
+                    removeGeneration()
+                } label: {
+                    Label("Remove", systemImage: "trash")
+                }
+            }
+        #endif
         .frame(maxWidth: .infinity, alignment: .topLeading)
     }
     

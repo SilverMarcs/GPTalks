@@ -81,11 +81,6 @@ struct MacOSDefaultParameters: View {
     var body: some View {
         VStack(spacing: 20) {
             GroupBox(label: Text("Default Parameters")) {
-                LabeledPicker(title: "Context Length", width: widthValue, picker: DefaultContextPicker())
-                    .padding(paddingValue)
-
-                Divider()
-
                 HStack {
                     Text("Temperature")
                     Spacer()

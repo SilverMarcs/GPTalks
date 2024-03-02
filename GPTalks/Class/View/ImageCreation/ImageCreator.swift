@@ -27,7 +27,8 @@ struct ImageCreator: View {
             .navigationTitle("Image Generations")
             .navigationSubtitle(imageSession.configuration.model.name)
             #else
-            .navigationTitle(imageSession.configuration.model.name)
+//            .navigationTitle(imageSession.configuration.model.name)
+            .navigationTitle(imageSession.configuration.model == .customImage ? AppConfiguration.shared.$customImageModel : Binding.constant(imageSession.configuration.model.name))
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.immediately)
             #endif
@@ -115,7 +116,9 @@ struct ImageCreator: View {
         List {
             VStack {
                 ForEach(imageSession.generations) { generation in
-                    GenerationView(generation: generation, shouldScroll: Binding.constant(false))
+                    GenerationView(generation: generation, shouldScroll: Binding.constant(false)) {
+                        imageSession.generations.removeAll(where: { $0.id == generation.id })
+                    }
                         .padding(.horizontal, 7)
 
                     Spacer()
@@ -131,7 +134,9 @@ struct ImageCreator: View {
         ScrollView {
             LazyVStack {
                 ForEach(imageSession.generations, id: \.self) { generation in
-                    GenerationView(generation: generation, shouldScroll: Binding.constant(false))
+                    GenerationView(generation: generation, shouldScroll: Binding.constant(false)) {
+                        imageSession.generations.removeAll(where: { $0.id == generation.id })
+                    }
                         .listRowSeparator(.hidden)
                         .id(generation.id)                    
                 }

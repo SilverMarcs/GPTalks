@@ -79,18 +79,6 @@ struct PreferredImageProvider: View {
     }
 }
 
-struct DefaultContextPicker: View {
-    @ObservedObject var configuration: AppConfiguration = .shared
-
-    var body: some View {
-        Picker("Context Length", selection: $configuration.contextLength) {
-            ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
-                Text("Last \(number) Messages").tag(number)
-            }
-        }
-    }
-}
-
 struct DefaultTempSlider: View {
     @ObservedObject var configuration: AppConfiguration = .shared
 

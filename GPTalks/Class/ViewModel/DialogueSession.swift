@@ -12,13 +12,11 @@ import SwiftUI
     struct Configuration: Codable {
         var temperature: Double
         var systemPrompt: String
-        var contextLength: Int
         var provider: Provider
         var model: Model
 
         init() {
             provider = AppConfiguration.shared.preferredChatService
-            contextLength = AppConfiguration.shared.contextLength
             temperature = AppConfiguration.shared.temperature
             systemPrompt = AppConfiguration.shared.systemPrompt
             model = provider.preferredChatModel
@@ -343,12 +341,12 @@ import SwiftUI
         }
     }
     
-    public func getMessageCountAfterResetMarker() -> Int {
-        if let resetMarker = resetMarker {
-            return conversations.count - resetMarker - 1
-        }
-        return min(configuration.contextLength, conversations.count)
-    }
+//    public func getMessageCountAfterResetMarker() -> Int {
+//        if let resetMarker = resetMarker {
+//            return conversations.count - resetMarker - 1
+//        }
+//        return min(configuration.contextLength, conversations.count)
+//    }
     
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
@@ -373,12 +371,10 @@ import SwiftUI
 
         let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
 
-        var contextAdjustedMessages: [Conversation]
+        var contextAdjustedMessages: [Conversation] = conversations
 
         if let marker = resetMarker, conversations.count > marker + 1 {
-            contextAdjustedMessages = Array(conversations.suffix(from: marker + 1).suffix(configuration.contextLength))
-        } else {
-            contextAdjustedMessages = Array(conversations.suffix(configuration.contextLength - 1))
+            contextAdjustedMessages = Array(conversations.suffix(from: marker + 1))
         }
 
         var finalMessages = ([systemPrompt] + contextAdjustedMessages).map({ conversation in

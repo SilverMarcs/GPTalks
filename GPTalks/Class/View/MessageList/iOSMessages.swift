@@ -242,12 +242,6 @@ struct iOSMessages: View {
                         } label: {
                             Label("Temperature: " + String(session.configuration.temperature), systemImage: "thermometer.sun")
                         }
-
-                        Menu {
-                            ContextPicker(session: session)
-                        } label: {
-                            Label("Context: " + String(session.configuration.contextLength), systemImage: "clock.arrow.circlepath")
-                        }
                     }
 
                     Section {

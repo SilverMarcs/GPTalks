@@ -132,8 +132,6 @@ struct MacOSMessages: View {
                         }
                         
                         Section {
-                            ContextPicker(session: session)
-
                             Button("Regenerate") {
                                 Task { await session.regenerateLastMessage() }
                             }

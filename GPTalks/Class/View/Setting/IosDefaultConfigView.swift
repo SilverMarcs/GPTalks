@@ -12,7 +12,6 @@ struct IosDefaultConfigView: View {
         NavigationView {
             Form {
                 Section("Default Settings") {
-                    DefaultContextPicker()
                     DefaultTempSlider()
                 }
                 

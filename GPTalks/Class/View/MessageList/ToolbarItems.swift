@@ -60,15 +60,3 @@ struct ModelPicker: View {
         }
     }
 }
-
-struct ContextPicker: View {
-    @Bindable var session: DialogueSession
-
-    var body: some View {
-        Picker("Context Length", selection: $session.configuration.contextLength) {
-            ForEach(Array(stride(from: 2, through: 20, by: 2)), id: \.self) { number in
-                Text("\(number) Messages").tag(number)
-            }
-        }
-    }
-}
