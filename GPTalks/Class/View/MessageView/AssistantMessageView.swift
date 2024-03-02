@@ -44,7 +44,6 @@ struct AssistantMessageView: View {
     }
     
     var optionsMenu: some View {
-//        AdaptiveStack(isHorizontal: conversation.content.count < 350) {
         Menu {
             MessageContextMenu(session: session, conversation: conversation) { }
             toggleTextSelection: {
@@ -88,7 +87,7 @@ struct AssistantMessageView: View {
                 }
                 .textSelection(.enabled)
                 
-                if conversation.isReplying {
+                if conversation.content.isEmpty {
                     ReplyingIndicatorView()
                         .frame(width: 48, height: 16)
                         .padding(.vertical, 10)

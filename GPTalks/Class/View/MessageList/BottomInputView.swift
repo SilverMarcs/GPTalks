@@ -20,22 +20,20 @@ struct BottomInputView: View {
     
     @State private var importing = false
     
-    @State var selectedItem: PhotosPickerItem? = nil
+    @State var selectedItems: [PhotosPickerItem] = []
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            if session.inputImage != nil {
-                importedImage
+            if !session.inputImages.isEmpty {
+                importedImages
             }
             
             HStack(spacing: 12) {
                 #if os(macOS)
                 imagePicker
                 #else
-//                iosImagePicker
                 iosMore
                 #endif
-//                resetContextButton
                 
                 inputBox
                     .onTapGesture {
@@ -51,7 +49,7 @@ struct BottomInputView: View {
                 #endif
             }
         }
-        .animation(.default, value: session.inputImage)
+        .animation(.default, value: session.inputImages)
         .buttonStyle(.plain)
         .padding(.horizontal)
         .padding(.top, verticalPadding)
@@ -66,34 +64,40 @@ struct BottomInputView: View {
         #endif
     }
     
-    var importedImage: some View {
-        ZStack(alignment: .topTrailing) {
-            if let inputImage = session.inputImage {
-                #if os(macOS)
-                Image(nsImage: inputImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
-                    .aspectRatio(contentMode: .fill)
-                    .cornerRadius(6)
-                #else
-                Image(uiImage: inputImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
-                    .aspectRatio(contentMode: .fill)
-                    .cornerRadius(6)
-                #endif
-                
-                Button {
-                    session.inputImage = nil
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.background)
-                        .background(.primary, in: Circle())
+    var importedImages: some View {
+        ScrollView(.horizontal) {
+            HStack {
+                ForEach(Array(session.inputImages.enumerated()), id: \.element) { index, inputImage in
+                    ZStack(alignment: .topTrailing) {
+#if os(macOS)
+                        Image(nsImage: inputImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
+                            .aspectRatio(contentMode: .fill)
+                            .cornerRadius(6)
+                        
+#else
+                        
+                        Image(uiImage: inputImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
+                            .aspectRatio(contentMode: .fill)
+                            .cornerRadius(6)
+                        
+#endif
+                        
+                        Button {
+                            session.inputImages.remove(at: index)
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(.background)
+                                .background(.primary, in: Circle())
+                        }
+                        .padding(7)
+                    }
                 }
-                .padding(7)
-                .keyboardShortcut(.escape, modifiers: .command)
             }
         }
     }
@@ -133,14 +137,23 @@ struct BottomInputView: View {
                 .clipShape(Circle())
                 .frame(width: imageSize + 3, height: imageSize + 3)
         }
-        .photosPicker(isPresented: $importing, selection: $selectedItem, matching: .images, photoLibrary: .shared())
-        .onChange(of: selectedItem) {
-            guard let newItem = selectedItem else { return }
+        .photosPicker(
+            isPresented: $importing,
+            selection: $selectedItems,
+            maxSelectionCount: 5, 
+            matching: .images,
+            photoLibrary: .shared()
+        )
+        .onChange(of: selectedItems) {
             Task {
-                if let data = try? await newItem.loadTransferable(type: Data.self) {
-                    session.inputImage = UIImage(data: data)
-                    selectedItem = nil
+                for newItem in selectedItems {
+                    if let data = try? await newItem.loadTransferable(type: Data.self) {
+                        if let image = UIImage(data: data) {
+                            session.inputImages.append(image)
+                        }
+                    }
                 }
+                selectedItems = [] // Reset selection
             }
         }
         .padding(20) // Increase tappable area
@@ -167,24 +180,27 @@ struct BottomInputView: View {
         .keyboardShortcut("i", modifiers: .command)
         .fileImporter(
             isPresented: $importing,
-            allowedContentTypes: [.image]
+            allowedContentTypes: [.image],
+            allowsMultipleSelection: true
         ) { result in
             switch result {
-            case .success(let file):
-                print(file.absoluteString)
-                #if os(macOS)
-                if let nsImage = NSImage(contentsOf: file) {
-                    session.inputImage = nsImage
+            case .success(let files): // 'files' is now an array of URLs
+                for file in files { // Iterate over each file
+                    #if os(macOS)
+                    let image = NSImage(contentsOf: file)
+                    #else
+                    let image = UIImage(contentsOfFile: file.path)
+                    #endif
+                    
+                    if let image = image {
+                        session.inputImages.append(image)
+                    }
                 }
-                #else
-                if let uiImage = UIImage(contentsOfFile: file.path) {
-                    session.inputImage = uiImage
-                }
-                #endif
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
+        .disabled(session.inputImages.count >= 5)
     }
     
     @ViewBuilder
@@ -235,6 +251,7 @@ struct BottomInputView: View {
             #endif
             
             Task { @MainActor in
+                selectedItems = []
                 await session.send()
             }
         } label: {

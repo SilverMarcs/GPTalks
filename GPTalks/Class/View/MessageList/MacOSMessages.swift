@@ -88,8 +88,8 @@ struct MacOSMessages: View {
             .onChange(of: session.errorDesc) {
                 scrollToBottom(proxy: proxy, animated: true)
             }
-            .onChange(of: session.inputImage) {
-                if session.inputImage != nil {
+            .onChange(of: session.inputImages) {
+                if !session.inputImages.isEmpty {
                     if !session.configuration.provider.visionModels.contains(session.configuration.model) {
                         session.configuration.model = session.configuration.provider.visionModels[0]
                     }
@@ -103,21 +103,21 @@ struct MacOSMessages: View {
                     session.configuration.model = session.configuration.provider.preferredChatModel
                 }
             }
-            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
-                if let itemProvider = providers.first {
-                    itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in
-                        DispatchQueue.main.async {
-                            if let image = image as? NSImage {
-                                session.inputImage = image
-                            } else {
-                                print("Could not load image: \(String(describing: error))")
-                            }
-                        }
-                    }
-                    return true
-                }
-                return false
-            }
+//            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
+//                if let itemProvider = providers.first {
+//                    itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in
+//                        DispatchQueue.main.async {
+//                            if let image = image as? NSImage {
+//                                session.inputImage = image
+//                            } else {
+//                                print("Could not load image: \(String(describing: error))")
+//                            }
+//                        }
+//                    }
+//                    return true
+//                }
+//                return false
+//            }
             .toolbar {
                 ToolbarItem(placement: .navigation) {
                     Menu {

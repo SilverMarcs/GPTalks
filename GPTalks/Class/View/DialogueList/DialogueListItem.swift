@@ -13,9 +13,7 @@ struct DialogueListItem: View {
     var session: DialogueSession
     
     @State private var showRenameDialogue = false
-    @State private var showDeleteDialogue = false
     @State private var newName = ""
-    @State private var searchQuery = ""
 
     var body: some View {
         HStack(spacing: imgToTextSpace) {
@@ -63,33 +61,23 @@ struct DialogueListItem: View {
                 session.rename(newTitle: newName)
             }
             Button("Cancel", role: .cancel) {
-                
-            }
-        }
-        .alert("Confirm Delete?", isPresented: $showDeleteDialogue) {
-            Button("Delete", role: .destructive) {
-                viewModel.deleteDialogue(session)
-                showDeleteDialogue = false
-            }
-            Button("Cancel", role: .cancel) {
-                
+                showRenameDialogue = false
             }
         }
         .contextMenu {
-            renameButton
-                .labelStyle(.titleAndIcon)
-            
-            archiveButton
-                .labelStyle(.titleAndIcon)
-            
-            deleteButton
-                .labelStyle(.titleAndIcon)
+            Group {
+                renameButton
+                
+                archiveButton
+                
+                deleteButton
+            }
+            .labelStyle(.titleAndIcon)
         }
         .swipeActions(edge: .trailing) {
             deleteButton
             
             archiveButton
-
         }
         .swipeActions(edge: .leading) {
             renameButton
@@ -115,7 +103,8 @@ struct DialogueListItem: View {
     
     var renameButton: some View {
         Button {
-            newName = session.title
+            print("Current session title: \(session.title)")
+//            newName = session.title
             showRenameDialogue.toggle()
         } label: {
             Label("Rename", systemImage: "pencil")

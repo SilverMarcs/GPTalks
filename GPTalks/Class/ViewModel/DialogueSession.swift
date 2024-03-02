@@ -42,9 +42,9 @@ import SwiftUI
     var input: String = ""
     
     #if os(macOS)
-    var inputImage: NSImage?
+    var inputImages: [NSImage] = []
     #else
-    var inputImage: UIImage?
+    var inputImages: [UIImage] = []
     #endif
     
     var title: String = "New Session" {
@@ -76,7 +76,7 @@ import SwiftUI
     var isStreaming = false
     
     var containsConversationWithImage: Bool {
-        conversations.contains(where: { !$0.base64Image.isEmpty })
+        conversations.contains(where: { !$0.base64Images.isEmpty })
     }
 
     // MARK: - Properties
@@ -200,12 +200,12 @@ import SwiftUI
            let fileURL = fileURLs.first {
             // Attempt to create an NSImage from the file URL
             if let image = NSImage(contentsOf: fileURL) {
-                self.inputImage = image
+                self.inputImages.append(image)
             }
         }
         // If there are no file URLs, attempt to read image data directly
         else if let image = pasteboard.readObjects(forClasses: [NSImage.self], options: nil)?.first as? NSImage {
-            self.inputImage = image
+            self.inputImages.append(image)
         }
     }
     #endif
@@ -302,8 +302,13 @@ import SwiftUI
                 removeResetContextMarker()
             }
             
-            if !conversation.base64Image.isEmpty {
-                inputImage = conversation.base64Image.imageFromBase64
+            if !conversation.base64Images.isEmpty {
+//                inputImages.append(conversation.base64Image.imageFromBase64)
+                for base64String in conversation.base64Images {
+                    if let image = base64String.imageFromBase64 { // Convert from base64 to UIImage/NSImage
+                        inputImages.append(image) // Append the converted image to inputImages
+                    }
+                }
             }
             
             removeConversations(from: index)
@@ -329,10 +334,17 @@ import SwiftUI
         resetErrorDesc()
 
         if !isRegen && !isRetry {
-            if inputImage == nil {
+            if inputImages.isEmpty {
                 appendConversation(Conversation(role: "user", content: text))
            } else {
-                appendConversation(Conversation(role: "user", content: text, base64Image: (inputImage?.base64EncodedString())!))
+//                appendConversation(Conversation(role: "user", content: text, base64Images: (inputImage?.base64EncodedString())!))
+               var base64Images: [String] = []
+               for inputImage in inputImages {
+                   if let base64String = inputImage.base64EncodedString() {
+                       base64Images.append(base64String)
+                   }
+               }
+               appendConversation(Conversation(role: "user", content: text, base64Images: base64Images))
            }
         }
         
@@ -408,7 +420,7 @@ import SwiftUI
         }
 
         do {
-            inputImage = nil
+            inputImages = []
             #if os(macOS)
             try await streamingTask?.value
             try await viewUpdater?.value
@@ -489,14 +501,15 @@ extension DialogueSession {
                let content = data.content,
                let role = data.role,
                let date = data.date,
-               let base64Image = data.base64Image {
-               let conversation = Conversation(
-                 id: id,
-                 date: date,
-                 role: role,
-                 content: content,
-                 base64Image: base64Image
-               )
+               let base64ImageString = data.base64Image {
+                let base64Images = base64ImageString.split(separator: "|||").map(String.init) // Convert back to an array of strings
+                let conversation = Conversation(
+                  id: id,
+                  date: date,
+                  role: role,
+                  content: content,
+                  base64Images: base64Images
+                )
                 return conversation
             } else {
                 return nil
@@ -527,7 +540,7 @@ extension DialogueSession {
         data.date = conversation.date
         data.role = conversation.role
         data.content = conversation.content
-        data.base64Image = conversation.base64Image
+        data.base64Image = conversation.base64Images.joined(separator: "|||")
         rawData?.conversations?.adding(data)
         data.dialogue = rawData
 

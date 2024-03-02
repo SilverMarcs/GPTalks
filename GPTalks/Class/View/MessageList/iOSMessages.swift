@@ -103,8 +103,8 @@ struct iOSMessages: View {
             .onChange(of: session.isAddingConversation) {
                 scrollToBottom(proxy: proxy)
             }
-            .onChange(of: session.inputImage) {
-                if session.inputImage != nil {
+            .onChange(of: session.inputImages) {
+                if !session.inputImages.isEmpty {
                     if !session.configuration.provider.visionModels.contains(session.configuration.model) {
                         session.configuration.model = session.configuration.provider.visionModels[0]
                     }
@@ -123,7 +123,7 @@ struct iOSMessages: View {
                     itemProvider.loadObject(ofClass: UIImage.self) { image, error in
                         DispatchQueue.main.async {
                             if let image = image as? UIImage {
-                                session.inputImage = image
+                                session.inputImages.append(image)
                             } else {
                                 print("Could not load image: \(String(describing: error))")
                             }

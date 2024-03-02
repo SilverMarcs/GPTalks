@@ -84,16 +84,13 @@ struct UserMessageView: View {
                           
                 #if !os(macOS)
                 HStack {
-                    if !conversation.base64Image.isEmpty {
-                        userImage
-                            .bubbleStyle(isMyMessage: false, compact: true)
-                    } else {
-                        EmptyView()
+                    ForEach(conversation.base64Images, id: \.self) { imageStr in
+                        UploadedImage(imageStr: imageStr)
                     }
                     
                     Spacer()
                     
-                    if conversation.content.count > 300 {
+                    if conversation.content.count > 200 {
                         Button(action: {
                             withAnimation {
                                 self.isExpanded.toggle()
@@ -110,9 +107,8 @@ struct UserMessageView: View {
                 #else
 
                 HStack {
-                    if !conversation.base64Image.isEmpty {
-                        userImage
-                            .bubbleStyle(isMyMessage: false, compact: true)
+                    ForEach(conversation.base64Images, id: \.self) { imageStr in
+                        UploadedImage(imageStr: imageStr)
                     }
                     
                     Spacer()
@@ -162,9 +158,8 @@ struct UserMessageView: View {
     
     var originalUI: some View {
         VStack(alignment: .trailing, spacing: 5) {
-            if !conversation.base64Image.isEmpty {
-                userImage
-                    .bubbleStyle(isMyMessage: false, compact: true)
+            ForEach(conversation.base64Images, id: \.self) { imageStr in
+                UploadedImage(imageStr: imageStr)
             }
             
             HStack(alignment: .lastTextBaseline) {
@@ -194,35 +189,8 @@ struct UserMessageView: View {
         .padding(4)
     }
     
-    var userImage: some View {
-        HStack {
-            Text("Image")
-            Image(systemName: "photo.on.rectangle")
-//                .symbolRenderingMode(.palette)
-//                .foregroundStyle(.blue, .orange)
-        }
-        .onTapGesture {
-            showPreview = true
-        }
-        .popover(isPresented: $showPreview) {
-            #if os(macOS)
-            Image(nsImage: NSImage(data: Data(base64Encoded: conversation.base64Image)!)!)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 600, maxHeight: 600, alignment: .center)
-                .presentationCompactAdaptation((.popover))
-            #else
-            Image(uiImage: UIImage(data: Data(base64Encoded: conversation.base64Image)!)!)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
-                .presentationCompactAdaptation((.popover))
-            #endif
-        }
-    }
     
     var optionsMenu: some View {
-//        AdaptiveStack(isHorizontal: conversation.content.count < 350) {
         Menu {
             MessageContextMenu(session: session, conversation: conversation) {
                 editingMessage = conversation.content
@@ -262,30 +230,32 @@ struct UserMessageView: View {
 }
 
 
-import SwiftUI
-
-struct MeasureSizeModifier: ViewModifier {
-    @Binding var isTruncated: Bool
-    var maxHeight: CGFloat
+struct UploadedImage: View {
+    var imageStr: String
+    @State var showPreview: Bool = false
     
-    func body(content: Content) -> some View {
-        content
-            .background(
-                GeometryReader { geometryProxy in
-                    Color.clear
-                        .onAppear {
-                            let isContentTruncated = geometryProxy.size.height > maxHeight
-                            if isTruncated != isContentTruncated {
-                                isTruncated = isContentTruncated
-                            }
-                        }
-                }
-            )
-    }
-}
-
-extension View {
-    func measureSize(isTruncated: Binding<Bool>, maxHeight: CGFloat) -> some View {
-        modifier(MeasureSizeModifier(isTruncated: isTruncated, maxHeight: maxHeight))
+    var body: some View {
+        HStack {
+            Image(systemName: "photo")
+        }
+        .bubbleStyle(isMyMessage: false, compact: true)
+        .onTapGesture {
+            showPreview = true
+        }
+        .popover(isPresented: $showPreview) {
+#if os(macOS)
+            Image(nsImage: NSImage(data: Data(base64Encoded: imageStr)!)!)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 600, maxHeight: 600, alignment: .center)
+                .presentationCompactAdaptation((.popover))
+#else
+            Image(uiImage: UIImage(data: Data(base64Encoded: imageStr)!)!)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
+                .presentationCompactAdaptation((.popover))
+#endif
+        }
     }
 }
