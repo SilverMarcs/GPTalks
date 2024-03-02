@@ -19,6 +19,16 @@ func saveImage(url: URL) {
     #endif
 }
 
+func saveImageData(imageData: Data) {
+    #if os(iOS)
+        saveImageDataToPhotos(imageData: imageData)
+    #elseif os(macOS)
+        saveImageDataWithPopup(imageData: imageData)
+    #else
+        print("Not supported.")
+    #endif
+}
+
 #if os(iOS)
     private func saveImageToPhotos(url: URL?) {
         guard let url = url else { return }
@@ -46,6 +56,26 @@ func saveImage(url: URL) {
             }
         }
     }
+
+private func saveImageDataToPhotos(imageData: Data) {
+    // Request permission to save to the photo library
+    PHPhotoLibrary.requestAuthorization { status in
+        if status == .authorized, let image = UIImage(data: imageData) {
+            // Save the image to the photo library
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest.creationRequestForAsset(from: image)
+            }) { success, error in
+                if let error = error {
+                    print("Error saving image to Photos: \(error)")
+                } else if success {
+                    print("Image successfully saved to Photos")
+                }
+            }
+        } else {
+            print("Permission to access the photo library was denied or image data is invalid.")
+        }
+    }
+}
 #endif
 
 #if os(macOS)
@@ -78,4 +108,24 @@ func saveImage(url: URL) {
             }
         }.resume()
     }
+
+private func saveImageDataWithPopup(imageData: Data) {
+    // Present the save panel to the user
+    DispatchQueue.main.async {
+        let savePanel = NSSavePanel()
+        savePanel.allowedContentTypes = [.png] // You can add more file types
+        savePanel.canCreateDirectories = true
+        savePanel.nameFieldStringValue = "image.png"
+
+        if savePanel.runModal() == .OK, let saveURL = savePanel.url {
+            // Save the image to the selected location
+            do {
+                try imageData.write(to: saveURL)
+                print("Image successfully saved to \(saveURL.path)")
+            } catch {
+                print("Error saving image: \(error)")
+            }
+        }
+    }
+}
 #endif

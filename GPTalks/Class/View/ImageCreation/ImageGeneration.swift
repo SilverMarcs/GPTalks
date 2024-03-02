@@ -25,36 +25,39 @@ import UIKit
     var errorDesc: String = ""
     var prompt: String
     var model: String
-    var urls: [URL]
+    var imagesData: [Data]
     
     var generatingTask: Task<Void, Error>? = nil
     
     init(prompt: String, imageModel: String, urls: [URL] = []) {
         self.prompt = prompt
         self.model = imageModel
-        self.urls = urls
+        self.imagesData = []
     }
     
     @MainActor
     func send(query: ImagesQuery, configuration: ImageSession.Configuration) async {
         isGenerating = true
-        
+
         let openAIconfig = configuration.provider.config
         let service = OpenAI(configuration: openAIconfig)
-        
-        
+
         generatingTask = Task {
             let results = try await service.images(query: query)
-            
-            let urlObjects = results.data.compactMap { urlResult -> URL? in
-                guard let urlString = urlResult.url, let url = URL(string: urlString) else {
-                    return nil
+
+            // Download and store image data asynchronously
+            for urlResult in results.data {
+                if let urlString = urlResult.url, let url = URL(string: urlString) {
+                    do {
+                        let (data, _) = try await URLSession.shared.data(from: url)
+                        imagesData.append(data)
+                    } catch {
+                        print("Error downloading image: \(error)")
+                    }
                 }
-                return url
             }
-            urls = urlObjects
         }
-        
+
         do {
             #if os(macOS)
             try await generatingTask?.value
@@ -63,9 +66,9 @@ import UIKit
             let taskId = application.beginBackgroundTask {
                 // Handle expiration of background task here
             }
-            
+
             try await generatingTask?.value
-            
+
             application.endBackgroundTask(taskId)
             #endif
             isGenerating = false

@@ -131,23 +131,21 @@ struct ImageCreator: View {
         }
         .listStyle(.plain)
         #else
-        ScrollView {
-            LazyVStack {
-                ForEach(imageSession.generations, id: \.self) { generation in
-                    GenerationView(generation: generation, shouldScroll: Binding.constant(false)) {
-                        imageSession.generations.removeAll(where: { $0.id == generation.id })
-                    }
-                        .listRowSeparator(.hidden)
-                        .id(generation.id)                    
+        List {
+            ForEach(imageSession.generations, id: \.self) { generation in
+                GenerationView(generation: generation, shouldScroll: Binding.constant(false)) {
+                    imageSession.generations.removeAll(where: { $0.id == generation.id })
                 }
-            }
-            .padding(.horizontal)
-            .padding(.vertical)
-            
-                Spacer()
-                .id("bottomID")
+                .id(generation.id)
                 .listRowSeparator(.hidden)
             }
+            
+            Spacer()
+                .id("bottomID")
+                .listRowSeparator(.hidden)
+            
+        }
+        .listStyle(.plain)
         .onTapGesture {
             isFocused = false
         }
@@ -173,7 +171,7 @@ struct ImageCreator: View {
                 .foregroundStyle(.secondary)
             #if os(macOS)
                 .padding(5)
-                .frame(width: imageSize + 1, height: imageSize + 1)
+                .frame(width: imageSize + 2, height: imageSize + 2)
             #else
                 .padding(8)
                 .frame(width: imageSize + 3, height: imageSize + 3)

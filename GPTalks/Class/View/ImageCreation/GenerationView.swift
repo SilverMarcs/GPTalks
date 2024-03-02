@@ -58,32 +58,43 @@ struct GenerationView: View {
                         .foregroundColor(.red)
                 }
                 
-                // TODO: make grid
-                ForEach(generation.urls, id: \.self) { url in 
-                    AsyncImage(url: url) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .frame(width: imageSize, height: imageSize)
-                        #if !os(macOS)
-                            .contextMenu {
-                                Button {
-                                    saveImage(url: url)
-                                } label: {
-                                    Label("Save Image", systemImage: "square.and.arrow.down")
-                                }
-                            }
-                        #endif
-                    } placeholder: {
-                        ZStack(alignment: .center) {
-                            Color.secondary
-                                .opacity(0.1)
-                                .frame(width: imageSize, height: imageSize)
+                ForEach(generation.imagesData, id: \.self) { imageData in
+                    HStack {
+#if os(iOS)
+                        if let uiImage = UIImage(data: imageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFit()
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                                
-                            ProgressView()
+                                .frame(width: imageSize, height: imageSize)
                         }
+#elseif os(macOS)
+                        if let nsImage = NSImage(data: imageData) {
+                            Image(nsImage: nsImage)
+                                .resizable()
+                                .scaledToFit()
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .frame(width: imageSize, height: imageSize)
+                        }
+#endif
+                        
+                        Button {
+                            saveImageData(imageData: imageData)
+                        } label: {
+                            Image(systemName: "square.and.arrow.down")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(.accentColor)
+                                .frame(width: 14, height: 14)
+                                .padding(6)
+                                .padding(.top, -2)
+                                .padding(.horizontal, -1)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 50)
+                                        .stroke(.tertiary, lineWidth: 0.5)
+                                )
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 
@@ -143,7 +154,7 @@ struct GenerationView: View {
         #if os(macOS)
             400
         #else
-            325
+            300
         #endif
     }
 }
