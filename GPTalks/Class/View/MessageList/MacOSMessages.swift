@@ -103,21 +103,21 @@ struct MacOSMessages: View {
                     session.configuration.model = session.configuration.provider.preferredChatModel
                 }
             }
-//            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
-//                if let itemProvider = providers.first {
-//                    itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in
-//                        DispatchQueue.main.async {
-//                            if let image = image as? NSImage {
-//                                session.inputImage = image
-//                            } else {
-//                                print("Could not load image: \(String(describing: error))")
-//                            }
-//                        }
-//                    }
-//                    return true
-//                }
-//                return false
-//            }
+            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
+                if let itemProvider = providers.first {
+                    itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in
+                        DispatchQueue.main.async {
+                            if let image = image as? NSImage {
+                                session.inputImages.append(image)
+                            } else {
+                                print("Could not load image: \(String(describing: error))")
+                            }
+                        }
+                    }
+                    return true
+                }
+                return false
+            }
             .toolbar {
                 ToolbarItem(placement: .navigation) {
                     Menu {

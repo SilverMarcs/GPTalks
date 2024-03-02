@@ -340,11 +340,13 @@ import SwiftUI
                 appendConversation(Conversation(role: "user", content: text))
            } else {
                var base64Images: [String] = []
+               
                for inputImage in inputImages {
-                       if let base64String = inputImage.base64EncodedString() {
-                               base64Images.append(base64String)
-                       }
+                   if let savedURL = saveImageToDisk(image: inputImage) {
+                       base64Images.append(savedURL.absoluteString)
+                   }
                }
+               
                appendConversation(Conversation(role: "user", content: text, base64Images: base64Images))
            }
         }

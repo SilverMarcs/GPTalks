@@ -5,8 +5,8 @@
 //  Created by Zabir Raihan on 27/11/2024.
 //
 
-import SwiftUI
 import OpenAI
+import SwiftUI
 
 struct Conversation: Codable, Identifiable, Hashable, Equatable {
     var id = UUID()
@@ -15,7 +15,7 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
     var content: String
     var base64Images: [String] = []
     var isReplying: Bool = false
-    
+
     func toChat() -> ChatQuery.ChatCompletionMessageParam {
         let chatRole: ChatQuery.ChatCompletionMessageParam.Role = {
             switch role {
@@ -29,14 +29,20 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
                 return .tool
             }
         }()
-        
+
         if !base64Images.isEmpty {
             return .init(role: chatRole, content:
                 [.init(chatCompletionContentPartTextParam: .init(text: content))] +
-                base64Images.map { base64Image in
-                    .init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: ("data:image/jpeg;base64," + base64Image), detail: .auto)))
-                }
-            )!
+                    base64Images.map { base64Image in
+                        .init(chatCompletionContentPartImageParam:
+                            .init(imageUrl:
+                                .init(
+                                    url: "data:image/jpeg;base64," + (retrieveImageFromDisk(url: URL(string: base64Image)!)?.base64EncodedString())!,
+                                    detail: .auto
+                                )
+                            )
+                        )
+                    })!
         } else {
             return .init(role: chatRole, content: content)!
         }
@@ -44,7 +50,6 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
 }
 
 extension ConversationData {
-    
     func sync(with conversation: Conversation) {
         id = conversation.id
         date = conversation.date
@@ -52,10 +57,8 @@ extension ConversationData {
         content = conversation.content
         do {
             try PersistenceController.shared.save()
-        } catch let error {
+        } catch {
             print(error.localizedDescription)
         }
     }
-    
 }
-

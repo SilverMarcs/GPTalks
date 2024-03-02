@@ -244,17 +244,22 @@ struct UploadedImage: View {
         }
         .popover(isPresented: $showPreview) {
 #if os(macOS)
-            Image(nsImage: NSImage(data: Data(base64Encoded: imageStr)!)!)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 600, maxHeight: 600, alignment: .center)
-                .presentationCompactAdaptation((.popover))
+//            Image(nsImage: NSImage(data: Data(base64Encoded: imageStr)!)!)
+            if let retrievedImage = retrieveImageFromDisk(url: URL(string: imageStr)!) {
+                Image(nsImage: retrievedImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 600, maxHeight: 600, alignment: .center)
+                    .presentationCompactAdaptation((.popover))
+            }
 #else
-            Image(uiImage: UIImage(data: Data(base64Encoded: imageStr)!)!)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
-                .presentationCompactAdaptation((.popover))
+            if let retrievedImage = retrieveImageFromDisk(url: URL(string: imageStr)!) {
+                Image(uiImage: retrievedImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
+                    .presentationCompactAdaptation((.popover))
+            }
 #endif
         }
     }
