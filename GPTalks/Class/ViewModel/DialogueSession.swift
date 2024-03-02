@@ -8,7 +8,7 @@
 import OpenAI
 import SwiftUI
 
-@Observable class DialogueSession: Identifiable, Equatable, Hashable, Codable {
+@Observable class DialogueSession: Identifiable, Equatable, Hashable {
     struct Configuration: Codable {
         var temperature: Double
         var systemPrompt: String
@@ -21,34 +21,6 @@ import SwiftUI
             systemPrompt = AppConfiguration.shared.systemPrompt
             model = provider.preferredChatModel
         }
-    }
-
-    // MARK: - Codable
-
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        configuration = try container.decode(Configuration.self, forKey: .configuration)
-        conversations = try container.decode([Conversation].self, forKey: .conversations)
-        date = try container.decode(Date.self, forKey: .date)
-        id = try container.decode(UUID.self, forKey: .id)
-        input = ""
-
-        initFinished = true
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(configuration, forKey: .configuration)
-        try container.encode(conversations, forKey: .conversations)
-        try container.encode(id, forKey: .id)
-        try container.encode(date, forKey: .date)
-    }
-
-    enum CodingKeys: CodingKey {
-        case configuration
-        case conversations
-        case date
-        case id
     }
 
     // MARK: - Hashable, Equatable
@@ -100,8 +72,6 @@ import SwiftUI
     var isArchive = false
     
     var isAddingConversation = false
-
-    private var initFinished = false
     
     var isStreaming = false
     
@@ -394,6 +364,7 @@ import SwiftUI
 
         let query = ChatQuery(messages: finalMessages, 
                               model: configuration.model.id,
+                              maxTokens: 3800, 
                               temperature: configuration.temperature,
                               stream: true)        
         
@@ -417,7 +388,7 @@ import SwiftUI
                 #if os(macOS)
                 try await Task.sleep(nanoseconds: 200_000_000)
                 #else
-                try await Task.sleep(nanoseconds: 50_000_000)
+                try await Task.sleep(nanoseconds: 100_000_000)
                 #endif
                 
                 if AppConfiguration.shared.isMarkdownEnabled {
@@ -535,8 +506,6 @@ extension DialogueSession {
         self.conversations.sort {
             $0.date < $1.date
         }
-
-        initFinished = true
     }
 
     @discardableResult
