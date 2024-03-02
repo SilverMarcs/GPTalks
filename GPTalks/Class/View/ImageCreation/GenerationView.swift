@@ -120,13 +120,6 @@ struct GenerationView: View {
                         .buttonStyle(.plain)
                     }
                 }
-                
-                Color.clear
-                #if os(macOS)
-                    .frame(height: 10)
-                #else
-                    .frame(height: 30)
-                #endif
             }
         }
         #if !os(macOS)

@@ -159,7 +159,9 @@ struct ImageCreator: View {
     @ViewBuilder
     private var clearGenerations: some View {
         Button {
-            imageSession.generations = []
+            withAnimation {
+                imageSession.generations = []
+            }
         } label: {
             Image(systemName: "eraser")
                 .resizable()

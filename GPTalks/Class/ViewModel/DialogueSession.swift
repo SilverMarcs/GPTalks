@@ -212,7 +212,9 @@ import SwiftUI
 
     func setResetContextMarker(conversation: Conversation) {
         if let index = conversations.firstIndex(of: conversation) {
-            resetMarker = index
+            withAnimation {
+                resetMarker = index
+            }
         }
 
         save()
@@ -337,12 +339,11 @@ import SwiftUI
             if inputImages.isEmpty {
                 appendConversation(Conversation(role: "user", content: text))
            } else {
-//                appendConversation(Conversation(role: "user", content: text, base64Images: (inputImage?.base64EncodedString())!))
                var base64Images: [String] = []
                for inputImage in inputImages {
-                   if let base64String = inputImage.base64EncodedString() {
-                       base64Images.append(base64String)
-                   }
+                       if let base64String = inputImage.base64EncodedString() {
+                               base64Images.append(base64String)
+                       }
                }
                appendConversation(Conversation(role: "user", content: text, base64Images: base64Images))
            }
@@ -527,13 +528,7 @@ extension DialogueSession {
             removeResetContextMarker()
         }
 
-        #if os(macOS)
         conversations.append(conversation)
-        #else
-        withAnimation {
-            conversations.append(conversation)
-        }
-        #endif
 
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id
