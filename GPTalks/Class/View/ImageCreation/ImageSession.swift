@@ -68,9 +68,6 @@ import SwiftUI
     }
 
     func addDummies() {
-//        generations.append(ImageGeneration(prompt: "batman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v superman", imageModel: "dall-e-3", urls: [URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!, URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!]))
-//        generations.append(ImageGeneration(prompt: "batman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v superman", imageModel: "dall-e-3", urls: [URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!]))
-//        generations.append(ImageGeneration(prompt: "batman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v supermanbatman v superman", imageModel: "dall-e-3", urls: [URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!, URL(string: "https://u128907-a9aa-d8229a13.westc.gpuhub.com:8443/view?filename=ComfyUI_101194_.png&subfolder=&type=output")!]))
-//        generations.append(ImageGeneration(prompt: "batman v superman", imageModel: "dall-e-3", urls: []))
+
     }
 }

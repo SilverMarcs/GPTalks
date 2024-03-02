@@ -5,14 +5,16 @@
 //  Created by Zabir Raihan on 14/02/2024.
 //
 
-//import NetworkImage
 import SwiftUI
+import SwiftUIImageViewer
 
 struct GenerationView: View {
     var generation: ImageGeneration
     @Binding var shouldScroll: Bool
     
     var removeGeneration: () -> Void
+    
+    @State private var isImagePresented = false
     
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
@@ -67,6 +69,16 @@ struct GenerationView: View {
                                 .scaledToFit()
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                 .frame(width: imageSize, height: imageSize)
+                                .onTapGesture {
+                                    isImagePresented = true
+                                }
+                                .fullScreenCover(isPresented: $isImagePresented) {
+                                    SwiftUIImageViewer(image: Image(uiImage: uiImage))
+                                        .overlay(alignment: .topTrailing) {
+                                            closeButton
+                                        }
+                                    
+                                }
                         }
 #elseif os(macOS)
                         if let nsImage = NSImage(data: imageData) {
@@ -75,6 +87,17 @@ struct GenerationView: View {
                                 .scaledToFit()
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                 .frame(width: imageSize, height: imageSize)
+                                .onTapGesture {
+                                    isImagePresented = true
+                                }
+                                .sheet(isPresented: $isImagePresented) {
+                                    SwiftUIImageViewer(image: Image(nsImage: nsImage))
+                                        .frame(width: 800, height: 800)
+                                        .overlay(alignment: .topTrailing) {
+                                            closeButton
+                                        }
+                                    
+                                }
                         }
 #endif
                         
@@ -116,6 +139,19 @@ struct GenerationView: View {
             }
         #endif
         .frame(maxWidth: .infinity, alignment: .topLeading)
+    }
+    
+    private var closeButton: some View {
+        Button {
+            isImagePresented = false
+        } label: {
+            Image(systemName: "xmark")
+                .font(.headline)
+                .padding(5)
+        }
+        .buttonStyle(.bordered)
+        .clipShape(Circle())
+        .padding()
     }
     
     private var VSpacing: CGFloat {

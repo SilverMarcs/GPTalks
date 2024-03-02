@@ -25,7 +25,7 @@ struct ImageCreator: View {
             list
             #if os(macOS)
             .navigationTitle("Image Generations")
-            .navigationSubtitle(imageSession.configuration.model.name)
+//            .navigationSubtitle(imageSession.configuration.model.name)
             #else
 //            .navigationTitle(imageSession.configuration.model.name)
             .navigationTitle(imageSession.configuration.model == .customImage ? AppConfiguration.shared.$customImageModel : Binding.constant(imageSession.configuration.model.name))
