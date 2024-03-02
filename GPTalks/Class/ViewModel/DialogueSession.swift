@@ -400,7 +400,7 @@ import SwiftUI
                 #if os(macOS)
                 try await Task.sleep(nanoseconds: 200_000_000)
                 #else
-                try await Task.sleep(nanoseconds: 100_000_000)
+                try await Task.sleep(nanoseconds: 50_000_000)
                 #endif
                 
                 if AppConfiguration.shared.isMarkdownEnabled {

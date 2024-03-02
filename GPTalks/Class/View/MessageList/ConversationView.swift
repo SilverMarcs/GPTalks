@@ -17,7 +17,7 @@ struct ConversationView: View {
                 if conversation.role == "user" {
                     UserMessageView(conversation: conversation, session: session)
                     #if !os(macOS)
-                        .padding(.vertical, -15)
+                        .padding(.vertical, -20)
                     #endif
                 }
 

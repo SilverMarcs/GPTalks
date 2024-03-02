@@ -19,7 +19,6 @@ struct BottomInputView: View {
     @FocusState var focused: Bool
     
     @State private var importing = false
-    
     @State var selectedItems: [PhotosPickerItem] = []
     
     var body: some View {
@@ -87,7 +86,6 @@ struct BottomInputView: View {
                             .cornerRadius(6)
                         
 #endif
-                        
                         Button {
                             session.inputImages.remove(at: index)
                         } label: {

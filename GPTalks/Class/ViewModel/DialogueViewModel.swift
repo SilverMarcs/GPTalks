@@ -213,48 +213,6 @@ enum ContentState: String, CaseIterable, Identifiable {
                 break
         }
     }
-
-//    func addDialogue(conversations: [Conversation] = []) {
-//        selectedState = .recent
-//
-//        let session = DialogueSession()
-//        
-//        if !conversations.isEmpty {
-//            session.conversations = conversations
-//        }
-//        
-//        withAnimation {
-//            allDialogues.insert(session, at: 0)
-//            selectedDialogue = session
-//        }
-//
-//        let newItem = DialogueData(context: viewContext)
-//        newItem.id = session.id
-//        newItem.date = session.date
-//        
-//        if !conversations.isEmpty {
-//            // Convert your array of Conversation objects to NSSet and assign it to newItem.conversations
-//            let conversationsSet = NSSet(array: conversations.map { conversation in
-//                // Assuming you need to create a ConversationData object for each Conversation
-//                let data = ConversationData(context: viewContext)
-//                data.id = conversation.id
-//                data.date = conversation.date
-//                data.role = conversation.role
-//                data.content = conversation.content
-//                data.base64Image = conversation.base64Images.joined(separator: "|||")
-//                return data
-//            })
-//            newItem.conversations = conversationsSet
-//        }
-//
-//        do {
-//            newItem.configuration = try JSONEncoder().encode(session.configuration)
-//        } catch {
-//            print(error.localizedDescription)
-//        }
-//
-//        save()
-//    }
     
     func addDialogue(conversations: [Conversation] = []) {
         selectedState = .recent
