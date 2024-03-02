@@ -594,7 +594,6 @@ extension DialogueSession {
         }
     }
 
-//    @MainActor
     func removeConversations(from index: Int) {
         guard index < conversations.count else {
             print("Index out of range")
@@ -656,6 +655,16 @@ extension DialogueSession {
             if let marker = resetMarker {
                 rawData?.resetMarker = Int16(marker)
             }
+//            rawData?.conversations = NSSet(array: conversations.map { conversation in
+//                let data = ConversationData(context: PersistenceController.shared.container.viewContext)
+//                data.id = conversation.id
+//                data.date = conversation.date
+//                data.role = conversation.role
+//                data.content = conversation.content
+//                data.base64Image = conversation.base64Images.joined(separator: "|||")
+//                data.dialogue = rawData
+//                return data
+//            })
             rawData?.configuration = try JSONEncoder().encode(configuration)
 
             try PersistenceController.shared.save()

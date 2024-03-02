@@ -27,14 +27,10 @@ struct ImageCreator: View {
             .navigationTitle("Image Generations")
 //            .navigationSubtitle(imageSession.configuration.model.name)
             #else
-//            .navigationTitle(imageSession.configuration.model.name)
             .navigationTitle(imageSession.configuration.model == .customImage ? AppConfiguration.shared.$customImageModel : Binding.constant(imageSession.configuration.model.name))
             .navigationBarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.immediately)
             #endif
-//            .onAppear {
-//                imageSession.addDummies()
-//            }
             .onChange(of: imageSession.generations) {
                 withAnimation {
                     scrollToBottom(proxy: proxy)
