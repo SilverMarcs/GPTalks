@@ -84,47 +84,24 @@ struct UserMessageView: View {
                           
                 #if !os(macOS)
                 HStack {
-                    ForEach(conversation.base64Images, id: \.self) { imageStr in
-                        UploadedImage(imageStr: imageStr)
+                    ForEach(conversation.base64Images, id: \.self) { imagePath in
+                        UploadedImage(imagePath: imagePath)
                     }
                     
                     Spacer()
                     
-                    if conversation.content.count > 200 {
-                        Button(action: {
-                            withAnimation {
-                                self.isExpanded.toggle()
-                            }
-                        }) {
-                            Image(systemName: isExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
-                        }
-                        .buttonStyle(.plain)
-                        .imageScale(.medium)
-                    } else {
-                        EmptyView()
-                    }
+                    expandToggle(limit: 200)
                 }
                 #else
+                ForEach(conversation.base64Images, id: \.self) { imagePath in
+                    UploadedImage(imagePath: imagePath)
+                }
 
                 HStack {
-                    ForEach(conversation.base64Images, id: \.self) { imageStr in
-                        UploadedImage(imageStr: imageStr)
-                    }
-                    
                     Spacer()
                     
                     Group {
-                        if conversation.content.count > 300 {
-                            Button(action: {
-                                withAnimation {
-                                    self.isExpanded.toggle()
-                                }
-                            }) {
-                                Image(systemName: isExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
-                            }
-                            .buttonStyle(.plain)
-                            .imageScale(.medium)
-                        }
+                        expandToggle(limit: 300)
                         
                         MessageContextMenu(session: session, conversation: conversation) {
                             editingMessage = conversation.content
@@ -158,8 +135,8 @@ struct UserMessageView: View {
     
     var originalUI: some View {
         VStack(alignment: .trailing, spacing: 5) {
-            ForEach(conversation.base64Images, id: \.self) { imageStr in
-                UploadedImage(imageStr: imageStr)
+            ForEach(conversation.base64Images, id: \.self) { imagePath in
+                UploadedImage(imagePath: imagePath)
             }
             
             HStack(alignment: .lastTextBaseline) {
@@ -176,6 +153,23 @@ struct UserMessageView: View {
         }
         .padding(.leading, horizontalPadding)
         .frame(maxWidth: .infinity, alignment: .trailing)
+    }
+  
+    @ViewBuilder
+    func expandToggle(limit: Int) -> some View {
+        if conversation.content.count > limit {
+            Button {
+                withAnimation {
+                    self.isExpanded.toggle()
+                }
+            } label: {
+                Image(systemName: isExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
+            }
+            .buttonStyle(.plain)
+            .imageScale(.medium)
+        } else {
+            EmptyView()
+        }
     }
     
     var editBtn: some View {
@@ -231,36 +225,23 @@ struct UserMessageView: View {
 
 
 struct UploadedImage: View {
-    var imageStr: String
-    @State var showPreview: Bool = false
+    var imagePath: String
     
     var body: some View {
-        HStack {
-            Image(systemName: "photo")
-        }
-        .bubbleStyle(isMyMessage: false, compact: true)
-        .onTapGesture {
-            showPreview = true
-        }
-        .popover(isPresented: $showPreview) {
 #if os(macOS)
-//            Image(nsImage: NSImage(data: Data(base64Encoded: imageStr)!)!)
-            if let retrievedImage = retrieveImageFromDisk(url: URL(string: imageStr)!) {
-                Image(nsImage: retrievedImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 600, maxHeight: 600, alignment: .center)
-                    .presentationCompactAdaptation((.popover))
-            }
-#else
-            if let retrievedImage = retrieveImageFromDisk(url: URL(string: imageStr)!) {
-                Image(uiImage: retrievedImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 400, maxHeight: 400, alignment: .center)
-                    .presentationCompactAdaptation((.popover))
-            }
-#endif
+        if let retrievedImage = getSavedImage(fromPath: imagePath) {
+            Image(nsImage: retrievedImage)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 300, maxHeight: 300, alignment: .center)
         }
+    #else
+        if let retrievedImage = getSavedImage(fromPath: imagePath) {
+            Image(uiImage: retrievedImage)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 325, maxHeight: 325, alignment: .center)
+        }
+#endif
     }
 }

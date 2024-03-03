@@ -37,7 +37,10 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
                         .init(chatCompletionContentPartImageParam:
                             .init(imageUrl:
                                 .init(
-                                    url: "data:image/jpeg;base64," + (retrieveImageFromDisk(url: URL(string: base64Image)!)?.base64EncodedString())!,
+                                    url: "data:image/jpeg;base64," + 
+//                                        (retrieveImageFromDisk(url: URL(string: base64Image)!)?
+                                        (getSavedImage(fromPath: base64Image)!
+                                            .base64EncodedString())!,
                                     detail: .auto
                                 )
                             )

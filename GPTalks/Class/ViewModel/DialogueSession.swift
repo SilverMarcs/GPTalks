@@ -342,8 +342,8 @@ import SwiftUI
                var base64Images: [String] = []
                
                for inputImage in inputImages {
-                   if let savedURL = saveImageToDisk(image: inputImage) {
-                       base64Images.append(savedURL.absoluteString)
+                   if let savedURL = saveImage(image: inputImage) {
+                       base64Images.append(savedURL)
                    }
                }
                
