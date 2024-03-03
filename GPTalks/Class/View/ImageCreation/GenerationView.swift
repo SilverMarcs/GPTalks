@@ -32,6 +32,10 @@ struct GenerationView: View {
                 Text(generation.prompt)
                     .textSelection(.enabled)
                 
+                ForEach(generation.imagesData, id: \.self) { imageData in
+                    ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: true)
+                }
+                
                 if generation.isGenerating {
                     HStack {
                         ReplyingIndicatorView()
@@ -57,20 +61,19 @@ struct GenerationView: View {
                         .foregroundColor(.red)
                 }
                 
-                ForEach(generation.imagesData, id: \.self) { imageData in
-                    ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: true)
-                }
+                Color.clear
+                    .frame(height: 10)
             }
         }
-        #if !os(macOS)
         .contextMenu {
             Button {
-                removeGeneration()
+                withAnimation {
+                    removeGeneration()
+                }
             } label: {
                 Label("Remove", systemImage: "trash")
             }
         }
-        #endif
         .frame(maxWidth: .infinity, alignment: .topLeading)
     }
     

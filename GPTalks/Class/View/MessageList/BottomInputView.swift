@@ -63,6 +63,7 @@ struct BottomInputView: View {
         #endif
     }
     
+    // TODO: use ImageView here later
     var importedImages: some View {
         ScrollView(.horizontal) {
             HStack {

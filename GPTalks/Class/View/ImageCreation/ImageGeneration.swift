@@ -7,9 +7,7 @@
 
 import Foundation
 import OpenAI
-#if os(iOS)
-import UIKit
-#endif
+import SwiftUI
 
 @Observable class ImageGeneration: Identifiable, Hashable, Equatable {
     static func == (lhs: ImageGeneration, rhs: ImageGeneration) -> Bool {

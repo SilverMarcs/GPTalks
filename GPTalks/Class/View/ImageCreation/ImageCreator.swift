@@ -36,29 +36,7 @@ struct ImageCreator: View {
                 }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                HStack(spacing: 12) {
-                    clearGenerations
-                    
-                    inputBox
-
-                    #if os(macOS)
-                    sendButton
-                    #endif
-                }
-                .buttonStyle(.plain)
-                .padding(.horizontal)
-                .padding(.top, verticalPadding)
-                .padding(.bottom, verticalPadding + 2)
-                #if os(iOS)
-                    .background(
-                        VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
-                            .ignoresSafeArea()
-                    )
-                #elseif os(macOS)
-                    .background(.bar)
-                #elseif os(visionOS)
-                    .background(.regularMaterial)
-                #endif
+                bottomInputView
             }
             .toolbar {
 #if os(macOS)
@@ -107,30 +85,14 @@ struct ImageCreator: View {
     
     @ViewBuilder
     var list: some View {
-        #if os(macOS)
-        List {
-            VStack {
-                ForEach(imageSession.generations) { generation in
-                    GenerationView(generation: generation, shouldScroll: Binding.constant(false)) {
-                        imageSession.generations.removeAll(where: { $0.id == generation.id })
-                    }
-                        .padding(.horizontal, 7)
-
-                    Spacer()
-                        .frame(height: 30)
-                }
-                .listRowSeparator(.hidden)
-
-            }
-            .id("bottomID")
-        }
-        .listStyle(.plain)
-        #else
         List {
             ForEach(imageSession.generations, id: \.self) { generation in
                 GenerationView(generation: generation, shouldScroll: Binding.constant(false)) {
                     imageSession.generations.removeAll(where: { $0.id == generation.id })
                 }
+                #if os(macOS)
+                .padding(.horizontal)
+                #endif
                 .id(generation.id)
                 .listRowSeparator(.hidden)
             }
@@ -141,17 +103,36 @@ struct ImageCreator: View {
             
         }
         .listStyle(.plain)
+        #if !os(macOS)
         .onTapGesture {
             isFocused = false
         }
         #endif
     }
+    
+    private var bottomInputView: some View {
+        HStack(spacing: 12) {
+            clearGenerations
+            
+            inputBox
 
-    private var imageSize: CGFloat {
-        #if os(macOS)
-        21
-        #else
-        31
+            #if os(macOS)
+            sendButton
+            #endif
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal)
+        .padding(.top, verticalPadding)
+        .padding(.bottom, verticalPadding + 2)
+        #if os(iOS)
+            .background(
+                VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
+                    .ignoresSafeArea()
+            )
+        #elseif os(macOS)
+            .background(.bar)
+        #elseif os(visionOS)
+            .background(.regularMaterial)
         #endif
     }
     
@@ -301,6 +282,14 @@ struct ImageCreator: View {
         return 7
         #else
         return 13
+        #endif
+    }
+    
+    private var imageSize: CGFloat {
+        #if os(macOS)
+        21
+        #else
+        31
         #endif
     }
 }

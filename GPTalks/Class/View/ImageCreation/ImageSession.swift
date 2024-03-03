@@ -48,23 +48,14 @@ import SwiftUI
         
         let tempImageGeneration = ImageGeneration(prompt: input, imageModel: configuration.model == .customImage ? configuration.model.id : configuration.model.name)
 
-        generations.append(tempImageGeneration)
+        withAnimation {
+            generations.append(tempImageGeneration)
+        }
 
         if let index = generations.firstIndex(where: { $0.id == tempImageGeneration.id }) {
             await generations[index].send(query: query, configuration: configuration)
         }
 
-    }
-
-    @MainActor
-    func sendHelper(query: ImagesQuery) async throws {
-        let tempImageGeneration = ImageGeneration(prompt: input, imageModel: configuration.model.name)
-
-        generations.append(tempImageGeneration)
-
-        if let index = generations.firstIndex(where: { $0.id == tempImageGeneration.id }) {
-            await generations[index].send(query: query, configuration: configuration)
-        }
     }
 
     func addDummies() {
