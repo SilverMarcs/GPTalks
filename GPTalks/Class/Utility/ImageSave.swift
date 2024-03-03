@@ -205,6 +205,16 @@ func getSavedImage(fromPath filePath: String) -> UIImage? {
     }
 }
 
+func getImageData(fromPath filePath: String) -> Data? {
+    do {
+        let directory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        let fileURL = directory.appendingPathComponent(filePath)
+        return try Data(contentsOf: fileURL)
+    } catch {
+        print(error.localizedDescription)
+        return nil
+    }
+}
 
 #endif
 
@@ -385,6 +395,17 @@ func getSavedImage(fromPath filePath: String) -> NSImage? {
         let directory = try FileManager.default.url(for: .picturesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         let fileURL = directory.appendingPathComponent(filePath)
         return NSImage(contentsOf: fileURL)
+    } catch {
+        print(error.localizedDescription)
+        return nil
+    }
+}
+
+func getImageData(fromPath filePath: String) -> Data? {
+    do {
+        let directory = try FileManager.default.url(for: .picturesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        let fileURL = directory.appendingPathComponent(filePath)
+        return try Data(contentsOf: fileURL)
     } catch {
         print(error.localizedDescription)
         return nil

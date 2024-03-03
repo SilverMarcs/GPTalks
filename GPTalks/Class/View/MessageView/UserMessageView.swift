@@ -85,7 +85,9 @@ struct UserMessageView: View {
                 #if !os(macOS)
                 HStack {
                     ForEach(conversation.base64Images, id: \.self) { imagePath in
-                        UploadedImage(imagePath: imagePath)
+                        if let imageData = getImageData(fromPath: imagePath) {
+                            ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
+                        }
                     }
                     
                     Spacer()
@@ -94,7 +96,9 @@ struct UserMessageView: View {
                 }
                 #else
                 ForEach(conversation.base64Images, id: \.self) { imagePath in
-                    UploadedImage(imagePath: imagePath)
+                    if let imageData = getImageData(fromPath: imagePath) {
+                        ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
+                    }
                 }
 
                 HStack {
@@ -136,7 +140,9 @@ struct UserMessageView: View {
     var originalUI: some View {
         VStack(alignment: .trailing, spacing: 5) {
             ForEach(conversation.base64Images, id: \.self) { imagePath in
-                UploadedImage(imagePath: imagePath)
+                if let imageData = getImageData(fromPath: imagePath) {
+                    ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
+                }
             }
             
             HStack(alignment: .lastTextBaseline) {
@@ -221,27 +227,12 @@ struct UserMessageView: View {
         18
         #endif
     }
-}
-
-
-struct UploadedImage: View {
-    var imagePath: String
     
-    var body: some View {
-#if os(macOS)
-        if let retrievedImage = getSavedImage(fromPath: imagePath) {
-            Image(nsImage: retrievedImage)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 300, maxHeight: 300, alignment: .center)
-        }
-    #else
-        if let retrievedImage = getSavedImage(fromPath: imagePath) {
-            Image(uiImage: retrievedImage)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 325, maxHeight: 325, alignment: .center)
-        }
-#endif
+    private var imageSize: CGFloat {
+        #if os(macOS)
+        300
+        #else
+        325
+        #endif
     }
 }

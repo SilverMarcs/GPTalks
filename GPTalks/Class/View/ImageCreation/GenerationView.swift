@@ -6,15 +6,12 @@
 //
 
 import SwiftUI
-import SwiftUIImageViewer
 
 struct GenerationView: View {
     var generation: ImageGeneration
     @Binding var shouldScroll: Bool
     
     var removeGeneration: () -> Void
-    
-    @State private var isImagePresented = false
     
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
@@ -61,90 +58,20 @@ struct GenerationView: View {
                 }
                 
                 ForEach(generation.imagesData, id: \.self) { imageData in
-                    HStack {
-#if os(iOS)
-                        if let uiImage = UIImage(data: imageData) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFit()
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                .frame(width: imageSize, height: imageSize)
-                                .onTapGesture {
-                                    isImagePresented = true
-                                }
-                                .fullScreenCover(isPresented: $isImagePresented) {
-                                    SwiftUIImageViewer(image: Image(uiImage: uiImage))
-                                        .overlay(alignment: .topTrailing) {
-                                            closeButton
-                                        }
-                                    
-                                }
-                        }
-#elseif os(macOS)
-                        if let nsImage = NSImage(data: imageData) {
-                            Image(nsImage: nsImage)
-                                .resizable()
-                                .scaledToFit()
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                .frame(width: imageSize, height: imageSize)
-                                .onTapGesture {
-                                    isImagePresented = true
-                                }
-                                .sheet(isPresented: $isImagePresented) {
-                                    SwiftUIImageViewer(image: Image(nsImage: nsImage))
-                                        .frame(width: 800, height: 800)
-                                        .overlay(alignment: .topTrailing) {
-                                            closeButton
-                                        }
-                                    
-                                }
-                        }
-#endif
-                        
-                        Button {
-                            saveImageData(imageData: imageData)
-                        } label: {
-                            Image(systemName: "square.and.arrow.down")
-                                .resizable()
-                                .scaledToFit()
-                                .foregroundColor(.accentColor)
-                                .frame(width: 14, height: 14)
-                                .padding(6)
-                                .padding(.top, -2)
-                                .padding(.horizontal, -1)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 50)
-                                        .stroke(.tertiary, lineWidth: 0.5)
-                                )
-                        }
-                        .buttonStyle(.plain)
-                    }
+                    ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: true)
                 }
             }
         }
         #if !os(macOS)
-            .contextMenu {
-                Button {
-                    removeGeneration()
-                } label: {
-                    Label("Remove", systemImage: "trash")
-                }
+        .contextMenu {
+            Button {
+                removeGeneration()
+            } label: {
+                Label("Remove", systemImage: "trash")
             }
+        }
         #endif
         .frame(maxWidth: .infinity, alignment: .topLeading)
-    }
-    
-    private var closeButton: some View {
-        Button {
-            isImagePresented = false
-        } label: {
-            Image(systemName: "xmark")
-                .font(.headline)
-                .padding(5)
-        }
-        .buttonStyle(.bordered)
-        .clipShape(Circle())
-        .padding()
     }
     
     private var VSpacing: CGFloat {
@@ -183,7 +110,9 @@ struct GenerationView: View {
         #if os(macOS)
             400
         #else
-            300
+            275
         #endif
     }
 }
+
+

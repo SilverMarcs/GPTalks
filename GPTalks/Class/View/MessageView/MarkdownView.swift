@@ -47,13 +47,14 @@ struct MarkdownView: View {
                         FontSize(.em(0.97))
                     }
                     .padding(12)
-                    .background(.background.secondary)
+                    .background(.bar)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .markdownMargin(top: .zero, bottom: .em(0.8))
 
                 copyButton
                     .padding(5)
             }
+            .roundedRectangleOverlay(radius: 8, opacity: 0.5)
             #if os(macOS)
             .onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.2)) {
@@ -80,7 +81,7 @@ struct MarkdownView: View {
             .foregroundStyle(.primary)
 #if os(macOS)
             .background(
-                .background.tertiary,
+                .background,
                 in: RoundedRectangle(cornerRadius: 5, style: .continuous)
             )
             .overlay {

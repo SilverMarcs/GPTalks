@@ -25,7 +25,6 @@ struct ImageCreator: View {
             list
             #if os(macOS)
             .navigationTitle("Image Generations")
-//            .navigationSubtitle(imageSession.configuration.model.name)
             #else
             .navigationTitle(imageSession.configuration.model == .customImage ? AppConfiguration.shared.$customImageModel : Binding.constant(imageSession.configuration.model.name))
             .navigationBarTitleDisplayMode(.inline)
@@ -67,7 +66,7 @@ struct ImageCreator: View {
                 providerPicker
 
                 modelPicker
-                    .frame(maxWidth: 110)
+                    .frame(width: 110)
         
                 countPicker
 #else
