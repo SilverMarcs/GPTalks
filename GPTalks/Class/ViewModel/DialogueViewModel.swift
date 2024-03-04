@@ -59,20 +59,10 @@ enum ContentState: String, CaseIterable, Identifiable {
             if !searchText.isEmpty {
                 switch selectedState {
                 case .archived:
-                    let filteredDialogues = filterDialogues(matching: searchText, from: allDialogues)
-//                    #if os(macOS)
-//                    archivedDialogues = filteredDialogues.isEmpty ? allDialogues : filteredDialogues
-//                    #else
-                    archivedDialogues = filteredDialogues
-//                    #endif
+                    archivedDialogues = filterDialogues(matching: searchText, from: allDialogues)
                     
                 case .recent, .images, .all:
-                    let filteredDialogues = filterDialogues(matching: searchText, from: allDialogues)
-//                    #if os(macOS)
-//                    activeDialogues = filteredDialogues.isEmpty ? allDialogues : filteredDialogues
-//                    #else
-                    activeDialogues = filteredDialogues
-//                    #endif
+                    activeDialogues = filterDialogues(matching: searchText, from: allDialogues)
                 }
             } else {
                 

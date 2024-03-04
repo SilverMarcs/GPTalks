@@ -24,7 +24,6 @@ struct MacOSDialogList: View {
                             .accentColor(.accentColor) // to keep row colors untouched
                     }
                     .accentColor(Color("niceColorLighter")) // to change list seldction color
-                    .searchable(text: $viewModel.searchText, placement: .toolbar)
                     .animation(.default, value: viewModel.selectedState)
                     .animation(.default, value: viewModel.searchText)
                     .padding(.top, -10)
@@ -58,5 +57,6 @@ struct MacOSDialogList: View {
             }
             .keyboardShortcut("n", modifiers: .command)
         }
+        .searchable(text: $viewModel.searchText, placement: .toolbar)
     }
 }
