@@ -58,32 +58,21 @@ enum ContentState: String, CaseIterable, Identifiable {
         didSet {
             if !searchText.isEmpty {
                 switch selectedState {
-                    case .archived:
-                        let filteredDialogues = allDialogues.filter { dialogue in
-                            let isContentMatch = dialogue.conversations.contains { conversation in
-                                conversation.content.localizedCaseInsensitiveContains(searchText)
-                            }
-                            return isContentMatch
-                        }
-                    #if os(macOS) // macos has a bug where if no matches, search bar disappears
-                        archivedDialogues = filteredDialogues.isEmpty ? allDialogues : filteredDialogues
-                    #else
-                        archivedDialogues = filteredDialogues
-                    #endif
-                        break
+                case .archived:
+                    let filteredDialogues = filterDialogues(matching: searchText, from: allDialogues)
+//                    #if os(macOS)
+//                    archivedDialogues = filteredDialogues.isEmpty ? allDialogues : filteredDialogues
+//                    #else
+                    archivedDialogues = filteredDialogues
+//                    #endif
+                    
                 case .recent, .images, .all:
-                        let filteredDialogues = allDialogues.filter { dialogue in
-                            let isContentMatch = dialogue.conversations.contains { conversation in
-                                conversation.content.localizedCaseInsensitiveContains(searchText)
-                            }
-                            return isContentMatch
-                        }
-                    #if os(macOS) // macos has a bug where if no matches, search bar disappears
-                        activeDialogues = filteredDialogues.isEmpty ? allDialogues : filteredDialogues
-                    #else
-                        activeDialogues = filteredDialogues
-                    #endif
-                        break
+                    let filteredDialogues = filterDialogues(matching: searchText, from: allDialogues)
+//                    #if os(macOS)
+//                    activeDialogues = filteredDialogues.isEmpty ? allDialogues : filteredDialogues
+//                    #else
+                    activeDialogues = filteredDialogues
+//                    #endif
                 }
             } else {
                 
@@ -157,6 +146,16 @@ enum ContentState: String, CaseIterable, Identifiable {
             #endif
         } catch {
             print("DEBUG: Some error occured while fetching")
+        }
+    }
+    
+    func filterDialogues(matching searchText: String, from dialogues: [DialogueSession]) -> [DialogueSession] {
+        dialogues.filter { dialogue in
+            let isContentMatch = dialogue.conversations.contains { conversation in
+                conversation.content.localizedCaseInsensitiveContains(searchText)
+            }
+            let isTitleMatch = dialogue.title.localizedCaseInsensitiveContains(searchText)
+            return isContentMatch || isTitleMatch
         }
     }
 

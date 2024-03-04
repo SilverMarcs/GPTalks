@@ -75,7 +75,7 @@ struct UserMessageView: View {
                     .bold()
                 
                 #if os(macOS)
-                Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n\n...")
+                Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
                     .textSelection(.enabled)
                 #else
                 Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "...")

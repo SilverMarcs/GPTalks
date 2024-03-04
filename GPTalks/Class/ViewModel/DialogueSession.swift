@@ -401,7 +401,7 @@ import SwiftUI
         viewUpdater = Task {
             while true {
                 #if os(macOS)
-                try await Task.sleep(nanoseconds: 200_000_000)
+                try await Task.sleep(nanoseconds: 150_000_000)
                 #else
                 try await Task.sleep(nanoseconds: 50_000_000)
                 #endif
@@ -452,7 +452,11 @@ import SwiftUI
             } else {
                 if lastConversation.role == "assistant" && lastConversation.content == ""  {
                     do {
-                        try await Task.sleep(nanoseconds: 250_000_000)
+                    #if os(macOS)
+                    try await Task.sleep(nanoseconds: 151_000_000)
+                    #else
+                    try await Task.sleep(nanoseconds: 51_000_000)
+                    #endif
                     } catch {
                         print("couldnt sleep")
                     }
