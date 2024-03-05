@@ -551,8 +551,12 @@ extension DialogueSession {
     func removeConversation(at index: Int) {
         let conversation = conversations[index]
         
-        withAnimation {
+        if conversations.count <= 2 {
             let _ = conversations.remove(at: index)
+        } else {
+            withAnimation {
+                let _ = conversations.remove(at: index)
+            }
         }
 
         if resetMarker == index {

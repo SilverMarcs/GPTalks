@@ -12,6 +12,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     case openai
     case oxygen
     case custom
+    case naga
 
     var id: String {
         switch self {
@@ -19,6 +20,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             "openai"
         case .oxygen:
             "oxygen"
+        case .naga:
+            "naga"
         case .custom:
             "custom"
         }
@@ -35,6 +38,11 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             OpenAI.Configuration(
                 token: AppConfiguration.shared.Okey,
                 host: "app.oxyapi.uk"
+            )
+        case .naga:
+            OpenAI.Configuration(
+                token: AppConfiguration.shared.Nkey,
+                host: "api.naga.ac"
             )
         case .custom:
             OpenAI.Configuration(
@@ -54,6 +62,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             Color("greenColor")
         case .oxygen:
             Color("niceColor")
+        case .naga:
+            Color("blueColor")
         case .custom:
             Color("tealColor")
         }
@@ -65,6 +75,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             "OpenAI"
         case .oxygen:
             "Oxygen"
+        case .naga:
+            "Naga"
         case .custom:
             "Custom"
         }
@@ -78,6 +90,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             AppConfiguration.shared.Omodel
         case .custom:
             .customChat
+        case .naga:
+            AppConfiguration.shared.Nmodel
         }
     }
     
@@ -89,6 +103,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             AppConfiguration.shared.OImageModel
         case .custom:
             .customImage
+        case .naga:
+            AppConfiguration.shared.NImageModel
         }
     }
 
@@ -98,6 +114,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             Model.openAIChatModels
         case .oxygen:
             Model.oxygenChatModels
+        case .naga:
+            Model.nagaChatModels
         case .custom:
             [Model.customChat]
         }
@@ -109,6 +127,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             Model.openAIVisionModels
         case .oxygen:
             Model.oxygenVisionModels
+        case .naga:
+            Model.nagaVisionModels
         case .custom:
             [Model.customVision]
         }
@@ -120,6 +140,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             Model.openAIImageModels
         case .oxygen:
             Model.oxygenImageModels
+        case .naga:
+            Model.nagaImageModels
         case .custom:
             [Model.customImage]
         }
@@ -144,6 +166,13 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 apiKey: configuration.$Okey,
                 provider: self
             )
+        case .naga:
+            ServiceSettingsView(
+                chatModel: configuration.$Nmodel,
+                imageModel: configuration.$NImageModel,
+                apiKey: configuration.$Nkey,
+                provider: self
+            )
         case .custom:
             ServiceSettingsView(
                 chatModel: Binding.constant(.customChat),
@@ -165,6 +194,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         [
             .openai,
             .oxygen,
+            .naga,
             .custom,
         ]
     }

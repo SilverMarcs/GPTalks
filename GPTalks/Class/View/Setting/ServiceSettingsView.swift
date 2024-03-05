@@ -37,6 +37,8 @@ struct ServiceSettingsView: View {
                     }
                     .padding(paddingValue)
                     
+                    Divider()
+                    
                     HStack {
                         Text("Default Image Model")
                         Spacer()

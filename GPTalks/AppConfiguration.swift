@@ -37,9 +37,13 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.Omodel") var Omodel: Model = .gpt4t0125
     @AppStorage("configuration.OImageModel") var OImageModel: Model = .absolutereality_v181
     
+    /// naga
+    @AppStorage("configuration.Nkey") var Nkey = ""
+    @AppStorage("configuration.Nmodel") var Nmodel: Model = .gpt4t0125
+    @AppStorage("configuration.NImageModel") var NImageModel: Model = .dalle3
+    
     /// custom
     @AppStorage("configuration.Ckey") var Ckey = ""
-//    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt3t0125
     @AppStorage("configuration.Chost") var Chost: String = ""
     
     @AppStorage("configuration.customChatModel") var customChatModel: String = ""
