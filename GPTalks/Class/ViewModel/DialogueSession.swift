@@ -8,6 +8,14 @@
 import OpenAI
 import SwiftUI
 
+#if os(macOS)
+import AppKit
+typealias PlatformImage = NSImage
+#else
+import UIKit
+typealias PlatformImage = UIImage
+#endif
+
 @Observable class DialogueSession: Identifiable, Equatable, Hashable {
     struct Configuration: Codable {
         var temperature: Double
@@ -41,11 +49,7 @@ import SwiftUI
 
     var input: String = ""
     
-    #if os(macOS)
-    var inputImages: [NSImage] = []
-    #else
-    var inputImages: [UIImage] = []
-    #endif
+    var inputImages: [PlatformImage] = []
     
     var title: String = "New Session" {
         didSet {
@@ -67,7 +71,7 @@ import SwiftUI
         }
     }
 
-    var resetMarker: Int?
+    var resetMarker: Int = -1
     
     var isArchive = false
     
@@ -76,7 +80,7 @@ import SwiftUI
     var isStreaming = false
     
     var containsConversationWithImage: Bool {
-        conversations.contains(where: { !$0.base64Images.isEmpty })
+        conversations.contains(where: { !$0.imagePaths.isEmpty })
     }
 
     // MARK: - Properties
@@ -121,9 +125,9 @@ import SwiftUI
     }
 
     func removeResetContextMarker() {
-        withAnimation {
-            resetMarker = nil
-        }
+//        withAnimation {
+            resetMarker = -1
+//        }
         save()
     }
     
@@ -147,7 +151,6 @@ import SwiftUI
     
     @MainActor
     func generateTitle(forced: Bool = false) async {
-//        if (!forced && conversations.count == 1) || (forced && conversations.count >= 1) {
         if conversations.count == 1 || conversations.count == 2 {
             // TODO: makeRequest func
             let openAIconfig = configuration.provider.config
@@ -189,18 +192,7 @@ import SwiftUI
     
     #if os(macOS)
     func pasteImageFromClipboard() {
-        let pasteboard = NSPasteboard.general
-
-        // Check for file URLs on the pasteboard
-        if let fileURLs = pasteboard.readObjects(forClasses: [NSURL.self], options: nil) as? [URL],
-           let fileURL = fileURLs.first {
-            // Attempt to create an NSImage from the file URL
-            if let image = NSImage(contentsOf: fileURL) {
-                self.inputImages.append(image)
-            }
-        }
-        // If there are no file URLs, attempt to read image data directly
-        else if let image = pasteboard.readObjects(forClasses: [NSImage.self], options: nil)?.first as? NSImage {
+        if let image = getImageFromClipboard() {
             self.inputImages.append(image)
         }
     }
@@ -208,9 +200,9 @@ import SwiftUI
 
     func setResetContextMarker(conversation: Conversation) {
         if let index = conversations.firstIndex(of: conversation) {
-            withAnimation {
+//            withAnimation {
                 resetMarker = index
-            }
+//            }
         }
 
         save()
@@ -220,7 +212,6 @@ import SwiftUI
         if conversations.isEmpty {
             return
         }
-            // if reset marker is already at the end of conversations, then unset it
             if resetMarker == conversations.count - 1 {
                     removeResetContextMarker()
             } else {
@@ -278,7 +269,7 @@ import SwiftUI
     @MainActor
     func regenerate(from conversation: Conversation) async {
         if let index = conversations.firstIndex(of: conversation) {
-            if index <= resetMarker ?? -1 {
+            if index <= resetMarker {
                 removeResetContextMarker()
             }
             
@@ -294,16 +285,13 @@ import SwiftUI
     @MainActor
     func edit(conversation: Conversation, editedContent: String) async {
         if let index = conversations.firstIndex(of: conversation) {
-            if index <= resetMarker ?? -1 {
+            if index <= resetMarker {
                 removeResetContextMarker()
             }
             
-            if !conversation.base64Images.isEmpty {
-//                inputImages.append(conversation.base64Image.imageFromBase64)
-                for base64String in conversation.base64Images {
-                    if let image = base64String.imageFromBase64 { // Convert from base64 to UIImage/NSImage
-                        inputImages.append(image) // Append the converted image to inputImages
-                    }
+            for imagePath in conversation.imagePaths {
+                if let imageData = getSavedImage(fromPath: imagePath) {
+                    inputImages.append(imageData)
                 }
             }
             
@@ -312,36 +300,23 @@ import SwiftUI
         }
     }
     
-//    public func getMessageCountAfterResetMarker() -> Int {
-//        if let resetMarker = resetMarker {
-//            return conversations.count - resetMarker - 1
-//        }
-//        return min(configuration.contextLength, conversations.count)
-//    }
-    
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
-        if let resetMarker = resetMarker {
-            if resetMarker == 0 {
-                removeResetContextMarker()
-            }
-        }
-
         resetErrorDesc()
 
         if !isRegen && !isRetry {
             if inputImages.isEmpty {
                 appendConversation(Conversation(role: "user", content: text))
            } else {
-               var base64Images: [String] = []
+               var imagePaths: [String] = []
                
                for inputImage in inputImages {
                    if let savedURL = saveImage(image: inputImage) {
-                       base64Images.append(savedURL)
+                       imagePaths.append(savedURL)
                    }
                }
                
-               appendConversation(Conversation(role: "user", content: text, base64Images: base64Images))
+               appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths))
            }
         }
         
@@ -352,8 +327,8 @@ import SwiftUI
 
         var contextAdjustedMessages: [Conversation] = conversations
 
-        if let marker = resetMarker, conversations.count > marker + 1 {
-            contextAdjustedMessages = Array(conversations.suffix(from: marker + 1))
+        if conversations.count > resetMarker + 1 {
+            contextAdjustedMessages = Array(conversations.suffix(from: resetMarker + 1))
         }
 
         var finalMessages = ([systemPrompt] + contextAdjustedMessages).map({ conversation in
@@ -488,11 +463,8 @@ extension DialogueSession {
         self.title = title
         self.errorDesc = errorDesc
         self.isArchive = isArchive
-        if resetMarker != 0 {
-            self.resetMarker = Int(resetMarker)
-        } else {
-            self.resetMarker = nil
-        }
+        self.resetMarker = Int(resetMarker)
+        
         if let configuration = try? JSONDecoder().decode(Configuration.self, from: configurationData) {
             self.configuration = configuration
         }
@@ -502,14 +474,14 @@ extension DialogueSession {
                let content = data.content,
                let role = data.role,
                let date = data.date,
-               let base64ImageString = data.base64Image {
-                let base64Images = base64ImageString.split(separator: "|||").map(String.init) // Convert back to an array of strings
+               let imagePaths = data.imagePaths {
+                let imagePaths = imagePaths.split(separator: "|||").map(String.init) // Convert back to an array of strings
                 let conversation = Conversation(
                   id: id,
                   date: date,
                   role: role,
                   content: content,
-                  base64Images: base64Images
+                  imagePaths: imagePaths
                 )
                 return conversation
             } else {
@@ -535,7 +507,7 @@ extension DialogueSession {
         data.date = conversation.date
         data.role = conversation.role
         data.content = conversation.content
-        data.base64Image = conversation.base64Images.joined(separator: "|||")
+        data.imagePaths = conversation.imagePaths.joined(separator: "|||")
         rawData?.conversations?.adding(data)
         data.dialogue = rawData
 
@@ -554,16 +526,16 @@ extension DialogueSession {
         if conversations.count <= 2 {
             let _ = conversations.remove(at: index)
         } else {
-            withAnimation {
+//            withAnimation {
                 let _ = conversations.remove(at: index)
-            }
+//            }
         }
 
         if resetMarker == index {
             if conversations.count > 1 {
                 resetMarker = index - 1
             } else {
-                resetMarker = nil
+                resetMarker = -1
             }
         }
 
@@ -651,10 +623,8 @@ extension DialogueSession {
             rawData?.title = title
             rawData?.errorDesc = errorDesc
             rawData?.isArchive = isArchive
-            if let marker = resetMarker {
-                rawData?.resetMarker = Int16(marker)
-            }
-
+            rawData?.resetMarker = Int16(resetMarker)
+        
             rawData?.configuration = try JSONEncoder().encode(configuration)
 
             try PersistenceController.shared.save()

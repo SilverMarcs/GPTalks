@@ -84,7 +84,7 @@ struct UserMessageView: View {
                           
                 #if !os(macOS)
                 HStack {
-                    ForEach(conversation.base64Images, id: \.self) { imagePath in
+                    ForEach(conversation.imagePaths, id: \.self) { imagePath in
                         if let imageData = getImageData(fromPath: imagePath) {
                             ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
                         }
@@ -95,7 +95,7 @@ struct UserMessageView: View {
                     expandToggle(limit: 200)
                 }
                 #else
-                ForEach(conversation.base64Images, id: \.self) { imagePath in
+                ForEach(conversation.imagePaths, id: \.self) { imagePath in
                     if let imageData = getImageData(fromPath: imagePath) {
                         ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
                     }
@@ -139,7 +139,7 @@ struct UserMessageView: View {
     
     var originalUI: some View {
         VStack(alignment: .trailing, spacing: 5) {
-            ForEach(conversation.base64Images, id: \.self) { imagePath in
+            ForEach(conversation.imagePaths, id: \.self) { imagePath in
                 if let imageData = getImageData(fromPath: imagePath) {
                     ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
                 }

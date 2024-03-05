@@ -13,7 +13,7 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
     var date = Date()
     var role: String
     var content: String
-    var base64Images: [String] = []
+    var imagePaths: [String] = []
     var isReplying: Bool = false
 
     func toChat() -> ChatQuery.ChatCompletionMessageParam {
@@ -30,15 +30,14 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
             }
         }()
 
-        if !base64Images.isEmpty {
+        if !imagePaths.isEmpty {
             return .init(role: chatRole, content:
                 [.init(chatCompletionContentPartTextParam: .init(text: content))] +
-                    base64Images.map { base64Image in
+                         imagePaths.map { base64Image in
                         .init(chatCompletionContentPartImageParam:
                             .init(imageUrl:
                                 .init(
                                     url: "data:image/jpeg;base64," + 
-//                                        (retrieveImageFromDisk(url: URL(string: base64Image)!)?
                                         (getSavedImage(fromPath: base64Image)!
                                             .base64EncodedString())!,
                                     detail: .auto

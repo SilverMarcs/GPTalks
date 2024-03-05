@@ -106,69 +106,6 @@ func retrieveImageFromDisk(url: URL) -> UIImage? {
     }
 }
 
-//func saveImage(image: UIImage, fileName: String = UUID().uuidString, inFolder folderName: String = "GPTalksImages") -> Bool {
-//    guard let data = image.jpegData(compressionQuality: 0.7) ?? image.pngData() else {
-//        return false
-//    }
-//    
-//    do {
-//        let directory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-//        let folderURL = directory.appendingPathComponent(folderName, isDirectory: true)
-//        
-//        // Check if the folder exists, if not, create it
-//        if !FileManager.default.fileExists(atPath: folderURL.path) {
-//            try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
-//        }
-//        
-//        let fileURL = folderURL.appendingPathComponent(fileName)
-//        try data.write(to: fileURL)
-//        return true
-//    } catch {
-//        print(error.localizedDescription)
-//        return false
-//    }
-//}
-//
-//func getSavedImage(named: String, fromFolder folderName: String = "GPTalksImages") -> UIImage? {
-//    do {
-//        let directory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-//        let folderURL = directory.appendingPathComponent(folderName, isDirectory: true)
-//        let fileURL = folderURL.appendingPathComponent(named)
-//        
-//        return UIImage(contentsOfFile: fileURL.path)
-//    } catch {
-//        print(error.localizedDescription)
-//        return nil
-//    }
-//}
-
-//func saveImage(image: UIImage, fileName: String = UUID().uuidString, inFolder folderName: String = "GPTalksImages") -> String? {
-//    guard let data = image.jpegData(compressionQuality: 0.7) ?? image.pngData() else {
-//        return nil
-//    }
-//    
-//    do {
-//        let directory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-//        let folderURL = directory.appendingPathComponent(folderName, isDirectory: true)
-//        
-//        // Check if the folder exists, if not, create it
-//        if !FileManager.default.fileExists(atPath: folderURL.path) {
-//            try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
-//        }
-//        
-//        let fileURL = folderURL.appendingPathComponent(fileName)
-//        try data.write(to: fileURL)
-//        return fileURL.path
-//    } catch {
-//        print(error.localizedDescription)
-//        return nil
-//    }
-//}
-//
-//func getSavedImage(fromPath filePath: String) -> UIImage? {
-//    print(filePath)
-//    return UIImage(contentsOfFile: filePath)
-//}
 
 func saveImage(image: UIImage, fileName: String = UUID().uuidString, inFolder folderName: String = "GPTalksImages") -> String? {
     guard let data = image.jpegData(compressionQuality: 0.7) ?? image.pngData() else {
@@ -270,100 +207,6 @@ private func saveImageDataWithPopup(imageData: Data) {
     }
 }
 
-func saveImageToDisk(image: NSImage) -> URL? {
-    guard let data = image.tiffRepresentation,
-          let bitmapImage = NSBitmapImageRep(data: data),
-          let pngData = bitmapImage.representation(using: .png, properties: [:]) else { return nil }
-    let fileName = UUID().uuidString + ".png"
-    if let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
-        let filePath = directory.appendingPathComponent(fileName)
-        do {
-            try pngData.write(to: filePath)
-            return filePath
-        } catch {
-            print("Error saving image: \(error)")
-            return nil
-        }
-    }
-    return nil
-}
-
-func retrieveImageFromDisk(url: URL) -> NSImage? {
-    do {
-        let data = try Data(contentsOf: url)
-        return NSImage(data: data)
-    } catch {
-        print("Error retrieving image: \(error)")
-        return nil
-    }
-}
-
-//func saveImage(image: NSImage, fileName: String, inFolder folderName: String = "GPTalksImages") -> Bool {
-//    guard let data = image.tiffRepresentation else {
-//        return false
-//    }
-//    
-//    do {
-//        // Use .picturesDirectory or .applicationSupportDirectory
-//        let directory = try FileManager.default.url(for: .picturesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-//        let folderURL = directory.appendingPathComponent(folderName, isDirectory: true)
-//        
-//        // Check if the folder exists, if not, create it
-//        if !FileManager.default.fileExists(atPath: folderURL.path) {
-//            try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
-//         }
-//        
-//        let fileURL = folderURL.appendingPathComponent(fileName + ".png")
-//        try data.write(to: fileURL)
-//        return true
-//    } catch {
-//        print(error.localizedDescription)
-//        return false
-//    }
-//}
-//
-//func getSavedImage(named: String, fromFolder folderName: String = "GPTalksImages") -> NSImage? {
-//    do {
-//        // Use .picturesDirectory or .applicationSupportDirectory
-//        let directory = try FileManager.default.url(for: .picturesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-//        let folderURL = directory.appendingPathComponent(folderName, isDirectory: true)
-//        let fileURL = folderURL.appendingPathComponent(named + ".png")
-//        
-//        return NSImage(contentsOf: fileURL)
-//    } catch {
-//        print(error.localizedDescription)
-//        return nil
-//     }
-// }
-//
-//func saveImage(image: NSImage, fileName: String = UUID().uuidString, inFolder folderName: String = "GPTalksImages") -> String? {
-//    guard let data = image.tiffRepresentation,
-//          let bitmapImage = NSBitmapImageRep(data: data),
-//          let imageData = bitmapImage.representation(using: .png, properties: [:]) else {
-//        return nil
-//    }
-//    
-//    do {
-//        let directory = try FileManager.default.url(for: .picturesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-//        let folderURL = directory.appendingPathComponent(folderName, isDirectory: true)
-//        
-//        if !FileManager.default.fileExists(atPath: folderURL.path) {
-//            try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
-//        }
-//        
-//        let fileURL = folderURL.appendingPathComponent("\(fileName).png")
-//        try imageData.write(to: fileURL)
-//        return fileURL.path
-//    } catch {
-//        print(error.localizedDescription)
-//        return nil
-//    }
-//}
-//
-//func getSavedImage(fromPath filePath: String) -> NSImage? {
-//    return NSImage(contentsOfFile: filePath)
-//}
-
 func saveImage(image: NSImage, fileName: String = UUID().uuidString, inFolder folderName: String = "GPTalksImages") -> String? {
     guard let data = image.tiffRepresentation,
           let bitmapImage = NSBitmapImageRep(data: data),
@@ -410,6 +253,24 @@ func getImageData(fromPath filePath: String) -> Data? {
         print(error.localizedDescription)
         return nil
     }
+}
+
+func getImageFromClipboard() -> NSImage? {
+    let pasteboard = NSPasteboard.general
+
+    // Check for file URLs on the pasteboard
+    if let fileURLs = pasteboard.readObjects(forClasses: [NSURL.self], options: nil) as? [URL],
+       let fileURL = fileURLs.first {
+        // Attempt to create an NSImage from the file URL
+        return NSImage(contentsOf: fileURL)
+    }
+    // If there are no file URLs, attempt to read image data directly
+    else if let image = pasteboard.readObjects(forClasses: [NSImage.self], options: nil)?.first as? NSImage {
+        return image
+    }
+    
+    // If no image was found, return nil
+    return nil
 }
 
 #endif

@@ -217,7 +217,7 @@ enum ContentState: String, CaseIterable, Identifiable {
                 data.date = conversation.date
                 data.role = conversation.role
                 data.content = conversation.content
-                data.base64Image = conversation.base64Images.joined(separator: "|||")
+                data.imagePaths = conversation.imagePaths.joined(separator: "|||")
                 return data
             })
             newItem.conversations = conversationsSet
