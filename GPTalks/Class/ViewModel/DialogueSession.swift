@@ -92,10 +92,6 @@ import SwiftUI
         return conversations[conversations.count - 1]
     }
 
-    var lastConcersationContent: String? {
-        return lastConversation.content
-    }
-
     var streamingTask: Task<Void, Error>?
     var viewUpdater: Task<Void, Error>?
 
@@ -236,10 +232,8 @@ import SwiftUI
 
 //    @MainActor
     func stopStreaming() {
-        if let lastConcersationContent = lastConcersationContent {
-            if lastConcersationContent.isEmpty {
-                removeConversation(at: conversations.count - 1)
-            }
+        if let lastConcersationContent = conversations.last?.content, lastConcersationContent.isEmpty {
+            removeConversation(at: conversations.count - 1)
         }
         streamingTask?.cancel()
         streamingTask = nil
@@ -379,7 +373,7 @@ import SwiftUI
 
         let query = ChatQuery(messages: finalMessages, 
                               model: configuration.model.id,
-                              maxTokens: 3800, 
+                              maxTokens: 4000, 
                               temperature: configuration.temperature,
                               stream: true)        
         

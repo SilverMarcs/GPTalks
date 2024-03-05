@@ -14,12 +14,8 @@ struct MacOSMessages: View {
 
     @Bindable var session: DialogueSession
 
-    @State private var previousContent: String?
     @State private var isUserScrolling = false
-    @State private var contentChangeTimer: Timer? = nil
-    
     @State var isShowSysPrompt: Bool = false
-
     @FocusState var isTextFieldFocused: Bool
 
     var body: some View {
@@ -57,21 +53,22 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.conversations.last?.content) {
-                if session.conversations.last?.content != previousContent && !isUserScrolling {
+                if !isUserScrolling {
                     scrollToBottom(proxy: proxy, animated: true)
                 }
-                previousContent = session.conversations.last?.content
-
-                contentChangeTimer?.invalidate()
-                contentChangeTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
+            }
+            .onChange(of: session.conversations.last?.isReplying) {
+                if !session.isReplying() {
                     isUserScrolling = false
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-                isUserScrolling = true
+                if session.isReplying() {
+                    isUserScrolling = true
+                }
             }
             .onChange(of: session.isAddingConversation) {
-                scrollToBottom(proxy: proxy, animated: true)
+                scrollToBottom(proxy: proxy, animated: false)
             }
             .onChange(of: session.input) {
                 if session.input.contains("\n") || (session.input.count > 105) {
