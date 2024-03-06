@@ -20,7 +20,29 @@ extension Array {
     }
 }
 
-func extractURL(from jsonString: String) -> String? {
+//func extractURL(from jsonString: String) -> String? {
+//    guard let jsonData = jsonString.data(using: .utf8) else {
+//        print("Error: Could not convert string to UTF-8 data.")
+//        return nil
+//    }
+//
+//    do {
+//        if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+//           let url = jsonObject["url"] as? String {
+//            print("Web content url: \(url)")
+//            return url
+//        } else {
+//            print("Error: JSON does not contain a valid 'url' key.")
+//            return nil
+//        }
+//    } catch {
+//        print("Error parsing JSON: \(error)")
+//        return nil
+//    }
+//}
+
+
+func extractValue(from jsonString: String, forKey key: String) -> String? {
     guard let jsonData = jsonString.data(using: .utf8) else {
         print("Error: Could not convert string to UTF-8 data.")
         return nil
@@ -28,11 +50,11 @@ func extractURL(from jsonString: String) -> String? {
 
     do {
         if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
-           let url = jsonObject["url"] as? String {
-            print("Web content url: \(url)")
-            return url
+           let value = jsonObject[key] as? String {
+            print("\(key) value: \(value)")
+            return value
         } else {
-            print("Error: JSON does not contain a valid 'url' key.")
+            print("Error: JSON does not contain a valid '\(key)' key.")
             return nil
         }
     } catch {
@@ -40,7 +62,6 @@ func extractURL(from jsonString: String) -> String? {
         return nil
     }
 }
-
 
 extension String {
     func copyToPasteboard() {

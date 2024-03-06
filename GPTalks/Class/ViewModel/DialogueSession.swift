@@ -152,7 +152,6 @@ typealias PlatformImage = UIImage
     @MainActor
     func generateTitle(forced: Bool = false) async {
         if conversations.count == 1 || conversations.count == 2 {
-            // TODO: makeRequest func
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
@@ -300,20 +299,6 @@ typealias PlatformImage = UIImage
         }
     }
     
-    let tools: [ChatQuery.ChatCompletionToolParam] = [.init(function:
-            .init(name: "urlScrape",
-                  description: "If a URL is explicitly given, this function can be used to receive the contents of that url webpage. If you feel absolutely confident that you know some url where some information can be found, you may come up with the url yourself. If you already know the information, do not use the function to come up with a url. Always prioritize your pre-existing knowledge",
-                  parameters:
-                    .init(type: .object,
-                        properties: ["url":
-                            .init(type: .string,
-                                  description: "The URL of the website to scrape")]
-                        )
-                 )
-            )
-    ]
-
-    
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
         resetErrorDesc()
@@ -345,14 +330,22 @@ typealias PlatformImage = UIImage
         streamingTask = Task {
             isStreaming = true
             
-            var webFuncParam = ""
+            var funcParam = ""
+            
             var isWebFuncCall = false
+            var isImageFuncCall = false
+            
             var toolCallId = ""
         
             for try await result in service.chatsStream(query: query) {
                 if let funcCalls = result.choices.first?.delta.toolCalls {
-                    isWebFuncCall = true
-                    webFuncParam += funcCalls.first?.function?.arguments ?? ""
+                    if let name = funcCalls.first?.function?.name, name == "urlScrape" {
+                        isWebFuncCall = true
+                    } else if let name = funcCalls.first?.function?.name, name == "imageGenerate" {
+                        isImageFuncCall = true
+                    }
+                    
+                    funcParam += funcCalls.first?.function?.arguments ?? ""
 
                     
                     if let id = result.choices.first?.delta.toolCalls?.first?.id {
@@ -369,8 +362,9 @@ typealias PlatformImage = UIImage
             
             if isWebFuncCall {
                 print(toolCallId)
+                print("webfunc")
                 
-                if let url = extractURL(from: webFuncParam) {
+                if let url = extractValue(from: funcParam, forKey: "url") {
                     let webContent = try await fetchAndParseHTMLAsync(from: url).joined()
                     
                     removeConversation(at: conversations.count - 1)
@@ -378,13 +372,27 @@ typealias PlatformImage = UIImage
                     appendConversation(Conversation(role: "assistant", content: "urlScrape"))
                     appendConversation(Conversation(role: "tool", content: webContent))
                     
-                    
                     let query2 = createChatQuery()
                     
+//                    let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
+//                    
+//                    var finalMessages = ([systemPrompt] + conversations).map({ conversation in
+//                        conversation.toChat()
+//                    })
+//                    
+//                    if finalMessages.count > 100 {
+//                        finalMessages = Array(finalMessages.suffix(100))
+//                    }
+//
+//                    let query2 =  ChatQuery(messages: finalMessages,
+//                                     model: configuration.model.id,
+//                                     maxTokens: 4000,
+//                                     temperature: configuration.temperature,
+//                                     tools: ChatTool.allTools)
+//                    
                     var streamText2 = ""
                     
                     let lastConversationData2 = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
-//                    isAddingConversation.toggle()
                     
                     for try await result in service.chatsStream(query: query2) {
                         streamText2 += result.choices.first?.delta.content ?? ""
@@ -392,6 +400,35 @@ typealias PlatformImage = UIImage
                         lastConversationData2.sync(with: conversations[conversations.count - 1])
                     }
                     
+                }
+            }
+            
+            if isImageFuncCall {
+                print("imageFuncCall")
+                print(funcParam)
+                
+                removeConversation(at: conversations.count - 1)
+                
+                appendConversation(Conversation(role: "assistant", content: "imageGenerate"))
+//                appendConversation(Conversation(role: "tool", content: "imageGenerate"))
+                
+                if let prompt = extractValue(from: funcParam, forKey: "prompt") {
+                    let query = ImagesQuery(prompt: prompt, model: configuration.provider.preferredImageModel.id, n: 1, quality: .standard, size: ._1024)
+                    
+                    let results = try await service.images(query: query)
+                    
+                    for urlResult in results.data {
+                        if let urlString = urlResult.url, let url = URL(string: urlString) {
+                            do {
+                                let (data, _) = try await URLSession.shared.data(from: url)
+                                if let savedURL = saveImage(image: PlatformImage(data: data)!) {
+                                    appendConversation(Conversation(role: "tool", content: "imageGenerate", imagePaths: [savedURL]))
+                                }
+                            } catch {
+                                print("Error downloading image: \(error)")
+                            }
+                        }
+                    }
                 }
             }
         
@@ -404,7 +441,6 @@ typealias PlatformImage = UIImage
             inputImages = []
             #if os(macOS)
             try await streamingTask?.value
-//            try await viewUpdater?.value
             #else
             let application = UIApplication.shared
             let taskId = application.beginBackgroundTask {
@@ -412,7 +448,6 @@ typealias PlatformImage = UIImage
             }
             
             try await streamingTask?.value
-            try await viewUpdater?.value
             
             application.endBackgroundTask(taskId)
             #endif
@@ -448,25 +483,46 @@ typealias PlatformImage = UIImage
 
         save()
         
-        await generateTitle(forced: false)
+//        await generateTitle(forced: false)
     }
     
     func createChatQuery() -> ChatQuery {
         let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
         
-        var finalMessages = ([systemPrompt] + conversations).map({ conversation in
+        
+        var contextAdjustedMessages: [Conversation] = conversations
+
+        if conversations.count > resetMarker + 1 {
+            contextAdjustedMessages = Array(conversations.suffix(from: resetMarker + 1))
+        }
+
+        let finalMessages = ([systemPrompt] + contextAdjustedMessages).map({ conversation in
             conversation.toChat()
         })
+//        var finalMessages = ([systemPrompt] + conversations).map({ conversation in
+//            conversation.toChat()
+//        })
         
-        if finalMessages.count > 100 {
-            finalMessages = Array(finalMessages.suffix(100))
+//        if finalMessages.count > 100 {
+//            finalMessages = Array(finalMessages.suffix(100))
+//        }
+        
+        for conversation in conversations {
+            if conversation.role == "tool" && !conversation.imagePaths.isEmpty {
+                configuration.model = .gpt3t0125
+                break // Assuming you only need to find the first occurrence
+            } else if conversation.role == "user" && !conversation.imagePaths.isEmpty {
+                configuration.model = .gpt4vision
+                break // Assuming you only need to find the first occurrence
+            }
         }
+
         
         return ChatQuery(messages: finalMessages,
                          model: configuration.model.id,
                          maxTokens: 4000,
                          temperature: configuration.temperature,
-                         tools: tools)
+                         tools: ChatTool.allTools)
     }
 }
 

@@ -9,7 +9,7 @@
 import SwiftUI
 import OpenAI
 
-enum ChatTool: String {
+enum ChatTool: String, CaseIterable {
     case urlScrape
     // Add other cases here as needed, for example:
     case imageGenerate
@@ -32,7 +32,7 @@ enum ChatTool: String {
             // Placeholder for another tool's parameters. Adjust accordingly.
             return .init(function:
                         .init(name: "imageGenerate",
-                              description: "If the user asks to generate an image with a description of the image, create a prompt that dalle can use to generate the image(s)",
+                              description: "If the user asks to generate an image with a description of the image, create a prompt that dalle can use to generate the image(s). Note that in the chat history, if this function was called and the following image comes from the user, it was in fact created by the assistant",
                               parameters:
                                 .init(type: .object,
                                       properties: ["prompt":
@@ -43,4 +43,9 @@ enum ChatTool: String {
                     )
         }
     }
+    
+    static var allTools: [ChatQuery.ChatCompletionToolParam] {
+        return ChatTool.allCases.map { $0.completionToolParam }
+    }
+    
 }

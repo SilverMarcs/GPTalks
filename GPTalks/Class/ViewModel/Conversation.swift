@@ -35,16 +35,18 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
         if chatRole != .tool {
             if chatRole == .assistant && content == "urlScrape" {
                 return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "webFuncParam", name: "urlScrape"))])!
+            } else if chatRole == .assistant && content == "imageGenerate" {
+                return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "prompt", name: "imageGenerate"))])!
             } else {
                 if !imagePaths.isEmpty {
                     return .init(role: chatRole, content:
                                     [.init(chatCompletionContentPartTextParam: .init(text: content))] +
-                                 imagePaths.map { base64Image in
+                                 imagePaths.map { path in
                             .init(chatCompletionContentPartImageParam:
                                     .init(imageUrl:
                                             .init(
                                                 url: "data:image/jpeg;base64," +
-                                                (getSavedImage(fromPath: base64Image)!
+                                                (getSavedImage(fromPath: path)!
                                                     .base64EncodedString())!,
                                                 detail: .auto
                                             )
@@ -56,7 +58,31 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
                 }
             }
         } else {
-            return .init(role: .tool, content: content, name: "urlScrape", toolCallId: "")!
+//            if !imagePaths.isEmpty {
+//                return 
+//                    .init(role: .user,
+//                         content:
+//                            [.init(chatCompletionContentPartTextParam: .init(text: content))] +
+//                         imagePaths.map { path in
+//                            .init(chatCompletionContentPartImageParam:
+//                                    .init(imageUrl:
+//                                            .init(
+//                                                url: "data:image/jpeg;base64," +
+//                                                (getSavedImage(fromPath: path)!
+//                                                    .base64EncodedString())!,
+//                                                detail: .auto
+//                                            )
+//                                    )
+//                            )
+//                        },
+//                        name: "imageGenerate")!
+            if content == "imageGenerate" {
+                return .init(role: .tool, content: content, name: "imageGenerate", toolCallId: "")!
+            } else {
+                return .init(role: .tool, content: content, name: "urlScrape", toolCallId: "")!
+            }
+            
+//            return .init(role: .tool, content: content, name: "urlScrape", toolCallId: "")!
         }
     }
 }
