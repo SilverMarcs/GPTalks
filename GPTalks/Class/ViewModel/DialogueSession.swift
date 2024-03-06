@@ -5,8 +5,8 @@
 //  Created by Zabir Raihan on 27/11/2024.
 //
 
-import OpenAI
 import SwiftUI
+import OpenAI
 
 #if os(macOS)
 import AppKit
@@ -229,8 +229,8 @@ typealias PlatformImage = UIImage
         streamingTask?.cancel()
         streamingTask = nil
         
-        viewUpdater?.cancel()
-        viewUpdater = nil
+//        viewUpdater?.cancel()
+//        viewUpdater = nil
     }
 
     @MainActor
@@ -300,6 +300,20 @@ typealias PlatformImage = UIImage
         }
     }
     
+    let tools: [ChatQuery.ChatCompletionToolParam] = [.init(function:
+            .init(name: "urlScrape",
+                  description: "If a URL is explicitly given, this function can be used to receive the contents of that url webpage. If you feel absolutely confident that you know some url where some information can be found, you may come up with the url yourself. If you already know the information, do not use the function to come up with a url. Always prioritize your pre-existing knowledge",
+                  parameters:
+                    .init(type: .object,
+                        properties: ["url":
+                            .init(type: .string,
+                                  description: "The URL of the website to scrape")]
+                        )
+                 )
+            )
+    ]
+
+    
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
         resetErrorDesc()
@@ -320,82 +334,77 @@ typealias PlatformImage = UIImage
            }
         }
         
-        let openAIconfig = configuration.provider.config
-        let service: OpenAI = OpenAI(configuration: openAIconfig)
+        let service: OpenAI = OpenAI(configuration: configuration.provider.config)
 
-        let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
-
-        var contextAdjustedMessages: [Conversation] = conversations
-
-        if conversations.count > resetMarker + 1 {
-            contextAdjustedMessages = Array(conversations.suffix(from: resetMarker + 1))
-        }
-
-        var finalMessages = ([systemPrompt] + contextAdjustedMessages).map({ conversation in
-            conversation.toChat()
-        })
-        
-        var summaryText = ""
-        
-        if let summaryQuery = await getSummaryText(inputText: text) {
-            summaryText = summaryQuery
-        }
-        
-        if !summaryText.isEmpty {
-            finalMessages.append(.init(role: .user, content: "Take the following text content as context. Note that there may be contents in the text thats commonly found on article websites such as writer name or adverisement or others. Ignore them and observe the main content only. Also ignore the URL sent as I am also giving you the contents of the url together with it.Observe the content and fufill the user's request. If nothing is specified, provide a summary of the text content.")!)
-            finalMessages.append(.init(role: .user, content: summaryText)!)
-        }
-
-        let query = ChatQuery(messages: finalMessages, 
-                              model: configuration.model.id,
-                              maxTokens: 4000, 
-                              temperature: configuration.temperature,
-                              stream: true)        
+        let query = createChatQuery()
         
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         
-        isAddingConversation.toggle()
-
         var streamText = "";
     
         streamingTask = Task {
             isStreaming = true
-                for try await result in service.chatsStream(query: query) {
-                    streamText += result.choices.first?.delta.content ?? ""
-                }
+            
+            var webFuncParam = ""
+            var isWebFuncCall = false
+            var toolCallId = ""
+        
+            for try await result in service.chatsStream(query: query) {
+                if let funcCalls = result.choices.first?.delta.toolCalls {
+                    isWebFuncCall = true
+                    webFuncParam += funcCalls.first?.function?.arguments ?? ""
 
-            isStreaming = false
-        }
-
-        viewUpdater = Task {
-            while true {
-                #if os(macOS)
-                try await Task.sleep(nanoseconds: 150_000_000)
-                #else
-                try await Task.sleep(nanoseconds: 50_000_000)
-                #endif
-                
-                if AppConfiguration.shared.isMarkdownEnabled {
-                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                } else {
-                    withAnimation {
-                        conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    
+                    if let id = result.choices.first?.delta.toolCalls?.first?.id {
+                        toolCallId = id
                     }
-                }
-                
-                lastConversationData.sync(with: conversations[conversations.count - 1])
-                
-                if !isStreaming {
-                    break
+                    
+                    
+                } else {
+                    streamText += result.choices.first?.delta.content ?? ""
+                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    lastConversationData.sync(with: conversations[conversations.count - 1])
                 }
             }
+            
+            if isWebFuncCall {
+                print(toolCallId)
+                
+                if let url = extractURL(from: webFuncParam) {
+                    let webContent = try await fetchAndParseHTMLAsync(from: url).joined()
+                    
+                    removeConversation(at: conversations.count - 1)
+                    
+                    appendConversation(Conversation(role: "assistant", content: "urlScrape"))
+                    appendConversation(Conversation(role: "tool", content: webContent))
+                    
+                    
+                    let query2 = createChatQuery()
+                    
+                    var streamText2 = ""
+                    
+                    let lastConversationData2 = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+//                    isAddingConversation.toggle()
+                    
+                    for try await result in service.chatsStream(query: query2) {
+                        streamText2 += result.choices.first?.delta.content ?? ""
+                        conversations[conversations.count - 1].content = streamText2.trimmingCharacters(in: .whitespacesAndNewlines)
+                        lastConversationData2.sync(with: conversations[conversations.count - 1])
+                    }
+                    
+                }
+            }
+        
+            conversations[conversations.count - 1].isReplying = false
+
+            isStreaming = false
         }
 
         do {
             inputImages = []
             #if os(macOS)
             try await streamingTask?.value
-            try await viewUpdater?.value
+//            try await viewUpdater?.value
             #else
             let application = UIApplication.shared
             let taskId = application.beginBackgroundTask {
@@ -435,11 +444,29 @@ typealias PlatformImage = UIImage
             setErrorDesc(errorDesc: error.localizedDescription)
         }
 
-        conversations[conversations.count - 1].isReplying = false
+//        conversations[conversations.count - 1].isReplying = false
 
         save()
         
         await generateTitle(forced: false)
+    }
+    
+    func createChatQuery() -> ChatQuery {
+        let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
+        
+        var finalMessages = ([systemPrompt] + conversations).map({ conversation in
+            conversation.toChat()
+        })
+        
+        if finalMessages.count > 100 {
+            finalMessages = Array(finalMessages.suffix(100))
+        }
+        
+        return ChatQuery(messages: finalMessages,
+                         model: configuration.model.id,
+                         maxTokens: 4000,
+                         temperature: configuration.temperature,
+                         tools: tools)
     }
 }
 
@@ -501,6 +528,7 @@ extension DialogueSession {
         }
 
         conversations.append(conversation)
+        isAddingConversation.toggle()
 
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id

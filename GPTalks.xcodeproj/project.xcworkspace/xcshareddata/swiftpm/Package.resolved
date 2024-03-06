@@ -28,15 +28,6 @@
       }
     },
     {
-      "identity" : "openai",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/OpenAI",
-      "state" : {
-        "branch" : "MacPaw.gpt_vision",
-        "revision" : "03a166cc68b42d39839b2707c95709fb9d546de3"
-      }
-    },
-    {
       "identity" : "splash",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/JohnSundell/Splash",
