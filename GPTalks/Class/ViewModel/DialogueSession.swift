@@ -334,6 +334,7 @@ typealias PlatformImage = UIImage
             
             var isWebFuncCall = false
             var isImageFuncCall = false
+            var isTranscribeFuncCall = false
             
             var toolCallId = ""
         
@@ -343,6 +344,8 @@ typealias PlatformImage = UIImage
                         isWebFuncCall = true
                     } else if let name = funcCalls.first?.function?.name, name == "imageGenerate" {
                         isImageFuncCall = true
+                    } else if let name = funcCalls.first?.function?.name, name == "transcribe" {
+                        isTranscribeFuncCall = true
                     }
                     
                     funcParam += funcCalls.first?.function?.arguments ?? ""
@@ -374,22 +377,6 @@ typealias PlatformImage = UIImage
                     
                     let query2 = createChatQuery()
                     
-//                    let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
-//                    
-//                    var finalMessages = ([systemPrompt] + conversations).map({ conversation in
-//                        conversation.toChat()
-//                    })
-//                    
-//                    if finalMessages.count > 100 {
-//                        finalMessages = Array(finalMessages.suffix(100))
-//                    }
-//
-//                    let query2 =  ChatQuery(messages: finalMessages,
-//                                     model: configuration.model.id,
-//                                     maxTokens: 4000,
-//                                     temperature: configuration.temperature,
-//                                     tools: ChatTool.allTools)
-//                    
                     var streamText2 = ""
                     
                     let lastConversationData2 = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
@@ -410,7 +397,6 @@ typealias PlatformImage = UIImage
                 removeConversation(at: conversations.count - 1)
                 
                 appendConversation(Conversation(role: "assistant", content: "imageGenerate"))
-//                appendConversation(Conversation(role: "tool", content: "imageGenerate"))
                 
                 if let prompt = extractValue(from: funcParam, forKey: "prompt") {
                     let query = ImagesQuery(prompt: prompt, model: configuration.provider.preferredImageModel.id, n: 1, quality: .standard, size: ._1024)
@@ -428,6 +414,44 @@ typealias PlatformImage = UIImage
                                 print("Error downloading image: \(error)")
                             }
                         }
+                    }
+                }
+            }
+            
+            if isTranscribeFuncCall {
+                print("transcribeFuncCall")
+                print(funcParam)
+                
+                removeConversation(at: conversations.count - 1)
+                
+                appendConversation(Conversation(role: "assistant", content: "transcribe"))
+                
+                if let audioPath = extractValue(from: funcParam, forKey: "audioPath") {
+                    do {
+                        print(audioPath)
+                        let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: .whisper_1)
+                        
+                        let result = try await service.audioTranscriptions(query: query)
+                        print(result.text)
+                        
+                        appendConversation(Conversation(role: "tool", content: result.text))
+                        
+                        let query3 = createChatQuery()
+                        
+                        var streamText2 = ""
+                        
+                        let lastConversationData3 = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+                        
+                        for try await result in service.chatsStream(query: query3) {
+                            streamText2 += result.choices.first?.delta.content ?? ""
+                            conversations[conversations.count - 1].content = streamText2.trimmingCharacters(in: .whitespacesAndNewlines)
+                            lastConversationData3.sync(with: conversations[conversations.count - 1])
+                        }
+                        
+                        print(result.text)
+                    } catch {
+                        // Handle errors (e.g., file not found, insufficient permissions, etc.)
+                        print("Error reading file: \(error)")
                     }
                 }
             }

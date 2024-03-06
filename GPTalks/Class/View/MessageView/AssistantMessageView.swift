@@ -18,7 +18,7 @@ struct AssistantMessageView: View {
 
     var body: some View {
         Group {
-            if conversation.content == "urlScrape" || conversation.content == "imageGenerate" {
+            if conversation.content == "urlScrape" || conversation.content == "imageGenerate" || conversation.content == "transcribe" {
                 EmptyView()
             } else {
                 if AppConfiguration.shared.alternateChatUi {

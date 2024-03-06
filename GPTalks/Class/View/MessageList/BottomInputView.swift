@@ -18,7 +18,10 @@ struct BottomInputView: View {
     
     @FocusState var focused: Bool
     
-    @State private var importing = false
+    @State private var importingImage = false
+    @State private var importingAudio = false
+    @State private var showMore = false
+    
     @State var selectedItems: [PhotosPickerItem] = []
     
     var body: some View {
@@ -27,9 +30,20 @@ struct BottomInputView: View {
                 importedImages
             }
             
+            // TODO:
+//            if !session.inputAudio.isEmpty {
+//                importedAudio
+//            }
+            
             HStack(spacing: 12) {
                 #if os(macOS)
-                imagePicker
+                macOSMore
+//                    .animation(.default, value: showMore)
+                
+                if showMore {
+                    imagePicker
+                    audioPicker
+                }
                 #else
                 iosMore
                 #endif
@@ -49,6 +63,7 @@ struct BottomInputView: View {
             }
         }
         .animation(.default, value: session.inputImages)
+        .animation(.default, value: showMore)
         .buttonStyle(.plain)
         .padding(.horizontal)
         .padding(.top, verticalPadding)
@@ -120,7 +135,7 @@ struct BottomInputView: View {
             }
             
             Button {
-                importing = true
+                importingImage = true
             } label: {
                 Label("Add Image", systemImage: "photo")
             }
@@ -137,7 +152,7 @@ struct BottomInputView: View {
                 .frame(width: imageSize + 3, height: imageSize + 3)
         }
         .photosPicker(
-            isPresented: $importing,
+            isPresented: $importingImage,
             selection: $selectedItems,
             maxSelectionCount: 5, 
             matching: .images,
@@ -162,9 +177,9 @@ struct BottomInputView: View {
 
     #endif
     
-    var imagePicker: some View {
+    var macOSMore: some View {
         Button {
-            importing = true
+            showMore.toggle()
         } label: {
             Image(systemName: "plus")
                 .resizable()
@@ -174,11 +189,54 @@ struct BottomInputView: View {
                 .foregroundStyle(.secondary)
                 .background(.gray.opacity(0.2))
                 .clipShape(Circle())
-                .frame(width: imageSize + 1, height: imageSize + 1)
+                .frame(width: imageSize + 2, height: imageSize + 2)
+                .rotationEffect(.degrees(showMore ? 45 : 0))
+                .animation(.default, value: showMore)
         }
-        .keyboardShortcut("i", modifiers: .command)
+    }
+    
+    var audioPicker: some View {
+        Button {
+            importingAudio = true
+        } label: {
+            Image(systemName: "waveform")
+                .resizable()
+                .scaledToFit()
+                .padding(6)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+                .background(.gray.opacity(0.2))
+                .clipShape(Circle())
+                .frame(width: imageSize + 2, height: imageSize + 2)
+        }
+        .fileImporter(isPresented: $importingAudio, allowedContentTypes: [.audio], allowsMultipleSelection: false) { result in
+            switch result {
+            case .success(let urls):
+                let url = urls[0]
+                session.input = url.absoluteString
+                print("Selected file URL: \(url)")
+            case .failure(let error):
+                print("File selection error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    var imagePicker: some View {
+        Button {
+            importingImage = true
+        } label: {
+            Image(systemName: "photo")
+                .resizable()
+                .scaledToFit()
+                .padding(7)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+                .background(.gray.opacity(0.2))
+                .clipShape(Circle())
+                .frame(width: imageSize + 5, height: imageSize + 5)
+        }
         .fileImporter(
-            isPresented: $importing,
+            isPresented: $importingImage,
             allowedContentTypes: [.image],
             allowsMultipleSelection: true
         ) { result in

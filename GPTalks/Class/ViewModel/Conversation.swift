@@ -37,6 +37,8 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
                 return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "webFuncParam", name: "urlScrape"))])!
             } else if chatRole == .assistant && content == "imageGenerate" {
                 return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "prompt", name: "imageGenerate"))])!
+            } else if chatRole == .assistant && content == "transcribe" {
+                return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "audioPath", name: "transcribe"))])!
             } else {
                 if !imagePaths.isEmpty {
                     return .init(role: chatRole, content:
@@ -58,26 +60,10 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
                 }
             }
         } else {
-//            if !imagePaths.isEmpty {
-//                return 
-//                    .init(role: .user,
-//                         content:
-//                            [.init(chatCompletionContentPartTextParam: .init(text: content))] +
-//                         imagePaths.map { path in
-//                            .init(chatCompletionContentPartImageParam:
-//                                    .init(imageUrl:
-//                                            .init(
-//                                                url: "data:image/jpeg;base64," +
-//                                                (getSavedImage(fromPath: path)!
-//                                                    .base64EncodedString())!,
-//                                                detail: .auto
-//                                            )
-//                                    )
-//                            )
-//                        },
-//                        name: "imageGenerate")!
             if content == "imageGenerate" {
                 return .init(role: .tool, content: content, name: "imageGenerate", toolCallId: "")!
+            } else if content == "transcribe" {
+                return .init(role: .tool, content: content, name: "transcribe", toolCallId: "")!
             } else {
                 return .init(role: .tool, content: content, name: "urlScrape", toolCallId: "")!
             }

@@ -11,8 +11,9 @@ import OpenAI
 
 enum ChatTool: String, CaseIterable {
     case urlScrape
-    // Add other cases here as needed, for example:
+//    case browse
     case imageGenerate
+    case transcribe
 
     var completionToolParam: ChatQuery.ChatCompletionToolParam {
         switch self {
@@ -29,7 +30,6 @@ enum ChatTool: String, CaseIterable {
                              )
                     )
         case .imageGenerate:
-            // Placeholder for another tool's parameters. Adjust accordingly.
             return .init(function:
                         .init(name: "imageGenerate",
                               description: "If the user asks to generate an image with a description of the image, create a prompt that dalle can use to generate the image(s). Note that in the chat history, if this function was called and the following image comes from the user, it was in fact created by the assistant",
@@ -38,6 +38,18 @@ enum ChatTool: String, CaseIterable {
                                       properties: ["prompt":
                                                     .init(type: .string,
                                                           description: "The prompt for dalle")]
+                                     )
+                             )
+                    )
+        case .transcribe:
+            return .init(function:
+                        .init(name: "transcribe",
+                              description: "If the user's input message contains something like a path to an audio file, then call this function with the exact filepath that the user provided. Do not add or format the fiel url in any way. For example, if the user's provided file path was 'file:///Users/Zabir/Downloads/test.mp3' then you need to return exactly 'file:///Users/Zabir/Downloads/test.mp3'",
+                              parameters:
+                                .init(type: .object,
+                                      properties: ["audioPath":
+                                                    .init(type: .string,
+                                                          description: "The file path for the user's audio file")]
                                      )
                              )
                     )

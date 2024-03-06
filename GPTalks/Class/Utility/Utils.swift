@@ -51,7 +51,7 @@ func extractValue(from jsonString: String, forKey key: String) -> String? {
     do {
         if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
            let value = jsonObject[key] as? String {
-            print("\(key) value: \(value)")
+//            print("\(key) value: \(value)")
             return value
         } else {
             print("Error: JSON does not contain a valid '\(key)' key.")

@@ -27,7 +27,16 @@ struct ToolMessageView: View {
                 Button{
                     showPopover.toggle()
                 } label: {
-                    Text("Web Content")
+                    if let index = session.conversations.firstIndex(of: conversation) {
+                        if session.conversations[index - 1].content == "urlScrape" {
+                            Text("Web Content")
+                        } else if session.conversations[index - 1].content == "transcribe" {
+                            Text("Transcribe")
+                        }
+                        
+                    }
+                        
+                    
                 }
                 .popover(isPresented: $showPopover, arrowEdge: .leading) {
                     ScrollView {
@@ -35,7 +44,7 @@ struct ToolMessageView: View {
                             .textSelection(.enabled)
                             .padding()
                     }
-                    .frame(width: 600, height: 500)
+                    .frame(width: 500, height: 400)
                 }
             }
         }
@@ -43,7 +52,7 @@ struct ToolMessageView: View {
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .background(.background.tertiary)
         .border(.quinary, width: 1)
-        
+
 //        Button{
 //            showPopover.toggle()
 //        } label: {

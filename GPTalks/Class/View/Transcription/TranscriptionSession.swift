@@ -40,6 +40,9 @@ import OpenAI
         do {
         
             let audioData = try Data(contentsOf: input)
+            
+            print("Audio data: \(audioData)")
+            print(input)
         
             let tempGeneration = TranscriptionGeneration(audioData: audioData, audioModel: configuration.model.name)
 //            let query = AudioTranscriptionQuery(file: audioData, fileType: .mp3, model: .whisper_1)
