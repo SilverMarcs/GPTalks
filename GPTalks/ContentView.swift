@@ -12,6 +12,7 @@ import SwiftSoup
 struct ContentView: View {
     @Environment(DialogueViewModel.self) private var viewModel
     @State var imageSession: ImageSession = .init()
+    @State var transcriptionSession: TranscriptionSession = .init()
 
     var body: some View {
         NavigationSplitView {
@@ -28,6 +29,8 @@ struct ContentView: View {
                         .onChange(of: viewModel.selectedDialogue) {
                             viewModel.selectedState = .recent
                         }
+                } else if viewModel.selectedState == .speech {
+                    TranscriptionCreator()
                 } else {
                     MacOSMessages(session: selectedDialogue)
                         .frame(minWidth: 500)

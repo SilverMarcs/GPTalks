@@ -48,6 +48,7 @@ struct ReplyingIndicatorView: View {
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            self.animationCount += 1 // Increment the counter
             self.performAnimation()
         }
     }

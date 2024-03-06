@@ -42,6 +42,10 @@
 		08827D112B28B72B0044213B /* ErrorDescView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08827D102B28B72B0044213B /* ErrorDescView.swift */; };
 		088CF0602B1E43C6009CFDCB /* PlaceHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CF05F2B1E43C6009CFDCB /* PlaceHolderView.swift */; };
 		088CF0622B1E705D009CFDCB /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CF0612B1E705D009CFDCB /* ContextResetDivider.swift */; };
+		08980EC42B9786E30005B522 /* TranscriptionCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08980EC32B9786E30005B522 /* TranscriptionCreator.swift */; };
+		08980EC62B97877A0005B522 /* TranscriptionSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08980EC52B97877A0005B522 /* TranscriptionSession.swift */; };
+		08980EC82B9788160005B522 /* TranscriptionGeneration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08980EC72B9788160005B522 /* TranscriptionGeneration.swift */; };
+		08980ECA2B9789830005B522 /* TranscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08980EC92B9789830005B522 /* TranscriptionView.swift */; };
 		08A1EF4E2B2604D000A88A3A /* UserMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */; };
 		08A1EF502B2606C000A88A3A /* AssistantMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */; };
 		08A1EF522B26100600A88A3A /* DialogueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF512B26100600A88A3A /* DialogueViewModel.swift */; };
@@ -122,6 +126,10 @@
 		08827D102B28B72B0044213B /* ErrorDescView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorDescView.swift; sourceTree = "<group>"; };
 		088CF05F2B1E43C6009CFDCB /* PlaceHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHolderView.swift; sourceTree = "<group>"; };
 		088CF0612B1E705D009CFDCB /* ContextResetDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextResetDivider.swift; sourceTree = "<group>"; };
+		08980EC32B9786E30005B522 /* TranscriptionCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionCreator.swift; sourceTree = "<group>"; };
+		08980EC52B97877A0005B522 /* TranscriptionSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionSession.swift; sourceTree = "<group>"; };
+		08980EC72B9788160005B522 /* TranscriptionGeneration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionGeneration.swift; sourceTree = "<group>"; };
+		08980EC92B9789830005B522 /* TranscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionView.swift; sourceTree = "<group>"; };
 		08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageView.swift; sourceTree = "<group>"; };
 		08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantMessageView.swift; sourceTree = "<group>"; };
 		08A1EF512B26100600A88A3A /* DialogueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueViewModel.swift; sourceTree = "<group>"; };
@@ -204,6 +212,17 @@
 				08545C3B2B8D16F800592108 /* WebScrapeService.swift */,
 			);
 			path = LanguageModel;
+			sourceTree = "<group>";
+		};
+		08980EC22B9786D00005B522 /* Transcription */ = {
+			isa = PBXGroup;
+			children = (
+				08980EC32B9786E30005B522 /* TranscriptionCreator.swift */,
+				08980EC52B97877A0005B522 /* TranscriptionSession.swift */,
+				08980EC72B9788160005B522 /* TranscriptionGeneration.swift */,
+				08980EC92B9789830005B522 /* TranscriptionView.swift */,
+			);
+			path = Transcription;
 			sourceTree = "<group>";
 		};
 		08A1EF4C2B2604C300A88A3A /* MessageView */ = {
@@ -302,6 +321,7 @@
 		E4C65ED529CA9F7800AFA884 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				08980EC22B9786D00005B522 /* Transcription */,
 				08C82E562B7CAFF00029791B /* ImageCreation */,
 				08A1EF4C2B2604C300A88A3A /* MessageView */,
 				E4994DF029DA8AF8002981D0 /* Setting */,
@@ -539,6 +559,7 @@
 				08545C3C2B8D16F800592108 /* WebScrapeService.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
 				08D5A2932B7DFE2E00BA1CE0 /* OpenAIService.swift in Sources */,
+				08980EC62B97877A0005B522 /* TranscriptionSession.swift in Sources */,
 				0878E53B2B1683ED00E0D79D /* AppIconView.swift in Sources */,
 				0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */,
 				E4C65EEE29CA9F7800AFA884 /* Conversation.swift in Sources */,
@@ -556,12 +577,15 @@
 				E4C65EF329CA9F7800AFA884 /* ReplyingIndicatorView.swift in Sources */,
 				088CF0602B1E43C6009CFDCB /* PlaceHolderView.swift in Sources */,
 				08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */,
+				08980EC82B9788160005B522 /* TranscriptionGeneration.swift in Sources */,
 				E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */,
+				08980ECA2B9789830005B522 /* TranscriptionView.swift in Sources */,
 				08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */,
 				0829D1152B3166E300DFFBB1 /* MacOSMessages.swift in Sources */,
 				08C82E582B7CB00C0029791B /* ImageGeneration.swift in Sources */,
 				081B02732B81B1EF006AF219 /* AISession.swift in Sources */,
 				E4C65EF629CA9F7800AFA884 /* IosSettingsView.swift in Sources */,
+				08980EC42B9786E30005B522 /* TranscriptionCreator.swift in Sources */,
 				08376D7A2B7CBFCB003258D1 /* GenerationView.swift in Sources */,
 				08A1EF522B26100600A88A3A /* DialogueViewModel.swift in Sources */,
 				0829D1192B31936C00DFFBB1 /* IOSDialogList.swift in Sources */,
