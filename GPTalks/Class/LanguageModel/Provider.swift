@@ -107,6 +107,19 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             AppConfiguration.shared.NImageModel
         }
     }
+    
+    var preferredVisionModel: Model {
+        switch self {
+        case .openai:
+            .gpt4vision
+        case .oxygen:
+            .gpt4vision
+        case .custom:
+            .customVision
+        case .naga:
+            .gpt4vision
+        }
+    }
 
     var chatModels: [Model] {
         switch self {

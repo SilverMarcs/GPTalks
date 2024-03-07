@@ -207,7 +207,7 @@ private func saveImageDataWithPopup(imageData: Data) {
     }
 }
 
-func saveImage(image: NSImage, fileName: String = UUID().uuidString, inFolder folderName: String = "GPTalksImages") -> String? {
+func saveImage(image: NSImage, fileName: String = Date().nowFileName(), inFolder folderName: String = "GPTalksImages") -> String? {
     guard let data = image.tiffRepresentation,
           let bitmapImage = NSBitmapImageRep(data: data),
           let imageData = bitmapImage.representation(using: .png, properties: [:]) else {

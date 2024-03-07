@@ -90,18 +90,18 @@ struct MacOSMessages: View {
             }
             .onChange(of: session.inputImages) {
                 if !session.inputImages.isEmpty {
-//                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
-//                        session.configuration.model = session.configuration.provider.visionModels[0]
-//                    }
+                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
+                        session.configuration.model = session.configuration.provider.preferredVisionModel
+                    }
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }
             .onChange(of: session.configuration.provider) {
-//                if session.containsConversationWithImage {
-//                    session.configuration.model = session.configuration.provider.visionModels[0]
-//                } else {
-//                    session.configuration.model = session.configuration.provider.preferredChatModel
-//                }
+                if session.containsConversationWithImage {
+                    session.configuration.model = session.configuration.provider.preferredVisionModel
+                } else {
+                    session.configuration.model = session.configuration.provider.preferredChatModel
+                }
             }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {

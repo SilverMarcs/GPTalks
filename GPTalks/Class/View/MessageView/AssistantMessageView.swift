@@ -18,15 +18,10 @@ struct AssistantMessageView: View {
 
     var body: some View {
         Group {
-            if conversation.content == "urlScrape" || conversation.content == "imageGenerate" || conversation.content == "transcribe" {
-//                EmptyView()
-                Color.red
+            if AppConfiguration.shared.alternateChatUi {
+                alternateUI
             } else {
-                if AppConfiguration.shared.alternateChatUi {
-                    alternateUI
-                } else {
-                    originalUI
-                }
+                originalUI
             }
         }
 #if os(iOS)
@@ -105,19 +100,13 @@ struct AssistantMessageView: View {
                     if let nextConversation = session.conversations[safe: index - 2] {
                         if nextConversation.content == "imageGenerate" {
                             if let toolConversation = session.conversations[safe: index - 1] {
-                                ToolMessageView(conversation: toolConversation, session: session)
+                                ForEach(toolConversation.imagePaths, id: \.self) { imagePath in
+                                    if let imageData = getImageData(fromPath: imagePath) {
+                                        ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: true)
+                                    }
+                                }
                                 
                                 HStack {
-                                    Spacer()
-                                    
-                                    messageContextMenu
-                                }
-                            }
-                        } else if nextConversation.content == "urlScrape" || nextConversation.content == "transcribe" {
-                            if let toolConversation = session.conversations[safe: index - 1] {
-                                HStack {
-                                    ToolMessageView(conversation: toolConversation, session: session)
-                                    
                                     Spacer()
                                     
                                     messageContextMenu
@@ -224,6 +213,14 @@ struct AssistantMessageView: View {
             50
         #else
             65
+        #endif
+    }
+    
+    private var imageSize: CGFloat {
+        #if os(macOS)
+        300
+        #else
+        325
         #endif
     }
 }

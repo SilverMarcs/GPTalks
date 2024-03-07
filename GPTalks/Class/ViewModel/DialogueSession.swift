@@ -80,7 +80,7 @@ typealias PlatformImage = UIImage
     var isStreaming = false
     
     var containsConversationWithImage: Bool {
-        conversations.contains(where: { !$0.imagePaths.isEmpty })
+        conversations.contains(where: { $0.role == "user" && !$0.imagePaths.isEmpty })
     }
 
     // MARK: - Properties
@@ -303,12 +303,15 @@ typealias PlatformImage = UIImage
     func filteredConversations() -> [Conversation] {
         // Filter out conversations where content matches any of the specified strings
         // or where role equals "tool"
+        // TODO: one liner
         return conversations.filter { conversation in
             let content = conversation.content
             let role = conversation.role
             // Return true for conversations that do not match the criteria, hence keeping them
             // TODO: for content chekc first check if role is assistant
-            return content != "urlScrape" && content != "transcribe" && content != "imageGenerate" && role != "tool"
+//            return content != "urlScrape" && content != "transcribe" && content != "imageGenerate" && role != "tool"
+            
+            return role != "tool"
         }
     }
     
@@ -381,12 +384,15 @@ typealias PlatformImage = UIImage
                 print("webfunc")
                 
                 if let url = extractValue(from: funcParam, forKey: "url") {
-                    let webContent = try await fetchAndParseHTMLAsync(from: url).joined()
-                    
                     removeConversation(at: conversations.count - 1)
                     
-                    appendConversation(Conversation(role: "assistant", content: "urlScrape"))
+                    appendConversation(Conversation(role: "assistant", content: "urlScrape", isReplying: true))
+                    
+                    let webContent = try await fetchAndParseHTMLAsync(from: url).joined()
+                    
                     appendConversation(Conversation(role: "tool", content: webContent))
+                    
+                    conversations[conversations.count - 2].isReplying = false
                     
                     let query2 = createChatQuery()
                     
@@ -409,7 +415,7 @@ typealias PlatformImage = UIImage
                 
                 removeConversation(at: conversations.count - 1)
                 
-                appendConversation(Conversation(role: "assistant", content: "imageGenerate"))
+                appendConversation(Conversation(role: "assistant", content: "imageGenerate", isReplying: true))
                 
                 if let prompt = extractValue(from: funcParam, forKey: "prompt") {
                     let query = ImagesQuery(prompt: prompt, model: configuration.provider.preferredImageModel.id, n: 1, quality: .standard, size: ._1024)
@@ -422,7 +428,8 @@ typealias PlatformImage = UIImage
                                 let (data, _) = try await URLSession.shared.data(from: url)
                                 if let savedURL = saveImage(image: PlatformImage(data: data)!) {
                                     appendConversation(Conversation(role: "tool", content: "imageGenerate", imagePaths: [savedURL]))
-                                    appendConversation(Conversation(role: "assistant", content: "Refined prompt: " + prompt))
+                                    appendConversation(Conversation(role: "assistant", content: "Refined Prompt: " + prompt))
+                                    conversations[conversations.count - 3].isReplying = false
                                 }
                             } catch {
                                 print("Error downloading image: \(error)")
@@ -438,15 +445,17 @@ typealias PlatformImage = UIImage
                 
                 removeConversation(at: conversations.count - 1)
                 
-                appendConversation(Conversation(role: "assistant", content: "transcribe"))
+                appendConversation(Conversation(role: "assistant", content: "transcribe", isReplying: true))
                 
                 if let audioPath = extractValue(from: funcParam, forKey: "audioPath") {
                     do {
-                        print(audioPath)
+//                        print(audioPath)
                         let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: .whisper_1)
                         
                         let result = try await service.audioTranscriptions(query: query)
-                        print(result.text)
+                        
+                        conversations[conversations.count - 1].isReplying = false
+//                        print(result.text)
                         
                         appendConversation(Conversation(role: "tool", content: result.text))
                         
@@ -521,32 +530,40 @@ typealias PlatformImage = UIImage
 
         save()
         
-//        await generateTitle(forced: false)
+        await generateTitle(forced: false)
     }
     
     func createChatQuery() -> ChatQuery {
         let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
         
         
-        var contextAdjustedMessages: [Conversation] = conversations
+        // Adjusting the conversations array based on the resetMarker
+        var adjustedConversations: [Conversation] = conversations
 
         if conversations.count > resetMarker + 1 {
-            contextAdjustedMessages = Array(conversations.suffix(from: resetMarker + 1))
+            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
         }
 
-        let finalMessages = ([systemPrompt] + contextAdjustedMessages).map({ conversation in
+        // Mapping systemPrompt and adjusted conversations to their chat representation
+        let finalMessages = ([systemPrompt] + adjustedConversations).map({ conversation in
             conversation.toChat()
         })
 
-        for conversation in conversations {
-            if conversation.role == "tool" && !conversation.imagePaths.isEmpty {
-                configuration.model = .gpt3t0125
-                break // Assuming you only need to find the first occurrence
-            } else if conversation.role == "user" && !conversation.imagePaths.isEmpty {
-                configuration.model = .gpt4vision
-                break // Assuming you only need to find the first occurrence
-            }
-        }
+        // Iterating over the adjusted conversations to update the configuration model
+//        for conversation in adjustedConversations {
+////            if conversation.role == "tool" && !conversation.imagePaths.isEmpty {
+////                configuration.model = .gpt3t0125
+////                break // Assuming you only need to find the first occurrence
+////            } else if conversation.role == "user" && !conversation.imagePaths.isEmpty {
+////                configuration.model = .gpt4vision
+////                break // Assuming you only need to find the first occurrence
+////            }
+//            
+//            if conversation.role == "user" && !conversation.imagePaths.isEmpty {
+//                configuration.model = configuration.provider.visionModels.first!
+//                break
+//            }
+//        }
 
         
         return ChatQuery(messages: finalMessages,

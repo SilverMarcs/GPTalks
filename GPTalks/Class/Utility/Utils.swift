@@ -26,6 +26,20 @@ extension Collection {
     }
 }
 
+extension String {
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+}
+
+extension Date {
+    func nowFileName() -> String {
+        let formatter = DateFormatter()
+        // Customize the date format to include year, month, day, hour, minute, second, and millisecond
+        formatter.dateFormat = "yyyyMMdd_HHmmssSSS"
+        return formatter.string(from: self)
+    }
+}
 
 func extractValue(from jsonString: String, forKey key: String) -> String? {
     guard let jsonData = jsonString.data(using: .utf8) else {

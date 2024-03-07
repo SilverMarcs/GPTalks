@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+// unused
 struct ToolMessageView: View {
     var conversation: Conversation
     var session: DialogueSession

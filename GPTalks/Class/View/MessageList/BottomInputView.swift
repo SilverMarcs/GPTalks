@@ -214,6 +214,7 @@ struct BottomInputView: View {
             case .success(let urls):
                 let url = urls[0]
                 session.input = url.absoluteString
+                showMore = false
                 print("Selected file URL: \(url)")
             case .failure(let error):
                 print("File selection error: \(error.localizedDescription)")
@@ -245,6 +246,7 @@ struct BottomInputView: View {
                 for file in files { // Iterate over each file
                     #if os(macOS)
                     let image = NSImage(contentsOf: file)
+                    showMore = false
                     #else
                     let image = UIImage(contentsOfFile: file.path)
                     #endif
