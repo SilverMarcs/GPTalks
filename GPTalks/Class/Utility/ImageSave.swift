@@ -107,7 +107,7 @@ func retrieveImageFromDisk(url: URL) -> UIImage? {
 }
 
 
-func saveImage(image: UIImage, fileName: String = UUID().uuidString, inFolder folderName: String = "GPTalksImages") -> String? {
+func saveImage(image: UIImage, fileName: String = Date().nowFileName(), inFolder folderName: String = "GPTalksImages") -> String? {
     guard let data = image.jpegData(compressionQuality: 0.7) ?? image.pngData() else {
         return nil
     }

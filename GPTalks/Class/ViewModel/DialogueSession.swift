@@ -301,18 +301,7 @@ typealias PlatformImage = UIImage
     
   
     func filteredConversations() -> [Conversation] {
-        // Filter out conversations where content matches any of the specified strings
-        // or where role equals "tool"
-        // TODO: one liner
-        return conversations.filter { conversation in
-            let content = conversation.content
-            let role = conversation.role
-            // Return true for conversations that do not match the criteria, hence keeping them
-            // TODO: for content chekc first check if role is assistant
-//            return content != "urlScrape" && content != "transcribe" && content != "imageGenerate" && role != "tool"
-            
-            return role != "tool"
-        }
+        return conversations.filter { $0.role != "tool" }
     }
     
     @MainActor
@@ -428,7 +417,7 @@ typealias PlatformImage = UIImage
                                 let (data, _) = try await URLSession.shared.data(from: url)
                                 if let savedURL = saveImage(image: PlatformImage(data: data)!) {
                                     appendConversation(Conversation(role: "tool", content: "imageGenerate", imagePaths: [savedURL]))
-                                    appendConversation(Conversation(role: "assistant", content: "Refined Prompt: " + prompt))
+                                    appendConversation(Conversation(role: "assistant", content: "Prompt: " + prompt))
                                     conversations[conversations.count - 3].isReplying = false
                                 }
                             } catch {
@@ -774,5 +763,25 @@ extension DialogueSession {
         } catch let error {
             print(error.localizedDescription)
         }
+    }
+}
+
+
+extension DialogueSession {
+    func bottomPadding(for conversation: Conversation) -> CGFloat {
+        // Check if the conversation is the last in the array
+        guard let currentIndex = conversations.firstIndex(where: { $0.id == conversation.id }),
+              currentIndex != conversations.count - 1 else {
+            // If it's the last conversation or not found, return 0
+            return 0
+        }
+        
+        // For specific conversation content by the assistant, return -47
+        if conversation.role == "assistant" && ["urlScrape", "transcribe", "imageGenerate"].contains(conversation.content) {
+            return -47
+        }
+        
+        // Default padding
+        return 0
     }
 }

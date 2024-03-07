@@ -16,34 +16,35 @@ struct ConversationView: View {
             Group {
                 if conversation.role == "user" {
                     UserMessageView(conversation: conversation, session: session)
-//#if !os(macOS)
-//                        .padding(.vertical, -20)
-//#endif
+#if !os(macOS)
+                        .padding(.vertical, -20)
+#endif
                 }
                 
                 if conversation.role == "assistant" {
                     if conversation.content == "urlScrape" || conversation.content == "transcribe" || conversation.content == "imageGenerate" {
                         ToolCallView(conversation: conversation, session: session)
+                #if !os(macOS)
+                        .padding(.bottom, session.bottomPadding(for: conversation))
+                #endif
                     } else {
                         AssistantMessageView(conversation: conversation, session: session)
                     }
-                    
                 }
             }
             #if os(macOS)
             .opacity(0.9)
             #endif
-//            .transition(.opacity)
 
             if session.conversations.firstIndex(of: conversation) == session.resetMarker {
                 ContextResetDivider(session: session)
                     .padding()
             }
 
-//            #if os(macOS)
+            #if os(macOS)
             DeleteBtn
                 .opacity(0)
-//            #endif
+            #endif
         }
     }
 

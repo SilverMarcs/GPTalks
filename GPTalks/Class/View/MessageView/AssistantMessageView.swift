@@ -121,6 +121,21 @@ struct AssistantMessageView: View {
                         }
                     }
                 }
+                #else
+                if let index = session.conversations.firstIndex(of: conversation) {
+                    if let nextConversation = session.conversations[safe: index - 2] {
+                        if nextConversation.content == "imageGenerate" {
+                            if let toolConversation = session.conversations[safe: index - 1] {
+                                ForEach(toolConversation.imagePaths, id: \.self) { imagePath in
+                                    if let imageData = getImageData(fromPath: imagePath) {
+                                        ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: true)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 #endif
             }
 

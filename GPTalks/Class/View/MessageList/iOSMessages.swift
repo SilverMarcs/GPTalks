@@ -30,7 +30,7 @@ struct iOSMessages: View {
         ScrollViewReader { proxy in
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
-                    ForEach(session.conversations) { conversation in
+                    ForEach(session.filteredConversations()) { conversation in
                         ConversationView(session: session, conversation: conversation)
                     }
                     .padding(.horizontal, AppConfiguration.shared.alternateChatUi ? 0 :  12)

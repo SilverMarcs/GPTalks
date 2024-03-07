@@ -11,6 +11,8 @@ struct ToolCallView: View {
     var conversation: Conversation
     var session: DialogueSession
     
+    @Environment(\.dismiss) var dismiss
+    
     @State var showPopover = false
     @State var isHovered = false
     
@@ -32,6 +34,7 @@ struct ToolCallView: View {
                     
                     funcCall
        
+                #if os(macOS)
                 HStack {
                     
                     Spacer()
@@ -41,9 +44,9 @@ struct ToolCallView: View {
                         .opacity(isHovered ? 1 : 0)
                         .transition(.opacity)
                         .animation(.easeOut(duration: 0.15), value: isHovered)
-                    }
-                
                 }
+                #endif
+            }
             
             Spacer()
         }
@@ -73,12 +76,33 @@ struct ToolCallView: View {
                 .popover(isPresented: $showPopover, arrowEdge: .leading) {
                     if let index = session.conversations.firstIndex(of: conversation) {
                         if let toolMessage = session.conversations[safe: index + 1] {
+                            #if os(macOS)
                             ScrollView {
                                 Text(toolMessage.content)
                                     .textSelection(.enabled)
                                     .padding()
                             }
                             .frame(width: 500, height: 400)
+                            #else
+                            NavigationView {
+                                ScrollView {
+                                    Text(toolMessage.content)
+                                        .padding(.horizontal)
+                                        .padding(.bottom, 45)
+                                }
+
+                                .edgesIgnoringSafeArea(.bottom)
+                                .navigationTitle("Web Conent")
+                                .navigationBarTitleDisplayMode(.inline)
+                                .toolbar {
+                                    ToolbarItem(placement: .navigationBarTrailing) {
+                                        Button("Done") {
+                                            dismiss()
+                                        }
+                                    }
+                                }
+                            }
+                            #endif
                         }
                     }
                 }
