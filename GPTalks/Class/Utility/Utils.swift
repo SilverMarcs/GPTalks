@@ -20,26 +20,11 @@ extension Array {
     }
 }
 
-//func extractURL(from jsonString: String) -> String? {
-//    guard let jsonData = jsonString.data(using: .utf8) else {
-//        print("Error: Could not convert string to UTF-8 data.")
-//        return nil
-//    }
-//
-//    do {
-//        if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
-//           let url = jsonObject["url"] as? String {
-//            print("Web content url: \(url)")
-//            return url
-//        } else {
-//            print("Error: JSON does not contain a valid 'url' key.")
-//            return nil
-//        }
-//    } catch {
-//        print("Error parsing JSON: \(error)")
-//        return nil
-//    }
-//}
+extension Collection {
+    subscript(safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
 
 
 func extractValue(from jsonString: String, forKey key: String) -> String? {

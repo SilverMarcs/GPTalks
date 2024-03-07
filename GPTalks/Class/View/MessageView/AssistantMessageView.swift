@@ -19,7 +19,8 @@ struct AssistantMessageView: View {
     var body: some View {
         Group {
             if conversation.content == "urlScrape" || conversation.content == "imageGenerate" || conversation.content == "transcribe" {
-                EmptyView()
+//                EmptyView()
+                Color.red
             } else {
                 if AppConfiguration.shared.alternateChatUi {
                     alternateUI
@@ -100,18 +101,37 @@ struct AssistantMessageView: View {
                 }
                 
                 #if os(macOS)
-                HStack {
-                    Spacer()
-
-                    MessageContextMenu(session: session, conversation: conversation) { }
-                    toggleTextSelection: {
-                        canSelectText.toggle()
+                if let index = session.conversations.firstIndex(of: conversation) {
+                    if let nextConversation = session.conversations[safe: index - 2] {
+                        if nextConversation.content == "imageGenerate" {
+                            if let toolConversation = session.conversations[safe: index - 1] {
+                                ToolMessageView(conversation: toolConversation, session: session)
+                                
+                                HStack {
+                                    Spacer()
+                                    
+                                    messageContextMenu
+                                }
+                            }
+                        } else if nextConversation.content == "urlScrape" || nextConversation.content == "transcribe" {
+                            if let toolConversation = session.conversations[safe: index - 1] {
+                                HStack {
+                                    ToolMessageView(conversation: toolConversation, session: session)
+                                    
+                                    Spacer()
+                                    
+                                    messageContextMenu
+                                }
+                            }
+                        } else {
+                            HStack {
+                                Spacer()
+                                
+                                messageContextMenu
+                            }
+                        }
                     }
-                    .labelStyle(.iconOnly)
                 }
-                .opacity(isHovered ? 1 : 0)
-                .transition(.opacity)
-                .animation(.easeOut(duration: 0.15), value: isHovered)
                 #endif
             }
 
@@ -164,6 +184,31 @@ struct AssistantMessageView: View {
         }
         .padding(.trailing, horizontalPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    var messageContextMenu: some View {
+        MessageContextMenu(session: session, conversation: conversation) { }
+        toggleTextSelection: {
+            canSelectText.toggle()
+        }
+        .labelStyle(.iconOnly)
+        .opacity(isHovered ? 1 : 0)
+        .transition(.opacity)
+        .animation(.easeOut(duration: 0.15), value: isHovered)
+    }
+    
+    @ViewBuilder
+    var normalView: some View {
+        if let index = session.conversations.firstIndex(of: conversation) {
+            if let nextConversation = session.conversations[safe: index - 2] {
+                if nextConversation.content == "urlScrape" || nextConversation.content == "imageGenerate" || nextConversation.content == "transcribe" {
+                    // Since the next element is also accessed safely, you should safely unwrap it too.
+                    if let toolConversation = session.conversations[safe: index - 1] {
+                        ToolMessageView(conversation: toolConversation, session: session)
+                    }
+                }
+            }
+        }
     }
 
     private var radius: CGFloat {

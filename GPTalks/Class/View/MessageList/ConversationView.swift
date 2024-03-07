@@ -24,10 +24,6 @@ struct ConversationView: View {
                 if conversation.role == "assistant" {
                     AssistantMessageView(conversation: conversation, session: session)
                 }
-                
-                if conversation.role == "tool" {
-                    ToolMessageView(conversation: conversation, session: session)
-                }
             }
             #if os(macOS)
             .opacity(0.9)

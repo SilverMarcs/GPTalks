@@ -205,7 +205,7 @@ struct MacOSMessages: View {
             if AppConfiguration.shared.alternateChatUi {
                 List {
                     LazyVStack {
-                        ForEach(session.conversations) { conversation in
+                        ForEach(session.filteredConversations()) { conversation in
                             ConversationView(session: session, conversation: conversation)
                                 .id(conversation.id)
                         }

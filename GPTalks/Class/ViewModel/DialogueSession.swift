@@ -299,6 +299,19 @@ typealias PlatformImage = UIImage
         }
     }
     
+  
+    func filteredConversations() -> [Conversation] {
+        // Filter out conversations where content matches any of the specified strings
+        // or where role equals "tool"
+        return conversations.filter { conversation in
+            let content = conversation.content
+            let role = conversation.role
+            // Return true for conversations that do not match the criteria, hence keeping them
+            // TODO: for content chekc first check if role is assistant
+            return content != "urlScrape" && content != "transcribe" && content != "imageGenerate" && role != "tool"
+        }
+    }
+    
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
         resetErrorDesc()
@@ -409,6 +422,7 @@ typealias PlatformImage = UIImage
                                 let (data, _) = try await URLSession.shared.data(from: url)
                                 if let savedURL = saveImage(image: PlatformImage(data: data)!) {
                                     appendConversation(Conversation(role: "tool", content: "imageGenerate", imagePaths: [savedURL]))
+                                    appendConversation(Conversation(role: "assistant", content: "Refined prompt: " + prompt))
                                 }
                             } catch {
                                 print("Error downloading image: \(error)")
@@ -523,14 +537,7 @@ typealias PlatformImage = UIImage
         let finalMessages = ([systemPrompt] + contextAdjustedMessages).map({ conversation in
             conversation.toChat()
         })
-//        var finalMessages = ([systemPrompt] + conversations).map({ conversation in
-//            conversation.toChat()
-//        })
-        
-//        if finalMessages.count > 100 {
-//            finalMessages = Array(finalMessages.suffix(100))
-//        }
-        
+
         for conversation in conversations {
             if conversation.role == "tool" && !conversation.imagePaths.isEmpty {
                 configuration.model = .gpt3t0125

@@ -19,7 +19,7 @@ struct ToolMessageView: View {
                 HStack {
                     ForEach(conversation.imagePaths, id: \.self) { imagePath in
                         if let imageData = getImageData(fromPath: imagePath) {
-                            ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
+                            ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: true)
                         }
                     }
                 }
@@ -31,12 +31,9 @@ struct ToolMessageView: View {
                         if session.conversations[index - 1].content == "urlScrape" {
                             Text("Web Content")
                         } else if session.conversations[index - 1].content == "transcribe" {
-                            Text("Transcribe")
+                            Text("Transcription")
                         }
-                        
                     }
-                        
-                    
                 }
                 .popover(isPresented: $showPopover, arrowEdge: .leading) {
                     ScrollView {
@@ -48,32 +45,6 @@ struct ToolMessageView: View {
                 }
             }
         }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .topLeading)
-        .background(.background.tertiary)
-        .border(.quinary, width: 1)
-
-//        Button{
-//            showPopover.toggle()
-//        } label: {
-//            HStack {
-//                Text(conversation.role)
-//            }
-//        }
-//        .buttonStyle(.plain)
-//        .popover(isPresented: $showPopover, arrowEdge: .leading) {
-//            ScrollView {
-//                Text(conversation.content)
-//                    .padding()
-//                
-//                ForEach(conversation.imagePaths, id: \.self) { imagePath in
-//                    if let imageData = getImageData(fromPath: imagePath) {
-//                        ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
-//                    }
-//                }
-//            }
-//            .frame(width: 300, height: 200)
-//        }
     }
     
     private var imageSize: CGFloat {
