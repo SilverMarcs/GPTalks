@@ -16,11 +16,11 @@ struct ToolCallView: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "sparkle")
+            Image(systemName: "wrench.fill")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 18, height: 18)
-                .foregroundColor(Color("niceColorLighter"))
+                .foregroundColor(Color("tealColor"))
             #if !os(macOS)
                 .padding(.top, 3)
             #endif
@@ -30,8 +30,9 @@ struct ToolCallView: View {
                     .font(.title3)
                     .bold()
                     
-                HStack {
                     funcCall
+       
+                HStack {
                     
                     Spacer()
                     
@@ -40,8 +41,7 @@ struct ToolCallView: View {
                         .opacity(isHovered ? 1 : 0)
                         .transition(.opacity)
                         .animation(.easeOut(duration: 0.15), value: isHovered)
-                        .padding(.bottom, -12)
-                }
+                    }
                 
                 }
             
@@ -96,6 +96,7 @@ struct ToolCallView: View {
                 }
             }
         }
+        .fontWeight(.semibold)
         .bubbleStyle(isMyMessage: false)
     }
 }

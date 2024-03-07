@@ -20,7 +20,7 @@ enum ChatTool: String, CaseIterable {
         case .urlScrape:
             return .init(function:
                         .init(name: "urlScrape",
-                              description: "If a URL is explicitly given, this function can be used to receive the contents of that url webpage. If you feel absolutely confident that you know some url where some information can be found, you may come up with the url yourself. If you already know the information, do not use the function to come up with a url. Always prioritize your pre-existing knowledge",
+                              description: "If a URL is explicitly given, this function can be used to receive the contents of that url webpage. If you feel absolutely confident that you know some url where some information can be found, you may come up with the url yourself and call the function with that URL. If you already know the information, do not use the function to come up with a url. Always prioritize your pre-existing knowledge.",
                               parameters:
                                 .init(type: .object,
                                       properties: ["url":

@@ -60,11 +60,12 @@ struct UserMessageView: View {
     
     var alternateUI: some View {
         HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "person.circle.fill")
+            Image(systemName: "person.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 17, height: 17)
-                .foregroundStyle(.secondary)
+                .frame(width: 16, height: 16)
+//                .foregroundStyle(.secondary)
+                .foregroundColor(Color("blueColorLighter"))
                 #if !os(macOS)
                 .padding(.top, 3)
                 #endif
