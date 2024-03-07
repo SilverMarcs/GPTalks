@@ -101,10 +101,10 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             AppConfiguration.shared.OAIImageModel
         case .oxygen:
             AppConfiguration.shared.OImageModel
-        case .custom:
-            .customImage
         case .naga:
             AppConfiguration.shared.NImageModel
+        case .custom:
+            .customImage
         }
     }
     
@@ -114,10 +114,10 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             .gpt4vision
         case .oxygen:
             .gpt4vision
-        case .custom:
-            .customVision
         case .naga:
             .gpt4vision
+        case .custom:
+            .customVision
         }
     }
 

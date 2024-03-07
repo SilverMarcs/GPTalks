@@ -530,12 +530,13 @@ typealias PlatformImage = UIImage
 
         save()
         
-        await generateTitle(forced: false)
+        if AppConfiguration.shared.isAutoGenerateTitle {
+            await generateTitle(forced: false)
+        }
     }
     
     func createChatQuery() -> ChatQuery {
         let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
-        
         
         // Adjusting the conversations array based on the resetMarker
         var adjustedConversations: [Conversation] = conversations
@@ -545,9 +546,19 @@ typealias PlatformImage = UIImage
         }
 
         // Mapping systemPrompt and adjusted conversations to their chat representation
-        let finalMessages = ([systemPrompt] + adjustedConversations).map({ conversation in
+//        let finalMessages = ([systemPrompt] + adjustedConversations).map({ conversation in
+//            conversation.toChat()
+//        })
+        
+        var finalMessages = adjustedConversations.map({ conversation in
             conversation.toChat()
         })
+
+        // Check if the systemPrompt's content is not an empty string before adding
+        if !systemPrompt.content.isEmpty {
+            // Prepend the systemPrompt to the finalMessages
+            finalMessages.insert(systemPrompt.toChat(), at: 0)
+        }
 
         // Iterating over the adjusted conversations to update the configuration model
 //        for conversation in adjustedConversations {

@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+struct AutoGenTitleEnabler: View {
+    @ObservedObject var configuration: AppConfiguration = .shared
+    var isPicker: Bool = false
+    
+    var body: some View {
+        if isPicker {
+            Picker("AutoGen Title", selection: $configuration.isAutoGenerateTitle) {
+                Text("True").tag(true)
+                Text("False").tag(false)
+            }
+        } else {
+            Toggle("AutoGen Title", isOn: $configuration.isAutoGenerateTitle)
+        }
+    }
+}
+
 struct MarkdownEnabler: View {
     @ObservedObject var configuration: AppConfiguration = .shared
     var isPicker: Bool = false

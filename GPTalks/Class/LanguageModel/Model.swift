@@ -28,6 +28,8 @@ enum Model: String, Codable {
     
     /// naga
     case mistrallarge
+    case geminipro
+    case geminiprovision
     
     case sdxl
     case kandinsky3
@@ -67,6 +69,11 @@ enum Model: String, Codable {
         /// naga
         case .mistrallarge:
             "Mistral"
+        case .geminipro:
+            "Gemini"
+        case .geminiprovision:
+            "Gemini-V"
+            
         case .sdxl:
             "SDXL"
         case .kandinsky3:
@@ -112,6 +119,11 @@ enum Model: String, Codable {
         /// naga
         case .mistrallarge:
             "mistral-large"
+        case .geminipro:
+            "gemini-pro"
+        case .geminiprovision:
+            "gemini-pro-vision"
+            
         case .sdxl:
             "sdxl"
         case .kandinsky3:
@@ -170,10 +182,14 @@ enum Model: String, Codable {
         openAIChatModels +
         [
             .mistrallarge,
+            .geminipro,
         ]
     
     static let nagaVisionModels: [Model] =
-        openAIVisionModels
+        openAIVisionModels +
+        [
+            .geminiprovision,
+        ]
     
     static let nagaImageModels: [Model] =
         [

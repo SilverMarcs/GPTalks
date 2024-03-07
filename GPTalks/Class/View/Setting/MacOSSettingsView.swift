@@ -11,7 +11,7 @@ struct MacOSSettingsView: View {
     var body: some View {
         TabView {
             MacOSAppearanceView()
-                .frame(width: 650, height: 370)
+                .frame(width: 650, height: 400)
                 .tabItem {
                     Label("Appearance", systemImage: "wand.and.stars")
                 }
@@ -63,6 +63,11 @@ struct MacOSAppearanceView: View {
             LabeledPicker(title: "Alternate Chat UI", width: 300, picker: AlternateChatUI(isPicker: true))
                 .padding(10)
                 
+            Divider()
+            
+            LabeledPicker(title: "AutoGen Title", width: 300, picker: AutoGenTitleEnabler(isPicker: true))
+                .padding(10)
+            
             Divider()
                 
             LabeledPicker(title: "Preferred Chat Provider", width: 300, picker: PreferredChatProvider())
