@@ -39,7 +39,7 @@ struct ToolCallView: View {
                     
                     Spacer()
                     
-                    MessageContextMenu(session: session, conversation: conversation) { } toggleTextSelection: {}
+                    MessageContextMenu(session: session, conversation: conversation) { } toggleTextSelection: { }
                         .labelStyle(.iconOnly)
                         .opacity(isHovered ? 1 : 0)
                         .transition(.opacity)
@@ -59,7 +59,7 @@ struct ToolCallView: View {
             .padding(.bottom, -5)
             .background(.background.secondary)
         #else
-            .background(.background.tertiary)
+            .background(.background.secondary)
         #endif
             .border(.quinary, width: 1)
             .frame(maxWidth: .infinity, alignment: .topLeading)
@@ -67,6 +67,12 @@ struct ToolCallView: View {
     
     var funcCall: some View {
         HStack(spacing: 4) {
+            
+//            if isAudioFile(urlString: "file:///Users/Zabir/Downloads/test.mp3") {
+//                AudioPlayerView(audioURL: URL(fileURLWithPath: "file:///Users/Zabir/Downloads/test.mp3"))
+//            }
+//            AudioPlayerView(audioURL: URL(string: "file:///Users/Zabir/Downloads/test.mp3")!)
+            
             Text("Function: " + conversation.content.capitalizingFirstLetter())
                 .onTapGesture {
                     if conversation.content != "imageGenerate" {
@@ -122,5 +128,69 @@ struct ToolCallView: View {
         }
         .fontWeight(.semibold)
         .bubbleStyle(isMyMessage: false)
+    }
+    
+    func isAudioFile(urlString: String) -> Bool {
+         guard let url = URL(string: urlString) else { return false }
+
+         // Determine the file's Uniform Type Identifier (UTI)
+         guard let uti = try? url.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier else { return false }
+
+         // Popular audio UTIs
+         let audioTypes = [
+             "public.mp3",
+             "public.mpeg-4",
+             "public.aiff-audio",
+             "com.apple.coreaudio-format",
+             "public.audiovisual-content"
+             // Add more audio types if needed
+         ]
+
+         return audioTypes.contains(uti)
+     }
+}
+
+import AVFoundation
+
+struct AudioPlayerView: View {
+    var audioURL: URL
+    @State private var audioPlayer: AVAudioPlayer?
+    @State private var isPlaying = false
+    
+    var body: some View {
+        VStack {
+            Button(action: {
+                self.togglePlayPause()
+            }) {
+                Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 50, height: 50)
+            }
+        }
+        .onAppear {
+            self.preparePlayer()
+        }
+    }
+    
+    func preparePlayer() {
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: audioURL)
+            audioPlayer?.prepareToPlay()
+        } catch {
+            print("Error initializing player: \(error)")
+        }
+    }
+    
+    func togglePlayPause() {
+        guard let player = audioPlayer else { return }
+        
+        if player.isPlaying {
+            player.pause()
+            isPlaying = false
+        } else {
+            player.play()
+            isPlaying = true
+        }
     }
 }
