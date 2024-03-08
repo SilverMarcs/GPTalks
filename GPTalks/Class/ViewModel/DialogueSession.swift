@@ -162,7 +162,7 @@ typealias PlatformImage = UIImage
             })
             
             
-            let query = ChatQuery(messages: messages, 
+            let query = ChatQuery(messages: messages,
                                   model: configuration.model.id,
                                   maxTokens: 5,
                                   stream: false)
@@ -330,8 +330,8 @@ typealias PlatformImage = UIImage
         
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         
-        var streamText = "";
-    
+        let uiUpdateInterval = TimeInterval(0.1)
+        
         streamingTask = Task {
             isStreaming = true
             
@@ -342,7 +342,11 @@ typealias PlatformImage = UIImage
             var isTranscribeFuncCall = false
             
             var toolCallId = ""
-        
+            
+            var lastUIUpdateTime = Date()
+            
+            var streamText = ""
+            
             for try await result in service.chatsStream(query: query) {
                 if let funcCalls = result.choices.first?.delta.toolCalls {
                     if let name = funcCalls.first?.function?.name, name == "urlScrape" {
@@ -354,18 +358,26 @@ typealias PlatformImage = UIImage
                     }
                     
                     funcParam += funcCalls.first?.function?.arguments ?? ""
-
                     
                     if let id = result.choices.first?.delta.toolCalls?.first?.id {
                         toolCallId = id
                     }
-                    
-                    
                 } else {
                     streamText += result.choices.first?.delta.content ?? ""
-                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                    lastConversationData.sync(with: conversations[conversations.count - 1])
+                    
+                    let currentTime = Date()
+                    if currentTime.timeIntervalSince(lastUIUpdateTime) >= uiUpdateInterval {
+                        conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                        lastConversationData.sync(with: conversations[conversations.count - 1])
+                        lastUIUpdateTime = currentTime
+                    }
                 }
+            }
+            
+            // Ensure the UI is updated one last time after the loop ends
+            if !streamText.isEmpty {
+                conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                lastConversationData.sync(with: conversations[conversations.count - 1])
             }
             
             if isWebFuncCall {
@@ -389,9 +401,22 @@ typealias PlatformImage = UIImage
                     
                     let lastConversationData2 = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
                     
+                    var lastUIUpdateTime2 = Date()
+                    
                     for try await result in service.chatsStream(query: query2) {
                         streamText2 += result.choices.first?.delta.content ?? ""
-                        conversations[conversations.count - 1].content = streamText2.trimmingCharacters(in: .whitespacesAndNewlines)
+                        
+                        let currentTime2 = Date()
+                        if currentTime2.timeIntervalSince(lastUIUpdateTime2) >= uiUpdateInterval {
+                            conversations[conversations.count - 1].content += streamText2.trimmingCharacters(in: .whitespacesAndNewlines)
+                            lastConversationData2.sync(with: conversations[conversations.count - 1])
+                            lastUIUpdateTime2 = currentTime2
+                        }
+                    }
+                    
+                    // Final UI update for any remaining data
+                    if !streamText2.isEmpty {
+                        conversations[conversations.count - 1].content += streamText2.trimmingCharacters(in: .whitespacesAndNewlines)
                         lastConversationData2.sync(with: conversations[conversations.count - 1])
                     }
                     
@@ -439,24 +464,36 @@ typealias PlatformImage = UIImage
                 if let audioPath = extractValue(from: funcParam, forKey: "audioPath") {
                     do {
 //                        print(audioPath)
-                        let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: .whisper_1)
+                        let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: "m2m100-1.2b")
                         
                         let result = try await service.audioTranscriptions(query: query)
                         
                         conversations[conversations.count - 1].isReplying = false
-//                        print(result.text)
                         
                         appendConversation(Conversation(role: "tool", content: result.text))
                         
                         let query3 = createChatQuery()
                         
-                        var streamText2 = ""
+                        var streamText3 = ""
                         
                         let lastConversationData3 = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+                         
+                        var lastUIUpdateTime2 = Date()
                         
                         for try await result in service.chatsStream(query: query3) {
-                            streamText2 += result.choices.first?.delta.content ?? ""
-                            conversations[conversations.count - 1].content = streamText2.trimmingCharacters(in: .whitespacesAndNewlines)
+                            streamText3 += result.choices.first?.delta.content ?? ""
+                            
+                            let currentTime2 = Date()
+                            if currentTime2.timeIntervalSince(lastUIUpdateTime2) >= uiUpdateInterval {
+                                conversations[conversations.count - 1].content = streamText3.trimmingCharacters(in: .whitespacesAndNewlines)
+                                lastConversationData3.sync(with: conversations[conversations.count - 1])
+                                lastUIUpdateTime2 = currentTime2
+                            }
+                        }
+                        
+                        // Final UI update for any remaining data
+                        if !streamText3.isEmpty {
+                            conversations[conversations.count - 1].content = streamText3.trimmingCharacters(in: .whitespacesAndNewlines)
                             lastConversationData3.sync(with: conversations[conversations.count - 1])
                         }
                         
@@ -558,7 +595,7 @@ typealias PlatformImage = UIImage
 ////                configuration.model = .gpt4vision
 ////                break // Assuming you only need to find the first occurrence
 ////            }
-//            
+//
 //            if conversation.role == "user" && !conversation.imagePaths.isEmpty {
 //                configuration.model = configuration.provider.visionModels.first!
 //                break

@@ -112,12 +112,12 @@ struct AssistantMessageView: View {
                                     messageContextMenu
                                 }
                             }
-                        } else {
-                            HStack {
-                                Spacer()
-                                
-                                messageContextMenu
-                            }
+                        }
+                    } else {
+                        HStack {
+                            Spacer()
+                            
+                            messageContextMenu
                         }
                     }
                 }

@@ -14,6 +14,9 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
     var role: String
     var content: String
     var imagePaths: [String] = []
+//    var audioPath: String = ""
+//    var imagePrompt: String = ""
+//    var webUrl: String = ""
     var isReplying: Bool = false
 
     func toChat() -> ChatQuery.ChatCompletionMessageParam {
