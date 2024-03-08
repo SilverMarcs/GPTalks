@@ -86,7 +86,7 @@ struct iOSMessages: View {
                     scrollToBottom(proxy: proxy)
                 }
 
-                if session.containsConversationWithImage {
+                if session.shouldSwitchToVision {
                     session.configuration.model = session.configuration.provider.visionModels[0]
                 }
             }
@@ -113,7 +113,7 @@ struct iOSMessages: View {
                 }
             }
             .onChange(of: session.configuration.provider) {
-                if session.containsConversationWithImage {
+                if session.shouldSwitchToVision {
                     session.configuration.model = session.configuration.provider.visionModels[0]
                 } else {
                     session.configuration.model = session.configuration.provider.preferredChatModel

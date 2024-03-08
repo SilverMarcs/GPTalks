@@ -79,8 +79,8 @@ typealias PlatformImage = UIImage
     
     var isStreaming = false
     
-    var containsConversationWithImage: Bool {
-        conversations.contains(where: { $0.role == "user" && !$0.imagePaths.isEmpty })
+    var shouldSwitchToVision: Bool {
+        conversations.contains(where: { $0.role == "user" && !$0.imagePaths.isEmpty }) || inputImages.count > 0
     }
 
     // MARK: - Properties
@@ -408,7 +408,7 @@ typealias PlatformImage = UIImage
                         
                         let currentTime2 = Date()
                         if currentTime2.timeIntervalSince(lastUIUpdateTime2) >= uiUpdateInterval {
-                            conversations[conversations.count - 1].content += streamText2.trimmingCharacters(in: .whitespacesAndNewlines)
+                            conversations[conversations.count - 1].content = streamText2.trimmingCharacters(in: .whitespacesAndNewlines)
                             lastConversationData2.sync(with: conversations[conversations.count - 1])
                             lastUIUpdateTime2 = currentTime2
                         }
@@ -416,7 +416,7 @@ typealias PlatformImage = UIImage
                     
                     // Final UI update for any remaining data
                     if !streamText2.isEmpty {
-                        conversations[conversations.count - 1].content += streamText2.trimmingCharacters(in: .whitespacesAndNewlines)
+                        conversations[conversations.count - 1].content = streamText2.trimmingCharacters(in: .whitespacesAndNewlines)
                         lastConversationData2.sync(with: conversations[conversations.count - 1])
                     }
                     
@@ -444,6 +444,9 @@ typealias PlatformImage = UIImage
                                     appendConversation(Conversation(role: "tool", content: "imageGenerate", imagePaths: [savedURL]))
                                     appendConversation(Conversation(role: "assistant", content: "Prompt: " + prompt))
                                     conversations[conversations.count - 3].isReplying = false
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                        self.isAddingConversation.toggle()
+                                    }
                                 }
                             } catch {
                                 print("Error downloading image: \(error)")

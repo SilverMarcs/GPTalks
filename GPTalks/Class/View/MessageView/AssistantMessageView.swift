@@ -105,21 +105,16 @@ struct AssistantMessageView: View {
                                         ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: true)
                                     }
                                 }
-                                
-                                HStack {
-                                    Spacer()
-                                    
-                                    messageContextMenu
-                                }
                             }
                         }
-                    } else {
-                        HStack {
-                            Spacer()
-                            
-                            messageContextMenu
-                        }
                     }
+                }
+
+                // This HStack is moved outside of the conditional blocks to ensure it is always shown.
+                HStack {
+                    Spacer()
+                    
+                    messageContextMenu
                 }
                 #else
                 if let index = session.conversations.firstIndex(of: conversation) {

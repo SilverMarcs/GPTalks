@@ -12,7 +12,7 @@ struct ConversationView: View {
     var conversation: Conversation
 
     var body: some View {
-        VStack(spacing: spacing) {
+        VStack(spacing: spacing) { // TODO dont use vstack
             Group {
                 if conversation.role == "user" {
                     UserMessageView(conversation: conversation, session: session)

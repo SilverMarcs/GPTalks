@@ -41,6 +41,14 @@ struct IosSettingsView: View {
                     }
                     .disabled(!configuration.isMarkdownEnabled)
                     
+                    
+                    HStack {
+                        Image(systemName: "textformat")
+                            .renderingMode(.original)
+                        Spacer()
+                        Toggle("AutoGen Titlte", isOn: $configuration.isAutoGenerateTitle)
+                    }
+                    
                 }
                 
                 Section("Preferred Services") {

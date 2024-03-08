@@ -209,6 +209,7 @@ struct BottomInputView: View {
                 .clipShape(Circle())
                 .frame(width: imageSize + 2, height: imageSize + 2)
         }
+        .disabled(session.shouldSwitchToVision)
         .fileImporter(isPresented: $importingAudio, allowedContentTypes: [.audio], allowsMultipleSelection: false) { result in
             switch result {
             case .success(let urls):

@@ -81,7 +81,7 @@ struct MacOSMessages: View {
                 }
                 isTextFieldFocused = true
                 
-                if session.containsConversationWithImage {
+                if session.shouldSwitchToVision {
                     session.configuration.model = session.configuration.provider.visionModels[0]
                 }
             }
@@ -97,7 +97,7 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.configuration.provider) {
-                if session.containsConversationWithImage {
+                if session.shouldSwitchToVision {
                     session.configuration.model = session.configuration.provider.preferredVisionModel
                 } else {
                     session.configuration.model = session.configuration.provider.preferredChatModel

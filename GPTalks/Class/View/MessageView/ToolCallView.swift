@@ -63,6 +63,10 @@ struct ToolCallView: View {
         #endif
             .border(.quinary, width: 1)
             .frame(maxWidth: .infinity, alignment: .topLeading)
+            .contextMenu {
+                MessageContextMenu(session: session, conversation: conversation) { } toggleTextSelection: { }
+                .labelStyle(.titleAndIcon)
+            }
     }
     
     var funcCall: some View {
