@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(macOS)
 struct MacTextEditor: View {
     @Binding var input: String
     @FocusState var focused: Bool
@@ -42,3 +43,4 @@ struct MacTextEditor: View {
         .roundedRectangleOverlay()
     }
 }
+#endif

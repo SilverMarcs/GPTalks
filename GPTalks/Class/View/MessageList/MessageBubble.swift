@@ -27,21 +27,18 @@ struct Bubble: ViewModifier {
         #if os(visionOS)
             .background(.background.secondary)
         #else
-            .background(isMyMessage ? accentColor : bubbleBackground)
+            .background(.background.tertiary)
         #endif
             .cornerRadius(radius)
             .foregroundColor(isMyMessage ? Color.white : .primary)
             .clipShape(RoundedRectangle(cornerRadius: radius))
             .font(compact ? .callout : .body)
-//        #if os(iOS)
-//            .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
-//        #endif
     }
 
     private var radius: CGFloat {
         #if os(macOS)
         if AppConfiguration.shared.alternateChatUi {
-            5
+            15
         } else {
             15
         }

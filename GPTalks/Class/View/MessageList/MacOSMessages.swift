@@ -25,7 +25,7 @@ struct MacOSMessages: View {
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 MacInputView(session: session)
                     .background(.bar)
-                    .id(session.id)
+//                    .id(session.id)
             }
             .onChange(of: viewModel.selectedDialogue) {
                 if viewModel.selectedState == .images {
@@ -199,19 +199,18 @@ struct MacOSMessages: View {
             LazyVStack(spacing: 0) {
                 ForEach(session.filteredConversations()) { conversation in
                     ConversationView(session: session, conversation: conversation)
-                        .id(conversation.id)
                 }
                 
                 ErrorDescView(session: session)
                 
                 Button("hidden") {
-                    if let lastConversation = session.conversations.last {
-                        session.removeConversation(lastConversation)
+                    if session.conversations.count > 0 {
+                        print("hidden2")
+                        session.removeConversation(session.conversations.last!)
                     }
                 }
-                .hidden()
-                .listRowSeparator(.hidden)
                 .keyboardShortcut(.delete, modifiers: .command)
+                .hidden()
                 
                 
                 Color.clear

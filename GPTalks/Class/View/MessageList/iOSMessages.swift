@@ -45,7 +45,7 @@ struct iOSMessages: View {
                         Color.clear.preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
                     }
                 }
-                .animation(.default, value: session.isReplying())
+                .animation(.default, value: session.isReplying)
 
                 scrollBtn(proxy: proxy)
             }
@@ -66,7 +66,6 @@ struct iOSMessages: View {
                 } else {
                     scrollToBottom(proxy: proxy, animated: false)
                 }
-                isTextFieldFocused = true
             }
             .onTapGesture {
                 isTextFieldFocused = false
@@ -169,22 +168,16 @@ struct iOSMessages: View {
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            BottomInputView(
+            IOSInputView(
                 session: session,
                 focused: _isTextFieldFocused
             )
-            #if os(iOS)
             .background(
                 VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
                     .ignoresSafeArea()
             )
-            #else
-            .background(.regularMaterial)
-            #endif
         }
-//        #if os(visionOS)
-//        .navigationTitle(session.title)
-//        #endif
+
         .navigationTitle(session.configuration.model.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

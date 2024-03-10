@@ -26,9 +26,9 @@ struct UserMessageView: View {
 
     var body: some View {
         Group {
-//            if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
-//                editBtn
-//            }
+            if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
+                editBtn
+            }
             
             if AppConfiguration.shared.alternateChatUi {
                 alternateUI

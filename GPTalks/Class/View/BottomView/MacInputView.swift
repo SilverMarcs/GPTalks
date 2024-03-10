@@ -8,6 +8,7 @@
 import SwiftUI
 import PhotosUI
 
+#if os(macOS)
 struct MacInputView: View {
     @Bindable var session: DialogueSession
     
@@ -24,7 +25,12 @@ struct MacInputView: View {
             }
             
             if isAudioFile(urlString: session.inputAudioPath) {
-                AudioPlayerView(audioURL: URL(string: session.inputAudioPath)!)
+                InputAudioPlayer(urlString: session.inputAudioPath) {
+                    withAnimation {
+                        session.inputAudioPath = ""
+                    }
+                }
+                .padding(.horizontal, -1)
             }
             
             HStack(spacing: 12) {
@@ -35,9 +41,12 @@ struct MacInputView: View {
                         session.inputImages.append(newImage)
                         showMore = false
                     }
+                    .disabled(!session.inputAudioPath.isEmpty)
+                    
                     AudioPickerView(shouldAllowSelection: !session.shouldSwitchToVision) { selectedURL in
-//                        session.input = selectedURL.absoluteString
-                        session.inputAudioPath = selectedURL.absoluteString
+                        withAnimation {
+                            session.inputAudioPath = selectedURL.absoluteString
+                        }
                         showMore = false
                     }
                 }
@@ -156,3 +165,21 @@ struct AudioPickerView: View {
         }
     }
 }
+
+struct InputAudioPlayer: View {
+    var urlString: String
+    var removeAudio: () -> Void
+    
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            AudioPlayerView(audioURL: URL(string: urlString)!)
+            
+            CustomCrossButton {
+                removeAudio()
+            }
+            .padding(-10)
+        }
+    }
+}
+
+#endif

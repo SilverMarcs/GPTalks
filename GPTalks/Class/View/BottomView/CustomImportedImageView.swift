@@ -39,17 +39,28 @@ struct ImportedImages: View {
                             .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
                             .aspectRatio(contentMode: .fill)
                             .cornerRadius(6)
-                        Button {
+                        
+                        CustomCrossButton {
                             session.inputImages.remove(at: index)
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundStyle(.background)
-                                .background(.primary, in: Circle())
                         }
-                        .padding(7)
                     }
                 }
             }
         }
+    }
+}
+
+struct CustomCrossButton: View {
+    var action: () -> Void
+    
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            Image(systemName: "xmark.circle.fill")
+                .foregroundStyle(.background)
+                .background(.primary, in: Circle())
+        }
+        .padding(7)
     }
 }
