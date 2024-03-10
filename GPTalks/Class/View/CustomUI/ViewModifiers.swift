@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+struct CustomImageViewModifier: ViewModifier {
+    let padding: CGFloat
+    let imageSize: CGFloat
+
+    func body(content: Content) -> some View {
+        content
+            .scaledToFit()
+            .padding(padding)
+            .fontWeight(.semibold)
+            .foregroundStyle(.secondary)
+            .background(Color.gray.opacity(0.2))
+            .clipShape(Circle())
+            .frame(width: imageSize, height: imageSize)
+    }
+}
+
 
 // Define the custom view modifier
 struct RoundedRectangleOverlayModifier: ViewModifier {
@@ -39,4 +55,9 @@ extension View {
     func roundedRectangleOverlay(radius: CGFloat = 18, opacity: CGFloat = 0.8) -> some View {
         self.modifier(RoundedRectangleOverlayModifier(radius: radius, opacity: opacity))
     }
+    
+    func inputImageStyle(padding: CGFloat, imageSize: CGFloat) -> some View {
+           self.modifier(CustomImageViewModifier(padding: padding, imageSize: imageSize))
+       }
 }
+

@@ -25,6 +25,12 @@
 		08376D832B7CF0F4003258D1 /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08376D822B7CF0F4003258D1 /* ZoomableImageView.swift */; };
 		0837E47D2AFE57A100C03059 /* IosDefaultConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E47C2AFE57A100C03059 /* IosDefaultConfigView.swift */; };
 		0837E4812AFFE7B000C03059 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E4802AFFE7AF00C03059 /* Model.swift */; };
+		0839834F2B9D507000A46A84 /* IOSInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0839834E2B9D507000A46A84 /* IOSInputView.swift */; };
+		083983512B9D507A00A46A84 /* MacInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083983502B9D507A00A46A84 /* MacInputView.swift */; };
+		083983532B9D51A500A46A84 /* CustomImportedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083983522B9D51A500A46A84 /* CustomImportedImageView.swift */; };
+		083983552B9D52AF00A46A84 /* InputViewButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083983542B9D52AF00A46A84 /* InputViewButtons.swift */; };
+		083983592B9D84C900A46A84 /* MacTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083983582B9D84C900A46A84 /* MacTextEditor.swift */; };
+		0839835B2B9DBDD800A46A84 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0839835A2B9DBDD800A46A84 /* AudioPlayerView.swift */; };
 		083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 083E3B182B3A67B9007BE19E /* VisualEffectView */; };
 		0846F1F62B33D68F002A2EB2 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */; };
 		084C95BD2B94518300778F14 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084C95BC2B94518300778F14 /* ImageView.swift */; };
@@ -118,6 +124,12 @@
 		08376D822B7CF0F4003258D1 /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
 		0837E47C2AFE57A100C03059 /* IosDefaultConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosDefaultConfigView.swift; sourceTree = "<group>"; };
 		0837E4802AFFE7AF00C03059 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		0839834E2B9D507000A46A84 /* IOSInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSInputView.swift; sourceTree = "<group>"; };
+		083983502B9D507A00A46A84 /* MacInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacInputView.swift; sourceTree = "<group>"; };
+		083983522B9D51A500A46A84 /* CustomImportedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImportedImageView.swift; sourceTree = "<group>"; };
+		083983542B9D52AF00A46A84 /* InputViewButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputViewButtons.swift; sourceTree = "<group>"; };
+		083983582B9D84C900A46A84 /* MacTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTextEditor.swift; sourceTree = "<group>"; };
+		0839835A2B9DBDD800A46A84 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
 		084C95BC2B94518300778F14 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		08545C3B2B8D16F800592108 /* WebScrapeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebScrapeService.swift; sourceTree = "<group>"; };
@@ -210,6 +222,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0839834D2B9D505F00A46A84 /* BottomView */ = {
+			isa = PBXGroup;
+			children = (
+				0839834E2B9D507000A46A84 /* IOSInputView.swift */,
+				083983502B9D507A00A46A84 /* MacInputView.swift */,
+				083983522B9D51A500A46A84 /* CustomImportedImageView.swift */,
+				083983542B9D52AF00A46A84 /* InputViewButtons.swift */,
+				083983582B9D84C900A46A84 /* MacTextEditor.swift */,
+				0839835A2B9DBDD800A46A84 /* AudioPlayerView.swift */,
+			);
+			path = BottomView;
+			sourceTree = "<group>";
+		};
 		08723DAB2AFA4911001D59FE /* LanguageModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -332,6 +357,7 @@
 		E4C65ED529CA9F7800AFA884 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				0839834D2B9D505F00A46A84 /* BottomView */,
 				08980EC22B9786D00005B522 /* Transcription */,
 				08C82E562B7CAFF00029791B /* ImageCreation */,
 				08A1EF4C2B2604C300A88A3A /* MessageView */,
@@ -558,6 +584,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				08F74EA42B0BC318006D1DD3 /* ServiceSettingsView.swift in Sources */,
+				083983552B9D52AF00A46A84 /* InputViewButtons.swift in Sources */,
 				088CF0622B1E705D009CFDCB /* ContextResetDivider.swift in Sources */,
 				E4C65EA229CA9E7E00AFA884 /* GPTalks.swift in Sources */,
 				084C95BD2B94518300778F14 /* ImageView.swift in Sources */,
@@ -568,8 +595,10 @@
 				0803E14A2B8338FA00D588C3 /* MessageContextMenu.swift in Sources */,
 				08376D832B7CF0F4003258D1 /* ZoomableImageView.swift in Sources */,
 				085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */,
+				083983592B9D84C900A46A84 /* MacTextEditor.swift in Sources */,
 				08545C3C2B8D16F800592108 /* WebScrapeService.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
+				083983512B9D507A00A46A84 /* MacInputView.swift in Sources */,
 				08D5A2932B7DFE2E00BA1CE0 /* OpenAIService.swift in Sources */,
 				08E2611D2B98978800E4542E /* ToolMessageView.swift in Sources */,
 				08980EC62B97877A0005B522 /* TranscriptionSession.swift in Sources */,
@@ -596,6 +625,7 @@
 				E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */,
 				08980ECA2B9789830005B522 /* TranscriptionView.swift in Sources */,
 				08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */,
+				0839835B2B9DBDD800A46A84 /* AudioPlayerView.swift in Sources */,
 				0829D1152B3166E300DFFBB1 /* MacOSMessages.swift in Sources */,
 				08C82E582B7CB00C0029791B /* ImageGeneration.swift in Sources */,
 				081B02732B81B1EF006AF219 /* AISession.swift in Sources */,
@@ -608,8 +638,10 @@
 				08A1EF4E2B2604D000A88A3A /* UserMessageView.swift in Sources */,
 				E4C65EA429CA9E7E00AFA884 /* Persistence.swift in Sources */,
 				08376D812B7CF0D1003258D1 /* ImageSave.swift in Sources */,
+				083983532B9D51A500A46A84 /* CustomImportedImageView.swift in Sources */,
 				08D533342B2C2ED9008B4FA9 /* MarkdownView.swift in Sources */,
 				087AC1982B6D40A7006B9386 /* EditingView.swift in Sources */,
+				0839834F2B9D507000A46A84 /* IOSInputView.swift in Sources */,
 				0837E47D2AFE57A100C03059 /* IosDefaultConfigView.swift in Sources */,
 				085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */,
 				0827585F2B8A62B000F2EF8A /* Components.swift in Sources */,

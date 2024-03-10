@@ -62,6 +62,25 @@ func extractValue(from jsonString: String, forKey key: String) -> String? {
     }
 }
 
+func isAudioFile(urlString: String) -> Bool {
+     guard let url = URL(string: urlString) else { return false }
+
+     // Determine the file's Uniform Type Identifier (UTI)
+     guard let uti = try? url.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier else { return false }
+
+     // Popular audio UTIs
+     let audioTypes = [
+         "public.mp3",
+         "public.mpeg-4",
+         "public.aiff-audio",
+         "com.apple.coreaudio-format",
+         "public.audiovisual-content"
+         // Add more audio types if needed
+     ]
+
+     return audioTypes.contains(uti)
+ }
+
 extension String {
     func copyToPasteboard() {
 #if os(macOS)

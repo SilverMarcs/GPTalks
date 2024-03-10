@@ -32,7 +32,7 @@ struct DialogueListItem: View {
                     #endif
                 }
                 VStack {
-                    if session.isReplying() {
+                    if session.isReplying {
                         ReplyingIndicatorView()
                             .frame(
                                 maxWidth: .infinity,

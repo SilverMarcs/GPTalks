@@ -51,6 +51,8 @@ typealias PlatformImage = UIImage
     
     var inputImages: [PlatformImage] = []
     
+    var inputAudioPath: String = ""
+    
     var title: String = "New Session" {
         didSet {
             save()
@@ -99,7 +101,7 @@ typealias PlatformImage = UIImage
     var streamingTask: Task<Void, Error>?
     var viewUpdater: Task<Void, Error>?
 
-    func isReplying() -> Bool {
+    var isReplying: Bool {
         return !conversations.isEmpty && lastConversation.isReplying
     }
     
@@ -395,30 +397,7 @@ typealias PlatformImage = UIImage
                     
                     conversations[conversations.count - 2].isReplying = false
                     
-                    let query2 = createChatQuery()
-                    
-                    var streamText2 = ""
-                    
-                    let lastConversationData2 = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
-                    
-                    var lastUIUpdateTime2 = Date()
-                    
-                    for try await result in service.chatsStream(query: query2) {
-                        streamText2 += result.choices.first?.delta.content ?? ""
-                        
-                        let currentTime2 = Date()
-                        if currentTime2.timeIntervalSince(lastUIUpdateTime2) >= uiUpdateInterval {
-                            conversations[conversations.count - 1].content = streamText2.trimmingCharacters(in: .whitespacesAndNewlines)
-                            lastConversationData2.sync(with: conversations[conversations.count - 1])
-                            lastUIUpdateTime2 = currentTime2
-                        }
-                    }
-                    
-                    // Final UI update for any remaining data
-                    if !streamText2.isEmpty {
-                        conversations[conversations.count - 1].content = streamText2.trimmingCharacters(in: .whitespacesAndNewlines)
-                        lastConversationData2.sync(with: conversations[conversations.count - 1])
-                    }
+                    try await toolFollowup()
                     
                 }
             }
@@ -438,18 +417,14 @@ typealias PlatformImage = UIImage
                     
                     for urlResult in results.data {
                         if let urlString = urlResult.url, let url = URL(string: urlString) {
-                            do {
-                                let (data, _) = try await URLSession.shared.data(from: url)
-                                if let savedURL = saveImage(image: PlatformImage(data: data)!) {
-                                    appendConversation(Conversation(role: "tool", content: "imageGenerate", imagePaths: [savedURL]))
-                                    appendConversation(Conversation(role: "assistant", content: "Prompt: " + prompt))
-                                    conversations[conversations.count - 3].isReplying = false
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                        self.isAddingConversation.toggle()
-                                    }
+                            let (data, _) = try await URLSession.shared.data(from: url)
+                            if let savedURL = saveImage(image: PlatformImage(data: data)!) {
+                                appendConversation(Conversation(role: "tool", content: "imageGenerate", imagePaths: [savedURL]))
+                                appendConversation(Conversation(role: "assistant", content: "Prompt: " + prompt))
+                                conversations[conversations.count - 3].isReplying = false
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    self.isAddingConversation.toggle()
                                 }
-                            } catch {
-                                print("Error downloading image: \(error)")
                             }
                         }
                     }
@@ -465,46 +440,15 @@ typealias PlatformImage = UIImage
                 appendConversation(Conversation(role: "assistant", content: "transcribe", isReplying: true))
                 
                 if let audioPath = extractValue(from: funcParam, forKey: "audioPath") {
-                    do {
-//                        print(audioPath)
-                        let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: "m2m100-1.2b")
-                        
-                        let result = try await service.audioTranscriptions(query: query)
-                        
-                        conversations[conversations.count - 1].isReplying = false
-                        
-                        appendConversation(Conversation(role: "tool", content: result.text))
-                        
-                        let query3 = createChatQuery()
-                        
-                        var streamText3 = ""
-                        
-                        let lastConversationData3 = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
-                         
-                        var lastUIUpdateTime2 = Date()
-                        
-                        for try await result in service.chatsStream(query: query3) {
-                            streamText3 += result.choices.first?.delta.content ?? ""
-                            
-                            let currentTime2 = Date()
-                            if currentTime2.timeIntervalSince(lastUIUpdateTime2) >= uiUpdateInterval {
-                                conversations[conversations.count - 1].content = streamText3.trimmingCharacters(in: .whitespacesAndNewlines)
-                                lastConversationData3.sync(with: conversations[conversations.count - 1])
-                                lastUIUpdateTime2 = currentTime2
-                            }
-                        }
-                        
-                        // Final UI update for any remaining data
-                        if !streamText3.isEmpty {
-                            conversations[conversations.count - 1].content = streamText3.trimmingCharacters(in: .whitespacesAndNewlines)
-                            lastConversationData3.sync(with: conversations[conversations.count - 1])
-                        }
-                        
-                        print(result.text)
-                    } catch {
-                        // Handle errors (e.g., file not found, insufficient permissions, etc.)
-                        print("Error reading file: \(error)")
-                    }
+                    let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: .whisper_1)
+                    
+                    let result = try await service.audioTranscriptions(query: query)
+                    
+                    conversations[conversations.count - 1].isReplying = false
+                    
+                    appendConversation(Conversation(role: "tool", content: result.text))
+                    
+                    try await toolFollowup()
                 }
             }
         
@@ -515,6 +459,7 @@ typealias PlatformImage = UIImage
 
         do {
             inputImages = []
+            inputAudioPath = ""
             #if os(macOS)
             try await streamingTask?.value
             #else
@@ -542,9 +487,9 @@ typealias PlatformImage = UIImage
                 if lastConversation.role == "assistant" && lastConversation.content == ""  {
                     do {
                     #if os(macOS)
-                    try await Task.sleep(nanoseconds: 151_000_000)
+                    try await Task.sleep(nanoseconds: 100_000_000)
                     #else
-                    try await Task.sleep(nanoseconds: 51_000_000)
+                    try await Task.sleep(nanoseconds: 100_000_000)
                     #endif
                     } catch {
                         print("couldnt sleep")
@@ -573,44 +518,55 @@ typealias PlatformImage = UIImage
         if conversations.count > resetMarker + 1 {
             adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
         }
-
-        // Mapping systemPrompt and adjusted conversations to their chat representation
-//        let finalMessages = ([systemPrompt] + adjustedConversations).map({ conversation in
-//            conversation.toChat()
-//        })
         
         var finalMessages = adjustedConversations.map({ conversation in
             conversation.toChat()
         })
 
-        // Check if the systemPrompt's content is not an empty string before adding
         if !systemPrompt.content.isEmpty {
-            // Prepend the systemPrompt to the finalMessages
             finalMessages.insert(systemPrompt.toChat(), at: 0)
         }
-
-        // Iterating over the adjusted conversations to update the configuration model
-//        for conversation in adjustedConversations {
-////            if conversation.role == "tool" && !conversation.imagePaths.isEmpty {
-////                configuration.model = .gpt3t0125
-////                break // Assuming you only need to find the first occurrence
-////            } else if conversation.role == "user" && !conversation.imagePaths.isEmpty {
-////                configuration.model = .gpt4vision
-////                break // Assuming you only need to find the first occurrence
-////            }
-//
-//            if conversation.role == "user" && !conversation.imagePaths.isEmpty {
-//                configuration.model = configuration.provider.visionModels.first!
-//                break
-//            }
-//        }
-
+        
+        if !inputAudioPath.isEmpty {
+            finalMessages.append(.user(.init(content: .string(inputAudioPath))))
+        }
         
         return ChatQuery(messages: finalMessages,
                          model: configuration.model.id,
                          maxTokens: 4000,
                          temperature: configuration.temperature,
                          tools: ChatTool.allTools)
+    }
+    
+    func toolFollowup() async throws {
+        let service = OpenAI(configuration: configuration.provider.config)
+        
+        let query = createChatQuery()
+        
+        var streamText = ""
+        
+        let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+         
+        let uiUpdateInterval = TimeInterval(0.1)
+
+        var lastUIUpdateTime = Date()
+        
+        for try await result in service.chatsStream(query: query) {
+            streamText += result.choices.first?.delta.content ?? ""
+            
+            let currentTime = Date()
+            if currentTime.timeIntervalSince(lastUIUpdateTime) >= uiUpdateInterval {
+                conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                lastConversationData.sync(with: conversations[conversations.count - 1])
+                lastUIUpdateTime = currentTime
+            }
+        }
+        
+        // Final UI update for any remaining data
+        if !streamText.isEmpty {
+            conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+            lastConversationData.sync(with: conversations[conversations.count - 1])
+        }
     }
 }
 

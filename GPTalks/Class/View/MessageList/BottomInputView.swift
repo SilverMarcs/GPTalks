@@ -36,17 +36,22 @@ struct BottomInputView: View {
 //            }
             
             HStack(spacing: 12) {
-                #if os(macOS)
-                macOSMore
-//                    .animation(.default, value: showMore)
-                
-                if showMore {
-                    imagePicker
-                    audioPicker
-                }
-                #else
-                iosMore
-                #endif
+//                #if os(macOS)
+//                macOSMore
+//                
+//                if showMore {
+//                    imagePicker
+//                    audioPicker
+//                }
+//                #else
+//                iosMore
+//                
+//                if showMore {
+//                    addImage
+//                    regenerate
+//                    resetContext
+//                }
+//                #endif
                 
                 inputBox
                     .onTapGesture {
@@ -54,12 +59,17 @@ struct BottomInputView: View {
                     }
                 
                 #if os(macOS)
-                if session.isReplying() {
+                if session.isReplying {
                     stopButton
                 } else {
                     sendButton
                 }
                 #endif
+            }
+        }
+        .onChange(of: session.input) {
+            if session.input.count > 3 {
+                showMore = false
             }
         }
         .animation(.default, value: session.inputImages)
@@ -118,28 +128,62 @@ struct BottomInputView: View {
     
     #if !os(macOS)
     
+    var resetContext: some View {
+        Button {
+            showMore = false
+            session.resetContext()
+        } label: {
+            Image(systemName: "eraser")
+                .resizable()
+                .scaledToFit()
+                .padding(10)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+                .background(.gray.opacity(0.2))
+                .clipShape(Circle())
+                .frame(width: imageSize + 3, height: imageSize + 3)
+        }
+    }
+    
+    var regenerate: some View {
+        Button {
+            showMore = false
+            Task {
+                await session.regenerateLastMessage()
+            }
+        } label: {
+            Image(systemName: "arrow.2.circlepath")
+                .resizable()
+                .scaledToFit()
+                .padding(10)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+                .background(.gray.opacity(0.2))
+                .clipShape(Circle())
+                .frame(width: imageSize + 6, height: imageSize + 6)
+        }
+    }
+    
+    var addImage: some View {
+        Button {
+            importingImage = true
+            showMore = false
+        } label: {
+            Image(systemName: "photo")
+                .resizable()
+                .scaledToFit()
+                .padding(11)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+                .background(.gray.opacity(0.2))
+                .clipShape(Circle())
+                .frame(width: imageSize + 7, height: imageSize + 7)
+        }
+    }
+    
     var iosMore: some View {
-        Menu {
-            Button {
-                session.resetContext()
-            } label: {
-                Label("Reset Context", systemImage: "eraser")
-            }
-            
-            Button {
-                Task {
-                    await session.regenerateLastMessage()
-                }
-            } label: {
-                Label("Regenerate", systemImage: "arrow.2.circlepath")
-            }
-            
-            Button {
-                importingImage = true
-            } label: {
-                Label("Add Image", systemImage: "photo")
-            }
-            
+        Button {
+            showMore.toggle()
         } label: {
             Image(systemName: "plus")
                 .resizable()
@@ -150,6 +194,8 @@ struct BottomInputView: View {
                 .background(.gray.opacity(0.2))
                 .clipShape(Circle())
                 .frame(width: imageSize + 3, height: imageSize + 3)
+                .rotationEffect(.degrees(showMore ? 45 : 0))
+                .animation(.default, value: showMore)
         }
         .photosPicker(
             isPresented: $importingImage,
@@ -177,92 +223,6 @@ struct BottomInputView: View {
 
     #endif
     
-    var macOSMore: some View {
-        Button {
-            showMore.toggle()
-        } label: {
-            Image(systemName: "plus")
-                .resizable()
-                .scaledToFit()
-                .padding(6)
-                .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .background(.gray.opacity(0.2))
-                .clipShape(Circle())
-                .frame(width: imageSize + 2, height: imageSize + 2)
-                .rotationEffect(.degrees(showMore ? 45 : 0))
-                .animation(.default, value: showMore)
-        }
-    }
-    
-    var audioPicker: some View {
-        Button {
-            importingAudio = true
-        } label: {
-            Image(systemName: "waveform")
-                .resizable()
-                .scaledToFit()
-                .padding(6)
-                .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .background(.gray.opacity(0.2))
-                .clipShape(Circle())
-                .frame(width: imageSize + 2, height: imageSize + 2)
-        }
-        .disabled(session.shouldSwitchToVision)
-        .fileImporter(isPresented: $importingAudio, allowedContentTypes: [.audio], allowsMultipleSelection: false) { result in
-            switch result {
-            case .success(let urls):
-                let url = urls[0]
-                session.input = url.absoluteString
-                showMore = false
-                print("Selected file URL: \(url)")
-            case .failure(let error):
-                print("File selection error: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    var imagePicker: some View {
-        Button {
-            importingImage = true
-        } label: {
-            Image(systemName: "photo")
-                .resizable()
-                .scaledToFit()
-                .padding(7)
-                .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .background(.gray.opacity(0.2))
-                .clipShape(Circle())
-                .frame(width: imageSize + 5, height: imageSize + 5)
-        }
-        .fileImporter(
-            isPresented: $importingImage,
-            allowedContentTypes: [.image],
-            allowsMultipleSelection: true
-        ) { result in
-            switch result {
-            case .success(let files): // 'files' is now an array of URLs
-                for file in files { // Iterate over each file
-                    #if os(macOS)
-                    let image = NSImage(contentsOf: file)
-                    showMore = false
-                    #else
-                    let image = UIImage(contentsOfFile: file.path)
-                    #endif
-                    
-                    if let image = image {
-                        session.inputImages.append(image)
-                    }
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-        .disabled(session.inputImages.count >= 5)
-    }
-    
     @ViewBuilder
     private var resetContextButton: some View {
         Button {
@@ -280,8 +240,8 @@ struct BottomInputView: View {
                 .frame(width: imageSize + 3, height: imageSize + 3)
             #endif
         }
-        .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
-        .disabled(session.conversations.isEmpty || session.isReplying())
+        .foregroundColor(session.isReplying ? placeHolderTextColor : .secondary)
+        .disabled(session.conversations.isEmpty || session.isReplying)
         .contentShape(Rectangle())
     }
     
@@ -296,9 +256,9 @@ struct BottomInputView: View {
                 .scaledToFit()
                 .frame(width: imageSize, height: imageSize)
         }
-        .foregroundColor(session.isReplying() ? placeHolderTextColor : .secondary)
+        .foregroundColor(session.isReplying ? placeHolderTextColor : .secondary)
         .buttonStyle(.plain)
-        .disabled(session.conversations.isEmpty || session.isReplying())
+        .disabled(session.conversations.isEmpty || session.isReplying)
     }
 
     @ViewBuilder
@@ -318,7 +278,7 @@ struct BottomInputView: View {
             Image(systemName: empty ? "arrow.up.circle" : "arrow.up.circle.fill")
                 .resizable()
                 .scaledToFit()
-                .disabled(empty)
+//                .disabled(empty)
                 .foregroundColor(empty ? .secondary : .accentColor)
             #if os(macOS)
                 .frame(width: imageSize + 1, height: imageSize + 1)
@@ -329,8 +289,8 @@ struct BottomInputView: View {
             #endif
         }
         .keyboardShortcut(.return, modifiers: .command)
-        .foregroundColor(session.isReplying() || empty ? placeHolderTextColor : .secondary)
-        .disabled(empty || session.isReplying())
+//        .foregroundColor(session.isReplying || empty ? placeHolderTextColor : .secondary)
+        .disabled(empty || session.isReplying)
         .fontWeight(.semibold)
         .animation(.interactiveSpring, value: empty)
 //        .contentShape(Rectangle())
@@ -385,7 +345,7 @@ struct BottomInputView: View {
             #endif
             
             Group {
-                if session.input.isEmpty && !session.isReplying() {
+                if session.input.isEmpty && !session.isReplying {
                     Button {} label: {
                         Image(systemName: "mic.fill")
                             .resizable()
@@ -396,7 +356,7 @@ struct BottomInputView: View {
                     }
                     .offset(x: -10, y: -9)
                 } else {
-                    if session.isReplying() {
+                    if session.isReplying {
                         stopButton
                             .offset(x: -4, y: -4)
                         

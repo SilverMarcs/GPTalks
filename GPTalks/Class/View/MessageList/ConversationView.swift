@@ -12,8 +12,8 @@ struct ConversationView: View {
     var conversation: Conversation
 
     var body: some View {
-        VStack(spacing: spacing) { // TODO dont use vstack
-            Group {
+        VStack { // TODO dont use vstack
+        Group {
                 if conversation.role == "user" {
                     UserMessageView(conversation: conversation, session: session)
 #if !os(macOS)
@@ -27,6 +27,7 @@ struct ConversationView: View {
                 #if !os(macOS)
                         .padding(.bottom, session.bottomPadding(for: conversation))
                 #endif
+                        
                     } else {
                         AssistantMessageView(conversation: conversation, session: session)
                     }
@@ -40,22 +41,20 @@ struct ConversationView: View {
                 ContextResetDivider(session: session)
                     .padding()
             }
-
-            #if os(macOS)
-            DeleteBtn
-                .opacity(0)
-            #endif
         }
     }
 
+    @ViewBuilder
     private var DeleteBtn: some View {
-        Button("hidden") {
-            if let lastConversation = session.conversations.last {
-                session.removeConversation(lastConversation)
+        if let lastConversation = session.conversations.last, lastConversation == conversation {
+            Button("hidden") {
+//                if let lastConversation = session.conversations.last {
+                    session.removeConversation(lastConversation)
+//                }
             }
+            .keyboardShortcut(.delete, modifiers: .command)
+            .frame(width: 1, height: 1)
         }
-        .keyboardShortcut(.delete, modifiers: .command)
-        .frame(width: 1, height: 1)
     }
 
     private var spacing: CGFloat {

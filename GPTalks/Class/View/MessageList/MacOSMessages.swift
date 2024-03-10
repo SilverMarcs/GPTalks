@@ -16,7 +16,6 @@ struct MacOSMessages: View {
 
     @State private var isUserScrolling = false
     @State var isShowSysPrompt: Bool = false
-    @FocusState var isTextFieldFocused: Bool
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -24,15 +23,11 @@ struct MacOSMessages: View {
             .navigationTitle(session.title)
             .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                BottomInputView(
-                    session: session,
-                    focused: _isTextFieldFocused
-                )
-                .background(.bar)
+                MacInputView(session: session)
+                    .background(.bar)
+                    .id(session.id)
             }
             .onChange(of: viewModel.selectedDialogue) {
-                isTextFieldFocused = true
-                
                 if viewModel.selectedState == .images {
                     viewModel.selectedState = .recent
                 }
@@ -58,12 +53,12 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.conversations.last?.isReplying) {
-                if !session.isReplying() {
+                if !session.isReplying  {
                     isUserScrolling = false
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-                if session.isReplying() {
+                if session.isReplying {
                     isUserScrolling = true
                 }
             }
@@ -79,7 +74,6 @@ struct MacOSMessages: View {
                 if session.resetMarker == session.conversations.count - 1 {
                     scrollToBottom(proxy: proxy)
                 }
-                isTextFieldFocused = true
                 
                 if session.shouldSwitchToVision {
                     session.configuration.model = session.configuration.provider.visionModels[0]
@@ -201,60 +195,33 @@ struct MacOSMessages: View {
     }
 
     private var normalList: some View {
-        Group {
-            if AppConfiguration.shared.alternateChatUi {
-                List {
-                    LazyVStack {
-                        ForEach(session.filteredConversations()) { conversation in
-                            ConversationView(session: session, conversation: conversation)
-                                .id(conversation.id)
-                        }
-                        
-                        ErrorDescView(session: session)
-                        
-                        Color.clear
-                            .listRowSeparator(.hidden)
-                            .frame(height: 20)
-                    }
-                    .padding(.horizontal, -8)
-                    .id("bottomID")
-                }
-                .listStyle(.plain)
-                
-            } else {
-                List {
-                    VStack {
-                        ForEach(session.conversations) { conversation in
-                            ConversationView(session: session, conversation: conversation)
-                        }
-                        
-                        ErrorDescView(session: session)
-                    }
-                    .id("bottomID")
-                }
-            }
-        }
-    }
-    
-    private var alternateList: some View {
-        // not used for now
         List {
-            ForEach(Array(session.conversations.chunked(fromEndInto: 10).enumerated()), id: \.offset) { _, chunk in
-                VStack {
-                    ForEach(chunk, id: \.self) { conversation in
-                        ConversationView(session: session, conversation: conversation)
+            LazyVStack(spacing: 0) {
+                ForEach(session.filteredConversations()) { conversation in
+                    ConversationView(session: session, conversation: conversation)
+                        .id(conversation.id)
+                }
+                
+                ErrorDescView(session: session)
+                
+                Button("hidden") {
+                    if let lastConversation = session.conversations.last {
+                        session.removeConversation(lastConversation)
                     }
                 }
+                .hidden()
                 .listRowSeparator(.hidden)
+                .keyboardShortcut(.delete, modifiers: .command)
+                
+                
+                Color.clear
+                    .listRowSeparator(.hidden)
+                    .frame(height: 10)
             }
-
-            ErrorDescView(session: session)
-                .listRowSeparator(.hidden)
-
-            Spacer()
-                .listRowSeparator(.hidden)
-                .id("bottomID")
+            .padding(.horizontal, -8)
+            .id("bottomID")
         }
+        .listStyle(.plain)
     }
 }
 #endif

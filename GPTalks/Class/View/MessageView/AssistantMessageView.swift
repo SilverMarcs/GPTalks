@@ -24,15 +24,15 @@ struct AssistantMessageView: View {
                 originalUI
             }
         }
-#if os(iOS)
-        .sheet(isPresented: $canSelectText) {
-            TextSelectionView(content: conversation.content)
-        }
-#endif
+
+        #if os(macOS)
         .onHover { isHovered in
             self.isHovered = isHovered
         }
-        #if os(iOS)
+        #else
+        .sheet(isPresented: $canSelectText) {
+            TextSelectionView(content: conversation.content)
+        }
         .contextMenu {
             MessageContextMenu(session: session, conversation: conversation) {}
             toggleTextSelection: {
