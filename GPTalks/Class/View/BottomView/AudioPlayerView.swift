@@ -28,6 +28,7 @@ struct AudioPlayerView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 20, height: 20)
                 }
+                .buttonStyle(.plain)
                 
                 Text("\(formatTime(time: currentTime))")
                 

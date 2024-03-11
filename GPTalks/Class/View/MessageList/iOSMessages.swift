@@ -49,13 +49,14 @@ struct iOSMessages: View {
 
                 scrollBtn(proxy: proxy)
             }
+            
             #if !os(visionOS)
             .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                 let bottomReached = value > UIScreen.main.bounds.height
                 shouldStopScroll = bottomReached
                 showScrollButton = bottomReached
             }
-            .scrollDismissesKeyboard(.interactively)
+            .scrollDismissesKeyboard(.immediately)
             #endif
             .listStyle(.plain)
             .onAppear {

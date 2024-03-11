@@ -446,7 +446,7 @@ typealias PlatformImage = UIImage
                     
                     conversations[conversations.count - 1].isReplying = false
                     
-                    appendConversation(Conversation(role: "tool", content: result.text))
+                    appendConversation(Conversation(role: "tool", content: result.text, audioPath: audioPath))
                     
                     try await toolFollowup()
                 }
@@ -601,6 +601,7 @@ extension DialogueSession {
                let content = data.content,
                let role = data.role,
                let date = data.date,
+               let audioPath = data.audioPath,
                let imagePaths = data.imagePaths {
                 let imagePaths = imagePaths.split(separator: "|||").map(String.init) // Convert back to an array of strings
                 let conversation = Conversation(
@@ -608,7 +609,8 @@ extension DialogueSession {
                   date: date,
                   role: role,
                   content: content,
-                  imagePaths: imagePaths
+                  imagePaths: imagePaths,
+                  audioPath: audioPath
                 )
                 return conversation
             } else {
@@ -635,6 +637,7 @@ extension DialogueSession {
         data.date = conversation.date
         data.role = conversation.role
         data.content = conversation.content
+        data.audioPath = conversation.audioPath
         data.imagePaths = conversation.imagePaths.joined(separator: "|||")
         rawData?.conversations?.adding(data)
         data.dialogue = rawData

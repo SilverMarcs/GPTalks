@@ -205,7 +205,6 @@ struct MacOSMessages: View {
                 
                 Button("hidden") {
                     if session.conversations.count > 0 {
-                        print("hidden2")
                         session.removeConversation(session.conversations.last!)
                     }
                 }

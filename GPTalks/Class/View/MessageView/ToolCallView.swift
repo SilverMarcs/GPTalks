@@ -70,87 +70,73 @@ struct ToolCallView: View {
     }
     
     var funcCall: some View {
-        HStack(spacing: 4) {
-            
-//            if isAudioFile(urlString: "file:///Users/Zabir/Downloads/test.mp3") {
-//                AudioPlayerView(audioURL: URL(fileURLWithPath: "file:///Users/Zabir/Downloads/test.mp3"))
-//            }
-//            AudioPlayerView(audioURL: URL(string: "file:///Users/Zabir/Downloads/test.mp3")!)
-            
-            Text("Function: " + conversation.content.capitalizingFirstLetter())
-                .onTapGesture {
-                    if conversation.content != "imageGenerate" {
-                        showPopover.toggle()
+        VStack(alignment: .leading) {
+            HStack(spacing: 4) {
+                Text("Function: " + conversation.content.capitalizingFirstLetter())
+                    .onTapGesture {
+                        if conversation.content != "imageGenerate" {
+                            showPopover.toggle()
+                        }
                     }
-                }
-                .popover(isPresented: $showPopover, arrowEdge: .leading) {
-                    if let index = session.conversations.firstIndex(of: conversation) {
-                        if let toolMessage = session.conversations[safe: index + 1] {
-                            #if os(macOS)
-                            ScrollView {
-                                Text(toolMessage.content)
-                                    .textSelection(.enabled)
-                                    .padding()
-                            }
-                            .frame(width: 500, height: 400)
-                            #else
-                            NavigationView {
+                    .popover(isPresented: $showPopover, arrowEdge: .leading) {
+                        if let index = session.conversations.firstIndex(of: conversation) {
+                            if let toolMessage = session.conversations[safe: index + 1] {
+#if os(macOS)
                                 ScrollView {
                                     Text(toolMessage.content)
-                                        .padding(.horizontal)
-                                        .padding(.bottom, 45)
+                                        .textSelection(.enabled)
+                                        .padding()
                                 }
-
-                                .edgesIgnoringSafeArea(.bottom)
-                                .navigationTitle("Web Conent")
-                                .navigationBarTitleDisplayMode(.inline)
-                                .toolbar {
-                                    ToolbarItem(placement: .navigationBarTrailing) {
-                                        Button("Done") {
-                                            dismiss()
+                                .frame(width: 500, height: 400)
+#else
+                                NavigationView {
+                                    ScrollView {
+                                        Text(toolMessage.content)
+                                            .padding(.horizontal)
+                                            .padding(.bottom, 45)
+                                    }
+                                    
+                                    .edgesIgnoringSafeArea(.bottom)
+                                    .navigationTitle("Web Conent")
+                                    .navigationBarTitleDisplayMode(.inline)
+                                    .toolbar {
+                                        ToolbarItem(placement: .navigationBarTrailing) {
+                                            Button("Done") {
+                                                dismiss()
+                                            }
                                         }
                                     }
                                 }
+#endif
                             }
-                            #endif
                         }
                     }
+                
+                if conversation.isReplying {
+                    ProgressView()
+                        .controlSize(.small)
+                } else {
+                    if conversation.content == "urlScrape" {
+                        Image(systemName: "network")
+                    } else if conversation.content == "transcribe" {
+                        Image(systemName: "waveform")
+                    } else if conversation.content == "imageGenerate" {
+                        Image(systemName: "photo")
+                    }
                 }
+            }
+            .fontWeight(.semibold)
+            .bubbleStyle(isMyMessage: false)
             
-            if conversation.isReplying {
-                ProgressView()
-                    .controlSize(.small)
-            } else {
-                if conversation.content == "urlScrape" {
-                    Image(systemName: "network")
-                } else if conversation.content == "transcribe" {
-                    Image(systemName: "waveform")
-                } else if conversation.content == "imageGenerate" {
-                    Image(systemName: "photo")
+            if let index = session.conversations.firstIndex(of: conversation) {
+                if let toolMessage = session.conversations[safe: index + 1] {
+                    if let audioUrl = URL(string:toolMessage.audioPath) {
+                        AudioPlayerView(audioURL: audioUrl)
+                            .frame(maxWidth: 500)
+                    }
                 }
             }
         }
-        .fontWeight(.semibold)
-        .bubbleStyle(isMyMessage: false)
     }
-    
-    func isAudioFile(urlString: String) -> Bool {
-         guard let url = URL(string: urlString) else { return false }
-
-         // Determine the file's Uniform Type Identifier (UTI)
-         guard let uti = try? url.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier else { return false }
-
-         // Popular audio UTIs
-         let audioTypes = [
-             "public.mp3",
-             "public.mpeg-4",
-             "public.aiff-audio",
-             "com.apple.coreaudio-format",
-             "public.audiovisual-content"
-             // Add more audio types if needed
-         ]
-
-         return audioTypes.contains(uti)
-     }
 }
 

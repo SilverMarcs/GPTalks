@@ -220,6 +220,7 @@ enum ContentState: String, CaseIterable, Identifiable {
                 data.date = conversation.date
                 data.role = conversation.role
                 data.content = conversation.content
+                data.audioPath = conversation.audioPath
                 data.imagePaths = conversation.imagePaths.joined(separator: "|||")
                 return data
             })
