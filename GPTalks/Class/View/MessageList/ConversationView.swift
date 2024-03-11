@@ -13,26 +13,19 @@ struct ConversationView: View {
 
     var body: some View {
         VStack { // TODO dont use vstack
-        Group {
-                if conversation.role == "user" {
-                    UserMessageView(conversation: conversation, session: session)
-#if !os(macOS)
-                        .padding(.vertical, -20)
-#endif
-                }
-                
-                if conversation.role == "assistant" {
-                    if ChatTool.allCases.map({ $0.rawValue }).contains(conversation.content) {
-                        ToolCallView(conversation: conversation, session: session)
-                #if !os(macOS)
-                        .padding(.bottom, session.bottomPadding(for: conversation))
-                #endif
-                        
-                    } else {
-                        AssistantMessageView(conversation: conversation, session: session)
+            Group {
+                    if conversation.role == "user" {
+                        UserMessageView(conversation: conversation, session: session)
+                    }
+                    
+                    if conversation.role == "assistant" {
+                        if ChatTool.allCases.map({ $0.rawValue }).contains(conversation.content) {
+                            ToolCallView(conversation: conversation, session: session)
+                        } else {
+                            AssistantMessageView(conversation: conversation, session: session)
+                        }
                     }
                 }
-            }
             #if os(macOS)
             .opacity(0.9)
             #endif

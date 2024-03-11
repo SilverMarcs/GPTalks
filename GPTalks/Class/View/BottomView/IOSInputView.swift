@@ -33,7 +33,7 @@ struct IOSInputView: View {
                 
                 if showMore {
                     addImage
-                    regenerate
+//                    regenerate
                     resetContext
                 }
                 
@@ -71,7 +71,7 @@ struct IOSInputView: View {
             showMore = false
             session.resetContext()
         } label: {
-            Image(systemName: "eraser")
+            Image(systemName: "eraser.fill")
                 .resizable()
                 .inputImageStyle(padding: 10, imageSize: imageSize + 3)
         }

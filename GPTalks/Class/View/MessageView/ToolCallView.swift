@@ -11,8 +11,6 @@ struct ToolCallView: View {
     var conversation: Conversation
     var session: DialogueSession
     
-    @Environment(\.dismiss) var dismiss
-    
     @State var showPopover = false
     @State var isHovered = false
     
@@ -120,7 +118,7 @@ struct ToolCallView: View {
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarTrailing) {
                                     Button("Done") {
-                                        dismiss()
+                                        showPopover = false
                                     }
                                 }
                             }

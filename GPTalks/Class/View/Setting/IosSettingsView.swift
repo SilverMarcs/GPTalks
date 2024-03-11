@@ -93,6 +93,19 @@ struct IosSettingsView: View {
                     }
                 }
                 
+                Section("Plugins") {
+                    NavigationLink {
+                        ChatTool.googleSearch.destination
+                    } label: {
+                        HStack {
+                            Image(systemName: "safari")
+                                .renderingMode(.original)
+                            Text("Google Search")
+                        }
+                    }
+                }
+                
+                
                 Section("Services") {
                     ForEach(Provider.availableProviders) { provider in
                         NavigationLink(

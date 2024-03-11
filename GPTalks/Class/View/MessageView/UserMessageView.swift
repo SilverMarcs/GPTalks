@@ -129,9 +129,9 @@ struct UserMessageView: View {
         #if os(macOS)
         .padding(.horizontal, 8)
         .padding(.bottom, -6) // need at least -2 padding here
-        #else
-        .padding(.top, -9)
-        .padding(.bottom, -14)
+//        #else
+//        .padding(.top, -9)
+//        .padding(.bottom, -14)
         #endif
         .frame(maxWidth: .infinity, alignment: .topLeading) // Align content to the top left
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
