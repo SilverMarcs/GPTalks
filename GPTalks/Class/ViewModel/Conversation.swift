@@ -38,6 +38,8 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
         if chatRole != .tool {
             if chatRole == .assistant && content == "urlScrape" {
                 return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "webFuncParam", name: "urlScrape"))])!
+            } else if chatRole == .assistant && content == "googleSearch" {
+                return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "searchQuery", name: "googleSearch"))])!
             } else if chatRole == .assistant && content == "imageGenerate" {
                 return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "prompt", name: "imageGenerate"))])!
             } else if chatRole == .assistant && content == "transcribe" {
@@ -67,11 +69,13 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
                 return .init(role: .tool, content: content, name: "imageGenerate", toolCallId: "")!
             } else if content == "transcribe" {
                 return .init(role: .tool, content: content, name: "transcribe", toolCallId: "")!
-            } else {
+            } else if content == "urlScrape" {
                 return .init(role: .tool, content: content, name: "urlScrape", toolCallId: "")!
+            } else if content == "googleSearch" {
+                return .init(role: .tool, content: content, name: "googleSearch", toolCallId: "")!
+            } else {
+                return .init(role: .tool, content: content, name: "nil", toolCallId: "")!
             }
-            
-//            return .init(role: .tool, content: content, name: "urlScrape", toolCallId: "")!
         }
     }
 }

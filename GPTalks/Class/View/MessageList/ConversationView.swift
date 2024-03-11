@@ -22,7 +22,7 @@ struct ConversationView: View {
                 }
                 
                 if conversation.role == "assistant" {
-                    if conversation.content == "urlScrape" || conversation.content == "transcribe" || conversation.content == "imageGenerate" {
+                    if ChatTool.allCases.map({ $0.rawValue }).contains(conversation.content) {
                         ToolCallView(conversation: conversation, session: session)
                 #if !os(macOS)
                         .padding(.bottom, session.bottomPadding(for: conversation))

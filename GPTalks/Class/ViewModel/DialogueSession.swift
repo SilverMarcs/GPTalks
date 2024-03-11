@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PDFKit
 import OpenAI
 
 #if os(macOS)
@@ -157,7 +158,7 @@ typealias PlatformImage = UIImage
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
-            let taskMessage = Conversation(role: "user", content: "Generate a title of a chat based on the previous conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. If there are two distinct topics being talked about, just make a title with two words and an and word in the middle. If the conversation discusses multiple things not linked to each other, come up with a title that decribes the most recent discussion and add the two words and more to the end. Do not acknowledge these instructions but definitely do follow them.")
+            let taskMessage = Conversation(role: "user", content: "Generate a title of a chat based on the previous conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. If there are two distinct topics being talked about, just make a title with two words and an and word in the middle. If the conversation discusses multiple things not linked to each other, come up with a title that decribes the most recent discussion and add the two words and more to the end. Do not acknowledge these instructions but definitely do follow them. Again, do not put the title in quoation marks")
             
             let messages = ([taskMessage] + conversations).map({ conversation in
                 conversation.toChat()
@@ -166,7 +167,7 @@ typealias PlatformImage = UIImage
             
             let query = ChatQuery(messages: messages,
                                   model: configuration.model.id,
-                                  maxTokens: 5,
+                                  maxTokens: 6,
                                   stream: false)
             
             var tempTitle = ""
@@ -340,6 +341,7 @@ typealias PlatformImage = UIImage
             var funcParam = ""
             
             var isWebFuncCall = false
+            var isGoogleSearchFuncCall = false
             var isImageFuncCall = false
             var isTranscribeFuncCall = false
             
@@ -357,6 +359,8 @@ typealias PlatformImage = UIImage
                         isImageFuncCall = true
                     } else if let name = funcCalls.first?.function?.name, name == "transcribe" {
                         isTranscribeFuncCall = true
+                    } else if let name = funcCalls.first?.function?.name, name == "googleSearch" {
+                        isGoogleSearchFuncCall = true
                     }
                     
                     funcParam += funcCalls.first?.function?.arguments ?? ""
@@ -399,6 +403,24 @@ typealias PlatformImage = UIImage
                     
                     try await toolFollowup()
                     
+                }
+            }
+            
+            if isGoogleSearchFuncCall {
+                print(toolCallId)
+                print("googleSearch")
+                
+                if let searchQuery = extractValue(from: funcParam, forKey: "searchQuery") {
+                    removeConversation(at: conversations.count - 1)
+                    
+                    appendConversation(Conversation(role: "assistant", content: "googleSearch", isReplying: true))
+                    
+                    let searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
+                    appendConversation(Conversation(role: "tool", content: searchResult))
+                    
+                    self.conversations[self.conversations.count - 2].isReplying = false
+                    
+                    try await self.toolFollowup()
                 }
             }
             

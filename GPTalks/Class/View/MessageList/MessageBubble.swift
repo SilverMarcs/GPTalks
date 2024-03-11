@@ -8,8 +8,8 @@
 import SwiftUI
 
 extension View {
-    func bubbleStyle(isMyMessage: Bool, compact: Bool = false, accentColor: Color = Color(.systemBlue)) -> some View {
-        modifier(Bubble(isMyMessage: isMyMessage, compact: compact, accentColor: .accentColor))
+    func bubbleStyle(isMyMessage: Bool, compact: Bool = false, sharp: Bool = false, accentColor: Color = Color(.systemBlue)) -> some View {
+        modifier(Bubble(isMyMessage: isMyMessage, compact: compact, sharp: sharp, accentColor: .accentColor))
     }
 }
 
@@ -18,6 +18,7 @@ struct Bubble: ViewModifier {
 
     var isMyMessage: Bool
     var compact: Bool = false
+    var sharp: Bool = false
     var accentColor: Color = .init("greenColor")
 
     func body(content: Content) -> some View {
@@ -37,13 +38,13 @@ struct Bubble: ViewModifier {
 
     private var radius: CGFloat {
         #if os(macOS)
-        if AppConfiguration.shared.alternateChatUi {
-            15
+        if sharp {
+            5
         } else {
             15
         }
         #else
-        if AppConfiguration.shared.alternateChatUi {
+        if sharp {
             8
         } else {
             18

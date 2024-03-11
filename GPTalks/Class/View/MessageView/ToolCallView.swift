@@ -73,44 +73,6 @@ struct ToolCallView: View {
         VStack(alignment: .leading) {
             HStack(spacing: 4) {
                 Text("Function: " + conversation.content.capitalizingFirstLetter())
-                    .onTapGesture {
-                        if conversation.content != "imageGenerate" {
-                            showPopover.toggle()
-                        }
-                    }
-                    .popover(isPresented: $showPopover, arrowEdge: .leading) {
-                        if let index = session.conversations.firstIndex(of: conversation) {
-                            if let toolMessage = session.conversations[safe: index + 1] {
-#if os(macOS)
-                                ScrollView {
-                                    Text(toolMessage.content)
-                                        .textSelection(.enabled)
-                                        .padding()
-                                }
-                                .frame(width: 500, height: 400)
-#else
-                                NavigationView {
-                                    ScrollView {
-                                        Text(toolMessage.content)
-                                            .padding(.horizontal)
-                                            .padding(.bottom, 45)
-                                    }
-                                    
-                                    .edgesIgnoringSafeArea(.bottom)
-                                    .navigationTitle("Web Conent")
-                                    .navigationBarTitleDisplayMode(.inline)
-                                    .toolbar {
-                                        ToolbarItem(placement: .navigationBarTrailing) {
-                                            Button("Done") {
-                                                dismiss()
-                                            }
-                                        }
-                                    }
-                                }
-#endif
-                            }
-                        }
-                    }
                 
                 if conversation.isReplying {
                     ProgressView()
@@ -122,11 +84,51 @@ struct ToolCallView: View {
                         Image(systemName: "waveform")
                     } else if conversation.content == "imageGenerate" {
                         Image(systemName: "photo")
+                    } else if conversation.content == "googleSearch" {
+                        Image(systemName: "safari")
                     }
                 }
             }
             .fontWeight(.semibold)
-            .bubbleStyle(isMyMessage: false)
+            .bubbleStyle(isMyMessage: false, sharp: true)
+            .onTapGesture {
+                if conversation.content != "imageGenerate" {
+                    showPopover.toggle()
+                }
+            }
+            .popover(isPresented: $showPopover, arrowEdge: .leading) {
+                if let index = session.conversations.firstIndex(of: conversation) {
+                    if let toolMessage = session.conversations[safe: index + 1] {
+#if os(macOS)
+                        ScrollView {
+                            Text(toolMessage.content)
+                                .textSelection(.enabled)
+                                .padding()
+                        }
+                        .frame(width: 500, height: 400)
+#else
+                        NavigationView {
+                            ScrollView {
+                                Text(toolMessage.content)
+                                    .padding(.horizontal)
+                                    .padding(.bottom, 45)
+                            }
+                            
+                            .edgesIgnoringSafeArea(.bottom)
+                            .navigationTitle("Web Conent")
+                            .navigationBarTitleDisplayMode(.inline)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarTrailing) {
+                                    Button("Done") {
+                                        dismiss()
+                                    }
+                                }
+                            }
+                        }
+#endif
+                    }
+                }
+            }
             
             if let index = session.conversations.firstIndex(of: conversation) {
                 if let toolMessage = session.conversations[safe: index + 1] {

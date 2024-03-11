@@ -27,6 +27,28 @@ struct MacOSSettingsView: View {
                 .tabItem {
                     Label("Providers", systemImage: "brain.head.profile")
                 }
+            
+            ToolsView()
+                .frame(width: 650, height: 300)
+                .tabItem {
+                    Label("Plugins", systemImage: "wrench")
+                }
+        }
+    }
+}
+
+struct ToolsView: View {
+    @State var selection: ChatTool = .urlScrape
+    
+    var body: some View {
+        NavigationView {
+            List(ChatTool.allCases, id: \.self) { tool in
+                NavigationLink(
+                    destination: tool.destination,
+                    label: { tool.settingsLabel }
+                )
+            }
+            .listStyle(.inset)
         }
     }
 }

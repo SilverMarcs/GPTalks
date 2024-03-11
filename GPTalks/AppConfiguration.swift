@@ -22,6 +22,10 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.preferredChatService") var preferredChatService: Provider = .openai
     @AppStorage("configuration.preferredImageService") var preferredImageService: Provider = .openai
     
+    // Google Search
+    @AppStorage("configuration.googleApiKey") var googleApiKey = ""
+    @AppStorage("configuration.googleSearchEngineId") var googleSearchEngineId = ""
+    
     // config
     @AppStorage("configuration.contextLength") var contextLength = 10
     @AppStorage("configuration.temperature") var temperature: Double = 0.5

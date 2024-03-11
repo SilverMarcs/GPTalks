@@ -25,7 +25,7 @@ struct MacOSMessages: View {
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 MacInputView(session: session)
                     .background(.bar)
-//                    .id(session.id)
+                    .id(session.id)
             }
             .onChange(of: viewModel.selectedDialogue) {
                 if viewModel.selectedState == .images {
