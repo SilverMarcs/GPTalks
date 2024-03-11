@@ -42,7 +42,7 @@ struct ToolsView: View {
     
     var body: some View {
         NavigationView {
-            List(ChatTool.allCases, id: \.self) { tool in
+            List(ChatTool.allCases, id: \.self, selection: $selection) { tool in
                 NavigationLink(
                     destination: tool.destination,
                     label: { tool.settingsLabel }

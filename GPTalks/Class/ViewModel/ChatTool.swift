@@ -76,20 +76,46 @@ enum ChatTool: String, CaseIterable {
     var destination: some View {
         switch self {
         case .urlScrape:
-            Text("URL Scrape")
+            VStack {
+                Text("Pass in a URL in prompt for the assistant to retrieve web content from that URL.")
+                    .padding()
+                Spacer()
+            }
         case .googleSearch:
             VStack {
-                Group {
-                    TextField("Google Search API Key", text: AppConfiguration.shared.$googleApiKey)
-                    TextField("Google Search Engine ID", text: AppConfiguration.shared.$googleSearchEngineId)
+                VStack {
+                    Text("If the assistant does not have the information, it will make a google search and retrieve the user's content.")
+                        HStack() {
+                            Text("API Key:")
+                            Spacer()
+                            TextField("Google Search API Key", text: AppConfiguration.shared.$googleApiKey)
+                                .textFieldStyle(.roundedBorder)
+                                .frame(maxWidth: 320)
+                        }
+                    
+                        HStack {
+                            Text("Engine ID:")
+                            Spacer()
+                            TextField("Google Search Engine ID", text: AppConfiguration.shared.$googleSearchEngineId)
+                                .textFieldStyle(.roundedBorder)
+                                .frame(maxWidth: 320)
+                        }
                 }
-                .textFieldStyle(.roundedBorder)
+                .padding()
+                Spacer()
             }
-            .padding()
         case .imageGenerate:
-            Text("Image Generate")
+            VStack {
+                Text("Ask the assistant to generate an image with a description of the image.")
+                    .padding()
+                Spacer()
+            }
         case .transcribe:
-            Text("Transcribe")
+            VStack {
+                Text("Upload an audio file and ask the assistant to transcribe it for you. You may also also ask additional questions about the transcribed text.")
+                    .padding()
+                Spacer()
+            }
         }
     }
     
