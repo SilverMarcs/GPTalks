@@ -395,7 +395,7 @@ typealias PlatformImage = UIImage
                     
                     appendConversation(Conversation(role: "assistant", content: "urlScrape", isReplying: true))
                     
-                    let webContent = try await fetchAndParseHTMLAsync(from: url).joined()
+                    let webContent = try await fetchAndParseHTMLAsync(from: url)
                     
                     appendConversation(Conversation(role: "tool", content: webContent))
                     

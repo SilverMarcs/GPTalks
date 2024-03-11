@@ -37,7 +37,7 @@ struct IOSInputView: View {
                     resetContext
                 }
                 
-                IOSTextField(input: $session.input, isReplying: session.isReplying) {
+                IOSTextField(input: $session.input, isReplying: session.isReplying, focused: _focused) {
                     focused = false
                     
                     Task { @MainActor in

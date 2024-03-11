@@ -14,7 +14,7 @@ func getSummaryText(inputText: String) async -> String? {
     if let urlString = findURL(in: preProcessed) {
         do {
             let pTexts = try await fetchAndParseHTMLAsync(from: urlString)
-            return pTexts.joined()
+            return pTexts
         } catch {
             print("Failed to fetch or parse HTML: \(error.localizedDescription)")
         }
@@ -64,12 +64,14 @@ let task = URLSession.shared.dataTask(with: url) { data, response, error in
 task.resume()
 }
 
-func fetchAndParseHTMLAsync(from urlString: String) async throws -> [String] {
+func fetchAndParseHTMLAsync(from urlString: String) async throws -> String {
     return try await withCheckedThrowingContinuation { continuation in
         fetchAndParseHTML(from: urlString) { result in
             switch result {
             case .success(let pTexts):
-                continuation.resume(returning: pTexts)
+                // Join the strings and slice to the first 5000 characters
+                let joinedText = pTexts.joined(separator: " ").prefix(5000)
+                continuation.resume(returning: String(joinedText))
             case .failure(let error):
                 continuation.resume(throwing: error)
             }

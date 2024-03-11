@@ -12,7 +12,6 @@
 		0816CA092B7F97F800D22D5C /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 0816CA082B7F97F800D22D5C /* Splash */; };
 		0816CA0B2B7F97F800D22D5C /* SplashMarkdown in Frameworks */ = {isa = PBXBuildFile; productRef = 0816CA0A2B7F97F800D22D5C /* SplashMarkdown */; };
 		081B02712B81B1A2006AF219 /* ImageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081B02702B81B1A2006AF219 /* ImageSession.swift */; };
-		081B02732B81B1EF006AF219 /* AISession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081B02722B81B1EF006AF219 /* AISession.swift */; };
 		0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820E06C2B5395E500401A30 /* TextSelectionView.swift */; };
 		0827585F2B8A62B000F2EF8A /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0827585E2B8A62B000F2EF8A /* Components.swift */; };
 		0829D1132B3166D900DFFBB1 /* iOSMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1122B3166D900DFFBB1 /* iOSMessages.swift */; };
@@ -63,7 +62,6 @@
 		08C82E582B7CB00C0029791B /* ImageGeneration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C82E572B7CB00C0029791B /* ImageGeneration.swift */; };
 		08D533322B2C2D50008B4FA9 /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */; };
 		08D533342B2C2ED9008B4FA9 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */; };
-		08D5A2932B7DFE2E00BA1CE0 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D5A2922B7DFE2E00BA1CE0 /* OpenAIService.swift */; };
 		08D5A2962B7E068700BA1CE0 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08D5A2952B7E068700BA1CE0 /* OpenAI */; };
 		08DCC4822B98B1F600737191 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DCC4812B98B1F600737191 /* OpenAI */; };
 		08DCC4842B98C22E00737191 /* ChatTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCC4832B98C22E00737191 /* ChatTool.swift */; };
@@ -112,7 +110,6 @@
 /* Begin PBXFileReference section */
 		0803E1492B8338FA00D588C3 /* MessageContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContextMenu.swift; sourceTree = "<group>"; };
 		081B02702B81B1A2006AF219 /* ImageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSession.swift; sourceTree = "<group>"; };
-		081B02722B81B1EF006AF219 /* AISession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AISession.swift; sourceTree = "<group>"; };
 		0820E06C2B5395E500401A30 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
 		0827585E2B8A62B000F2EF8A /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
 		0829D1122B3166D900DFFBB1 /* iOSMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSMessages.swift; sourceTree = "<group>"; };
@@ -156,7 +153,6 @@
 		08C82E572B7CB00C0029791B /* ImageGeneration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGeneration.swift; sourceTree = "<group>"; };
 		08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
 		08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
-		08D5A2922B7DFE2E00BA1CE0 /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		08DCC4832B98C22E00737191 /* ChatTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTool.swift; sourceTree = "<group>"; };
 		08DCC4852B99AD8D00737191 /* ToolCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCallView.swift; sourceTree = "<group>"; };
 		08E047002B724DE400E81C91 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
@@ -241,11 +237,8 @@
 		08723DAB2AFA4911001D59FE /* LanguageModel */ = {
 			isa = PBXGroup;
 			children = (
-				08D5A2922B7DFE2E00BA1CE0 /* OpenAIService.swift */,
 				085D40C22AFD8C250033F8B5 /* Provider.swift */,
 				0837E4802AFFE7AF00C03059 /* Model.swift */,
-				081B02722B81B1EF006AF219 /* AISession.swift */,
-				08545C3B2B8D16F800592108 /* WebScrapeService.swift */,
 			);
 			path = LanguageModel;
 			sourceTree = "<group>";
@@ -253,6 +246,8 @@
 		0887DB182B9F262800153392 /* Functions */ = {
 			isa = PBXGroup;
 			children = (
+				08DCC4832B98C22E00737191 /* ChatTool.swift */,
+				08545C3B2B8D16F800592108 /* WebScrapeService.swift */,
 				0887DB192B9F263600153392 /* GoogleSearch.swift */,
 			);
 			path = Functions;
@@ -361,7 +356,6 @@
 				E4C65ED329CA9F7800AFA884 /* DialogueSession.swift */,
 				E4C65ED429CA9F7800AFA884 /* Conversation.swift */,
 				08A1EF512B26100600A88A3A /* DialogueViewModel.swift */,
-				08DCC4832B98C22E00737191 /* ChatTool.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -610,7 +604,6 @@
 				08545C3C2B8D16F800592108 /* WebScrapeService.swift in Sources */,
 				E4C65EA729CA9E7E00AFA884 /* GPTalks.xcdatamodeld in Sources */,
 				083983512B9D507A00A46A84 /* MacInputView.swift in Sources */,
-				08D5A2932B7DFE2E00BA1CE0 /* OpenAIService.swift in Sources */,
 				08E2611D2B98978800E4542E /* ToolMessageView.swift in Sources */,
 				08980EC62B97877A0005B522 /* TranscriptionSession.swift in Sources */,
 				0878E53B2B1683ED00E0D79D /* AppIconView.swift in Sources */,
@@ -640,7 +633,6 @@
 				0839835B2B9DBDD800A46A84 /* AudioPlayerView.swift in Sources */,
 				0829D1152B3166E300DFFBB1 /* MacOSMessages.swift in Sources */,
 				08C82E582B7CB00C0029791B /* ImageGeneration.swift in Sources */,
-				081B02732B81B1EF006AF219 /* AISession.swift in Sources */,
 				E4C65EF629CA9F7800AFA884 /* IosSettingsView.swift in Sources */,
 				08980EC42B9786E30005B522 /* TranscriptionCreator.swift in Sources */,
 				08376D7A2B7CBFCB003258D1 /* GenerationView.swift in Sources */,

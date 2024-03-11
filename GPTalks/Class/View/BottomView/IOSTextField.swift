@@ -12,9 +12,9 @@ import VisualEffectView
 struct IOSTextField: View {
     @Environment(\.colorScheme) var colorScheme
     
-    @FocusState var focused: Bool
     @Binding var input: String
     var isReplying: Bool
+    @FocusState var focused: Bool
     
     var send: () -> Void
     var stop: () -> Void
