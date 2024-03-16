@@ -34,15 +34,6 @@ struct IosSettingsView: View {
                     .disabled(!configuration.isMarkdownEnabled)
                     
                     HStack {
-                        Image(systemName: "textformat.abc")
-                            .renderingMode(.original)
-                        Spacer()
-                        Toggle("Alternate Chat UI", isOn: $configuration.alternateChatUi)
-                    }
-                    .disabled(!configuration.isMarkdownEnabled)
-                    
-                    
-                    HStack {
                         Image(systemName: "textformat")
                             .renderingMode(.original)
                         Spacer()

@@ -6,8 +6,8 @@
 //
 
 import CoreData
-import SwiftUI
 import SwiftSoup
+import SwiftUI
 
 struct ContentView: View {
     @Environment(DialogueViewModel.self) private var viewModel
@@ -15,15 +15,11 @@ struct ContentView: View {
     @State var transcriptionSession: TranscriptionSession = .init()
 
     var body: some View {
+#if os(macOS)
         NavigationSplitView {
-            #if os(macOS)
-                MacOSDialogList(viewModel: viewModel)
-            #else
-                IOSDialogList(viewModel: viewModel)
-            #endif
+            MacOSDialogList(viewModel: viewModel)
         } detail: {
             if let selectedDialogue = viewModel.selectedDialogue {
-                #if os(macOS)
                 if viewModel.selectedState == .images {
                     ImageCreator(imageSession: imageSession)
                         .onChange(of: viewModel.selectedDialogue) {
@@ -35,12 +31,6 @@ struct ContentView: View {
                     MacOSMessages(session: selectedDialogue)
                         .frame(minWidth: 500)
                 }
-                #else
-
-                iOSMessages(session: selectedDialogue)
-                    .id(selectedDialogue.id)
-
-                #endif
             } else {
                 Text("No Chat Selected")
                     .font(.title)
@@ -50,5 +40,28 @@ struct ContentView: View {
         .task {
             viewModel.fetchDialogueData()
         }
+#else
+
+        if isIPadOS {
+            NavigationSplitView {
+                IOSDialogList(viewModel: viewModel)
+            } detail: {
+                if let selectedDialogue = viewModel.selectedDialogue {
+                    iOSMessages(session: selectedDialogue)
+                        .id(selectedDialogue.id)
+                } else {
+                    Text("No Chat Selected")
+                        .font(.title)
+                }
+            }
+        } else {
+            NavigationStack {
+                IOSDialogList(viewModel: viewModel)
+            }
+            .task {
+                viewModel.fetchDialogueData()
+            }
+        }
+#endif
     }
 }

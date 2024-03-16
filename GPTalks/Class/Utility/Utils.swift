@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+#if !os(macOS)
+var isIPadOS: Bool {
+    UIDevice.current.userInterfaceIdiom == .pad && UIDevice.current.systemName == "iPadOS"
+}
+#endif
+
 extension Array {
     func chunked(into size: Int) -> [[Element]] {
         stride(from: 0, to: count, by: size).map {
@@ -35,7 +41,6 @@ extension String {
 extension Date {
     func nowFileName() -> String {
         let formatter = DateFormatter()
-        // Customize the date format to include year, month, day, hour, minute, second, and millisecond
         formatter.dateFormat = "yyyyMMdd_HHmmssSSS"
         return formatter.string(from: self)
     }
@@ -50,7 +55,6 @@ func extractValue(from jsonString: String, forKey key: String) -> String? {
     do {
         if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
            let value = jsonObject[key] as? String {
-//            print("\(key) value: \(value)")
             return value
         } else {
             print("Error: JSON does not contain a valid '\(key)' key.")

@@ -93,16 +93,18 @@ struct IOSDialogList: View {
                 }
                 .listStyle(.inset)
             } else {
-                List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
-                    DialogueListItem(session: session)
+                List(viewModel.currentDialogues, id: \.self) { session in
+                    NavigationLink {
+                        iOSMessages(session: session)
+                            .id(session.id)
+                    } label: {
+                        DialogueListItem(session: session)
+                    }
+
                 }
                 .listStyle(.plain)
             }
         }
-    }
-
-    private var isIPadOS: Bool {
-        UIDevice.current.userInterfaceIdiom == .pad && UIDevice.current.systemName == "iPadOS"
     }
 }
 #endif

@@ -25,17 +25,14 @@ struct UserMessageView: View {
     @State var showPreview: Bool = false
 
     var body: some View {
-        Group {
-            if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
+        alternateUI
+        #if os(macOS)
+        .toolbar {
+            ToolbarItem(placement: .keyboard) {
                 editBtn
             }
-            
-            if AppConfiguration.shared.alternateChatUi {
-                alternateUI
-            } else {
-                originalUI
-            }
         }
+        #endif
         .onHover { isHovered in
             self.isHovered = isHovered
         }
@@ -138,29 +135,6 @@ struct UserMessageView: View {
         .animation(.default, value: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText))
     }
     
-    var originalUI: some View {
-        VStack(alignment: .trailing, spacing: 5) {
-            ForEach(conversation.imagePaths, id: \.self) { imagePath in
-                if let imageData = getImageData(fromPath: imagePath) {
-                    ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
-                }
-            }
-            
-            HStack(alignment: .lastTextBaseline) {
-                #if os(macOS)
-                optionsMenu
-                
-                #endif
-                
-                Text(conversation.content)
-                    .bubbleStyle(isMyMessage: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? false : true, accentColor: session.configuration.provider.accentColor)
-                    .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow : .clear, in: RoundedRectangle(cornerRadius: radius))
-                    .textSelection(.enabled)
-            }
-        }
-        .padding(.leading, horizontalPadding)
-        .frame(maxWidth: .infinity, alignment: .trailing)
-    }
   
     @ViewBuilder
     func expandToggle(limit: Int) -> some View {
@@ -189,46 +163,7 @@ struct UserMessageView: View {
         .keyboardShortcut("e", modifiers: .command)
         .padding(4)
     }
-    
-    
-    var optionsMenu: some View {
-        Menu {
-            MessageContextMenu(session: session, conversation: conversation) {
-                editingMessage = conversation.content
-                isEditing = true
-            } toggleTextSelection: {
-                canSelectText.toggle()
-            }
-            .labelStyle(.titleAndIcon)
-            
-        } label: {
-            Image(systemName: "ellipsis.circle")
-                .buttonStyle(.plain)
-        }
-        .buttonStyle(.plain)
-        .labelsHidden()
-        .menuIndicator(.hidden)
-        .opacity(isHovered ? 1 : 0)
-        .transition(.opacity)
-        .animation(.easeOut(duration: 0.15), value: isHovered)
-    }
-    
-    private var horizontalPadding: CGFloat {
-        #if os(iOS)
-        50
-        #else
-        65
-        #endif
-    }
-    
-    private var radius: CGFloat {
-        #if os(macOS)
-        15
-        #else
-        18
-        #endif
-    }
-    
+
     private var imageSize: CGFloat {
         #if os(macOS)
         300

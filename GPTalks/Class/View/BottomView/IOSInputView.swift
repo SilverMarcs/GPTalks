@@ -73,7 +73,7 @@ struct IOSInputView: View {
         } label: {
             Image(systemName: "eraser.fill")
                 .resizable()
-                .inputImageStyle(padding: 10, imageSize: imageSize + 3)
+                .inputImageStyle(padding: 10, imageSize: imageSize + 2)
         }
     }
     
@@ -97,7 +97,7 @@ struct IOSInputView: View {
         } label: {
             Image(systemName: "photo")
                 .resizable()
-                .inputImageStyle(padding: 11, imageSize: imageSize + 7)
+                .inputImageStyle(padding: 11, imageSize: imageSize + 6)
         }
     }
     

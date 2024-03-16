@@ -26,9 +26,7 @@ struct ConversationView: View {
                         }
                     }
                 }
-            #if os(macOS)
             .opacity(0.9)
-            #endif
 
             if session.conversations.firstIndex(of: conversation) == session.resetMarker {
                 ContextResetDivider(session: session)

@@ -34,7 +34,7 @@ struct iOSMessages: View {
                         ForEach(session.filteredConversations()) { conversation in
                             ConversationView(session: session, conversation: conversation)
                         }
-                        .padding(.horizontal, AppConfiguration.shared.alternateChatUi ? 0 :  12)
+//                        .padding(.horizontal, AppConfiguration.shared.alternateChatUi ? 0 :  12)
                     }
                     .padding(.bottom, 12)
 
@@ -67,15 +67,16 @@ struct iOSMessages: View {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
                 } else {
-                    scrollToBottom(proxy: proxy, animated: false)
+//                    scrollToBottom(proxy: proxy, animated: false)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
                 }
             }
             .onTapGesture {
                 isTextFieldFocused = false
             }
             .onChange(of: isTextFieldFocused) {
-                if !isTextFieldFocused {
-                    scrollToBottom(proxy: proxy, delay: 0.2)
+                if isTextFieldFocused {
+                    scrollToBottom(proxy: proxy, delay: 0.1)
                 }
             }
             .onChange(of: session.input) {
@@ -114,13 +115,13 @@ struct iOSMessages: View {
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }
-            .onChange(of: session.configuration.provider) {
-                if session.shouldSwitchToVision {
-                    session.configuration.model = session.configuration.provider.visionModels[0]
-                } else {
-                    session.configuration.model = session.configuration.provider.preferredChatModel
-                }
-            }
+//            .onChange(of: session.configuration.provider) {
+//                if session.shouldSwitchToVision {
+//                    session.configuration.model = session.configuration.provider.visionModels[0]
+//                } else {
+//                    session.configuration.model = session.configuration.provider.preferredChatModel
+//                }
+//            }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
                     itemProvider.loadObject(ofClass: UIImage.self) { image, error in
@@ -181,12 +182,12 @@ struct iOSMessages: View {
             )
         }
 
-        .navigationTitle(session.configuration.model.name)
+//        .navigationTitle(session.configuration.model.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-//            ToolbarItem(placement: .principal) {
-//                navTitle
-//            }
+            ToolbarItem(placement: .principal) {
+                navTitle
+            }
 
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {

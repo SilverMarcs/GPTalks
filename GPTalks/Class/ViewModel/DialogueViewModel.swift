@@ -105,7 +105,7 @@ enum ContentState: String, CaseIterable, Identifiable {
                 activeDialogues
         case .recent, .speech, .images:
             #if os(iOS)
-            Array(activeDialogues.prefix(6))
+            Array(activeDialogues.prefix(8))
             #else
             Array(activeDialogues.prefix(10))
             #endif

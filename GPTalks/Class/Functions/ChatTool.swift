@@ -10,8 +10,8 @@ import SwiftUI
 import OpenAI
 
 enum ChatTool: String, CaseIterable {
-    case urlScrape = "urlScrape"
     case googleSearch = "googleSearch"
+    case urlScrape = "urlScrape"
     case imageGenerate = "imageGenerate"
     case transcribe = "transcribe"
     

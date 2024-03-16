@@ -90,13 +90,13 @@ struct MacOSMessages: View {
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }
-            .onChange(of: session.configuration.provider) {
-                if session.shouldSwitchToVision {
-                    session.configuration.model = session.configuration.provider.preferredVisionModel
-                } else {
-                    session.configuration.model = session.configuration.provider.preferredChatModel
-                }
-            }
+//            .onChange(of: session.configuration.provider) {
+//                if session.shouldSwitchToVision {
+//                    session.configuration.model = session.configuration.provider.preferredVisionModel
+//                } else {
+//                    session.configuration.model = session.configuration.provider.preferredChatModel
+//                }
+//            }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
                     itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in
@@ -150,6 +150,12 @@ struct MacOSMessages: View {
                     }
                 }
 
+                #if os(macOS)
+                ToolbarItem(placement: .keyboard) {
+                    deleteButton
+                }
+                #endif
+                
                 ToolbarItemGroup {
                         
                     ProviderPicker(session: session)
@@ -201,25 +207,28 @@ struct MacOSMessages: View {
                     ConversationView(session: session, conversation: conversation)
                 }
                 
-                ErrorDescView(session: session)
-                
-                Button("hidden") {
-                    if session.conversations.count > 0 {
-                        session.removeConversation(session.conversations.last!)
-                    }
-                }
-                .keyboardShortcut(.delete, modifiers: .command)
-                .hidden()
-                
+                ErrorDescView(session: session)                 
                 
                 Color.clear
                     .listRowSeparator(.hidden)
-                    .frame(height: 10)
+                    .frame(height: 30)
             }
             .padding(.horizontal, -8)
             .id("bottomID")
         }
         .listStyle(.plain)
+    }
+    
+    private var deleteButton: some View {
+        Button("hidden") {
+            if let session = viewModel.selectedDialogue {
+                if session.conversations.count > 0 {
+                    session.removeConversation(session.conversations.last!)
+                }
+            }
+        }
+        .keyboardShortcut(.delete, modifiers: .command)
+        .hidden()
     }
 }
 #endif

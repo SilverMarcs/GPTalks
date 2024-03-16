@@ -55,22 +55,6 @@ struct AlternateMarkdownEnabler: View {
     }
 }
 
-struct AlternateChatUI: View {
-    @ObservedObject var configuration: AppConfiguration = .shared
-    var isPicker: Bool = false
-
-    var body: some View {
-        if isPicker {
-            Picker("Alternate Chat UI", selection: $configuration.alternateChatUi) {
-                Text("True").tag(true)
-                Text("False").tag(false)
-            }
-        } else {
-            Toggle("Alternate Chat UI", isOn: $configuration.alternateChatUi)
-        }
-    }
-}
-
 struct PreferredChatProvider: View {
     @ObservedObject var configuration: AppConfiguration = .shared
 

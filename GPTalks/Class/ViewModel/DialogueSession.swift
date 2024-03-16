@@ -83,7 +83,16 @@ typealias PlatformImage = UIImage
     var isStreaming = false
     
     var shouldSwitchToVision: Bool {
-        conversations.contains(where: { $0.role == "user" && !$0.imagePaths.isEmpty }) || inputImages.count > 0
+        // Context adjustment logic
+        let adjustedConversations: [Conversation]
+        if conversations.count > resetMarker + 1 {
+            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
+        } else {
+            adjustedConversations = conversations
+        }
+        
+        // Filtering on adjusted conversations
+        return adjustedConversations.contains(where: { $0.role == "user" && !$0.imagePaths.isEmpty }) || inputImages.count > 0
     }
 
     // MARK: - Properties
@@ -553,11 +562,18 @@ typealias PlatformImage = UIImage
             finalMessages.append(.user(.init(content: .string(inputAudioPath))))
         }
         
-        return ChatQuery(messages: finalMessages,
-                         model: configuration.model.id,
-                         maxTokens: 4000,
-                         temperature: configuration.temperature,
-                         tools: ChatTool.allTools)
+        if configuration.model == .gpt4vision || configuration.model == .geminiprovision {
+            return ChatQuery(messages: finalMessages,
+                             model: configuration.model.id,
+                             maxTokens: 4000,
+                             temperature: configuration.temperature)
+        } else {
+            return ChatQuery(messages: finalMessages,
+                             model: configuration.model.id,
+                             maxTokens: 4000,
+                             temperature: configuration.temperature,
+                             tools: ChatTool.allTools)
+        }
     }
     
     func toolFollowup() async throws {
