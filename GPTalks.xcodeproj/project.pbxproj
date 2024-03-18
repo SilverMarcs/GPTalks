@@ -19,6 +19,7 @@
 		0829D1172B317A4B00DFFBB1 /* ConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1162B317A4B00DFFBB1 /* ConversationView.swift */; };
 		0829D1192B31936C00DFFBB1 /* IOSDialogList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1182B31936C00DFFBB1 /* IOSDialogList.swift */; };
 		0829D11B2B31938000DFFBB1 /* MacOSDialogList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D11A2B31938000DFFBB1 /* MacOSDialogList.swift */; };
+		083495A22BA869D50009E271 /* Reeeed in Frameworks */ = {isa = PBXBuildFile; productRef = 083495A12BA869D50009E271 /* Reeeed */; };
 		08376D7A2B7CBFCB003258D1 /* GenerationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08376D792B7CBFCB003258D1 /* GenerationView.swift */; };
 		08376D812B7CF0D1003258D1 /* ImageSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08376D802B7CF0D1003258D1 /* ImageSave.swift */; };
 		08376D832B7CF0F4003258D1 /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08376D822B7CF0F4003258D1 /* ZoomableImageView.swift */; };
@@ -195,6 +196,7 @@
 				0816CA0B2B7F97F800D22D5C /* SplashMarkdown in Frameworks */,
 				086F6A072B94129100DF42F9 /* SwiftUIImageViewer in Frameworks */,
 				08D5A2962B7E068700BA1CE0 /* OpenAI in Frameworks */,
+				083495A22BA869D50009E271 /* Reeeed in Frameworks */,
 				08F039CF2B7FD8AE000F3185 /* MarkdownWebView in Frameworks */,
 				08E2D21E2B7A5F800065B5E8 /* MarkdownWebView in Frameworks */,
 				08C594FE2B7FD52C009AB268 /* OpenAI in Frameworks */,
@@ -464,6 +466,7 @@
 				08EA25A62B98B09F00EC5E65 /* OpenAI */,
 				0883CFE32B98B174004A6FEA /* OpenAI */,
 				08DCC4812B98B1F600737191 /* OpenAI */,
+				083495A12BA869D50009E271 /* Reeeed */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -546,6 +549,7 @@
 				08545C382B8D0DD500592108 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				086F6A082B94168100DF42F9 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
 				08DCC4802B98B1F600737191 /* XCLocalSwiftPackageReference "../GPTalks_packages/OpenAI" */,
+				083495A02BA869D50009E271 /* XCRemoteSwiftPackageReference "reeeed" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -1070,6 +1074,14 @@
 				minimumVersion = 0.16.0;
 			};
 		};
+		083495A02BA869D50009E271 /* XCRemoteSwiftPackageReference "reeeed" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nate-parrott/reeeed";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
 		083E3B172B3A67B9007BE19E /* XCRemoteSwiftPackageReference "VisualEffectView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/VisualEffectView";
@@ -1127,6 +1139,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0816CA072B7F97F800D22D5C /* XCRemoteSwiftPackageReference "Splash" */;
 			productName = SplashMarkdown;
+		};
+		083495A12BA869D50009E271 /* Reeeed */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 083495A02BA869D50009E271 /* XCRemoteSwiftPackageReference "reeeed" */;
+			productName = Reeeed;
 		};
 		083E3B182B3A67B9007BE19E /* VisualEffectView */ = {
 			isa = XCSwiftPackageProductDependency;

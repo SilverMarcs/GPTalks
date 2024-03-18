@@ -10,8 +10,9 @@ import OpenAI
 
 enum Model: String, Codable {
     /// openai
-    case gpt3t0125
+    case gpt3t
     case gpt4
+    case gpt4t
     case gpt4t1106
     case gpt4t0125
     
@@ -31,6 +32,11 @@ enum Model: String, Codable {
     case geminipro
     case geminiprovision
     
+    /// claude
+    case claude3opus
+    case claude3sonnet
+    case claude3haiku
+    
     case sdxl
     case kandinsky3
     case playgroundv25
@@ -43,14 +49,16 @@ enum Model: String, Codable {
 
     var name: String {
         switch self {
-        case .gpt3t0125:
+        case .gpt3t:
             "GPT-3.5T"
         case .gpt4:
             "GPT-4"
-        case .gpt4t1106:
-            "GPT-4T (Old)"
-        case .gpt4t0125:
+        case .gpt4t:
             "GPT-4T"
+        case .gpt4t1106:
+            "GPT-4T 1106"
+        case .gpt4t0125:
+            "GPT-4T 0125"
         case .gpt4vision:
             "GPT-4V"
         case .dalle3:
@@ -73,6 +81,12 @@ enum Model: String, Codable {
             "Gemini"
         case .geminiprovision:
             "Gemini-V"
+        case .claude3opus:
+            "Claude-3-O"
+        case .claude3sonnet:
+            "Claude-3-S"
+        case .claude3haiku:
+            "Claude-3-H"
             
         case .sdxl:
             "SDXL"
@@ -89,15 +103,18 @@ enum Model: String, Codable {
         case .customImage:
             self.id.isEmpty ? "Custom Image" : self.id
 
+
         }
     }
 
     var id: String {
         switch self {
-        case .gpt3t0125:
-            "gpt-3.5-turbo-1106"
+        case .gpt3t:
+            "gpt-3.5-turbo"
         case .gpt4:
             "gpt-4"
+        case .gpt4t:
+            "gpt-4-turbo-review"
         case .gpt4t1106:
             "gpt-4-1106-preview"
         case .gpt4t0125:
@@ -124,6 +141,13 @@ enum Model: String, Codable {
         case .geminiprovision:
             "gemini-pro-vision"
             
+        case .claude3opus:
+            "claude-3-opus"
+        case .claude3sonnet:
+            "claude-3-sonnet"
+        case .claude3haiku:
+            "claude-3-haiku"
+            
         case .sdxl:
             "sdxl"
         case .kandinsky3:
@@ -143,8 +167,9 @@ enum Model: String, Codable {
     /// OpenAI
     static let openAIChatModels: [Model] =
         [
-            .gpt3t0125,
+            .gpt3t,
             .gpt4,
+            .gpt4t,
             .gpt4t1106,
             .gpt4t0125,
         ]
@@ -183,6 +208,8 @@ enum Model: String, Codable {
         [
             .mistrallarge,
             .geminipro,
+            .claude3opus,
+            .claude3sonnet,
         ]
     
     static let nagaVisionModels: [Model] =
@@ -196,6 +223,30 @@ enum Model: String, Codable {
             .dalle3,
             .sdxl,
             .kandinsky3,
+            .playgroundv25,
+        ]
+    
+    /// Kraken
+    static let krakenChatModels: [Model] =
+        openAIChatModels +
+        [
+            .mistrallarge,
+            .geminipro,
+            .claude3opus,
+            .claude3sonnet,
+            .claude3haiku,
+        ]
+    
+    static let krakenVisionModels: [Model] =
+        openAIVisionModels +
+        [
+            .geminiprovision,
+        ]
+    
+    static let krakenImageModels: [Model] =
+        [
+            .dalle3,
+            .sdxl,
             .playgroundv25,
         ]
 }

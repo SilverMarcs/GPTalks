@@ -163,7 +163,7 @@ typealias PlatformImage = UIImage
     
     @MainActor
     func generateTitle(forced: Bool = false) async {
-        if (conversations.count == 1 || conversations.count == 2) || (forced && conversations.count >= 2) {
+        if conversations.count == 1 || conversations.count == 2 || (forced && conversations.count >= 2) {
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
@@ -182,11 +182,14 @@ typealias PlatformImage = UIImage
             var tempTitle = ""
             
             do {
-                let result = try await service.chats(query: query)
-                tempTitle += result.choices.first?.message.content?.string ?? ""
-
-                withAnimation {
-                    title = tempTitle
+//                let result = try await service.chats(query: query)
+//                tempTitle += result.choices.first?.message.content?.string ?? ""
+                
+                for try await result in service.chatsStream(query: query) {
+                    tempTitle += result.choices.first?.delta.content ?? ""
+                    withAnimation {
+                        title = tempTitle
+                    }
                 }
                 
                 save()
@@ -239,9 +242,6 @@ typealias PlatformImage = UIImage
         }
         streamingTask?.cancel()
         streamingTask = nil
-        
-//        viewUpdater?.cancel()
-//        viewUpdater = nil
     }
 
     @MainActor
@@ -333,11 +333,6 @@ typealias PlatformImage = UIImage
                }
                
                appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths))
-               if AppConfiguration.shared.isAutoGenerateTitle {
-                   if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
-                       await generateTitle(forced: false)
-                   }
-               }
            }
         }
         
@@ -409,7 +404,8 @@ typealias PlatformImage = UIImage
                     
                     appendConversation(Conversation(role: "assistant", content: "urlScrape", isReplying: true))
                     
-                    let webContent = try await fetchAndParseHTMLAsync(from: url)
+//                    let webContent = try await fetchAndParseHTMLAsync(from: url)
+                    let webContent = try await retrieveWebContent(urlStr: url)
                     
                     appendConversation(Conversation(role: "tool", content: webContent))
                     
@@ -540,11 +536,11 @@ typealias PlatformImage = UIImage
 
         save()
         
-//        if AppConfiguration.shared.isAutoGenerateTitle {
-//            if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
-//                await generateTitle(forced: false)
-//            }
-//        }
+        if AppConfiguration.shared.isAutoGenerateTitle {
+            if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
+                await generateTitle(forced: false)
+            }
+        }
     }
     
     func createChatQuery() -> ChatQuery {

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftSoup
+import Reeeed
 
 func getSummaryText(inputText: String) async -> String? {
     let preProcessed = inputText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
@@ -22,6 +23,45 @@ func getSummaryText(inputText: String) async -> String? {
     
     return nil
 }
+
+func stripHTML(from input: String) -> String {
+    guard let data = input.data(using: .utf8) else {
+        return input
+    }
+
+    let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
+        .documentType: NSAttributedString.DocumentType.html,
+        .characterEncoding: String.Encoding.utf8.rawValue
+    ]
+
+    if let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) {
+        return attributedString.string
+    } else {
+        return input
+    }
+}
+
+
+func retrieveWebContent(urlStr: String) async throws -> String {
+    
+    var extractedHTML: String = ""
+    
+    if let url = URL(string: urlStr) {
+        DispatchQueue.main.async { Reeeed.warmup() }
+
+        let content = try await Reeeed.fetchAndExtractContent(fromURL: url)
+    
+        var extracted = content.extracted.content ?? ""
+        
+        extractedHTML = stripHTML(from: extracted)
+
+    }
+    
+    return extractedHTML
+
+}
+
+
 
 func findURL(in input: String) -> String? {
 // Split the input string into words or components separated by whitespace

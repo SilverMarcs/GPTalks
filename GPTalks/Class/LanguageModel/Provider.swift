@@ -13,6 +13,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     case oxygen
     case custom
     case naga
+    case kraken
 
     var id: String {
         switch self {
@@ -22,6 +23,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             "oxygen"
         case .naga:
             "naga"
+        case .kraken:
+            "kraken"
         case .custom:
             "custom"
         }
@@ -44,6 +47,11 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 token: AppConfiguration.shared.Nkey,
                 host: "api.naga.ac"
             )
+        case .kraken:
+            OpenAI.Configuration(
+                token: AppConfiguration.shared.Kkey,
+                host: "api.cracked.systems"
+            )
         case .custom:
             OpenAI.Configuration(
                 token: AppConfiguration.shared.Ckey,
@@ -64,8 +72,10 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             Color("niceColor")
         case .naga:
             Color("blueColor")
-        case .custom:
+        case .kraken:
             Color("tealColor")
+        case .custom:
+            Color("orangeColor")
         }
     }
 
@@ -77,6 +87,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             "Oxygen"
         case .naga:
             "Naga"
+        case .kraken:
+            "Kraken"
         case .custom:
             "Custom"
         }
@@ -88,10 +100,12 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             AppConfiguration.shared.OAImodel
         case .oxygen:
             AppConfiguration.shared.Omodel
-        case .custom:
-            .customChat
         case .naga:
             AppConfiguration.shared.Nmodel
+        case .kraken:
+            AppConfiguration.shared.Kmodel
+        case .custom:
+            .customChat
         }
     }
     
@@ -103,6 +117,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             AppConfiguration.shared.OImageModel
         case .naga:
             AppConfiguration.shared.NImageModel
+        case .kraken:
+            AppConfiguration.shared.KImageModel
         case .custom:
             .customImage
         }
@@ -115,6 +131,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .oxygen:
             .gpt4vision
         case .naga:
+            .gpt4vision
+        case .kraken:
             .gpt4vision
         case .custom:
             .customVision
@@ -129,6 +147,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             Model.oxygenChatModels
         case .naga:
             Model.nagaChatModels
+        case .kraken:
+            Model.krakenChatModels
         case .custom:
             [Model.customChat]
         }
@@ -142,6 +162,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             Model.oxygenVisionModels
         case .naga:
             Model.nagaVisionModels
+        case .kraken:
+            Model.krakenVisionModels
         case .custom:
             [Model.customVision]
         }
@@ -155,6 +177,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             Model.oxygenImageModels
         case .naga:
             Model.nagaImageModels
+        case .kraken:
+            Model.krakenImageModels
         case .custom:
             [Model.customImage]
         }
@@ -186,6 +210,13 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 apiKey: configuration.$Nkey,
                 provider: self
             )
+        case .kraken:
+            ServiceSettingsView(
+                chatModel: configuration.$Kmodel,
+                imageModel: configuration.$KImageModel,
+                apiKey: configuration.$Kkey,
+                provider: self
+            )
         case .custom:
             ServiceSettingsView(
                 chatModel: Binding.constant(.customChat),
@@ -208,6 +239,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             .openai,
             .oxygen,
             .naga,
+            .kraken,
             .custom,
         ]
     }

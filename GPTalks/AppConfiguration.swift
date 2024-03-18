@@ -32,7 +32,7 @@ class AppConfiguration: ObservableObject {
         
     /// openAI
     @AppStorage("configuration.OAIKey") var OAIkey = ""
-    @AppStorage("configuration.OAImodel") var OAImodel: Model = .gpt3t0125
+    @AppStorage("configuration.OAImodel") var OAImodel: Model = .gpt3t
     @AppStorage("configuration.OAIImageModel") var OAIImageModel: Model = .dalle3
 
     /// oxygen
@@ -44,6 +44,11 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.Nkey") var Nkey = ""
     @AppStorage("configuration.Nmodel") var Nmodel: Model = .gpt4t0125
     @AppStorage("configuration.NImageModel") var NImageModel: Model = .dalle3
+    
+    /// kraken
+    @AppStorage("configuration.Kkey") var Kkey = ""
+    @AppStorage("configuration.Kmodel") var Kmodel: Model = .gpt4
+    @AppStorage("configuration.KImageModel") var KImageModel: Model = .dalle3
     
     /// custom
     @AppStorage("configuration.Ckey") var Ckey = ""

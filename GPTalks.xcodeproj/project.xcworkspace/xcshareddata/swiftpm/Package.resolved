@@ -1,5 +1,15 @@
 {
+  "originHash" : "9e6ac0e472924e742e31ec5836df89c3d4c6eee023ee721ef2df11f874e74478",
   "pins" : [
+    {
+      "identity" : "fuzi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/cezheng/Fuzi",
+      "state" : {
+        "revision" : "f08c8323da21e985f3772610753bcfc652c2103f",
+        "version" : "3.1.3"
+      }
+    },
     {
       "identity" : "hotkey",
       "kind" : "remoteSourceControl",
@@ -25,6 +35,15 @@
       "state" : {
         "revision" : "7aff8d1b31148d32c5933d75557d42f6323ee3d1",
         "version" : "6.0.0"
+      }
+    },
+    {
+      "identity" : "reeeed",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nate-parrott/reeeed",
+      "state" : {
+        "revision" : "567e2f50592f8a5fe41e9ff64784b42c77f35433",
+        "version" : "1.0.1"
       }
     },
     {
@@ -73,5 +92,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
