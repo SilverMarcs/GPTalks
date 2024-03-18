@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ToolCallView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     var conversation: Conversation
     var session: DialogueSession
     
@@ -57,7 +59,7 @@ struct ToolCallView: View {
             .padding(.bottom, -5)
             .background(.background.secondary)
         #else
-            .background(Color.gray.opacity(0.12))
+            .background(colorScheme == .dark ? Color.gray.opacity(0.12) : Color.gray.opacity(0.07))
 //            .background(.background.secondary)
         #endif
 //            .border(.quinary, width: 1)

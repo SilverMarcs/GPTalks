@@ -29,7 +29,9 @@ struct UserMessageView: View {
         #if os(macOS)
         .toolbar {
             ToolbarItem(placement: .keyboard) {
-                editBtn
+                if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
+                    editBtn
+                }
             }
         }
         #endif
@@ -140,9 +142,9 @@ struct UserMessageView: View {
     func expandToggle(limit: Int) -> some View {
         if conversation.content.count > limit {
             Button {
-                withAnimation {
+//                withAnimation {
                     self.isExpanded.toggle()
-                }
+//                }
             } label: {
                 Image(systemName: isExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
             }

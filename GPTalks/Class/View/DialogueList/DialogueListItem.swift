@@ -57,11 +57,15 @@ struct DialogueListItem: View {
         .frame(minHeight: minHeight)
         .alert("Rename Session", isPresented: $showRenameDialogue) {
             TextField("Enter new name", text: $newName)
+                .onAppear {
+                    newName = session.title
+                }
             Button("Rename") {
                 session.rename(newTitle: newName)
             }
             Button("Cancel", role: .cancel) {
                 showRenameDialogue = false
+                newName = session.title
             }
         }
         .contextMenu {
@@ -103,8 +107,10 @@ struct DialogueListItem: View {
     
     var renameButton: some View {
         Button {
-            print("Current session title: \(session.title)")
-//            newName = session.title
+//            print("Current session title: \(session.title)")
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                newName = session.title
+//            }
             showRenameDialogue.toggle()
         } label: {
             Label("Rename", systemImage: "pencil")

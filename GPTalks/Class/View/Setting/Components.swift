@@ -99,7 +99,7 @@ struct DefaultSystemPrompt: View {
     @ObservedObject var configuration: AppConfiguration = .shared
 
     var body: some View {
-        TextField("Enter a system prompt", text: $configuration.systemPrompt)
+        TextField("Enter a system prompt", text: $configuration.systemPrompt, axis: .vertical)
     }
 }
 

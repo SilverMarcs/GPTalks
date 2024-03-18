@@ -163,7 +163,7 @@ typealias PlatformImage = UIImage
     
     @MainActor
     func generateTitle(forced: Bool = false) async {
-        if conversations.count == 1 || conversations.count == 2 {
+        if (conversations.count == 1 || conversations.count == 2) || (forced && conversations.count >= 2) {
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
@@ -333,6 +333,11 @@ typealias PlatformImage = UIImage
                }
                
                appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths))
+               if AppConfiguration.shared.isAutoGenerateTitle {
+                   if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
+                       await generateTitle(forced: false)
+                   }
+               }
            }
         }
         
@@ -535,9 +540,11 @@ typealias PlatformImage = UIImage
 
         save()
         
-        if AppConfiguration.shared.isAutoGenerateTitle {
-            await generateTitle(forced: false)
-        }
+//        if AppConfiguration.shared.isAutoGenerateTitle {
+//            if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
+//                await generateTitle(forced: false)
+//            }
+//        }
     }
     
     func createChatQuery() -> ChatQuery {

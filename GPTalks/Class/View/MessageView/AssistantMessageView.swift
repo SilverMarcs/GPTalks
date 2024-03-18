@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct AssistantMessageView: View {
+    @Environment (\.colorScheme) var colorScheme
+    
     @Environment(DialogueViewModel.self) private var viewModel
     var conversation: Conversation
     var session: DialogueSession
@@ -123,7 +125,7 @@ struct AssistantMessageView: View {
         #else
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
 //        .background(.background.secondary)
-        .background(Color.gray.opacity(0.12))
+        .background(colorScheme == .dark ? Color.gray.opacity(0.12) : Color.gray.opacity(0.07))
         #endif
         .animation(.default, value: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText))
         .border(.quinary, width: 1)

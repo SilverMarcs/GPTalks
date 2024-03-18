@@ -17,7 +17,7 @@ struct IosDefaultConfigView: View {
                 
                 Section("System Prompt") {
                     DefaultSystemPrompt()
-                        .lineLimit(4, reservesSpace: true)
+                        .lineLimit(5, reservesSpace: true)
                 }
             }
         }
