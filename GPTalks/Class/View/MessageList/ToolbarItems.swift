@@ -53,7 +53,7 @@ struct ModelPicker: View {
                     Text(model.name).tag(model.id)
                 }
             } else {
-                ForEach(session.configuration.provider.visionModels + session.configuration.provider.chatModels, id: \.self) { model in
+                ForEach(session.configuration.provider.chatModels + session.configuration.provider.visionModels, id: \.self) { model in
                     Text(model.name).tag(model.id)
                 }
             }

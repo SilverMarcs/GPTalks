@@ -14,6 +14,8 @@ struct ContentView: View {
     @State var imageSession: ImageSession = .init()
     @State var transcriptionSession: TranscriptionSession = .init()
 
+    @State private var isLoading = true
+    
     var body: some View {
 #if os(macOS)
         NavigationSplitView {
@@ -28,8 +30,22 @@ struct ContentView: View {
                 } else if viewModel.selectedState == .speech {
                     TranscriptionCreator()
                 } else {
-                    MacOSMessages(session: selectedDialogue)
-                        .frame(minWidth: 500)
+                    if isLoading {
+                        ProgressView()
+                            .id(selectedDialogue.id)
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now()) {
+                                    isLoading = false
+                                }
+                            }
+                        } else {
+                            MacOSMessages(session: selectedDialogue)
+                                .id(selectedDialogue.id)
+                                .frame(minWidth: 500)
+                                .onChange(of: viewModel.selectedDialogue) {
+                                    isLoading = true
+                                }
+                        }
                 }
             } else {
                 Text("No Chat Selected")

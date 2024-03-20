@@ -47,7 +47,8 @@ struct MarkdownView: View {
                         FontSize(.em(0.97))
                     }
                     .padding(12)
-                    .background(.background.secondary)
+//                    .background(.background.secondary)
+                    .background(Color("mdownBgColor"))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .markdownMargin(top: .zero, bottom: .em(0.8))
 
@@ -81,7 +82,7 @@ struct MarkdownView: View {
             .foregroundStyle(.primary)
 #if os(macOS)
             .background(
-                .background,
+                .background.opacity(0.5),
                 in: RoundedRectangle(cornerRadius: 5, style: .continuous)
             )
             .overlay {

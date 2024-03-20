@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,6 +20,7 @@
 		0829D1192B31936C00DFFBB1 /* IOSDialogList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1182B31936C00DFFBB1 /* IOSDialogList.swift */; };
 		0829D11B2B31938000DFFBB1 /* MacOSDialogList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D11A2B31938000DFFBB1 /* MacOSDialogList.swift */; };
 		083495A22BA869D50009E271 /* Reeeed in Frameworks */ = {isa = PBXBuildFile; productRef = 083495A12BA869D50009E271 /* Reeeed */; };
+		083495A52BA8BCBA0009E271 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 083495A42BA8BCBA0009E271 /* OpenAI */; };
 		08376D7A2B7CBFCB003258D1 /* GenerationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08376D792B7CBFCB003258D1 /* GenerationView.swift */; };
 		08376D812B7CF0D1003258D1 /* ImageSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08376D802B7CF0D1003258D1 /* ImageSave.swift */; };
 		08376D832B7CF0F4003258D1 /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08376D822B7CF0F4003258D1 /* ZoomableImageView.swift */; };
@@ -64,7 +65,6 @@
 		08D533322B2C2D50008B4FA9 /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */; };
 		08D533342B2C2ED9008B4FA9 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D533332B2C2ED9008B4FA9 /* MarkdownView.swift */; };
 		08D5A2962B7E068700BA1CE0 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08D5A2952B7E068700BA1CE0 /* OpenAI */; };
-		08DCC4822B98B1F600737191 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DCC4812B98B1F600737191 /* OpenAI */; };
 		08DCC4842B98C22E00737191 /* ChatTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCC4832B98C22E00737191 /* ChatTool.swift */; };
 		08DCC4862B99AD8D00737191 /* ToolCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCC4852B99AD8D00737191 /* ToolCallView.swift */; };
 		08E047012B724DE400E81C91 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E047002B724DE400E81C91 /* ViewModifiers.swift */; };
@@ -185,7 +185,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				086F6A0A2B94168100DF42F9 /* SwiftUIImageViewer in Frameworks */,
-				08DCC4822B98B1F600737191 /* OpenAI in Frameworks */,
 				08EA25A72B98B09F00EC5E65 /* OpenAI in Frameworks */,
 				0883CFE42B98B174004A6FEA /* OpenAI in Frameworks */,
 				08C594FB2B7FCEA4009AB268 /* OpenAI in Frameworks */,
@@ -201,6 +200,7 @@
 				08E2D21E2B7A5F800065B5E8 /* MarkdownWebView in Frameworks */,
 				08C594FE2B7FD52C009AB268 /* OpenAI in Frameworks */,
 				E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */,
+				083495A52BA8BCBA0009E271 /* OpenAI in Frameworks */,
 				08545C3A2B8D0DD500592108 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -465,8 +465,8 @@
 				086F6A092B94168100DF42F9 /* SwiftUIImageViewer */,
 				08EA25A62B98B09F00EC5E65 /* OpenAI */,
 				0883CFE32B98B174004A6FEA /* OpenAI */,
-				08DCC4812B98B1F600737191 /* OpenAI */,
 				083495A12BA869D50009E271 /* Reeeed */,
+				083495A42BA8BCBA0009E271 /* OpenAI */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -548,8 +548,8 @@
 				08F039CD2B7FD8AE000F3185 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				08545C382B8D0DD500592108 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				086F6A082B94168100DF42F9 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
-				08DCC4802B98B1F600737191 /* XCLocalSwiftPackageReference "../GPTalks_packages/OpenAI" */,
 				083495A02BA869D50009E271 /* XCRemoteSwiftPackageReference "reeeed" */,
+				083495A32BA8BCBA0009E271 /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -1050,13 +1050,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		08DCC4802B98B1F600737191 /* XCLocalSwiftPackageReference "../GPTalks_packages/OpenAI" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../GPTalks_packages/OpenAI;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		080D542B2B7913E300273B56 /* XCRemoteSwiftPackageReference "HotKey" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1080,6 +1073,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.1;
+			};
+		};
+		083495A32BA8BCBA0009E271 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SilverMarcs/OpenAI";
+			requirement = {
+				branch = MacPaw.gpt_vision;
+				kind = branch;
 			};
 		};
 		083E3B172B3A67B9007BE19E /* XCRemoteSwiftPackageReference "VisualEffectView" */ = {
@@ -1145,6 +1146,11 @@
 			package = 083495A02BA869D50009E271 /* XCRemoteSwiftPackageReference "reeeed" */;
 			productName = Reeeed;
 		};
+		083495A42BA8BCBA0009E271 /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 083495A32BA8BCBA0009E271 /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
+		};
 		083E3B182B3A67B9007BE19E /* VisualEffectView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 083E3B172B3A67B9007BE19E /* XCRemoteSwiftPackageReference "VisualEffectView" */;
@@ -1177,10 +1183,6 @@
 			productName = OpenAI;
 		};
 		08D5A2952B7E068700BA1CE0 /* OpenAI */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = OpenAI;
-		};
-		08DCC4812B98B1F600737191 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
 		};

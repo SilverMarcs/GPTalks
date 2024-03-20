@@ -1,5 +1,5 @@
 {
-  "originHash" : "9e6ac0e472924e742e31ec5836df89c3d4c6eee023ee721ef2df11f874e74478",
+  "originHash" : "b2061428c5492da8cedea69cf307267c4bed61f38effc2059e03d1439aa1d5ce",
   "pins" : [
     {
       "identity" : "fuzi",
@@ -35,6 +35,15 @@
       "state" : {
         "revision" : "7aff8d1b31148d32c5933d75557d42f6323ee3d1",
         "version" : "6.0.0"
+      }
+    },
+    {
+      "identity" : "openai",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/OpenAI",
+      "state" : {
+        "branch" : "MacPaw.gpt_vision",
+        "revision" : "ad8e882bd571c7f80d2e781e3bf6ca1d18b28385"
       }
     },
     {

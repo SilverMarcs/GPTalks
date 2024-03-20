@@ -242,6 +242,10 @@ typealias PlatformImage = UIImage
         }
         streamingTask?.cancel()
         streamingTask = nil
+        
+        if let _ = conversations.last {
+            conversations[conversations.count - 1].isReplying = false
+        }
     }
 
     @MainActor

@@ -114,7 +114,7 @@ enum Model: String, Codable {
         case .gpt4:
             "gpt-4"
         case .gpt4t:
-            "gpt-4-turbo-review"
+            "gpt-4-turbo-preview"
         case .gpt4t1106:
             "gpt-4-1106-preview"
         case .gpt4t0125:
@@ -170,8 +170,8 @@ enum Model: String, Codable {
             .gpt3t,
             .gpt4,
             .gpt4t,
-            .gpt4t1106,
-            .gpt4t0125,
+//            .gpt4t1106,
+//            .gpt4t0125,
         ]
     
     static let openAIVisionModels: [Model] =
@@ -191,6 +191,7 @@ enum Model: String, Codable {
         [
             .ogpt4browsing,
             .odolphin,
+            .gpt4t0125,
         ]
     
     static let oxygenVisionModels: [Model] =
@@ -206,10 +207,11 @@ enum Model: String, Codable {
     static let nagaChatModels: [Model] =
         openAIChatModels +
         [
-            .mistrallarge,
-            .geminipro,
             .claude3opus,
             .claude3sonnet,
+            .claude3haiku,
+            .mistrallarge,
+            .geminipro,
         ]
     
     static let nagaVisionModels: [Model] =
@@ -232,9 +234,6 @@ enum Model: String, Codable {
         [
             .mistrallarge,
             .geminipro,
-            .claude3opus,
-            .claude3sonnet,
-            .claude3haiku,
         ]
     
     static let krakenVisionModels: [Model] =
