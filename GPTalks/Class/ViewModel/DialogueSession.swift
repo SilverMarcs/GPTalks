@@ -338,6 +338,13 @@ typealias PlatformImage = UIImage
                
                appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths))
            }
+            if AppConfiguration.shared.isAutoGenerateTitle && configuration.provider != .kraken {
+                if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
+                    Task {
+                        await generateTitle(forced: false)
+                    }
+                }
+            }
         }
         
         let service: OpenAI = OpenAI(configuration: configuration.provider.config)
@@ -540,11 +547,11 @@ typealias PlatformImage = UIImage
 
         save()
         
-        if AppConfiguration.shared.isAutoGenerateTitle {
-            if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
-                await generateTitle(forced: false)
-            }
-        }
+//        if AppConfiguration.shared.isAutoGenerateTitle && configuration.provider != .kraken {
+//            if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
+//                await generateTitle(forced: false)
+//            }
+//        }
     }
     
     func createChatQuery() -> ChatQuery {
@@ -575,8 +582,16 @@ typealias PlatformImage = UIImage
                              maxTokens: 4000,
                              temperature: configuration.temperature)
         } else {
+            let model: Model
+            
+            if configuration.provider == .oxygen && configuration.model == .gpt4t {
+                model = .gpt4t0125
+            } else {
+                model = configuration.model
+            }
+            
             return ChatQuery(messages: finalMessages,
-                             model: configuration.model.id,
+                             model: model.id,
                              maxTokens: 4000,
                              temperature: configuration.temperature,
                              tools: ChatTool.allTools)

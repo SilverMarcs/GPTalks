@@ -119,7 +119,7 @@ struct iOSMessages: View {
             }
 //            .onChange(of: session.configuration.provider) {
 //                if session.shouldSwitchToVision {
-//                    session.configuration.model = session.configuration.provider.visionModels[0]
+//                    session.configuration.model = session.configuration.provider.preferredVisionModel
 //                } else {
 //                    session.configuration.model = session.configuration.provider.preferredChatModel
 //                }

@@ -2,11 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>Your custom message explaining why your app needs access to save photos.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-    <string>Your custom message explaining why your app needs access to save photos.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>

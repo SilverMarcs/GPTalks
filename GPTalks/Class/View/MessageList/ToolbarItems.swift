@@ -12,7 +12,7 @@ struct TempPicker: View {
     
     var body: some View {
         Picker("Temperature", selection: $session.configuration.temperature) {
-            ForEach(stride(from: 0.0, through: 2.0, by: 0.2).map { $0 }, id: \.self) { temp in
+            ForEach(stride(from: 0.0, through: 2.0, by: 0.1).map { $0 }, id: \.self) { temp in
                 Text(String(format: "%.1f", temp)).tag(temp)
             }
         }

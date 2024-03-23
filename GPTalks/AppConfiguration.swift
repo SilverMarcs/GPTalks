@@ -37,12 +37,12 @@ class AppConfiguration: ObservableObject {
 
     /// oxygen
     @AppStorage("configuration.Okey") var Okey = ""
-    @AppStorage("configuration.Omodel") var Omodel: Model = .gpt4t0125
-    @AppStorage("configuration.OImageModel") var OImageModel: Model = .absolutereality_v181
+    @AppStorage("configuration.Omodel") var Omodel: Model = .gpt4t
+    @AppStorage("configuration.OImageModel") var OImageModel: Model = .dalle3
     
     /// naga
     @AppStorage("configuration.Nkey") var Nkey = ""
-    @AppStorage("configuration.Nmodel") var Nmodel: Model = .gpt4t0125
+    @AppStorage("configuration.Nmodel") var Nmodel: Model = .gpt4t
     @AppStorage("configuration.NImageModel") var NImageModel: Model = .dalle3
     
     /// kraken

@@ -31,9 +31,9 @@ struct MacOSMessages: View {
                 if AppConfiguration.shared.alternateMarkdown {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
-                    if session.conversations.count > 8 {
-                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
-                    }
+//                    if session.conversations.count > 8 {
+//                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
+//                    }
                 } else {
                     scrollToBottom(proxy: proxy, animated: false)
                 }
@@ -65,9 +65,6 @@ struct MacOSMessages: View {
                     isUserScrolling = true
                 }
             }
-            .onChange(of: session.isAddingConversation) {
-                scrollToBottom(proxy: proxy, animated: false)
-            }
             .onChange(of: session.input) {
                 if session.input.contains("\n") || (session.input.count > 105) {
                     scrollToBottom(proxy: proxy)
@@ -93,13 +90,13 @@ struct MacOSMessages: View {
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }
-//            .onChange(of: session.configuration.provider) {
-//                if session.shouldSwitchToVision {
-//                    session.configuration.model = session.configuration.provider.preferredVisionModel
-//                } else {
-//                    session.configuration.model = session.configuration.provider.preferredChatModel
-//                }
-//            }
+            .onChange(of: session.configuration.provider) {
+                if session.shouldSwitchToVision {
+                    session.configuration.model = session.configuration.provider.preferredVisionModel
+                } else {
+                    session.configuration.model = session.configuration.provider.preferredChatModel
+                }
+            }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
                     itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in
