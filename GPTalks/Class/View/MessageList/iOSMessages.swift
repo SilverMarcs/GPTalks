@@ -63,8 +63,8 @@ struct iOSMessages: View {
             .listStyle(.plain)
             .onAppear {
                 if AppConfiguration.shared.alternateMarkdown {
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.3)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.5)
                     if session.conversations.count > 8 {
                         scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
                     }

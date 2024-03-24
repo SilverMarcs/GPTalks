@@ -8,6 +8,16 @@
 import OpenAI
 import SwiftUI
 
+extension View {
+    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
+    }
+}
+
 struct MacOSDialogList: View {
     @Bindable var viewModel: DialogueViewModel
 
@@ -20,13 +30,15 @@ struct MacOSDialogList: View {
                     List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
                         DialogueListItem(session: session)
                             .id(session.id)
-                            .listRowSeparator(.hidden)
+                            .listRowSeparator(.visible)
+                            .listRowSeparatorTint(Color.gray.opacity(0.2))
                             .accentColor(.accentColor) // to keep row colors untouched
+//                            .padding(.top, -8))
                     }
                     .accentColor(Color("niceColorLighter")) // to change list seldction color
                     .animation(.default, value: viewModel.selectedState)
                     .animation(.default, value: viewModel.searchText)
-                    .padding(.top, -10)
+                    .padding(.top, -8)
                     .onChange(of: viewModel.activeDialogues.count) {
 //                         this is faaar from perfect but is required if we want to keep list style inset which is required for animations
                         if !viewModel.activeDialogues.isEmpty {
@@ -36,8 +48,7 @@ struct MacOSDialogList: View {
                 }
             }
         }
-        .listStyle(.inset)
-        .scrollContentBackground(.hidden)
+
         .frame(minWidth: 290)
         .toolbar {
             Spacer()
@@ -57,6 +68,8 @@ struct MacOSDialogList: View {
             }
             .keyboardShortcut("n", modifiers: .command)
         }
+        .listStyle(.inset)
+        .scrollContentBackground(.hidden)
         .searchable(text: $viewModel.searchText, placement: .toolbar)
     }
 }

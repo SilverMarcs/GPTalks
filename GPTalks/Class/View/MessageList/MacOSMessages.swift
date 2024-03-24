@@ -27,17 +27,17 @@ struct MacOSMessages: View {
                     .background(.bar)
                     .id(session.id)
             }
-            .onAppear {
-                if AppConfiguration.shared.alternateMarkdown {
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
-//                    if session.conversations.count > 8 {
-//                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
-//                    }
-                } else {
-                    scrollToBottom(proxy: proxy, animated: false)
-                }
-            }
+//            .onAppear {
+//                if AppConfiguration.shared.alternateMarkdown {
+//                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
+//                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+////                    if session.conversations.count > 8 {
+////                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
+////                    }
+//                } else {
+//                    scrollToBottom(proxy: proxy, animated: false)
+//                }
+//            }
             .onChange(of: viewModel.selectedDialogue) {
                 if viewModel.selectedState == .images {
                     viewModel.selectedState = .recent
@@ -48,6 +48,16 @@ struct MacOSMessages: View {
                         session.pasteImageFromClipboard()
                     }
                     return event
+                }
+                
+                if AppConfiguration.shared.alternateMarkdown {
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+                    if session.conversations.count > 8 {
+                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
+                    }
+                } else {
+                    scrollToBottom(proxy: proxy, animated: false)
                 }
             }
             .onChange(of: session.conversations.last?.content) {

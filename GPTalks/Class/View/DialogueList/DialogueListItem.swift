@@ -18,7 +18,7 @@ struct DialogueListItem: View {
     var body: some View {
         HStack(spacing: imgToTextSpace) {
             session.configuration.provider.logoImage
-            VStack(spacing: 8) {
+            VStack {
                 HStack {
                     Text(session.title)
                         .bold()
@@ -31,7 +31,7 @@ struct DialogueListItem: View {
                         .opacity(0.9)
                     #endif
                 }
-                VStack {
+                Group {
                     if session.isReplying {
                         ReplyingIndicatorView()
                             .frame(
@@ -46,15 +46,15 @@ struct DialogueListItem: View {
                             .lineLimit(textLineLimit)
                             .frame(
                                 maxWidth: .infinity,
-                                maxHeight: .infinity,
+                                maxHeight: lastMessageMaxHeight,
                                 alignment: .leading
                             )
                     }
                 }
-                .frame(maxHeight: lastMessageMaxHeight)
             }
         }
-        .frame(minHeight: minHeight)
+        .padding(paddingVal)
+        .frame(height: lastMessageMaxHeight)
         .alert("Rename Session", isPresented: $showRenameDialogue) {
             TextField("Enter new name", text: $newName)
                 .onAppear {
@@ -107,10 +107,7 @@ struct DialogueListItem: View {
     
     var renameButton: some View {
         Button {
-//            print("Current session title: \(session.title)")
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                newName = session.title
-//            }
+            newName = session.title
             showRenameDialogue.toggle()
         } label: {
             Label("Rename", systemImage: "pencil")
@@ -118,14 +115,13 @@ struct DialogueListItem: View {
         .tint(.accentColor)
     }
     
-    private var minHeight: CGFloat {
+    private var paddingVal: CGFloat {
         #if os(macOS)
-            55
+            7
         #else
-            75
+            0
         #endif
     }
-    
 
     private var imgToTextSpace: CGFloat {
         #if os(macOS)
@@ -137,9 +133,9 @@ struct DialogueListItem: View {
 
     private var lastMessageMaxHeight: CGFloat {
         #if os(macOS)
-        20
+        55
         #else
-        40
+        70
         #endif
     }
 

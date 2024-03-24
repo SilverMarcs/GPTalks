@@ -107,7 +107,7 @@ enum ContentState: String, CaseIterable, Identifiable {
             #if os(iOS)
             Array(activeDialogues.prefix(8))
             #else
-            Array(activeDialogues.prefix(10))
+            Array(activeDialogues.prefix(11))
             #endif
         }
     }
@@ -207,7 +207,9 @@ enum ContentState: String, CaseIterable, Identifiable {
     }
     
     func addDialogue(conversations: [Conversation] = []) {
-        selectedState = .recent
+        if selectedState == .speech || selectedState == .images {
+            selectedState = .recent
+        }
 
         let newItem = DialogueData(context: viewContext)
         newItem.id = UUID()
