@@ -92,7 +92,7 @@ struct iOSMessages: View {
                 }
 
                 if session.shouldSwitchToVision {
-                    session.configuration.model = session.configuration.provider.visionModels[0]
+                    session.configuration.model = session.configuration.provider.preferredVisionModel
                 }
             }
             .onChange(of: session.errorDesc) {
@@ -112,7 +112,7 @@ struct iOSMessages: View {
             .onChange(of: session.inputImages) {
                 if !session.inputImages.isEmpty {
                     if !session.configuration.provider.visionModels.contains(session.configuration.model) {
-                        session.configuration.model = session.configuration.provider.visionModels[0]
+                        session.configuration.model = session.configuration.provider.preferredVisionModel
                     }
                     scrollToBottom(proxy: proxy, animated: true)
                 }

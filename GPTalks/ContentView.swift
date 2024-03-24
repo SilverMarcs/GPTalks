@@ -40,7 +40,7 @@ struct ContentView: View {
                             }
                         } else {
                             MacOSMessages(session: selectedDialogue)
-                                .id(selectedDialogue.id)
+//                                .id(selectedDialogue.id)
                                 .frame(minWidth: 500)
                                 .onChange(of: viewModel.selectedDialogue) {
                                     isLoading = true

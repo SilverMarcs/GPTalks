@@ -51,7 +51,7 @@ func retrieveWebContent(urlStr: String) async throws -> String {
 
         let content = try await Reeeed.fetchAndExtractContent(fromURL: url)
     
-        var extracted = content.extracted.content ?? ""
+        let extracted = content.extracted.content ?? ""
         
         extractedHTML = stripHTML(from: extracted)
 

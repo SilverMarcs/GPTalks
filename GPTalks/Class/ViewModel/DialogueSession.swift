@@ -174,8 +174,16 @@ typealias PlatformImage = UIImage
             })
             
             
+            let model: Model
+            
+            if configuration.provider == .kraken {
+                model = .gpt3t
+            } else {
+                model = configuration.model
+            }
+            
             let query = ChatQuery(messages: messages,
-                                  model: configuration.model.id,
+                                  model: model.id,
                                   maxTokens: 6,
                                   stream: false)
             
@@ -338,7 +346,7 @@ typealias PlatformImage = UIImage
                
                appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths))
            }
-            if AppConfiguration.shared.isAutoGenerateTitle && configuration.provider != .kraken {
+            if AppConfiguration.shared.isAutoGenerateTitle {
                 if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
                     Task {
                         await generateTitle(forced: false)
@@ -546,12 +554,6 @@ typealias PlatformImage = UIImage
 //        conversations[conversations.count - 1].isReplying = false
 
         save()
-        
-//        if AppConfiguration.shared.isAutoGenerateTitle && configuration.provider != .kraken {
-//            if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
-//                await generateTitle(forced: false)
-//            }
-//        }
     }
     
     func createChatQuery() -> ChatQuery {
@@ -582,16 +584,17 @@ typealias PlatformImage = UIImage
                              maxTokens: 4000,
                              temperature: configuration.temperature)
         } else {
-            let model: Model
             
-            if configuration.provider == .oxygen && configuration.model == .gpt4t {
-                model = .gpt4t0125
-            } else {
-                model = configuration.model
+            var modelId: String {
+                if configuration.provider == .oxygen && configuration.model == .gpt4t {
+                    return Model.gpt4t0125.id
+                } else {
+                    return configuration.model.id
+                }
             }
             
             return ChatQuery(messages: finalMessages,
-                             model: model.id,
+                             model: modelId,
                              maxTokens: 4000,
                              temperature: configuration.temperature,
                              tools: ChatTool.allTools)

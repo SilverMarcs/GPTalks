@@ -84,25 +84,27 @@ struct IOSDialogList: View {
 
     @ViewBuilder
     private var list: some View {
-        if viewModel.shouldShowPlaceholder {
-            PlaceHolderView(imageName: "message.fill", title: viewModel.placeHolderText)
-        } else {
-            if isIPadOS {
-                List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
-                    DialogueListItem(session: session)
-                }
-                .listStyle(.inset)
+        Group {
+            if viewModel.shouldShowPlaceholder {
+                PlaceHolderView(imageName: "message.fill", title: viewModel.placeHolderText)
             } else {
-                List(viewModel.currentDialogues, id: \.self) { session in
-                    NavigationLink {
-                        iOSMessages(session: session)
-                            .id(session.id)
-                    } label: {
+                if isIPadOS {
+                    List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
                         DialogueListItem(session: session)
                     }
-
+                    .listStyle(.inset)
+                } else {
+                    List(viewModel.currentDialogues, id: \.self) { session in
+                        NavigationLink {
+                            iOSMessages(session: session)
+                                .id(session.id)
+                        } label: {
+                            DialogueListItem(session: session)
+                        }
+                        
+                    }
+                    .listStyle(.plain)
                 }
-                .listStyle(.plain)
             }
         }
     }
