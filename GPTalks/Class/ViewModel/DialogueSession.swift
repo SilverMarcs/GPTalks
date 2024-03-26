@@ -614,17 +614,139 @@ typealias PlatformImage = UIImage
 
         var lastUIUpdateTime = Date()
         
+        var isWebFuncCall = false
+        var isGoogleSearchFuncCall = false
+        var isImageFuncCall = false
+        var isTranscribeFuncCall = false
+        
+        var toolCallId = ""
+        var funcParam = ""
+        
         for try await result in service.chatsStream(query: query) {
-            streamText += result.choices.first?.delta.content ?? ""
-            
-            let currentTime = Date()
-            if currentTime.timeIntervalSince(lastUIUpdateTime) >= uiUpdateInterval {
-                conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                lastConversationData.sync(with: conversations[conversations.count - 1])
-                lastUIUpdateTime = currentTime
+            if let funcCalls = result.choices.first?.delta.toolCalls {
+                if let name = funcCalls.first?.function?.name, name == "urlScrape" {
+                    isWebFuncCall = true
+                } else if let name = funcCalls.first?.function?.name, name == "imageGenerate" {
+                    isImageFuncCall = true
+                } else if let name = funcCalls.first?.function?.name, name == "transcribe" {
+                    isTranscribeFuncCall = true
+                } else if let name = funcCalls.first?.function?.name, name == "googleSearch" {
+                    isGoogleSearchFuncCall = true
+                }
+                
+                funcParam += funcCalls.first?.function?.arguments ?? ""
+                
+                if let id = result.choices.first?.delta.toolCalls?.first?.id {
+                    toolCallId = id
+                }
+            } else {
+                streamText += result.choices.first?.delta.content ?? ""
+                
+                let currentTime = Date()
+                if currentTime.timeIntervalSince(lastUIUpdateTime) >= uiUpdateInterval {
+                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    lastConversationData.sync(with: conversations[conversations.count - 1])
+                    lastUIUpdateTime = currentTime
+                }
             }
         }
         
+        // Ensure the UI is updated one last time after the loop ends
+        if !streamText.isEmpty {
+            conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+            lastConversationData.sync(with: conversations[conversations.count - 1])
+        }
+        
+        if isWebFuncCall {
+            print(toolCallId)
+            print("webfunc")
+            
+            if let url = extractValue(from: funcParam, forKey: "url") {
+                removeConversation(at: conversations.count - 1)
+                
+                appendConversation(Conversation(role: "assistant", content: "urlScrape", isReplying: true))
+                
+//                    let webContent = try await fetchAndParseHTMLAsync(from: url)
+                let webContent = try await retrieveWebContent(urlStr: url)
+                
+                appendConversation(Conversation(role: "tool", content: webContent))
+                
+                conversations[conversations.count - 2].isReplying = false
+                
+                try await toolFollowup()
+                
+            }
+        }
+        
+        if isGoogleSearchFuncCall {
+            print(toolCallId)
+            print("googleSearch")
+            
+            if let searchQuery = extractValue(from: funcParam, forKey: "searchQuery") {
+                removeConversation(at: conversations.count - 1)
+                
+                appendConversation(Conversation(role: "assistant", content: "googleSearch", isReplying: true))
+                
+                let searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
+                appendConversation(Conversation(role: "tool", content: searchResult))
+                
+                self.conversations[self.conversations.count - 2].isReplying = false
+                
+                try await self.toolFollowup()
+            }
+        }
+        
+        if isImageFuncCall {
+            print("imageFuncCall")
+            print(funcParam)
+            
+            removeConversation(at: conversations.count - 1)
+            
+            appendConversation(Conversation(role: "assistant", content: "imageGenerate", isReplying: true))
+            
+            if let prompt = extractValue(from: funcParam, forKey: "prompt") {
+                let query = ImagesQuery(prompt: prompt, model: configuration.provider.preferredImageModel.id, n: 1, quality: .standard, size: ._1024)
+                
+                let results = try await service.images(query: query)
+                
+                for urlResult in results.data {
+                    if let urlString = urlResult.url, let url = URL(string: urlString) {
+                        let (data, _) = try await URLSession.shared.data(from: url)
+                        if let savedURL = saveImage(image: PlatformImage(data: data)!) {
+                            appendConversation(Conversation(role: "tool", content: "imageGenerate", imagePaths: [savedURL]))
+                            appendConversation(Conversation(role: "assistant", content: "Prompt: " + prompt))
+                            conversations[conversations.count - 3].isReplying = false
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                self.isAddingConversation.toggle()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        if isTranscribeFuncCall {
+            print("transcribeFuncCall")
+            print(funcParam)
+            
+            removeConversation(at: conversations.count - 1)
+            
+            appendConversation(Conversation(role: "assistant", content: "transcribe", isReplying: true))
+            
+            if let audioPath = extractValue(from: funcParam, forKey: "audioPath") {
+                let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: .whisper_1)
+                
+                let result = try await service.audioTranscriptions(query: query)
+                
+                conversations[conversations.count - 1].isReplying = false
+                
+                appendConversation(Conversation(role: "tool", content: result.text, audioPath: audioPath))
+                
+                try await toolFollowup()
+            }
+        }
+    
+        conversations[conversations.count - 1].isReplying = false
         // Final UI update for any remaining data
         if !streamText.isEmpty {
             conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
