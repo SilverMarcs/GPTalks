@@ -27,17 +27,17 @@ struct MacOSMessages: View {
                     .background(.bar)
                     .id(session.id)
             }
-//            .onAppear {
-//                if AppConfiguration.shared.alternateMarkdown {
-//                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
-//                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
-////                    if session.conversations.count > 8 {
-////                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
-////                    }
-//                } else {
-//                    scrollToBottom(proxy: proxy, animated: false)
-//                }
-//            }
+            .onAppear {
+                if AppConfiguration.shared.alternateMarkdown {
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+//                    if session.conversations.count > 8 {
+//                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
+//                    }
+                } else {
+                    scrollToBottom(proxy: proxy, animated: false)
+                }
+            }
             .onChange(of: viewModel.selectedDialogue) {
                 if viewModel.selectedState == .images {
                     viewModel.selectedState = .recent
@@ -48,16 +48,6 @@ struct MacOSMessages: View {
                         session.pasteImageFromClipboard()
                     }
                     return event
-                }
-                
-                if AppConfiguration.shared.alternateMarkdown {
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
-                    if session.conversations.count > 8 {
-                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
-                    }
-                } else {
-                    scrollToBottom(proxy: proxy, animated: false)
                 }
             }
             .onChange(of: session.conversations.last?.content) {
@@ -212,18 +202,19 @@ struct MacOSMessages: View {
 
     private var normalList: some View {
         List {
-            LazyVStack(spacing: 0) {
+            VStack(spacing: 0) {
                 ForEach(session.filteredConversations()) { conversation in
                     ConversationView(session: session, conversation: conversation)
                 }
                 
                 ErrorDescView(session: session)                 
                 
-                Color.clear
-                    .listRowSeparator(.hidden)
-                    .frame(height: 30)
+//                Color.clear
+//                    .listRowSeparator(.hidden)
+//                    .frame(height: 30)
             }
             .padding(.horizontal, -8)
+            .padding(.bottom, 30)
             .id("bottomID")
         }
         .listStyle(.plain)

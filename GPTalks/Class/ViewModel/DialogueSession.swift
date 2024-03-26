@@ -167,7 +167,7 @@ typealias PlatformImage = UIImage
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
-            let taskMessage = Conversation(role: "user", content: "Generate a title of a chat based on the previous conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. If there are two distinct topics being talked about, just make a title with two words and an and word in the middle. If the conversation discusses multiple things not linked to each other, come up with a title that decribes the most recent discussion and add the two words and more to the end. Do not acknowledge these instructions but definitely do follow them. Again, do not put the title in quoation marks")
+            let taskMessage = Conversation(role: "user", content: "Generate a title of a chat based on the previous conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. If there are two distinct topics being talked about, just make a title with two words and an and word in the middle. If the conversation discusses multiple things not linked to each other, come up with a title that decribes the most recent discussion and add the two words and more to the end. Do not acknowledge these instructions but definitely do follow them. Again, do not put the title in quoation marks. Do not put any punctuation at all")
             
             let messages = ([taskMessage] + conversations).map({ conversation in
                 conversation.toChat()
@@ -195,9 +195,9 @@ typealias PlatformImage = UIImage
                 
                 for try await result in service.chatsStream(query: query) {
                     tempTitle += result.choices.first?.delta.content ?? ""
-                    withAnimation {
+//                    withAnimation {
                         title = tempTitle
-                    }
+//                    }
                 }
                 
                 save()
@@ -346,13 +346,6 @@ typealias PlatformImage = UIImage
                
                appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths))
            }
-            if AppConfiguration.shared.isAutoGenerateTitle {
-                if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
-                    Task {
-                        await generateTitle(forced: false)
-                    }
-                }
-            }
         }
         
         streamingTask = Task {
@@ -361,7 +354,6 @@ typealias PlatformImage = UIImage
         
         do {
             inputImages = []
-            inputAudioPath = ""
             
             #if os(macOS)
             try await streamingTask?.value
@@ -377,29 +369,13 @@ typealias PlatformImage = UIImage
             #endif
             
         } catch {
-            isStreaming = false
             // TODO: do better with stop_reason from openai
             if error.localizedDescription == "cancelled" {
-                if lastConversation.content != "" {
-//                    lastConversationData.sync(with: conversations[conversations.count - 1])
-                } else {
-                    removeConversation(at: conversations.count - 1)
-                }
-                conversations[conversations.count - 1].isReplying = false
-            } else {
-                if lastConversation.role == "assistant" && lastConversation.content == ""  {
-                    do {
-                    #if os(macOS)
-                    try await Task.sleep(nanoseconds: 100_000_000)
-                    #else
-                    try await Task.sleep(nanoseconds: 100_000_000)
-                    #endif
-                    } catch {
-                        print("couldnt sleep")
-                    }
+                if let lastConversation = conversations.last, lastConversation.role == "assistant", lastConversation.content == "" {
                     removeConversation(at: conversations.count - 1)
                 }
             }
+            
             setErrorDesc(errorDesc: error.localizedDescription)
         }
 
@@ -453,43 +429,38 @@ typealias PlatformImage = UIImage
     }
     
     func processRequest() async throws {
+        let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+        
         let service = OpenAI(configuration: configuration.provider.config)
         
         let query = createChatQuery()
         
-        let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+        if AppConfiguration.shared.isAutoGenerateTitle {
+            if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
+                Task {
+                    await generateTitle(forced: false)
+                }
+            }
+        }
          
         let uiUpdateInterval = TimeInterval(0.1)
 
         var lastUIUpdateTime = Date()
         
-        var isWebFuncCall = false
-        var isGoogleSearchFuncCall = false
-        var isImageFuncCall = false
-        var isTranscribeFuncCall = false
-        
-        var toolCallId = ""
-        var funcParam = ""
-        
         var streamText = ""
+        var funcParam = ""
+        var chatTool: ChatTool?
         
         for try await result in service.chatsStream(query: query) {
-            if let funcCalls = result.choices.first?.delta.toolCalls {
-                if let name = funcCalls.first?.function?.name, name == "urlScrape" {
-                    isWebFuncCall = true
-                } else if let name = funcCalls.first?.function?.name, name == "imageGenerate" {
-                    isImageFuncCall = true
-                } else if let name = funcCalls.first?.function?.name, name == "transcribe" {
-                    isTranscribeFuncCall = true
-                } else if let name = funcCalls.first?.function?.name, name == "googleSearch" {
-                    isGoogleSearchFuncCall = true
+            if let funcCalls = result.choices.first?.delta.toolCalls, let firstFuncCall = funcCalls.first {
+                let toolName = firstFuncCall.function?.name ?? ""
+                let _ = firstFuncCall.id ?? ""
+
+                if chatTool == nil {
+                    chatTool = ChatTool(rawValue: toolName)
                 }
                 
                 funcParam += funcCalls.first?.function?.arguments ?? ""
-                
-                if let id = result.choices.first?.delta.toolCalls?.first?.id {
-                    toolCallId = id
-                }
             } else {
                 streamText += result.choices.first?.delta.content ?? ""
                 
@@ -501,60 +472,49 @@ typealias PlatformImage = UIImage
                 }
             }
         }
-        
-        // Ensure the UI is updated one last time after the loop ends
-        if !streamText.isEmpty {
-            conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-            lastConversationData.sync(with: conversations[conversations.count - 1])
-        }
-        
-        if isWebFuncCall {
-            print(toolCallId)
-            print("webfunc")
-            
-            if let url = extractValue(from: funcParam, forKey: "url") {
+
+        if let chatTool = chatTool {
+            switch chatTool {
+            case .urlScrape, .googleSearch, .imageGenerate, .transcribe:
+                print("funcParam: \(funcParam)")
+                
                 removeConversation(at: conversations.count - 1)
+                appendConversation(Conversation(role: "assistant", content: "\(chatTool.rawValue)", isReplying: true))
+//                removeConversation(at: conversations.count - 2)
                 
-                appendConversation(Conversation(role: "assistant", content: "urlScrape", isReplying: true))
-                
-                let webContent = try await fetchAndParseHTMLAsync(from: url)
-//                let webContent = try await retrieveWebContent(urlStr: url)
-                
-                appendConversation(Conversation(role: "tool", content: webContent))
-                
-                conversations[conversations.count - 2].isReplying = false
-                
-                try await processRequest()
-                
+                try await handleToolCall(chatTool: chatTool, funcParam: funcParam)
+            }
+        } else {
+            conversations[conversations.count - 1].isReplying = false
+            
+            if !streamText.isEmpty {
+                conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                lastConversationData.sync(with: conversations[conversations.count - 1])
             }
         }
+    }
+
+    func handleToolCall(chatTool: ChatTool, funcParam: String) async throws {
+        let service = OpenAI(configuration: configuration.provider.config)
         
-        if isGoogleSearchFuncCall {
-            print(toolCallId)
-            print("googleSearch")
-            
+        switch chatTool {
+        case .urlScrape:
+            if let url = extractValue(from: funcParam, forKey: "url") {
+                let webContent = try await fetchAndParseHTMLAsync(from: url)
+                appendConversation(Conversation(role: "tool", content: webContent))
+                
+                self.conversations[self.conversations.count - 2].isReplying = false
+                try await processRequest()
+            }
+        case .googleSearch:
             if let searchQuery = extractValue(from: funcParam, forKey: "searchQuery") {
-                removeConversation(at: conversations.count - 1)
-                
-                appendConversation(Conversation(role: "assistant", content: "googleSearch", isReplying: true))
-                
                 let searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
                 appendConversation(Conversation(role: "tool", content: searchResult))
                 
                 self.conversations[self.conversations.count - 2].isReplying = false
-                
-                try await self.processRequest()
+                try await processRequest()
             }
-        }
-        
-        if isImageFuncCall {
-            print("imageFuncCall")
-            print(funcParam)
-            
-            removeConversation(at: conversations.count - 1)
-            
-            appendConversation(Conversation(role: "assistant", content: "imageGenerate", isReplying: true))
-            
+        case .imageGenerate:
             if let prompt = extractValue(from: funcParam, forKey: "prompt") {
                 let query = ImagesQuery(prompt: prompt, model: configuration.provider.preferredImageModel.id, n: 1, quality: .standard, size: ._1024)
                 
@@ -567,41 +527,24 @@ typealias PlatformImage = UIImage
                             appendConversation(Conversation(role: "tool", content: "imageGenerate", imagePaths: [savedURL]))
                             appendConversation(Conversation(role: "assistant", content: "Prompt: " + prompt))
                             conversations[conversations.count - 3].isReplying = false
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                self.isAddingConversation.toggle()
-                            }
                         }
                     }
                 }
             }
-        }
-        
-        if isTranscribeFuncCall {
-            print("transcribeFuncCall")
-            print(funcParam)
-            
-            removeConversation(at: conversations.count - 1)
-            
-            appendConversation(Conversation(role: "assistant", content: "transcribe", isReplying: true))
-            
+        case .transcribe:
             if let audioPath = extractValue(from: funcParam, forKey: "audioPath") {
                 let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: .whisper_1)
                 
                 let result = try await service.audioTranscriptions(query: query)
                 
+                inputAudioPath = ""
+
                 conversations[conversations.count - 1].isReplying = false
                 
                 appendConversation(Conversation(role: "tool", content: result.text, audioPath: audioPath))
                 
                 try await processRequest()
             }
-        }
-    
-        conversations[conversations.count - 1].isReplying = false
-        // Final UI update for any remaining data
-        if !streamText.isEmpty {
-            conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-            lastConversationData.sync(with: conversations[conversations.count - 1])
         }
     }
 }
@@ -798,25 +741,5 @@ extension DialogueSession {
         } catch let error {
             print(error.localizedDescription)
         }
-    }
-}
-
-
-extension DialogueSession {
-    func bottomPadding(for conversation: Conversation) -> CGFloat {
-        // Check if the conversation is the last in the array
-        guard let currentIndex = conversations.firstIndex(where: { $0.id == conversation.id }),
-              currentIndex != conversations.count - 1 else {
-            // If it's the last conversation or not found, return 0
-            return 0
-        }
-        
-        // For specific conversation content by the assistant, return -47
-        if conversation.role == "assistant" && ["urlScrape", "transcribe", "imageGenerate"].contains(conversation.content) {
-            return -47
-        }
-        
-        // Default padding
-        return 0
     }
 }
