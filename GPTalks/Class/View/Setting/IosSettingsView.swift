@@ -37,7 +37,7 @@ struct IosSettingsView: View {
                         Image(systemName: "textformat")
                             .renderingMode(.original)
                         Spacer()
-                        Toggle("AutoGen Titlte", isOn: $configuration.isAutoGenerateTitle)
+                        Toggle("AutoGen Title", isOn: $configuration.isAutoGenerateTitle)
                     }
                     
                 }

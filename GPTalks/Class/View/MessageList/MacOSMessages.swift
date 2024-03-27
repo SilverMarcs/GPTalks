@@ -31,9 +31,9 @@ struct MacOSMessages: View {
                 if AppConfiguration.shared.alternateMarkdown {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
-//                    if session.conversations.count > 8 {
-//                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
-//                    }
+                    if session.conversations.count > 8 {
+                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
+                    }
                 } else {
                     scrollToBottom(proxy: proxy, animated: false)
                 }

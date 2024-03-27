@@ -190,18 +190,12 @@ typealias PlatformImage = UIImage
             var tempTitle = ""
             
             do {
-//                let result = try await service.chats(query: query)
-//                tempTitle += result.choices.first?.message.content?.string ?? ""
-                
                 for try await result in service.chatsStream(query: query) {
                     tempTitle += result.choices.first?.delta.content ?? ""
-//                    withAnimation {
                         title = tempTitle
-//                    }
                 }
                 
                 save()
-                
             } catch {
                 if forced {
                     print("Ensure at least two messages to generate a title.")
@@ -243,7 +237,7 @@ typealias PlatformImage = UIImage
         save()
     }
 
-//    @MainActor
+    @MainActor
     func stopStreaming() {
         if let lastConcersationContent = conversations.last?.content, lastConcersationContent.isEmpty {
             removeConversation(at: conversations.count - 1)
@@ -369,11 +363,8 @@ typealias PlatformImage = UIImage
             #endif
             
         } catch {
-            // TODO: do better with stop_reason from openai
-            if error.localizedDescription == "cancelled" {
-                if let lastConversation = conversations.last, lastConversation.role == "assistant", lastConversation.content == "" {
-                    removeConversation(at: conversations.count - 1)
-                }
+            if let lastConversation = conversations.last, lastConversation.role == "assistant", lastConversation.content == "" {
+                removeConversation(at: conversations.count - 1)
             }
             
             setErrorDesc(errorDesc: error.localizedDescription)
@@ -428,6 +419,7 @@ typealias PlatformImage = UIImage
         }
     }
     
+    @MainActor
     func processRequest() async throws {
         let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
         
@@ -480,7 +472,6 @@ typealias PlatformImage = UIImage
                 
                 removeConversation(at: conversations.count - 1)
                 appendConversation(Conversation(role: "assistant", content: "\(chatTool.rawValue)", isReplying: true))
-//                removeConversation(at: conversations.count - 2)
                 
                 try await handleToolCall(chatTool: chatTool, funcParam: funcParam)
             }
@@ -494,6 +485,7 @@ typealias PlatformImage = UIImage
         }
     }
 
+    @MainActor
     func handleToolCall(chatTool: ChatTool, funcParam: String) async throws {
         let service = OpenAI(configuration: configuration.provider.config)
         
