@@ -30,22 +30,9 @@ struct ContentView: View {
                 } else if viewModel.selectedState == .speech {
                     TranscriptionCreator()
                 } else {
-                    if isLoading {
-                        ProgressView()
-                            .id(selectedDialogue.id)
-                            .onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now()) {
-                                    isLoading = false
-                                }
-                            }
-                        } else {
-                            MacOSMessages(session: selectedDialogue)
-//                                .id(selectedDialogue.id)
-                                .frame(minWidth: 500)
-                                .onChange(of: viewModel.selectedDialogue) {
-                                    isLoading = true
-                                }
-                        }
+                    MacOSMessages(session: selectedDialogue)
+//                        .id(selectedDialogue.id)
+                        .frame(minWidth: 500)
                 }
             } else {
                 Text("No Chat Selected")

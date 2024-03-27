@@ -184,7 +184,7 @@ typealias PlatformImage = UIImage
             
             let query = ChatQuery(messages: messages,
                                   model: model.id,
-                                  maxTokens: 6,
+                                  maxTokens: 10,
                                   stream: false)
             
             var tempTitle = ""

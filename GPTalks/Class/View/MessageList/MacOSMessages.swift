@@ -27,7 +27,11 @@ struct MacOSMessages: View {
                     .background(.bar)
                     .id(session.id)
             }
-            .onAppear {
+            .onChange(of: viewModel.selectedDialogue) {
+                if viewModel.selectedState == .images {
+                    viewModel.selectedState = .recent
+                }
+                
                 if AppConfiguration.shared.alternateMarkdown {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
@@ -36,11 +40,6 @@ struct MacOSMessages: View {
                     }
                 } else {
                     scrollToBottom(proxy: proxy, animated: false)
-                }
-            }
-            .onChange(of: viewModel.selectedDialogue) {
-                if viewModel.selectedState == .images {
-                    viewModel.selectedState = .recent
                 }
                 
                 NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (event) -> NSEvent? in
