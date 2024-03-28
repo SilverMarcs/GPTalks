@@ -512,14 +512,14 @@ typealias PlatformImage = UIImage
             if let prompt = extractValue(from: funcParam, forKey: "prompt") {
                 let query = ImagesQuery(prompt: prompt, model: configuration.provider.preferredImageModel.id, n: 1, quality: .standard, size: ._1024)
                 
-            let results = try await service.images(query: query)
+                let results = try await service.images(query: query)
                 
                 for urlResult in results.data {
                     if let urlString = urlResult.url, let url = URL(string: urlString) {
                         let (data, _) = try await URLSession.shared.data(from: url)
                         if let savedURL = saveImage(image: PlatformImage(data: data)!) {
                             appendConversation(Conversation(role: "tool", content: "Prompt: \n" + prompt))
-                            appendConversation(Conversation(role: "assistant", content: "", imagePaths: [savedURL]))
+                            appendConversation(Conversation(role: "assistant", content: "Here is the image you requested:", imagePaths: [savedURL]))
                             conversations[conversations.count - 3].isReplying = false
                         }
                     }
@@ -528,13 +528,10 @@ typealias PlatformImage = UIImage
         case .transcribe:
             if let audioPath = extractValue(from: funcParam, forKey: "audioPath") {
                 let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: .whisper_1)
-                
                 let result = try await service.audioTranscriptions(query: query)
                 
                 inputAudioPath = ""
-
                 conversations[conversations.count - 1].isReplying = false
-                
                 appendConversation(Conversation(role: "tool", content: result.text, audioPath: audioPath))
                 
                 try await processRequest()

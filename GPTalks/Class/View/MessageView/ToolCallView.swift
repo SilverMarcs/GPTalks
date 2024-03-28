@@ -109,7 +109,7 @@ struct ToolCallView: View {
                                 .textSelection(.enabled)
                                 .padding()
                         }
-                        .frame(width: 500, height: 400)
+                        .frame(width: 500, height: conversation.content.count > 80 ? 400 : 200)
 #else
                         NavigationView {
                             ScrollView {

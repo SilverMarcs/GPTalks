@@ -80,7 +80,11 @@ struct ImageView: View {
         } label: {
             Image(systemName: "xmark.circle.fill")
                 .resizable()
+            #if os(macOS)
                 .frame(width: 20, height: 20)
+            #else
+                .frame(width: 30, height: 30)
+            #endif
                 .foregroundStyle(.foreground.secondary, Color.gray.opacity(0.2))
 //                .font(.headline)
 //                .padding(5)
