@@ -126,16 +126,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     
     var preferredVisionModel: Model {
         switch self {
-        case .openai:
+        case .openai, .oxygen, .naga, .kraken, .custom:
             .gpt4vision
-        case .oxygen:
-            .gpt4vision
-        case .naga:
-            .gpt4vision
-        case .kraken:
-            .gpt4vision
-        case .custom:
-            .customVision
         }
     }
 
@@ -165,7 +157,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .kraken:
             Model.krakenVisionModels
         case .custom:
-            [Model.customVision]
+            Model.openAIVisionModels + [Model.customVision]
         }
     }
     

@@ -93,7 +93,7 @@ struct IOSDialogList: View {
                     }
                     .listStyle(.inset)
                 } else {
-                    List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
+                    List(viewModel.currentDialogues, id: \.self) { session in
                         NavigationLink {
                             iOSMessages(session: session)
                                 .id(session.id)

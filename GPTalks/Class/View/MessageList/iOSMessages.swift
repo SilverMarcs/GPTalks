@@ -12,9 +12,11 @@ import VisualEffectView
 
 struct iOSMessages: View {
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.scenePhase) var scenePhase
     @Environment(DialogueViewModel.self) private var viewModel
 
     @Bindable var session: DialogueSession
+    var isAutoResuming: Bool = false
 
     @State private var shouldStopScroll: Bool = false
     @State private var showScrollButton: Bool = false
@@ -30,13 +32,10 @@ struct iOSMessages: View {
         ScrollViewReader { proxy in
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
-                    VStack(spacing: 0) {
-                        ForEach(session.filteredConversations()) { conversation in
-                            ConversationView(session: session, conversation: conversation)
-                        }
+                    ForEach(session.filteredConversations()) { conversation in
+                        ConversationView(session: session, conversation: conversation)
+//                                .animation(.default, value: session.isReplying)
                     }
-                    .padding(.bottom, 12)
-
 
                     ErrorDescView(session: session)
 
@@ -46,8 +45,7 @@ struct iOSMessages: View {
                         Color.clear.preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
                     }
                 }
-                .animation(.default, value: session.isReplying)
-
+                
                 scrollBtn(proxy: proxy)
             }
             #if !os(visionOS)
@@ -64,6 +62,12 @@ struct iOSMessages: View {
                 
                 if AppConfiguration.shared.alternateMarkdown && session.conversations.count > 8 {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
+                }
+                
+                if isAutoResuming {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                        isTextFieldFocused = true
+                    }
                 }
             }
             .onTapGesture {
@@ -244,6 +248,19 @@ struct iOSMessages: View {
                 }
             }
         }
+        .onChange(of: scenePhase) {
+           switch scenePhase {
+           case .active:
+               print("App has resumed from background")
+               if AppConfiguration.shared.autoResume {
+                   isTextFieldFocused = true
+               }
+           case .inactive, .background:
+               break
+           @unknown default:
+               break
+           }
+       }
     }
 
     private var navTitle: some View {

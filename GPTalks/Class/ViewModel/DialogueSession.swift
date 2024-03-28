@@ -367,6 +367,7 @@ typealias PlatformImage = UIImage
                 removeConversation(at: conversations.count - 1)
             }
             
+            conversations[conversations.count - 1].isReplying = false
             setErrorDesc(errorDesc: error.localizedDescription)
         }
 

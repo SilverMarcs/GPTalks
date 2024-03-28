@@ -40,6 +40,12 @@ struct IosSettingsView: View {
                         Toggle("AutoGen Title", isOn: $configuration.isAutoGenerateTitle)
                     }
                     
+                    HStack {
+                        Image(systemName: "play.fill")
+                            .renderingMode(.original)
+                        Spacer()
+                        Toggle("Auto Resume", isOn: $configuration.autoResume)
+                    }
                 }
                 
                 Section("Preferred Services") {
@@ -84,6 +90,16 @@ struct IosSettingsView: View {
                     }
                 }
                 
+                
+                Section("Services") {
+                    ForEach(Provider.availableProviders) { provider in
+                        NavigationLink(
+                            destination: provider.destination,
+                            label: { provider.settingsLabel }
+                        )
+                    }
+                }
+                
                 Section("Plugins") {
                     NavigationLink {
                         ChatTool.googleSearch.destination
@@ -93,16 +109,6 @@ struct IosSettingsView: View {
                                 .renderingMode(.original)
                             Text("Google Search")
                         }
-                    }
-                }
-                
-                
-                Section("Services") {
-                    ForEach(Provider.availableProviders) { provider in
-                        NavigationLink(
-                            destination: provider.destination,
-                            label: { provider.settingsLabel }
-                        )
                     }
                 }
                 

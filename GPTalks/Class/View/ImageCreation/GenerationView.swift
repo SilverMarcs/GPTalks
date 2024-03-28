@@ -28,6 +28,7 @@ struct GenerationView: View {
                 Text(generation.model)
                     .font(.title3)
                     .bold()
+                    .textSelection(.enabled)
                 
                 Text(generation.prompt)
                     .textSelection(.enabled)
