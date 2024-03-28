@@ -45,6 +45,10 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
             } else if chatRole == .assistant && content == "transcribe" {
                 return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "audioPath", name: "transcribe"))])!
             } else {
+                if chatRole == .assistant && !imagePaths.isEmpty {
+                    return .init(role: chatRole, content: content)!
+                }
+                
                 if !imagePaths.isEmpty {
                     return .init(role: chatRole, content:
                                     [.init(chatCompletionContentPartTextParam: .init(text: content))] +

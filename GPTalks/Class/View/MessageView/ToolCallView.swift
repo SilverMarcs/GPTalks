@@ -17,58 +17,62 @@ struct ToolCallView: View {
     @State var isHovered = false
     
     var body: some View {
+        ZStack(alignment: .bottomTrailing) {
         HStack(alignment: .top, spacing: 10) {
             Image(systemName: "wrench.fill")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 18, height: 18)
                 .foregroundColor(Color("tealColor"))
-            #if !os(macOS)
+#if !os(macOS)
                 .padding(.top, 3)
-            #endif
+#endif
             
             VStack(alignment: .leading, spacing: 6) {
                 Text("Tool")
                     .font(.title3)
                     .bold()
-                    
-                    funcCall
-       
-                #if os(macOS)
-                HStack {
-                    
-                    Spacer()
-                    
-                    MessageContextMenu(session: session, conversation: conversation) { } toggleTextSelection: { }
-                        .labelStyle(.iconOnly)
-                        .opacity(isHovered ? 1 : 0)
-                        .transition(.opacity)
-                        .animation(.easeOut(duration: 0.15), value: isHovered)
-                }
-                #endif
+                
+                funcCall
             }
             
             Spacer()
         }
+        .padding()
+#if os(macOS)
+            HStack {
+                
+                Spacer()
+                
+                messageContextMenu
+            }
+            .padding(10)
+            .padding(.horizontal, 8)
+#endif
+    }
+        
         .onHover { isHovered in
             self.isHovered = isHovered
         }
-        .padding()
         #if os(macOS)
             .padding(.horizontal, 8)
-            .padding(.bottom, -5)
             .background(.background.secondary)
         #else
             .background(colorScheme == .dark ? Color.gray.opacity(0.12) : Color.gray.opacity(0.07))
-//            .background(.background.secondary)
         #endif
-//            .border(.quinary, width: 1)
-            .border(width: 1, edges: [.top, .leading, .trailing], color: .gray.opacity(0.12))
+            .customBorder(width: 1, edges: [.top, .leading, .trailing], color: .gray.opacity(0.12))
             .frame(maxWidth: .infinity, alignment: .topLeading)
             .contextMenu {
                 MessageContextMenu(session: session, conversation: conversation) { } toggleTextSelection: { }
                 .labelStyle(.titleAndIcon)
             }
+    }
+    
+    var messageContextMenu: some View {
+        MessageContextMenu(session: session, conversation: conversation) 
+            { }
+            toggleTextSelection: { }
+        .contextMenuModifier(isHovered: $isHovered)
     }
     
     var funcCall: some View {
@@ -94,9 +98,7 @@ struct ToolCallView: View {
             .fontWeight(.semibold)
             .bubbleStyle(isMyMessage: false, sharp: true)
             .onTapGesture {
-                if conversation.content != "imageGenerate" {
-                    showPopover.toggle()
-                }
+                showPopover.toggle()
             }
             .popover(isPresented: $showPopover, arrowEdge: .leading) {
                 if let index = session.conversations.firstIndex(of: conversation) {
@@ -141,28 +143,5 @@ struct ToolCallView: View {
                 }
             }
         }
-    }
-}
-
-
-struct EdgeBorder: Shape {
-    var width: CGFloat
-    var edges: [Edge]
-
-    func path(in rect: CGRect) -> Path {
-        edges.map { edge -> Path in
-            switch edge {
-            case .top: return Path(.init(x: rect.minX, y: rect.minY, width: rect.width, height: width))
-            case .bottom: return Path(.init(x: rect.minX, y: rect.maxY - width, width: rect.width, height: width))
-            case .leading: return Path(.init(x: rect.minX, y: rect.minY, width: width, height: rect.height))
-            case .trailing: return Path(.init(x: rect.maxX - width, y: rect.minY, width: width, height: rect.height))
-            }
-        }.reduce(into: Path()) { $0.addPath($1) }
-    }
-}
-
-extension View {
-    func border(width: CGFloat, edges: [Edge], color: Color) -> some View {
-        overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
     }
 }

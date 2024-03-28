@@ -26,22 +26,13 @@ struct UserMessageView: View {
 
     var body: some View {
         alternateUI
-        #if os(macOS)
-        .toolbar {
-            ToolbarItem(placement: .keyboard) {
-                if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
-                    editBtn
-                }
-            }
-        }
-        #endif
         .onHover { isHovered in
             self.isHovered = isHovered
         }
         .sheet(isPresented: $isEditing) {
             EditingView(editingMessage: $editingMessage, isEditing: $isEditing, session: session, conversation: conversation)
         }
-        #if os(iOS)
+        #if !os(macOS)
         .sheet(isPresented: $canSelectText) {
             TextSelectionView(content: conversation.content)
         }
@@ -54,97 +45,94 @@ struct UserMessageView: View {
             }
             .labelStyle(.titleAndIcon)
         }
+        #else
+        .toolbar {
+            ToolbarItem(placement: .keyboard) {
+                if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
+                    editBtn
+                }
+            }
+        }
         #endif
     }
     
     var alternateUI: some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "person.fill")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 16, height: 16)
-//                .foregroundStyle(.secondary)
-                .foregroundColor(Color("blueColorLighter"))
-                #if !os(macOS)
-                .padding(.top, 3)
-                #endif
-
-            VStack(alignment: .leading, spacing: 6) {
-                Text("User")
-                    .font(.title3)
-                    .bold()
+        ZStack(alignment: .bottomTrailing) {
+            HStack(alignment: .top, spacing: 10) {
+                Image(systemName: "person.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 16, height: 16)
+                //                .foregroundStyle(.secondary)
+                    .foregroundColor(Color("blueColorLighter"))
+#if !os(macOS)
+                    .padding(.top, 3)
+#endif
                 
-                #if os(macOS)
-                Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
-                    .textSelection(.enabled)
-                #else
-                Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "...")
-                    .textSelection(.enabled)
-                #endif
-                          
-                #if !os(macOS)
-                HStack {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("User")
+                        .font(.title3)
+                        .bold()
+                    
+#if os(macOS)
+                    Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
+                        .textSelection(.enabled)
+#else
+//                    Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "...")
+                    Text(conversation.content)
+                        .textSelection(.enabled)
+#endif
+                    
                     ForEach(conversation.imagePaths, id: \.self) { imagePath in
                         if let imageData = getImageData(fromPath: imagePath) {
                             ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
                         }
                     }
-                    
-                    Spacer()
-                    
-                    expandToggle(limit: 200)
+                
                 }
-                #else
-                ForEach(conversation.imagePaths, id: \.self) { imagePath in
-                    if let imageData = getImageData(fromPath: imagePath) {
-                        ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
-                    }
-                }
-
-                HStack {
-                    Spacer()
-                    
-                    Group {
-                        expandToggle(limit: 300)
-                        
-                        MessageContextMenu(session: session, conversation: conversation) {
-                            editingMessage = conversation.content
-                            isEditing = true
-                        } toggleTextSelection: {
-                            canSelectText.toggle()
-                        }
-                        .labelStyle(.iconOnly)
-                    }
-                    .opacity(isHovered ? 1 : 0)
-                    .transition(.opacity)
-                    .animation(.easeOut(duration: 0.15), value: isHovered)
-                }
-                #endif
+                
+                Spacer()
             }
-
-            Spacer()
+            .padding()
+#if os(macOS)
+            HStack {
+                Spacer()
+                
+                messageContextMenu
+            }
+            .padding(10)
+            .padding(.horizontal, 8)
+#endif
         }
-        .padding()
+
         #if os(macOS)
         .padding(.horizontal, 8)
-        .padding(.bottom, -6) // need at least -2 padding here
-//        #else
-//        .padding(.top, -9)
-//        .padding(.bottom, -14)
+//        .padding(.bottom, -6) // need at least -2 padding here
         #endif
         .frame(maxWidth: .infinity, alignment: .topLeading) // Align content to the top left
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
         .animation(.default, value: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText))
     }
     
+    var messageContextMenu: some View {
+        HStack {
+            expandToggle(limit: 300)
+            
+            MessageContextMenu(session: session, conversation: conversation) { }
+            toggleTextSelection: {
+                canSelectText.toggle()
+            }
+        }
+        .contextMenuModifier(isHovered: $isHovered)
+
+    }
+
   
     @ViewBuilder
     func expandToggle(limit: Int) -> some View {
         if conversation.content.count > limit {
             Button {
-//                withAnimation {
-                    self.isExpanded.toggle()
-//                }
+                self.isExpanded.toggle()
             } label: {
                 Image(systemName: isExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
             }

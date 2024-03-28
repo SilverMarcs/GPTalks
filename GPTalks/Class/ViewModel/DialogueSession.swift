@@ -406,7 +406,7 @@ typealias PlatformImage = UIImage
         } else {
             
             var modelId: String {
-                if configuration.provider == .oxygen && configuration.model == .gpt4t {
+                if (configuration.provider == .oxygen || configuration.provider == .custom) && configuration.model == .gpt4t {
                     return Model.gpt4t0125.id
                 } else {
                     return configuration.model.id
@@ -512,14 +512,14 @@ typealias PlatformImage = UIImage
             if let prompt = extractValue(from: funcParam, forKey: "prompt") {
                 let query = ImagesQuery(prompt: prompt, model: configuration.provider.preferredImageModel.id, n: 1, quality: .standard, size: ._1024)
                 
-                let results = try await service.images(query: query)
+            let results = try await service.images(query: query)
                 
                 for urlResult in results.data {
                     if let urlString = urlResult.url, let url = URL(string: urlString) {
                         let (data, _) = try await URLSession.shared.data(from: url)
                         if let savedURL = saveImage(image: PlatformImage(data: data)!) {
-                            appendConversation(Conversation(role: "tool", content: "imageGenerate", imagePaths: [savedURL]))
-                            appendConversation(Conversation(role: "assistant", content: "Prompt: " + prompt))
+                            appendConversation(Conversation(role: "tool", content: "Prompt: \n" + prompt))
+                            appendConversation(Conversation(role: "assistant", content: "", imagePaths: [savedURL]))
                             conversations[conversations.count - 3].isReplying = false
                         }
                     }
@@ -603,7 +603,7 @@ extension DialogueSession {
         }
 
         conversations.append(conversation)
-        isAddingConversation.toggle()
+//        isAddingConversation.toggle()
 
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id

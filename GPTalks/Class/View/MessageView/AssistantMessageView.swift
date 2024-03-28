@@ -43,88 +43,63 @@ struct AssistantMessageView: View {
     
     
     var alternateUI: some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "sparkle")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 18, height: 18)
-                .foregroundColor(Color("niceColorLighter"))
-            #if !os(macOS)
-                .padding(.top, 3)
-            #endif
-
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Assistant")
-                    .font(.title3)
-                    .bold()
+        ZStack(alignment: .bottomTrailing) {
+            HStack(alignment: .top, spacing: 10) {
+                Image(systemName: "sparkle")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 18, height: 18)
+                    .foregroundColor(Color("niceColorLighter"))
+#if !os(macOS)
+                    .padding(.top, 3)
+#endif
                 
-                Group {
-                    if AppConfiguration.shared.isMarkdownEnabled {
-                        MarkdownView(text: conversation.content)
-                    } else {
-                        Text(conversation.content)
-                    }
-                }
-                .textSelection(.enabled)
-                
-                if conversation.content.isEmpty {
-                    ReplyingIndicatorView()
-                        .frame(width: 48, height: 16)
-                        .padding(.vertical, 10)
-                } else {
-                    EmptyView()
-                }
-                
-                #if os(macOS)
-                if let index = session.conversations.firstIndex(of: conversation) {
-                    if let nextConversation = session.conversations[safe: index - 2] {
-                        if nextConversation.content == "imageGenerate" {
-                            if let toolConversation = session.conversations[safe: index - 1] {
-                                ForEach(toolConversation.imagePaths, id: \.self) { imagePath in
-                                    if let imageData = getImageData(fromPath: imagePath) {
-                                        ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: true)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // This HStack is moved outside of the conditional blocks to ensure it is always shown.
-                HStack {
-                    Spacer()
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Assistant")
+                        .font(.title3)
+                        .bold()
                     
-                    messageContextMenu
-                }
-                #else
-                if let index = session.conversations.firstIndex(of: conversation) {
-                    if let nextConversation = session.conversations[safe: index - 2] {
-                        if nextConversation.content == "imageGenerate" {
-                            if let toolConversation = session.conversations[safe: index - 1] {
-                                ForEach(toolConversation.imagePaths, id: \.self) { imagePath in
-                                    if let imageData = getImageData(fromPath: imagePath) {
-                                        ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: true)
-                                    }
-                                }
-                            }
+                    Group {
+                        if AppConfiguration.shared.isMarkdownEnabled {
+                            MarkdownView(text: conversation.content)
+                        } else {
+                            Text(conversation.content)
+                        }
+                    }
+                    .textSelection(.enabled)
+                    
+                    if conversation.isReplying {
+                        ReplyingIndicatorView()
+                            .frame(width: 48, height: 16)
+                            .padding(.vertical, 10)
+                    }
+                    
+                    ForEach(conversation.imagePaths, id: \.self) { imagePath in
+                        if let imageData = getImageData(fromPath: imagePath) {
+                            ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: true)
                         }
                     }
                 }
-
-                #endif
+                
+                Spacer()
             }
-
-            Spacer()
+            .padding()
+#if os(macOS)
+            HStack {
+                Spacer()
+                
+                messageContextMenu
+            }
+            .padding(10)
+            .padding(.horizontal, 8)
+#endif
         }
-        .padding()
         #if os(macOS)
         .padding(.horizontal, 8)
-        .padding(.bottom, -5)
         .background(.background.tertiary)
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow : .clear)
         #else
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
-//        .background(.background.secondary)
         .background(colorScheme == .dark ? Color.gray.opacity(0.12) : Color.gray.opacity(0.07))
         #endif
         .animation(.default, value: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText))
@@ -138,10 +113,7 @@ struct AssistantMessageView: View {
         toggleTextSelection: {
             canSelectText.toggle()
         }
-        .labelStyle(.iconOnly)
-        .opacity(isHovered ? 1 : 0)
-        .transition(.opacity)
-        .animation(.easeOut(duration: 0.15), value: isHovered)
+        .contextMenuModifier(isHovered: $isHovered)
     }
     
     private var imageSize: CGFloat {
