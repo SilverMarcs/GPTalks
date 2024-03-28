@@ -342,7 +342,7 @@ typealias PlatformImage = UIImage
            }
         }
         
-        streamingTask = Task {
+        streamingTask = Task(priority: .userInitiated) {
             try await processRequest()
         }
         
@@ -374,6 +374,7 @@ typealias PlatformImage = UIImage
         save()
     }
     
+    @MainActor
     func createChatQuery() -> ChatQuery {
         let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
         
@@ -435,7 +436,7 @@ typealias PlatformImage = UIImage
             }
         }
          
-        let uiUpdateInterval = TimeInterval(0.1)
+        let uiUpdateInterval = TimeInterval(0.04)
 
         var lastUIUpdateTime = Date()
         
@@ -492,7 +493,7 @@ typealias PlatformImage = UIImage
         switch chatTool {
         case .urlScrape:
             if let url = extractValue(from: funcParam, forKey: "url") {
-                let webContent = try await fetchAndParseHTMLAsync(from: url)
+                let webContent = try await retrieveWebContent(from: url)
                 appendConversation(Conversation(role: "tool", content: webContent))
                 
                 self.conversations[self.conversations.count - 2].isReplying = false

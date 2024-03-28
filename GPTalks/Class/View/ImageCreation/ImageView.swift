@@ -78,12 +78,15 @@ struct ImageView: View {
         Button {
             isImagePresented = false
         } label: {
-            Image(systemName: "xmark")
-                .font(.headline)
-                .padding(5)
+            Image(systemName: "xmark.circle.fill")
+                .resizable()
+                .frame(width: 20, height: 20)
+                .foregroundStyle(.foreground.secondary, Color.gray.opacity(0.2))
+//                .font(.headline)
+//                .padding(5)
         }
-        .buttonStyle(.bordered)
-        .clipShape(Circle())
+        .buttonStyle(.plain)
+//        .clipShape(Circle())
         .padding()
     }
     

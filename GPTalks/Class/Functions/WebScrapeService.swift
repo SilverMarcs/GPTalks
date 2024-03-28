@@ -42,7 +42,7 @@ func stripHTML(from input: String) -> String {
 }
 
 
-func retrieveWebContent(urlStr: String) async throws -> String {
+func retrieveWebContent(from urlStr: String) async throws -> String {
     
     var extractedHTML: String = ""
     
