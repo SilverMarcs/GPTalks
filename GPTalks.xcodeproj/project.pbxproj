@@ -28,7 +28,6 @@
 		0837E4812AFFE7B000C03059 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E4802AFFE7AF00C03059 /* Model.swift */; };
 		083983512B9D507A00A46A84 /* MacInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083983502B9D507A00A46A84 /* MacInputView.swift */; };
 		083983532B9D51A500A46A84 /* CustomImportedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083983522B9D51A500A46A84 /* CustomImportedImageView.swift */; };
-		083983552B9D52AF00A46A84 /* InputViewButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083983542B9D52AF00A46A84 /* InputViewButtons.swift */; };
 		083983592B9D84C900A46A84 /* MacTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083983582B9D84C900A46A84 /* MacTextEditor.swift */; };
 		0839835B2B9DBDD800A46A84 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0839835A2B9DBDD800A46A84 /* AudioPlayerView.swift */; };
 		0839835D2B9DCE9900A46A84 /* IOSTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0839835C2B9DCE9900A46A84 /* IOSTextField.swift */; };
@@ -40,6 +39,7 @@
 		085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Utils.swift */; };
 		085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */; };
 		085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* Provider.swift */; };
+		0868CF632BB535E70037646C /* InputComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0868CF622BB535E70037646C /* InputComponents.swift */; };
 		086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */; };
 		086F6A072B94129100DF42F9 /* SwiftUIImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 086F6A062B94129100DF42F9 /* SwiftUIImageViewer */; };
 		086F6A0A2B94168100DF42F9 /* SwiftUIImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 086F6A092B94168100DF42F9 /* SwiftUIImageViewer */; };
@@ -125,7 +125,6 @@
 		0837E4802AFFE7AF00C03059 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		083983502B9D507A00A46A84 /* MacInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacInputView.swift; sourceTree = "<group>"; };
 		083983522B9D51A500A46A84 /* CustomImportedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImportedImageView.swift; sourceTree = "<group>"; };
-		083983542B9D52AF00A46A84 /* InputViewButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputViewButtons.swift; sourceTree = "<group>"; };
 		083983582B9D84C900A46A84 /* MacTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTextEditor.swift; sourceTree = "<group>"; };
 		0839835A2B9DBDD800A46A84 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		0839835C2B9DCE9900A46A84 /* IOSTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSTextField.swift; sourceTree = "<group>"; };
@@ -135,6 +134,7 @@
 		085D40BE2AFD66340033F8B5 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		085D40C22AFD8C250033F8B5 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		0868CF622BB535E70037646C /* InputComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputComponents.swift; sourceTree = "<group>"; };
 		086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarItems.swift; sourceTree = "<group>"; };
 		0878E53A2B1683ED00E0D79D /* AppIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconView.swift; sourceTree = "<group>"; };
 		087AC1972B6D40A7006B9386 /* EditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingView.swift; sourceTree = "<group>"; };
@@ -228,10 +228,10 @@
 				E4C65F1729CBEE2400AFA884 /* IOSInputView.swift */,
 				083983502B9D507A00A46A84 /* MacInputView.swift */,
 				083983522B9D51A500A46A84 /* CustomImportedImageView.swift */,
-				083983542B9D52AF00A46A84 /* InputViewButtons.swift */,
 				083983582B9D84C900A46A84 /* MacTextEditor.swift */,
 				0839835A2B9DBDD800A46A84 /* AudioPlayerView.swift */,
 				0839835C2B9DCE9900A46A84 /* IOSTextField.swift */,
+				0868CF622BB535E70037646C /* InputComponents.swift */,
 			);
 			path = BottomView;
 			sourceTree = "<group>";
@@ -593,7 +593,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				08F74EA42B0BC318006D1DD3 /* ServiceSettingsView.swift in Sources */,
-				083983552B9D52AF00A46A84 /* InputViewButtons.swift in Sources */,
 				088CF0622B1E705D009CFDCB /* ContextResetDivider.swift in Sources */,
 				E4C65EA229CA9E7E00AFA884 /* GPTalks.swift in Sources */,
 				084C95BD2B94518300778F14 /* ImageView.swift in Sources */,
@@ -630,6 +629,7 @@
 				088CF0602B1E43C6009CFDCB /* PlaceHolderView.swift in Sources */,
 				08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */,
 				08DCC4842B98C22E00737191 /* ChatTool.swift in Sources */,
+				0868CF632BB535E70037646C /* InputComponents.swift in Sources */,
 				08980EC82B9788160005B522 /* TranscriptionGeneration.swift in Sources */,
 				E4C65EED29CA9F7800AFA884 /* DialogueSession.swift in Sources */,
 				08980ECA2B9789830005B522 /* TranscriptionView.swift in Sources */,

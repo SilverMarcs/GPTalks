@@ -23,7 +23,6 @@ struct IOSDialogList: View {
                     ImageCreator(imageSession: imageSession)
                 }
             }
-
             .animation(.default, value: viewModel.selectedState)
             .animation(.default, value: viewModel.searchText)
             .searchable(text: $viewModel.searchText)
@@ -94,14 +93,13 @@ struct IOSDialogList: View {
                     }
                     .listStyle(.inset)
                 } else {
-                    List(viewModel.currentDialogues, id: \.self) { session in
+                    List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
                         NavigationLink {
                             iOSMessages(session: session)
                                 .id(session.id)
                         } label: {
                             DialogueListItem(session: session)
                         }
-                        
                     }
                     .listStyle(.plain)
                 }

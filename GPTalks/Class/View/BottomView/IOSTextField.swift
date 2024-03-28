@@ -46,14 +46,18 @@ struct IOSTextField: View {
                     }
                     .offset(x: -10, y: -9)
                 } else {
-                    if isReplying {
-                        stopButton
-                            .offset(x: -4, y: -4)
-                        
-                    } else {
-                        sendButton
-                            .offset(x: -4, y: -4)
+                    Group {
+                        if isReplying {
+                            StopButton(size: imageSize - 3) {
+                                stop()
+                            }
+                        } else {
+                            SendButton(size: imageSize - 3) {
+                                send()
+                            }
+                        }
                     }
+                    .offset(x: -4, y: -4)
                 }
             }
             .padding(20) // Increase tappable area
@@ -68,22 +72,17 @@ struct IOSTextField: View {
 
     @ViewBuilder
     private var sendButton: some View {
-        let empty = input.isEmpty
-        
         Button {
             send()
         } label: {
-            Image(systemName: empty ? "arrow.up.circle" : "arrow.up.circle.fill")
+            Image(systemName: "arrow.up.circle.fill")
                 .resizable()
-                .scaledToFit()
-                .foregroundColor(empty ? .secondary : .accentColor)
-                .background(.white)
-                .clipShape(Circle())
+                .keyboardShortcut(.return, modifiers: .command)
+                .fontWeight(.semibold)
+                .foregroundStyle(.foreground, Color.accentColor)
                 .frame(width: imageSize - 3, height: imageSize - 3)
         }
         .keyboardShortcut(.return, modifiers: .command)
-        .fontWeight(.semibold)
-        .animation(.interactiveSpring, value: empty)
     }
 
     @ViewBuilder
@@ -93,9 +92,9 @@ struct IOSTextField: View {
         } label: {
             Image(systemName: "stop.circle.fill")
                 .resizable()
-                .scaledToFit()
+                .keyboardShortcut("d", modifiers: .command)
+                .foregroundStyle(.foreground, .red)
                 .frame(width: imageSize - 3, height: imageSize - 3)
-                .foregroundColor(.red)
         }
         .keyboardShortcut("d", modifiers: .command)
     }

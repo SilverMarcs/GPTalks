@@ -34,7 +34,6 @@ struct iOSMessages: View {
                         ForEach(session.filteredConversations()) { conversation in
                             ConversationView(session: session, conversation: conversation)
                         }
-//                        .padding(.horizontal, AppConfiguration.shared.alternateChatUi ? 0 :  12)
                     }
                     .padding(.bottom, 12)
 
@@ -51,7 +50,6 @@ struct iOSMessages: View {
 
                 scrollBtn(proxy: proxy)
             }
-            
             #if !os(visionOS)
             .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                 let bottomReached = value > UIScreen.main.bounds.height
@@ -62,15 +60,10 @@ struct iOSMessages: View {
             #endif
             .listStyle(.plain)
             .onAppear {
-                if AppConfiguration.shared.alternateMarkdown {
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.3)
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.5)
-                    if session.conversations.count > 8 {
-                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
-                    }
-                } else {
-//                    scrollToBottom(proxy: proxy, animated: false)
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+                scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+                
+                if AppConfiguration.shared.alternateMarkdown && session.conversations.count > 8 {
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
                 }
             }
             .onTapGesture {
@@ -117,13 +110,6 @@ struct iOSMessages: View {
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }
-//            .onChange(of: session.configuration.provider) {
-//                if session.shouldSwitchToVision {
-//                    session.configuration.model = session.configuration.provider.preferredVisionModel
-//                } else {
-//                    session.configuration.model = session.configuration.provider.preferredChatModel
-//                }
-//            }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
                     itemProvider.loadObject(ofClass: UIImage.self) { image, error in
@@ -183,15 +169,13 @@ struct iOSMessages: View {
                     .ignoresSafeArea()
             )
         }
-
-//        .navigationTitle(session.configuration.model.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 navTitle
             }
 
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     Section {
                         Menu {
@@ -300,10 +284,7 @@ struct iOSMessages: View {
             Image(systemName: "arrow.down.circle.fill")
                 .resizable()
                 .frame(width: 32, height: 32)
-                .foregroundStyle(.ultraThickMaterial)
-                .background(Color.primary.opacity(0.8))
-                .shadow(radius: 3)
-                .clipShape(Circle())
+                .foregroundStyle(.foreground.secondary, .ultraThickMaterial)
                 .padding(.bottom, 15)
                 .padding(.trailing, 15)
         }

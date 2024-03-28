@@ -436,7 +436,7 @@ typealias PlatformImage = UIImage
             }
         }
          
-        let uiUpdateInterval = TimeInterval(0.04)
+        let uiUpdateInterval = TimeInterval(0.05)
 
         var lastUIUpdateTime = Date()
         

@@ -75,7 +75,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .kraken:
             Color("tealColor")
         case .custom:
-            Color("orangeColor")
+            Color("pinkColor")
         }
     }
 
@@ -150,7 +150,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .kraken:
             Model.krakenChatModels
         case .custom:
-            [Model.customChat]
+            Model.nagaChatModels + [Model.customChat]
         }
     }
     

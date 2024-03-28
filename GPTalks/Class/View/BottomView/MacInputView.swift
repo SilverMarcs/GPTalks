@@ -54,16 +54,17 @@ struct MacInputView: View {
                 MacTextEditor(input: $session.input)
                 
                 if session.isReplying {
-                    StopButton {
+                    StopButton (size: imageSize + 2) {
                         session.stopStreaming()
                     }
                 } else {
-                    MacSendButton(isInputEmpty: session.input.isEmpty, isReplying: session.isReplying) {
+                    SendButton(size: imageSize + 2) {
                         Task { @MainActor in
                             selectedItems = []
                             await session.send()
                         }
                     }
+                    .disabled(session.input.isEmpty)
                 }
             }
         }
