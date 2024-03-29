@@ -89,13 +89,6 @@ struct MacOSMessages: View {
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }
-//            .onChange(of: session.configuration.provider) {
-//                if session.shouldSwitchToVision {
-//                    session.configuration.model = session.configuration.provider.preferredVisionModel
-//                } else {
-//                    session.configuration.model = session.configuration.provider.preferredChatModel
-//                }
-//            }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
                     itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in
@@ -163,7 +156,7 @@ struct MacOSMessages: View {
                         .frame(width: 130)
 
                     ModelPicker(session: session)
-                        .frame(width: 90)
+                        .frame(width: 100)
                 }
             }
             .sheet(isPresented: $isShowSysPrompt) {

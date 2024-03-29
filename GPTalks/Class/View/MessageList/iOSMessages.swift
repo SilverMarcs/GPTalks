@@ -32,10 +32,13 @@ struct iOSMessages: View {
         ScrollViewReader { proxy in
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
-                    ForEach(session.filteredConversations()) { conversation in
-                        ConversationView(session: session, conversation: conversation)
-//                                .animation(.default, value: session.isReplying)
+                    VStack(spacing: 0) {
+                        ForEach(session.filteredConversations()) { conversation in
+                            ConversationView(session: session, conversation: conversation)
+                            //                                .animation(.default, value: session.isReplying)
+                        }
                     }
+                    .padding(.bottom, 8)
 
                     ErrorDescView(session: session)
 
@@ -75,7 +78,7 @@ struct iOSMessages: View {
             }
             .onChange(of: isTextFieldFocused) {
                 if isTextFieldFocused {
-                    scrollToBottom(proxy: proxy, delay: 0.1)
+                    scrollToBottom(proxy: proxy)
                 }
             }
             .onChange(of: session.input) {
@@ -169,7 +172,14 @@ struct iOSMessages: View {
                 focused: _isTextFieldFocused
             )
             .background(
-                VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
+//                VisualEffect(colorTint: colorScheme == .dark ? (isTextFieldFocused ? Color(hex: "545456") : .black) : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
+//                VisualEffect(colorTint: colorScheme == .dark ? (isTextFieldFocused ? Color(hex: "545456") : .black) : .white, colorTintAlpha: 0.7, blurRadius: 50, scale: 1)
+                VisualEffect(colorTint: colorScheme == .dark 
+                             ?
+                             (isTextFieldFocused ? Color(hex: "545456") : .black) 
+                             :
+                             (isTextFieldFocused ? Color(hex: "#BBBEC4") : .white)
+                             ,colorTintAlpha: 0.7, blurRadius: 50, scale: 1)
                     .ignoresSafeArea()
             )
         }

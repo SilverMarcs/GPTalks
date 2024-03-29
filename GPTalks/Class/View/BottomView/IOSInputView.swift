@@ -7,7 +7,6 @@
 
 #if !os(macOS)
 import SwiftUI
-import VisualEffectView
 import PhotosUI
 
 struct IOSInputView: View {
@@ -27,13 +26,12 @@ struct IOSInputView: View {
                 ImportedImages(session: session)
             }
 
-            HStack(spacing: 12) {
+            HStack(alignment: .bottom, spacing: 12) {
                 
                 MoreOptions
                 
                 if showMore {
                     addImage
-//                    regenerate
                     resetContext
                 }
                 
@@ -60,8 +58,10 @@ struct IOSInputView: View {
         .animation(.default, value: showMore)
         .buttonStyle(.plain)
         .padding(.horizontal)
-        .padding(.top, verticalPadding)
-        .padding(.bottom, verticalPadding + 2)
+//        .padding(.top, verticalPadding)
+//        .padding(.bottom, verticalPadding + 2)
+        .padding(.top, focused ? verticalPadding + 3 : verticalPadding)
+        .padding(.bottom, focused ? 2 : verticalPadding + 2)
     }
     
 
@@ -73,8 +73,9 @@ struct IOSInputView: View {
         } label: {
             Image(systemName: "eraser.fill")
                 .resizable()
-                .inputImageStyle(padding: 10, imageSize: imageSize + 2)
+                .inputImageStyle(padding: 9, imageSize: imageSize + 3)
         }
+        .padding(.top, -1)
     }
     
     var regenerate: some View {
@@ -97,8 +98,11 @@ struct IOSInputView: View {
         } label: {
             Image(systemName: "photo")
                 .resizable()
-                .inputImageStyle(padding: 11, imageSize: imageSize + 6)
+                .inputImageStyle(padding: 11, imageSize: imageSize + 7)
+     
         }
+        .offset(y: 2)
+        .padding(.top, -2)
     }
     
     var MoreOptions: some View {
@@ -107,7 +111,7 @@ struct IOSInputView: View {
         } label: {
             Image(systemName: "plus")
                 .resizable()
-                .inputImageStyle(padding: 10, imageSize: imageSize + 3)
+                .inputImageStyle(padding: 10, imageSize: imageSize + 4)
                 .rotationEffect(.degrees(showMore ? 45 : 0))
                 .animation(.default, value: showMore)
         }

@@ -118,8 +118,10 @@ struct UserMessageView: View {
         HStack {
             expandToggle(limit: 300)
             
-            MessageContextMenu(session: session, conversation: conversation) { }
-            toggleTextSelection: {
+            MessageContextMenu(session: session, conversation: conversation) {
+                editingMessage = conversation.content
+                isEditing = true
+            } toggleTextSelection: {
                 canSelectText.toggle()
             }
         }

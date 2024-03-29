@@ -22,6 +22,9 @@ struct IOSTextField: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             TextField("Send a message", text: $input, axis: .vertical)
+//                .keyboardType(.asciiCapable)
+//                .autocorrectionDisabled(true)
+//                .textContentType(.init(rawValue: ""))
                 .focused($focused)
                 .multilineTextAlignment(.leading)
                 .lineLimit(1 ... 15)
@@ -30,7 +33,13 @@ struct IOSTextField: View {
                 .padding(.trailing, 25) // for avoiding send button
                 .frame(minHeight: imageSize + 5)
                 .background(
-                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
+//                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
+                    VisualEffect(colorTint: colorScheme == .dark 
+                                 ?
+                                 (focused ? Color(hex: "666668")
+                                 :
+                                 (.black))
+                                 : .white, colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
                         .cornerRadius(18)
                 )
             
@@ -67,7 +76,7 @@ struct IOSTextField: View {
         .onTapGesture {
             focused = true
         }
-        .roundedRectangleOverlay()
+        .roundedRectangleOverlay(opacity: focused ? 0 : (colorScheme == .dark ? 0.8 : 0.5))
     }
 
     @ViewBuilder

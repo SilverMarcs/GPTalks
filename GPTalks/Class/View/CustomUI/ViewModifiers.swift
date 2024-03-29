@@ -39,11 +39,11 @@ struct RoundedRectangleOverlayModifier: ViewModifier {
                 RoundedRectangle(cornerRadius: radius, style: .continuous)
                 #if os(iOS)
                     .stroke(colorScheme == .dark ? Color(.tertiarySystemGroupedBackground) : Color(.tertiaryLabel), lineWidth: 1)
-                    .opacity(colorScheme == .dark ? 0.8 : 0.5)
+//                    .opacity(colorScheme == .dark ? opacity : 0.5)
                 #else
                     .stroke(.tertiary, lineWidth: 0.6)
-                    .opacity(opacity)
                 #endif
+                    .opacity(opacity)
             )
     }
 }

@@ -53,6 +53,8 @@ class AppConfiguration: ObservableObject {
     /// custom
     @AppStorage("configuration.Ckey") var Ckey = ""
     @AppStorage("configuration.Chost") var Chost: String = ""
+    @AppStorage("configuration.Cmodel") var Cmodel: Model = .gpt4t
+    @AppStorage("configuration.CImageModel") var CImageModel: Model = .dalle3
     
     @AppStorage("configuration.customChatModel") var customChatModel: String = ""
     @AppStorage("configuration.customImageModel") var customImageModel: String = ""

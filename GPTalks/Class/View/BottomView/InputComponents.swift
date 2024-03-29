@@ -18,7 +18,7 @@ struct SendButton: View {
             Image(systemName: "arrow.up.circle.fill")
                 .resizable()
                 .fontWeight(.semibold)
-                .foregroundStyle(.foreground, Color.accentColor)
+                .foregroundStyle(.white, Color.accentColor)
                 .frame(width: size, height: size)
         }
         .keyboardShortcut(.return, modifiers: .command)
@@ -36,7 +36,7 @@ struct StopButton: View {
             Image(systemName: "stop.circle.fill")
                 .resizable()
                 .fontWeight(.semibold)
-                .foregroundStyle(.foreground, .red)
+                .foregroundStyle(.white, .red)
                 .frame(width: size, height: size)
         }
         .keyboardShortcut("d", modifiers: .command)

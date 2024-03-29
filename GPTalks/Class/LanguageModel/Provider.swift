@@ -105,7 +105,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .kraken:
             AppConfiguration.shared.Kmodel
         case .custom:
-            .customChat
+            AppConfiguration.shared.Cmodel
         }
     }
     
@@ -120,7 +120,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .kraken:
             AppConfiguration.shared.KImageModel
         case .custom:
-            .customImage
+            AppConfiguration.shared.CImageModel
         }
     }
     
@@ -172,7 +172,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .kraken:
             Model.krakenImageModels
         case .custom:
-            [Model.customImage]
+            Model.openAIImageModels + [Model.customImage]
         }
     }
 
@@ -211,8 +211,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             )
         case .custom:
             ServiceSettingsView(
-                chatModel: Binding.constant(.customChat),
-                imageModel: Binding.constant(.customImage),
+                chatModel: configuration.$Cmodel,
+                imageModel: configuration.$CImageModel,
                 apiKey: configuration.$Ckey,
                 provider: self
             )

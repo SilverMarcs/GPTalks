@@ -33,7 +33,7 @@ struct MacInputView: View {
                 .padding(.horizontal, -1)
             }
             
-            HStack(spacing: 12) {
+            HStack(alignment: .bottom, spacing: 12) {
                 MoreOptions
                 
                 if showMore {
@@ -52,6 +52,7 @@ struct MacInputView: View {
                 }
 
                 MacTextEditor(input: $session.input)
+                    .offset(y: 1)
                 
                 if session.isReplying {
                     StopButton (size: imageSize + 2) {
