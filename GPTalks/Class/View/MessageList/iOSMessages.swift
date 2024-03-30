@@ -106,9 +106,9 @@ struct iOSMessages: View {
             .onChange(of: session.conversations.count) {
                 shouldStopScroll = false
             }
-            .onChange(of: session.isAddingConversation) {
-                scrollToBottom(proxy: proxy)
-            }
+//            .onChange(of: session.isAddingConversation) {
+//                scrollToBottom(proxy: proxy)
+//            }
             .onChange(of: session.inputImages) {
                 if !session.inputImages.isEmpty {
                     if !session.configuration.provider.visionModels.contains(session.configuration.model) {

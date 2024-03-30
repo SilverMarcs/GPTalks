@@ -49,23 +49,11 @@ typealias PlatformImage = UIImage
     // MARK: - State
 
     var input: String = ""
-    
     var inputImages: [PlatformImage] = []
-    
     var inputAudioPath: String = ""
     
-    var title: String = "New Session" {
-        didSet {
-            save()
-        }
-    }
-
-    var conversations: [Conversation] = [] {
-        didSet {
-            save()
-        }
-    }
-
+    var title: String = "New Session"
+    var conversations: [Conversation] = []
     var date = Date()
     var errorDesc: String = ""
     var configuration: Configuration = Configuration() {
@@ -75,11 +63,7 @@ typealias PlatformImage = UIImage
     }
 
     var resetMarker: Int = -1
-    
     var isArchive = false
-    
-    var isAddingConversation = false
-    
     var isStreaming = false
     
     var shouldSwitchToVision: Bool {
@@ -398,7 +382,7 @@ typealias PlatformImage = UIImage
             finalMessages.append(.user(.init(content: .string(inputAudioPath))))
         }
         
-        if configuration.model == .gpt4vision || configuration.model == .geminiprovision {
+        if configuration.model == .gpt4vision {
             return ChatQuery(messages: finalMessages,
                              model: configuration.model.id,
                              maxTokens: 4000,
@@ -406,7 +390,7 @@ typealias PlatformImage = UIImage
         } else {
             
             var modelId: String {
-                if (configuration.provider == .oxygen || configuration.provider == .custom) && configuration.model == .gpt4t {
+                if (configuration.provider == .oxygen || configuration.provider == .shard) && configuration.model == .gpt4t {
                     return Model.gpt4t0125.id
                 } else {
                     return configuration.model.id
@@ -430,7 +414,7 @@ typealias PlatformImage = UIImage
         let query = createChatQuery()
         
         if AppConfiguration.shared.isAutoGenerateTitle {
-            if ![Model.gpt4vision, Model.geminiprovision, Model.customVision].contains(configuration.model) {
+            if ![Model.gpt4vision, Model.customVision].contains(configuration.model) {
                 Task {
                     await generateTitle(forced: false)
                 }
@@ -527,7 +511,7 @@ typealias PlatformImage = UIImage
             }
         case .transcribe:
             if let audioPath = extractValue(from: funcParam, forKey: "audioPath") {
-                let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: .whisper_1)
+                let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: configuration.provider.preferredTranscriptionModel.id)
                 let result = try await service.audioTranscriptions(query: query)
                 
                 inputAudioPath = ""
@@ -600,7 +584,6 @@ extension DialogueSession {
         }
 
         conversations.append(conversation)
-//        isAddingConversation.toggle()
 
         let data = ConversationData(context: PersistenceController.shared.container.viewContext)
         data.id = conversation.id

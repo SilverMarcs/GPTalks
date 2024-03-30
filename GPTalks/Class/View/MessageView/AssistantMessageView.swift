@@ -52,7 +52,10 @@ struct AssistantMessageView: View {
                     .foregroundColor(Color("niceColorLighter"))
 #if !os(macOS)
                     .padding(.top, 3)
+#else
+                    .offset(y: 1)
 #endif
+                
                 
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Assistant")

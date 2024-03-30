@@ -27,7 +27,7 @@ struct MacTextEditor: View {
                 .font(.body)
                 .frame(maxHeight: 400)
                 .fixedSize(horizontal: false, vertical: true)
-                .padding(5)
+                .padding(6)
                 .scrollContentBackground(.hidden)
                 .onAppear {
                     focused = true

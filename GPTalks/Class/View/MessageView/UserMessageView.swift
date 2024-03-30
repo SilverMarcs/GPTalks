@@ -67,6 +67,9 @@ struct UserMessageView: View {
                     .foregroundColor(Color("blueColorLighter"))
 #if !os(macOS)
                     .padding(.top, 3)
+#else
+//                    .padding(.top, 4)
+                    .offset(y: 1)
 #endif
                 
                 VStack(alignment: .leading, spacing: 6) {

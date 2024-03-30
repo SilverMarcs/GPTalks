@@ -50,6 +50,11 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.Kmodel") var Kmodel: Model = .gpt4
     @AppStorage("configuration.KImageModel") var KImageModel: Model = .dalle3
     
+    /// shard
+    @AppStorage("configuration.Skey") var Skey = ""
+    @AppStorage("configuration.Smodel") var Smodel: Model = .gpt4
+    @AppStorage("configuration.SImageModel") var SImageModel: Model = .dalle3
+    
     /// custom
     @AppStorage("configuration.Ckey") var Ckey = ""
     @AppStorage("configuration.Chost") var Chost: String = ""

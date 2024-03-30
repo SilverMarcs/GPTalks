@@ -15,32 +15,24 @@ enum Model: String, Codable {
     case gpt4t
     case gpt4t1106
     case gpt4t0125
-    
     case gpt4vision
-    
     case dalle3
-    case dalle2
-    
-    /// oxygen
-    case ogpt4browsing
-    case odolphin
-    
-    case absolutereality_v181
-    
-    /// naga
-    case mistrallarge
-    case geminipro
-    case geminiprovision
+    case whisper1
     
     /// claude
     case claude3opus
     case claude3sonnet
     case claude3haiku
     
+    /// oxygen
+    case absolutereality_v181
+
+    /// naga
     case sdxl
-    case kandinsky3
     case playgroundv25
     
+    /// shard
+    case realisticvision
     
     /// custom
     case customChat
@@ -63,35 +55,28 @@ enum Model: String, Codable {
             "GPT-4V"
         case .dalle3:
             "DALL·E·3"
-        case .dalle2:
-            "DALL·E·2"
-     
-        /// oxygen
-        case .ogpt4browsing:
-            "GPT-4B"
-        case .odolphin:
-            "Dolphin"
-        case .absolutereality_v181:
-            "Absolute Reality"
+        case .whisper1:
+            "Whisper"
             
-        /// naga
-        case .mistrallarge:
-            "Mistral"
-        case .geminipro:
-            "Gemini"
-        case .geminiprovision:
-            "Gemini-V"
+        /// claude
         case .claude3opus:
             "Claude-3-O"
         case .claude3sonnet:
             "Claude-3-S"
         case .claude3haiku:
             "Claude-3-H"
+     
+        /// oxygen
+        case .absolutereality_v181:
+            "Absolute Reality"
             
+        /// shard
+        case .realisticvision:
+            "Realistic Vision"
+            
+        /// naga
         case .sdxl:
             "SDXL"
-        case .kandinsky3:
-            "Kandinsky"
         case .playgroundv25:
             "Playground"
             
@@ -123,23 +108,8 @@ enum Model: String, Codable {
             "gpt-4-vision-preview"
         case .dalle3:
             "dall-e-3"
-        case .dalle2:
-            "dall-e-2"
-
-        case .ogpt4browsing:
-            "gpt-4-browsing"
-        case .odolphin:
-            "dolphin-2.6-mixtral-8x7b"
-        case .absolutereality_v181:
-            "absolutereality_v181"
-            
-        /// naga
-        case .mistrallarge:
-            "mistral-large"
-        case .geminipro:
-            "gemini-pro"
-        case .geminiprovision:
-            "gemini-pro-vision"
+        case .whisper1:
+            "whisper-1"
             
         case .claude3opus:
             "claude-3-opus"
@@ -147,11 +117,18 @@ enum Model: String, Codable {
             "claude-3-sonnet"
         case .claude3haiku:
             "claude-3-haiku"
+
+        /// oxygen
+        case .absolutereality_v181:
+            "absolutereality_v181"
             
+        /// shard
+        case .realisticvision:
+            "realistic-vision-v5"
+            
+        /// naga
         case .sdxl:
             "sdxl"
-        case .kandinsky3:
-            "kandinsky-3"
         case .playgroundv25:
             "playground-v2.5"
 
@@ -163,6 +140,13 @@ enum Model: String, Codable {
             AppConfiguration.shared.customImageModel
         }
     }
+    
+    static let claudeModels: [Model] =
+        [
+            .claude3opus,
+            .claude3sonnet,
+            .claude3haiku,
+        ]
 
     /// OpenAI
     static let openAIChatModels: [Model] =
@@ -170,28 +154,24 @@ enum Model: String, Codable {
             .gpt3t,
             .gpt4,
             .gpt4t,
-//            .gpt4t1106,
-//            .gpt4t0125,
+//            .customChat
         ]
     
     static let openAIVisionModels: [Model] =
         [
             .gpt4vision,
+//            .customVision
         ]
     
     static let openAIImageModels: [Model] =
         [
             .dalle3,
-            .dalle2,
+//            .customImage
         ]
     
     /// Oxygen
     static let oxygenChatModels: [Model] =
-        openAIChatModels +
-        [
-            .ogpt4browsing,
-            .odolphin,
-        ]
+        openAIChatModels
     
     static let oxygenVisionModels: [Model] =
         openAIVisionModels
@@ -205,49 +185,44 @@ enum Model: String, Codable {
     /// Naga
     static let nagaChatModels: [Model] =
         openAIChatModels +
-        [
-            .claude3opus,
-            .claude3sonnet,
-            .claude3haiku,
-            .mistrallarge,
-            .geminipro,
-        ]
+        claudeModels
     
     static let nagaVisionModels: [Model] =
-        openAIVisionModels +
-        [
-            .geminiprovision,
-        ]
+        openAIVisionModels
     
     static let nagaImageModels: [Model] =
+        openAIImageModels +
         [
-            .dalle3,
             .sdxl,
-            .kandinsky3,
             .playgroundv25,
         ]
     
     /// Kraken
     static let krakenChatModels: [Model] =
         openAIChatModels +
-        [
-            .claude3opus,
-            .claude3sonnet,
-            .claude3haiku,
-            .mistrallarge,
-            .geminipro,
-        ]
+        claudeModels
     
     static let krakenVisionModels: [Model] =
-        openAIVisionModels +
-        [
-            .geminiprovision,
-        ]
+        openAIVisionModels
     
     static let krakenImageModels: [Model] =
+        openAIImageModels +
         [
-            .dalle3,
             .sdxl,
-            .playgroundv25,
+        ]
+    
+    /// shard
+    static let shardChatModels: [Model] =
+        openAIChatModels +
+        claudeModels
+    
+    static let shardVisionModels: [Model] =
+        openAIVisionModels
+    
+    static let shardImageModels: [Model] =
+        openAIImageModels +
+        [
+            .realisticvision,
+            .sdxl,
         ]
 }

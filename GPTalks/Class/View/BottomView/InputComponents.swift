@@ -36,7 +36,7 @@ struct StopButton: View {
             Image(systemName: "stop.circle.fill")
                 .resizable()
                 .fontWeight(.semibold)
-                .foregroundStyle(.white, .red)
+                .foregroundStyle(.red)
                 .frame(width: size, height: size)
         }
         .keyboardShortcut("d", modifiers: .command)

@@ -34,30 +34,34 @@ struct MacInputView: View {
             }
             
             HStack(alignment: .bottom, spacing: 12) {
-                MoreOptions
-                
-                if showMore {
-                    ImagePickerView(shouldAllowAdding: session.inputImages.count < 5) { newImage in
-                        session.inputImages.append(newImage)
-                        showMore = false
-                    }
-                    .disabled(!session.inputAudioPath.isEmpty)
+                Group {
+                    MoreOptions
                     
-                    AudioPickerView(shouldAllowSelection: !session.shouldSwitchToVision) { selectedURL in
-                        withAnimation {
-                            session.inputAudioPath = selectedURL.absoluteString
+                    if showMore {
+                        ImagePickerView(shouldAllowAdding: session.inputImages.count < 5) { newImage in
+                            session.inputImages.append(newImage)
+                            showMore = false
                         }
-                        showMore = false
+                        .disabled(!session.inputAudioPath.isEmpty)
+                        
+                        AudioPickerView(shouldAllowSelection: !session.shouldSwitchToVision) { selectedURL in
+                            withAnimation {
+                                session.inputAudioPath = selectedURL.absoluteString
+                            }
+                            showMore = false
+                        }
                     }
                 }
+                .offset(y: -2)
 
                 MacTextEditor(input: $session.input)
-                    .offset(y: 1)
+//                    .offset(y: 1)
                 
                 if session.isReplying {
                     StopButton (size: imageSize + 2) {
                         session.stopStreaming()
                     }
+                    .offset(y: -1.75)
                 } else {
                     SendButton(size: imageSize + 2) {
                         Task { @MainActor in
@@ -65,6 +69,7 @@ struct MacInputView: View {
                             await session.send()
                         }
                     }
+                    .offset(y: -1.75)
                     .disabled(session.input.isEmpty)
                 }
             }
@@ -78,8 +83,8 @@ struct MacInputView: View {
         .animation(.default, value: showMore)
         .buttonStyle(.plain)
         .padding(.horizontal)
-        .padding(.top, verticalPadding)
-        .padding(.bottom, verticalPadding + 2)
+        .padding(.top, verticalPadding - 1)
+        .padding(.bottom, verticalPadding + 3)
     }
     
     var MoreOptions: some View {
@@ -88,7 +93,7 @@ struct MacInputView: View {
         } label: {
             Image(systemName: "plus")
                 .resizable()
-                .inputImageStyle(padding: 6, imageSize: imageSize + 2)
+                .inputImageStyle(padding: 6, imageSize: imageSize + 3)
                 .rotationEffect(.degrees(showMore ? 45 : 0))
                 .animation(.default, value: showMore)
         }
@@ -115,8 +120,10 @@ struct ImagePickerView: View {
         } label: {
             Image(systemName: "photo")
                 .resizable()
-                .inputImageStyle(padding: 7, imageSize: 26)
+                .inputImageStyle(padding: 7, imageSize: 27)
         }
+        .offset(y: 2)
+        .padding(.top, -2)
         .disabled(!shouldAllowAdding)
         .fileImporter(
             isPresented: $importingImage,
@@ -148,7 +155,7 @@ struct AudioPickerView: View {
         } label: {
             Image(systemName: "waveform")
                 .resizable()
-                .inputImageStyle(padding: 6, imageSize: 23)
+                .inputImageStyle(padding: 6, imageSize: 24)
         }
         .disabled(!shouldAllowSelection)
         .fileImporter(
