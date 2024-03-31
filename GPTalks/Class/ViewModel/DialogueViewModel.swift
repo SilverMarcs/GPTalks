@@ -55,7 +55,19 @@ enum ContentState: String, CaseIterable, Identifiable {
 
     var isArchivedSelected: Bool = false
     
-    var selectedState: ContentState = .recent
+    var selectedState: ContentState = .recent {
+        didSet {
+            switch selectedState {
+            case .recent, .all, .all:
+                selectedDialogue = currentDialogues.first
+                break
+            case .images, .speech:
+                selectedDialogue = nil
+            @unknown default:
+                break
+            }
+        }
+    }
 
     var searchText: String = "" {
         didSet {
@@ -82,11 +94,6 @@ enum ContentState: String, CaseIterable, Identifiable {
     }
 
     var selectedDialogue: DialogueSession?
-
-    init(context: NSManagedObjectContext) {
-        viewContext = context
-        fetchDialogueData()
-    }
 
     var shouldShowPlaceholder: Bool {
         switch selectedState {
@@ -119,6 +126,11 @@ enum ContentState: String, CaseIterable, Identifiable {
         case .recent, .images, .speech, .all:
                 return (!searchText.isEmpty && activeDialogues.isEmpty) ? "No Search Results" : "No active chats"
         }
+    }
+    
+    init(context: NSManagedObjectContext) {
+        viewContext = context
+        fetchDialogueData()
     }
 
     func fetchDialogueData(firstTime: Bool = true) {

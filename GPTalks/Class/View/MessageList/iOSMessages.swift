@@ -35,7 +35,7 @@ struct iOSMessages: View {
                     VStack(spacing: 0) {
                         ForEach(session.filteredConversations()) { conversation in
                             ConversationView(session: session, conversation: conversation)
-                            //                                .animation(.default, value: session.isReplying)
+//                                .animation(.default, value: session.isReplying)
                         }
                     }
                     .padding(.bottom, 8)
@@ -61,14 +61,14 @@ struct iOSMessages: View {
             #endif
             .listStyle(.plain)
             .onAppear {
-                scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+                scrollToBottom(proxy: proxy, animated: true, delay: 0.3)
                 
                 if AppConfiguration.shared.alternateMarkdown && session.conversations.count > 8 {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
                 }
                 
                 if isAutoResuming {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                         isTextFieldFocused = true
                     }
                 }

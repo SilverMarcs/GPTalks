@@ -23,22 +23,18 @@ struct ContentView: View {
         NavigationSplitView {
             MacOSDialogList(viewModel: viewModel)
         } detail: {
-            if let selectedDialogue = viewModel.selectedDialogue {
-                if viewModel.selectedState == .images {
-                    ImageCreator(imageSession: imageSession)
-                        .onChange(of: viewModel.selectedDialogue) {
-                            viewModel.selectedState = .recent
-                        }
-                } else if viewModel.selectedState == .speech {
-                    TranscriptionCreator()
-                } else {
-                    MacOSMessages(session: selectedDialogue)
-//                        .id(selectedDialogue.id)
-                        .frame(minWidth: 500)
-                }
+            if viewModel.selectedState == .images {
+                ImageCreator(imageSession: imageSession)
+            } else if viewModel.selectedState == .speech {
+                TranscriptionCreator()
             } else {
-                Text("No Chat Selected")
-                    .font(.title)
+                if let selectedDialogue = viewModel.selectedDialogue {
+                    MacOSMessages(session: selectedDialogue)
+                        .frame(minWidth: 500)
+                } else {
+                    Text("No Chat Selected")
+                        .font(.title)
+                }
             }
         }
         .background(.background)

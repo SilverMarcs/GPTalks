@@ -154,6 +154,8 @@ enum Model: String, Codable {
             .gpt3t,
             .gpt4,
             .gpt4t,
+//            .gpt4t1106,
+//            .gpt4t0125,
 //            .customChat
         ]
     
@@ -171,7 +173,8 @@ enum Model: String, Codable {
     
     /// Oxygen
     static let oxygenChatModels: [Model] =
-        openAIChatModels
+        openAIChatModels +
+        claudeModels
     
     static let oxygenVisionModels: [Model] =
         openAIVisionModels

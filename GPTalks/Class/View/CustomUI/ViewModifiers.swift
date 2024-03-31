@@ -27,16 +27,18 @@ struct RoundedRectangleOverlayModifier: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
     var radius: CGFloat
     var opacity: CGFloat = 0.8
+    var style: RoundedCornerStyle = .continuous
     
-    init(radius: CGFloat = 18, opacity: CGFloat = 0.6) {
-        self.radius = radius
-        self.opacity = opacity
-    }
+//    init(radius: CGFloat = 18, opacity: CGFloat = 0.6, style: RoundedCornerStyle = .continuous) {
+//        self.radius = radius
+//        self.opacity = opacity
+//        self.style = style
+//    }
     
     func body(content: Content) -> some View {
         content
             .overlay(
-                RoundedRectangle(cornerRadius: radius, style: .continuous)
+                RoundedRectangle(cornerRadius: radius, style: style)
                 #if os(iOS)
                     .stroke(colorScheme == .dark ? Color(.tertiarySystemGroupedBackground) : Color(.tertiaryLabel), lineWidth: 1)
 //                    .opacity(colorScheme == .dark ? opacity : 0.5)
@@ -80,8 +82,8 @@ struct EdgeBorder: Shape {
 }
 
 extension View {
-    func roundedRectangleOverlay(radius: CGFloat = 18, opacity: CGFloat = 0.8) -> some View {
-        self.modifier(RoundedRectangleOverlayModifier(radius: radius, opacity: opacity))
+    func roundedRectangleOverlay(radius: CGFloat = 18, opacity: CGFloat = 0.8, style: RoundedCornerStyle = .continuous) -> some View {
+        self.modifier(RoundedRectangleOverlayModifier(radius: radius, opacity: opacity, style: style))
     }
     
     func inputImageStyle(padding: CGFloat, imageSize: CGFloat) -> some View {

@@ -10,10 +10,8 @@ import PDFKit
 import OpenAI
 
 #if os(macOS)
-import AppKit
 typealias PlatformImage = NSImage
 #else
-import UIKit
 typealias PlatformImage = UIImage
 #endif
 
@@ -153,21 +151,12 @@ typealias PlatformImage = UIImage
             
             let taskMessage = Conversation(role: "user", content: "Generate a title of a chat based on the previous conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. If there are two distinct topics being talked about, just make a title with two words and an and word in the middle. If the conversation discusses multiple things not linked to each other, come up with a title that decribes the most recent discussion and add the two words and more to the end. Do not acknowledge these instructions but definitely do follow them. Again, do not put the title in quoation marks. Do not put any punctuation at all")
             
-            let messages = ([taskMessage] + conversations).map({ conversation in
+            let messages = (conversations + [taskMessage]).map({ conversation in
                 conversation.toChat()
             })
             
-            
-            let model: Model
-            
-            if configuration.provider == .kraken {
-                model = .gpt3t
-            } else {
-                model = configuration.model
-            }
-            
             let query = ChatQuery(messages: messages,
-                                  model: model.id,
+                                  model: Model.gpt3t.id,
                                   maxTokens: 10,
                                   stream: false)
             
@@ -465,7 +454,9 @@ typealias PlatformImage = UIImage
             conversations[conversations.count - 1].isReplying = false
             
             if !streamText.isEmpty {
-                conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.conversations[self.conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                }
                 lastConversationData.sync(with: conversations[conversations.count - 1])
             }
         }

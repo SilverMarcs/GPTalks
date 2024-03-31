@@ -27,11 +27,7 @@ struct MacOSMessages: View {
                     .background(.bar)
                     .id(session.id)
             }
-            .onChange(of: viewModel.selectedDialogue) {
-                if viewModel.selectedState == .images {
-                    viewModel.selectedState = .recent
-                }
-                
+            .onChange(of: viewModel.selectedDialogue) {                
                 if AppConfiguration.shared.alternateMarkdown {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.4)

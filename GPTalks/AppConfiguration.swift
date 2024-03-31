@@ -38,22 +38,22 @@ class AppConfiguration: ObservableObject {
     /// oxygen
     @AppStorage("configuration.Okey") var Okey = ""
     @AppStorage("configuration.Omodel") var Omodel: Model = .gpt4t
-    @AppStorage("configuration.OImageModel") var OImageModel: Model = .dalle3
+    @AppStorage("configuration.OImageModel") var OImageModel: Model = .absolutereality_v181
     
     /// naga
     @AppStorage("configuration.Nkey") var Nkey = ""
     @AppStorage("configuration.Nmodel") var Nmodel: Model = .gpt4t
-    @AppStorage("configuration.NImageModel") var NImageModel: Model = .dalle3
+    @AppStorage("configuration.NImageModel") var NImageModel: Model = .playgroundv25
     
     /// kraken
     @AppStorage("configuration.Kkey") var Kkey = ""
-    @AppStorage("configuration.Kmodel") var Kmodel: Model = .gpt4
-    @AppStorage("configuration.KImageModel") var KImageModel: Model = .dalle3
+    @AppStorage("configuration.Kmodel") var Kmodel: Model = .gpt4t
+    @AppStorage("configuration.KImageModel") var KImageModel: Model = .sdxl
     
     /// shard
     @AppStorage("configuration.Skey") var Skey = ""
-    @AppStorage("configuration.Smodel") var Smodel: Model = .gpt4
-    @AppStorage("configuration.SImageModel") var SImageModel: Model = .dalle3
+    @AppStorage("configuration.Smodel") var Smodel: Model = .gpt4t
+    @AppStorage("configuration.SImageModel") var SImageModel: Model = .realisticvision
     
     /// custom
     @AppStorage("configuration.Ckey") var Ckey = ""
