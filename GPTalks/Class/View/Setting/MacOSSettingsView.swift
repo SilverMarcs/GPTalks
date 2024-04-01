@@ -120,10 +120,15 @@ struct MacOSDefaultParameters: View {
                 Divider()
 
                 HStack {
-                    Text("System prompt")
+                    VStack {
+                        Text("System prompt")
+                        Spacer()
+                    }
                     Spacer()
-                    DefaultSystemPrompt()
-                        .textFieldStyle(.roundedBorder)
+                    TextEditor(text: AppConfiguration.shared.$systemPrompt)
+                        .scrollContentBackground(.hidden)
+                        .padding(8)
+                        .roundedRectangleOverlay(radius: 7)
                         .frame(width: widthValue)
                 }
                 .padding(paddingValue)

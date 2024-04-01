@@ -57,12 +57,6 @@ struct ContentView: View {
                 }
             } else {
                 NavigationStack {
-                    if let first = viewModel.currentDialogues.first, viewModel.selectedDialogue == nil {
-                        NavigationLink(destination: iOSMessages(session: first, isAutoResuming: true), isActive: $resumed) {
-//                            iOSMessages(session: first).isTextFieldFocused = true
-                        }
-                    }
-                    
                     IOSDialogList(viewModel: viewModel)
                 }
                 .task {
@@ -70,19 +64,6 @@ struct ContentView: View {
                 }
             }
         }
-        .onChange(of: scenePhase) {
-           switch scenePhase {
-           case .active:
-               print("App has resumed from background")
-               if AppConfiguration.shared.autoResume {
-                   resumed = true
-               }
-           case .inactive, .background:
-               break
-           @unknown default:
-               break
-           }
-       }
 #endif
     }
 }

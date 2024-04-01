@@ -16,7 +16,6 @@ struct iOSMessages: View {
     @Environment(DialogueViewModel.self) private var viewModel
 
     @Bindable var session: DialogueSession
-    var isAutoResuming: Bool = false
 
     @State private var shouldStopScroll: Bool = false
     @State private var showScrollButton: Bool = false
@@ -60,16 +59,10 @@ struct iOSMessages: View {
             #endif
             .listStyle(.plain)
             .onAppear {
-                scrollToBottom(proxy: proxy, animated: true, delay: 0.3)
+                scrollToBottom(proxy: proxy, delay: 0.3)
                 
                 if AppConfiguration.shared.alternateMarkdown && session.conversations.count > 8 {
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
-                }
-                
-                if isAutoResuming {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                        isTextFieldFocused = true
-                    }
+                    scrollToBottom(proxy: proxy, delay: 0.8)
                 }
             }
             .onTapGesture {
@@ -81,9 +74,7 @@ struct iOSMessages: View {
                 }
             }
             .onChange(of: session.input) {
-                if session.input.contains("\n") || (session.input.count > 25) || (session.input.isEmpty) {
-                    scrollToBottom(proxy: proxy)
-                }
+                scrollToBottom(proxy: proxy)
             }
             .onChange(of: session.resetMarker) {
                 if session.resetMarker == session.conversations.count - 1 {
@@ -105,15 +96,19 @@ struct iOSMessages: View {
             .onChange(of: session.conversations.count) {
                 shouldStopScroll = false
             }
-//            .onChange(of: session.isAddingConversation) {
-//                scrollToBottom(proxy: proxy)
-//            }
             .onChange(of: session.inputImages) {
                 if !session.inputImages.isEmpty {
                     if !session.configuration.provider.visionModels.contains(session.configuration.model) {
                         session.configuration.model = session.configuration.provider.preferredVisionModel
                     }
                     scrollToBottom(proxy: proxy, animated: true)
+                }
+            }
+            .onChange(of: session.configuration.provider) {
+                if session.shouldSwitchToVision {
+                    session.configuration.model = session.configuration.provider.preferredVisionModel
+                } else {
+                    session.configuration.model = session.configuration.provider.preferredChatModel
                 }
             }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
@@ -171,14 +166,7 @@ struct iOSMessages: View {
                 focused: _isTextFieldFocused
             )
             .background(
-//                VisualEffect(colorTint: colorScheme == .dark ? (isTextFieldFocused ? Color(hex: "545456") : .black) : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
-//                VisualEffect(colorTint: colorScheme == .dark ? (isTextFieldFocused ? Color(hex: "545456") : .black) : .white, colorTintAlpha: 0.7, blurRadius: 50, scale: 1)
-                VisualEffect(colorTint: colorScheme == .dark 
-                             ?
-                             (isTextFieldFocused ? Color(hex: "545456") : .black) 
-                             :
-                             (isTextFieldFocused ? Color(hex: "#BBBEC4") : .white)
-                             ,colorTintAlpha: 0.7, blurRadius: 50, scale: 1)
+                VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 8, scale: 1)
                     .ignoresSafeArea()
             )
         }

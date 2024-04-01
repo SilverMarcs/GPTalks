@@ -15,12 +15,16 @@ enum ChatTool: String, CaseIterable {
     case imageGenerate = "imageGenerate"
     case transcribe = "transcribe"
     
+    static var allTools: [ChatQuery.ChatCompletionToolParam] {
+        return ChatTool.allCases.map { $0.completionToolParam }
+    }
+    
     var completionToolParam: ChatQuery.ChatCompletionToolParam {
         switch self {
         case .urlScrape:
             return .init(function:
                     .init(name: "urlScrape",
-                          description: "If a URL is explicitly given, this function must be used to receive the contents of that url webpage. If you already know the information, do not use the function to come up with a url. Always prioritize your pre-existing knowledge. Note that this function CANNOT search the web on its own. It can only look up a sepcific url. If you find a previous google search in the chat history, you may find some urls in the search results. You may use one and only one of those urls to call this function to retrieve required. Be sure to choose the most appropriate url to call in that case on your own. The function will  visit that url and return the webcontent from it. NEVER pass in wikipedia links as the paramater.",
+                          description: "If a URL is explicitly given, this function must be used to receive the contents of that url webpage. If you already know the information, do not use the function to come up with a url. Always prioritize your pre-existing knowledge. Note that this function CANNOT search the web on its own. It can only look up a sepcific url. If you find a previous google search in the chat history, you may find some urls in the search results. You may use one and only one of those urls to call this function to retrieve required. Be sure to choose the most appropriate url to call in that case on your own. The function will visit that url and return the webcontent from it. NEVER pass in wikipedia links as the paramater.",
                           parameters:
                             .init(type: .object,
                                   properties: ["url":
@@ -68,10 +72,6 @@ enum ChatTool: String, CaseIterable {
         }
     }
     
-    static var allTools: [ChatQuery.ChatCompletionToolParam] {
-        return ChatTool.allCases.map { $0.completionToolParam }
-    }
-    
     @ViewBuilder
     var destination: some View {
         switch self {
@@ -81,6 +81,7 @@ enum ChatTool: String, CaseIterable {
                     .padding()
                 
                 Toggle("Experimental Scraper (Beta)", isOn: AppConfiguration.shared.$useExperimentalWebScraper)
+                    .toggleStyle(.switch)
                     .padding()
                 Spacer()
             }
@@ -138,7 +139,6 @@ enum ChatTool: String, CaseIterable {
             "Transcribe"
         }
     }
-    
     
     var systemImageName: String {
         switch self {

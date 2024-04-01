@@ -22,24 +22,18 @@ struct IOSTextField: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             TextField("Send a message", text: $input, axis: .vertical)
-//                .keyboardType(.asciiCapable)
-//                .autocorrectionDisabled(true)
-//                .textContentType(.init(rawValue: ""))
                 .focused($focused)
                 .multilineTextAlignment(.leading)
                 .lineLimit(1 ... 15)
                 .padding(6)
                 .padding(.horizontal, 5)
                 .padding(.trailing, 25) // for avoiding send button
-                .frame(minHeight: imageSize + 5)
+                .frame(minHeight: imageSize + 7)
                 .background(
-//                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
                     VisualEffect(colorTint: colorScheme == .dark 
-                                 ?
-                                 (focused ? Color(hex: "666668")
-                                 :
-                                 (.black))
-                                 : .white, colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
+                                 ? Color(hex: "48484A")
+                                 : Color(hex: "CACACE"),
+                                 colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
                         .cornerRadius(18)
                 )
             
@@ -53,20 +47,20 @@ struct IOSTextField: View {
                             .foregroundStyle(.secondary)
                             .opacity(0.5)
                     }
-                    .offset(x: -10, y: -9)
+                    .offset(x: -10, y: -10)
                 } else {
                     Group {
                         if isReplying {
-                            StopButton(size: imageSize - 3) {
+                            StopButton(size: imageSize - 2) {
                                 stop()
                             }
                         } else {
-                            SendButton(size: imageSize - 3) {
+                            SendButton(size: imageSize - 2) {
                                 send()
                             }
                         }
                     }
-                    .offset(x: -4, y: -4)
+                    .offset(x: -4, y: -5)
                 }
             }
             .padding(20) // Increase tappable area
@@ -76,7 +70,6 @@ struct IOSTextField: View {
         .onTapGesture {
             focused = true
         }
-        .roundedRectangleOverlay(opacity: focused ? 0 : (colorScheme == .dark ? 0.8 : 0.5))
     }
 
     @ViewBuilder

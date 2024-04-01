@@ -58,10 +58,7 @@ struct IOSInputView: View {
         .animation(.default, value: showMore)
         .buttonStyle(.plain)
         .padding(.horizontal)
-//        .padding(.top, verticalPadding)
-//        .padding(.bottom, verticalPadding + 2)
-        .padding(.top, focused ? verticalPadding + 3 : verticalPadding)
-        .padding(.bottom, focused ? 2 : verticalPadding + 2)
+        .padding(.vertical, verticalPadding + 2)
     }
     
 
@@ -73,7 +70,7 @@ struct IOSInputView: View {
         } label: {
             Image(systemName: "eraser.fill")
                 .resizable()
-                .inputImageStyle(padding: 9, imageSize: imageSize + 3)
+                .inputImageStyle(padding: 9, imageSize: imageSize + 5)
         }
         .padding(.top, -1)
     }
@@ -98,7 +95,7 @@ struct IOSInputView: View {
         } label: {
             Image(systemName: "photo")
                 .resizable()
-                .inputImageStyle(padding: 11, imageSize: imageSize + 7)
+                .inputImageStyle(padding: 11, imageSize: imageSize + 9)
      
         }
         .offset(y: 2)
@@ -111,7 +108,7 @@ struct IOSInputView: View {
         } label: {
             Image(systemName: "plus")
                 .resizable()
-                .inputImageStyle(padding: 10, imageSize: imageSize + 4)
+                .inputImageStyle(padding: 10, imageSize: imageSize + 6)
                 .rotationEffect(.degrees(showMore ? 45 : 0))
                 .animation(.default, value: showMore)
         }
@@ -137,6 +134,7 @@ struct IOSInputView: View {
         .padding(20) // Increase tappable area
         .padding(-20) // Cancel out visual expansion
         .background(Color.clear)
+//        .offset(y: -1)
     }
 
     private var verticalPadding: CGFloat {
