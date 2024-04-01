@@ -145,7 +145,7 @@ typealias PlatformImage = UIImage
     
     @MainActor
     func generateTitle(forced: Bool = false) async {
-        if conversations.count == 1 || conversations.count == 2 || (forced && conversations.count >= 2) {
+        if conversations.count == 1 || conversations.count == 2 || (forced && conversations.count >= 2) && title == "New Session" {
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
@@ -377,17 +377,8 @@ typealias PlatformImage = UIImage
                              maxTokens: 4000,
                              temperature: configuration.temperature)
         } else {
-            
-            var modelId: String {
-                if (configuration.provider == .oxygen || configuration.provider == .shard) && configuration.model == .gpt4t {
-                    return Model.gpt4t0125.id
-                } else {
-                    return configuration.model.id
-                }
-            }
-            
             return ChatQuery(messages: finalMessages,
-                             model: modelId,
+                             model: (configuration.provider == .oxygen && configuration.model == .gpt4t) ? Model.gpt4t0125.id : configuration.model.id,
                              maxTokens: 4000,
                              temperature: configuration.temperature,
                              tools: ChatTool.allTools)
@@ -451,13 +442,12 @@ typealias PlatformImage = UIImage
                 try await handleToolCall(chatTool: chatTool, funcParam: funcParam)
             }
         } else {
-            conversations[conversations.count - 1].isReplying = false
-            
             if !streamText.isEmpty {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.conversations[self.conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    lastConversationData.sync(with: self.conversations[self.conversations.count - 1])
+                    self.conversations[self.conversations.count - 1].isReplying = false
                 }
-                lastConversationData.sync(with: conversations[conversations.count - 1])
             }
         }
     }
@@ -469,7 +459,14 @@ typealias PlatformImage = UIImage
         switch chatTool {
         case .urlScrape:
             if let url = extractValue(from: funcParam, forKey: "url") {
-                let webContent = try await retrieveWebContent(from: url)
+                let webContent: String
+                
+                if AppConfiguration.shared.useExperimentalWebScraper {
+                    webContent = try await retrieveWebContent(from: url)
+                } else {
+                    webContent = try await fetchAndParseHTMLAsync(from: url)
+                }
+                
                 appendConversation(Conversation(role: "tool", content: webContent))
                 
                 self.conversations[self.conversations.count - 2].isReplying = false

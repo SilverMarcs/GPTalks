@@ -11,25 +11,25 @@ struct MacOSSettingsView: View {
     var body: some View {
         TabView {
             MacOSAppearanceView()
-                .frame(width: 650, height: 400)
+                .frame(width: 650, height: 370)
                 .tabItem {
                     Label("Appearance", systemImage: "wand.and.stars")
                 }
         
             MacOSDefaultParameters()
-                .frame(width: 650, height: 300)
+                .frame(width: 650, height: 250)
                 .tabItem {
                     Label("Parameters", systemImage: "slider.horizontal.3")
                 }
         
             ProviderSettingsView()
-                .frame(width: 650, height: 370)
+                .frame(width: 650, height: 340)
                 .tabItem {
                     Label("Providers", systemImage: "brain.head.profile")
                 }
             
             ToolsView()
-                .frame(width: 650, height: 300)
+                .frame(width: 650, height: 200)
                 .tabItem {
                     Label("Plugins", systemImage: "wrench")
                 }
@@ -42,10 +42,16 @@ struct ToolsView: View {
     
     var body: some View {
         NavigationView {
-            List(ChatTool.allCases, id: \.self, selection: $selection) { tool in
+            List(ChatTool.allCases, id: \.self) { tool in
                 NavigationLink(
                     destination: tool.destination,
-                    label: { tool.settingsLabel }
+                    label: {
+                        HStack {
+                            Image(systemName: tool.systemImageName)
+                                .renderingMode(.template)
+                            Text(tool.toolName)
+                        }
+                    }
                 )
             }
             .listStyle(.inset)

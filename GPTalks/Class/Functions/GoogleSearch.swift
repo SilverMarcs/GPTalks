@@ -22,6 +22,11 @@ class GoogleSearchService {
     private let searchEngineId = AppConfiguration.shared.googleSearchEngineId
     
     func performSearch(query: String) async throws -> String {
+        // if the private values are not set, throw an error
+        guard !apiKey.isEmpty, !searchEngineId.isEmpty else {
+            throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "API key and/or search engine ID not set"])
+        }
+        
         let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         let urlString = "https://www.googleapis.com/customsearch/v1?q=\(encodedQuery)&key=\(apiKey)&cx=\(searchEngineId)"
         

@@ -22,7 +22,6 @@ struct AssistantMessageView: View {
 
         alternateUI
 
-
         #if os(macOS)
         .onHover { isHovered in
             self.isHovered = isHovered

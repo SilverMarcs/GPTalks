@@ -35,7 +35,6 @@ struct iOSMessages: View {
                     VStack(spacing: 0) {
                         ForEach(session.filteredConversations()) { conversation in
                             ConversationView(session: session, conversation: conversation)
-//                                .animation(.default, value: session.isReplying)
                         }
                     }
                     .padding(.bottom, 8)
@@ -282,12 +281,9 @@ struct iOSMessages: View {
                     .foregroundStyle(.primary)
                     .bold()
                 
-                HStack(spacing: 3) {
-                    Text(session.configuration.systemPrompt)
-                        .frame(maxWidth: 200, alignment: .leading)
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                }
+                Text(session.configuration.model.name + " • " + session.configuration.systemPrompt)
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
             }
             Spacer()
         }

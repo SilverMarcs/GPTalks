@@ -84,14 +84,8 @@ struct ToolCallView: View {
                     ProgressView()
                         .controlSize(.small)
                 } else {
-                    if conversation.content == "urlScrape" {
-                        Image(systemName: "network")
-                    } else if conversation.content == "transcribe" {
-                        Image(systemName: "waveform")
-                    } else if conversation.content == "imageGenerate" {
-                        Image(systemName: "photo")
-                    } else if conversation.content == "googleSearch" {
-                        Image(systemName: "safari")
+                    if let tool = ChatTool(rawValue: conversation.content) {
+                        Image(systemName: tool.systemImageName)
                     }
                 }
             }

@@ -79,8 +79,12 @@ enum ChatTool: String, CaseIterable {
             VStack {
                 Text("Pass in a URL in prompt for the assistant to retrieve web content from that URL.")
                     .padding()
+                
+                Toggle("Experimental Scraper (Beta)", isOn: AppConfiguration.shared.$useExperimentalWebScraper)
+                    .padding()
                 Spacer()
             }
+            .navigationTitle(self.toolName)
         case .googleSearch:
             VStack {
                 VStack {
@@ -104,31 +108,48 @@ enum ChatTool: String, CaseIterable {
                 .padding()
                 Spacer()
             }
+            .navigationTitle(self.toolName)
         case .imageGenerate:
             VStack {
                 Text("Ask the assistant to generate an image with a description of the image.")
                     .padding()
                 Spacer()
             }
+            .navigationTitle(self.toolName)
         case .transcribe:
             VStack {
                 Text("Upload an audio file and ask the assistant to transcribe it for you. You may also also ask additional questions about the transcribed text.")
                     .padding()
                 Spacer()
             }
+            .navigationTitle(self.toolName)
+        }
+    }
+
+    var toolName: String {
+        switch self {
+        case .urlScrape:
+            "URL Scrape"
+        case .googleSearch:
+            "Google Search"
+        case .imageGenerate:
+            "Image Generate"
+        case .transcribe:
+            "Transcribe"
         }
     }
     
-    var settingsLabel: some View {
+    
+    var systemImageName: String {
         switch self {
         case .urlScrape:
-            Text("URL Scrape")
-        case .googleSearch:
-            Text("Google Search")
-        case .imageGenerate:
-            Text("Image Generate")
+            return "network"
         case .transcribe:
-            Text("Transcribe")
+            return "waveform"
+        case .imageGenerate:
+            return "photo"
+        case .googleSearch:
+            return "safari"
         }
     }
 }

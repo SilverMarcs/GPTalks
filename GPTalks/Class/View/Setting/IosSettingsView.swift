@@ -78,7 +78,7 @@ struct IosSettingsView: View {
                     }
                 }
                 
-                Section("Defaults") {
+                Section("Chat Features") {
                     NavigationLink {
                         IosDefaultConfigView()
                     } label: {
@@ -88,8 +88,31 @@ struct IosSettingsView: View {
                             Text("Default Parameters")
                         }
                     }
+                    
+                    NavigationLink {
+                        Form {
+                            List(ChatTool.allCases, id: \.self) { tool in
+                                NavigationLink(
+                                    destination: tool.destination,
+                                    label: {
+                                        HStack {
+                                            Image(systemName: tool.systemImageName)
+                                                .renderingMode(.template)
+                                            Text(tool.toolName)
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                        .navigationTitle("Plugins")
+                    } label: {
+                        HStack {
+                            Image(systemName: "puzzlepiece.fill")
+                                .renderingMode(.original)
+                            Text("Plugins")
+                        }
+                    }
                 }
-                
                 
                 Section("Services") {
                     ForEach(Provider.availableProviders) { provider in
@@ -97,18 +120,6 @@ struct IosSettingsView: View {
                             destination: provider.destination,
                             label: { provider.settingsLabel }
                         )
-                    }
-                }
-                
-                Section("Plugins") {
-                    NavigationLink {
-                        ChatTool.googleSearch.destination
-                    } label: {
-                        HStack {
-                            Image(systemName: "safari")
-                                .renderingMode(.original)
-                            Text("Google Search")
-                        }
                     }
                 }
                 

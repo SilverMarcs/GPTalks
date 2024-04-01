@@ -25,6 +25,9 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.googleApiKey") var googleApiKey = ""
     @AppStorage("configuration.googleSearchEngineId") var googleSearchEngineId = ""
     
+    // URLScrape
+    @AppStorage("configuration.useExperimentalWebScraper") var useExperimentalWebScraper: Bool = false
+    
     // config
     @AppStorage("configuration.contextLength") var contextLength = 10
     @AppStorage("configuration.temperature") var temperature: Double = 0.5
