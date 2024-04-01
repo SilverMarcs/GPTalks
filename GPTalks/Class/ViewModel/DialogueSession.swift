@@ -378,7 +378,7 @@ typealias PlatformImage = UIImage
                              temperature: configuration.temperature)
         } else {
             return ChatQuery(messages: finalMessages,
-                             model: (configuration.provider == .oxygen && configuration.model == .gpt4t) ? Model.gpt4t0125.id : configuration.model.id,
+                             model: configuration.model.id,
                              maxTokens: 4000,
                              temperature: configuration.temperature,
                              tools: ChatTool.allTools)

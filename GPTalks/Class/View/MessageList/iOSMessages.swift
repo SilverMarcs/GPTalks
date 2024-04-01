@@ -104,13 +104,13 @@ struct iOSMessages: View {
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }
-            .onChange(of: session.configuration.provider) {
-                if session.shouldSwitchToVision {
-                    session.configuration.model = session.configuration.provider.preferredVisionModel
-                } else {
-                    session.configuration.model = session.configuration.provider.preferredChatModel
-                }
-            }
+//            .onChange(of: session.configuration.provider) {
+//                if session.shouldSwitchToVision {
+//                    session.configuration.model = session.configuration.provider.preferredVisionModel
+//                } else {
+//                    session.configuration.model = session.configuration.provider.preferredChatModel
+//                }
+//            }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
                     itemProvider.loadObject(ofClass: UIImage.self) { image, error in

@@ -59,7 +59,9 @@ enum ContentState: String, CaseIterable, Identifiable {
         didSet {
             switch selectedState {
             case .recent, .all, .all:
-                selectedDialogue = currentDialogues.first
+                if selectedDialogue == nil {
+                    selectedDialogue = currentDialogues.first
+                }
                 break
             case .images, .speech:
                 selectedDialogue = nil
