@@ -165,7 +165,7 @@ typealias PlatformImage = UIImage
             do {
                 for try await result in service.chatsStream(query: query) {
                     tempTitle += result.choices.first?.delta.content ?? ""
-                        title = tempTitle
+                    title = tempTitle
                 }
                 
                 save()
@@ -356,7 +356,7 @@ typealias PlatformImage = UIImage
         var adjustedConversations: [Conversation] = conversations
 
         if conversations.count > resetMarker + 1 {
-            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
+            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1).dropLast()) // dropping the emtpy last conversation cuz its the empty assistant reply
         }
         
         var finalMessages = adjustedConversations.map({ conversation in
