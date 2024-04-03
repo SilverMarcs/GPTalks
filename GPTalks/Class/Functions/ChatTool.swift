@@ -87,6 +87,19 @@ enum ChatTool: String, CaseIterable {
             TranscriptionConfigurationView()
         }
     }
+    
+    var paramName: String {
+        switch self {
+        case .urlScrape:
+            "url"
+        case .googleSearch:
+            "searchQuery"
+        case .imageGenerate:
+            "prompt"
+        case .transcribe:
+            "audioPath"
+        }
+    }
 
     var toolName: String {
         switch self {

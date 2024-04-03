@@ -39,6 +39,7 @@ enum Model: String, Codable {
     case kplaygroundv25
     
     /// shard
+    case swhisper
     case realisticvision
     case cyberrealistic_v33
     case juggernaut_aftermath
@@ -86,6 +87,8 @@ enum Model: String, Codable {
             "ICBINP"
             
         /// shard
+        case .swhisper:
+            "Whisper"
         case .realisticvision:
             "Realistic Vision"
         case .cyberrealistic_v33:
@@ -153,6 +156,8 @@ enum Model: String, Codable {
             "icantbelieveitsnotphotography_seco"
             
         /// shard
+        case .swhisper:
+            "whisper"
         case .realisticvision:
             "realistic-vision-v5"
         case .cyberrealistic_v33:

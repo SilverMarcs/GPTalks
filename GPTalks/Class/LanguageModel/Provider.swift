@@ -207,8 +207,10 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     
     var transcriptionModels: [Model] {
         switch self {
-        case .openai, .oxygen, .naga, .kraken, .custom, .shard:
+        case .openai, .oxygen, .naga, .kraken, .custom:
             return [.whisper1]
+        case .shard:
+            return [.swhisper,]
         }
     }
 

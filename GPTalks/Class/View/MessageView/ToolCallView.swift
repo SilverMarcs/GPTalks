@@ -127,15 +127,6 @@ struct ToolCallView: View {
                     }
                 }
             }
-            
-            if let index = session.conversations.firstIndex(of: conversation) {
-                if let toolMessage = session.conversations[safe: index + 1] {
-                    if let audioUrl = URL(string:toolMessage.audioPath) {
-                        AudioPlayerView(audioURL: audioUrl)
-                            .frame(maxWidth: 500)
-                    }
-                }
-            }
         }
     }
 }

@@ -90,7 +90,11 @@ struct UserMessageView: View {
                             ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
                         }
                     }
-                
+                    
+                    if let audioUrl = URL(string: conversation.audioPath) {
+                        AudioPlayerView(audioURL: audioUrl)
+                            .frame(maxWidth: 500)
+                    }
                 }
                 
                 Spacer()

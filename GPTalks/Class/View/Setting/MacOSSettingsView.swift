@@ -54,7 +54,7 @@ struct ToolsView: View {
                     }
                 )
             }
-            .listStyle(.inset)
+            .listStyle(.sidebar)
         }
     }
 }
@@ -70,7 +70,7 @@ struct ProviderSettingsView: View {
                     label: { provider.settingsLabel }
                 )
             }
-            .listStyle(.inset)
+            .listStyle(.sidebar)
         }
     }
 }

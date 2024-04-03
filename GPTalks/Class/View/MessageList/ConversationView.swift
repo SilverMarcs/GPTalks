@@ -18,7 +18,7 @@ struct ConversationView: View {
                         UserMessageView(conversation: conversation, session: session)
                     }
                     
-                    if conversation.role == "assistant" {
+                    else if conversation.role == "assistant" {
                         if ChatTool.allCases.map({ $0.rawValue }).contains(conversation.content) {
                             ToolCallView(conversation: conversation, session: session)
                         } else {

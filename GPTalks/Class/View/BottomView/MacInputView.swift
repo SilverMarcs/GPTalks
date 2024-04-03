@@ -96,8 +96,8 @@ struct MacInputView: View {
         .animation(.default, value: showMore)
         .buttonStyle(.plain)
         .padding(.horizontal)
-        .padding(.top, verticalPadding - 1)
-        .padding(.bottom, verticalPadding + 3)
+        .padding(.top, verticalPadding - 2)
+        .padding(.bottom, verticalPadding + 2)
     }
     
     var MoreOptions: some View {

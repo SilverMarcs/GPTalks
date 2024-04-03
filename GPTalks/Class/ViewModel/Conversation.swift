@@ -36,47 +36,34 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
         }()
 
         if chatRole != .tool {
-            if chatRole == .assistant && content == "urlScrape" {
-                return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "webFuncParam", name: "urlScrape"))])!
-            } else if chatRole == .assistant && content == "googleSearch" {
-                return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "searchQuery", name: "googleSearch"))])!
-            } else if chatRole == .assistant && content == "imageGenerate" {
-                return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "prompt", name: "imageGenerate"))])!
-            } else if chatRole == .assistant && content == "transcribe" {
-                return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: "audioPath", name: "transcribe"))])!
-            } else {
-                if chatRole == .assistant && !imagePaths.isEmpty {
-                    return .init(role: chatRole, content: content)!
-                }
-                
-                if !imagePaths.isEmpty {
-                    return .init(role: chatRole, content:
-                                    [.init(chatCompletionContentPartTextParam: .init(text: content))] +
-                                 imagePaths.map { path in
-                            .init(chatCompletionContentPartImageParam:
-                                    .init(imageUrl:
-                                            .init(
-                                                url: "data:image/jpeg;base64," +
-                                                (getSavedImage(fromPath: path)!
-                                                    .base64EncodedString())!,
-                                                detail: .auto
-                                            )
-                                    )
-                            )
-                    })!
-                } else {
-                    return .init(role: chatRole, content: content)!
-                }
+            if chatRole == .assistant && imagePaths.isEmpty, let tool = ChatTool(rawValue: content) {
+                return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: tool.paramName, name: tool.rawValue))])!
             }
+            else if chatRole == .user && !audioPath.isEmpty {
+                let audioContent = content + "\n" + audioPath
+                return .init(role: chatRole, content: audioContent)!
+            } else if chatRole == .user && !imagePaths.isEmpty {
+                return .init(role: chatRole, content:
+                               [.init(chatCompletionContentPartTextParam: .init(text: content))] +
+                            imagePaths.map { path in
+                       .init(chatCompletionContentPartImageParam:
+                               .init(imageUrl:
+                                       .init(
+                                           url: "data:image/jpeg;base64," +
+                                           (getSavedImage(fromPath: path)!
+                                               .base64EncodedString())!,
+                                           detail: .auto
+                                       )
+                               )
+                       )
+               })!
+            }
+            
+            return .init(role: chatRole, content: content)!
+ 
         } else {
-            if content == "imageGenerate" {
-                return .init(role: .tool, content: content, name: "imageGenerate", toolCallId: "")!
-            } else if content == "transcribe" {
-                return .init(role: .tool, content: content, name: "transcribe", toolCallId: "")!
-            } else if content == "urlScrape" {
-                return .init(role: .tool, content: content, name: "urlScrape", toolCallId: "")!
-            } else if content == "googleSearch" {
-                return .init(role: .tool, content: content, name: "googleSearch", toolCallId: "")!
+            if let tool = ChatTool(rawValue: content) {
+                return .init(role: .tool, content: content, name: tool.toolName, toolCallId: "")!
             } else {
                 return .init(role: .tool, content: content, name: "nil", toolCallId: "")!
             }

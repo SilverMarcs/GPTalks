@@ -285,6 +285,10 @@ typealias PlatformImage = UIImage
                 }
             }
             
+            if !conversation.audioPath.isEmpty {
+                inputAudioPath = conversation.audioPath
+            }
+            
             removeConversations(from: index)
             await send(text: editedContent)
         }
@@ -301,7 +305,11 @@ typealias PlatformImage = UIImage
 
         if !isRegen && !isRetry {
             if inputImages.isEmpty {
-                appendConversation(Conversation(role: "user", content: text))
+                if inputAudioPath.isEmpty {
+                    appendConversation(Conversation(role: "user", content: text))
+                } else {
+                    appendConversation(Conversation(role: "user", content: text, audioPath: inputAudioPath))
+                }
            } else {
                var imagePaths: [String] = []
                
@@ -321,6 +329,7 @@ typealias PlatformImage = UIImage
         
         do {
             inputImages = []
+            inputAudioPath = ""
             
             #if os(macOS)
             try await streamingTask?.value
@@ -350,25 +359,24 @@ typealias PlatformImage = UIImage
     
     @MainActor
     func createChatQuery() -> ChatQuery {
-        let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
+        var adjustedConversations: [Conversation] = conversations
         
         // Adjusting the conversations array based on the resetMarker
-        var adjustedConversations: [Conversation] = conversations
-
         if conversations.count > resetMarker + 1 {
-            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1).dropLast()) // dropping the emtpy last conversation cuz its the empty assistant reply
+            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
+        }
+        
+        if adjustedConversations.last?.role == "assistant" {
+            adjustedConversations = adjustedConversations.dropLast() // dropping the emtpy last conversation cuz its the empty assistant reply
         }
         
         var finalMessages = adjustedConversations.map({ conversation in
             conversation.toChat()
         })
 
+        let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
         if !systemPrompt.content.isEmpty {
             finalMessages.insert(systemPrompt.toChat(), at: 0)
-        }
-        
-        if !inputAudioPath.isEmpty {
-            finalMessages.append(.user(.init(content: .string(inputAudioPath))))
         }
         
         if configuration.model == .gpt4vision {
@@ -504,7 +512,6 @@ typealias PlatformImage = UIImage
                 let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: AppConfiguration.shared.transcriptionModel.id)
                 let result = try await service.audioTranscriptions(query: query)
                 
-                inputAudioPath = ""
                 conversations[conversations.count - 1].isReplying = false
                 appendConversation(Conversation(role: "tool", content: result.text, audioPath: audioPath))
                 
