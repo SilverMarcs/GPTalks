@@ -57,7 +57,7 @@ enum ContentState: String, CaseIterable, Identifiable {
     var selectedState: ContentState = .recent {
         didSet {
             switch selectedState {
-            case .recent, .all, .all:
+            case .recent, .all, .starred:
                 if selectedDialogue == nil {
                     selectedDialogue = currentDialogues.first
                 }
@@ -227,14 +227,7 @@ enum ContentState: String, CaseIterable, Identifiable {
 
         if !conversations.isEmpty {
             let conversationsSet = NSSet(array: conversations.map { conversation in
-                let data = ConversationData(context: viewContext)
-                data.id = conversation.id
-                data.date = conversation.date
-                data.role = conversation.role
-                data.content = conversation.content
-                data.audioPath = conversation.audioPath
-                data.imagePaths = conversation.imagePaths.joined(separator: "|||")
-                return data
+                Conversation.createConversationData(from: conversation, in: viewContext)
             })
             newItem.conversations = conversationsSet
         }

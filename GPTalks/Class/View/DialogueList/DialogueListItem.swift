@@ -34,12 +34,8 @@ struct DialogueListItem: View {
                 
                 HStack {
                     if session.isReplying {
-                        ReplyingIndicatorView()
-                            .frame(
-                                maxWidth: .infinity,
-                                maxHeight: 16,
-                                alignment: .leading
-                            )
+                        ProgressView()
+                            .controlSize(.small)
                     } else {
                         Text(session.lastMessage)
                             .font(lastMessageFont)
@@ -51,6 +47,8 @@ struct DialogueListItem: View {
                                 alignment: .leading
                             )
                     }
+                    
+                    Spacer()
                     
                     if session.isArchive {
                         Image(systemName: "star.fill")

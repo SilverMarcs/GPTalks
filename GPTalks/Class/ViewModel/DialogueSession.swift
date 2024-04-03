@@ -296,7 +296,7 @@ typealias PlatformImage = UIImage
     
   
     func filteredConversations() -> [Conversation] {
-        return conversations.filter { $0.role != "tool" }
+        return conversations.filter { $0.role != "ss" }
     }
     
     @MainActor
@@ -445,7 +445,7 @@ typealias PlatformImage = UIImage
                 print("funcParam: \(funcParam)")
                 
                 removeConversation(at: conversations.count - 1)
-                appendConversation(Conversation(role: "assistant", content: "\(chatTool.rawValue)", isReplying: true))
+                appendConversation(Conversation(role: "assistant", content: "", toolRawValue: chatTool.rawValue, arguments: funcParam, isReplying: true))
                 
                 try await handleToolCall(chatTool: chatTool, funcParam: funcParam)
             }
@@ -473,7 +473,7 @@ typealias PlatformImage = UIImage
                     webContent = try await fetchAndParseHTMLAsync(from: url)
                 }
                 
-                appendConversation(Conversation(role: "tool", content: webContent))
+                appendConversation(Conversation(role: "tool", content: webContent, toolRawValue: chatTool.rawValue))
                 
                 self.conversations[self.conversations.count - 2].isReplying = false
                 try await processRequest()
@@ -481,7 +481,7 @@ typealias PlatformImage = UIImage
         case .googleSearch:
             if let searchQuery = extractValue(from: funcParam, forKey: "searchQuery") {
                 let searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
-                appendConversation(Conversation(role: "tool", content: searchResult))
+                appendConversation(Conversation(role: "tool", content: searchResult, toolRawValue: chatTool.rawValue))
                 
                 self.conversations[self.conversations.count - 2].isReplying = false
                 try await processRequest()
@@ -498,7 +498,7 @@ typealias PlatformImage = UIImage
                     if let urlString = urlResult.url, let url = URL(string: urlString) {
                         let (data, _) = try await URLSession.shared.data(from: url)
                         if let savedURL = saveImage(image: PlatformImage(data: data)!) {
-                            appendConversation(Conversation(role: "tool", content: "Prompt: \n" + prompt))
+                            appendConversation(Conversation(role: "tool", content: "Prompt: \n" + prompt, toolRawValue: chatTool.rawValue))
                             appendConversation(Conversation(role: "assistant", content: "Here is the image you requested:", imagePaths: [savedURL]))
                             conversations[conversations.count - 3].isReplying = false
                         }
@@ -513,7 +513,7 @@ typealias PlatformImage = UIImage
                 let result = try await service.audioTranscriptions(query: query)
                 
                 conversations[conversations.count - 1].isReplying = false
-                appendConversation(Conversation(role: "tool", content: result.text, audioPath: audioPath))
+                appendConversation(Conversation(role: "tool", content: result.text, audioPath: audioPath, toolRawValue: chatTool.rawValue))
                 
                 try await processRequest()
             }
@@ -553,6 +553,8 @@ extension DialogueSession {
                let role = data.role,
                let date = data.date,
                let audioPath = data.audioPath,
+               let toolRawValue = data.toolRawValue,
+               let arguments = data.arguments,
                let imagePaths = data.imagePaths {
                 let imagePaths = imagePaths.split(separator: "|||").map(String.init) // Convert back to an array of strings
                 let conversation = Conversation(
@@ -561,7 +563,9 @@ extension DialogueSession {
                   role: role,
                   content: content,
                   imagePaths: imagePaths,
-                  audioPath: audioPath
+                  audioPath: audioPath,
+                  toolRawValue: toolRawValue,
+                  arguments: arguments
                 )
                 return conversation
             } else {
@@ -582,13 +586,8 @@ extension DialogueSession {
 
         conversations.append(conversation)
 
-        let data = ConversationData(context: PersistenceController.shared.container.viewContext)
-        data.id = conversation.id
-        data.date = conversation.date
-        data.role = conversation.role
-        data.content = conversation.content
-        data.audioPath = conversation.audioPath
-        data.imagePaths = conversation.imagePaths.joined(separator: "|||")
+        let data = Conversation.createConversationData(from: conversation, in: PersistenceController.shared.container.viewContext)
+        
         rawData?.conversations?.adding(data)
         data.dialogue = rawData
 

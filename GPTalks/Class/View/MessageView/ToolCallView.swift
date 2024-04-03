@@ -59,13 +59,13 @@ struct ToolCallView: View {
             .background(.background.secondary)
         #else
             .background(colorScheme == .dark ? Color.gray.opacity(0.12) : Color.gray.opacity(0.07))
-        #endif
-            .customBorder(width: 1, edges: [.top, .leading, .trailing], color: .gray.opacity(0.12))
-            .frame(maxWidth: .infinity, alignment: .topLeading)
             .contextMenu {
                 MessageContextMenu(session: session, conversation: conversation) { } toggleTextSelection: { }
                 .labelStyle(.titleAndIcon)
             }
+        #endif
+            .customBorder(width: 1, edges: [.leading, .trailing], color: .gray.opacity(0.12))
+            .frame(maxWidth: .infinity, alignment: .topLeading)
     }
     
     var messageContextMenu: some View {
@@ -78,15 +78,9 @@ struct ToolCallView: View {
     var funcCall: some View {
         VStack(alignment: .leading) {
             HStack(spacing: 4) {
-                Text("Function: " + conversation.content.capitalizingFirstLetter())
-                
-                if conversation.isReplying {
-                    ProgressView()
-                        .controlSize(.small)
-                } else {
-                    if let tool = ChatTool(rawValue: conversation.content) {
-                        Image(systemName: tool.systemImageName)
-                    }
+                if let tool = ChatTool(rawValue: conversation.toolRawValue) {
+                    Text(tool.toolName)
+                    Image(systemName: tool.systemImageName)
                 }
             }
             .fontWeight(.semibold)
@@ -95,37 +89,33 @@ struct ToolCallView: View {
                 showPopover.toggle()
             }
             .popover(isPresented: $showPopover, arrowEdge: .leading) {
-                if let index = session.conversations.firstIndex(of: conversation) {
-                    if let toolMessage = session.conversations[safe: index + 1] {
 #if os(macOS)
-                        ScrollView {
-                            Text(toolMessage.content)
-                                .textSelection(.enabled)
-                                .padding()
-                        }
-                        .frame(width: 500, height: conversation.content.count > 80 ? 400 : 200)
+                ScrollView {
+                    Text(conversation.content)
+                        .textSelection(.enabled)
+                        .padding()
+                }
+                .frame(width: 500, height: conversation.content.count > 80 ? 400 : 200)
 #else
-                        NavigationView {
-                            ScrollView {
-                                Text(toolMessage.content)
-                                    .padding(.horizontal)
-                                    .padding(.bottom, 45)
-                            }
-                            
-                            .edgesIgnoringSafeArea(.bottom)
-                            .navigationTitle("Web Conent")
-                            .navigationBarTitleDisplayMode(.inline)
-                            .toolbar {
-                                ToolbarItem(placement: .navigationBarTrailing) {
-                                    Button("Done") {
-                                        showPopover = false
-                                    }
-                                }
+                NavigationView {
+                    ScrollView {
+                        Text(conversation.content)
+                            .padding(.horizontal)
+                            .padding(.bottom, 45)
+                    }
+                    
+                    .edgesIgnoringSafeArea(.bottom)
+                    .navigationTitle("Web Conent")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("Done") {
+                                showPopover = false
                             }
                         }
-#endif
                     }
                 }
+#endif
             }
         }
     }

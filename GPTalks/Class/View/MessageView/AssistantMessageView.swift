@@ -71,9 +71,8 @@ struct AssistantMessageView: View {
                     .textSelection(.enabled)
                     
                     if conversation.isReplying {
-                        ReplyingIndicatorView()
-                            .frame(width: 48, height: 16)
-                            .padding(.vertical, 10)
+                        ProgressView()
+                            .controlSize(.small)
                     }
                     
                     ForEach(conversation.imagePaths, id: \.self) { imagePath in

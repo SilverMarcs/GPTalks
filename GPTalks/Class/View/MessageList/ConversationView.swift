@@ -16,14 +16,10 @@ struct ConversationView: View {
             Group {
                     if conversation.role == "user" {
                         UserMessageView(conversation: conversation, session: session)
-                    }
-                    
-                    else if conversation.role == "assistant" {
-                        if ChatTool.allCases.map({ $0.rawValue }).contains(conversation.content) {
-                            ToolCallView(conversation: conversation, session: session)
-                        } else {
-                            AssistantMessageView(conversation: conversation, session: session)
-                        }
+                    } else if conversation.role == "assistant" {
+                        AssistantMessageView(conversation: conversation, session: session)
+                    } else if conversation.role == "tool" {
+                        ToolCallView(conversation: conversation, session: session)
                     }
                 }
             .opacity(0.9)
