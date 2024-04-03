@@ -69,6 +69,10 @@ extension ConversationData {
         date = conversation.date
         role = conversation.role
         content = conversation.content
+        audioPath = conversation.audioPath
+        imagePaths = conversation.imagePaths.joined(separator: "|||")
+        toolRawValue = conversation.toolRawValue
+        arguments = conversation.arguments
         do {
             try PersistenceController.shared.save()
         } catch {

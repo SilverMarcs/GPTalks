@@ -444,8 +444,14 @@ typealias PlatformImage = UIImage
             case .urlScrape, .googleSearch, .imageGenerate, .transcribe:
                 print("funcParam: \(funcParam)")
                 
-                removeConversation(at: conversations.count - 1)
-                appendConversation(Conversation(role: "assistant", content: "", toolRawValue: chatTool.rawValue, arguments: funcParam))
+//                removeConversation(at: conversations.count - 1)
+//                appendConversation(Conversation(role: "assistant", content: "", toolRawValue: chatTool.rawValue, arguments: funcParam))
+                
+                conversations[conversations.count - 1].toolRawValue = chatTool.rawValue
+                conversations[conversations.count - 1].arguments = funcParam
+                conversations[conversations.count - 1].isReplying = false
+                
+                lastConversationData.sync(with: conversations[conversations.count - 1])
                 
                 try await handleToolCall(chatTool: chatTool, funcParam: funcParam)
             }
