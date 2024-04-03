@@ -9,9 +9,9 @@ import CoreData
 import SwiftUI
 
 enum ContentState: String, CaseIterable, Identifiable {
-    case recent = "Recents"
-    case all = "Active"   //excludes archived
-    case archived = "Archived"
+    case recent = "Recent"
+    case starred = "Starred"
+    case all = "Active"   // includes starred
     case images = "Images"
     case speech = "Speech"
     
@@ -20,11 +20,11 @@ enum ContentState: String, CaseIterable, Identifiable {
     var image : String {
         switch self {
             case .recent:
-                "tray.full"
+                "tray.fill"
             case .all:
                 "tray.2"
-            case .archived:
-                "archivebox"
+            case .starred:
+                "star.fill"
             case .images:
                 "photo"
             case .speech:
@@ -39,11 +39,10 @@ enum ContentState: String, CaseIterable, Identifiable {
     var allDialogues: [DialogueSession] = [] {
         didSet {
             switch selectedState {
-                case .archived:
-                    archivedDialogues = allDialogues.filter { $0.isArchive }
+                case .starred:
+                    starredDialogues = allDialogues.filter { $0.isArchive }
                     break
             case .recent, .images, .speech, .all:
-                    activeDialogues = allDialogues.filter { !$0.isArchive }
                     break
             }
         }
@@ -51,7 +50,7 @@ enum ContentState: String, CaseIterable, Identifiable {
     
     var activeDialogues: [DialogueSession] = []
 
-    var archivedDialogues: [DialogueSession] = []
+    var starredDialogues: [DialogueSession] = []
 
     var isArchivedSelected: Bool = false
     
@@ -75,20 +74,19 @@ enum ContentState: String, CaseIterable, Identifiable {
         didSet {
             if !searchText.isEmpty {
                 switch selectedState {
-                case .archived:
-                    archivedDialogues = filterDialogues(matching: searchText, from: allDialogues)
+                case .starred:
+                    starredDialogues = filterDialogues(matching: searchText, from: allDialogues)
                     
                 case .recent, .images, .speech, .all:
-                    activeDialogues = filterDialogues(matching: searchText, from: allDialogues)
+                    break
                 }
             } else {
                 
                 switch selectedState {
-                    case .archived:
-                        archivedDialogues = allDialogues.filter { $0.isArchive }
+                    case .starred:
+                    starredDialogues = allDialogues.filter { $0.isArchive }
                         break
                 case .recent, .images, .speech, .all:
-                        activeDialogues = allDialogues.filter { !$0.isArchive }
                         break
                 }
             }
@@ -99,34 +97,34 @@ enum ContentState: String, CaseIterable, Identifiable {
 
     var shouldShowPlaceholder: Bool {
         switch selectedState {
-            case .archived:
-                return archivedDialogues.isEmpty || (!searchText.isEmpty && archivedDialogues.isEmpty)
+            case .starred:
+                return starredDialogues.isEmpty || (!searchText.isEmpty && starredDialogues.isEmpty)
             case .recent, .images, .speech, .all:
-                return activeDialogues.isEmpty  || (!searchText.isEmpty && activeDialogues.isEmpty)
+                return allDialogues.isEmpty  || (!searchText.isEmpty && allDialogues.isEmpty)
         }
     }
 
     var currentDialogues: [DialogueSession] {
         switch selectedState {
-            case .archived:
-                archivedDialogues
+            case .starred:
+                starredDialogues
             case .all:
-                activeDialogues
+                allDialogues
         case .recent, .speech, .images:
             #if os(iOS)
-            Array(activeDialogues.prefix(8))
+            Array(allDialogues.prefix(8))
             #else
-            Array(activeDialogues.prefix(11))
+            Array(allDialogues.prefix(11))
             #endif
         }
     }
     
     var placeHolderText: String {
         switch selectedState {
-            case .archived:
-                return (!searchText.isEmpty && archivedDialogues.isEmpty) ? "No Search Results" : "No archived chats"
+            case .starred:
+                return (!searchText.isEmpty && starredDialogues.isEmpty) ? "No Search Results" : "No archived chats"
         case .recent, .images, .speech, .all:
-                return (!searchText.isEmpty && activeDialogues.isEmpty) ? "No Search Results" : "No active chats"
+                return (!searchText.isEmpty && allDialogues.isEmpty) ? "No Search Results" : "No active chats"
         }
     }
     
@@ -143,12 +141,11 @@ enum ContentState: String, CaseIterable, Identifiable {
 
             allDialogues = dialogueData.compactMap { DialogueSession(rawData: $0) }
 
-            activeDialogues = allDialogues.filter { !$0.isArchive }
-            archivedDialogues = allDialogues.filter { $0.isArchive }
+            starredDialogues = allDialogues.filter { $0.isArchive }
 
             #if os(macOS)
                 if firstTime {
-                    selectedDialogue = activeDialogues.first
+                    selectedDialogue = allDialogues.first
                 }
             #endif
         } catch {
@@ -176,7 +173,7 @@ enum ContentState: String, CaseIterable, Identifiable {
             selectedState = .recent
         } else {
             isArchivedSelected.toggle()
-            selectedState = .archived
+            selectedState = .starred
         }
     }
     
@@ -192,25 +189,24 @@ enum ContentState: String, CaseIterable, Identifiable {
         session.toggleArchive()
         
         switch selectedState {
-            case .archived:
+            case .starred:
             withAnimation {
-                archivedDialogues.removeAll {
+                starredDialogues.removeAll {
                     $0.id == session.id
-                }
-                activeDialogues.append(session)
-                activeDialogues.sort {
-                    $0.date > $1.date
                 }
             }
                 break
             case .recent, .all:
             withAnimation {
-                activeDialogues.removeAll {
-                    $0.id == session.id
-                }
-                archivedDialogues.append(session)
-                archivedDialogues.sort {
-                    $0.date > $1.date
+                if !starredDialogues.contains(session) {
+                    starredDialogues.append(session)
+                    starredDialogues.sort {
+                        $0.date > $1.date
+                    }
+                } else {
+                    starredDialogues.removeAll {
+                        $0.id == session.id
+                    }
                 }
             }
             

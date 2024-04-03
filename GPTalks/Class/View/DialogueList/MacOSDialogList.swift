@@ -33,7 +33,6 @@ struct MacOSDialogList: View {
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))
                             .accentColor(.accentColor) // to keep row colors untouched
-//                            .padding(.top, -8))
                     }
                     .accentColor(Color("niceColorLighter")) // to change list seldction color
                     .animation(.default, value: viewModel.selectedState)

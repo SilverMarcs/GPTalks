@@ -31,12 +31,13 @@ struct DialogueListItem: View {
                         .opacity(0.9)
                     #endif
                 }
-                Group {
+                
+                HStack {
                     if session.isReplying {
                         ReplyingIndicatorView()
                             .frame(
                                 maxWidth: .infinity,
-                                maxHeight: 14,
+                                maxHeight: 16,
                                 alignment: .leading
                             )
                     } else {
@@ -49,6 +50,11 @@ struct DialogueListItem: View {
                                 maxHeight: lastMessageMaxHeight,
                                 alignment: .leading
                             )
+                    }
+                    
+                    if session.isArchive {
+                        Image(systemName: "star.fill")
+                            .foregroundStyle(.orange)
                     }
                 }
             }
@@ -80,10 +86,10 @@ struct DialogueListItem: View {
         }
         .swipeActions(edge: .trailing) {
             deleteButton
-            
-            archiveButton
         }
         .swipeActions(edge: .leading) {
+            archiveButton
+            
             renameButton
         }
     }
@@ -92,7 +98,7 @@ struct DialogueListItem: View {
         Button {
             viewModel.toggleArchive(session: session)
         } label: {
-            Label(session.isArchive ? "Unarchive" : "Archive", systemImage: "archivebox")
+            Label(session.isArchive ? "Unstar" : "Star", systemImage: session.isArchive ? "star.slash" : "star")
         }
         .tint(.orange)
     }
