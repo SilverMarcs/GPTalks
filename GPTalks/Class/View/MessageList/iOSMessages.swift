@@ -262,7 +262,8 @@ struct iOSMessages: View {
 
     private var navTitle: some View {
         HStack {
-            ProviderImage(radius: 9, color: session.configuration.provider.accentColor, frame: 30)
+            ProviderImage(radius: 9, color: session.configuration.provider.accentColor, frame: 29)
+            
             VStack(alignment: .leading, spacing: 1) {
                 Text(session.title)
                     .font(.system(size: 16))
@@ -273,6 +274,7 @@ struct iOSMessages: View {
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
             }
+            
             Spacer()
         }
     }

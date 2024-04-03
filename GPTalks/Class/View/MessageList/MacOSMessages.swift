@@ -198,11 +198,7 @@ struct MacOSMessages: View {
                     ConversationView(session: session, conversation: conversation)
                 }
                 
-                ErrorDescView(session: session)                 
-                
-//                Color.clear
-//                    .listRowSeparator(.hidden)
-//                    .frame(height: 30)
+                ErrorDescView(session: session)
             }
             .padding(.horizontal, -8)
             .padding(.bottom, 30)

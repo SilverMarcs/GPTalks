@@ -28,7 +28,7 @@ struct MacTextEditor: View {
                 .frame(maxHeight: 400)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(6)
-                .padding(.trailing, 15) // for avoiding send button
+//                .padding(.trailing, 15) // for avoiding send button
                 .scrollContentBackground(.hidden)
                 .onAppear {
                     focused = true

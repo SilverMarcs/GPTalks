@@ -57,9 +57,21 @@ struct AssistantMessageView: View {
                 
                 
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Assistant")
-                        .font(.title3)
-                        .bold()
+                    HStack {
+                        Text("Assistant")
+                            .font(.title3)
+                        
+                        if let _ = ChatTool(rawValue: conversation.toolRawValue) {
+                            Text("Tool Call")
+                                .foregroundStyle(.secondary)
+                                .font(.system(size: 11))
+                        }
+                    }
+                    
+                    if let _ = ChatTool(rawValue: conversation.toolRawValue) {
+                        Text(conversation.arguments)
+                            .textSelection(.enabled)
+                    }
                     
                     Group {
                         if AppConfiguration.shared.isMarkdownEnabled {
@@ -98,7 +110,7 @@ struct AssistantMessageView: View {
         #if os(macOS)
         .padding(.horizontal, 8)
         .background(.background.tertiary)
-        .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow : .clear)
+        .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.4) : .clear)
         #else
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
         .background(colorScheme == .dark ? Color.gray.opacity(0.12) : Color.gray.opacity(0.07))
@@ -107,7 +119,6 @@ struct AssistantMessageView: View {
         .border(.quinary, width: 1)
         .frame(maxWidth: .infinity, alignment: .topLeading)
     }
-    
     
     var messageContextMenu: some View {
         MessageContextMenu(session: session, conversation: conversation) { }

@@ -445,7 +445,7 @@ typealias PlatformImage = UIImage
                 print("funcParam: \(funcParam)")
                 
                 removeConversation(at: conversations.count - 1)
-                appendConversation(Conversation(role: "assistant", content: "", toolRawValue: chatTool.rawValue, arguments: funcParam, isReplying: true))
+                appendConversation(Conversation(role: "assistant", content: "", toolRawValue: chatTool.rawValue, arguments: funcParam))
                 
                 try await handleToolCall(chatTool: chatTool, funcParam: funcParam)
             }
@@ -464,7 +464,9 @@ typealias PlatformImage = UIImage
     func handleToolCall(chatTool: ChatTool, funcParam: String) async throws {
         switch chatTool {
         case .urlScrape:
-            if let url = extractValue(from: funcParam, forKey: "url") {
+            if let url = extractValue(from: funcParam, forKey: chatTool.paramName) {
+                let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
+                
                 let webContent: String
                 
                 if AppConfiguration.shared.useExperimentalWebScraper {
@@ -473,49 +475,58 @@ typealias PlatformImage = UIImage
                     webContent = try await fetchAndParseHTMLAsync(from: url)
                 }
                 
-                appendConversation(Conversation(role: "tool", content: webContent, toolRawValue: chatTool.rawValue))
+                conversations[conversations.count - 1].content = webContent
+                lastToolCall.sync(with: conversations[conversations.count - 1])
+                conversations[conversations.count - 1].isReplying = false
                 
-                self.conversations[self.conversations.count - 2].isReplying = false
                 try await processRequest()
             }
         case .googleSearch:
-            if let searchQuery = extractValue(from: funcParam, forKey: "searchQuery") {
-                let searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
-                appendConversation(Conversation(role: "tool", content: searchResult, toolRawValue: chatTool.rawValue))
+            if let searchQuery = extractValue(from: funcParam, forKey: chatTool.paramName) {
                 
-                self.conversations[self.conversations.count - 2].isReplying = false
+                let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
+                let searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
+                conversations[conversations.count - 1].content = searchResult
+                lastToolCall.sync(with: conversations[conversations.count - 1])
+                conversations[conversations.count - 1].isReplying = false
+                
+                try await processRequest()
+            }
+        case .transcribe:
+            let service = OpenAI(configuration: AppConfiguration.shared.transcriptionProvider.config)
+            
+            if let audioPath = extractValue(from: funcParam, forKey: chatTool.paramName) {
+                let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: AppConfiguration.shared.transcriptionModel.id)
+                
+                let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
+                let result = try await service.audioTranscriptions(query: query)
+                conversations[conversations.count - 1].content = result.text
+                lastToolCall.sync(with: conversations[conversations.count - 1])
+                conversations[conversations.count - 1].isReplying = false
+
                 try await processRequest()
             }
         case .imageGenerate:
             let service = OpenAI(configuration: AppConfiguration.shared.imageProvider.config)
             
-            if let prompt = extractValue(from: funcParam, forKey: "prompt") {
+            if let prompt = extractValue(from: funcParam, forKey: chatTool.paramName) {
                 let query = ImagesQuery(prompt: prompt, model: AppConfiguration.shared.imageModel.id, n: 1, quality: .hd, size: ._1024)
                 
+                let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
                 let results = try await service.images(query: query)
+                conversations[conversations.count - 1].content = "Provider: " + AppConfiguration.shared.imageProvider.name + "\n" + "Model: " + AppConfiguration.shared.imageModel.name
+                lastToolCall.sync(with: conversations[conversations.count - 1])
                 
                 for urlResult in results.data {
                     if let urlString = urlResult.url, let url = URL(string: urlString) {
                         let (data, _) = try await URLSession.shared.data(from: url)
                         if let savedURL = saveImage(image: PlatformImage(data: data)!) {
-                            appendConversation(Conversation(role: "tool", content: "Prompt: \n" + prompt, toolRawValue: chatTool.rawValue))
+                            conversations[conversations.count - 1].isReplying = false
                             appendConversation(Conversation(role: "assistant", content: "Here is the image you requested:", imagePaths: [savedURL]))
-                            conversations[conversations.count - 3].isReplying = false
                         }
                     }
                 }
-            }
-        case .transcribe:
-            let service = OpenAI(configuration: AppConfiguration.shared.transcriptionProvider.config)
-            
-            if let audioPath = extractValue(from: funcParam, forKey: "audioPath") {
-                let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: AppConfiguration.shared.transcriptionModel.id)
-                let result = try await service.audioTranscriptions(query: query)
                 
-                conversations[conversations.count - 1].isReplying = false
-                appendConversation(Conversation(role: "tool", content: result.text, audioPath: audioPath, toolRawValue: chatTool.rawValue))
-                
-                try await processRequest()
             }
         }
     }
