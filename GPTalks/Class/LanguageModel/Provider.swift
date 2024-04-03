@@ -204,6 +204,13 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             return Model.shardImageModels
         }
     }
+    
+    var transcriptionModels: [Model] {
+        switch self {
+        case .openai, .oxygen, .naga, .kraken, .custom, .shard:
+            return [.whisper1]
+        }
+    }
 
     @ViewBuilder
     var destination: some View {

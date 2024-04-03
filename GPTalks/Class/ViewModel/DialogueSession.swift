@@ -454,8 +454,6 @@ typealias PlatformImage = UIImage
 
     @MainActor
     func handleToolCall(chatTool: ChatTool, funcParam: String) async throws {
-        let service = OpenAI(configuration: configuration.provider.config)
-        
         switch chatTool {
         case .urlScrape:
             if let url = extractValue(from: funcParam, forKey: "url") {
@@ -481,8 +479,10 @@ typealias PlatformImage = UIImage
                 try await processRequest()
             }
         case .imageGenerate:
+            let service = OpenAI(configuration: AppConfiguration.shared.imageProvider.config)
+            
             if let prompt = extractValue(from: funcParam, forKey: "prompt") {
-                let query = ImagesQuery(prompt: prompt, model: configuration.provider.preferredImageModel.id, n: 1, quality: .standard, size: ._1024)
+                let query = ImagesQuery(prompt: prompt, model: AppConfiguration.shared.imageModel.id, n: 1, quality: .hd, size: ._1024)
                 
                 let results = try await service.images(query: query)
                 
@@ -498,8 +498,10 @@ typealias PlatformImage = UIImage
                 }
             }
         case .transcribe:
+            let service = OpenAI(configuration: AppConfiguration.shared.transcriptionProvider.config)
+            
             if let audioPath = extractValue(from: funcParam, forKey: "audioPath") {
-                let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: configuration.provider.preferredTranscriptionModel.id)
+                let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: AppConfiguration.shared.transcriptionModel.id)
                 let result = try await service.audioTranscriptions(query: query)
                 
                 inputAudioPath = ""

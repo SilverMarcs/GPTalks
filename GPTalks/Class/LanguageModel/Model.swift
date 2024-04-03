@@ -24,15 +24,28 @@ enum Model: String, Codable {
     case claude3sonnet
     case claude3haiku
     
+    // ----- //
+    
+    case sdxl
+    
     /// oxygen
-    case absolutereality_v181
+    case epic_realism
+    case icbinp
 
     /// naga
-    case sdxl
-    case playgroundv25
+    case nplaygroundv25
+    
+    /// kraken
+    case kplaygroundv25
     
     /// shard
     case realisticvision
+    case cyberrealistic_v33
+    case juggernaut_aftermath
+    case am_i_real
+    case absolute_reality
+    case pollinations
+    case midjourney
     
     /// custom
     case customChat
@@ -67,19 +80,36 @@ enum Model: String, Codable {
             "Claude-3-H"
      
         /// oxygen
-        case .absolutereality_v181:
-            "Absolute Reality"
+        case .epic_realism:
+            "Epic Realism"
+        case .icbinp:
+            "ICBINP"
             
         /// shard
         case .realisticvision:
             "Realistic Vision"
+        case .cyberrealistic_v33:
+            "Cyber Realistic"
+        case .juggernaut_aftermath:
+            "Juggernaut Aftermath"
+        case .am_i_real:
+            "Am I Real"
+        case .absolute_reality:
+            "Absolute Reality"
+        case .pollinations:
+            "Pollinations"
+        case .midjourney:
+            "Midjourney"
             
         /// naga
         case .sdxl:
             "SDXL"
-        case .playgroundv25:
+        case .nplaygroundv25:
             "Playground"
             
+        /// kraken
+        case .kplaygroundv25:
+            "Playground"
 
         case .customChat:
             self.id.isEmpty ? "Custom Chat" : self.id
@@ -87,8 +117,6 @@ enum Model: String, Codable {
             self.id.isEmpty ? "Custom Vision" : self.id
         case .customImage:
             self.id.isEmpty ? "Custom Image" : self.id
-
-
         }
     }
 
@@ -119,18 +147,36 @@ enum Model: String, Codable {
             "claude-3-haiku"
 
         /// oxygen
-        case .absolutereality_v181:
-            "absolutereality_v181"
+        case .epic_realism:
+            "epicrealism_naturalsinrc1vae"
+        case .icbinp:
+            "icantbelieveitsnotphotography_seco"
             
         /// shard
         case .realisticvision:
             "realistic-vision-v5"
+        case .cyberrealistic_v33:
+            "cyberrealistic-v3.3"
+        case .juggernaut_aftermath:
+            "juggernaut-aftermath"
+        case .am_i_real:
+            "am-i-real-v4.1"
+        case .absolute_reality:
+            "absolute-reality-v1.8.1"
+        case .pollinations:
+            "pollinations"
+        case .midjourney:
+            "midjourney"
             
         /// naga
         case .sdxl:
             "sdxl"
-        case .playgroundv25:
+        case .nplaygroundv25:
             "playground-v2.5"
+            
+        /// kraken
+        case .kplaygroundv25:
+            "playground-2.5"
 
         case .customChat:
             AppConfiguration.shared.customChatModel
@@ -138,6 +184,7 @@ enum Model: String, Codable {
             AppConfiguration.shared.customVisionModel
         case .customImage:
             AppConfiguration.shared.customImageModel
+
         }
     }
     
@@ -154,21 +201,16 @@ enum Model: String, Codable {
             .gpt3t,
             .gpt4,
             .gpt4t,
-//            .gpt4t1106,
-//            .gpt4t0125,
-//            .customChat
         ]
     
     static let openAIVisionModels: [Model] =
         [
             .gpt4vision,
-//            .customVision
         ]
     
     static let openAIImageModels: [Model] =
         [
             .dalle3,
-//            .customImage
         ]
     
     /// Oxygen
@@ -182,7 +224,8 @@ enum Model: String, Codable {
     static let oxygenImageModels: [Model] =
         openAIImageModels +
         [
-            .absolutereality_v181,
+            .epic_realism,
+            .icbinp,
         ]
     
     /// Naga
@@ -197,7 +240,7 @@ enum Model: String, Codable {
         openAIImageModels +
         [
             .sdxl,
-            .playgroundv25,
+            .nplaygroundv25,
         ]
     
     /// Kraken
@@ -212,6 +255,7 @@ enum Model: String, Codable {
         openAIImageModels +
         [
             .sdxl,
+            .kplaygroundv25,
         ]
     
     /// shard
@@ -225,7 +269,13 @@ enum Model: String, Codable {
     static let shardImageModels: [Model] =
         openAIImageModels +
         [
+            .midjourney,
             .realisticvision,
             .sdxl,
+            .cyberrealistic_v33,
+            .juggernaut_aftermath,
+            .am_i_real,
+            .absolute_reality,
+            .pollinations,
         ]
 }

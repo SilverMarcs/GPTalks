@@ -28,6 +28,14 @@ class AppConfiguration: ObservableObject {
     // URLScrape
     @AppStorage("configuration.useExperimentalWebScraper") var useExperimentalWebScraper: Bool = false
     
+    // ImageGenerate
+    @AppStorage("configuration.imageProvider") var imageProvider: Provider = .openai
+    @AppStorage("configuration.imageModel") var imageModel: Model = .dalle3
+    
+    // Transcription
+    @AppStorage("configuration.transcriptionProvider") var transcriptionProvider: Provider = .openai
+    @AppStorage("configuration.transcriptionModel") var transcriptionModel: Model = .whisper1
+    
     // config
     @AppStorage("configuration.contextLength") var contextLength = 10
     @AppStorage("configuration.temperature") var temperature: Double = 0.5
@@ -41,12 +49,12 @@ class AppConfiguration: ObservableObject {
     /// oxygen
     @AppStorage("configuration.Okey") var Okey = ""
     @AppStorage("configuration.Omodel") var Omodel: Model = .gpt4t
-    @AppStorage("configuration.OImageModel") var OImageModel: Model = .absolutereality_v181
+    @AppStorage("configuration.OImageModel") var OImageModel: Model = .icbinp
     
     /// naga
     @AppStorage("configuration.Nkey") var Nkey = ""
     @AppStorage("configuration.Nmodel") var Nmodel: Model = .gpt4t
-    @AppStorage("configuration.NImageModel") var NImageModel: Model = .playgroundv25
+    @AppStorage("configuration.NImageModel") var NImageModel: Model = .nplaygroundv25
     
     /// kraken
     @AppStorage("configuration.Kkey") var Kkey = ""

@@ -74,56 +74,17 @@ enum ChatTool: String, CaseIterable {
     
     @ViewBuilder
     var destination: some View {
+        @ObservedObject var appConfig = AppConfiguration.shared
+        
         switch self {
         case .urlScrape:
-            VStack {
-                Text("Pass in a URL in prompt for the assistant to retrieve web content from that URL.")
-                    .padding()
-                
-                Toggle("Experimental Scraper (Beta)", isOn: AppConfiguration.shared.$useExperimentalWebScraper)
-                    .toggleStyle(.switch)
-                    .padding()
-                Spacer()
-            }
-            .navigationTitle(self.toolName)
+            URLScrapeConfigurationView()
         case .googleSearch:
-            VStack {
-                VStack {
-                    Text("If the assistant does not have the information, it will make a google search and retrieve the user's content.")
-                        HStack() {
-                            Text("API Key:")
-                            Spacer()
-                            TextField("Google Search API Key", text: AppConfiguration.shared.$googleApiKey)
-                                .textFieldStyle(.roundedBorder)
-                                .frame(maxWidth: 320)
-                        }
-                    
-                        HStack {
-                            Text("Engine ID:")
-                            Spacer()
-                            TextField("Google Search Engine ID", text: AppConfiguration.shared.$googleSearchEngineId)
-                                .textFieldStyle(.roundedBorder)
-                                .frame(maxWidth: 320)
-                        }
-                }
-                .padding()
-                Spacer()
-            }
-            .navigationTitle(self.toolName)
+            GoogleSearchConfigurationView()
         case .imageGenerate:
-            VStack {
-                Text("Ask the assistant to generate an image with a description of the image.")
-                    .padding()
-                Spacer()
-            }
-            .navigationTitle(self.toolName)
+            ImageGenerateConfigurationView()
         case .transcribe:
-            VStack {
-                Text("Upload an audio file and ask the assistant to transcribe it for you. You may also also ask additional questions about the transcribed text.")
-                    .padding()
-                Spacer()
-            }
-            .navigationTitle(self.toolName)
+            TranscriptionConfigurationView()
         }
     }
 
@@ -151,5 +112,95 @@ enum ChatTool: String, CaseIterable {
         case .googleSearch:
             return "safari"
         }
+    }
+}
+
+struct URLScrapeConfigurationView: View {
+    @ObservedObject var appConfig = AppConfiguration.shared
+    
+    var body: some View {
+        Form {
+            Section("Ask the assistant to scrape a webpage for information.") {
+                Toggle("Experimental Scraper (Beta)", isOn: appConfig.$useExperimentalWebScraper)
+            }
+        }
+        .navigationTitle("URL Scrape")
+    }
+}
+
+struct GoogleSearchConfigurationView: View {
+    @ObservedObject var appConfig = AppConfiguration.shared
+    
+    var body: some View {
+        Form {
+            Section("Ask the assistant to make a google search and retrieve the user's content.") {
+                Group {
+                    TextField("GSearch API Key", text: appConfig.$googleApiKey)
+                    
+                    TextField("GSearch Engine ID", text: appConfig.$googleSearchEngineId)
+                }
+                #if os(macOS)
+                .textFieldStyle(.roundedBorder)
+                .padding(.horizontal)
+                #endif
+            }
+        }
+        .navigationTitle("Google Search")
+    }
+}
+
+struct ImageGenerateConfigurationView: View {
+    @ObservedObject var appConfig = AppConfiguration.shared
+    
+    var body: some View {
+        Form {
+            Section("Ask the assistant to generate an image with a description of the image.") {
+                Picker("Image Provider", selection: appConfig.$imageProvider) {
+                    ForEach(Provider.allCases, id: \.self) { provider in
+                        Text(provider.name)
+                            .tag(provider.rawValue)
+                    }
+                }
+                
+                Picker("Image Model", selection: appConfig.$imageModel) {
+                    ForEach(appConfig.imageProvider.imageModels, id: \.self) { model in
+                        Text(model.name)
+                            .tag(model.rawValue)
+                    }
+                }
+            }
+        }
+        .navigationTitle("Image Generate")
+    #if os(macOS)
+        .frame(maxWidth: 400)
+    #endif
+    }
+}
+
+struct TranscriptionConfigurationView: View {
+    @ObservedObject var appConfig = AppConfiguration.shared
+    
+    var body: some View {
+        Form {
+            Section("Upload an audio file and ask the assistant to transcribe it for you.") {
+                Picker("Transcription Provider", selection: appConfig.$transcriptionProvider) {
+                    ForEach(Provider.allCases, id: \.self) { provider in
+                        Text(provider.name)
+                            .tag(provider.rawValue)
+                    }
+                }
+                
+                Picker("Transcription Model", selection: appConfig.$transcriptionModel) {
+                    ForEach(appConfig.transcriptionProvider.transcriptionModels, id: \.self) { model in
+                        Text(model.name)
+                            .tag(model.rawValue)
+                    }
+                }
+            }
+        }
+        .navigationTitle("Transcribe")
+    #if os(macOS)
+        .frame(maxWidth: 400)
+    #endif
     }
 }
