@@ -19,6 +19,7 @@ struct UserMessageView: View {
     @State var editingMessage: String = ""
     
     @State private var isHovered = false
+    @State var hoverxyz = false
     
     @State var canSelectText = false
     
@@ -105,15 +106,18 @@ struct UserMessageView: View {
                 Spacer()
                 
                 messageContextMenu
+                    .animation(.easeInOut(duration: 0.15), value: hoverxyz)
             }
             .padding(10)
             .padding(.horizontal, 8)
+            .onHover { isHovered in
+                hoverxyz = isHovered
+            }
 #endif
         }
 
         #if os(macOS)
         .padding(.horizontal, 8)
-//        .padding(.bottom, -6) // need at least -2 padding here
         #endif
         .frame(maxWidth: .infinity, alignment: .topLeading) // Align content to the top left
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
@@ -122,14 +126,25 @@ struct UserMessageView: View {
     
     var messageContextMenu: some View {
         HStack {
-            expandToggle(limit: 300)
-            
-            MessageContextMenu(session: session, conversation: conversation) {
-                editingMessage = conversation.content
-                isEditing = true
-            } toggleTextSelection: {
-                canSelectText.toggle()
+            if hoverxyz {
+                expandToggle(limit: 300)
+                
+                MessageContextMenu(session: session, conversation: conversation) {
+                    editingMessage = conversation.content
+                    isEditing = true
+                } toggleTextSelection: {
+                    canSelectText.toggle()
+                }
+            } else {
+                Button {
+                    
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                        .frame(width: 17, height: 17)
+                }
+                .buttonStyle(.plain)
             }
+
         }
         .contextMenuModifier(isHovered: $isHovered)
 

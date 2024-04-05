@@ -15,6 +15,7 @@ struct AssistantMessageView: View {
     var session: DialogueSession
     
     @State var isHovered = false
+    @State var hoverxyz = false
     
     @State var canSelectText = false
 
@@ -102,9 +103,13 @@ struct AssistantMessageView: View {
                 Spacer()
                 
                 messageContextMenu
+                    .animation(.easeInOut(duration: 0.15), value: hoverxyz)
             }
             .padding(10)
             .padding(.horizontal, 8)
+            .onHover { isHovered in
+                hoverxyz = isHovered
+            }
 #endif
         }
         #if os(macOS)
@@ -121,9 +126,21 @@ struct AssistantMessageView: View {
     }
     
     var messageContextMenu: some View {
-        MessageContextMenu(session: session, conversation: conversation) { }
-        toggleTextSelection: {
-            canSelectText.toggle()
+        HStack {
+            if hoverxyz {
+                MessageContextMenu(session: session, conversation: conversation) { }
+            toggleTextSelection: {
+                canSelectText.toggle()
+            }
+            } else {
+                Button {
+                    
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                        .frame(width: 17, height: 17)
+                }
+                .buttonStyle(.plain)
+            }
         }
         .contextMenuModifier(isHovered: $isHovered)
     }
