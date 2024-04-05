@@ -94,7 +94,7 @@ struct DialogueListItem: View {
     
     var archiveButton: some View {
         Button {
-            viewModel.toggleArchive(session: session)
+            session.toggleArchive()
         } label: {
             Label(session.isArchive ? "Unstar" : "Star", systemImage: session.isArchive ? "star.slash" : "star")
         }

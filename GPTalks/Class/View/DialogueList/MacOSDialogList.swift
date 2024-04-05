@@ -5,18 +5,7 @@
 //  Created by Zabir Raihan on 19/12/2023.
 //
 
-import OpenAI
 import SwiftUI
-
-//extension View {
-//    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
-//        if condition {
-//            transform(self)
-//        } else {
-//            self
-//        }
-//    }
-//}
 
 struct MacOSDialogList: View {
     @Bindable var viewModel: DialogueViewModel
@@ -43,12 +32,19 @@ struct MacOSDialogList: View {
                         // Check if the current count is greater than the previous count
                         if viewModel.currentDialogues.count > previousActiveDialoguesCount {
                             // If so, it's an addition. Scroll to the first item.
-                            if !viewModel.activeDialogues.isEmpty {
-                                proxy.scrollTo(viewModel.currentDialogues[0].id, anchor: .top)
+                            if !viewModel.currentDialogues.isEmpty {
+                                withAnimation {
+                                    proxy.scrollTo(viewModel.currentDialogues[0].id, anchor: .top)
+                                }
                             }
                         }
                         // Update the previous count to the current count
                         previousActiveDialoguesCount = viewModel.currentDialogues.count
+                    }
+                    .onChange(of: viewModel.currentDialogues.first?.date) {
+                        withAnimation {
+                            proxy.scrollTo(viewModel.currentDialogues[0].id, anchor: .top)
+                        }
                     }
                 }
             }

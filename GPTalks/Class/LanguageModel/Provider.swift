@@ -77,18 +77,18 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         case .openai:
             return Color("greenColor")
         case .oxygen:
-//            return Color("niceColor")
-            return Color("tealColor")
+            return Color("niceColor")
+//            return Color("tealColor")
         case .naga:
             return Color("blueColor")
         case .kraken:
-            return Color("pinkColor")
-//            return Color("tealColor")
+//            return Color("pinkColor")
+            return Color("tealColor")
         case .custom:
             return Color("orangeColor")
         case .shard: 
-            return Color("niceColor")
-//            return Color("pinkColor")
+//            return Color("niceColor")
+            return Color("pinkColor")
         }
     }
 

@@ -10,6 +10,8 @@ import PhotosUI
 
 #if os(macOS)
 struct MacInputView: View {
+    @Environment(DialogueViewModel.self) private var viewModel
+    
     @Bindable var session: DialogueSession
     
     @State private var importingImage = false
@@ -63,6 +65,7 @@ struct MacInputView: View {
                         SendButton(size: imageSize + 3) {
                             Task { @MainActor in
                                 selectedItems = []
+                                viewModel.moveUpChat(session: session)
                                 await session.send()
                             }
                         }

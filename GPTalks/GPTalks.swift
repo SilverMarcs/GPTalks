@@ -59,10 +59,10 @@ struct GPTalks: App {
                 }
                 
                 Section {
-                    Button(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") {
-                        viewModel.toggleChatTypes()
-                    }
-                    .keyboardShortcut("a", modifiers: [.command, .shift])
+//                    Button(viewModel.isArchivedSelected ? "Active Chats" : "Archived Chats") {
+//                        viewModel.toggleChatTypes()
+//                    }
+//                    .keyboardShortcut("a", modifiers: [.command, .shift])
                     
                     Button("Image Generations") {
                         viewModel.tggleImageAndChat()

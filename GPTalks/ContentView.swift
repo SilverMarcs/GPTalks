@@ -26,12 +26,12 @@ struct ContentView: View {
             if viewModel.selectedState == .images {
                 ImageCreator(imageSession: imageSession)
                     .onChange(of: viewModel.selectedDialogue) {
-                        viewModel.selectedState = .recent
+                        viewModel.selectedState = .chats
                     }
             } else if viewModel.selectedState == .speech {
                 TranscriptionCreator()
                     .onChange(of: viewModel.selectedDialogue) {
-                        viewModel.selectedState = .recent
+                        viewModel.selectedState = .chats
                     }
             } else {
                 if let selectedDialogue = viewModel.selectedDialogue {
