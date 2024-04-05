@@ -32,10 +32,10 @@ struct AssistantMessageView: View {
             TextSelectionView(content: conversation.content)
         }
         .contextMenu {
-            MessageContextMenu(session: session, conversation: conversation) {}
+            MessageContextMenu(session: session, conversation: conversation,
             toggleTextSelection: {
                 canSelectText.toggle()
-            }
+            })
             .labelStyle(.titleAndIcon)
         }
         #endif
@@ -128,18 +128,11 @@ struct AssistantMessageView: View {
     var messageContextMenu: some View {
         HStack {
             if hoverxyz {
-                MessageContextMenu(session: session, conversation: conversation) { }
-            toggleTextSelection: {
-                canSelectText.toggle()
-            }
+                MessageContextMenu(session: session, conversation: conversation,
+                                   toggleTextSelection: { canSelectText.toggle() })
             } else {
-                Button {
-                    
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                        .frame(width: 17, height: 17)
-                }
-                .buttonStyle(.plain)
+                Image(systemName: "ellipsis")
+                    .frame(width: 17, height: 17)
             }
         }
         .contextMenuModifier(isHovered: $isHovered)

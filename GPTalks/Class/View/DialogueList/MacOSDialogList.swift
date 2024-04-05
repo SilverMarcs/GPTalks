@@ -42,8 +42,10 @@ struct MacOSDialogList: View {
                         previousActiveDialoguesCount = viewModel.currentDialogues.count
                     }
                     .onChange(of: viewModel.currentDialogues.first?.date) {
-                        withAnimation {
-                            proxy.scrollTo(viewModel.currentDialogues[0].id, anchor: .top)
+                        if !viewModel.currentDialogues.isEmpty {
+                            withAnimation {
+                                proxy.scrollTo(viewModel.currentDialogues[0].id, anchor: .top)
+                            }
                         }
                     }
                 }

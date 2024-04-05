@@ -38,12 +38,15 @@ struct UserMessageView: View {
             TextSelectionView(content: conversation.content)
         }
         .contextMenu {
-            MessageContextMenu(session: session, conversation: conversation) {
+            MessageContextMenu(session: session, conversation: conversation, isExpanded: isExpanded,
+            editHandler: {
                 editingMessage = conversation.content
                 isEditing = true
-            } toggleTextSelection: {
+            }, toggleTextSelection: {
                 canSelectText.toggle()
-            }
+            }, toggleExpanded: {
+                isExpanded.toggle()
+            })
             .labelStyle(.titleAndIcon)
         }
         #else
@@ -127,43 +130,22 @@ struct UserMessageView: View {
     var messageContextMenu: some View {
         HStack {
             if hoverxyz {
-                expandToggle(limit: 300)
-                
-                MessageContextMenu(session: session, conversation: conversation) {
+                MessageContextMenu(session: session, conversation: conversation, isExpanded: isExpanded,
+                editHandler: {
                     editingMessage = conversation.content
                     isEditing = true
-                } toggleTextSelection: {
+                }, toggleTextSelection: {
                     canSelectText.toggle()
-                }
+                }, toggleExpanded: {
+                    isExpanded.toggle()
+                })
             } else {
-                Button {
-                    
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                        .frame(width: 17, height: 17)
-                }
-                .buttonStyle(.plain)
+                Image(systemName: "ellipsis")
+                    .frame(width: 17, height: 17)
             }
 
         }
         .contextMenuModifier(isHovered: $isHovered)
-
-    }
-
-  
-    @ViewBuilder
-    func expandToggle(limit: Int) -> some View {
-        if conversation.content.count > limit {
-            Button {
-                self.isExpanded.toggle()
-            } label: {
-                Image(systemName: isExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
-            }
-            .buttonStyle(.plain)
-            .imageScale(.medium)
-        } else {
-            EmptyView()
-        }
     }
     
     var editBtn: some View {

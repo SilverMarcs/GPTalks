@@ -11,9 +11,11 @@ struct MessageContextMenu: View {
     @Environment(DialogueViewModel.self) private var viewModel
     var session: DialogueSession
     var conversation: Conversation
+    var isExpanded: Bool = false
     
-    let editHandler: () -> Void
-    let toggleTextSelection: () -> Void
+    var editHandler: () -> Void = {}
+    var toggleTextSelection: () -> Void = {}
+    var toggleExpanded: () -> Void = {}
     
     @State private var itemSize = CGSize.zero
     
@@ -23,11 +25,19 @@ struct MessageContextMenu: View {
             Group {
                 Section {
                     if conversation.role == "user" {
+                        #if os(macOS)
+                        if conversation.content.count > 300 {
+                            expandButton
+                        }
+                        #endif
+                        
                         Button {
                             editHandler()
                         } label: {
                             Label("Edit", systemImage: "applepencil.tip")
                         }
+                    } else if conversation.role == "tool" {
+                        expandButton
                     }
                     
                     Button {
@@ -73,6 +83,14 @@ struct MessageContextMenu: View {
             }
             .buttonStyle(.plain)
             .imageScale(.medium)
+        }
+    }
+    
+    var expandButton: some View {
+        Button {
+            toggleExpanded()
+        } label: {
+            Image(systemName: isExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
         }
     }
 }

@@ -15,6 +15,8 @@ struct ToolCallView: View {
     var session: DialogueSession
     
     @State var isHovered = false
+    @State var hoverxyz = false
+    
     @State var isExpanded = false
     @State var canSelectText = false
     
@@ -46,9 +48,13 @@ struct ToolCallView: View {
                 Spacer()
                 
                 messageContextMenu
+                    .animation(.easeInOut(duration: 0.15), value: hoverxyz)
             }
             .padding(10)
             .padding(.horizontal, 8)
+            .onHover { isHovered in
+                hoverxyz = isHovered
+            }
 #endif
         }
 #if !os(macOS)
@@ -63,8 +69,12 @@ struct ToolCallView: View {
         .padding(.horizontal, 8)
 #else
         .contextMenu {
-            MessageContextMenu(session: session, conversation: conversation) {} toggleTextSelection: {}
-                .labelStyle(.titleAndIcon)
+            MessageContextMenu(session: session, conversation: conversation, toggleTextSelection: {
+                canSelectText.toggle()
+            }, toggleExpanded: {
+                isExpanded.toggle()
+            })
+            .labelStyle(.titleAndIcon)
         }
 #endif
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
@@ -74,16 +84,16 @@ struct ToolCallView: View {
     
     var messageContextMenu: some View {
         HStack {
-            Button {
-                isExpanded.toggle()
-            } label: {
-                Image(systemName: isExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
+            if hoverxyz {
+                MessageContextMenu(session: session, conversation: conversation, toggleTextSelection: {
+                    canSelectText.toggle()
+                }, toggleExpanded: {
+                    isExpanded.toggle()
+                })
+            } else {
+                Image(systemName: "ellipsis")
+                    .frame(width: 17, height: 17)
             }
-            .buttonStyle(.plain)
-            .imageScale(.medium)
-            
-            MessageContextMenu(session: session, conversation: conversation)
-                {} toggleTextSelection: {}
         }
         .contextMenuModifier(isHovered: $isHovered)
     }
