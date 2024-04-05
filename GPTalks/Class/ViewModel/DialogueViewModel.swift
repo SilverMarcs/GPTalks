@@ -35,19 +35,21 @@ enum ContentState: String, CaseIterable, Identifiable {
 
 @Observable class DialogueViewModel {
     private let viewContext: NSManagedObjectContext
-
+    
     var allDialogues: [DialogueSession] = [] {
         didSet {
             switch selectedState {
                 case .starred:
-                    starredDialogues = allDialogues.filter { $0.isArchive }
+                starredDialogues = allDialogues.filter { $0.isArchive }
                     break
             case .recent, .images, .speech, .all:
+                activeDialogues = allDialogues.filter { !$0.isArchive }
                     break
             }
         }
     }
     
+
     var activeDialogues: [DialogueSession] = []
 
     var starredDialogues: [DialogueSession] = []
@@ -69,24 +71,23 @@ enum ContentState: String, CaseIterable, Identifiable {
             }
         }
     }
-
+    
     var searchText: String = "" {
         didSet {
             if !searchText.isEmpty {
                 switch selectedState {
                 case .starred:
                     starredDialogues = filterDialogues(matching: searchText, from: allDialogues)
-                    
-                case .recent, .images, .speech, .all:
-                    break
+                case .all, .recent, .images, .speech:
+                    activeDialogues = filterDialogues(matching: searchText, from: allDialogues)
                 }
             } else {
-                
                 switch selectedState {
                     case .starred:
                     starredDialogues = allDialogues.filter { $0.isArchive }
-                        break
+                    break
                 case .recent, .images, .speech, .all:
+                    activeDialogues = allDialogues
                         break
                 }
             }
@@ -106,15 +107,15 @@ enum ContentState: String, CaseIterable, Identifiable {
 
     var currentDialogues: [DialogueSession] {
         switch selectedState {
-            case .starred:
-                starredDialogues
-            case .all:
-                allDialogues
+        case .starred:
+            starredDialogues
+        case .all:
+            activeDialogues
         case .recent, .speech, .images:
             #if os(iOS)
-            Array(allDialogues.prefix(8))
+            Array(activeDialogues.prefix(8))
             #else
-            Array(allDialogues.prefix(11))
+            Array(activeDialogues.prefix(11))
             #endif
         }
     }
@@ -142,6 +143,7 @@ enum ContentState: String, CaseIterable, Identifiable {
             allDialogues = dialogueData.compactMap { DialogueSession(rawData: $0) }
 
             starredDialogues = allDialogues.filter { $0.isArchive }
+            activeDialogues = allDialogues.filter { !$0.isArchive }
 
             #if os(macOS)
                 if firstTime {
@@ -217,7 +219,7 @@ enum ContentState: String, CaseIterable, Identifiable {
     }
     
     func addDialogue(conversations: [Conversation] = []) {
-        if selectedState == .speech || selectedState == .images {
+        if selectedState != .recent {
             selectedState = .recent
         }
 

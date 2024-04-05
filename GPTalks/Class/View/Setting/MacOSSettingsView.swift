@@ -38,7 +38,7 @@ struct MacOSSettingsView: View {
 }
 
 struct ToolsView: View {
-    @State var selection: ChatTool = .urlScrape
+//    @State var selection: ChatTool = .urlScrape
     
     var body: some View {
         NavigationView {

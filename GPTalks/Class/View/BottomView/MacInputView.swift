@@ -54,37 +54,22 @@ struct MacInputView: View {
                 }
                 .offset(y: -2)
                 
-//                ZStack(alignment: .bottomTrailing) {
-                    MacTextEditor(input: $session.input)
-                    
-                    Group {
-                        if session.isReplying {
-                            StopButton (size: imageSize + 3 ) { session.stopStreaming() }
-                        } else {
-                            
-//                            if session.input.isEmpty {
-//                                Button {} label: {
-//                                    Image(systemName: "mic.fill")
-//                                        .resizable()
-//                                        .scaledToFit()
-//                                        .frame(width: imageSize - 6, height: imageSize - 6)
-//                                        .foregroundStyle(.secondary)
-//                                        .opacity(0.5)
-//                                }
-//                                .offset(x: -5, y: -3)
-//                            } else {
-                                SendButton(size: imageSize + 3) {
-                                    Task { @MainActor in
-                                        selectedItems = []
-                                        await session.send()
-                                    }
-                                }
-                                .disabled(session.input.isEmpty)
-//                            }
+                MacTextEditor(input: $session.input)
+                
+                Group {
+                    if session.isReplying {
+                        StopButton (size: imageSize + 3 ) { session.stopStreaming() }
+                    } else {
+                        SendButton(size: imageSize + 3) {
+                            Task { @MainActor in
+                                selectedItems = []
+                                await session.send()
+                            }
                         }
+                        .disabled(session.input.isEmpty)
                     }
-                    .offset(y: -1)
-//                }
+                }
+                .offset(y: -1)
             }
         }
         .onChange(of: session.input) {

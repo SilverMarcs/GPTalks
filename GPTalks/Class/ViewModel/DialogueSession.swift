@@ -442,11 +442,7 @@ typealias PlatformImage = UIImage
         if let chatTool = chatTool {
             switch chatTool {
             case .urlScrape, .googleSearch, .imageGenerate, .transcribe:
-                print("funcParam: \(funcParam)")
-                
-//                removeConversation(at: conversations.count - 1)
-//                appendConversation(Conversation(role: "assistant", content: "", toolRawValue: chatTool.rawValue, arguments: funcParam))
-                
+        
                 conversations[conversations.count - 1].toolRawValue = chatTool.rawValue
                 conversations[conversations.count - 1].arguments = funcParam
                 conversations[conversations.count - 1].isReplying = false
@@ -492,6 +488,7 @@ typealias PlatformImage = UIImage
                 
                 let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
                 let searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
+                
                 conversations[conversations.count - 1].content = searchResult
                 lastToolCall.sync(with: conversations[conversations.count - 1])
                 conversations[conversations.count - 1].isReplying = false
@@ -506,6 +503,7 @@ typealias PlatformImage = UIImage
                 
                 let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
                 let result = try await service.audioTranscriptions(query: query)
+                
                 conversations[conversations.count - 1].content = result.text
                 lastToolCall.sync(with: conversations[conversations.count - 1])
                 conversations[conversations.count - 1].isReplying = false

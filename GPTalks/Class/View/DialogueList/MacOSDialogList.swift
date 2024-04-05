@@ -8,18 +8,19 @@
 import OpenAI
 import SwiftUI
 
-extension View {
-    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
-        }
-    }
-}
+//extension View {
+//    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+//        if condition {
+//            transform(self)
+//        } else {
+//            self
+//        }
+//    }
+//}
 
 struct MacOSDialogList: View {
     @Bindable var viewModel: DialogueViewModel
+    @State private var previousActiveDialoguesCount = 0 // Add this line
 
     var body: some View {
         Group {
@@ -34,15 +35,20 @@ struct MacOSDialogList: View {
                             .listRowSeparatorTint(Color.gray.opacity(0.2))
                             .accentColor(.accentColor) // to keep row colors untouched
                     }
-                    .accentColor(Color("niceColorLighter")) // to change list seldction color
+                    .accentColor(Color("niceColorLighter")) // to change list selection color
                     .animation(.default, value: viewModel.selectedState)
                     .animation(.default, value: viewModel.searchText)
                     .padding(.top, -8)
-                    .onChange(of: viewModel.activeDialogues.count) {
-//                         this is faaar from perfect but is required if we want to keep list style inset which is required for animations
-                        if !viewModel.activeDialogues.isEmpty {
-                            proxy.scrollTo(viewModel.activeDialogues[0].id, anchor: .top)
+                    .onChange(of: viewModel.currentDialogues.count) {
+                        // Check if the current count is greater than the previous count
+                        if viewModel.currentDialogues.count > previousActiveDialoguesCount {
+                            // If so, it's an addition. Scroll to the first item.
+                            if !viewModel.activeDialogues.isEmpty {
+                                proxy.scrollTo(viewModel.currentDialogues[0].id, anchor: .top)
+                            }
                         }
+                        // Update the previous count to the current count
+                        previousActiveDialoguesCount = viewModel.currentDialogues.count
                     }
                 }
             }
