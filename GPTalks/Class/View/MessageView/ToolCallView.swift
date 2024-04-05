@@ -68,7 +68,7 @@ struct ToolCallView: View {
         }
 #endif
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
-        .customBorder(width: 1, edges: [.leading, .trailing], color: .gray.opacity(0.12))
+//        .customBorder(width: 1, edges: [.leading, .trailing], color: .gray.opacity(0.12))
         .frame(maxWidth: .infinity, alignment: .topLeading)
     }
     

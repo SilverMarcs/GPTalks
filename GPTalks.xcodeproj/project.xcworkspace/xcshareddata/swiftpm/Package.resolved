@@ -1,6 +1,15 @@
 {
-  "originHash" : "b2061428c5492da8cedea69cf307267c4bed61f38effc2059e03d1439aa1d5ce",
+  "originHash" : "9c44092cf9d646477dcbb055da1e75d38de261468c0213dab26400f6d4d731fe",
   "pins" : [
+    {
+      "identity" : "dswaveformimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dmrschmidt/DSWaveformImage",
+      "state" : {
+        "revision" : "4c56578ee10128ee2b2c04c9c5aa73812de722db",
+        "version" : "14.2.2"
+      }
+    },
     {
       "identity" : "fuzi",
       "kind" : "remoteSourceControl",
@@ -98,6 +107,24 @@
       "state" : {
         "branch" : "master",
         "revision" : "a47ca84e0f0b92d8e4264a6d306f152758ffc02d"
+      }
+    },
+    {
+      "identity" : "waavform",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nbrandes/Waavform",
+      "state" : {
+        "branch" : "main",
+        "revision" : "6d1c011bfd6fb22fcc470657846db2a5717bba77"
+      }
+    },
+    {
+      "identity" : "waveform",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AudioKit/Waveform.git",
+      "state" : {
+        "revision" : "79103e766434eb32aff9f0b169a469fce0af9ebd",
+        "version" : "1.0.2"
       }
     }
   ],
