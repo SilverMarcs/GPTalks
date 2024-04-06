@@ -50,8 +50,10 @@ typealias PlatformImage = UIImage
     var inputImages: [PlatformImage] = []
     var inputAudioPath: String = ""
     
-    var editingMessage: String = ""
     var isEditing: Bool = false
+    var editingMessage: String = ""
+    var editingAudioPath: String = ""
+    var editingImages: [PlatformImage] = []
     var editingIndex: Int = -1
     
     var title: String = "New Session"
@@ -284,7 +286,7 @@ typealias PlatformImage = UIImage
         }
 
         removeConversations(from: editingIndex)
-        let text = self.input
+        let text = self.editingMessage
     
         await send(text: text, isEdit: true)
     }
@@ -293,11 +295,11 @@ typealias PlatformImage = UIImage
         withAnimation {
             isEditing = true
             editingIndex = conversations.firstIndex { $0.id == conversation.id }!
-            input = conversation.content
-            inputAudioPath = conversation.audioPath
+            editingMessage = conversation.content
+            editingAudioPath = conversation.audioPath
             for imagePath in conversation.imagePaths {
                 if let imageData = getSavedImage(fromPath: imagePath) {
-                    inputImages.append(imageData)
+                    editingImages.append(imageData)
                 }
             }
         }
@@ -307,9 +309,9 @@ typealias PlatformImage = UIImage
         withAnimation {
             isEditing = false
             editingIndex = -1
-            input = ""
-            inputImages = []
-            inputAudioPath = ""
+            editingMessage = ""
+            editingImages = []
+            editingAudioPath = ""
         }
     }
 
@@ -342,6 +344,11 @@ typealias PlatformImage = UIImage
     
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false, isEdit: Bool = false) async {
+        if isEdit {
+            inputImages = editingImages
+            inputAudioPath = editingAudioPath
+        }
+        
         resetErrorDesc()
 
         if !isRegen && !isRetry {

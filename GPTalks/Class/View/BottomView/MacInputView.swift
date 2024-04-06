@@ -22,18 +22,33 @@ struct MacInputView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            if !session.inputImages.isEmpty {
-                ImportedImages(session: session)
+            if !session.inputImages.isEmpty || !session.editingImages.isEmpty {
+                if session.isEditing {
+                    ImportedImagesView(images: $session.editingImages) { index in
+                        session.editingImages.remove(at: index)
+                    }
+                } else {
+                    ImportedImagesView(images: $session.inputImages) { index in
+                        session.inputImages.remove(at: index)
+                    }
+                }
             }
             
             if isAudioFile(urlString: session.inputAudioPath) {
-                InputAudioPlayer(urlString: session.inputAudioPath) {
-                    withAnimation {
-                        session.inputAudioPath = ""
+                    UniversalAudioPlayer(audioURLString: session.inputAudioPath) {
+                        withAnimation {
+                            session.inputAudioPath = ""
+                        }
                     }
+                    .padding(.horizontal, -1)
+                } else if isAudioFile(urlString: session.editingAudioPath) && session.isEditing {
+                    UniversalAudioPlayer(audioURLString: session.editingAudioPath) {
+                        withAnimation {
+                            session.editingAudioPath = ""
+                        }
+                    }
+                    .padding(.horizontal, -1)
                 }
-                .padding(.horizontal, -1)
-            }
             
             HStack(alignment: .bottom, spacing: 12) {
                 Group {
@@ -47,26 +62,38 @@ struct MacInputView: View {
                     MoreOptions
                         
                     if showMore {
-                        ImagePickerView(shouldAllowAdding: session.inputImages.count < 5) { newImage in
-                            session.inputImages.append(newImage)
-                            showMore = false
-                        }
-                        .offset(y: 2)
-                        .padding(.top, -2)
-                        .disabled(!session.inputAudioPath.isEmpty)
-                        
-                        AudioPickerView(shouldAllowSelection: !session.shouldSwitchToVision) { selectedURL in
-                            withAnimation {
-                                session.inputAudioPath = selectedURL.absoluteString
+                        ImagePickerView(shouldAllowAdding: shouldAllowAddingImages(), onImageAppend: { newImage in
+                            if session.isEditing {
+                                session.editingImages.append(newImage)
+                            } else {
+                                session.inputImages.append(newImage)
                             }
                             showMore = false
-                        }
+                        })
+                        .offset(y: 2)
+                        .padding(.top, -2)
+                        .disabled(!session.inputAudioPath.isEmpty || (session.isEditing && !session.editingAudioPath.isEmpty))
+                        
+                        AudioPickerView(shouldAllowSelection: !session.shouldSwitchToVision, onAudioSelect: { selectedURL in
+                            withAnimation {
+                                if session.isEditing {
+                                    session.editingAudioPath = selectedURL.absoluteString
+                                } else {
+                                    session.inputAudioPath = selectedURL.absoluteString
+                                }
+                            }
+                            showMore = false
+                        })
                     }
                     
                 }
                 .offset(y: -2)
                 
-                MacTextEditor(input: $session.input)
+                if session.isEditing {
+                    MacTextEditor(input: $session.editingMessage)
+                } else {
+                    MacTextEditor(input: $session.input)
+                }
                 
                 Group {
                     if session.isReplying {
@@ -87,7 +114,7 @@ struct MacInputView: View {
                                 }
                             }
                         }
-                        .disabled(session.input.isEmpty)
+                        .disabled((!session.isEditing && session.input.isEmpty) || (session.isEditing && session.editingMessage.isEmpty))
                     }
                 }
                 .offset(y: -1)
@@ -124,6 +151,14 @@ struct MacInputView: View {
     
     private var imageSize: CGFloat {
         21
+    }
+    
+    func shouldAllowAddingImages() -> Bool {
+        if session.isEditing {
+            return session.editingImages.count < 5
+        } else {
+            return session.inputImages.count < 5
+        }
     }
 }
 
@@ -216,20 +251,24 @@ struct AudioPickerView: View {
     }
 }
 
-struct InputAudioPlayer: View {
-    var urlString: String
-    var removeAudio: () -> Void
+struct UniversalAudioPlayer: View {
+    var audioURLString: String
+    var removeAudioAction: () -> Void
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            AudioPlayerView(audioURL: URL(string: urlString)!)
-            
-            CustomCrossButton {
-                removeAudio()
+            if let url = URL(string: audioURLString) {
+                AudioPlayerView(audioURL: url)
+            } else {
+                // Handle invalid URL or show placeholder
+                Text("Invalid URL")
             }
-            .padding(-10)
+            
+            CustomCrossButton(action: removeAudioAction)
+                .padding(-10)
         }
     }
 }
+
 
 #endif

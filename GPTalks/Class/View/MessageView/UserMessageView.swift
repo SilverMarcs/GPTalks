@@ -40,8 +40,9 @@ struct UserMessageView: View {
         .contextMenu {
             MessageContextMenu(session: session, conversation: conversation, isExpanded: isExpanded,
             editHandler: {
-                editingMessage = conversation.content
-                isEditing = true
+//                editingMessage = conversation.content
+//                isEditing = true
+                session.setupEditing(conversation: conversation)
             }, toggleTextSelection: {
                 canSelectText.toggle()
             }, toggleExpanded: {

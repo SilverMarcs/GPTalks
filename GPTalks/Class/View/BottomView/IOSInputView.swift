@@ -22,11 +22,24 @@ struct IOSInputView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            if !session.inputImages.isEmpty {
-                ImportedImages(session: session)
+            if !session.inputImages.isEmpty || !session.editingImages.isEmpty {
+                if session.isEditing {
+                    ImportedImagesView(images: $session.editingImages) { index in
+                        session.editingImages.remove(at: index)
+                    }
+                } else {
+                    ImportedImagesView(images: $session.inputImages) { index in
+                        session.inputImages.remove(at: index)
+                    }
+                }
             }
 
             HStack(alignment: .bottom, spacing: 12) {
+                
+                
+                if session.isEditing {
+                    stopEditing
+                }
                 
                 MoreOptions
                 
@@ -35,18 +48,31 @@ struct IOSInputView: View {
                     resetContext
                 }
                 
-                IOSTextField(input: $session.input, isReplying: session.isReplying, focused: _focused) {
-                    focused = false
-                    
-                    Task { @MainActor in
-                        selectedItems = []
-                        await session.send()
+                if session.isEditing {
+                    IOSTextField(input: $session.editingMessage, isReplying: session.isReplying, focused: _focused) {
+                        focused = false
+                        
+                        Task { @MainActor in
+                            selectedItems = []
+                            await session.edit()
+                        }
+                        
+                    } stop: {
+                        session.stopStreaming()
                     }
-                    
-                } stop: {
-                    session.stopStreaming()
+                } else {
+                    IOSTextField(input: $session.input, isReplying: session.isReplying, focused: _focused) {
+                        focused = false
+                        
+                        Task { @MainActor in
+                            selectedItems = []
+                            await session.send()
+                        }
+                        
+                    } stop: {
+                        session.stopStreaming()
+                    }
                 }
-
             }
         }
         .onChange(of: session.input) {
@@ -88,6 +114,23 @@ struct IOSInputView: View {
         }
     }
     
+    var stopEditing: some View {
+        Button {
+            session.resetIsEditing()
+        } label: {
+            Image(systemName: "plus")
+                .resizable()
+                .scaledToFit()
+                .padding(10)
+                .fontWeight(.semibold)
+                .background(.red)
+                .foregroundStyle(.ultraThickMaterial)
+                .clipShape(Circle())
+                .frame(width: imageSize + 4, height: imageSize + 4)
+                .rotationEffect(.degrees(45))
+        }
+    }
+    
     var addImage: some View {
         Button {
             importingImage = true
@@ -124,7 +167,11 @@ struct IOSInputView: View {
                 for newItem in selectedItems {
                     if let data = try? await newItem.loadTransferable(type: Data.self) {
                         if let image = UIImage(data: data) {
-                            session.inputImages.append(image)
+                            if session.isEditing {
+                                session.editingImages.append(image)
+                            } else {
+                                session.inputImages.append(image)
+                            }
                         }
                     }
                 }
