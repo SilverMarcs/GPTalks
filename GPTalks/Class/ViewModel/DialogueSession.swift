@@ -49,11 +49,13 @@ typealias PlatformImage = UIImage
     var input: String = ""
     var inputImages: [PlatformImage] = []
     var inputAudioPath: String = ""
+    var inputPDFPath: String = ""
     
     var isEditing: Bool = false
     var editingMessage: String = ""
     var editingAudioPath: String = ""
     var editingImages: [PlatformImage] = []
+    var editingPDFPath: String = ""
     var editingIndex: Int = -1
     
     var title: String = "New Session"
@@ -301,6 +303,7 @@ typealias PlatformImage = UIImage
             editingIndex = conversations.firstIndex { $0.id == conversation.id }!
             editingMessage = conversation.content
             editingAudioPath = conversation.audioPath
+            editingPDFPath = conversation.pdfPath
             for imagePath in conversation.imagePaths {
                 if let imageData = getSavedImage(fromPath: imagePath) {
                     editingImages.append(imageData)
@@ -316,6 +319,7 @@ typealias PlatformImage = UIImage
             editingMessage = ""
             editingImages = []
             editingAudioPath = ""
+            editingPDFPath = ""
         }
     }
 
@@ -336,6 +340,10 @@ typealias PlatformImage = UIImage
                 inputAudioPath = conversation.audioPath
             }
             
+            if !conversation.pdfPath.isEmpty {
+                inputPDFPath = conversation.pdfPath
+            }
+            
             removeConversations(from: index)
             await send(text: editedContent)
         }
@@ -351,28 +359,50 @@ typealias PlatformImage = UIImage
         if isEdit {
             inputImages = editingImages
             inputAudioPath = editingAudioPath
+            inputPDFPath = editingPDFPath
         }
         
         resetErrorDesc()
 
+//        if !isRegen && !isRetry {
+//            if inputImages.isEmpty {
+//                if inputAudioPath.isEmpty {
+//                    appendConversation(Conversation(role: "user", content: text))
+//                } else {
+//                    appendConversation(Conversation(role: "user", content: text, audioPath: inputAudioPath))
+//                }
+//           } else {
+//               var imagePaths: [String] = []
+//               
+//               for inputImage in inputImages {
+//                   if let savedURL = saveImage(image: inputImage) {
+//                       imagePaths.append(savedURL)
+//                   }
+//               }
+//               
+//               appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths))
+//           }
+//        }
+        
         if !isRegen && !isRetry {
-            if inputImages.isEmpty {
-                if inputAudioPath.isEmpty {
-                    appendConversation(Conversation(role: "user", content: text))
-                } else {
-                    appendConversation(Conversation(role: "user", content: text, audioPath: inputAudioPath))
-                }
-           } else {
+//            if inputImages.isEmpty {
+//                if inputAudioPath.isEmpty {
+//                    appendConversation(Conversation(role: "user", content: text))
+//                } else {
+//                    appendConversation(Conversation(role: "user", content: text, audioPath: inputAudioPath))
+//                }
+//           } else {
                var imagePaths: [String] = []
                
+            // tTODO: dont need to do this, save url properly later
                for inputImage in inputImages {
                    if let savedURL = saveImage(image: inputImage) {
                        imagePaths.append(savedURL)
                    }
                }
                
-               appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths))
-           }
+               appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths, audioPath: inputAudioPath, pdfPath: inputPDFPath))
+//           }
         }
         
         if isEdit {
@@ -386,6 +416,7 @@ typealias PlatformImage = UIImage
         do {
             inputImages = []
             inputAudioPath = ""
+            inputPDFPath = ""
             
             #if os(macOS)
             try await streamingTask?.value
@@ -496,17 +527,13 @@ typealias PlatformImage = UIImage
         }
 
         if let chatTool = chatTool {
-            switch chatTool {
-            case .urlScrape, .googleSearch, .imageGenerate, .transcribe:
-        
-                conversations[conversations.count - 1].toolRawValue = chatTool.rawValue
-                conversations[conversations.count - 1].arguments = funcParam
-                conversations[conversations.count - 1].isReplying = false
-                
-                lastConversationData.sync(with: conversations[conversations.count - 1])
-                
-                try await handleToolCall(chatTool: chatTool, funcParam: funcParam)
-            }
+            conversations[conversations.count - 1].toolRawValue = chatTool.rawValue
+            conversations[conversations.count - 1].arguments = funcParam
+            conversations[conversations.count - 1].isReplying = false
+            
+            lastConversationData.sync(with: conversations[conversations.count - 1])
+            
+            try await handleToolCall(chatTool: chatTool, funcParam: funcParam)
         } else {
             if !streamText.isEmpty {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -564,6 +591,18 @@ typealias PlatformImage = UIImage
                 lastToolCall.sync(with: conversations[conversations.count - 1])
                 conversations[conversations.count - 1].isReplying = false
 
+                try await processRequest()
+            }
+        case .extractPdf:
+            if let pdfPath = extractValue(from: funcParam, forKey: chatTool.paramName) {
+                let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
+                
+                let pdfContent = extractTextFromPDF(at: URL(string: pdfPath)!)
+                
+                conversations[conversations.count - 1].content = pdfContent
+                lastToolCall.sync(with: conversations[conversations.count - 1])
+                conversations[conversations.count - 1].isReplying = false
+                
                 try await processRequest()
             }
         case .imageGenerate:
@@ -624,6 +663,7 @@ extension DialogueSession {
                let role = data.role,
                let date = data.date,
                let audioPath = data.audioPath,
+               let pdfPath = data.pdfPath,
                let toolRawValue = data.toolRawValue,
                let arguments = data.arguments,
                let imagePaths = data.imagePaths {
@@ -635,6 +675,7 @@ extension DialogueSession {
                   content: content,
                   imagePaths: imagePaths,
                   audioPath: audioPath,
+                  pdfPath: pdfPath,
                   toolRawValue: toolRawValue,
                   arguments: arguments
                 )

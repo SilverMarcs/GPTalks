@@ -2,11 +2,13 @@
 //  MacInputView.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 10/03/2024.
+//  Created by Zabir Raihan on 10/03/2024..
 //
 
 import SwiftUI
 import PhotosUI
+import PDFKit
+import QuickLook
 
 #if os(macOS)
 struct MacInputView: View {
@@ -22,33 +24,11 @@ struct MacInputView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            if !session.inputImages.isEmpty || !session.editingImages.isEmpty {
-                if session.isEditing {
-                    ImportedImagesView(images: $session.editingImages) { index in
-                        session.editingImages.remove(at: index)
-                    }
-                } else {
-                    ImportedImagesView(images: $session.inputImages) { index in
-                        session.inputImages.remove(at: index)
-                    }
-                }
-            }
+            importedImages
             
-            if isAudioFile(urlString: session.inputAudioPath) {
-                    UniversalAudioPlayer(audioURLString: session.inputAudioPath) {
-                        withAnimation {
-                            session.inputAudioPath = ""
-                        }
-                    }
-                    .padding(.horizontal, -1)
-                } else if isAudioFile(urlString: session.editingAudioPath) && session.isEditing {
-                    UniversalAudioPlayer(audioURLString: session.editingAudioPath) {
-                        withAnimation {
-                            session.editingAudioPath = ""
-                        }
-                    }
-                    .padding(.horizontal, -1)
-                }
+            importedPDF
+            
+            importedAudio
             
             HStack(alignment: .bottom, spacing: 12) {
                 Group {
@@ -56,7 +36,6 @@ struct MacInputView: View {
                         StopEditing() {
                             session.resetIsEditing()
                         }
-//                        .offset(y: -1)
                         
                     }
                     MoreOptions
@@ -74,6 +53,20 @@ struct MacInputView: View {
                         .padding(.top, -2)
                         .disabled(!session.inputAudioPath.isEmpty || (session.isEditing && !session.editingAudioPath.isEmpty))
                         
+                        PDFPickerView(shouldAllowAdding: !session.shouldSwitchToVision, onPDFAppend: { selectedURL in
+                            withAnimation {
+                                if session.isEditing {
+                                    session.editingPDFPath = selectedURL.absoluteString
+                                    print("Editing PDF: \(selectedURL.absoluteString)")
+                                } else {
+                                    session.inputPDFPath = selectedURL.absoluteString
+                                    print(selectedURL.absoluteString)
+                                }
+                            }
+                            showMore = false
+                        })
+                        .offset(y: 1)
+                        
                         AudioPickerView(shouldAllowSelection: !session.shouldSwitchToVision, onAudioSelect: { selectedURL in
                             withAnimation {
                                 if session.isEditing {
@@ -87,7 +80,7 @@ struct MacInputView: View {
                     }
                     
                 }
-                .offset(y: -2)
+                .offset(y: -1)
                 
                 if session.isEditing {
                     MacTextEditor(input: $session.editingMessage)
@@ -131,6 +124,59 @@ struct MacInputView: View {
         .padding(.horizontal)
         .padding(.top, verticalPadding - 2)
         .padding(.bottom, verticalPadding + 2)
+    }
+    
+    @ViewBuilder
+    var importedImages: some View {
+        if !session.inputImages.isEmpty || (session.isEditing && !session.editingImages.isEmpty) {
+            if session.isEditing {
+                ImportedImagesView(images: $session.editingImages) { index in
+                    session.editingImages.remove(at: index)
+                }
+            } else {
+                ImportedImagesView(images: $session.inputImages) { index in
+                    session.inputImages.remove(at: index)
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var importedPDF: some View {
+        if !session.inputPDFPath.isEmpty || (session.isEditing && !session.editingPDFPath.isEmpty) {
+            if session.isEditing {
+                PDFViewer(pdfURL: URL(string: session.editingPDFPath)!, removePDFAction: {
+                    withAnimation {
+                        session.editingPDFPath = ""
+                    }
+                })
+            } else {
+                PDFViewer(pdfURL: URL(string: session.inputPDFPath)!, removePDFAction: {
+                    withAnimation {
+                        session.inputPDFPath = ""
+                    }
+                })
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var importedAudio: some View {
+        if !session.inputAudioPath.isEmpty || (session.isEditing && !session.editingAudioPath.isEmpty) {
+            if session.isEditing {
+                UniversalAudioPlayer(audioURL: URL(string: session.editingAudioPath)!) {
+                    withAnimation {
+                        session.editingAudioPath = ""
+                    }
+                }
+            } else {
+                UniversalAudioPlayer(audioURL: URL(string: session.inputAudioPath)!) {
+                    withAnimation {
+                        session.inputAudioPath = ""
+                    }
+                }
+            }
+        }
     }
     
     var MoreOptions: some View {
@@ -198,8 +244,6 @@ struct ImagePickerView: View {
                 .resizable()
                 .inputImageStyle(padding: 7, imageSize: 28)
         }
-//        .offset(y: 2)
-//        .padding(.top, -2)
         .disabled(!shouldAllowAdding)
         .fileImporter(
             isPresented: $importingImage,
@@ -212,6 +256,36 @@ struct ImagePickerView: View {
                     guard let image = NSImage(contentsOf: file) else { continue }
                     onImageAppend?(image)
                 }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+}
+
+struct PDFPickerView: View {
+    var shouldAllowAdding: Bool
+    var onPDFAppend: ((URL) -> Void)?
+    
+    @State private var importingPDF = false
+    
+    var body: some View {
+        Button {
+            importingPDF = true
+        } label: {
+            Image(systemName: "doc.richtext")
+                .resizable()
+                .inputImageStyle(padding: 7, imageSize: 26)
+        }
+        .disabled(!shouldAllowAdding)
+        .fileImporter(
+            isPresented: $importingPDF,
+            allowedContentTypes: [.pdf],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                onPDFAppend?(urls[0])
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -252,17 +326,39 @@ struct AudioPickerView: View {
 }
 
 struct UniversalAudioPlayer: View {
-    var audioURLString: String
+    var audioURL: URL
     var removeAudioAction: () -> Void
+    
+    @State var qlItem: URL?
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            if let url = URL(string: audioURLString) {
-                AudioPlayerView(audioURL: url)
-            } else {
-                // Handle invalid URL or show placeholder
-                Text("Invalid URL")
+//            if let url = URL(string: audioURLString) {
+////                AudioPlayerView(audioURL: url)
+//                Text("Audio Player")
+//                    .onTapGesture {
+//                        audioURL = URL(string: audioURLString)
+//                    }
+//                    .quickLookPreview($audioURL)
+//            } else {
+//                // Handle invalid URL or show placeholder
+//                Text("Invalid URL")
+//            }
+            
+            HStack {
+                Text(audioURL.lastPathComponent)
+                    .font(.callout)
+                    .fontWeight(.semibold)
+                
+                
+                Image(systemName: "waveform")
+                    .imageScale(.medium)
             }
+            .bubbleStyle(isMyMessage: false)
+            .onTapGesture {
+                qlItem = audioURL
+            }
+            .quickLookPreview($qlItem)
             
             CustomCrossButton(action: removeAudioAction)
                 .padding(-10)
@@ -270,5 +366,34 @@ struct UniversalAudioPlayer: View {
     }
 }
 
+struct PDFViewer: View {
+    var pdfURL: URL
+    var removePDFAction: () -> Void
+    
+    @State var qlItem: URL?
+    
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            HStack {
+                Text(pdfURL.lastPathComponent)
+                    .font(.callout)
+                    .fontWeight(.semibold)
+                
+                
+                Image(systemName: "doc.richtext.fill")
+                    .imageScale(.medium)
+            }
+            .bubbleStyle(isMyMessage: false)
+            .onTapGesture {
+                qlItem = pdfURL
+            }
+            .quickLookPreview($qlItem)
+            
+            // show this based on a a prameter
+            CustomCrossButton(action: removePDFAction)
+                .padding(-10)
+        }
+    }
+}
 
 #endif

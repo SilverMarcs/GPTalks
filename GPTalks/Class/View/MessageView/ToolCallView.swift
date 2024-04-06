@@ -85,7 +85,7 @@ struct ToolCallView: View {
     var messageContextMenu: some View {
         HStack {
             if hoverxyz {
-                MessageContextMenu(session: session, conversation: conversation, toggleTextSelection: {
+                MessageContextMenu(session: session, conversation: conversation, isExpanded: isExpanded, toggleTextSelection: {
                     canSelectText.toggle()
                 }, toggleExpanded: {
                     isExpanded.toggle()

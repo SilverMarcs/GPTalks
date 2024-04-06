@@ -15,7 +15,8 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
     var content: String
     var imagePaths: [String] = []
     var audioPath: String = ""
-    var toolRawValue: String = "" // this holds rawValue of tool
+    var pdfPath: String = ""
+    var toolRawValue: String = ""
     var arguments: String = ""
     var isReplying: Bool = false
 
@@ -40,6 +41,9 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
         } else if chatRole == .user && !audioPath.isEmpty {
             let audioContent = content + "\n" + audioPath
             return .init(role: chatRole, content: audioContent)!
+        } else if chatRole == .user && !pdfPath.isEmpty {
+            let pdfContent = content + "\n" + pdfPath
+            return .init(role: chatRole, content: pdfContent)!
         } else if chatRole == .tool {
             return .init(role: chatRole, content: content, name: toolRawValue, toolCallId: "")!
         } else if chatRole == .user && !imagePaths.isEmpty {
@@ -70,6 +74,7 @@ extension ConversationData {
         role = conversation.role
         content = conversation.content
         audioPath = conversation.audioPath
+        pdfPath = conversation.pdfPath
         imagePaths = conversation.imagePaths.joined(separator: "|||")
         toolRawValue = conversation.toolRawValue
         arguments = conversation.arguments
@@ -91,6 +96,7 @@ extension Conversation {
         data.role = conversation.role
         data.content = conversation.content
         data.audioPath = conversation.audioPath
+        data.pdfPath = conversation.pdfPath
         data.imagePaths = conversation.imagePaths.joined(separator: "|||")
         data.toolRawValue = conversation.toolRawValue
         data.arguments = conversation.arguments

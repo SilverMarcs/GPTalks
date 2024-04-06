@@ -98,6 +98,10 @@ struct UserMessageView: View {
                         AudioPlayerView(audioURL: audioUrl)
                             .frame(maxWidth: 500)
                     }
+                    
+                    if let pdfURL = URL(string: conversation.pdfPath) {
+                        PDFViewer(pdfURL: pdfURL, removePDFAction: {})
+                    }
                 }
                 
                 Spacer()

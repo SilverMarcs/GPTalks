@@ -14,6 +14,7 @@ enum ChatTool: String, CaseIterable {
     case urlScrape = "urlScrape"
     case imageGenerate = "imageGenerate"
     case transcribe = "transcribe"
+    case extractPdf = "extractPdf"
     
     static var allTools: [ChatQuery.ChatCompletionToolParam] {
         return ChatTool.allCases.map { $0.completionToolParam }
@@ -39,7 +40,7 @@ enum ChatTool: String, CaseIterable {
                           description: "If your preexisting knowledge does not contain info of the user's question, you may use this function to make a google search and retrieve the user's content. if a url has been explicitly given already, use the urlScape function instead. Always prioritize your pre-existing knowledge. Only use this function if the requested info is beyond your knowledge cutoff date. In the case where a google search will help you find the user's question's answer, come up with a meaningful search query to search google with and call the function with it. You will be receiving some website links and a small snippet from that webpage. Usually, the snippets should suffice to answer the user's question.",
                           parameters:
                             .init(type: .object,
-                                  properties: ["searchQuery":
+                                  properties: [self.paramName:
                                         .init(type: .string,
                                               description: "The search query to search google with")]
                                  )
@@ -51,7 +52,7 @@ enum ChatTool: String, CaseIterable {
                           description: "If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image.",
                           parameters:
                             .init(type: .object,
-                                  properties: ["prompt":
+                                  properties: [self.paramName:
                                         .init(type: .string,
                                               description: "The prompt for dalle")]
                                  )
@@ -63,9 +64,21 @@ enum ChatTool: String, CaseIterable {
                           description: "If the user's input message contains something like a path to an audio file, then call this function with the exact filepath that the user provided. Do not add or format the fiel url in any way. For example, if the user's provided file path was 'file:///Users/Zabir/Downloads/test.mp3' then you need to return exactly 'file:///Users/Zabir/Downloads/test.mp3'",
                           parameters:
                             .init(type: .object,
-                                  properties: ["audioPath":
+                                  properties: [self.paramName:
                                         .init(type: .string,
                                               description: "The file path for the user's audio file")]
+                                 )
+                         )
+            )
+        case .extractPdf:
+            return .init(function:
+                    .init(name: "extractPdf",
+                          description: "If the user's input message contains something like a path to a PDF file, then call this function with the exact filepath that the user provided. Do not add or format the fiel url in any way. For example, if the user's provided file path was 'file:///Users/Zabir/Downloads/sample_pdf.pdf' then you need to return exactly 'file:///Users/Zabir/Downloads/sample_pdf.pdf'",
+                          parameters:
+                            .init(type: .object,
+                                  properties: [self.paramName:
+                                        .init(type: .string,
+                                              description: "The file path for the user's PDF file")]
                                  )
                          )
             )
@@ -85,6 +98,8 @@ enum ChatTool: String, CaseIterable {
             ImageGenerateConfigurationView()
         case .transcribe:
             TranscriptionConfigurationView()
+        case .extractPdf:
+            Text("Extract PDF")
         }
     }
     
@@ -98,6 +113,8 @@ enum ChatTool: String, CaseIterable {
             "prompt"
         case .transcribe:
             "audioPath"
+        case .extractPdf:
+            "pdfPath"
         }
     }
 
@@ -111,6 +128,8 @@ enum ChatTool: String, CaseIterable {
             "Image Generate"
         case .transcribe:
             "Transcribe"
+        case .extractPdf:
+            "Extract PDF"
         }
     }
     
@@ -124,6 +143,8 @@ enum ChatTool: String, CaseIterable {
             return "photo"
         case .googleSearch:
             return "safari"
+        case .extractPdf:
+            return "doc.richtext"
         }
     }
 }

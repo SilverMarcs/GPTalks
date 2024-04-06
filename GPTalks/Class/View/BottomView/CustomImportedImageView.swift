@@ -159,5 +159,6 @@ struct CustomCrossButton: View {
                 .background(.primary, in: Circle())
         }
         .padding(7)
+        .buttonStyle(.plain)
     }
 }

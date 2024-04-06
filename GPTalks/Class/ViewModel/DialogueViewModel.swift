@@ -106,7 +106,11 @@ enum ContentState: String, CaseIterable, Identifiable {
     
     func moveUpChat(session: DialogueSession) {
         session.date = Date()
-
+        
+        if session.id == allDialogues.first?.id {
+            return
+        }
+        
         let index = allDialogues.firstIndex { $0.id == session.id }
         if let index = index {
             withAnimation {
