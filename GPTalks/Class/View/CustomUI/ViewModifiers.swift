@@ -10,6 +10,7 @@ import SwiftUI
 struct CustomImageViewModifier: ViewModifier {
     let padding: CGFloat
     let imageSize: CGFloat
+    let color: Color
 
     func body(content: Content) -> some View {
         content
@@ -17,7 +18,7 @@ struct CustomImageViewModifier: ViewModifier {
             .padding(padding)
             .fontWeight(.semibold)
             .foregroundStyle(.secondary)
-            .background(Color.gray.opacity(0.2))
+            .background(color)
             .clipShape(Circle())
             .frame(width: imageSize, height: imageSize)
     }
@@ -79,8 +80,8 @@ extension View {
         self.modifier(RoundedRectangleOverlayModifier(radius: radius, opacity: opacity, style: style))
     }
     
-    func inputImageStyle(padding: CGFloat, imageSize: CGFloat) -> some View {
-           self.modifier(CustomImageViewModifier(padding: padding, imageSize: imageSize))
+    func inputImageStyle(padding: CGFloat, imageSize: CGFloat, color: Color = Color.gray.opacity(0.2)) -> some View {
+           self.modifier(CustomImageViewModifier(padding: padding, imageSize: imageSize, color: color))
        }
     
     func contextMenuModifier(isHovered: Binding<Bool>) -> some View {

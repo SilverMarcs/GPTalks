@@ -37,13 +37,22 @@ struct MacInputView: View {
             
             HStack(alignment: .bottom, spacing: 12) {
                 Group {
+                    if session.isEditing {
+                        StopEditing() {
+                            session.resetIsEditing()
+                        }
+//                        .offset(y: -1)
+                        
+                    }
                     MoreOptions
-                    
+                        
                     if showMore {
                         ImagePickerView(shouldAllowAdding: session.inputImages.count < 5) { newImage in
                             session.inputImages.append(newImage)
                             showMore = false
                         }
+                        .offset(y: 2)
+                        .padding(.top, -2)
                         .disabled(!session.inputAudioPath.isEmpty)
                         
                         AudioPickerView(shouldAllowSelection: !session.shouldSwitchToVision) { selectedURL in
@@ -53,6 +62,7 @@ struct MacInputView: View {
                             showMore = false
                         }
                     }
+                    
                 }
                 .offset(y: -2)
                 
@@ -60,13 +70,21 @@ struct MacInputView: View {
                 
                 Group {
                     if session.isReplying {
-                        StopButton (size: imageSize + 3 ) { session.stopStreaming() }
+                        StopButton (size: imageSize + 4 ) { session.stopStreaming() }
                     } else {
-                        SendButton(size: imageSize + 3) {
-                            Task { @MainActor in
-                                selectedItems = []
-                                viewModel.moveUpChat(session: session)
-                                await session.send()
+                        SendButton(size: imageSize + 4) {
+                            if session.isEditing {
+                                Task { @MainActor in
+                                    viewModel.moveUpChat(session: session)
+                                    await session.edit()
+                                }
+                                
+                            } else {
+                                Task { @MainActor in
+                                    selectedItems = []
+                                    viewModel.moveUpChat(session: session)
+                                    await session.send()
+                                }
                             }
                         }
                         .disabled(session.input.isEmpty)
@@ -109,6 +127,28 @@ struct MacInputView: View {
     }
 }
 
+struct StopEditing: View {
+    var action: () -> Void
+    
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            Image(systemName: "plus")
+                .resizable()
+                .scaledToFit()
+                .padding(6)
+                .fontWeight(.bold)
+                .foregroundStyle(.bar)
+                .background(.red)
+                .clipShape(Circle())
+                .frame(width: 24, height: 24)
+                .rotationEffect(.degrees(45))
+        }
+        .keyboardShortcut(.cancelAction)
+    }
+}
+
 struct ImagePickerView: View {
     var shouldAllowAdding: Bool
     var onImageAppend: ((NSImage) -> Void)?
@@ -121,10 +161,10 @@ struct ImagePickerView: View {
         } label: {
             Image(systemName: "photo")
                 .resizable()
-                .inputImageStyle(padding: 7, imageSize: 27)
+                .inputImageStyle(padding: 7, imageSize: 28)
         }
-        .offset(y: 2)
-        .padding(.top, -2)
+//        .offset(y: 2)
+//        .padding(.top, -2)
         .disabled(!shouldAllowAdding)
         .fileImporter(
             isPresented: $importingImage,

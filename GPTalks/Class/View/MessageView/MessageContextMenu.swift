@@ -42,6 +42,7 @@ struct MessageContextMenu: View {
                     
                     Button {
                         Task { @MainActor in
+                            viewModel.moveUpChat(session: session)
                             await session.regenerate(from: conversation)
                         }
                     } label: {

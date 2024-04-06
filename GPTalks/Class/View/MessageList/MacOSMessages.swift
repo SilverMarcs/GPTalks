@@ -61,7 +61,7 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.input) {
-                if session.input.contains("\n") || (session.input.count > 105) {
+                if !session.isEditing {
                     scrollToBottom(proxy: proxy)
                 }
             }
@@ -82,11 +82,15 @@ struct MacOSMessages: View {
                     if !session.configuration.provider.visionModels.contains(session.configuration.model) {
                         session.configuration.model = session.configuration.provider.preferredVisionModel
                     }
-                    scrollToBottom(proxy: proxy, animated: true)
+                    if !session.isEditing {
+                        scrollToBottom(proxy: proxy, animated: true)
+                    }
                 }
             }
             .onChange(of: session.inputAudioPath) {
-                scrollToBottom(proxy: proxy, animated: true)
+                if !session.isEditing {
+                    scrollToBottom(proxy: proxy, animated: true)
+                }
             }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {

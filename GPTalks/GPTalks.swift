@@ -26,15 +26,18 @@ struct GPTalks: App {
                 Section {
                     Button("Regenerate") {
                         Task { @MainActor in
+                            if let selectedDialogue = viewModel.selectedDialogue {
+                                viewModel.moveUpChat(session: selectedDialogue)
+                            }
                             await viewModel.selectedDialogue?.regenerateLastMessage()
                         }
                     }
                     .keyboardShortcut("r", modifiers: .command)
-                    
-                    Button("Deselect Session") {
-                        viewModel.selectedDialogue = nil
-                    }
-                    .keyboardShortcut(.escape, modifiers: .command)
+//                    
+//                    Button("Deselect Session") {
+//                        viewModel.selectedDialogue = nil
+//                    }
+//                    .keyboardShortcut(.escape, modifiers: .command)
                     
                 }
                 

@@ -67,7 +67,6 @@ struct UserMessageView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 16, height: 16)
-                //                .foregroundStyle(.secondary)
                     .foregroundColor(Color("blueColorLighter"))
 #if !os(macOS)
                     .padding(.top, 3)
@@ -84,7 +83,6 @@ struct UserMessageView: View {
                     Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
                         .textSelection(.enabled)
 #else
-//                    Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "...")
                     Text(conversation.content)
                         .textSelection(.enabled)
 #endif
@@ -124,6 +122,7 @@ struct UserMessageView: View {
         #endif
         .frame(maxWidth: .infinity, alignment: .topLeading) // Align content to the top left
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
+        .background(session.conversations.firstIndex(where: { $0.id == conversation.id }) == session.editingIndex ? Color("niceColor").opacity(0.3) : .clear)
         .animation(.default, value: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText))
     }
     
@@ -132,8 +131,7 @@ struct UserMessageView: View {
             if hoverxyz {
                 MessageContextMenu(session: session, conversation: conversation, isExpanded: isExpanded,
                 editHandler: {
-                    editingMessage = conversation.content
-                    isEditing = true
+                    session.setupEditing(conversation: conversation)
                 }, toggleTextSelection: {
                     canSelectText.toggle()
                 }, toggleExpanded: {
@@ -150,8 +148,7 @@ struct UserMessageView: View {
     
     var editBtn: some View {
         Button("") {
-            editingMessage = conversation.content
-            isEditing = true
+            session.setupEditing(conversation: conversation)
         }
         .frame(width: 0, height: 0)
         .hidden()

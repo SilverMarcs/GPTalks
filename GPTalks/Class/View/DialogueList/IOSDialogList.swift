@@ -48,7 +48,7 @@ struct IOSDialogList: View {
                           }
                       }
                       .onChange(of: navigateToImages) {
-                          viewModel.selectedState = .recent
+                          viewModel.selectedState = .chats
                       }
 
                         

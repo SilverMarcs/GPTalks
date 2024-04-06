@@ -50,6 +50,10 @@ typealias PlatformImage = UIImage
     var inputImages: [PlatformImage] = []
     var inputAudioPath: String = ""
     
+    var editingMessage: String = ""
+    var isEditing: Bool = false
+    var editingIndex: Int = -1
+    
     var title: String = "New Session"
     var conversations: [Conversation] = []
     var date = Date()
@@ -272,6 +276,42 @@ typealias PlatformImage = UIImage
             }
         }
     }
+    
+    @MainActor
+    func edit() async {
+        if editingIndex <= resetMarker {
+            removeResetContextMarker()
+        }
+
+        removeConversations(from: editingIndex)
+        let text = self.input
+    
+        await send(text: text, isEdit: true)
+    }
+    
+    func setupEditing(conversation: Conversation) {
+        withAnimation {
+            isEditing = true
+            editingIndex = conversations.firstIndex { $0.id == conversation.id }!
+            input = conversation.content
+            inputAudioPath = conversation.audioPath
+            for imagePath in conversation.imagePaths {
+                if let imageData = getSavedImage(fromPath: imagePath) {
+                    inputImages.append(imageData)
+                }
+            }
+        }
+    }
+    
+    func resetIsEditing() {
+        withAnimation {
+            isEditing = false
+            editingIndex = -1
+            input = ""
+            inputImages = []
+            inputAudioPath = ""
+        }
+    }
 
     @MainActor
     func edit(conversation: Conversation, editedContent: String) async {
@@ -301,7 +341,7 @@ typealias PlatformImage = UIImage
     }
     
     @MainActor
-    private func send(text: String, isRegen: Bool = false, isRetry: Bool = false) async {
+    private func send(text: String, isRegen: Bool = false, isRetry: Bool = false, isEdit: Bool = false) async {
         resetErrorDesc()
 
         if !isRegen && !isRetry {
@@ -322,6 +362,10 @@ typealias PlatformImage = UIImage
                
                appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths))
            }
+        }
+        
+        if isEdit {
+            resetIsEditing()
         }
         
         streamingTask = Task(priority: .userInitiated) {
