@@ -374,25 +374,26 @@ struct PDFViewer: View {
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            HStack {
-                Text(pdfURL.lastPathComponent)
-                    .font(.callout)
-                    .fontWeight(.semibold)
-                
-                
-                Image(systemName: "doc.richtext.fill")
-                    .imageScale(.medium)
-            }
-            .bubbleStyle(isMyMessage: false)
-            .onTapGesture {
+            Button {
                 qlItem = pdfURL
+            } label: {
+                HStack {
+                    Text(pdfURL.lastPathComponent)
+                        .font(.callout)
+                        .fontWeight(.semibold)
+                    
+                    Image(systemName: "doc.richtext.fill")
+                        .imageScale(.medium)
+                }
+                .bubbleStyle(isMyMessage: false)
             }
-            .quickLookPreview($qlItem)
-            
-            // show this based on a a prameter
+            .buttonStyle(.plain)
+
+            // TODO: show this based on a a prameter
             CustomCrossButton(action: removePDFAction)
                 .padding(-10)
         }
+        .quickLookPreview($qlItem)
     }
 }
 

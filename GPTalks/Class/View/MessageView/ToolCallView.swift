@@ -48,13 +48,19 @@ struct ToolCallView: View {
                 Spacer()
                 
                 messageContextMenu
+                    .padding(.leading, 200) // Increase padding to enlarge the invisible hover area
+  //                  .background(Color.blue.opacity(0.1)) // Optional: Just to visualize the area during development
+                    .contentShape(Rectangle()) // Make the whole padded area hoverable
+                    .onHover { isHovered in
+                        hoverxyz = isHovered
+                    }
                     .animation(.easeInOut(duration: 0.15), value: hoverxyz)
             }
             .padding(10)
             .padding(.horizontal, 8)
-            .onHover { isHovered in
-                hoverxyz = isHovered
-            }
+//            .onHover { isHovered in
+//                hoverxyz = isHovered
+//            }
 #endif
         }
 #if !os(macOS)
@@ -100,26 +106,29 @@ struct ToolCallView: View {
     
     var funcCall: some View {
         VStack(alignment: .leading) {
-            HStack(spacing: 4) {
-                if let tool = ChatTool(rawValue: conversation.toolRawValue) {
-                    Text("Used")
-                        .foregroundStyle(.secondary)
-                    
-                    Text(tool.toolName)
-                        .fontWeight(.semibold)
-                    
-                    if conversation.isReplying {
-                        ProgressView()
-                            .controlSize(.small)
-                    } else {
-                        Image(systemName: tool.systemImageName)
+            Button {
+                isExpanded.toggle()
+            } label: {
+                HStack(spacing: 4) {
+                    if let tool = ChatTool(rawValue: conversation.toolRawValue) {
+                        Text("Used")
+                            .foregroundStyle(.secondary)
+    
+                        Text(tool.toolName)
+                            .fontWeight(.semibold)
+    
+                        if conversation.isReplying {
+                            ProgressView()
+                                .controlSize(.small)
+                        } else {
+                            Image(systemName: tool.systemImageName)
+                        }
                     }
                 }
+                .bubbleStyle(isMyMessage: false, sharp: true)
             }
-            .bubbleStyle(isMyMessage: false, sharp: true)
-            .onTapGesture {
-                isExpanded.toggle()
-            }
+            .buttonStyle(.plain)
+            
             
             if isExpanded {
                 Text(conversation.content)

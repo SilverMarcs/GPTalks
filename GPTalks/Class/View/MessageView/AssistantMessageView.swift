@@ -103,13 +103,19 @@ struct AssistantMessageView: View {
                 Spacer()
                 
                 messageContextMenu
+                    .padding(.leading, 200) // Increase padding to enlarge the invisible hover area
+  //                  .background(Color.blue.opacity(0.1)) // Optional: Just to visualize the area during development
+                    .contentShape(Rectangle()) // Make the whole padded area hoverable
+                    .onHover { isHovered in
+                        hoverxyz = isHovered
+                    }
                     .animation(.easeInOut(duration: 0.15), value: hoverxyz)
             }
             .padding(10)
             .padding(.horizontal, 8)
-            .onHover { isHovered in
-                hoverxyz = isHovered
-            }
+//            .onHover { isHovered in
+//                hoverxyz = isHovered
+//            }
 #endif
         }
         #if os(macOS)

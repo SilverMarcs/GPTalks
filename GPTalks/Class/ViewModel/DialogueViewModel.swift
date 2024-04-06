@@ -161,6 +161,10 @@ enum ContentState: String, CaseIterable, Identifiable {
     }
 
     func deleteDialogue(_ session: DialogueSession) {
+        if session.isArchive {
+            return
+        }
+        
         if selectedDialogue == session {
             selectedDialogue = nil
         }
