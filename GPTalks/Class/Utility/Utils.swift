@@ -195,3 +195,51 @@ extension String {
 }
 
 #endif
+
+#if os(macOS)
+typealias PlatformImage = NSImage
+#else
+typealias PlatformImage = UIImage
+#endif
+
+extension Image {
+    init(platformImage: PlatformImage) {
+#if os(macOS)
+        self.init(nsImage: platformImage)
+#else
+        self.init(uiImage: platformImage)
+#endif
+    }
+}
+
+
+func getFileSizeFormatted(fileURL: URL) -> String? {
+    do {
+        let attributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
+        
+        if let fileSize = attributes[FileAttributeKey.size] as? NSNumber {
+            return formatBytes(bytes: fileSize.intValue)
+        } else {
+            print("Could not find file size.")
+            return nil
+        }
+    } catch {
+        print("Error getting file size: \(error.localizedDescription)")
+        return nil
+    }
+}
+
+func formatBytes(bytes: Int) -> String {
+    let formatter = ByteCountFormatter()
+    formatter.allowedUnits = [.useBytes, .useKB, .useMB, .useGB]
+    formatter.countStyle = .file
+    formatter.includesUnit = true
+    formatter.isAdaptive = true
+    return formatter.string(fromByteCount: Int64(bytes))
+}
+
+#if os(macOS)
+func getFileTypeIcon(fileURL: URL) -> NSImage? {
+    return NSWorkspace.shared.icon(forFile: fileURL.path)
+}
+#endif

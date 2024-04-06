@@ -20,9 +20,7 @@ struct ToolMessageView: View {
             if conversation.imagePaths.count > 0 {
                 HStack {
                     ForEach(conversation.imagePaths, id: \.self) { imagePath in
-                        if let imageData = getImageData(fromPath: imagePath) {
-                            ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: true)
-                        }
+                        ImageView2(imageUrlPath: imagePath, imageSize: imageSize)
                     }
                 }
             } else {

@@ -146,15 +146,11 @@ struct MacInputView: View {
         if !session.inputPDFPath.isEmpty || (session.isEditing && !session.editingPDFPath.isEmpty) {
             if session.isEditing {
                 PDFViewer(pdfURL: URL(string: session.editingPDFPath)!, removePDFAction: {
-                    withAnimation {
-                        session.editingPDFPath = ""
-                    }
+                    session.editingPDFPath = ""
                 })
             } else {
                 PDFViewer(pdfURL: URL(string: session.inputPDFPath)!, removePDFAction: {
-                    withAnimation {
-                        session.inputPDFPath = ""
-                    }
+                    session.inputPDFPath = ""
                 })
             }
         }
@@ -164,17 +160,13 @@ struct MacInputView: View {
     var importedAudio: some View {
         if !session.inputAudioPath.isEmpty || (session.isEditing && !session.editingAudioPath.isEmpty) {
             if session.isEditing {
-                UniversalAudioPlayer(audioURL: URL(string: session.editingAudioPath)!) {
-                    withAnimation {
-                        session.editingAudioPath = ""
-                    }
-                }
+                AudioPreviewer(audioURL: URL(string: session.editingAudioPath)!, showRemoveButton: true, removeAudioAction: {
+                    session.editingAudioPath = ""
+                })
             } else {
-                UniversalAudioPlayer(audioURL: URL(string: session.inputAudioPath)!) {
-                    withAnimation {
-                        session.inputAudioPath = ""
-                    }
-                }
+                AudioPreviewer(audioURL: URL(string: session.inputAudioPath)!, showRemoveButton: true, removeAudioAction: {
+                    session.inputAudioPath = ""
+                })
             }
         }
     }
@@ -325,76 +317,7 @@ struct AudioPickerView: View {
     }
 }
 
-struct UniversalAudioPlayer: View {
-    var audioURL: URL
-    var removeAudioAction: () -> Void
-    
-    @State var qlItem: URL?
-    
-    var body: some View {
-        ZStack(alignment: .topTrailing) {
-//            if let url = URL(string: audioURLString) {
-////                AudioPlayerView(audioURL: url)
-//                Text("Audio Player")
-//                    .onTapGesture {
-//                        audioURL = URL(string: audioURLString)
-//                    }
-//                    .quickLookPreview($audioURL)
-//            } else {
-//                // Handle invalid URL or show placeholder
-//                Text("Invalid URL")
-//            }
-            
-            HStack {
-                Text(audioURL.lastPathComponent)
-                    .font(.callout)
-                    .fontWeight(.semibold)
-                
-                
-                Image(systemName: "waveform")
-                    .imageScale(.medium)
-            }
-            .bubbleStyle(isMyMessage: false)
-            .onTapGesture {
-                qlItem = audioURL
-            }
-            .quickLookPreview($qlItem)
-            
-            CustomCrossButton(action: removeAudioAction)
-                .padding(-10)
-        }
-    }
-}
-
-struct PDFViewer: View {
-    var pdfURL: URL
-    var removePDFAction: () -> Void
-    
-    @State var qlItem: URL?
-    
-    var body: some View {
-        ZStack(alignment: .topTrailing) {
-            Button {
-                qlItem = pdfURL
-            } label: {
-                HStack {
-                    Text(pdfURL.lastPathComponent)
-                        .font(.callout)
-                        .fontWeight(.semibold)
-                    
-                    Image(systemName: "doc.richtext.fill")
-                        .imageScale(.medium)
-                }
-                .bubbleStyle(isMyMessage: false)
-            }
-            .buttonStyle(.plain)
-
-            // TODO: show this based on a a prameter
-            CustomCrossButton(action: removePDFAction)
-                .padding(-10)
-        }
-        .quickLookPreview($qlItem)
-    }
-}
 
 #endif
+
+

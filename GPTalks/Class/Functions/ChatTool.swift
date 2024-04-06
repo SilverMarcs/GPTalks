@@ -230,6 +230,9 @@ struct TranscriptionConfigurationView: View {
                             .tag(model.rawValue)
                     }
                 }
+                
+                Toggle("Alternate Player", isOn: appConfig.$alternateAudioPlayer)
+                    .toggleStyle(.switch)
             }
         }
         .navigationTitle("Transcribe")

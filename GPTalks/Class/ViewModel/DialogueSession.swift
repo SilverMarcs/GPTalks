@@ -9,12 +9,6 @@ import SwiftUI
 import PDFKit
 import OpenAI
 
-#if os(macOS)
-typealias PlatformImage = NSImage
-#else
-typealias PlatformImage = UIImage
-#endif
-
 @Observable class DialogueSession: Identifiable, Equatable, Hashable {
     struct Configuration: Codable {
         var temperature: Double
@@ -202,9 +196,7 @@ typealias PlatformImage = UIImage
 
     func setResetContextMarker(conversation: Conversation) {
         if let index = conversations.firstIndex(of: conversation) {
-//            withAnimation {
-                resetMarker = index
-//            }
+            resetMarker = index
         }
 
         save()
@@ -305,8 +297,20 @@ typealias PlatformImage = UIImage
             editingAudioPath = conversation.audioPath
             editingPDFPath = conversation.pdfPath
             for imagePath in conversation.imagePaths {
-                if let imageData = getSavedImage(fromPath: imagePath) {
-                    editingImages.append(imageData)
+//                #if os(macOS)
+////                if let imageData = loadImageData(from: imagePath), let imageFromData = imageFromData(data: imageData) {
+////                    editingImages.append(imageFromData)
+////                }
+//                if let nsImage = loadImage(from: imagePath) {
+//                    editingImages.append(nsImage)
+//                }
+//                #else
+//                if let uiImage = loadImage(fromRelativePath: imagePath) {
+//                    editingImages.append(uiImage)
+//                }
+//                #endif
+                if let image = loadImage(from: imagePath) {
+                    editingImages.append(image)
                 }
             }
         }
@@ -329,10 +333,19 @@ typealias PlatformImage = UIImage
             if index <= resetMarker {
                 removeResetContextMarker()
             }
-            
+
             for imagePath in conversation.imagePaths {
-                if let imageData = getSavedImage(fromPath: imagePath) {
-                    inputImages.append(imageData)
+//                #if os(macOS)
+////                if let imageData = loadImageData(from: imagePath), let imageFromData = imageFromData(data: imageData) {
+////                    inputImages.append(imageFromData)
+////                }
+//                #else
+//                if let uiImage = loadImage(fromRelativePath: imagePath) {
+//                    inputImages.append(uiImage)
+//                }
+//                #endif
+                if let image = loadImage(from: imagePath) {
+                    inputImages.append(image)
                 }
             }
             
@@ -364,45 +377,16 @@ typealias PlatformImage = UIImage
         
         resetErrorDesc()
 
-//        if !isRegen && !isRetry {
-//            if inputImages.isEmpty {
-//                if inputAudioPath.isEmpty {
-//                    appendConversation(Conversation(role: "user", content: text))
-//                } else {
-//                    appendConversation(Conversation(role: "user", content: text, audioPath: inputAudioPath))
-//                }
-//           } else {
-//               var imagePaths: [String] = []
-//               
-//               for inputImage in inputImages {
-//                   if let savedURL = saveImage(image: inputImage) {
-//                       imagePaths.append(savedURL)
-//                   }
-//               }
-//               
-//               appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths))
-//           }
-//        }
-        
         if !isRegen && !isRetry {
-//            if inputImages.isEmpty {
-//                if inputAudioPath.isEmpty {
-//                    appendConversation(Conversation(role: "user", content: text))
-//                } else {
-//                    appendConversation(Conversation(role: "user", content: text, audioPath: inputAudioPath))
-//                }
-//           } else {
-               var imagePaths: [String] = []
+           var imagePaths: [String] = []
                
-            // tTODO: dont need to do this, save url properly later
-               for inputImage in inputImages {
-                   if let savedURL = saveImage(image: inputImage) {
-                       imagePaths.append(savedURL)
-                   }
+           for inputImage in inputImages {
+               if let savedURL = saveImage(image: inputImage) {
+                   imagePaths.append(savedURL)
                }
+           }
                
-               appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths, audioPath: inputAudioPath, pdfPath: inputPDFPath))
-//           }
+           appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths, audioPath: inputAudioPath, pdfPath: inputPDFPath))
         }
         
         if isEdit {

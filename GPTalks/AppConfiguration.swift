@@ -35,6 +35,7 @@ class AppConfiguration: ObservableObject {
     // Transcription
     @AppStorage("configuration.transcriptionProvider") var transcriptionProvider: Provider = .openai
     @AppStorage("configuration.transcriptionModel") var transcriptionModel: Model = .whisper1
+    @AppStorage("configuration.alternateAudioPlayer") var alternateAudioPlayer: Bool = false
     
     // config
     @AppStorage("configuration.contextLength") var contextLength = 10

@@ -40,8 +40,6 @@ struct UserMessageView: View {
         .contextMenu {
             MessageContextMenu(session: session, conversation: conversation, isExpanded: isExpanded,
             editHandler: {
-//                editingMessage = conversation.content
-//                isEditing = true
                 session.setupEditing(conversation: conversation)
             }, toggleTextSelection: {
                 canSelectText.toggle()
@@ -89,18 +87,16 @@ struct UserMessageView: View {
 #endif
                     
                     ForEach(conversation.imagePaths, id: \.self) { imagePath in
-                        if let imageData = getImageData(fromPath: imagePath) {
-                            ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: false)
-                        }
+                        ImageView2(imageUrlPath: imagePath, imageSize: imageSize)
                     }
                     
                     if let audioUrl = URL(string: conversation.audioPath) {
-                        AudioPlayerView(audioURL: audioUrl)
-                            .frame(maxWidth: 500)
+                        AudioPreviewer(audioURL: audioUrl,showRemoveButton: false, removeAudioAction: {})
+//                            .frame(maxWidth: 500)
                     }
                     
                     if let pdfURL = URL(string: conversation.pdfPath) {
-                        PDFViewer(pdfURL: pdfURL, removePDFAction: {})
+                        PDFViewer(pdfURL: pdfURL, removePDFAction: {}, showRemoveButton: false)
                     }
                 }
                 

@@ -9,16 +9,6 @@ import Foundation
 import SwiftUI
 import Photos
 
-func saveImage(url: URL) {
-    #if os(iOS)
-        saveImageToPhotos(url: url)
-    #elseif os(macOS)
-        saveImageWithPopup(url: url)
-    #else
-        print("Not supported.")
-    #endif
-}
-
 func saveImageData(imageData: Data) {
     #if os(iOS)
         saveImageDataToPhotos(imageData: imageData)
@@ -29,163 +19,7 @@ func saveImageData(imageData: Data) {
     #endif
 }
 
-#if os(iOS)
-private func saveImageToPhotos(url: URL?) {
-    guard let url = url else { return }
-
-    // Request permission to save to the photo library
-    PHPhotoLibrary.requestAuthorization { status in
-        if status == .authorized {
-            // Download the image data
-            URLSession.shared.dataTask(with: url) { data, _, error in
-                guard let data = data, let image = UIImage(data: data), error == nil else { return }
-
-                // Save the image to the photo library
-                PHPhotoLibrary.shared().performChanges({
-                    PHAssetChangeRequest.creationRequestForAsset(from: image)
-                }) { success, error in
-                    if let error = error {
-                        print("Error saving image to Photos: \(error)")
-                    } else if success {
-                        print("Image successfully saved to Photos")
-                    }
-                }
-            }.resume()
-        } else {
-            print("Permission to access the photo library was denied.")
-        }
-    }
-}
-
-private func saveImageDataToPhotos(imageData: Data) {
-    // Request permission to save to the photo library
-    PHPhotoLibrary.requestAuthorization { status in
-        if status == .authorized, let image = UIImage(data: imageData) {
-            // Save the image to the photo library
-            PHPhotoLibrary.shared().performChanges({
-                PHAssetChangeRequest.creationRequestForAsset(from: image)
-            }) { success, error in
-                if let error = error {
-                    print("Error saving image to Photos: \(error)")
-                } else if success {
-                    print("Image successfully saved to Photos")
-                }
-            }
-        } else {
-            print("Permission to access the photo library was denied or image data is invalid.")
-        }
-    }
-}
-
-
-// Function to save an image to disk and return its URL
-func saveImageToDisk(image: UIImage) -> URL? {
-    guard let data = image.pngData() else { return nil }
-    let fileName = UUID().uuidString + ".png"
-    if let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
-        let filePath = directory.appendingPathComponent(fileName)
-        do {
-            try data.write(to: filePath)
-            return filePath
-        } catch {
-            print("Error saving image: \(error)")
-            return nil
-        }
-    }
-    return nil
-}
-
-// Function to retrieve an image from disk
-func retrieveImageFromDisk(url: URL) -> UIImage? {
-    do {
-        let data = try Data(contentsOf: url)
-        return UIImage(data: data)
-    } catch {
-        print("Error retrieving image: \(error)")
-        return nil
-    }
-}
-
-
-func saveImage(image: UIImage, fileName: String = Date().nowFileName(), inFolder folderName: String = "GPTalksImages") -> String? {
-    guard let data = image.jpegData(compressionQuality: 0.7) ?? image.pngData() else {
-        return nil
-    }
-    
-    do {
-        let directory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        let folderURL = directory.appendingPathComponent(folderName, isDirectory: true)
-        
-        if !FileManager.default.fileExists(atPath: folderURL.path) {
-            try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
-        }
-        
-        let fileURL = folderURL.appendingPathComponent(fileName)
-        try data.write(to: fileURL)
-        // Return only the relative path
-        return folderName + "/" + fileName
-    } catch {
-        print(error.localizedDescription)
-        return nil
-    }
-}
-
-// path is relative path
-func getSavedImage(fromPath filePath: String) -> UIImage? {
-    do {
-        let directory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        let fileURL = directory.appendingPathComponent(filePath)
-        return UIImage(contentsOfFile: fileURL.path)
-    } catch {
-        print(error.localizedDescription)
-        return nil
-    }
-}
-
-func getImageData(fromPath filePath: String) -> Data? {
-    do {
-        let directory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        let fileURL = directory.appendingPathComponent(filePath)
-        return try Data(contentsOf: fileURL)
-    } catch {
-        print(error.localizedDescription)
-        return nil
-    }
-}
-
-#endif
-
 #if os(macOS)
-private func saveImageWithPopup(url: URL?) {
-    guard let url = url else { return }
-
-    // Download the image data
-    URLSession.shared.dataTask(with: url) { data, _, error in
-        guard let data = data, let image = NSImage(data: data), error == nil else { return }
-
-        DispatchQueue.main.async {
-            // Present the save panel to the user
-            let savePanel = NSSavePanel()
-            savePanel.allowedContentTypes = [.image] // You can add more file types
-            savePanel.canCreateDirectories = true
-            savePanel.nameFieldStringValue = url.deletingPathExtension().lastPathComponent + ".png"
-
-            if savePanel.runModal() == .OK, let saveURL = savePanel.url {
-                // Save the image to the selected location
-                if let tiffData = image.tiffRepresentation, let bitmapImage = NSBitmapImageRep(data: tiffData) {
-                    let imageData = bitmapImage.representation(using: .png, properties: [:])
-                    do {
-                        try imageData?.write(to: saveURL)
-                        print("Image successfully saved to \(saveURL.path)")
-                    } catch {
-                        print("Error saving image: \(error)")
-                    }
-                }
-            }
-        }
-    }
-    .resume()
-}
 
 private func saveImageDataWithPopup(imageData: Data) {
     // Present the save panel to the user
@@ -207,6 +41,7 @@ private func saveImageDataWithPopup(imageData: Data) {
     }
 }
 
+// absolute
 func saveImage(image: NSImage, fileName: String = Date().nowFileName(), inFolder folderName: String = "GPTalksImages") -> String? {
     guard let data = image.tiffRepresentation,
           let bitmapImage = NSBitmapImageRep(data: data),
@@ -224,33 +59,45 @@ func saveImage(image: NSImage, fileName: String = Date().nowFileName(), inFolder
         
         let fileURL = folderURL.appendingPathComponent("\(fileName).png")
         try imageData.write(to: fileURL)
-        // Return only the relative path
-        return folderName + "/" + fileName + ".png"
+        // Return the whole file URL as a string
+        return fileURL.absoluteString
     } catch {
         print(error.localizedDescription)
         return nil
     }
 }
 
-// relative path
-func getSavedImage(fromPath filePath: String) -> NSImage? {
-    do {
-        let directory = try FileManager.default.url(for: .picturesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        let fileURL = directory.appendingPathComponent(filePath)
-        return NSImage(contentsOf: fileURL)
-    } catch {
-        print(error.localizedDescription)
+// absolute
+func loadImage(from filePath: String) -> NSImage? {
+    // Convert the string to a URL
+    guard let fileURL = URL(string: filePath) else {
+        print("Invalid URL")
         return nil
     }
+    
+    // Attempt to create an NSImage object with the contents of the file
+    let image = NSImage(contentsOf: fileURL)
+    if image == nil {
+        print("Error loading image from file")
+    }
+    return image
 }
 
-func getImageData(fromPath filePath: String) -> Data? {
+// absolute
+func loadImageData(from filePath: String) -> Data? {
+    // Convert the string to a URL
+    guard let fileURL = URL(string: filePath) else {
+        print("Invalid URL")
+        return nil
+    }
+    
     do {
-        let directory = try FileManager.default.url(for: .picturesDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        let fileURL = directory.appendingPathComponent(filePath)
-        return try Data(contentsOf: fileURL)
+        // Attempt to create a Data object with the contents of the file
+        let data = try Data(contentsOf: fileURL)
+        return data
     } catch {
-        print(error.localizedDescription)
+        // If there was an error loading the file, print the error
+        print("Error loading data from file: \(error)")
         return nil
     }
 }
@@ -273,4 +120,107 @@ func getImageFromClipboard() -> NSImage? {
     return nil
 }
 
+#else
+
+private func saveImageDataToPhotos(imageData: Data) {
+    // Request permission to save to the photo library
+    PHPhotoLibrary.requestAuthorization { status in
+        if status == .authorized, let image = UIImage(data: imageData) {
+            // Save the image to the photo library
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest.creationRequestForAsset(from: image)
+            }) { success, error in
+                if let error = error {
+                    print("Error saving image to Photos: \(error)")
+                } else if success {
+                    print("Image successfully saved to Photos")
+                }
+            }
+        } else {
+            print("Permission to access the photo library was denied or image data is invalid.")
+        }
+    }
+}
+
+// relative
+func saveImage(image: UIImage, fileName: String = Date().nowFileName(), inFolder folderName: String = "GPTalksImages") -> String? {
+    var imageData: Data? = nil
+    var fileType: String = ""
+    
+    if let jpegData = image.jpegData(compressionQuality: 0.7) {
+        imageData = jpegData
+        fileType = ".jpg"
+    } else if let pngData = image.pngData() {
+        imageData = pngData
+        fileType = ".png"
+    }
+    
+    guard let data = imageData else {
+        return nil
+    }
+    
+    do {
+        let directory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        let folderURL = directory.appendingPathComponent(folderName, isDirectory: true)
+        
+        if !FileManager.default.fileExists(atPath: folderURL.path) {
+            try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
+        }
+        
+        let fullFileName = fileName + fileType
+        let fileURL = folderURL.appendingPathComponent(fullFileName)
+        
+        try data.write(to: fileURL)
+        
+        // Return the relative path from the Documents directory
+        return folderName + "/" + fullFileName
+    } catch {
+        print(error.localizedDescription)
+        return nil
+    }
+}
+
+// relative
+func loadImage(from filePath: String) -> UIImage? {
+    guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        return nil
+    }
+    let fileURL = documentsDirectory.appendingPathComponent(filePath)
+    return UIImage(contentsOfFile: fileURL.path)
+}
+
+// relative
+func loadImageData(from filePath: String) -> Data? {
+    // Get the URL for the app's document directory
+    guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        print("Documents directory not found.")
+        return nil
+    }
+    
+    // Append the relative path to the documents directory to form the full file URL
+    let fileURL = documentsDirectory.appendingPathComponent(filePath)
+    
+    // Attempt to load and return the data from the file URL
+    do {
+        let data = try Data(contentsOf: fileURL)
+        return data
+    } catch {
+        print("Failed to load data: \(error.localizedDescription)")
+        return nil
+    }
+}
+
+func absoluteURL(forRelativePath relativePath: String) -> URL? {
+    // Get the URL for the Documents directory
+    guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        return nil
+    }
+    
+    // Append the relative path to the Documents directory URL
+    let fileURL = documentsDirectory.appendingPathComponent(relativePath)
+    
+    return fileURL
+}
+
 #endif
+

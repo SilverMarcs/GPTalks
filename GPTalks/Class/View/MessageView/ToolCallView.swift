@@ -125,7 +125,7 @@ struct ToolCallView: View {
                         }
                     }
                 }
-                .bubbleStyle(isMyMessage: false, sharp: true)
+                .bubbleStyle(isMyMessage: false, radius: 7)
             }
             .buttonStyle(.plain)
             

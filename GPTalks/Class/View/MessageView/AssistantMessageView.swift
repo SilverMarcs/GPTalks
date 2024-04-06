@@ -89,9 +89,7 @@ struct AssistantMessageView: View {
                     }
                     
                     ForEach(conversation.imagePaths, id: \.self) { imagePath in
-                        if let imageData = getImageData(fromPath: imagePath) {
-                            ImageView(imageData: imageData, imageSize: imageSize, showSaveButton: true)
-                        }
+                        ImageView2(imageUrlPath: imagePath, imageSize: imageSize, showSaveButton: true)
                     }
                 }
                 
@@ -113,9 +111,6 @@ struct AssistantMessageView: View {
             }
             .padding(10)
             .padding(.horizontal, 8)
-//            .onHover { isHovered in
-//                hoverxyz = isHovered
-//            }
 #endif
         }
         #if os(macOS)
