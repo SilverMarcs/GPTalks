@@ -17,7 +17,7 @@ struct MacOSSettingsView: View {
                 }
         
             MacOSDefaultParameters()
-                .frame(width: 650, height: 250)
+                .frame(width: 650, height: 320)
                 .tabItem {
                     Label("Parameters", systemImage: "slider.horizontal.3")
                 }
@@ -29,7 +29,7 @@ struct MacOSSettingsView: View {
                 }
             
             ToolsView()
-                .frame(width: 650, height: 200)
+                .frame(width: 650, height: 210)
                 .tabItem {
                     Label("Plugins", systemImage: "wrench")
                 }
@@ -38,11 +38,11 @@ struct MacOSSettingsView: View {
 }
 
 struct ToolsView: View {
-//    @State var selection: ChatTool = .urlScrape
+    @State var selection: ChatTool = .googleSearch
     
     var body: some View {
         NavigationView {
-            List(ChatTool.allCases, id: \.self) { tool in
+            List(ChatTool.allCases, id: \.self, selection: $selection) { tool in
                 NavigationLink(
                     destination: tool.destination,
                     label: {

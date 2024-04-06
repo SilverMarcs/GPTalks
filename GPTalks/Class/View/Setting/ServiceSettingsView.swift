@@ -11,6 +11,7 @@ struct ServiceSettingsView: View {
     @Binding var chatModel: Model
     @Binding var imageModel: Model
     @Binding var apiKey: String
+    @Binding var color: ProviderColor
     @ObservedObject var configuration = AppConfiguration.shared
     var provider: Provider
 
@@ -46,6 +47,17 @@ struct ServiceSettingsView: View {
                             .labelsHidden()
                             .frame(width: widthValue)
                     }
+                    .padding(paddingValue)
+                }
+                
+                GroupBox(label: Text("Appearance")) {
+                    HStack {
+                        Text("Provider Color")
+                        Spacer()
+                        colorPicker
+                            .labelsHidden()
+                            .frame(width: widthValue)
+                        }
                     .padding(paddingValue)
                 }
             
@@ -122,6 +134,11 @@ struct ServiceSettingsView: View {
                 chatModelPicker
                 imageModelPicker
             }
+            
+            Section("Appearance") {
+                colorPicker
+            }
+            
             Section("API Settings") {
                 if provider == .custom {
                     hostUrl
@@ -166,6 +183,15 @@ struct ServiceSettingsView: View {
             ForEach(provider.imageModels, id: \.self) { model in
                 Text(model.name)
                     .tag(model.rawValue)
+            }
+        }
+    }
+    
+    var colorPicker: some View {
+        Picker("Provider Color", selection: $color) {
+            ForEach(ProviderColor.allCases, id: \.self) { color in
+                Text(color.name)
+                    .tag(color.rawValue)
             }
         }
     }

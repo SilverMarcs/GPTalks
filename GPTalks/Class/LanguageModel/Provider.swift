@@ -8,6 +8,35 @@
 import OpenAI
 import SwiftUI
 
+enum ProviderColor: String, CaseIterable {
+    case greenColor = "greenColor"
+    case niceColor = "niceColor"
+    case blueColor = "blueColor"
+    case tealColor = "tealColor"
+    case orangeColor = "orangeColor"
+    case pinkColor = "pinkColor"
+//    case purpleColor = "purpleColor"
+    
+    var name: String {
+        switch self {
+        case .greenColor:
+            return "Green"
+        case .niceColor:
+            return "Purple"
+        case .blueColor:
+            return "Blue"
+        case .tealColor:
+            return "Teal"
+        case .orangeColor:
+            return "Orange"
+        case .pinkColor:
+            return "Pink"
+//        case .purpleColor:
+//            return "Purple"
+        }
+    }
+}
+
 enum Provider: String, CaseIterable, Codable, Identifiable {
     case openai
     case oxygen
@@ -75,20 +104,17 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     var accentColor: Color {
         switch self {
         case .openai:
-            return Color("greenColor")
+            Color(AppConfiguration.shared.OAIColor.rawValue)
         case .oxygen:
-            return Color("niceColor")
-//            return Color("tealColor")
+            Color(AppConfiguration.shared.OColor.rawValue)
         case .naga:
-            return Color("blueColor")
+            Color(AppConfiguration.shared.NColor.rawValue)
         case .kraken:
-//            return Color("pinkColor")
-            return Color("tealColor")
+            Color(AppConfiguration.shared.KColor.rawValue)
         case .custom:
-            return Color("orangeColor")
-        case .shard: 
-//            return Color("niceColor")
-            return Color("pinkColor")
+            Color(AppConfiguration.shared.CColor.rawValue)
+        case .shard:
+            Color(AppConfiguration.shared.SColor.rawValue)
         }
     }
 
@@ -227,6 +253,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 chatModel: configuration.$OAImodel,
                 imageModel: configuration.$OAIImageModel,
                 apiKey: configuration.$OAIkey,
+                color: configuration.$OAIColor,
                 provider: self
             )
         case .oxygen:
@@ -234,6 +261,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 chatModel: configuration.$Omodel,
                 imageModel: configuration.$OImageModel,
                 apiKey: configuration.$Okey,
+                color: configuration.$OColor,
                 provider: self
             )
         case .naga:
@@ -241,6 +269,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 chatModel: configuration.$Nmodel,
                 imageModel: configuration.$NImageModel,
                 apiKey: configuration.$Nkey,
+                color: configuration.$NColor,
                 provider: self
             )
         case .kraken:
@@ -248,6 +277,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 chatModel: configuration.$Kmodel,
                 imageModel: configuration.$KImageModel,
                 apiKey: configuration.$Kkey,
+                color: configuration.$KColor,
                 provider: self
             )
         case .custom:
@@ -255,6 +285,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 chatModel: configuration.$Cmodel,
                 imageModel: configuration.$CImageModel,
                 apiKey: configuration.$Ckey,
+                color: configuration.$CColor,
                 provider: self
             )
         case .shard:
@@ -262,6 +293,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 chatModel: configuration.$Smodel,
                 imageModel: configuration.$SImageModel,
                 apiKey: configuration.$Skey,
+                color: configuration.$SColor,
                 provider: self
             )
         }
@@ -269,9 +301,11 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
 
     var settingsLabel: some View {
         HStack {
-            ProviderImage(color: self.accentColor, frame: frame)
+            ProviderImage(color: accentColor, frame: frame)
+//                .id(accentColor)
             Text(name)
         }
+        .id(accentColor)
     }
 
     static var availableProviders: [Provider] {
@@ -287,6 +321,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
 
     var logoImage: some View {
         ProviderImage(radius: imageRadius, color: accentColor, frame: imageSize)
+            .id(accentColor)
     }
 
     private var imageRadius: CGFloat {

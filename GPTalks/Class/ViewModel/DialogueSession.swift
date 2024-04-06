@@ -152,7 +152,11 @@ typealias PlatformImage = UIImage
     @MainActor
     func generateTitle(forced: Bool = false) async {
         // TODO; the new session check dont work nicely
-        if conversations.count == 1 || conversations.count == 2 || (forced && conversations.count >= 2) && title == "New Session" {
+        if conversations.count == 1 || conversations.count == 2 || (forced && conversations.count >= 2) {
+            if title != "New Session" && !forced {
+                return
+            }
+                
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
