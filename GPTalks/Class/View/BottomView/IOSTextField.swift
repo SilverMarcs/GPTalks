@@ -51,16 +51,16 @@ struct IOSTextField: View {
                 } else {
                     Group {
                         if isReplying {
-                            StopButton(size: imageSize - 2) {
+                            StopButton(size: imageSize - 1) {
                                 stop()
                             }
                         } else {
-                            SendButton(size: imageSize - 2) {
+                            SendButton(size: imageSize - 1) {
                                 send()
                             }
                         }
                     }
-                    .offset(x: -4, y: -5)
+                    .offset(x: -4, y: -4)
                 }
             }
             .padding(20) // Increase tappable area
@@ -70,35 +70,6 @@ struct IOSTextField: View {
         .onTapGesture {
             focused = true
         }
-    }
-
-    @ViewBuilder
-    private var sendButton: some View {
-        Button {
-            send()
-        } label: {
-            Image(systemName: "arrow.up.circle.fill")
-                .resizable()
-                .keyboardShortcut(.return, modifiers: .command)
-                .fontWeight(.semibold)
-                .foregroundStyle(.foreground, Color.accentColor)
-                .frame(width: imageSize - 3, height: imageSize - 3)
-        }
-        .keyboardShortcut(.return, modifiers: .command)
-    }
-
-    @ViewBuilder
-    private var stopButton: some View {
-        Button {
-            stop()
-        } label: {
-            Image(systemName: "stop.circle.fill")
-                .resizable()
-                .keyboardShortcut("d", modifiers: .command)
-                .foregroundStyle(.foreground, .red)
-                .frame(width: imageSize - 3, height: imageSize - 3)
-        }
-        .keyboardShortcut("d", modifiers: .command)
     }
 
     private var imageSize: CGFloat {

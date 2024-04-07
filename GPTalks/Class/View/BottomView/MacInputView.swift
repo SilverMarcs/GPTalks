@@ -5,10 +5,10 @@
 //  Created by Zabir Raihan on 10/03/2024..
 //
 
-import SwiftUI
-import PhotosUI
 import PDFKit
+import PhotosUI
 import QuickLook
+import SwiftUI
 
 #if os(macOS)
 struct MacInputView: View {
@@ -24,7 +24,6 @@ struct MacInputView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            
             CustomImportedImagesView(session: session)
             CustomPDFViewer(session: session)
             CustomAudioPreviewer(session: session)
@@ -37,19 +36,19 @@ struct MacInputView: View {
                     
                     moreOptions
                     
-                    if showMore {   
+                    if showMore {
                         CustomImagePickerView(session: session, showMore: $showMore)
-                        CustomPDFPickerView(session: session, showMore: $showMore)
+                        CustomPDFPickerView(session: session, showMore: $showMore, imageSize: 25)
                         CustomAudioPickerView(session: session, showMore: $showMore)
                     }
                 }
                 .offset(y: -1.15)
                 
-                CustomTextEditoView(session: session)
+                CustomTextEditorView(session: session)
                 
                 Group {
                     if session.isReplying {
-                        StopButton (size: imageSize ) { session.stopStreaming() }
+                        StopButton(size: imageSize) { session.stopStreaming() }
                     } else {
                         SendButton(size: imageSize) { Task { @MainActor in viewModel.moveUpChat(session: session); await session.sendAppropriate() } }
                     }
@@ -109,16 +108,6 @@ struct MacInputView: View {
     private var imageSize: CGFloat {
         25
     }
-    
-    func shouldAllowAddingImages() -> Bool {
-        if session.isEditing {
-            return session.editingImages.count < 5
-        } else {
-            return session.inputImages.count < 5
-        }
-    }
 }
 
 #endif
-
-

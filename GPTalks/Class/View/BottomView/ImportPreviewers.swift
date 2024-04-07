@@ -55,7 +55,8 @@ struct CustomAudioPreviewer: View {
     }
 }
 
-struct CustomTextEditoView: View {
+#if os(macOS)
+struct CustomTextEditorView: View {
     @Bindable var session: DialogueSession
     
     private var currentMessage: Binding<String> {
@@ -66,3 +67,28 @@ struct CustomTextEditoView: View {
         MacTextEditor(input: currentMessage)
     }
 }
+#else
+struct CustomTextEditorView: View {
+    @Bindable var session: DialogueSession
+    @FocusState var focused: Bool
+    var extraAction: (() -> Void)
+    
+    private var currentMessage: Binding<String> {
+        session.isEditing ? $session.editingMessage : $session.input
+    }
+    
+    var body: some View {
+        IOSTextField(input: currentMessage, isReplying: session.isReplying, focused: _focused) {
+            focused = false
+            
+            Task { @MainActor in
+                extraAction()
+                await session.sendAppropriate()
+            }
+            
+        } stop: {
+            session.stopStreaming()
+        }
+    }
+}
+#endif

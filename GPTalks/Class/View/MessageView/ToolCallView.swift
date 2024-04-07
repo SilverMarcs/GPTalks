@@ -58,9 +58,6 @@ struct ToolCallView: View {
             }
             .padding(10)
             .padding(.horizontal, 8)
-//            .onHover { isHovered in
-//                hoverxyz = isHovered
-//            }
 #endif
         }
 #if !os(macOS)

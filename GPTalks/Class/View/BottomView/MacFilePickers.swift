@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(macOS)
 struct ImagePickerView: View {
     var shouldAllowAdding: Bool
     var onImageAppend: ((NSImage) -> Void)?
@@ -33,36 +34,6 @@ struct ImagePickerView: View {
                     guard let image = NSImage(contentsOf: file) else { continue }
                     onImageAppend?(image)
                 }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
-}
-
-struct PDFPickerView: View {
-    var shouldAllowAdding: Bool
-    var onPDFAppend: ((URL) -> Void)?
-    
-    @State private var importingPDF = false
-    
-    var body: some View {
-        Button {
-            importingPDF = true
-        } label: {
-            Image(systemName: "doc.richtext")
-                .resizable()
-                .inputImageStyle(padding: 7, imageSize: 25)
-        }
-        .disabled(!shouldAllowAdding)
-        .fileImporter(
-            isPresented: $importingPDF,
-            allowedContentTypes: [.pdf],
-            allowsMultipleSelection: false
-        ) { result in
-            switch result {
-            case .success(let urls):
-                onPDFAppend?(urls[0])
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -141,9 +112,45 @@ struct CustomAudioPickerView: View {
     }
 }
 
+#endif
+
+// consolodate the two
+struct PDFPickerView: View {
+    var shouldAllowAdding: Bool
+    var onPDFAppend: ((URL) -> Void)?
+    var imageSize: CGFloat
+    
+    @State private var importingPDF = false
+    
+    var body: some View {
+        Button {
+            importingPDF = true
+        } label: {
+            Image(systemName: "doc.richtext")
+                .resizable()
+                .inputImageStyle(padding: 7, imageSize: imageSize)
+        }
+        .disabled(!shouldAllowAdding)
+        .fileImporter(
+            isPresented: $importingPDF,
+            allowedContentTypes: [.pdf],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                onPDFAppend?(urls[0])
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+}
+
+
 struct CustomPDFPickerView: View {
     @Bindable var session: DialogueSession
     var showMore: Binding<Bool>
+    var imageSize: CGFloat
     
     private var currentPDFPath: Binding<String> {
         session.isEditing ? $session.editingPDFPath : $session.inputPDFPath
@@ -155,6 +162,50 @@ struct CustomPDFPickerView: View {
                 currentPDFPath.wrappedValue = selectedURL.absoluteString
                 showMore.wrappedValue = false
             }
-        })
+        }, imageSize: imageSize)
+    }
+}
+
+
+
+struct CombinedPDFPickerView: View {
+    @Bindable var session: DialogueSession
+    var showMore: Binding<Bool>
+    var imageSize: CGFloat
+    var padding: CGFloat
+    
+    @State private var importingPDF = false
+    private var shouldAllowAdding: Bool {
+        !session.shouldSwitchToVision
+    }
+    
+    private var currentPDFPath: Binding<String> {
+        session.isEditing ? $session.editingPDFPath : $session.inputPDFPath
+    }
+    
+    var body: some View {
+        Button {
+            importingPDF = true
+        } label: {
+            Image(systemName: "doc.richtext")
+                .resizable()
+                .inputImageStyle(padding: padding, imageSize: imageSize)
+        }
+        .disabled(!shouldAllowAdding)
+        .fileImporter(
+            isPresented: $importingPDF,
+            allowedContentTypes: [.pdf],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                withAnimation {
+                    currentPDFPath.wrappedValue = urls[0].absoluteString
+                    showMore.wrappedValue = false
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }
