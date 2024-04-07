@@ -43,7 +43,7 @@ struct AssistantMessageView: View {
     
     
     var alternateUI: some View {
-        ZStack(alignment: .bottomTrailing) {
+        VStack(alignment: .trailing) {
             HStack(alignment: .top, spacing: 10) {
                 Image(systemName: "sparkle")
                     .resizable()
@@ -109,8 +109,10 @@ struct AssistantMessageView: View {
                     }
                     .animation(.easeInOut(duration: 0.15), value: hoverxyz)
             }
-            .padding(10)
-            .padding(.horizontal, 8)
+//            .padding(10)
+            .padding(.top, -40)
+            .padding(.bottom, 3)
+            .padding(.horizontal, 18)
 #endif
         }
         #if os(macOS)

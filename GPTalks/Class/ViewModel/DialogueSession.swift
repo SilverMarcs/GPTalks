@@ -121,9 +121,9 @@ import OpenAI
     }
 
     func removeResetContextMarker() {
-//        withAnimation {
+        withAnimation {
             resetMarker = -1
-//        }
+        }
         save()
     }
     
@@ -196,7 +196,9 @@ import OpenAI
 
     func setResetContextMarker(conversation: Conversation) {
         if let index = conversations.firstIndex(of: conversation) {
-            resetMarker = index
+            withAnimation {
+                resetMarker = index
+            }
         }
 
         save()
@@ -207,7 +209,9 @@ import OpenAI
             return
         }
             if resetMarker == conversations.count - 1 {
+                withAnimation {
                     removeResetContextMarker()
+                }
             } else {
                 resetMarker = conversations.count - 1
             }
@@ -695,7 +699,9 @@ extension DialogueSession {
             removeResetContextMarker()
         }
 
-        conversations.append(conversation)
+//        withAnimation {
+            conversations.append(conversation)
+//        }
 
         let data = Conversation.createConversationData(from: conversation, in: PersistenceController.shared.container.viewContext)
         
@@ -717,9 +723,9 @@ extension DialogueSession {
         if conversations.count <= 2 {
             let _ = conversations.remove(at: index)
         } else {
-//            withAnimation {
+            withAnimation {
                 let _ = conversations.remove(at: index)
-//            }
+            }
         }
 
         if resetMarker == index {
@@ -749,7 +755,9 @@ extension DialogueSession {
             return
         }
 
-        removeConversation(at: index)
+        withAnimation {
+            removeConversation(at: index)
+        }
 
         if conversations.isEmpty {
             resetErrorDesc()

@@ -79,6 +79,22 @@ struct PreferredImageProvider: View {
     }
 }
 
+struct SmootherScrollPicker: View {
+    @ObservedObject var configuration: AppConfiguration = .shared
+    var isPicker: Bool = false
+    
+    var body: some View {
+        if isPicker {
+            Picker("Smoother Scrolling", selection: $configuration.smootherScrolling) {
+                Text("True").tag(true)
+                Text("False").tag(false)
+            }
+        } else {
+            Toggle("Smoother Scrolling", isOn: $configuration.smootherScrolling)
+        }
+    }
+}
+
 struct DefaultTempSlider: View {
     @ObservedObject var configuration: AppConfiguration = .shared
 

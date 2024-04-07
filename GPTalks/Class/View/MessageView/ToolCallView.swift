@@ -21,7 +21,7 @@ struct ToolCallView: View {
     @State var canSelectText = false
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
+        VStack(alignment: .trailing) {
             HStack(alignment: .top, spacing: 10) {
                 Image(systemName: "wrench.fill")
                     .resizable()
@@ -56,8 +56,10 @@ struct ToolCallView: View {
                     }
                     .animation(.easeInOut(duration: 0.15), value: hoverxyz)
             }
-            .padding(10)
-            .padding(.horizontal, 8)
+//            .padding(10)
+            .padding(.top, -40)
+            .padding(.bottom, 3)
+            .padding(.horizontal, 18)
 #endif
         }
 #if !os(macOS)
@@ -91,7 +93,9 @@ struct ToolCallView: View {
                 MessageContextMenu(session: session, conversation: conversation, isExpanded: isExpanded, toggleTextSelection: {
                     canSelectText.toggle()
                 }, toggleExpanded: {
-                    isExpanded.toggle()
+                    withAnimation {
+                        isExpanded.toggle()
+                    }
                 })
             } else {
                 Image(systemName: "ellipsis")
@@ -131,6 +135,7 @@ struct ToolCallView: View {
                 Text(conversation.content)
                     .textSelection(.enabled)
                     .padding(.top, 4)
+                    .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: isExpanded)
             }
         }
     }

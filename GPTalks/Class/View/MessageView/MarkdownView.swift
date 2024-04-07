@@ -19,11 +19,7 @@ struct MarkdownView: View {
 
     var body: some View {
         if AppConfiguration.shared.alternateMarkdown {
-            if text.isEmpty {
-                EmptyView()
-            } else {
                 MarkdownWebView(text)
-            }
         } else {
             Markdown(text)
                 .markdownCodeSyntaxHighlighter(.splash(theme: theme))

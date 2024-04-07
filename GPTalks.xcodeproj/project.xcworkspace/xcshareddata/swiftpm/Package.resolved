@@ -1,5 +1,5 @@
 {
-  "originHash" : "9c44092cf9d646477dcbb055da1e75d38de261468c0213dab26400f6d4d731fe",
+  "originHash" : "85625c337262685568344f83f5bccf58917091b700e6966f640050116afb0066",
   "pins" : [
     {
       "identity" : "dswaveformimage",
@@ -26,15 +26,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "4d02d80de143d69b7eeb5962729591a157a57ede"
-      }
-    },
-    {
-      "identity" : "markdown-webview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/markdown-webview",
-      "state" : {
-        "branch" : "main",
-        "revision" : "4b8692fb74eaeb8944e6f687c0bcfab77d4f5142"
       }
     },
     {

@@ -60,7 +60,7 @@ struct UserMessageView: View {
     }
     
     var alternateUI: some View {
-        ZStack(alignment: .bottomTrailing) {
+        VStack(alignment: .trailing) {
             HStack(alignment: .top, spacing: 10) {
                 Image(systemName: "person.fill")
                     .resizable()
@@ -108,18 +108,18 @@ struct UserMessageView: View {
                 Spacer()
                 
                 messageContextMenu
-                  .padding(.leading, 200) // Increase padding to enlarge the invisible hover area
-//                  .background(Color.blue.opacity(0.1)) // Optional: Just to visualize the area during development
-                  .contentShape(Rectangle()) // Make the whole padded area hoverable
-                  .onHover { isHovered in
-                      hoverxyz = isHovered
-                  }
+                    .padding(.leading, 200) // Increase padding to enlarge the invisible hover area
+  //                  .background(Color.blue.opacity(0.1)) // Optional: Just to visualize the area during development
+                    .contentShape(Rectangle()) // Make the whole padded area hoverable
+                    .onHover { isHovered in
+                        hoverxyz = isHovered
+                    }
                     .animation(.easeInOut(duration: 0.15), value: hoverxyz)
-                
-                
             }
-            .padding(10)
-            .padding(.horizontal, 8)
+//            .padding(10)
+            .padding(.top, -40)
+            .padding(.bottom, 3)
+            .padding(.horizontal, 18)
 #endif
         }
 
@@ -141,7 +141,10 @@ struct UserMessageView: View {
                 }, toggleTextSelection: {
                     canSelectText.toggle()
                 }, toggleExpanded: {
-                    isExpanded.toggle()
+                    withAnimation {
+                        isExpanded.toggle()
+                    }
+//                    isExpanded.toggle()
                 })
             } else {
                 Image(systemName: "ellipsis")

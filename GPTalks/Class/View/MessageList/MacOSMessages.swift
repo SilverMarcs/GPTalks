@@ -19,7 +19,7 @@ struct MacOSMessages: View {
 
     var body: some View {
         ScrollViewReader { proxy in
-            normalList
+            listView
             .navigationTitle(session.title)
             .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -207,8 +207,18 @@ struct MacOSMessages: View {
             }
         }
     }
+    
+    @ViewBuilder
+    private var listView: some View {
+        if AppConfiguration.shared.smootherScrolling {
+            alternateList
+        } else {
+            normalList
+        }
+    }
 
-    private var normalList: some View {
+    @ViewBuilder
+    private var alternateList: some View {
         List {
             VStack(spacing: 0) {
                 ForEach(session.filteredConversations()) { conversation in
@@ -222,6 +232,23 @@ struct MacOSMessages: View {
             .id("bottomID")
         }
         .listStyle(.plain)
+    }
+    
+    @ViewBuilder
+    private var normalList: some View {
+        ScrollView {
+            VStack(spacing: 0) {
+                ForEach(session.filteredConversations()) { conversation in
+                    ConversationView(session: session, conversation: conversation)
+                }
+            }
+            
+            ErrorDescView(session: session)
+            
+            Color.clear
+                .frame(height: 30)
+                .id("bottomID")
+        }
     }
     
     private var deleteLastMessage: some View {
