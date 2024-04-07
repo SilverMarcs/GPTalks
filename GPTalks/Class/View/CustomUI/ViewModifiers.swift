@@ -14,13 +14,14 @@ struct CustomImageViewModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .scaledToFit()
+//            .scaledToFit()
             .padding(padding)
             .fontWeight(.semibold)
             .foregroundStyle(.secondary)
             .background(color)
-            .clipShape(Circle())
             .frame(width: imageSize, height: imageSize)
+            .clipShape(Circle())
+//            .frame(width: imageSize, height: imageSize)
     }
 }
 

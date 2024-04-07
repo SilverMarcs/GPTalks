@@ -39,7 +39,7 @@ import OpenAI
     var rawData: DialogueData?
 
     // MARK: - State
-
+    
     var input: String = ""
     var inputImages: [PlatformImage] = []
     var inputAudioPath: String = ""
@@ -225,6 +225,21 @@ import OpenAI
         
         if let _ = conversations.last {
             conversations[conversations.count - 1].isReplying = false
+        }
+    }
+    
+    @MainActor
+    func sendAppropriate() async {
+        if isEditing {
+            if editingMessage.isEmpty {
+                return
+            }
+            await edit()
+        } else {
+            if input.isEmpty {
+                return
+            }
+            await send()
         }
     }
 

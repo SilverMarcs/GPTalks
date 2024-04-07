@@ -17,7 +17,7 @@ struct MacTextEditor: View {
             if input.isEmpty {
                 Text("Send a message")
                     .font(.body)
-                    .padding(5)
+                    .padding(6)
                     .padding(.leading, 6)
                     .foregroundColor(Color(.placeholderTextColor))
             }

@@ -36,7 +36,6 @@ struct PDFViewer: View {
                                 Group {
                                     Text("PDF •")
                                         .font(.caption)
-//                                        .fontWeight(.semibold)
                                     Text(fileSize)
                                         .font(.caption)
                                 }
@@ -50,7 +49,7 @@ struct PDFViewer: View {
                     }
                     
                 }
-                .bubbleStyle(isMyMessage: false, radius: 10)
+                .bubbleStyle(isMyMessage: false, radius: 8)
             }
             .buttonStyle(.plain)
 

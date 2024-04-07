@@ -24,93 +24,37 @@ struct MacInputView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            importedImages
             
-            importedPDF
-            
-            importedAudio
+            CustomImportedImagesView(session: session)
+            CustomPDFViewer(session: session)
+            CustomAudioPreviewer(session: session)
             
             HStack(alignment: .bottom, spacing: 12) {
                 Group {
                     if session.isEditing {
-                        StopEditing() {
-                            session.resetIsEditing()
-                        }
-                        
-                    }
-                    MoreOptions
-                        
-                    if showMore {
-                        ImagePickerView(shouldAllowAdding: shouldAllowAddingImages(), onImageAppend: { newImage in
-                            if session.isEditing {
-                                session.editingImages.append(newImage)
-                            } else {
-                                session.inputImages.append(newImage)
-                            }
-                            showMore = false
-                        })
-                        .offset(y: 2)
-                        .padding(.top, -2)
-                        .disabled(!session.inputAudioPath.isEmpty || (session.isEditing && !session.editingAudioPath.isEmpty))
-                        
-                        PDFPickerView(shouldAllowAdding: !session.shouldSwitchToVision, onPDFAppend: { selectedURL in
-                            withAnimation {
-                                if session.isEditing {
-                                    session.editingPDFPath = selectedURL.absoluteString
-                                    print("Editing PDF: \(selectedURL.absoluteString)")
-                                } else {
-                                    session.inputPDFPath = selectedURL.absoluteString
-                                    print(selectedURL.absoluteString)
-                                }
-                            }
-                            showMore = false
-                        })
-                        .offset(y: 1)
-                        
-                        AudioPickerView(shouldAllowSelection: !session.shouldSwitchToVision, onAudioSelect: { selectedURL in
-                            withAnimation {
-                                if session.isEditing {
-                                    session.editingAudioPath = selectedURL.absoluteString
-                                } else {
-                                    session.inputAudioPath = selectedURL.absoluteString
-                                }
-                            }
-                            showMore = false
-                        })
+                        stopEditing
                     }
                     
+                    moreOptions
+                    
+                    if showMore {   
+                        CustomImagePickerView(session: session, showMore: $showMore)
+                        CustomPDFPickerView(session: session, showMore: $showMore)
+                        CustomAudioPickerView(session: session, showMore: $showMore)
+                    }
                 }
-                .offset(y: -1)
+                .offset(y: -1.15)
                 
-                if session.isEditing {
-                    MacTextEditor(input: $session.editingMessage)
-                } else {
-                    MacTextEditor(input: $session.input)
-                }
+                CustomTextEditoView(session: session)
                 
                 Group {
                     if session.isReplying {
-                        StopButton (size: imageSize + 4 ) { session.stopStreaming() }
+                        StopButton (size: imageSize ) { session.stopStreaming() }
                     } else {
-                        SendButton(size: imageSize + 4) {
-                            if session.isEditing {
-                                Task { @MainActor in
-                                    viewModel.moveUpChat(session: session)
-                                    await session.edit()
-                                }
-                                
-                            } else {
-                                Task { @MainActor in
-                                    selectedItems = []
-                                    viewModel.moveUpChat(session: session)
-                                    await session.send()
-                                }
-                            }
-                        }
-                        .disabled((!session.isEditing && session.input.isEmpty) || (session.isEditing && session.editingMessage.isEmpty))
+                        SendButton(size: imageSize) { Task { @MainActor in viewModel.moveUpChat(session: session); await session.sendAppropriate() } }
                     }
                 }
-                .offset(y: -1)
+                .offset(y: -1.15)
             }
         }
         .onChange(of: session.input) {
@@ -119,6 +63,14 @@ struct MacInputView: View {
             }
         }
         .animation(.default, value: session.inputImages)
+        .animation(.default, value: session.editingImages)
+        .animation(.default, value: session.inputPDFPath)
+        .animation(.default, value: session.editingPDFPath)
+        .animation(.default, value: session.inputAudioPath)
+        .animation(.default, value: session.editingAudioPath)
+        .animation(.default, value: session.input)
+        .animation(.default, value: session.editingMessage)
+        .animation(.default, value: session.isEditing)
         .animation(.default, value: showMore)
         .buttonStyle(.plain)
         .padding(.horizontal)
@@ -126,61 +78,28 @@ struct MacInputView: View {
         .padding(.bottom, verticalPadding + 2)
     }
     
-    @ViewBuilder
-    var importedImages: some View {
-        if !session.inputImages.isEmpty || (session.isEditing && !session.editingImages.isEmpty) {
-            if session.isEditing {
-                ImportedImagesView(images: $session.editingImages) { index in
-                    session.editingImages.remove(at: index)
-                }
-            } else {
-                ImportedImagesView(images: $session.inputImages) { index in
-                    session.inputImages.remove(at: index)
-                }
-            }
-        }
-    }
-    
-    @ViewBuilder
-    var importedPDF: some View {
-        if !session.inputPDFPath.isEmpty || (session.isEditing && !session.editingPDFPath.isEmpty) {
-            if session.isEditing {
-                PDFViewer(pdfURL: URL(string: session.editingPDFPath)!, removePDFAction: {
-                    session.editingPDFPath = ""
-                })
-            } else {
-                PDFViewer(pdfURL: URL(string: session.inputPDFPath)!, removePDFAction: {
-                    session.inputPDFPath = ""
-                })
-            }
-        }
-    }
-    
-    @ViewBuilder
-    var importedAudio: some View {
-        if !session.inputAudioPath.isEmpty || (session.isEditing && !session.editingAudioPath.isEmpty) {
-            if session.isEditing {
-                AudioPreviewer(audioURL: URL(string: session.editingAudioPath)!, showRemoveButton: true, removeAudioAction: {
-                    session.editingAudioPath = ""
-                })
-            } else {
-                AudioPreviewer(audioURL: URL(string: session.inputAudioPath)!, showRemoveButton: true, removeAudioAction: {
-                    session.inputAudioPath = ""
-                })
-            }
-        }
-    }
-    
-    var MoreOptions: some View {
+    var moreOptions: some View {
         Button {
             showMore.toggle()
         } label: {
             Image(systemName: "plus")
                 .resizable()
-                .inputImageStyle(padding: 6, imageSize: imageSize + 3)
+                .inputImageStyle(padding: 6, imageSize: imageSize)
                 .rotationEffect(.degrees(showMore ? 45 : 0))
                 .animation(.default, value: showMore)
         }
+    }
+    
+    var stopEditing: some View {
+        Button {
+            session.resetIsEditing()
+        } label: {
+            Image(systemName: "plus")
+                .resizable()
+                .inputImageStyle(padding: 6, imageSize: imageSize - 1, color: .red)
+                .rotationEffect(.degrees(45))
+        }
+        .keyboardShortcut(.cancelAction)
     }
    
     private var verticalPadding: CGFloat {
@@ -188,7 +107,7 @@ struct MacInputView: View {
     }
     
     private var imageSize: CGFloat {
-        21
+        25
     }
     
     func shouldAllowAddingImages() -> Bool {
@@ -199,124 +118,6 @@ struct MacInputView: View {
         }
     }
 }
-
-struct StopEditing: View {
-    var action: () -> Void
-    
-    var body: some View {
-        Button {
-            action()
-        } label: {
-            Image(systemName: "plus")
-                .resizable()
-                .scaledToFit()
-                .padding(6)
-                .fontWeight(.bold)
-                .foregroundStyle(.bar)
-                .background(.red)
-                .clipShape(Circle())
-                .frame(width: 24, height: 24)
-                .rotationEffect(.degrees(45))
-        }
-        .keyboardShortcut(.cancelAction)
-    }
-}
-
-struct ImagePickerView: View {
-    var shouldAllowAdding: Bool
-    var onImageAppend: ((NSImage) -> Void)?
-    
-    @State private var importingImage = false
-    
-    var body: some View {
-        Button {
-            importingImage = true
-        } label: {
-            Image(systemName: "photo")
-                .resizable()
-                .inputImageStyle(padding: 7, imageSize: 28)
-        }
-        .disabled(!shouldAllowAdding)
-        .fileImporter(
-            isPresented: $importingImage,
-            allowedContentTypes: [.image],
-            allowsMultipleSelection: true
-        ) { result in
-            switch result {
-            case .success(let files):
-                for file in files {
-                    guard let image = NSImage(contentsOf: file) else { continue }
-                    onImageAppend?(image)
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
-}
-
-struct PDFPickerView: View {
-    var shouldAllowAdding: Bool
-    var onPDFAppend: ((URL) -> Void)?
-    
-    @State private var importingPDF = false
-    
-    var body: some View {
-        Button {
-            importingPDF = true
-        } label: {
-            Image(systemName: "doc.richtext")
-                .resizable()
-                .inputImageStyle(padding: 7, imageSize: 26)
-        }
-        .disabled(!shouldAllowAdding)
-        .fileImporter(
-            isPresented: $importingPDF,
-            allowedContentTypes: [.pdf],
-            allowsMultipleSelection: false
-        ) { result in
-            switch result {
-            case .success(let urls):
-                onPDFAppend?(urls[0])
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
-}
-
-struct AudioPickerView: View {
-    var shouldAllowSelection: Bool // Condition to enable or disable the picker.
-    var onAudioSelect: ((URL) -> Void)? // Closure to handle audio selection.
-    
-    @State private var importingAudio = false
-    
-    var body: some View {
-        Button {
-            importingAudio = true
-        } label: {
-            Image(systemName: "waveform")
-                .resizable()
-                .inputImageStyle(padding: 6, imageSize: 24)
-        }
-        .disabled(!shouldAllowSelection)
-        .fileImporter(
-            isPresented: $importingAudio,
-            allowedContentTypes: [.audio],
-            allowsMultipleSelection: false
-        ) { result in
-            switch result {
-            case .success(let urls):
-                let url = urls[0]
-                onAudioSelect?(url)
-                print("Selected file URL: \(url)")
-            case .failure(let error):
-                print("File selection error: \(error.localizedDescription)")
-            }
-        }
-    }
-}
-
 
 #endif
 

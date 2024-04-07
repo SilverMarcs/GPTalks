@@ -60,9 +60,6 @@ struct MacOSMessages: View {
                     isUserScrolling = true
                 }
             }
-            .onChange(of: session.input) {
-                scrollToBottom(proxy: proxy)
-            }
             .onChange(of: session.resetMarker) {
                 if session.resetMarker == session.conversations.count - 1 {
                     scrollToBottom(proxy: proxy)
@@ -83,8 +80,21 @@ struct MacOSMessages: View {
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }
-            .onChange(of: session.inputAudioPath) {
-                scrollToBottom(proxy: proxy, animated: true)
+//            .onChange(of: session.inputAudioPath) {
+//                scrollToBottom(proxy: proxy)
+//            }
+//            .onChange(of: session.inputPDFPath) {
+//                scrollToBottom(proxy: proxy)
+//            }
+            .onChange(of: session.editingImages) {
+                if !session.editingImages.isEmpty {
+                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
+                        session.configuration.model = session.configuration.provider.preferredVisionModel
+                    }
+                }
+            }
+            .onChange(of: session.input) {
+                scrollToBottom(proxy: proxy)
             }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
@@ -141,7 +151,16 @@ struct MacOSMessages: View {
 
                 #if os(macOS)
                 ToolbarItem(placement: .keyboard) {
-                    deleteButton
+                    deleteLastMessage
+                }
+                ToolbarItem(placement: .keyboard) {
+                    resetContextButton
+                }
+                ToolbarItem(placement: .keyboard) {
+                    deleteAllMessages
+                }
+                ToolbarItem(placement: .keyboard) {
+                    regenLast
                 }
                 #endif
                 
@@ -205,8 +224,8 @@ struct MacOSMessages: View {
         .listStyle(.plain)
     }
     
-    private var deleteButton: some View {
-        Button("hidden") {
+    private var deleteLastMessage: some View {
+        Button("Delete Last Message") {
             if let session = viewModel.selectedDialogue {
                 if session.conversations.count > 0 {
                     session.removeConversation(session.conversations.last!)
@@ -214,6 +233,38 @@ struct MacOSMessages: View {
             }
         }
         .keyboardShortcut(.delete, modifiers: .command)
+        .hidden()
+    }
+    
+    private var resetContextButton: some View {
+        Button("Reset Context") {
+            if let session = viewModel.selectedDialogue {
+                session.resetContext()
+            }
+        }
+        .keyboardShortcut("k", modifiers: .command)
+        .hidden()
+    }
+    
+    private var deleteAllMessages: some View {
+        Button("Delete all messages") {
+            if let session = viewModel.selectedDialogue {
+                session.removeAllConversations()
+            }
+        }
+        .keyboardShortcut(.delete, modifiers: [.command, .shift])
+        .hidden()
+    }
+    
+    private var regenLast: some View {
+        Button("Regenerate") {
+            if let session = viewModel.selectedDialogue {
+                Task { @MainActor in
+                    await session.regenerateLastMessage()
+                }
+            }
+        }
+        .keyboardShortcut("r", modifiers: .command)
         .hidden()
     }
 }

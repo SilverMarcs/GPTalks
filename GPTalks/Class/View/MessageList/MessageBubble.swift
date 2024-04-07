@@ -39,18 +39,8 @@ struct Bubble: ViewModifier {
 
     private var _radius: CGFloat {
         #if os(macOS)
-//        if sharp {
-//            5
-//        } else {
-//            15
-//        }
         15
         #else
-//        if sharp {
-//            8
-//        } else {
-//            18
-//        }
         18
         #endif
     }
