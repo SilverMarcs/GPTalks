@@ -49,6 +49,7 @@ enum ChatTool: String, CaseIterable {
         case .imageGenerate:
             return .init(function:
                     .init(name: "imageGenerate",
+//                          description: "If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. If the tool has generated and already provided the image url to you, you as the assistant should send it again using markdown's image rendering capability",
                           description: "If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image.",
                           parameters:
                             .init(type: .object,

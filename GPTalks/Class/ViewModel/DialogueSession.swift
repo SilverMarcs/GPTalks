@@ -629,6 +629,14 @@ import OpenAI
                     }
                 }
                 
+
+//                let result = try await service.images(query: query).data.first?.url
+//                
+//                conversations[conversations.count - 1].content = result!
+//                lastToolCall.sync(with: conversations[conversations.count - 1])
+//                conversations[conversations.count - 1].isReplying = false
+//                
+//                try await processRequest()
             }
         }
     }
