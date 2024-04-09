@@ -81,9 +81,9 @@ struct iOSMessages: View {
                     scrollToBottom(proxy: proxy)
                 }
 
-                if session.shouldSwitchToVision {
-                    session.configuration.model = session.configuration.provider.preferredVisionModel
-                }
+//                if session.shouldSwitchToVision {
+//                    session.configuration.model = session.configuration.provider.preferredVisionModel
+//                }
             }
             .onChange(of: session.errorDesc) {
                 scrollToBottom(proxy: proxy)
@@ -98,9 +98,9 @@ struct iOSMessages: View {
             }
             .onChange(of: session.inputImages) {
                 if !session.inputImages.isEmpty {
-                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
-                        session.configuration.model = session.configuration.provider.preferredVisionModel
-                    }
+//                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
+//                        session.configuration.model = session.configuration.provider.preferredVisionModel
+//                    }
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }
@@ -208,6 +208,18 @@ struct iOSMessages: View {
                             Label(session.configuration.systemPrompt, systemImage: "square.text.square")
                         }
                     }
+                    
+                    Section {
+                        Menu {
+//                            Picker("Use Tools", selection: $session.configuration.useTools) {
+//                                Text("Yes").tag(true)
+//                                Text("No").tag(false)
+//                            }
+                            Toggle("Use Tools", isOn: $session.configuration.useTools)
+                        } label: {
+                            Label("Tools", systemImage: "hammer")
+                        }
+                    }
 
                     Section {
                         Menu {
@@ -227,6 +239,7 @@ struct iOSMessages: View {
                         } label: {
                             Label("Temperature: " + String(session.configuration.temperature), systemImage: "thermometer.sun")
                         }
+                        
                     }
 
                     Section {

@@ -15,12 +15,14 @@ import OpenAI
         var systemPrompt: String
         var provider: Provider
         var model: Model
+        var useTools: Bool
 
         init() {
             provider = AppConfiguration.shared.preferredChatService
             temperature = AppConfiguration.shared.temperature
             systemPrompt = AppConfiguration.shared.systemPrompt
             model = provider.preferredChatModel
+            useTools = true
         }
     }
 
@@ -452,7 +454,7 @@ import OpenAI
             finalMessages.insert(systemPrompt.toChat(), at: 0)
         }
         
-        if configuration.model == .gpt4vision {
+        if configuration.model == .gpt4vision || !configuration.useTools {
             return ChatQuery(messages: finalMessages,
                              model: configuration.model.id,
                              maxTokens: 4000,

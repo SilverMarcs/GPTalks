@@ -125,28 +125,17 @@ struct MacOSMessages: View {
                         }
                         
                         Section {
-                            Button("Regenerate") {
-                                Task { await session.regenerateLastMessage() }
-                            }
-
-                            Button("Reset Context") {
-                                session.resetContext()
-                            }
+//                            Picker("Use Tools", selection: $session.configuration.useTools) {
+//                                Text("Yes").tag(true)
+//                                Text("No").tag(false)
+//                            }
+                            Toggle("Use Tools", isOn: $session.configuration.useTools)
                         }
 
-                        Button("Delete All Messages") {
-                            session.removeAllConversations()
-                        }
                     } label: {
                         Image(systemName: "slider.vertical.3")
                     }
                     .menuIndicator(.hidden)
-                    
-                    Button {
-                        isShowSysPrompt = true
-                    } label: {
-                        Image(systemName: "square.text.square")
-                    }
                 }
 
                 #if os(macOS)
