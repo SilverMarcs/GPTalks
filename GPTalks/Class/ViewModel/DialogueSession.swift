@@ -535,23 +535,28 @@ import OpenAI
     func handleToolCall(chatTool: ChatTool, funcParam: String) async throws {
         switch chatTool {
         case .urlScrape:
-            if let url = extractValue(from: funcParam, forKey: chatTool.paramName) {
-                let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
-                
-                let webContent: String
-                
-                if AppConfiguration.shared.useExperimentalWebScraper {
-                    webContent = try await retrieveWebContent(from: url)
-                } else {
-                    webContent = try await fetchAndParseHTMLAsync(from: url)
-                }
-                
-                conversations[conversations.count - 1].content = webContent
-                lastToolCall.sync(with: conversations[conversations.count - 1])
-                conversations[conversations.count - 1].isReplying = false
-                
-                try await processRequest()
-            }
+            if let urls = extractURLs(from: funcParam, forKey: "urls") {
+               let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
+               
+               var webContent = ""
+               
+               for url in urls {
+                   let content: String
+                   if AppConfiguration.shared.useExperimentalWebScraper {
+                       content = try await retrieveWebContent(from: url)
+                   } else {
+                       content = try await fetchAndParseHTMLAsync(from: url)
+                   }
+                   // Append the URL and its content to webContent with clear separation
+                   webContent += "URL: \(url)\nContent:\n\(content)\n\n"
+               }
+               
+               conversations[conversations.count - 1].content = webContent
+               lastToolCall.sync(with: conversations[conversations.count - 1])
+               conversations[conversations.count - 1].isReplying = false
+               
+               try await processRequest()
+           }
         case .googleSearch:
             if let searchQuery = extractValue(from: funcParam, forKey: chatTool.paramName) {
                 

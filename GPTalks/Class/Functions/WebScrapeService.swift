@@ -111,3 +111,23 @@ func parseHTML(_ html: String, completion: @escaping (Result<[String], Error>) -
         completion(.failure(error))
     }
 }
+
+func extractURLs(from jsonString: String, forKey key: String) -> [String]? {
+    guard let jsonData = jsonString.data(using: .utf8) else {
+        print("Error: Could not convert string to UTF-8 data.")
+        return nil
+    }
+
+    do {
+        if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+           let urls = jsonObject[key] as? [String] {
+            return urls
+        } else {
+            print("Error: JSON does not contain a valid '\(key)' key or it's not an array of strings.")
+            return nil
+        }
+    } catch {
+        print("Error parsing JSON: \(error)")
+        return nil
+    }
+}

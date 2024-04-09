@@ -26,12 +26,13 @@ enum ChatTool: String, CaseIterable {
         case .urlScrape:
             return .init(function:
                     .init(name: "urlScrape",
-                          description: "If a URL is explicitly given, this function must be used to receive the contents of that url webpage. If you already know the information, do not use the function to come up with a url. Always prioritize your pre-existing knowledge. Note that this function CANNOT search the web on its own. It can only look up a sepcific url. If you find a previous google search in the chat history, you may find some urls in the search results. You may use one and only one of those urls to call this function to retrieve required. Be sure to choose the most appropriate url to call in that case on your own. The function will visit that url and return the webcontent from it. NEVER pass in wikipedia links as the paramater.",
+                          description: "If one or upto 3 URLs is explicitly given, this function must be used to receive the contents of that url webpage. Do not come up with potential URLs unless it explicityly exists in the chat history. Note that this function CANNOT search the web on its own. It can only look up sepcific urls. If you find a previous google search in the chat history, you may find some urls in the search results. You may initially use only one of those urls to call this function to retrieve required. If a certain URL content had been retrieved earlier, but the user's information was not found from it, you may visit some more urls gradualy. Be sure to choose the most appropriate url to call in that case on your own. The function will visit that url and return the webcontent from it. NEVER pass in wikipedia links as the paramater. Only if the user explcitly provides upto 3 urls, you will visit them all in one go. you must send all the urls as an object keyed by the 'urls' key and the valeu of this key is the list of urls.",
                           parameters:
                             .init(type: .object,
-                                  properties: ["url":
-                                        .init(type: .string,
-                                              description: "The URL of the website to scrape")]
+                                  properties: [
+                                    "urls":
+                                        .init(type: .array, description: "The array of URLs of the websites to scrape", items: .init(type: .string))
+                                    ]
                                  )
                          )
             )
@@ -99,7 +100,7 @@ enum ChatTool: String, CaseIterable {
                             .init(type: .object,
                                   properties: [
                                     "imagePaths":
-                                            .init(type: .array, description: "The array of file pats for the user's image file", items: .init(type: .string)),
+                                            .init(type: .array, description: "The array of file paths for the user's image file", items: .init(type: .string)),
                                     "prompt":
                                         .init(type: .string,
                                               description: "Prompt for the vision tool to describe the image")

@@ -65,9 +65,9 @@ struct MacOSMessages: View {
                     scrollToBottom(proxy: proxy)
                 }
                 
-                if session.shouldSwitchToVision {
-                    session.configuration.model = session.configuration.provider.preferredVisionModel
-                }
+//                if session.shouldSwitchToVision {
+//                    session.configuration.model = session.configuration.provider.preferredVisionModel
+//                }
             }
             .onChange(of: session.errorDesc) {
                 scrollToBottom(proxy: proxy, animated: true)
@@ -87,11 +87,11 @@ struct MacOSMessages: View {
 //                scrollToBottom(proxy: proxy)
 //            }
             .onChange(of: session.editingImages) {
-                if !session.editingImages.isEmpty {
-                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
-                        session.configuration.model = session.configuration.provider.preferredVisionModel
-                    }
-                }
+//                if !session.editingImages.isEmpty {
+//                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
+//                        session.configuration.model = session.configuration.provider.preferredVisionModel
+//                    }
+//                }
             }
             .onChange(of: session.input) {
                 scrollToBottom(proxy: proxy)
