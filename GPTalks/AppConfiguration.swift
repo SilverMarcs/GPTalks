@@ -33,6 +33,9 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.imageProvider") var imageProvider: Provider = .openai
     @AppStorage("configuration.imageModel") var imageModel: Model = .dalle3
     
+    // Vision
+    @AppStorage("configuration.visionProvider") var visionProvider: Provider = .openai
+    
     // Transcription
     @AppStorage("configuration.transcriptionProvider") var transcriptionProvider: Provider = .openai
     @AppStorage("configuration.transcriptionModel") var transcriptionModel: Model = .whisper1

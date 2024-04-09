@@ -15,6 +15,7 @@ enum ChatTool: String, CaseIterable {
     case imageGenerate = "imageGenerate"
     case transcribe = "transcribe"
     case extractPdf = "extractPdf"
+    case vision = "vision"
     
     static var allTools: [ChatQuery.ChatCompletionToolParam] {
         return ChatTool.allCases.map { $0.completionToolParam }
@@ -49,13 +50,17 @@ enum ChatTool: String, CaseIterable {
         case .imageGenerate:
             return .init(function:
                     .init(name: "imageGenerate",
-//                          description: "If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. If the tool has generated and already provided the image url to you, you as the assistant should send it again using markdown's image rendering capability",
-                          description: "If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image.",
+                          description: "If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. You may also specify the number of images to generate based on users request. If the user did not specify number, generate one image only.",
                           parameters:
                             .init(type: .object,
-                                  properties: [self.paramName:
+                                  properties: 
+                                    ["prompt":
                                         .init(type: .string,
-                                              description: "The prompt for dalle")]
+                                              description: "The prompt for dalle"),
+                                     "n":
+                                        .init(type: .string,
+                                              description: "The number of images to generate")
+                                    ]
                                  )
                          )
             )
@@ -74,12 +79,31 @@ enum ChatTool: String, CaseIterable {
         case .extractPdf:
             return .init(function:
                     .init(name: "extractPdf",
-                          description: "If the user's input message contains something like a path to a PDF file, then call this function with the exact filepath that the user provided. Do not add or format the fiel url in any way. For example, if the user's provided file path was 'file:///Users/Zabir/Downloads/sample_pdf.pdf' then you need to return exactly 'file:///Users/Zabir/Downloads/sample_pdf.pdf'",
+                          description: "If the user's input message contains something like a path to a PDF file, then call this function with the exact filepath that the user provided. Do not add or format the file url in any way. For example, if the user's provided file path was 'file:///Users/Zabir/Downloads/sample_pdf.pdf' then you need to return exactly 'file:///Users/Zabir/Downloads/sample_pdf.pdf'. The Tool will provide you with text extracted from the PDF file. You can use this text to answer the user's question.",
                           parameters:
                             .init(type: .object,
                                   properties: [self.paramName:
                                         .init(type: .string,
                                               description: "The file path for the user's PDF file")]
+                                 )
+                         )
+            )
+        case .vision:
+            return .init(function:
+                    .init(name: "vision",
+                          description: """
+                          If the user's input message contains something like a path to an image file, then call this function with the exact filepaths that the user provided. Do not add or format the file url in any way. For example, if the user's provided file path was 'file:///Users/Zabir/Downloads/test.jpg' then you need to return exactly 'file:///Users/Zabir/Downloads/test.jpg'. Multiple imagePaths may be provided joined by '|||'.
+                          The vision tool, GPT-4 vision is able to find information from images based on the prompt you give to it. Keep the prompt as close as possible to the user's initial request. But be very careful about the number of times you call this function as it is a very expensive operation. Unless absolutely necessary, avoid multiple calls of the tool for the same image.
+                          """,
+                          parameters:
+                            .init(type: .object,
+                                  properties: [
+                                    "imagePaths":
+                                            .init(type: .array, description: "The array of file pats for the user's image file", items: .init(type: .string)),
+                                    "prompt":
+                                        .init(type: .string,
+                                              description: "Prompt for the vision tool to describe the image")
+                                    ]
                                  )
                          )
             )
@@ -101,6 +125,8 @@ enum ChatTool: String, CaseIterable {
             TranscriptionConfigurationView()
         case .extractPdf:
             Text("Extract PDF")
+        case .vision:
+            VisionConfigurationView()
         }
     }
     
@@ -116,6 +142,8 @@ enum ChatTool: String, CaseIterable {
             "audioPath"
         case .extractPdf:
             "pdfPath"
+        case .vision:
+            "imagePath"
         }
     }
 
@@ -131,6 +159,8 @@ enum ChatTool: String, CaseIterable {
             "Transcribe"
         case .extractPdf:
             "Extract PDF"
+        case .vision:
+            "Vision"
         }
     }
     
@@ -146,6 +176,8 @@ enum ChatTool: String, CaseIterable {
             return "safari"
         case .extractPdf:
             return "doc.richtext"
+        case .vision:
+            return "eye"
         }
     }
 }
@@ -239,6 +271,35 @@ struct TranscriptionConfigurationView: View {
         .navigationTitle("Transcribe")
     #if os(macOS)
         .frame(maxWidth: 400)
+    #endif
+    }
+}
+
+struct VisionConfigurationView: View {
+    @ObservedObject var appConfig = AppConfiguration.shared
+    
+    var body: some View {
+        Form {
+            Section("Ask the assistant to recognize the content of an image.") {
+                Picker("Visiom Provider", selection: appConfig.$visionProvider) {
+                    ForEach(Provider.allCases, id: \.self) { provider in
+                        Text(provider.name)
+                            .tag(provider.rawValue)
+                    }
+                }
+//                
+//                Picker("Image Model", selection: appConfig.$imageModel) {
+//                    ForEach(appConfig.imageProvider.imageModels, id: \.self) { model in
+//                        Text(model.name)
+//                            .tag(model.rawValue)
+//                    }
+//                }
+            }
+        }
+    #if os(macOS)
+        .frame(maxWidth: 400)
+    #else
+        .navigationBarTitle("Vision")
     #endif
     }
 }

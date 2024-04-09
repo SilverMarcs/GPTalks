@@ -66,6 +66,31 @@ func extractValue(from jsonString: String, forKey key: String) -> String? {
     }
 }
 
+
+func extractValues(from jsonString: String) -> [String: String]? {
+    guard let jsonData = jsonString.data(using: .utf8) else {
+        print("Error: Could not convert string to UTF-8 data.")
+        return nil
+    }
+
+    do {
+        if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+            var valuesDict: [String: String] = [:]
+            for (key, value) in jsonObject {
+                if let stringValue = value as? String {
+                    valuesDict[key] = stringValue
+                }
+            }
+            return valuesDict.isEmpty ? nil : valuesDict
+        } else {
+            print("Error: JSON does not contain valid keys and values.")
+            return nil
+        }
+    } catch {
+        print("Error parsing JSON: \(error)")
+        return nil
+    }
+}
 func isAudioFile(urlString: String) -> Bool {
      guard let url = URL(string: urlString) else { return false }
 

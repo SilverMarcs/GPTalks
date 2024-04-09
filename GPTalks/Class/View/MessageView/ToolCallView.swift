@@ -93,8 +93,10 @@ struct ToolCallView: View {
                 MessageContextMenu(session: session, conversation: conversation, isExpanded: isExpanded, toggleTextSelection: {
                     canSelectText.toggle()
                 }, toggleExpanded: {
-                    withAnimation {
-                        isExpanded.toggle()
+                    if !conversation.isReplying {
+                        withAnimation {
+                            isExpanded.toggle()
+                        }
                     }
                 })
             } else {

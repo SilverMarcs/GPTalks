@@ -74,9 +74,9 @@ struct MacOSMessages: View {
             }
             .onChange(of: session.inputImages) {
                 if !session.inputImages.isEmpty {
-                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
-                        session.configuration.model = session.configuration.provider.preferredVisionModel
-                    }
+//                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
+//                        session.configuration.model = session.configuration.provider.preferredVisionModel
+//                    }
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }

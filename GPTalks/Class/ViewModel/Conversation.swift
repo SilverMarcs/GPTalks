@@ -20,7 +20,7 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
     var arguments: String = ""
     var isReplying: Bool = false
 
-    func toChat() -> ChatQuery.ChatCompletionMessageParam {
+    func toChat(imageAsPath: Bool = false) -> ChatQuery.ChatCompletionMessageParam {
         let chatRole: ChatQuery.ChatCompletionMessageParam.Role = {
             switch role {
             case "user":
@@ -38,6 +38,9 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
 
         if chatRole == .assistant, let tool = ChatTool(rawValue: toolRawValue) {
             return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: arguments, name: tool.rawValue))])!
+        } else if chatRole == .assistant && !imagePaths.isEmpty {
+            let imageContent = content + "\n" + imagePaths.joined(separator: "|||")
+            return .init(role: chatRole, content: imageContent)!
         } else if chatRole == .user && !audioPath.isEmpty {
             let audioContent = content + "\n" + audioPath
             return .init(role: chatRole, content: audioContent)!
@@ -47,18 +50,24 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
         } else if chatRole == .tool {
             return .init(role: chatRole, content: content, name: toolRawValue, toolCallId: "")!
         } else if chatRole == .user && !imagePaths.isEmpty {
-            return .init(role: chatRole, content:
-                           [.init(chatCompletionContentPartTextParam: .init(text: content))] +
-                        imagePaths.map { path in
-                   .init(chatCompletionContentPartImageParam:
-                           .init(imageUrl:
-                                   .init(
-                                       url: "data:image/jpeg;base64," + loadImageData(from: path)!.base64EncodedString(),
-                                       detail: .auto
-                                   )
-                           )
-                   )
-           })!
+            if imageAsPath {
+                let imageContent = content + "\n" + imagePaths.joined(separator: "|||")
+                return .init(role: chatRole, content: imageContent)!
+            } else {
+                return .init(role: chatRole, 
+                             content:
+                                [.init(chatCompletionContentPartTextParam: .init(text: content))] +
+                             imagePaths.map { path in
+                                .init(chatCompletionContentPartImageParam:
+                                        .init(imageUrl:
+                                            .init(
+                                                url: "data:image/jpeg;base64," + loadImageData(from: path)!.base64EncodedString(),
+                                                detail: .auto
+                                            )
+                                        )
+                                )
+                })!
+            }
         }
         
         return .init(role: chatRole, content: content)!

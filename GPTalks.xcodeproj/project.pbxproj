@@ -46,6 +46,8 @@
 		085D40BF2AFD66340033F8B5 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40BE2AFD66340033F8B5 /* Utils.swift */; };
 		085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */; };
 		085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* Provider.swift */; };
+		0865E3D12BC4AB5E00F73E3F /* ImageGenerateTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0865E3D02BC4AB5E00F73E3F /* ImageGenerateTool.swift */; };
+		0865E3D32BC4AC4700F73E3F /* VisionTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0865E3D22BC4AC4700F73E3F /* VisionTool.swift */; };
 		08664FD72BB7D368001281FA /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08664FD62BB7D368001281FA /* OpenAIService.swift */; };
 		0868CF632BB535E70037646C /* InputComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0868CF622BB535E70037646C /* InputComponents.swift */; };
 		086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */; };
@@ -151,6 +153,8 @@
 		085D40BE2AFD66340033F8B5 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		085D40C02AFD77F90033F8B5 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		085D40C22AFD8C250033F8B5 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		0865E3D02BC4AB5E00F73E3F /* ImageGenerateTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGenerateTool.swift; sourceTree = "<group>"; };
+		0865E3D22BC4AC4700F73E3F /* VisionTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionTool.swift; sourceTree = "<group>"; };
 		08664FD62BB7D368001281FA /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		0868CF622BB535E70037646C /* InputComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputComponents.swift; sourceTree = "<group>"; };
 		086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarItems.swift; sourceTree = "<group>"; };
@@ -286,6 +290,8 @@
 				08545C3B2B8D16F800592108 /* WebScrapeService.swift */,
 				0887DB192B9F263600153392 /* GoogleSearch.swift */,
 				0817E3A32BC1B5970028AD2F /* PDFExtractor.swift */,
+				0865E3D02BC4AB5E00F73E3F /* ImageGenerateTool.swift */,
+				0865E3D22BC4AC4700F73E3F /* VisionTool.swift */,
 			);
 			path = Functions;
 			sourceTree = "<group>";
@@ -673,6 +679,7 @@
 				08827D112B28B72B0044213B /* ErrorDescView.swift in Sources */,
 				0817E3AF2BC26C470028AD2F /* MacFilePickers.swift in Sources */,
 				0839835D2B9DCE9900A46A84 /* IOSTextField.swift in Sources */,
+				0865E3D12BC4AB5E00F73E3F /* ImageGenerateTool.swift in Sources */,
 				081B02712B81B1A2006AF219 /* ImageSession.swift in Sources */,
 				08664FD72BB7D368001281FA /* OpenAIService.swift in Sources */,
 				0837E4812AFFE7B000C03059 /* Model.swift in Sources */,
@@ -711,6 +718,7 @@
 				08AA814C2BC0A13C00E68012 /* dvmtry.swift in Sources */,
 				085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */,
 				0887DB1A2B9F263700153392 /* GoogleSearch.swift in Sources */,
+				0865E3D32BC4AC4700F73E3F /* VisionTool.swift in Sources */,
 				0827585F2B8A62B000F2EF8A /* Components.swift in Sources */,
 				0829D1172B317A4B00DFFBB1 /* ConversationView.swift in Sources */,
 				085D40C12AFD77F90033F8B5 /* AppConfiguration.swift in Sources */,

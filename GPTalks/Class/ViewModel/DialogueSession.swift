@@ -316,18 +316,6 @@ import OpenAI
             editingAudioPath = conversation.audioPath
             editingPDFPath = conversation.pdfPath
             for imagePath in conversation.imagePaths {
-//                #if os(macOS)
-////                if let imageData = loadImageData(from: imagePath), let imageFromData = imageFromData(data: imageData) {
-////                    editingImages.append(imageFromData)
-////                }
-//                if let nsImage = loadImage(from: imagePath) {
-//                    editingImages.append(nsImage)
-//                }
-//                #else
-//                if let uiImage = loadImage(fromRelativePath: imagePath) {
-//                    editingImages.append(uiImage)
-//                }
-//                #endif
                 if let image = loadImage(from: imagePath) {
                     editingImages.append(image)
                 }
@@ -354,15 +342,6 @@ import OpenAI
             }
 
             for imagePath in conversation.imagePaths {
-//                #if os(macOS)
-////                if let imageData = loadImageData(from: imagePath), let imageFromData = imageFromData(data: imageData) {
-////                    inputImages.append(imageFromData)
-////                }
-//                #else
-//                if let uiImage = loadImage(fromRelativePath: imagePath) {
-//                    inputImages.append(uiImage)
-//                }
-//                #endif
                 if let image = loadImage(from: imagePath) {
                     inputImages.append(image)
                 }
@@ -461,7 +440,11 @@ import OpenAI
         }
         
         var finalMessages = adjustedConversations.map({ conversation in
-            conversation.toChat()
+            if shouldSwitchToVision && configuration.model != .gpt4vision {
+                return conversation.toChat(imageAsPath: true)
+            } else {
+                return conversation.toChat()
+            }
         })
 
         let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
@@ -608,35 +591,68 @@ import OpenAI
                 
                 try await processRequest()
             }
-        case .imageGenerate:
-            let service = OpenAI(configuration: AppConfiguration.shared.imageProvider.config)
+        case .vision:
+            if let visionParams = extractVisionParameters(from: funcParam) {
+                let service = OpenAI(configuration: AppConfiguration.shared.visionProvider.config)
+                let chatCompletionObject = ChatQuery.ChatCompletionMessageParam(role: .user, content:
+                        [.init(chatCompletionContentPartTextParam: .init(text: visionParams.prompt))] +
+                        visionParams.imagePaths.compactMap { path in
+                            guard let imageData = loadImageData(from: path) else {
+                                print("Error: Could not load image data from path \(path).")
+                                return nil
+                            }
+                            return .init(chatCompletionContentPartImageParam:
+                                            .init(imageUrl:
+                                                    .init(
+                                                        url: "data:image/jpeg;base64," + imageData.base64EncodedString(),
+                                                        detail: .auto
+                                                    )
+                                            )
+                            )
+                        }
+                    )!
+                let query =  ChatQuery(messages: [chatCompletionObject],
+                                       model: Model.gpt4vision.id,
+                                       maxTokens: 4000,
+                                       temperature: configuration.temperature)
+                
+                let toolContent = "Provider: " + AppConfiguration.shared.visionProvider.name + "\n" + "Model: " + Model.gpt4vision.name
+                let _ = appendConversation(Conversation(role: "tool", content: toolContent, toolRawValue: chatTool.rawValue, isReplying: false))
+
+                var streamText = ""
+                let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+                for try await result in service.chatsStream(query: query) {
+                    streamText += result.choices.first?.delta.content ?? ""
+                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    lastConversationData.sync(with: conversations[conversations.count - 1])
+                }
+                
+                conversations[conversations.count - 1].isReplying = false
+
+            }
             
-            if let prompt = extractValue(from: funcParam, forKey: chatTool.paramName) {
-                let query = ImagesQuery(prompt: prompt, model: AppConfiguration.shared.imageModel.id, n: 1, quality: .hd, size: ._1024)
+        case .imageGenerate:
+            if let imageParams = extractImageParameters(from: funcParam) {
+                let service = OpenAI(configuration: AppConfiguration.shared.imageProvider.config)
                 
-                let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
+                // Use the extracted parameters directly
+                let query = ImagesQuery(prompt: imageParams.prompt, model: AppConfiguration.shared.imageModel.id, n: imageParams.n, quality: .hd, size: ._1024)
+                let toolContent = "Provider: " + AppConfiguration.shared.imageProvider.name + "\n" + "Model: " + AppConfiguration.shared.imageModel.name
+                let _ = appendConversation(Conversation(role: "tool", content: toolContent, toolRawValue: chatTool.rawValue, isReplying: true))
+                
                 let results = try await service.images(query: query)
-                conversations[conversations.count - 1].content = "Provider: " + AppConfiguration.shared.imageProvider.name + "\n" + "Model: " + AppConfiguration.shared.imageModel.name
-                lastToolCall.sync(with: conversations[conversations.count - 1])
-                
+                var savedImageURLs: [String] = []
                 for urlResult in results.data {
                     if let urlString = urlResult.url, let url = URL(string: urlString) {
                         let (data, _) = try await URLSession.shared.data(from: url)
                         if let savedURL = saveImage(image: PlatformImage(data: data)!) {
-                            conversations[conversations.count - 1].isReplying = false
-                            appendConversation(Conversation(role: "assistant", content: "Here is the image you requested:", imagePaths: [savedURL]))
+                            savedImageURLs.append(savedURL)
                         }
                     }
                 }
                 
-
-//                let result = try await service.images(query: query).data.first?.url
-//                
-//                conversations[conversations.count - 1].content = result!
-//                lastToolCall.sync(with: conversations[conversations.count - 1])
-//                conversations[conversations.count - 1].isReplying = false
-//                
-//                try await processRequest()
+                appendConversation(Conversation(role: "assistant", content: "Here are the image(s) you requested:", imagePaths: savedImageURLs))
+                conversations[conversations.count - 2].isReplying = false // for the tool call
             }
         }
     }
