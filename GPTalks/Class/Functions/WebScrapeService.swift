@@ -112,6 +112,27 @@ func parseHTML(_ html: String, completion: @escaping (Result<[String], Error>) -
     }
 }
 
+//func extractURLs(from jsonString: String, forKey key: String) -> [String]? {
+//    guard let jsonData = jsonString.data(using: .utf8) else {
+//        print("Error: Could not convert string to UTF-8 data.")
+//        return nil
+//    }
+//
+//    do {
+//        if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+//           let urls = jsonObject[key] as? [String] {
+//            return urls
+//        } else {
+//            print("Error: JSON does not contain a valid '\(key)' key or it's not an array of strings.")
+//            return nil
+//        }
+//    } catch {
+//        print("Error parsing JSON: \(error)")
+//        return nil
+//    }
+//}
+
+
 func extractURLs(from jsonString: String, forKey key: String) -> [String]? {
     guard let jsonData = jsonString.data(using: .utf8) else {
         print("Error: Could not convert string to UTF-8 data.")
@@ -119,8 +140,21 @@ func extractURLs(from jsonString: String, forKey key: String) -> [String]? {
     }
 
     do {
-        if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
-           let urls = jsonObject[key] as? [String] {
+        if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+            var urls: [String] = []
+            // Check if the value for the key is an array or a single string and handle accordingly
+            if let urlArray = jsonObject[key] as? [String] {
+                urls = urlArray
+            } else if let url = jsonObject[key] as? String {
+                urls = [url] // Treat a single string as an array with one element
+            }
+            
+            // Ensure we have at least one URL
+            guard !urls.isEmpty else {
+                print("Error: JSON does not contain valid '\(key)' or it's not in the expected format.")
+                return nil
+            }
+            
             return urls
         } else {
             print("Error: JSON does not contain a valid '\(key)' key or it's not an array of strings.")
