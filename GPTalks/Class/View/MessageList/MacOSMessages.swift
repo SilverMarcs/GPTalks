@@ -64,36 +64,19 @@ struct MacOSMessages: View {
                 if session.resetMarker == session.conversations.count - 1 {
                     scrollToBottom(proxy: proxy)
                 }
-                
-//                if session.shouldSwitchToVision {
-//                    session.configuration.model = session.configuration.provider.preferredVisionModel
-//                }
             }
             .onChange(of: session.errorDesc) {
                 scrollToBottom(proxy: proxy, animated: true)
             }
             .onChange(of: session.inputImages) {
                 if !session.inputImages.isEmpty {
-//                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
-//                        session.configuration.model = session.configuration.provider.preferredVisionModel
-//                    }
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }
-//            .onChange(of: session.inputAudioPath) {
-//                scrollToBottom(proxy: proxy)
-//            }
-//            .onChange(of: session.inputPDFPath) {
-//                scrollToBottom(proxy: proxy)
-//            }
-            .onChange(of: session.editingImages) {
-//                if !session.editingImages.isEmpty {
-//                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
-//                        session.configuration.model = session.configuration.provider.preferredVisionModel
-//                    }
-//                }
-            }
             .onChange(of: session.input) {
+                scrollToBottom(proxy: proxy)
+            }
+            .onChange(of: session.isAddingConversation) {
                 scrollToBottom(proxy: proxy)
             }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
@@ -125,10 +108,6 @@ struct MacOSMessages: View {
                         }
                         
                         Section {
-//                            Picker("Use Tools", selection: $session.configuration.useTools) {
-//                                Text("Yes").tag(true)
-//                                Text("No").tag(false)
-//                            }
                             Toggle("Use Tools", isOn: $session.configuration.useTools)
                         }
 

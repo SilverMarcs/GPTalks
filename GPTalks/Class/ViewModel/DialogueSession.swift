@@ -54,6 +54,8 @@ import OpenAI
     var editingPDFPath: String = ""
     var editingIndex: Int = -1
     
+    var isAddingConversation: Bool = false
+    
     var title: String = "New Session"
     var conversations: [Conversation] = []
     var date = Date()
@@ -733,7 +735,8 @@ extension DialogueSession {
 //        withAnimation {
             conversations.append(conversation)
 //        }
-
+        isAddingConversation.toggle()
+        
         let data = Conversation.createConversationData(from: conversation, in: PersistenceController.shared.container.viewContext)
         
         rawData?.conversations?.adding(data)

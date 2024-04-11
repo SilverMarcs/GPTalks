@@ -116,7 +116,7 @@ struct PDFPickerView: View {
         Button {
             importingPDF = true
         } label: {
-            Image(systemName: "doc.richtext")
+            Image(systemName: "newspaper")
                 .resizable()
                 .inputImageStyle(padding: 7, imageSize: imageSize)
         }
@@ -152,45 +152,5 @@ struct CustomPDFPickerView: View {
                 showMore.wrappedValue = false
             }
         }, imageSize: imageSize)
-    }
-}
-
-
-
-struct CombinedPDFPickerView: View {
-    @Bindable var session: DialogueSession
-    var showMore: Binding<Bool>
-    var imageSize: CGFloat
-    var padding: CGFloat
-    
-    @State private var importingPDF = false
-    
-    private var currentPDFPath: Binding<String> {
-        session.isEditing ? $session.editingPDFPath : $session.inputPDFPath
-    }
-    
-    var body: some View {
-        Button {
-            importingPDF = true
-        } label: {
-            Image(systemName: "doc.richtext")
-                .resizable()
-                .inputImageStyle(padding: padding, imageSize: imageSize)
-        }
-        .fileImporter(
-            isPresented: $importingPDF,
-            allowedContentTypes: [.pdf],
-            allowsMultipleSelection: false
-        ) { result in
-            switch result {
-            case .success(let urls):
-                withAnimation {
-                    currentPDFPath.wrappedValue = urls[0].absoluteString
-                    showMore.wrappedValue = false
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
     }
 }
