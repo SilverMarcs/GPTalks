@@ -2,12 +2,18 @@
 //  OpenAIService.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 15/02/2024.
+//  Created by Zabir Raihan on 30/03/2024.
 //
 
-import Foundation
-import OpenAI
+import SwiftUI
 
-func makeRequest() async {
-    
-}
+//struct OpenAIService: View {
+//    var body: some View {
+//        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+//    }
+//}
+//
+//#Preview {
+//    OpenAIService()
+//}
+

@@ -18,7 +18,7 @@ struct DialogueListItem: View {
     var body: some View {
         HStack(spacing: imgToTextSpace) {
             session.configuration.provider.logoImage
-            VStack(spacing: 8) {
+            VStack {
                 HStack {
                     Text(session.title)
                         .bold()
@@ -31,14 +31,11 @@ struct DialogueListItem: View {
                         .opacity(0.9)
                     #endif
                 }
-                VStack {
-                    if session.isReplying() {
-                        ReplyingIndicatorView()
-                            .frame(
-                                maxWidth: .infinity,
-                                maxHeight: 14,
-                                alignment: .leading
-                            )
+                
+                HStack {
+                    if session.isReplying {
+                        ProgressView()
+                            .controlSize(.small)
                     } else {
                         Text(session.lastMessage)
                             .font(lastMessageFont)
@@ -46,22 +43,33 @@ struct DialogueListItem: View {
                             .lineLimit(textLineLimit)
                             .frame(
                                 maxWidth: .infinity,
-                                maxHeight: .infinity,
+                                maxHeight: lastMessageMaxHeight,
                                 alignment: .leading
                             )
                     }
+                    
+                    Spacer()
+                    
+                    if session.isArchive {
+                        Image(systemName: "star.fill")
+                            .foregroundStyle(.orange)
+                    }
                 }
-                .frame(maxHeight: lastMessageMaxHeight)
             }
         }
-        .frame(minHeight: minHeight)
+        .padding(paddingVal)
+        .frame(height: lastMessageMaxHeight)
         .alert("Rename Session", isPresented: $showRenameDialogue) {
             TextField("Enter new name", text: $newName)
+                .onAppear {
+                    newName = session.title
+                }
             Button("Rename") {
                 session.rename(newTitle: newName)
             }
             Button("Cancel", role: .cancel) {
                 showRenameDialogue = false
+                newName = session.title
             }
         }
         .contextMenu {
@@ -76,19 +84,19 @@ struct DialogueListItem: View {
         }
         .swipeActions(edge: .trailing) {
             deleteButton
-            
-            archiveButton
         }
         .swipeActions(edge: .leading) {
+            archiveButton
+            
             renameButton
         }
     }
     
     var archiveButton: some View {
         Button {
-            viewModel.toggleArchive(session: session)
+            session.toggleArchive()
         } label: {
-            Label(session.isArchive ? "Unarchive" : "Archive", systemImage: "archivebox")
+            Label(session.isArchive ? "Unstar" : "Star", systemImage: session.isArchive ? "star.slash" : "star")
         }
         .tint(.orange)
     }
@@ -103,8 +111,7 @@ struct DialogueListItem: View {
     
     var renameButton: some View {
         Button {
-            print("Current session title: \(session.title)")
-//            newName = session.title
+            newName = session.title
             showRenameDialogue.toggle()
         } label: {
             Label("Rename", systemImage: "pencil")
@@ -112,14 +119,13 @@ struct DialogueListItem: View {
         .tint(.accentColor)
     }
     
-    private var minHeight: CGFloat {
+    private var paddingVal: CGFloat {
         #if os(macOS)
-            55
+            7
         #else
-            75
+            0
         #endif
     }
-    
 
     private var imgToTextSpace: CGFloat {
         #if os(macOS)
@@ -131,9 +137,9 @@ struct DialogueListItem: View {
 
     private var lastMessageMaxHeight: CGFloat {
         #if os(macOS)
-        20
+        55
         #else
-        40
+        70
         #endif
     }
 

@@ -1,5 +1,24 @@
 {
+  "originHash" : "9c44092cf9d646477dcbb055da1e75d38de261468c0213dab26400f6d4d731fe",
   "pins" : [
+    {
+      "identity" : "dswaveformimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dmrschmidt/DSWaveformImage",
+      "state" : {
+        "revision" : "4c56578ee10128ee2b2c04c9c5aa73812de722db",
+        "version" : "14.2.2"
+      }
+    },
+    {
+      "identity" : "fuzi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/cezheng/Fuzi",
+      "state" : {
+        "revision" : "f08c8323da21e985f3772610753bcfc652c2103f",
+        "version" : "3.1.3"
+      }
+    },
     {
       "identity" : "hotkey",
       "kind" : "remoteSourceControl",
@@ -15,7 +34,7 @@
       "location" : "https://github.com/SilverMarcs/markdown-webview",
       "state" : {
         "branch" : "main",
-        "revision" : "4b8692fb74eaeb8944e6f687c0bcfab77d4f5142"
+        "revision" : "cea0067221ab34e6d192c3ac8caed38f3ab10d49"
       }
     },
     {
@@ -33,7 +52,16 @@
       "location" : "https://github.com/SilverMarcs/OpenAI",
       "state" : {
         "branch" : "MacPaw.gpt_vision",
-        "revision" : "03a166cc68b42d39839b2707c95709fb9d546de3"
+        "revision" : "ad8e882bd571c7f80d2e781e3bf6ca1d18b28385"
+      }
+    },
+    {
+      "identity" : "reeeed",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nate-parrott/reeeed",
+      "state" : {
+        "revision" : "567e2f50592f8a5fe41e9ff64784b42c77f35433",
+        "version" : "1.0.1"
       }
     },
     {
@@ -59,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "1d39e56d364cba79ce43b341f9661b534cccb18d",
-        "version" : "2.7.1"
+        "revision" : "028487d4a8a291b2fe1b4392b5425b6172056148",
+        "version" : "2.7.2"
       }
     },
     {
@@ -80,7 +108,25 @@
         "branch" : "master",
         "revision" : "a47ca84e0f0b92d8e4264a6d306f152758ffc02d"
       }
+    },
+    {
+      "identity" : "waavform",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nbrandes/Waavform",
+      "state" : {
+        "branch" : "main",
+        "revision" : "6d1c011bfd6fb22fcc470657846db2a5717bba77"
+      }
+    },
+    {
+      "identity" : "waveform",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AudioKit/Waveform.git",
+      "state" : {
+        "revision" : "79103e766434eb32aff9f0b169a469fce0af9ebd",
+        "version" : "1.0.2"
+      }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

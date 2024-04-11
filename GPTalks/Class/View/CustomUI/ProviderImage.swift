@@ -17,6 +17,7 @@ struct ProviderImage: View {
             RoundedRectangle(cornerRadius: radius)
                 .fill(color)
                 .frame(width: frame, height: frame)
+                .id(color)
             
             Image("openaiPng")
                 .resizable()

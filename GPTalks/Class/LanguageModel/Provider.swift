@@ -8,46 +8,91 @@
 import OpenAI
 import SwiftUI
 
+enum ProviderColor: String, CaseIterable {
+    case greenColor = "greenColor"
+    case niceColor = "niceColor"
+    case blueColor = "blueColor"
+    case tealColor = "tealColor"
+    case orangeColor = "orangeColor"
+    case pinkColor = "pinkColor"
+//    case purpleColor = "purpleColor"
+    
+    var name: String {
+        switch self {
+        case .greenColor:
+            return "Green"
+        case .niceColor:
+            return "Purple"
+        case .blueColor:
+            return "Blue"
+        case .tealColor:
+            return "Teal"
+        case .orangeColor:
+            return "Orange"
+        case .pinkColor:
+            return "Pink"
+//        case .purpleColor:
+//            return "Purple"
+        }
+    }
+}
+
 enum Provider: String, CaseIterable, Codable, Identifiable {
     case openai
     case oxygen
     case custom
     case naga
+    case kraken
+    case shard // Newly added case
 
     var id: String {
         switch self {
         case .openai:
-            "openai"
+            return "openai"
         case .oxygen:
-            "oxygen"
+            return "oxygen"
         case .naga:
-            "naga"
+            return "naga"
+        case .kraken:
+            return "kraken"
         case .custom:
-            "custom"
+            return "custom"
+        case .shard: 
+            return "shard"
         }
     }
 
     var config: OpenAI.Configuration {
         switch self {
         case .openai:
-            OpenAI.Configuration(
+            return OpenAI.Configuration(
                 token: AppConfiguration.shared.OAIkey,
                 host: "api.openai.com"
             )
         case .oxygen:
-            OpenAI.Configuration(
+            return OpenAI.Configuration(
                 token: AppConfiguration.shared.Okey,
                 host: "app.oxyapi.uk"
             )
         case .naga:
-            OpenAI.Configuration(
+            return OpenAI.Configuration(
                 token: AppConfiguration.shared.Nkey,
                 host: "api.naga.ac"
             )
+        case .kraken:
+            return OpenAI.Configuration(
+                token: AppConfiguration.shared.Kkey,
+                host: "api.cracked.systems"
+            )
         case .custom:
-            OpenAI.Configuration(
+            return OpenAI.Configuration(
                 token: AppConfiguration.shared.Ckey,
                 host: AppConfiguration.shared.Chost
+            )
+        case .shard: 
+            return OpenAI.Configuration(
+                token: AppConfiguration.shared.Skey,
+                host: "api.shard-ai.xyz"
             )
         }
     }
@@ -59,91 +104,142 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     var accentColor: Color {
         switch self {
         case .openai:
-            Color("greenColor")
+            Color(AppConfiguration.shared.OAIColor.rawValue)
         case .oxygen:
-            Color("niceColor")
+            Color(AppConfiguration.shared.OColor.rawValue)
         case .naga:
-            Color("blueColor")
+            Color(AppConfiguration.shared.NColor.rawValue)
+        case .kraken:
+            Color(AppConfiguration.shared.KColor.rawValue)
         case .custom:
-            Color("tealColor")
+            Color(AppConfiguration.shared.CColor.rawValue)
+        case .shard:
+            Color(AppConfiguration.shared.SColor.rawValue)
         }
     }
 
     var name: String {
         switch self {
         case .openai:
-            "OpenAI"
+            return "OpenAI"
         case .oxygen:
-            "Oxygen"
+            return "Oxygen"
         case .naga:
-            "Naga"
+            return "Naga"
+        case .kraken:
+            return "Kraken"
         case .custom:
-            "Custom"
+            return "Custom"
+        case .shard: 
+            return "Shard"
         }
     }
 
     var preferredChatModel: Model {
         switch self {
         case .openai:
-            AppConfiguration.shared.OAImodel
+            return AppConfiguration.shared.OAImodel
         case .oxygen:
-            AppConfiguration.shared.Omodel
-        case .custom:
-            .customChat
+            return AppConfiguration.shared.Omodel
         case .naga:
-            AppConfiguration.shared.Nmodel
+            return AppConfiguration.shared.Nmodel
+        case .kraken:
+            return AppConfiguration.shared.Kmodel
+        case .custom:
+            return AppConfiguration.shared.Cmodel
+        case .shard: 
+            return AppConfiguration.shared.Smodel
         }
     }
     
     var preferredImageModel: Model {
         switch self {
         case .openai:
-            AppConfiguration.shared.OAIImageModel
+            return AppConfiguration.shared.OAIImageModel
         case .oxygen:
-            AppConfiguration.shared.OImageModel
-        case .custom:
-            .customImage
+            return AppConfiguration.shared.OImageModel
         case .naga:
-            AppConfiguration.shared.NImageModel
+            return AppConfiguration.shared.NImageModel
+        case .kraken:
+            return AppConfiguration.shared.KImageModel
+        case .custom:
+            return AppConfiguration.shared.CImageModel
+        case .shard: 
+            return AppConfiguration.shared.SImageModel
+        }
+    }
+    
+    var preferredVisionModel: Model {
+        switch self {
+        case .openai, .oxygen, .naga, .kraken, .custom, .shard:
+            return .gpt4vision
+        }
+    }
+    
+    var preferredTranscriptionModel: Model {
+        switch self {
+        case .openai, .oxygen, .naga, .kraken, .custom, .shard:
+            return .whisper1
         }
     }
 
     var chatModels: [Model] {
         switch self {
         case .openai:
-            Model.openAIChatModels
+            return Model.openAIChatModels
         case .oxygen:
-            Model.oxygenChatModels
+            return Model.oxygenChatModels
         case .naga:
-            Model.nagaChatModels
+            return Model.nagaChatModels
+        case .kraken:
+            return Model.krakenChatModels
         case .custom:
-            [Model.customChat]
+            return Model.nagaChatModels + [Model.customChat]
+        case .shard:
+            return Model.shardChatModels
         }
     }
     
     var visionModels: [Model] {
         switch self {
         case .openai:
-            Model.openAIVisionModels
+            return Model.openAIVisionModels
         case .oxygen:
-            Model.oxygenVisionModels
+            return Model.oxygenVisionModels
         case .naga:
-            Model.nagaVisionModels
+            return Model.nagaVisionModels
+        case .kraken:
+            return Model.krakenVisionModels
         case .custom:
-            [Model.customVision]
+            return Model.openAIVisionModels + [Model.customVision]
+        case .shard:
+            return Model.shardVisionModels
         }
     }
     
     var imageModels: [Model] {
         switch self {
         case .openai:
-            Model.openAIImageModels
+            return Model.openAIImageModels
         case .oxygen:
-            Model.oxygenImageModels
+            return Model.oxygenImageModels
         case .naga:
-            Model.nagaImageModels
+            return Model.nagaImageModels
+        case .kraken:
+            return Model.krakenImageModels
         case .custom:
-            [Model.customImage]
+            return Model.openAIImageModels + [Model.customImage]
+        case .shard:
+            return Model.shardImageModels
+        }
+    }
+    
+    var transcriptionModels: [Model] {
+        switch self {
+        case .openai, .oxygen, .naga, .kraken, .custom:
+            return [.whisper1]
+        case .shard:
+            return [.swhisper,]
         }
     }
 
@@ -157,6 +253,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 chatModel: configuration.$OAImodel,
                 imageModel: configuration.$OAIImageModel,
                 apiKey: configuration.$OAIkey,
+                color: configuration.$OAIColor,
                 provider: self
             )
         case .oxygen:
@@ -164,6 +261,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 chatModel: configuration.$Omodel,
                 imageModel: configuration.$OImageModel,
                 apiKey: configuration.$Okey,
+                color: configuration.$OColor,
                 provider: self
             )
         case .naga:
@@ -171,13 +269,31 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 chatModel: configuration.$Nmodel,
                 imageModel: configuration.$NImageModel,
                 apiKey: configuration.$Nkey,
+                color: configuration.$NColor,
+                provider: self
+            )
+        case .kraken:
+            ServiceSettingsView(
+                chatModel: configuration.$Kmodel,
+                imageModel: configuration.$KImageModel,
+                apiKey: configuration.$Kkey,
+                color: configuration.$KColor,
                 provider: self
             )
         case .custom:
             ServiceSettingsView(
-                chatModel: Binding.constant(.customChat),
-                imageModel: Binding.constant(.customImage),
+                chatModel: configuration.$Cmodel,
+                imageModel: configuration.$CImageModel,
                 apiKey: configuration.$Ckey,
+                color: configuration.$CColor,
+                provider: self
+            )
+        case .shard:
+            ServiceSettingsView(
+                chatModel: configuration.$Smodel,
+                imageModel: configuration.$SImageModel,
+                apiKey: configuration.$Skey,
+                color: configuration.$SColor,
                 provider: self
             )
         }
@@ -185,9 +301,11 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
 
     var settingsLabel: some View {
         HStack {
-            ProviderImage(color: self.accentColor, frame: frame)
+            ProviderImage(color: accentColor, frame: frame)
+//                .id(accentColor)
             Text(name)
         }
+        .id(accentColor)
     }
 
     static var availableProviders: [Provider] {
@@ -195,12 +313,15 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             .openai,
             .oxygen,
             .naga,
+            .kraken,
+            .shard,
             .custom,
         ]
     }
 
     var logoImage: some View {
         ProviderImage(radius: imageRadius, color: accentColor, frame: imageSize)
+            .id(accentColor)
     }
 
     private var imageRadius: CGFloat {

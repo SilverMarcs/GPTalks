@@ -17,16 +17,44 @@ struct MacOSSettingsView: View {
                 }
         
             MacOSDefaultParameters()
-                .frame(width: 650, height: 300)
+                .frame(width: 650, height: 320)
                 .tabItem {
                     Label("Parameters", systemImage: "slider.horizontal.3")
                 }
         
             ProviderSettingsView()
-                .frame(width: 650, height: 370)
+                .frame(width: 650, height: 340)
                 .tabItem {
                     Label("Providers", systemImage: "brain.head.profile")
                 }
+            
+            ToolsView()
+                .frame(width: 650, height: 230)
+                .tabItem {
+                    Label("Plugins", systemImage: "wrench")
+                }
+        }
+    }
+}
+
+struct ToolsView: View {
+    @State var selection: ChatTool = .googleSearch
+    
+    var body: some View {
+        NavigationView {
+            List(ChatTool.allCases, id: \.self, selection: $selection) { tool in
+                NavigationLink(
+                    destination: tool.destination,
+                    label: {
+                        HStack {
+                            Image(systemName: tool.systemImageName)
+                                .renderingMode(.template)
+                            Text(tool.toolName)
+                        }
+                    }
+                )
+            }
+            .listStyle(.sidebar)
         }
     }
 }
@@ -42,7 +70,7 @@ struct ProviderSettingsView: View {
                     label: { provider.settingsLabel }
                 )
             }
-            .listStyle(.inset)
+            .listStyle(.sidebar)
         }
     }
 }
@@ -59,10 +87,10 @@ struct MacOSAppearanceView: View {
                 .padding(10)
                 
             Divider()
-                
-            LabeledPicker(title: "Alternate Chat UI", width: 300, picker: AlternateChatUI(isPicker: true))
+            
+            LabeledPicker(title: "AutoGen Title", width: 300, picker: AutoGenTitleEnabler(isPicker: true))
                 .padding(10)
-                
+            
             Divider()
                 
             LabeledPicker(title: "Preferred Chat Provider", width: 300, picker: PreferredChatProvider())
@@ -71,6 +99,11 @@ struct MacOSAppearanceView: View {
             Divider()
                 
             LabeledPicker(title: "Preferred Image Provider", width: 300, picker: PreferredImageProvider())
+                .padding(10)
+            
+            Divider()
+            
+            LabeledPicker(title: "Smoother Scrolling", width: 300, picker: SmootherScrollPicker(isPicker: true))
                 .padding(10)
         }
         .padding(30)
@@ -92,10 +125,15 @@ struct MacOSDefaultParameters: View {
                 Divider()
 
                 HStack {
-                    Text("System prompt")
+                    VStack {
+                        Text("System prompt")
+                        Spacer()
+                    }
                     Spacer()
-                    DefaultSystemPrompt()
-                        .textFieldStyle(.roundedBorder)
+                    TextEditor(text: AppConfiguration.shared.$systemPrompt)
+                        .scrollContentBackground(.hidden)
+                        .padding(8)
+                        .roundedRectangleOverlay(radius: 7)
                         .frame(width: widthValue)
                 }
                 .padding(paddingValue)

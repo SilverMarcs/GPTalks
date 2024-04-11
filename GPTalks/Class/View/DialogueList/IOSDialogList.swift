@@ -23,7 +23,6 @@ struct IOSDialogList: View {
                     ImageCreator(imageSession: imageSession)
                 }
             }
-
             .animation(.default, value: viewModel.selectedState)
             .animation(.default, value: viewModel.searchText)
             .searchable(text: $viewModel.searchText)
@@ -49,7 +48,7 @@ struct IOSDialogList: View {
                           }
                       }
                       .onChange(of: navigateToImages) {
-                          viewModel.selectedState = .recent
+                          viewModel.selectedState = .chats
                       }
 
                         
@@ -84,25 +83,28 @@ struct IOSDialogList: View {
 
     @ViewBuilder
     private var list: some View {
-        if viewModel.shouldShowPlaceholder {
-            PlaceHolderView(imageName: "message.fill", title: viewModel.placeHolderText)
-        } else {
-            if isIPadOS {
-                List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
-                    DialogueListItem(session: session)
-                }
-                .listStyle(.inset)
+        Group {
+            if viewModel.shouldShowPlaceholder {
+                PlaceHolderView(imageName: "message.fill", title: viewModel.placeHolderText)
             } else {
-                List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
-                    DialogueListItem(session: session)
+                if isIPadOS {
+                    List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
+                        DialogueListItem(session: session)
+                    }
+                    .listStyle(.inset)
+                } else {
+                    List(viewModel.currentDialogues, id: \.self) { session in
+                        NavigationLink {
+                            iOSMessages(session: session)
+                                .id(session.id)
+                        } label: {
+                            DialogueListItem(session: session)
+                        }
+                    }
+                    .listStyle(.plain)
                 }
-                .listStyle(.plain)
             }
         }
-    }
-
-    private var isIPadOS: Bool {
-        UIDevice.current.userInterfaceIdiom == .pad && UIDevice.current.systemName == "iPadOS"
     }
 }
 #endif

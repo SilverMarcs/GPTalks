@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+struct AutoGenTitleEnabler: View {
+    @ObservedObject var configuration: AppConfiguration = .shared
+    var isPicker: Bool = false
+    
+    var body: some View {
+        if isPicker {
+            Picker("AutoGen Title", selection: $configuration.isAutoGenerateTitle) {
+                Text("True").tag(true)
+                Text("False").tag(false)
+            }
+        } else {
+            Toggle("AutoGen Title", isOn: $configuration.isAutoGenerateTitle)
+        }
+    }
+}
+
 struct MarkdownEnabler: View {
     @ObservedObject var configuration: AppConfiguration = .shared
     var isPicker: Bool = false
@@ -39,22 +55,6 @@ struct AlternateMarkdownEnabler: View {
     }
 }
 
-struct AlternateChatUI: View {
-    @ObservedObject var configuration: AppConfiguration = .shared
-    var isPicker: Bool = false
-
-    var body: some View {
-        if isPicker {
-            Picker("Alternate Chat UI", selection: $configuration.alternateChatUi) {
-                Text("True").tag(true)
-                Text("False").tag(false)
-            }
-        } else {
-            Toggle("Alternate Chat UI", isOn: $configuration.alternateChatUi)
-        }
-    }
-}
-
 struct PreferredChatProvider: View {
     @ObservedObject var configuration: AppConfiguration = .shared
 
@@ -79,6 +79,22 @@ struct PreferredImageProvider: View {
     }
 }
 
+struct SmootherScrollPicker: View {
+    @ObservedObject var configuration: AppConfiguration = .shared
+    var isPicker: Bool = false
+    
+    var body: some View {
+        if isPicker {
+            Picker("Smoother Scrolling", selection: $configuration.smootherScrolling) {
+                Text("True").tag(true)
+                Text("False").tag(false)
+            }
+        } else {
+            Toggle("Smoother Scrolling", isOn: $configuration.smootherScrolling)
+        }
+    }
+}
+
 struct DefaultTempSlider: View {
     @ObservedObject var configuration: AppConfiguration = .shared
 
@@ -99,7 +115,7 @@ struct DefaultSystemPrompt: View {
     @ObservedObject var configuration: AppConfiguration = .shared
 
     var body: some View {
-        TextField("Enter a system prompt", text: $configuration.systemPrompt)
+        TextField("Enter a system prompt", text: $configuration.systemPrompt, axis: .vertical)
     }
 }
 

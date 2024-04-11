@@ -16,25 +16,26 @@ struct MacOSMessages: View {
 
     @State private var isUserScrolling = false
     @State var isShowSysPrompt: Bool = false
-    @FocusState var isTextFieldFocused: Bool
 
     var body: some View {
         ScrollViewReader { proxy in
-            normalList
+            listView
             .navigationTitle(session.title)
             .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                BottomInputView(
-                    session: session,
-                    focused: _isTextFieldFocused
-                )
-                .background(.bar)
+                MacInputView(session: session)
+                    .background(.bar)
+                    .id(session.id)
             }
-            .onChange(of: viewModel.selectedDialogue) {
-                isTextFieldFocused = true
-                
-                if viewModel.selectedState == .images {
-                    viewModel.selectedState = .recent
+            .onChange(of: viewModel.selectedDialogue) {                
+                if AppConfiguration.shared.alternateMarkdown {
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+                    if session.conversations.count > 8 {
+                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
+                    }
+                } else {
+                    scrollToBottom(proxy: proxy, animated: false)
                 }
                 
                 NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (event) -> NSEvent? in
@@ -43,14 +44,6 @@ struct MacOSMessages: View {
                     }
                     return event
                 }
-                
-                if AppConfiguration.shared.alternateMarkdown {
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
-                } else {
-                    scrollToBottom(proxy: proxy, animated: false)
-                }
             }
             .onChange(of: session.conversations.last?.content) {
                 if !isUserScrolling {
@@ -58,31 +51,18 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.conversations.last?.isReplying) {
-                if !session.isReplying() {
+                if !session.isReplying  {
                     isUserScrolling = false
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-                if session.isReplying() {
+                if session.isReplying {
                     isUserScrolling = true
-                }
-            }
-            .onChange(of: session.isAddingConversation) {
-                scrollToBottom(proxy: proxy, animated: false)
-            }
-            .onChange(of: session.input) {
-                if session.input.contains("\n") || (session.input.count > 105) {
-                    scrollToBottom(proxy: proxy)
                 }
             }
             .onChange(of: session.resetMarker) {
                 if session.resetMarker == session.conversations.count - 1 {
                     scrollToBottom(proxy: proxy)
-                }
-                isTextFieldFocused = true
-                
-                if session.containsConversationWithImage {
-                    session.configuration.model = session.configuration.provider.visionModels[0]
                 }
             }
             .onChange(of: session.errorDesc) {
@@ -90,18 +70,14 @@ struct MacOSMessages: View {
             }
             .onChange(of: session.inputImages) {
                 if !session.inputImages.isEmpty {
-                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
-                        session.configuration.model = session.configuration.provider.visionModels[0]
-                    }
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }
-            .onChange(of: session.configuration.provider) {
-                if session.containsConversationWithImage {
-                    session.configuration.model = session.configuration.provider.visionModels[0]
-                } else {
-                    session.configuration.model = session.configuration.provider.preferredChatModel
-                }
+            .onChange(of: session.input) {
+                scrollToBottom(proxy: proxy)
+            }
+            .onChange(of: session.isAddingConversation) {
+                scrollToBottom(proxy: proxy)
             }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
@@ -132,30 +108,30 @@ struct MacOSMessages: View {
                         }
                         
                         Section {
-                            Button("Regenerate") {
-                                Task { await session.regenerateLastMessage() }
-                            }
-
-                            Button("Reset Context") {
-                                session.resetContext()
-                            }
+                            Toggle("Use Tools", isOn: $session.configuration.useTools)
                         }
 
-                        Button("Delete All Messages") {
-                            session.removeAllConversations()
-                        }
                     } label: {
                         Image(systemName: "slider.vertical.3")
                     }
                     .menuIndicator(.hidden)
-                    
-                    Button {
-                        isShowSysPrompt = true
-                    } label: {
-                        Image(systemName: "square.text.square")
-                    }
                 }
 
+                #if os(macOS)
+                ToolbarItem(placement: .keyboard) {
+                    deleteLastMessage
+                }
+                ToolbarItem(placement: .keyboard) {
+                    resetContextButton
+                }
+                ToolbarItem(placement: .keyboard) {
+                    deleteAllMessages
+                }
+                ToolbarItem(placement: .keyboard) {
+                    regenLast
+                }
+                #endif
+                
                 ToolbarItemGroup {
                         
                     ProviderPicker(session: session)
@@ -164,7 +140,7 @@ struct MacOSMessages: View {
                         .frame(width: 130)
 
                     ModelPicker(session: session)
-                        .frame(width: 90)
+                        .frame(width: 100)
                 }
             }
             .sheet(isPresented: $isShowSysPrompt) {
@@ -199,62 +175,92 @@ struct MacOSMessages: View {
             }
         }
     }
+    
+    @ViewBuilder
+    private var listView: some View {
+        if AppConfiguration.shared.smootherScrolling {
+            alternateList
+        } else {
+            normalList
+        }
+    }
 
-    private var normalList: some View {
-        Group {
-            if AppConfiguration.shared.alternateChatUi {
-                List {
-                    LazyVStack {
-                        ForEach(session.conversations) { conversation in
-                            ConversationView(session: session, conversation: conversation)
-                                .id(conversation.id)
-                        }
-                        
-                        ErrorDescView(session: session)
-                        
-                        Color.clear
-                            .listRowSeparator(.hidden)
-                            .frame(height: 20)
-                    }
-                    .padding(.horizontal, -8)
-                    .id("bottomID")
+    @ViewBuilder
+    private var alternateList: some View {
+        List {
+            VStack(spacing: 0) {
+                ForEach(session.filteredConversations()) { conversation in
+                    ConversationView(session: session, conversation: conversation)
                 }
-                .listStyle(.plain)
                 
-            } else {
-                List {
-                    VStack {
-                        ForEach(session.conversations) { conversation in
-                            ConversationView(session: session, conversation: conversation)
-                        }
-                        
-                        ErrorDescView(session: session)
-                    }
-                    .id("bottomID")
+                ErrorDescView(session: session)
+            }
+            .padding(.horizontal, -8)
+            .padding(.bottom, 30)
+            .id("bottomID")
+        }
+        .listStyle(.plain)
+    }
+    
+    @ViewBuilder
+    private var normalList: some View {
+        ScrollView {
+            VStack(spacing: 0) {
+                ForEach(session.filteredConversations()) { conversation in
+                    ConversationView(session: session, conversation: conversation)
                 }
             }
+            
+            ErrorDescView(session: session)
+            
+            Color.clear
+                .frame(height: 30)
+                .id("bottomID")
         }
     }
     
-    private var alternateList: some View {
-        // not used for now
-        List {
-            ForEach(Array(session.conversations.chunked(fromEndInto: 10).enumerated()), id: \.offset) { _, chunk in
-                VStack {
-                    ForEach(chunk, id: \.self) { conversation in
-                        ConversationView(session: session, conversation: conversation)
-                    }
+    private var deleteLastMessage: some View {
+        Button("Delete Last Message") {
+            if let session = viewModel.selectedDialogue {
+                if session.conversations.count > 0 {
+                    session.removeConversation(session.conversations.last!)
                 }
-                .listRowSeparator(.hidden)
             }
-
-            ErrorDescView(session: session)
-                .listRowSeparator(.hidden)
-
-            Spacer()
-                .listRowSeparator(.hidden)
-                .id("bottomID")
         }
+        .keyboardShortcut(.delete, modifiers: .command)
+        .hidden()
+    }
+    
+    private var resetContextButton: some View {
+        Button("Reset Context") {
+            if let session = viewModel.selectedDialogue {
+                session.resetContext()
+            }
+        }
+        .keyboardShortcut("k", modifiers: .command)
+        .hidden()
+    }
+    
+    private var deleteAllMessages: some View {
+        Button("Delete all messages") {
+            if let session = viewModel.selectedDialogue {
+                session.removeAllConversations()
+            }
+        }
+        .keyboardShortcut(.delete, modifiers: [.command, .shift])
+        .hidden()
+    }
+    
+    private var regenLast: some View {
+        Button("Regenerate") {
+            if let session = viewModel.selectedDialogue {
+                Task { @MainActor in
+                    await session.regenerateLastMessage()
+                }
+            }
+        }
+        .keyboardShortcut("r", modifiers: .command)
+        .hidden()
     }
 }
 #endif
