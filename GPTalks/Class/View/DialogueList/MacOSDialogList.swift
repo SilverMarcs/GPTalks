@@ -19,7 +19,7 @@ struct MacOSDialogList: View {
                 ScrollViewReader { proxy in
                     List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
                         DialogueListItem(session: session)
-                            .id(session.id)
+//                            .id(session.id)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))
                             .accentColor(.accentColor) // to keep row colors untouched

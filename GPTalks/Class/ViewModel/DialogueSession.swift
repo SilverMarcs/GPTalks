@@ -193,7 +193,12 @@ import OpenAI
     #if os(macOS)
     func pasteImageFromClipboard() {
         if let image = getImageFromClipboard() {
-            self.inputImages.append(image)
+            let imageData = image.tiffRepresentation
+
+            // Check if the imageData is already in the array
+            if !self.inputImages.contains(where: { $0.tiffRepresentation == imageData }) {
+                self.inputImages.append(image)
+            }
         }
     }
     #endif

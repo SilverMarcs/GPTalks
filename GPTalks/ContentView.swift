@@ -36,6 +36,7 @@ struct ContentView: View {
             } else {
                 if let selectedDialogue = viewModel.selectedDialogue {
                     MacOSMessages(session: selectedDialogue)
+//                        .id(selectedDialogue.id)
                         .frame(minWidth: 500)
                 } else {
                     Text("No Chat Selected")

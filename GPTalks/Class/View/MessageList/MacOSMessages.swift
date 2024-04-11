@@ -12,10 +12,11 @@ import UniformTypeIdentifiers
 struct MacOSMessages: View {
     @Environment(DialogueViewModel.self) private var viewModel
 
-    @Bindable var session: DialogueSession
+    var session: DialogueSession
 
     @State private var isUserScrolling = false
     @State var isShowSysPrompt: Bool = false
+    @State var keyDownMonitor: Any?
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -27,7 +28,8 @@ struct MacOSMessages: View {
                     .background(.bar)
                     .id(session.id)
             }
-            .onChange(of: viewModel.selectedDialogue) {                
+            .onChange(of: viewModel.selectedDialogue) {      
+//            .onAppear {
                 if AppConfiguration.shared.alternateMarkdown {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
@@ -38,11 +40,24 @@ struct MacOSMessages: View {
                     scrollToBottom(proxy: proxy, animated: false)
                 }
                 
-                NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (event) -> NSEvent? in
+                // Remove previous event monitor if exists
+                if let existingMonitor = self.keyDownMonitor {
+                    NSEvent.removeMonitor(existingMonitor)
+                    self.keyDownMonitor = nil
+                }
+
+                // Add new event monitor
+                self.keyDownMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (event) -> NSEvent? in
                     if event.modifierFlags.contains(.command) && event.characters == "v" {
                         session.pasteImageFromClipboard()
                     }
                     return event
+                }
+            }
+            .onDisappear {
+                if let existingMonitor = self.keyDownMonitor {
+                    NSEvent.removeMonitor(existingMonitor)
+                    self.keyDownMonitor = nil
                 }
             }
             .onChange(of: session.conversations.last?.content) {
@@ -108,7 +123,7 @@ struct MacOSMessages: View {
                         }
                         
                         Section {
-                            Toggle("Use Tools", isOn: $session.configuration.useTools)
+                            ToolToggle(session: session)
                         }
 
                     } label: {
@@ -144,34 +159,7 @@ struct MacOSMessages: View {
                 }
             }
             .sheet(isPresented: $isShowSysPrompt) {
-                VStack {
-                    HStack {
-                        Button("Hidden") {
-                            
-                        }
-                        .opacity(0)
-                        
-                        Spacer()
-                        
-                        Text("System Prompt")
-                            .bold()
-                        
-                        Spacer()
-                        
-                        Button("Done") {
-                            isShowSysPrompt = false
-                        }
-                        .buttonStyle(.borderedProminent)
-                    }
-                    
-                    Divider()
-                    
-                    TextEditor(text: $session.configuration.systemPrompt)
-                        .font(.body)
-                        .frame(width: 300, height: 150)
-                        .scrollContentBackground(.hidden)
-                }
-                .padding(10)
+                MacSysPrompt(session: session)
             }
         }
     }
@@ -263,4 +251,50 @@ struct MacOSMessages: View {
         .hidden()
     }
 }
+
+struct MacSysPrompt: View {
+    @Environment(\.dismiss) var dismiss
+    @Bindable var session: DialogueSession
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Button("Hidden") {
+                    
+                }
+                .opacity(0)
+                
+                Spacer()
+                
+                Text("System Prompt")
+                    .bold()
+                
+                Spacer()
+                
+                Button("Done") {
+                    dismiss()
+                }
+                .buttonStyle(.borderedProminent)
+            }
+            
+            Divider()
+            
+            TextEditor(text: $session.configuration.systemPrompt)
+                .font(.body)
+                .frame(width: 300, height: 150)
+                .scrollContentBackground(.hidden)
+        }
+        .padding(10)
+    }
+}
+
+struct ToolToggle: View {
+    @Bindable var session: DialogueSession
+    
+    var body: some View {
+        Toggle("Use Tools", isOn: $session.configuration.useTools)
+    }
+}
+
 #endif
+
