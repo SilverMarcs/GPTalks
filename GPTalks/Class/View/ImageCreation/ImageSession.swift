@@ -27,7 +27,7 @@ import SwiftUI
             count = 1
             provider = AppConfiguration.shared.preferredImageService
             model = AppConfiguration.shared.preferredImageService.preferredImageModel
-            quality = .standard
+            quality = .hd
         }
     }
 

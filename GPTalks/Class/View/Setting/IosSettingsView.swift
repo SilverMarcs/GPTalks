@@ -34,13 +34,18 @@ struct IosSettingsView: View {
                     .disabled(!configuration.isMarkdownEnabled)
                     
                     HStack {
-                        Image(systemName: "textformat.abc")
+                        Image(systemName: "textformat")
                             .renderingMode(.original)
                         Spacer()
-                        Toggle("Alternate Chat UI", isOn: $configuration.alternateChatUi)
+                        Toggle("AutoGen Title", isOn: $configuration.isAutoGenerateTitle)
                     }
-                    .disabled(!configuration.isMarkdownEnabled)
                     
+                    HStack {
+                        Image(systemName: "play.fill")
+                            .renderingMode(.original)
+                        Spacer()
+                        Toggle("Auto Resume", isOn: $configuration.autoResume)
+                    }
                 }
                 
                 Section("Preferred Services") {
@@ -73,7 +78,7 @@ struct IosSettingsView: View {
                     }
                 }
                 
-                Section("Defaults") {
+                Section("Chat Features") {
                     NavigationLink {
                         IosDefaultConfigView()
                     } label: {
@@ -81,6 +86,30 @@ struct IosSettingsView: View {
                             Image(systemName: "cpu.fill")
                                 .renderingMode(.original)
                             Text("Default Parameters")
+                        }
+                    }
+                    
+                    NavigationLink {
+                        Form {
+                            List(ChatTool.allCases, id: \.self) { tool in
+                                NavigationLink(
+                                    destination: tool.destination,
+                                    label: {
+                                        HStack {
+                                            Image(systemName: tool.systemImageName)
+                                                .renderingMode(.template)
+                                            Text(tool.toolName)
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                        .navigationTitle("Plugins")
+                    } label: {
+                        HStack {
+                            Image(systemName: "puzzlepiece.fill")
+                                .renderingMode(.original)
+                            Text("Plugins")
                         }
                     }
                 }

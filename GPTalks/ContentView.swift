@@ -6,46 +6,70 @@
 //
 
 import CoreData
-import SwiftUI
 import SwiftSoup
+import SwiftUI
 
 struct ContentView: View {
     @Environment(DialogueViewModel.self) private var viewModel
+    @Environment(\.scenePhase) var scenePhase
+    
     @State var imageSession: ImageSession = .init()
-
+    @State var transcriptionSession: TranscriptionSession = .init()
+    
+    @State var resumed: Bool = false
+    
     var body: some View {
+#if os(macOS)
         NavigationSplitView {
-            #if os(macOS)
-                MacOSDialogList(viewModel: viewModel)
-            #else
-                IOSDialogList(viewModel: viewModel)
-            #endif
+            MacOSDialogList(viewModel: viewModel)
         } detail: {
-            if let selectedDialogue = viewModel.selectedDialogue {
-                #if os(macOS)
-                if viewModel.selectedState == .images {
-                    ImageCreator(imageSession: imageSession)
-                        .onChange(of: viewModel.selectedDialogue) {
-                            viewModel.selectedState = .recent
-                        }
-                } else {
+            if viewModel.selectedState == .images {
+                ImageCreator(imageSession: imageSession)
+                    .onChange(of: viewModel.selectedDialogue) {
+                        viewModel.selectedState = .chats
+                    }
+            } else if viewModel.selectedState == .speech {
+                TranscriptionCreator()
+                    .onChange(of: viewModel.selectedDialogue) {
+                        viewModel.selectedState = .chats
+                    }
+            } else {
+                if let selectedDialogue = viewModel.selectedDialogue {
                     MacOSMessages(session: selectedDialogue)
                         .frame(minWidth: 500)
+                } else {
+                    Text("No Chat Selected")
+                        .font(.title)
                 }
-                #else
-
-                iOSMessages(session: selectedDialogue)
-                    .id(selectedDialogue.id)
-
-                #endif
-            } else {
-                Text("No Chat Selected")
-                    .font(.title)
             }
         }
         .background(.background)
         .task {
             viewModel.fetchDialogueData()
         }
+#else
+        Group {
+            if isIPadOS {
+                NavigationSplitView {
+                    IOSDialogList(viewModel: viewModel)
+                } detail: {
+                    if let selectedDialogue = viewModel.selectedDialogue {
+                        iOSMessages(session: selectedDialogue)
+                            .id(selectedDialogue.id)
+                    } else {
+                        Text("No Chat Selected")
+                            .font(.title)
+                    }
+                }
+            } else {
+                NavigationStack {
+                    IOSDialogList(viewModel: viewModel)
+                }
+                .task {
+                    viewModel.fetchDialogueData()
+                }
+            }
+        }
+#endif
     }
 }

@@ -12,7 +12,7 @@ struct TempPicker: View {
     
     var body: some View {
         Picker("Temperature", selection: $session.configuration.temperature) {
-            ForEach(stride(from: 0.0, through: 2.0, by: 0.2).map { $0 }, id: \.self) { temp in
+            ForEach(stride(from: 0.0, through: 2.0, by: 0.1).map { $0 }, id: \.self) { temp in
                 Text(String(format: "%.1f", temp)).tag(temp)
             }
         }
@@ -48,15 +48,15 @@ struct ModelPicker: View {
 
     var body: some View {
         Picker("Model", selection: $session.configuration.model) {
-            if session.containsConversationWithImage || !session.inputImages.isEmpty {
-                ForEach(session.configuration.provider.visionModels, id: \.self) { model in
+//            if session.shouldSwitchToVision || !session.inputImages.isEmpty {
+//                ForEach(session.configuration.provider.visionModels, id: \.self) { model in
+//                    Text(model.name).tag(model.id)
+//                }
+//            } else {
+                ForEach(session.configuration.provider.chatModels + session.configuration.provider.visionModels, id: \.self) { model in
                     Text(model.name).tag(model.id)
                 }
-            } else {
-                ForEach(session.configuration.provider.visionModels + session.configuration.provider.chatModels, id: \.self) { model in
-                    Text(model.name).tag(model.id)
-                }
-            }
+//            }
         }
     }
 }

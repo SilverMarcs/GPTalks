@@ -9,113 +9,68 @@ import CoreData
 import SwiftUI
 
 enum ContentState: String, CaseIterable, Identifiable {
-    case recent = "Recents"
-    case all = "Active"   //excludes archived
-    case archived = "Archived"
+    case chats = "Chats"   // includes starred
     case images = "Images"
+    case speech = "Speech"
     
     var id: Self { self }
     
     var image : String {
         switch self {
-            case .recent:
-                "tray.full"
-            case .all:
+            case .chats:
                 "tray.2"
-            case .archived:
-                "archivebox"
             case .images:
                 "photo"
+            case .speech:
+                "waveform"
         }
     }
 }
 
 @Observable class DialogueViewModel {
     private let viewContext: NSManagedObjectContext
-
-    var allDialogues: [DialogueSession] = [] {
-        didSet {
-            switch selectedState {
-                case .archived:
-                    archivedDialogues = allDialogues.filter { $0.isArchive }
-                    break
-            case .recent, .images, .all:
-                    activeDialogues = allDialogues.filter { !$0.isArchive }
-                    break
-            }
-        }
-    }
     
-    var activeDialogues: [DialogueSession] = []
-
-    var archivedDialogues: [DialogueSession] = []
+    var allDialogues: [DialogueSession] = []
 
     var isArchivedSelected: Bool = false
     
-    var selectedState: ContentState = .recent
-
-    var searchText: String = "" {
+    var selectedState: ContentState = .chats {
         didSet {
-            if !searchText.isEmpty {
-                switch selectedState {
-                case .archived:
-                    archivedDialogues = filterDialogues(matching: searchText, from: allDialogues)
-                    
-                case .recent, .images, .all:
-                    activeDialogues = filterDialogues(matching: searchText, from: allDialogues)
+            switch selectedState {
+            case .chats:
+                if selectedDialogue == nil {
+                    selectedDialogue = allDialogues.first
                 }
-            } else {
-                
-                switch selectedState {
-                    case .archived:
-                        archivedDialogues = allDialogues.filter { $0.isArchive }
-                        break
-                case .recent, .images, .all:
-                        activeDialogues = allDialogues.filter { !$0.isArchive }
-                        break
-                }
+                break
+            case .images, .speech:
+                selectedDialogue = nil
             }
         }
     }
+    
+    var searchText: String = ""
 
     var selectedDialogue: DialogueSession?
 
-    init(context: NSManagedObjectContext) {
-        viewContext = context
-        fetchDialogueData()
-    }
-
     var shouldShowPlaceholder: Bool {
-        switch selectedState {
-            case .archived:
-                return archivedDialogues.isEmpty || (!searchText.isEmpty && archivedDialogues.isEmpty)
-            case .recent, .images, .all:
-                return activeDialogues.isEmpty  || (!searchText.isEmpty && activeDialogues.isEmpty)
-        }
+        return (!searchText.isEmpty && currentDialogues.isEmpty) || currentDialogues.isEmpty
     }
 
     var currentDialogues: [DialogueSession] {
-        switch selectedState {
-            case .archived:
-                archivedDialogues
-            case .all:
-                activeDialogues
-            case .recent, .images:
-            #if os(iOS)
-            Array(activeDialogues.prefix(6))
-            #else
-            Array(activeDialogues.prefix(10))
-            #endif
+        if !searchText.isEmpty {
+            return filterDialogues(matching: searchText, from: allDialogues)
+        } else {
+            return allDialogues
         }
     }
     
     var placeHolderText: String {
-        switch selectedState {
-            case .archived:
-                return (!searchText.isEmpty && archivedDialogues.isEmpty) ? "No Search Results" : "No archived chats"
-        case .recent, .images, .all:
-                return (!searchText.isEmpty && activeDialogues.isEmpty) ? "No Search Results" : "No active chats"
-        }
+        return allDialogues.isEmpty ? "Start a new chat" : "No Search Results"
+    }
+    
+    init(context: NSManagedObjectContext) {
+        viewContext = context
+        fetchDialogueData()
     }
 
     func fetchDialogueData(firstTime: Bool = true) {
@@ -125,15 +80,10 @@ enum ContentState: String, CaseIterable, Identifiable {
             let dialogueData = try PersistenceController.shared.container.viewContext.fetch(fetchRequest)
 
             allDialogues = dialogueData.compactMap { DialogueSession(rawData: $0) }
-
-            activeDialogues = allDialogues.filter { !$0.isArchive }
-            archivedDialogues = allDialogues.filter { $0.isArchive }
-
-            #if os(macOS)
-                if firstTime {
-                    selectedDialogue = activeDialogues.first
-                }
-            #endif
+            
+            if firstTime {
+                selectedDialogue = allDialogues.first
+            }
         } catch {
             print("DEBUG: Some error occured while fetching")
         }
@@ -152,59 +102,36 @@ enum ContentState: String, CaseIterable, Identifiable {
     func toggleArchivedStatus() {
         isArchivedSelected.toggle()
     }
+
     
-    func toggleChatTypes() {
-        if isArchivedSelected {
-            isArchivedSelected.toggle()
-            selectedState = .recent
-        } else {
-            isArchivedSelected.toggle()
-            selectedState = .archived
+    func moveUpChat(session: DialogueSession) {
+        session.date = Date()
+        
+        if session.id == allDialogues.first?.id {
+            return
+        }
+        
+        let index = allDialogues.firstIndex { $0.id == session.id }
+        if let index = index {
+            withAnimation {
+                allDialogues.remove(at: index)
+                allDialogues.insert(session, at: 0)
+            }
         }
     }
     
     func tggleImageAndChat() {
         if selectedState == .images {
-            selectedState = .recent
+            selectedState = .chats
         } else {
             selectedState = .images
         }
     }
 
-    func toggleArchive(session: DialogueSession) {
-        session.toggleArchive()
-        
-        switch selectedState {
-            case .archived:
-            withAnimation {
-                archivedDialogues.removeAll {
-                    $0.id == session.id
-                }
-                activeDialogues.append(session)
-                activeDialogues.sort {
-                    $0.date > $1.date
-                }
-            }
-                break
-            case .recent, .all:
-            withAnimation {
-                activeDialogues.removeAll {
-                    $0.id == session.id
-                }
-                archivedDialogues.append(session)
-                archivedDialogues.sort {
-                    $0.date > $1.date
-                }
-            }
-            
-                break
-            case .images:
-                break
-        }
-    }
-    
     func addDialogue(conversations: [Conversation] = []) {
-        selectedState = .recent
+        if selectedState != .chats {
+            selectedState = .chats
+        }
 
         let newItem = DialogueData(context: viewContext)
         newItem.id = UUID()
@@ -212,13 +139,7 @@ enum ContentState: String, CaseIterable, Identifiable {
 
         if !conversations.isEmpty {
             let conversationsSet = NSSet(array: conversations.map { conversation in
-                let data = ConversationData(context: viewContext)
-                data.id = conversation.id
-                data.date = conversation.date
-                data.role = conversation.role
-                data.content = conversation.content
-                data.imagePaths = conversation.imagePaths.joined(separator: "|||")
-                return data
+                Conversation.createConversationData(from: conversation, in: viewContext)
             })
             newItem.conversations = conversationsSet
         }
@@ -240,6 +161,10 @@ enum ContentState: String, CaseIterable, Identifiable {
     }
 
     func deleteDialogue(_ session: DialogueSession) {
+        if session.isArchive {
+            return
+        }
+        
         if selectedDialogue == session {
             selectedDialogue = nil
         }

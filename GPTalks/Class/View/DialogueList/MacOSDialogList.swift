@@ -5,11 +5,11 @@
 //  Created by Zabir Raihan on 19/12/2023.
 //
 
-import OpenAI
 import SwiftUI
 
 struct MacOSDialogList: View {
     @Bindable var viewModel: DialogueViewModel
+    @State private var previousActiveDialoguesCount = 0 // Add this line
 
     var body: some View {
         Group {
@@ -20,24 +20,38 @@ struct MacOSDialogList: View {
                     List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
                         DialogueListItem(session: session)
                             .id(session.id)
-                            .listRowSeparator(.hidden)
+                            .listRowSeparator(.visible)
+                            .listRowSeparatorTint(Color.gray.opacity(0.2))
                             .accentColor(.accentColor) // to keep row colors untouched
                     }
-                    .accentColor(Color("niceColorLighter")) // to change list seldction color
+                    .accentColor(Color("niceColorLighter")) // to change list selection color
                     .animation(.default, value: viewModel.selectedState)
                     .animation(.default, value: viewModel.searchText)
-                    .padding(.top, -10)
-                    .onChange(of: viewModel.activeDialogues.count) {
-//                         this is faaar from perfect but is required if we want to keep list style inset which is required for animations
-                        if !viewModel.activeDialogues.isEmpty {
-                            proxy.scrollTo(viewModel.activeDialogues[0].id, anchor: .top)
+                    .padding(.top, -8)
+                    .onChange(of: viewModel.currentDialogues.count) {
+                        // Check if the current count is greater than the previous count
+                        if viewModel.currentDialogues.count > previousActiveDialoguesCount {
+                            // If so, it's an addition. Scroll to the first item.
+                            if !viewModel.currentDialogues.isEmpty {
+                                withAnimation {
+                                    proxy.scrollTo(viewModel.currentDialogues[0].id, anchor: .top)
+                                }
+                            }
+                        }
+                        // Update the previous count to the current count
+                        previousActiveDialoguesCount = viewModel.currentDialogues.count
+                    }
+                    .onChange(of: viewModel.currentDialogues.first?.date) {
+                        if !viewModel.currentDialogues.isEmpty {
+                            withAnimation {
+                                proxy.scrollTo(viewModel.currentDialogues[0].id, anchor: .top)
+                            }
                         }
                     }
                 }
             }
         }
-        .listStyle(.inset)
-        .scrollContentBackground(.hidden)
+
         .frame(minWidth: 290)
         .toolbar {
             Spacer()
@@ -57,6 +71,8 @@ struct MacOSDialogList: View {
             }
             .keyboardShortcut("n", modifiers: .command)
         }
+        .listStyle(.inset)
+        .scrollContentBackground(.hidden)
         .searchable(text: $viewModel.searchText, placement: .toolbar)
     }
 }

@@ -78,12 +78,19 @@ struct ImageView: View {
         Button {
             isImagePresented = false
         } label: {
-            Image(systemName: "xmark")
-                .font(.headline)
-                .padding(5)
+            Image(systemName: "xmark.circle.fill")
+                .resizable()
+            #if os(macOS)
+                .frame(width: 20, height: 20)
+            #else
+                .frame(width: 30, height: 30)
+            #endif
+                .foregroundStyle(.foreground.secondary, Color.gray.opacity(0.2))
+//                .font(.headline)
+//                .padding(5)
         }
-        .buttonStyle(.bordered)
-        .clipShape(Circle())
+        .buttonStyle(.plain)
+//        .clipShape(Circle())
         .padding()
     }
     
@@ -94,7 +101,8 @@ struct ImageView: View {
             Image(systemName: "square.and.arrow.down")
                 .resizable()
                 .scaledToFit()
-                .foregroundColor(.accentColor)
+                .foregroundStyle(.primary)
+                .fontWeight(.bold)
                 .frame(width: 14, height: 14)
                 .padding(6)
                 .padding(.top, -2)

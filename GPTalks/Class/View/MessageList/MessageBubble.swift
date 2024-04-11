@@ -8,8 +8,8 @@
 import SwiftUI
 
 extension View {
-    func bubbleStyle(isMyMessage: Bool, compact: Bool = false, accentColor: Color = Color(.systemBlue)) -> some View {
-        modifier(Bubble(isMyMessage: isMyMessage, compact: compact, accentColor: .accentColor))
+    func bubbleStyle(isMyMessage: Bool, compact: Bool = false, radius: CGFloat = 15, accentColor: Color = Color(.systemBlue)) -> some View {
+        modifier(Bubble(isMyMessage: isMyMessage, compact: compact, radius: radius, accentColor: .accentColor))
     }
 }
 
@@ -18,6 +18,8 @@ struct Bubble: ViewModifier {
 
     var isMyMessage: Bool
     var compact: Bool = false
+//    var sharp: Bool = false
+    var radius: CGFloat = 15
     var accentColor: Color = .init("greenColor")
 
     func body(content: Content) -> some View {
@@ -27,30 +29,19 @@ struct Bubble: ViewModifier {
         #if os(visionOS)
             .background(.background.secondary)
         #else
-            .background(isMyMessage ? accentColor : bubbleBackground)
+            .background(.background.tertiary)
         #endif
             .cornerRadius(radius)
             .foregroundColor(isMyMessage ? Color.white : .primary)
             .clipShape(RoundedRectangle(cornerRadius: radius))
             .font(compact ? .callout : .body)
-//        #if os(iOS)
-//            .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: radius, style: .continuous))
-//        #endif
     }
 
-    private var radius: CGFloat {
+    private var _radius: CGFloat {
         #if os(macOS)
-        if AppConfiguration.shared.alternateChatUi {
-            5
-        } else {
-            15
-        }
+        15
         #else
-        if AppConfiguration.shared.alternateChatUi {
-            8
-        } else {
-            18
-        }
+        18
         #endif
     }
 

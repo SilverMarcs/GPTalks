@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+#if !os(macOS)
+var isIPadOS: Bool {
+    UIDevice.current.userInterfaceIdiom == .pad && UIDevice.current.systemName == "iPadOS"
+}
+#endif
+
 extension Array {
     func chunked(into size: Int) -> [[Element]] {
         stride(from: 0, to: count, by: size).map {
@@ -19,6 +25,90 @@ extension Array {
         reversed().chunked(into: size).map { $0.reversed() }.reversed()
     }
 }
+
+extension Collection {
+    subscript(safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
+
+extension String {
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+}
+
+extension Date {
+    func nowFileName() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd_HHmmssSSS"
+        return formatter.string(from: self)
+    }
+}
+
+func extractValue(from jsonString: String, forKey key: String) -> String? {
+    guard let jsonData = jsonString.data(using: .utf8) else {
+        print("Error: Could not convert string to UTF-8 data.")
+        return nil
+    }
+
+    do {
+        if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+           let value = jsonObject[key] as? String {
+            return value
+        } else {
+            print("Error: JSON does not contain a valid '\(key)' key.")
+            return nil
+        }
+    } catch {
+        print("Error parsing JSON: \(error)")
+        return nil
+    }
+}
+
+
+func extractValues(from jsonString: String) -> [String: String]? {
+    guard let jsonData = jsonString.data(using: .utf8) else {
+        print("Error: Could not convert string to UTF-8 data.")
+        return nil
+    }
+
+    do {
+        if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+            var valuesDict: [String: String] = [:]
+            for (key, value) in jsonObject {
+                if let stringValue = value as? String {
+                    valuesDict[key] = stringValue
+                }
+            }
+            return valuesDict.isEmpty ? nil : valuesDict
+        } else {
+            print("Error: JSON does not contain valid keys and values.")
+            return nil
+        }
+    } catch {
+        print("Error parsing JSON: \(error)")
+        return nil
+    }
+}
+func isAudioFile(urlString: String) -> Bool {
+     guard let url = URL(string: urlString) else { return false }
+
+     // Determine the file's Uniform Type Identifier (UTI)
+     guard let uti = try? url.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier else { return false }
+
+     // Popular audio UTIs
+     let audioTypes = [
+         "public.mp3",
+         "public.mpeg-4",
+         "public.aiff-audio",
+         "com.apple.coreaudio-format",
+         "public.audiovisual-content"
+         // Add more audio types if needed
+     ]
+
+     return audioTypes.contains(uti)
+ }
 
 extension String {
     func copyToPasteboard() {
@@ -129,4 +219,52 @@ extension String {
     }
 }
 
+#endif
+
+#if os(macOS)
+typealias PlatformImage = NSImage
+#else
+typealias PlatformImage = UIImage
+#endif
+
+extension Image {
+    init(platformImage: PlatformImage) {
+#if os(macOS)
+        self.init(nsImage: platformImage)
+#else
+        self.init(uiImage: platformImage)
+#endif
+    }
+}
+
+
+func getFileSizeFormatted(fileURL: URL) -> String? {
+    do {
+        let attributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
+        
+        if let fileSize = attributes[FileAttributeKey.size] as? NSNumber {
+            return formatBytes(bytes: fileSize.intValue)
+        } else {
+            print("Could not find file size.")
+            return nil
+        }
+    } catch {
+        print("Error getting file size: \(error.localizedDescription)")
+        return nil
+    }
+}
+
+func formatBytes(bytes: Int) -> String {
+    let formatter = ByteCountFormatter()
+    formatter.allowedUnits = [.useBytes, .useKB, .useMB, .useGB]
+    formatter.countStyle = .file
+    formatter.includesUnit = true
+    formatter.isAdaptive = true
+    return formatter.string(fromByteCount: Int64(bytes))
+}
+
+#if os(macOS)
+func getFileTypeIcon(fileURL: URL) -> NSImage? {
+    return NSWorkspace.shared.icon(forFile: fileURL.path)
+}
 #endif

@@ -34,7 +34,7 @@
       "location" : "https://github.com/SilverMarcs/markdown-webview",
       "state" : {
         "branch" : "main",
-        "revision" : "4b8692fb74eaeb8944e6f687c0bcfab77d4f5142"
+        "revision" : "cea0067221ab34e6d192c3ac8caed38f3ab10d49"
       }
     },
     {
@@ -52,7 +52,16 @@
       "location" : "https://github.com/SilverMarcs/OpenAI",
       "state" : {
         "branch" : "MacPaw.gpt_vision",
-        "revision" : "03a166cc68b42d39839b2707c95709fb9d546de3"
+        "revision" : "ad8e882bd571c7f80d2e781e3bf6ca1d18b28385"
+      }
+    },
+    {
+      "identity" : "reeeed",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nate-parrott/reeeed",
+      "state" : {
+        "revision" : "567e2f50592f8a5fe41e9ff64784b42c77f35433",
+        "version" : "1.0.1"
       }
     },
     {
@@ -87,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "1d39e56d364cba79ce43b341f9661b534cccb18d",
-        "version" : "2.7.1"
+        "revision" : "028487d4a8a291b2fe1b4392b5425b6172056148",
+        "version" : "2.7.2"
       }
     },
     {
