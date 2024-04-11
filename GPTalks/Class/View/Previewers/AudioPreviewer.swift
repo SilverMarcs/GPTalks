@@ -19,7 +19,7 @@ struct AudioPreviewer: View {
         ZStack(alignment: .topTrailing) {
             if !AppConfiguration.shared.alternateAudioPlayer {
                 AudioPlayerView(audioURL: audioURL)
-                    .frame(maxWidth: showRemoveButton ? .infinity : 500)
+                    .frame(maxWidth: 500)
             } else {
                 Button {
                     qlItem = audioURL
@@ -47,7 +47,6 @@ struct AudioPreviewer: View {
                                     Group {
                                         Text("Audio •")
                                             .font(.caption)
-                                        //                                        .fontWeight(.semibold)
                                         Text(fileSize)
                                             .font(.caption)
                                     }

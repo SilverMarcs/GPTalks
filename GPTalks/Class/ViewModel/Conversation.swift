@@ -38,9 +38,6 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
 
         if chatRole == .assistant, let tool = ChatTool(rawValue: toolRawValue) {
             return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: arguments, name: tool.rawValue))])!
-        } else if chatRole == .assistant && !imagePaths.isEmpty {
-            let imageContent = content + "\n" + imagePaths.joined(separator: "|||")
-            return .init(role: chatRole, content: imageContent)!
         } else if chatRole == .user && !audioPath.isEmpty {
             let audioContent = content + "\n" + audioPath
             return .init(role: chatRole, content: audioContent)!
@@ -49,29 +46,40 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
             return .init(role: chatRole, content: pdfContent)!
         } else if chatRole == .tool {
             return .init(role: chatRole, content: content, name: toolRawValue, toolCallId: "")!
+        } else if chatRole == .assistant && !imagePaths.isEmpty {
+            if imageAsPath {
+                let imageContent = content + "\n" + imagePaths.joined(separator: "|||")
+                return .init(role: chatRole, content: imageContent)!
+            } else {
+                return createVisionMessage(conversation: self)
+            }
         } else if chatRole == .user && !imagePaths.isEmpty {
             if imageAsPath {
                 let imageContent = content + "\n" + imagePaths.joined(separator: "|||")
                 return .init(role: chatRole, content: imageContent)!
             } else {
-                return .init(role: chatRole, 
-                     content:
-                        [.init(chatCompletionContentPartTextParam: .init(text: content))] +
-                     imagePaths.map { path in
-                        .init(chatCompletionContentPartImageParam:
-                                .init(imageUrl:
-                                    .init(
-                                        url: "data:image/jpeg;base64," + loadImageData(from: path)!.base64EncodedString(),
-                                        detail: .auto
-                                    )
-                                )
-                        )
-                })!
+                return createVisionMessage(conversation: self)
             }
         }
-        
+
         return .init(role: chatRole, content: content)!
     }
+}
+
+func createVisionMessage(conversation: Conversation) -> ChatQuery.ChatCompletionMessageParam {
+    return .init(role: .user,
+                 content:
+                 [.init(chatCompletionContentPartTextParam: .init(text: conversation.content))] +
+                     conversation.imagePaths.map { path in
+                         .init(chatCompletionContentPartImageParam:
+                             .init(imageUrl:
+                                 .init(
+                                     url: "data:image/jpeg;base64," + loadImageData(from: path)!.base64EncodedString(),
+                                     detail: .auto
+                                 )
+                             )
+                         )
+                     })!
 }
 
 extension ConversationData {

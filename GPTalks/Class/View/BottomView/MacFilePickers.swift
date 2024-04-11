@@ -9,7 +9,6 @@ import SwiftUI
 
 #if os(macOS)
 struct ImagePickerView: View {
-    var shouldAllowAdding: Bool
     var onImageAppend: ((NSImage) -> Void)?
     
     @State private var importingImage = false
@@ -22,7 +21,6 @@ struct ImagePickerView: View {
                 .resizable()
                 .inputImageStyle(padding: 7, imageSize: 25)
         }
-        .disabled(!shouldAllowAdding)
         .fileImporter(
             isPresented: $importingImage,
             allowedContentTypes: [.image],
@@ -42,7 +40,6 @@ struct ImagePickerView: View {
 }
 
 struct AudioPickerView: View {
-    var shouldAllowSelection: Bool // Condition to enable or disable the picker.
     var onAudioSelect: ((URL) -> Void)? // Closure to handle audio selection.
     
     @State private var importingAudio = false
@@ -55,7 +52,6 @@ struct AudioPickerView: View {
                 .resizable()
                 .inputImageStyle(padding: 6, imageSize: 25)
         }
-        .disabled(!shouldAllowSelection)
         .fileImporter(
             isPresented: $importingAudio,
             allowedContentTypes: [.audio],
@@ -81,13 +77,8 @@ struct CustomImagePickerView: View {
         session.isEditing ? $session.editingImages : $session.inputImages
     }
     
-    private func shouldAllowAddingImages() -> Bool {
-        currentImages.wrappedValue.count < 5
-    }
-    
-    
     var body: some View {
-        ImagePickerView(shouldAllowAdding: shouldAllowAddingImages(), onImageAppend: { newImage in
+        ImagePickerView(onImageAppend: { newImage in
             currentImages.wrappedValue.append(newImage)
             showMore.wrappedValue = false
         })
@@ -103,7 +94,7 @@ struct CustomAudioPickerView: View {
     }
     
     var body: some View {
-        AudioPickerView(shouldAllowSelection: !session.shouldSwitchToVision, onAudioSelect: { selectedURL in
+        AudioPickerView(onAudioSelect: { selectedURL in
             withAnimation {
                 currentAudioPath.wrappedValue = selectedURL.absoluteString
                 showMore.wrappedValue = false
@@ -116,7 +107,6 @@ struct CustomAudioPickerView: View {
 
 // consolodate the two
 struct PDFPickerView: View {
-    var shouldAllowAdding: Bool
     var onPDFAppend: ((URL) -> Void)?
     var imageSize: CGFloat
     
@@ -130,7 +120,6 @@ struct PDFPickerView: View {
                 .resizable()
                 .inputImageStyle(padding: 7, imageSize: imageSize)
         }
-        .disabled(!shouldAllowAdding)
         .fileImporter(
             isPresented: $importingPDF,
             allowedContentTypes: [.pdf],
@@ -157,7 +146,7 @@ struct CustomPDFPickerView: View {
     }
     
     var body: some View {
-        PDFPickerView(shouldAllowAdding: !session.shouldSwitchToVision, onPDFAppend: { selectedURL in
+        PDFPickerView(onPDFAppend: { selectedURL in
             withAnimation {
                 currentPDFPath.wrappedValue = selectedURL.absoluteString
                 showMore.wrappedValue = false
@@ -175,9 +164,6 @@ struct CombinedPDFPickerView: View {
     var padding: CGFloat
     
     @State private var importingPDF = false
-    private var shouldAllowAdding: Bool {
-        !session.shouldSwitchToVision
-    }
     
     private var currentPDFPath: Binding<String> {
         session.isEditing ? $session.editingPDFPath : $session.inputPDFPath
@@ -191,7 +177,6 @@ struct CombinedPDFPickerView: View {
                 .resizable()
                 .inputImageStyle(padding: padding, imageSize: imageSize)
         }
-        .disabled(!shouldAllowAdding)
         .fileImporter(
             isPresented: $importingPDF,
             allowedContentTypes: [.pdf],
