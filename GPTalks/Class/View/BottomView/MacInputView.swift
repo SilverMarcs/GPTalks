@@ -38,7 +38,7 @@ struct MacInputView: View {
                     
                     if showMore {
                         CustomImagePickerView(session: session, showMore: $showMore)
-                        CustomPDFPickerView(session: session, showMore: $showMore, imageSize: 25)
+                        CustomPDFPickerView(session: session, showMore: $showMore, imageSize: 25, padding: 7)
                         CustomAudioPickerView(session: session, showMore: $showMore)
                     }
                 }

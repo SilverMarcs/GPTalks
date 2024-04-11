@@ -34,7 +34,7 @@ struct IOSInputView: View {
                 
                 if showMore {
                     addImage
-                    CombinedPDFPickerView(session: session, showMore: $showMore, imageSize: imageSize, padding: 10)
+                    CustomPDFPickerView(session: session, showMore: $showMore, imageSize: imageSize, padding: 10)
                     resetContext
                 }
                 

@@ -109,6 +109,7 @@ struct CustomAudioPickerView: View {
 struct PDFPickerView: View {
     var onPDFAppend: ((URL) -> Void)?
     var imageSize: CGFloat
+    var padding: CGFloat
     
     @State private var importingPDF = false
     
@@ -118,7 +119,7 @@ struct PDFPickerView: View {
         } label: {
             Image(systemName: "newspaper")
                 .resizable()
-                .inputImageStyle(padding: 7, imageSize: imageSize)
+                .inputImageStyle(padding: padding, imageSize: imageSize)
         }
         .fileImporter(
             isPresented: $importingPDF,
@@ -140,6 +141,7 @@ struct CustomPDFPickerView: View {
     @Bindable var session: DialogueSession
     var showMore: Binding<Bool>
     var imageSize: CGFloat
+    var padding: CGFloat
     
     private var currentPDFPath: Binding<String> {
         session.isEditing ? $session.editingPDFPath : $session.inputPDFPath
@@ -151,6 +153,6 @@ struct CustomPDFPickerView: View {
                 currentPDFPath.wrappedValue = selectedURL.absoluteString
                 showMore.wrappedValue = false
             }
-        }, imageSize: imageSize)
+        }, imageSize: imageSize, padding: padding)
     }
 }

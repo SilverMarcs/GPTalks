@@ -80,10 +80,6 @@ struct iOSMessages: View {
                 if session.resetMarker == session.conversations.count - 1 {
                     scrollToBottom(proxy: proxy)
                 }
-
-//                if session.shouldSwitchToVision {
-//                    session.configuration.model = session.configuration.provider.preferredVisionModel
-//                }
             }
             .onChange(of: session.errorDesc) {
                 scrollToBottom(proxy: proxy)
@@ -98,19 +94,12 @@ struct iOSMessages: View {
             }
             .onChange(of: session.inputImages) {
                 if !session.inputImages.isEmpty {
-//                    if !session.configuration.provider.visionModels.contains(session.configuration.model) {
-//                        session.configuration.model = session.configuration.provider.preferredVisionModel
-//                    }
                     scrollToBottom(proxy: proxy, animated: true)
                 }
             }
-//            .onChange(of: session.configuration.provider) {
-//                if session.shouldSwitchToVision {
-//                    session.configuration.model = session.configuration.provider.preferredVisionModel
-//                } else {
-//                    session.configuration.model = session.configuration.provider.preferredChatModel
-//                }
-//            }
+            .onChange(of: session.isAddingConversation) {
+                scrollToBottom(proxy: proxy)
+            }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
                     itemProvider.loadObject(ofClass: UIImage.self) { image, error in
@@ -211,10 +200,6 @@ struct iOSMessages: View {
                     
                     Section {
                         Menu {
-//                            Picker("Use Tools", selection: $session.configuration.useTools) {
-//                                Text("Yes").tag(true)
-//                                Text("No").tag(false)
-//                            }
                             Toggle("Use Tools", isOn: $session.configuration.useTools)
                         } label: {
                             Label("Tools", systemImage: "hammer")

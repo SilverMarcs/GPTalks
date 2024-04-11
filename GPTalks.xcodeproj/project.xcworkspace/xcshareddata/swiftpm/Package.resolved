@@ -65,15 +65,6 @@
       }
     },
     {
-      "identity" : "reeeed",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nate-parrott/reeeed",
-      "state" : {
-        "revision" : "567e2f50592f8a5fe41e9ff64784b42c77f35433",
-        "version" : "1.0.1"
-      }
-    },
-    {
       "identity" : "splash",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/JohnSundell/Splash",
