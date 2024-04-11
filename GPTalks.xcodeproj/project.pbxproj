@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -71,6 +71,7 @@
 		08AA81422BC0889F00E68012 /* DSWaveformImageViews in Frameworks */ = {isa = PBXBuildFile; productRef = 08AA81412BC0889F00E68012 /* DSWaveformImageViews */; };
 		08AA81452BC08AAD00E68012 /* Waavform in Frameworks */ = {isa = PBXBuildFile; productRef = 08AA81442BC08AAD00E68012 /* Waavform */; };
 		08AA814C2BC0A13C00E68012 /* dvmtry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AA814B2BC0A13C00E68012 /* dvmtry.swift */; };
+		08AB36642BC7F74100C8638C /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08AB36632BC7F74100C8638C /* MarkdownWebView */; };
 		08AF74742B720F5B00FB081F /* ImageCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AF74732B720F5B00FB081F /* ImageCreator.swift */; };
 		08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */; };
 		08C594FB2B7FCEA4009AB268 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08C594FA2B7FCEA4009AB268 /* OpenAI */; };
@@ -210,6 +211,7 @@
 				086F6A0A2B94168100DF42F9 /* SwiftUIImageViewer in Frameworks */,
 				08EA25A72B98B09F00EC5E65 /* OpenAI in Frameworks */,
 				0883CFE42B98B174004A6FEA /* OpenAI in Frameworks */,
+				08AB36642BC7F74100C8638C /* MarkdownWebView in Frameworks */,
 				08C594FB2B7FCEA4009AB268 /* OpenAI in Frameworks */,
 				080D542D2B7913E300273B56 /* HotKey in Frameworks */,
 				08AA81402BC0889F00E68012 /* DSWaveformImage in Frameworks */,
@@ -522,6 +524,7 @@
 				08AA81442BC08AAD00E68012 /* Waavform */,
 				08FB18B72BC29A0700DFD0DC /* MarkdownWebView */,
 				0833146F2BC29A5E003D42C1 /* MarkdownWebView */,
+				08AB36632BC7F74100C8638C /* MarkdownWebView */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -606,7 +609,7 @@
 				083495A32BA8BCBA0009E271 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				08AA813E2BC0889F00E68012 /* XCRemoteSwiftPackageReference "DSWaveformImage" */,
 				08AA81432BC08AAD00E68012 /* XCRemoteSwiftPackageReference "Waavform" */,
-				0833146E2BC29A5E003D42C1 /* XCLocalSwiftPackageReference "../GPTalks_packages/markdown-webview" */,
+				08AB36622BC7F74100C8638C /* XCRemoteSwiftPackageReference "markdown-webview" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -1119,13 +1122,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		0833146E2BC29A5E003D42C1 /* XCLocalSwiftPackageReference "../GPTalks_packages/markdown-webview" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "../GPTalks_packages/markdown-webview";
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		080D542B2B7913E300273B56 /* XCRemoteSwiftPackageReference "HotKey" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1194,6 +1190,14 @@
 		08AA81432BC08AAD00E68012 /* XCRemoteSwiftPackageReference "Waavform" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nbrandes/Waavform";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		08AB36622BC7F74100C8638C /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -1276,6 +1280,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 08AA81432BC08AAD00E68012 /* XCRemoteSwiftPackageReference "Waavform" */;
 			productName = Waavform;
+		};
+		08AB36632BC7F74100C8638C /* MarkdownWebView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08AB36622BC7F74100C8638C /* XCRemoteSwiftPackageReference "markdown-webview" */;
+			productName = MarkdownWebView;
 		};
 		08C594FA2B7FCEA4009AB268 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;

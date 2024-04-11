@@ -1,5 +1,5 @@
 {
-  "originHash" : "85625c337262685568344f83f5bccf58917091b700e6966f640050116afb0066",
+  "originHash" : "9c44092cf9d646477dcbb055da1e75d38de261468c0213dab26400f6d4d731fe",
   "pins" : [
     {
       "identity" : "dswaveformimage",
@@ -26,6 +26,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "4d02d80de143d69b7eeb5962729591a157a57ede"
+      }
+    },
+    {
+      "identity" : "markdown-webview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/markdown-webview",
+      "state" : {
+        "branch" : "main",
+        "revision" : "cea0067221ab34e6d192c3ac8caed38f3ab10d49"
       }
     },
     {
@@ -78,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "1d39e56d364cba79ce43b341f9661b534cccb18d",
-        "version" : "2.7.1"
+        "revision" : "028487d4a8a291b2fe1b4392b5425b6172056148",
+        "version" : "2.7.2"
       }
     },
     {

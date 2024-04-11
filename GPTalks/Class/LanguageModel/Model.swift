@@ -13,6 +13,7 @@ enum Model: String, Codable {
     case gpt3t
     case gpt4
     case gpt4t
+    case gpt4tp
     case gpt4t1106
     case gpt4t0125
     case gpt4vision
@@ -61,6 +62,8 @@ enum Model: String, Codable {
             "GPT-4"
         case .gpt4t:
             "GPT-4T"
+        case .gpt4tp:
+            "GPT-4TP"
         case .gpt4t1106:
             "GPT-4T 1106"
         case .gpt4t0125:
@@ -130,6 +133,8 @@ enum Model: String, Codable {
         case .gpt4:
             "gpt-4"
         case .gpt4t:
+            "gpt-4-turbo"
+        case .gpt4tp:
             "gpt-4-turbo-preview"
         case .gpt4t1106:
             "gpt-4-1106-preview"
@@ -206,6 +211,7 @@ enum Model: String, Codable {
             .gpt3t,
             .gpt4,
             .gpt4t,
+            .gpt4tp,
         ]
     
     static let openAIVisionModels: [Model] =

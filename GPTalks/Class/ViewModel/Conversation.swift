@@ -55,17 +55,17 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
                 return .init(role: chatRole, content: imageContent)!
             } else {
                 return .init(role: chatRole, 
-                             content:
-                                [.init(chatCompletionContentPartTextParam: .init(text: content))] +
-                             imagePaths.map { path in
-                                .init(chatCompletionContentPartImageParam:
-                                        .init(imageUrl:
-                                            .init(
-                                                url: "data:image/jpeg;base64," + loadImageData(from: path)!.base64EncodedString(),
-                                                detail: .auto
-                                            )
-                                        )
+                     content:
+                        [.init(chatCompletionContentPartTextParam: .init(text: content))] +
+                     imagePaths.map { path in
+                        .init(chatCompletionContentPartImageParam:
+                                .init(imageUrl:
+                                    .init(
+                                        url: "data:image/jpeg;base64," + loadImageData(from: path)!.base64EncodedString(),
+                                        detail: .auto
+                                    )
                                 )
+                        )
                 })!
             }
         }

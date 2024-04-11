@@ -78,7 +78,7 @@ import OpenAI
         }
         
         // Filtering on adjusted conversations
-        return adjustedConversations.contains(where: { $0.role == "user" && !$0.imagePaths.isEmpty }) || inputImages.count > 0
+        return adjustedConversations.contains(where: { ($0.role == "user" || $0.role == "assistant") && !$0.imagePaths.isEmpty }) || inputImages.count > 0
     }
 
     // MARK: - Properties
@@ -442,7 +442,7 @@ import OpenAI
         }
         
         var finalMessages = adjustedConversations.map({ conversation in
-            if shouldSwitchToVision && configuration.model != .gpt4vision {
+            if shouldSwitchToVision && configuration.model != .gpt4vision && configuration.model != .gpt4t && configuration.model != .customChat {
                 return conversation.toChat(imageAsPath: true)
             } else {
                 return conversation.toChat()
