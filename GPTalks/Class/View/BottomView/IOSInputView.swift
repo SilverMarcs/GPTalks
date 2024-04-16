@@ -75,7 +75,7 @@ struct IOSInputView: View {
         } label: {
             Image(systemName: "plus")
                 .resizable()
-                .inputImageStyle(padding: 10, imageSize: imageSize - 1, color: .red)
+                .inputImageStyle(padding: 10, imageSize: imageSize, color: .red)
                 .rotationEffect(.degrees(45))
         }
     }

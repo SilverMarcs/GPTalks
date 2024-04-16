@@ -26,7 +26,7 @@ enum ChatTool: String, CaseIterable {
         case .urlScrape:
             return .init(function:
                     .init(name: "urlScrape",
-                          description: "If one or upto 3 URLs is explicitly given, this function must be used to receive the contents of that url webpage. Do not come up with potential URLs unless it explicityly exists in the chat history. Note that this function CANNOT search the web on its own. It can only look up sepcific urls. If you find a previous google search in the chat history, you may find some urls in the search results. You may initially use only one of those urls to call this function to retrieve required. If a certain URL content had been retrieved earlier, but the user's information was not found from it, you may visit some more urls gradualy. Be sure to choose the most appropriate url to call in that case on your own. The function will visit that url and return the webcontent from it. NEVER pass in wikipedia links as the paramater. Only if the user explcitly provides upto 3 urls, you will visit them all in one go. you must send all the urls as an object keyed by the 'urls' key and the valeu of this key is the list of urls.",
+                          description: "If one or upto 3 URLs is explicitly given, this function must be used to receive the contents of that url webpage. Do not come up with potential URLs unless it explicitly exists in the chat history. Note that this function CANNOT search the web on its own. It can only look up sepcific urls. If you find a previous google search in the chat history, you may find some urls in the search results. You may initially use only one of those urls to call this function to retrieve required info. If a certain URL content had been retrieved earlier, but the user's information was not found from it, you may visit some more urls gradualy. Be sure to choose the most appropriate url to call in that case on your own. The function will visit that url and return the webcontent from it. NEVER pass in wikipedia links as the paramater. Only if the user explcitly provides upto 3 urls, you will visit them all in one go. If after attempting to retrieve a URL's content, content was not properly received, continue to access another url from previous search results, one at a time.",
                           parameters:
                             .init(type: .object,
                                   properties: [
@@ -39,7 +39,7 @@ enum ChatTool: String, CaseIterable {
         case .googleSearch:
             return .init(function:
                     .init(name: "googleSearch",
-                          description: "If your preexisting knowledge does not contain info of the user's question, you may use this function to make a google search and retrieve the user's content. if a url has been explicitly given already, use the urlScape function instead. Always prioritize your pre-existing knowledge. Only use this function if the requested info is beyond your knowledge cutoff date. In the case where a google search will help you find the user's question's answer, come up with a meaningful search query to search google with and call the function with it. You will be receiving some website links and a small snippet from that webpage. Usually, the snippets should suffice to answer the user's question. If you feel the user might have made a typo, ask for clarification before searching with google.",
+                          description: "If your preexisting knowledge does not contain info of the user's question, you may use this function to make a google search and retrieve the user's content. if a url has been explicitly given already, use the urlScape function instead. Always prioritize your pre-existing knowledge. Only use this function if the requested info is beyond your knowledge cutoff date. In the case where a google search will help you find the user's question's answer, come up with a meaningful search query to search google with and call the function with it. You will be receiving some website links and a small snippet from that webpage. Usually, the snippets should suffice to answer the user's question. If you feel the user might have made a typo, ask for clarification before searching with google. If you feel the google search does not sufficiently answer the user's query, use your url scraping function to retrieve any of the websites from the search results.",
                           parameters:
                             .init(type: .object,
                                   properties: [self.paramName:
@@ -288,9 +288,9 @@ struct VisionConfigurationView: View {
                             .tag(provider.rawValue)
                     }
                 }
-//                
-//                Picker("Image Model", selection: appConfig.$imageModel) {
-//                    ForEach(appConfig.imageProvider.imageModels, id: \.self) { model in
+
+//                Picker("Image Model", selection: appConfig.$visionModel) {
+//                    ForEach(appConfig.visionProvider.visionModels, id: \.self) { model in
 //                        Text(model.name)
 //                            .tag(model.rawValue)
 //                    }

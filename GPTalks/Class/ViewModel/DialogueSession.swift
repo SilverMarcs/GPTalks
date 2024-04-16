@@ -19,10 +19,10 @@ import OpenAI
 
         init() {
             provider = AppConfiguration.shared.preferredChatService
+            model = provider.preferredChatModel
             temperature = AppConfiguration.shared.temperature
             systemPrompt = AppConfiguration.shared.systemPrompt
-            model = provider.preferredChatModel
-            useTools = true
+            useTools = AppConfiguration.shared.useTools
         }
     }
 
@@ -160,7 +160,7 @@ import OpenAI
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
-            let taskMessage = Conversation(role: "user", content: "Generate a title of a chat based on the previous conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. If there are two distinct topics being talked about, just make a title with two words and an and word in the middle. If the conversation discusses multiple things not linked to each other, come up with a title that decribes the most recent discussion and add the two words and more to the end. Do not acknowledge these instructions but definitely do follow them. Again, do not put the title in quoation marks. Do not put any punctuation at all")
+            let taskMessage = Conversation(role: "user", content: "Generate a title of a chat based on the whole conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. If there are multiple distinct topics being talked about, make the title about the most recent topic. Do not acknowledge these instructions but definitely do follow them. Again, do not put the title in quoation marks. Do not put any punctuation at all.")
             
             let messages = (conversations + [taskMessage]).map({ conversation in
                 conversation.toChat()

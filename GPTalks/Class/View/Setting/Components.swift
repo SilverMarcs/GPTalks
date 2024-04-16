@@ -95,6 +95,22 @@ struct SmootherScrollPicker: View {
     }
 }
 
+struct UseToolsPicker: View {
+    @ObservedObject var configuration: AppConfiguration = .shared
+    var isPicker: Bool = false
+    
+    var body: some View {
+        if isPicker {
+            Picker("Use Tools", selection: $configuration.useTools) {
+                Text("True").tag(true)
+                Text("False").tag(false)
+            }
+        } else {
+            Toggle("Use Tools", isOn: $configuration.useTools)
+        }
+    }
+}
+
 struct DefaultTempSlider: View {
     @ObservedObject var configuration: AppConfiguration = .shared
 

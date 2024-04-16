@@ -302,7 +302,6 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     var settingsLabel: some View {
         HStack {
             ProviderImage(color: accentColor, frame: frame)
-//                .id(accentColor)
             Text(name)
         }
         .id(accentColor)
@@ -313,7 +312,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             .openai,
             .oxygen,
             .naga,
-            .kraken,
+//            .kraken,
             .shard,
             .custom,
         ]

@@ -1,5 +1,5 @@
 {
-  "originHash" : "9c44092cf9d646477dcbb055da1e75d38de261468c0213dab26400f6d4d731fe",
+  "originHash" : "f3bbd2b41000d86938bfc9cabab2a764b18021680ad226527246dd9f68837309",
   "pins" : [
     {
       "identity" : "dswaveformimage",
@@ -34,7 +34,7 @@
       "location" : "https://github.com/SilverMarcs/markdown-webview",
       "state" : {
         "branch" : "main",
-        "revision" : "cea0067221ab34e6d192c3ac8caed38f3ab10d49"
+        "revision" : "8762ac65037a439fe5e2239c20c3a1cbc3b7e045"
       }
     },
     {

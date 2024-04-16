@@ -11,15 +11,15 @@ struct MacOSSettingsView: View {
     var body: some View {
         TabView {
             MacOSAppearanceView()
-                .frame(width: 650, height: 370)
+                .frame(width: 650, height: 310)
                 .tabItem {
                     Label("Appearance", systemImage: "wand.and.stars")
                 }
         
             MacOSDefaultParameters()
-                .frame(width: 650, height: 320)
+                .frame(width: 650, height: 470)
                 .tabItem {
-                    Label("Parameters", systemImage: "slider.horizontal.3")
+                    Label("Session", systemImage: "slider.horizontal.3")
                 }
         
             ProviderSettingsView()
@@ -91,17 +91,7 @@ struct MacOSAppearanceView: View {
             LabeledPicker(title: "AutoGen Title", width: 300, picker: AutoGenTitleEnabler(isPicker: true))
                 .padding(10)
             
-            Divider()
-                
-            LabeledPicker(title: "Preferred Chat Provider", width: 300, picker: PreferredChatProvider())
-                .padding(10)
-                
-            Divider()
-                
-            LabeledPicker(title: "Preferred Image Provider", width: 300, picker: PreferredImageProvider())
-                .padding(10)
-            
-            Divider()
+            Divider()            
             
             LabeledPicker(title: "Smoother Scrolling", width: 300, picker: SmootherScrollPicker(isPicker: true))
                 .padding(10)
@@ -113,6 +103,16 @@ struct MacOSAppearanceView: View {
 struct MacOSDefaultParameters: View {
     var body: some View {
         VStack(spacing: 20) {
+            GroupBox(label: Text("Preferred Services")) {
+                LabeledPicker(title: "Preferred Chat Provider", width: 300, picker: PreferredChatProvider())
+                    .padding(10)
+                    
+                Divider()
+                    
+                LabeledPicker(title: "Preferred Image Provider", width: 300, picker: PreferredImageProvider())
+                    .padding(10)
+            }
+            
             GroupBox(label: Text("Default Parameters")) {
                 HStack {
                     Text("Temperature")
@@ -124,6 +124,17 @@ struct MacOSDefaultParameters: View {
 
                 Divider()
 
+                HStack {
+                    Text("Use Tools")
+                    Spacer()
+                    UseToolsPicker(isPicker: true)
+                        .labelsHidden()
+                        .frame(width: widthValue)
+                }
+                .padding(paddingValue)
+
+                Divider()
+                
                 HStack {
                     VStack {
                         Text("System prompt")

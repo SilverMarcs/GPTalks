@@ -11,8 +11,9 @@ struct IosDefaultConfigView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section("Default Settings") {
+                Section("Default Parameters") {
                     DefaultTempSlider()
+                    UseToolsPicker()
                 }
                 
                 Section("System Prompt") {

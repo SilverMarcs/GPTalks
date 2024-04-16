@@ -95,7 +95,7 @@ struct MacInputView: View {
         } label: {
             Image(systemName: "plus")
                 .resizable()
-                .inputImageStyle(padding: 6, imageSize: imageSize - 1, color: .red)
+                .inputImageStyle(padding: 6, imageSize: imageSize, color: .red)
                 .rotationEffect(.degrees(45))
         }
         .keyboardShortcut(.cancelAction)

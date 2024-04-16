@@ -41,10 +41,11 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.transcriptionModel") var transcriptionModel: Model = .whisper1
     @AppStorage("configuration.alternateAudioPlayer") var alternateAudioPlayer: Bool = false
     
-    // config
+    // params
     @AppStorage("configuration.contextLength") var contextLength = 10
     @AppStorage("configuration.temperature") var temperature: Double = 0.5
-    @AppStorage("configuration.systemPrompt") var systemPrompt: String = "You are a helpful assistant."    
+    @AppStorage("configuration.useTools") var useTools: Bool = true
+    @AppStorage("configuration.systemPrompt") var systemPrompt: String = "You are a helpful assistant."
         
     /// openAI
     @AppStorage("configuration.OAIKey") var OAIkey = ""
