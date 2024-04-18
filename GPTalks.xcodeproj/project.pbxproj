@@ -69,9 +69,6 @@
 		08A1EF4E2B2604D000A88A3A /* UserMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */; };
 		08A1EF502B2606C000A88A3A /* AssistantMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */; };
 		08A1EF522B26100600A88A3A /* DialogueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF512B26100600A88A3A /* DialogueViewModel.swift */; };
-		08AA81402BC0889F00E68012 /* DSWaveformImage in Frameworks */ = {isa = PBXBuildFile; productRef = 08AA813F2BC0889F00E68012 /* DSWaveformImage */; };
-		08AA81422BC0889F00E68012 /* DSWaveformImageViews in Frameworks */ = {isa = PBXBuildFile; productRef = 08AA81412BC0889F00E68012 /* DSWaveformImageViews */; };
-		08AA81452BC08AAD00E68012 /* Waavform in Frameworks */ = {isa = PBXBuildFile; productRef = 08AA81442BC08AAD00E68012 /* Waavform */; };
 		08AA814C2BC0A13C00E68012 /* dvmtry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AA814B2BC0A13C00E68012 /* dvmtry.swift */; };
 		08AF74742B720F5B00FB081F /* ImageCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AF74732B720F5B00FB081F /* ImageCreator.swift */; };
 		08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */; };
@@ -90,6 +87,8 @@
 		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
 		08F74EA42B0BC318006D1DD3 /* ServiceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */; };
 		08FB18B82BC29A0700DFD0DC /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08FB18B72BC29A0700DFD0DC /* MarkdownWebView */; };
+		08FBE1DA2BCF0B4D006CD9CB /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 08FBE1D92BCF0B4D006CD9CB /* GPTEncoder */; };
+		08FBE1DC2BCF0BC6006CD9CB /* GPTEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08FBE1DB2BCF0BC6006CD9CB /* GPTEncoder.swift */; };
 		E4994DF229DA8B29002981D0 /* MacOSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */; };
 		E4C65EA229CA9E7E00AFA884 /* GPTalks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA129CA9E7E00AFA884 /* GPTalks.swift */; };
 		E4C65EA429CA9E7E00AFA884 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65EA329CA9E7E00AFA884 /* Persistence.swift */; };
@@ -185,6 +184,7 @@
 		08E2611C2B98978800E4542E /* ToolMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolMessageView.swift; sourceTree = "<group>"; };
 		08ED9EB72B02564D00849A1E /* DialogueListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListItem.swift; sourceTree = "<group>"; };
 		08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSettingsView.swift; sourceTree = "<group>"; };
+		08FBE1DB2BCF0BC6006CD9CB /* GPTEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTEncoder.swift; sourceTree = "<group>"; };
 		E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSSettingsView.swift; sourceTree = "<group>"; };
 		E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C65EA129CA9E7E00AFA884 /* GPTalks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTalks.swift; sourceTree = "<group>"; };
@@ -215,13 +215,11 @@
 				08320B602BC89F560037F825 /* MarkdownWebView in Frameworks */,
 				08C594FB2B7FCEA4009AB268 /* OpenAI in Frameworks */,
 				080D542D2B7913E300273B56 /* HotKey in Frameworks */,
-				08AA81402BC0889F00E68012 /* DSWaveformImage in Frameworks */,
 				0816CA092B7F97F800D22D5C /* Splash in Frameworks */,
 				083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */,
+				08FBE1DA2BCF0B4D006CD9CB /* GPTEncoder in Frameworks */,
 				0816CA0B2B7F97F800D22D5C /* SplashMarkdown in Frameworks */,
-				08AA81452BC08AAD00E68012 /* Waavform in Frameworks */,
 				086F6A072B94129100DF42F9 /* SwiftUIImageViewer in Frameworks */,
-				08AA81422BC0889F00E68012 /* DSWaveformImageViews in Frameworks */,
 				08D5A2962B7E068700BA1CE0 /* OpenAI in Frameworks */,
 				085EC7762BCF0A2D00383058 /* MarkdownWebView in Frameworks */,
 				083495A22BA869D50009E271 /* Reeeed in Frameworks */,
@@ -283,6 +281,7 @@
 				085D40C22AFD8C250033F8B5 /* Provider.swift */,
 				0837E4802AFFE7AF00C03059 /* Model.swift */,
 				08664FD62BB7D368001281FA /* OpenAIService.swift */,
+				08FBE1DB2BCF0BC6006CD9CB /* GPTEncoder.swift */,
 			);
 			path = LanguageModel;
 			sourceTree = "<group>";
@@ -521,13 +520,11 @@
 				0883CFE32B98B174004A6FEA /* OpenAI */,
 				083495A12BA869D50009E271 /* Reeeed */,
 				083495A42BA8BCBA0009E271 /* OpenAI */,
-				08AA813F2BC0889F00E68012 /* DSWaveformImage */,
-				08AA81412BC0889F00E68012 /* DSWaveformImageViews */,
-				08AA81442BC08AAD00E68012 /* Waavform */,
 				08FB18B72BC29A0700DFD0DC /* MarkdownWebView */,
 				0833146F2BC29A5E003D42C1 /* MarkdownWebView */,
 				08320B5F2BC89F560037F825 /* MarkdownWebView */,
 				085EC7752BCF0A2D00383058 /* MarkdownWebView */,
+				08FBE1D92BCF0B4D006CD9CB /* GPTEncoder */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -610,9 +607,8 @@
 				086F6A082B94168100DF42F9 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
 				083495A02BA869D50009E271 /* XCRemoteSwiftPackageReference "reeeed" */,
 				083495A32BA8BCBA0009E271 /* XCRemoteSwiftPackageReference "OpenAI" */,
-				08AA813E2BC0889F00E68012 /* XCRemoteSwiftPackageReference "DSWaveformImage" */,
-				08AA81432BC08AAD00E68012 /* XCRemoteSwiftPackageReference "Waavform" */,
 				085EC7742BCF0A2D00383058 /* XCRemoteSwiftPackageReference "markdown-webview" */,
+				08FBE1D82BCF0B4D006CD9CB /* XCRemoteSwiftPackageReference "GPTEncoder" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -691,6 +687,7 @@
 				0837E4812AFFE7B000C03059 /* Model.swift in Sources */,
 				08DCC4862B99AD8D00737191 /* ToolCallView.swift in Sources */,
 				0846F1F62B33D68F002A2EB2 /* ProviderImage.swift in Sources */,
+				08FBE1DC2BCF0BC6006CD9CB /* GPTEncoder.swift in Sources */,
 				E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */,
 				08D533322B2C2D50008B4FA9 /* AdaptiveStack.swift in Sources */,
 				08A1EF502B2606C000A88A3A /* AssistantMessageView.swift in Sources */,
@@ -1190,20 +1187,12 @@
 				kind = branch;
 			};
 		};
-		08AA813E2BC0889F00E68012 /* XCRemoteSwiftPackageReference "DSWaveformImage" */ = {
+		08FBE1D82BCF0B4D006CD9CB /* XCRemoteSwiftPackageReference "GPTEncoder" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dmrschmidt/DSWaveformImage";
+			repositoryURL = "https://github.com/alfianlosari/GPTEncoder.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 14.2.2;
-			};
-		};
-		08AA81432BC08AAD00E68012 /* XCRemoteSwiftPackageReference "Waavform" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/nbrandes/Waavform";
-			requirement = {
-				branch = main;
-				kind = branch;
+				minimumVersion = 1.0.4;
 			};
 		};
 		E4C65F0F29CAA08400AFA884 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
@@ -1278,21 +1267,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
 		};
-		08AA813F2BC0889F00E68012 /* DSWaveformImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08AA813E2BC0889F00E68012 /* XCRemoteSwiftPackageReference "DSWaveformImage" */;
-			productName = DSWaveformImage;
-		};
-		08AA81412BC0889F00E68012 /* DSWaveformImageViews */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08AA813E2BC0889F00E68012 /* XCRemoteSwiftPackageReference "DSWaveformImage" */;
-			productName = DSWaveformImageViews;
-		};
-		08AA81442BC08AAD00E68012 /* Waavform */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08AA81432BC08AAD00E68012 /* XCRemoteSwiftPackageReference "Waavform" */;
-			productName = Waavform;
-		};
 		08C594FA2B7FCEA4009AB268 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
@@ -1316,6 +1290,11 @@
 		08FB18B72BC29A0700DFD0DC /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MarkdownWebView;
+		};
+		08FBE1D92BCF0B4D006CD9CB /* GPTEncoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08FBE1D82BCF0B4D006CD9CB /* XCRemoteSwiftPackageReference "GPTEncoder" */;
+			productName = GPTEncoder;
 		};
 		E4C65F1029CAA08400AFA884 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;

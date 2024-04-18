@@ -133,7 +133,8 @@ enum Model: String, Codable {
         case .gpt4:
             "gpt-4"
         case .gpt4t:
-            "gpt-4-turbo"
+//            "gpt-4-turbo"
+            "gpt-4-turbo-2024-04-09"
         case .gpt4tp:
             "gpt-4-turbo-preview"
         case .gpt4t1106:

@@ -19,10 +19,13 @@ struct MacOSMessages: View {
     @State var keyDownMonitor: Any?
 
     var body: some View {
+        // TODO: create variable for nav subtitle
+        
         ScrollViewReader { proxy in
             listView
             .navigationTitle(session.title)
-            .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
+//            .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
+            .navigationSubtitle(navSubtitle)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 MacInputView(session: session)
                     .background(.bar)
@@ -123,6 +126,17 @@ struct MacOSMessages: View {
                         }
                         
                         Section {
+                            Button("Reset Context") {
+                                session.resetContext()
+                            }
+                            
+                            Button("Delete All Messages") {
+                                session.removeAllConversations()
+                            }
+                        }
+                        
+                        
+                        Section {
                             ToolToggle(session: session)
                         }
 
@@ -162,6 +176,10 @@ struct MacOSMessages: View {
                 MacSysPrompt(session: session)
             }
         }
+    }
+    
+    var navSubtitle: String {
+        "Tokens: " + session.activeTokenCount.formatToK() + " • " + session.configuration.systemPrompt.truncated(to: 35)
     }
     
     @ViewBuilder

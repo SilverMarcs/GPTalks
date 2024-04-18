@@ -249,6 +249,7 @@ struct iOSMessages: View {
                print("App has resumed from background")
                if AppConfiguration.shared.autoResume {
                    isTextFieldFocused = true
+                   session.resetContext()
                }
            case .inactive, .background:
                break

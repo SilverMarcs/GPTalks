@@ -72,12 +72,11 @@ import OpenAI
     
     var shouldSwitchToVision: Bool {
         // Context adjustment logic
-        let adjustedConversations: [Conversation]
-        if conversations.count > resetMarker + 1 {
-            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
-        } else {
-            adjustedConversations = conversations
-        }
+        // TODO: this could probably be a computed variable of dialogsession
+//        var adjustedConversations: [Conversation] = []
+//        if conversations.count > resetMarker + 1 {
+//            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
+//        }
         
         // Filtering on adjusted conversations
         return adjustedConversations.contains(where: { ($0.role == "user" || $0.role == "assistant") && !$0.imagePaths.isEmpty }) || inputImages.count > 0
@@ -94,6 +93,26 @@ import OpenAI
 
     var lastConversation: Conversation {
         return conversations[conversations.count - 1]
+    }
+    
+    var adjustedConversations: [Conversation] {
+        if conversations.count > resetMarker + 1 {
+            return Array(conversations.suffix(from: resetMarker + 1))
+        }
+        return []
+    }
+    
+    var activeTokenCount: Int {
+//        var adjustedConversations: [Conversation] = []
+//        if conversations.count > resetMarker + 1 {
+//            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
+//        }
+        
+//        print("Adjusted Conversations: \(adjustedConversations.count)")
+        
+        // get all conversation.content from adjustedConversations
+        let allContent = adjustedConversations.map { $0.content }
+        return tokenCount(text: allContent.joined(separator: " "))
     }
 
     var streamingTask: Task<Void, Error>?
@@ -437,18 +456,24 @@ import OpenAI
     
     @MainActor
     func createChatQuery() -> ChatQuery {
-        var adjustedConversations: [Conversation] = conversations
+//        var adjustedConversations: [Conversation] = conversations
+//        var adjustedConversations: [Conversation] = []
         
         // Adjusting the conversations array based on the resetMarker
-        if conversations.count > resetMarker + 1 {
-            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
+//        if conversations.count > resetMarker + 1 {
+//            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
+//        }
+        
+//        if adjustedConversations.last?.role == "assistant" {
+//            adjustedConversations = adjustedConversations.dropLast() // dropping the emtpy last conversation cuz its the empty assistant reply
+//        }
+        
+        var mutableConversations = adjustedConversations
+        if mutableConversations.last?.role == "assistant" {
+            mutableConversations = mutableConversations.dropLast()
         }
         
-        if adjustedConversations.last?.role == "assistant" {
-            adjustedConversations = adjustedConversations.dropLast() // dropping the emtpy last conversation cuz its the empty assistant reply
-        }
-        
-        var finalMessages = adjustedConversations.map({ conversation in
+        var finalMessages = mutableConversations.map({ conversation in
             if shouldSwitchToVision && configuration.model != .gpt4vision && configuration.model != .gpt4t && configuration.model != .customChat {
                 return conversation.toChat(imageAsPath: true)
             } else {
@@ -544,7 +569,7 @@ import OpenAI
     func handleToolCall(chatTool: ChatTool, funcParam: String) async throws {
         switch chatTool {
         case .urlScrape:
-            if let urls = extractURLs(from: funcParam, forKey: "urls") {
+            if let urls = extractURLs(from: funcParam, forKey: "url_list") {
                let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
                
                var webContent = ""

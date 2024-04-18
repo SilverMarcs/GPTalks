@@ -91,10 +91,10 @@ struct MacOSAppearanceView: View {
             LabeledPicker(title: "AutoGen Title", width: 300, picker: AutoGenTitleEnabler(isPicker: true))
                 .padding(10)
             
-            Divider()            
-            
-            LabeledPicker(title: "Smoother Scrolling", width: 300, picker: SmootherScrollPicker(isPicker: true))
-                .padding(10)
+//            Divider()            
+//            
+//            LabeledPicker(title: "Smoother Scrolling", width: 300, picker: SmootherScrollPicker(isPicker: true))
+//                .padding(10)
         }
         .padding(30)
     }

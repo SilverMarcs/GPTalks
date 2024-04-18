@@ -26,11 +26,11 @@ enum ChatTool: String, CaseIterable {
         case .urlScrape:
             return .init(function:
                     .init(name: "urlScrape",
-                          description: "If one or upto 3 URLs is explicitly given, this function must be used to receive the contents of that url webpage. Do not come up with potential URLs unless it explicitly exists in the chat history. Note that this function CANNOT search the web on its own. It can only look up sepcific urls. If you find a previous google search in the chat history, you may find some urls in the search results. You may initially use only one of those urls to call this function to retrieve required info. If a certain URL content had been retrieved earlier, but the user's information was not found from it, you may visit some more urls gradualy. Be sure to choose the most appropriate url to call in that case on your own. The function will visit that url and return the webcontent from it. NEVER pass in wikipedia links as the paramater. Only if the user explcitly provides upto 3 urls, you will visit them all in one go. If after attempting to retrieve a URL's content, content was not properly received, continue to access another url from previous search results, one at a time.",
+                          description: "This function can be used to retrieve web content of any number of URLs. If you find a previous google search in the chat history, you may find some urls in the search results. You may initially use only one of those urls to call this function to retrieve required info. If a certain URL content had been retrieved earlier, but the user's information was not found from it, you may visit some more urls one by one. Be sure to choose the most appropriate url to call in that case on your own. The function will visit that url and return the webcontent from it. NEVER pass in wikipedia links as the paramater. Only if the user explcitly provides multiple urls, you will visit them all in one go. If after attempting to retrieve a URL's content, content was not properly received, keep accessing urls from previous search results, one at a time.",
                           parameters:
                             .init(type: .object,
                                   properties: [
-                                    "urls":
+                                    "url_list":
                                         .init(type: .array, description: "The array of URLs of the websites to scrape", items: .init(type: .string))
                                     ]
                                  )
