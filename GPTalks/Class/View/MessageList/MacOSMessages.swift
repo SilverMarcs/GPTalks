@@ -23,8 +23,8 @@ struct MacOSMessages: View {
         
         ScrollViewReader { proxy in
             listView
+//                .animation(.default, value: session.inputImages)
             .navigationTitle(session.title)
-//            .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
             .navigationSubtitle(navSubtitle)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 MacInputView(session: session)

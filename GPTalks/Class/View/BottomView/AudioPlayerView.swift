@@ -32,10 +32,6 @@ struct AudioPlayerView: View {
                 
                 Text("\(formatTime(time: currentTime))")
                 
-//                ProgressWaveformView(audioURL: audioURL, progress: $audioProgress) {
-//                    self.sliderEditingChanged(editingStarted: false) // Call when dragging ends
-//                }
-//                .frame(height: 30)
                 Slider(value: $audioProgress, in: 0...1, onEditingChanged: sliderEditingChanged)
                     .controlSize(.small)
                 
@@ -99,58 +95,3 @@ struct AudioPlayerView: View {
         return String(format: "%02i:%02i", minutes, seconds)
     }
 }
-
-//import DSWaveformImage
-//import DSWaveformImageViews
-//import SwiftUI
-//
-//struct ProgressWaveformView: View {
-//    let audioURL: URL
-//    @Binding var progress: Double // Make progress a Binding variable
-//    var onDragEnd: () -> Void
-//    @State var width = CGFloat(4) // Width of the slider handle
-//    
-//    @State private var isHovering = false
-//
-//    var body: some View {
-//        GeometryReader { geometry in
-//            ZStack(alignment: .leading) {
-//                WaveformView(audioURL: audioURL) { shape in
-//                    shape.fill(.foreground)
-//                    shape.fill(Color.accentColor).mask(alignment: .leading) {
-//                        Rectangle().frame(width: geometry.size.width * progress)
-//                    }
-//                }
-//                // Custom Slider Handle
-//                RoundedRectangle(cornerRadius: 2)
-//                    .fill(Color.blue)
-////                    .frame(width: width, height: geometry.size.height)
-//                    .frame(width: isHovering ? 12 : 4, height: geometry.size.height)
-//                    .offset(x: geometry.size.width * progress - 1)
-//                    .gesture(
-//                        DragGesture()
-//                            .onChanged { value in
-//                                let newProgress = value.location.x / geometry.size.width
-//                                progress = min(max(0, newProgress), 1)
-//                            }
-//                            .onEnded { _ in
-//                                onDragEnd()
-//                            }
-//                    )
-//                    .animation(.easeInOut, value: progress)
-//                    .background(
-//                        Color.red
-//                            .frame(width: 20, height: geometry.size.height) // Adjust the width to control the hover area
-//                            .contentShape(Rectangle())
-//                            .offset(x: geometry.size.width * progress - 1)
-//                            .onHover { hovering in
-//                                withAnimation {
-//                                    isHovering = hovering
-//                                    width = hovering ? 12 : 4
-//                                }
-//                            }
-//                    )
-//            }
-//        }
-//    }
-//}

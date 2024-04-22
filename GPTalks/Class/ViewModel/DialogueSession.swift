@@ -103,14 +103,8 @@ import OpenAI
     }
     
     var activeTokenCount: Int {
-//        var adjustedConversations: [Conversation] = []
-//        if conversations.count > resetMarker + 1 {
-//            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
-//        }
+        // TODO: add func call and system prompt tokens here too
         
-//        print("Adjusted Conversations: \(adjustedConversations.count)")
-        
-        // get all conversation.content from adjustedConversations
         let allContent = adjustedConversations.map { $0.content }
         return tokenCount(text: allContent.joined(separator: " "))
     }
@@ -401,6 +395,8 @@ import OpenAI
     
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false, isEdit: Bool = false) async {
+        streamingTask?.cancel()
+        
         if isEdit {
             inputImages = editingImages
             inputAudioPath = editingAudioPath
@@ -462,18 +458,6 @@ import OpenAI
     
     @MainActor
     func createChatQuery() -> ChatQuery {
-//        var adjustedConversations: [Conversation] = conversations
-//        var adjustedConversations: [Conversation] = []
-        
-        // Adjusting the conversations array based on the resetMarker
-//        if conversations.count > resetMarker + 1 {
-//            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
-//        }
-        
-//        if adjustedConversations.last?.role == "assistant" {
-//            adjustedConversations = adjustedConversations.dropLast() // dropping the emtpy last conversation cuz its the empty assistant reply
-//        }
-        
         var mutableConversations = adjustedConversations
         if mutableConversations.last?.role == "assistant" {
             mutableConversations = mutableConversations.dropLast()
