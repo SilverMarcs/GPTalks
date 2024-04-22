@@ -9,7 +9,8 @@ import CoreData
 import SwiftUI
 
 enum ContentState: String, CaseIterable, Identifiable {
-    case chats = "Chats"   // includes starred
+    case chats = "Recents"   // includes starred
+    case all = "All"
     case images = "Images"
     case speech = "Speech"
     
@@ -19,6 +20,8 @@ enum ContentState: String, CaseIterable, Identifiable {
         switch self {
             case .chats:
                 "tray.2"
+            case .all:
+                "tray.2.fill"
             case .images:
                 "photo"
             case .speech:
@@ -37,7 +40,7 @@ enum ContentState: String, CaseIterable, Identifiable {
     var selectedState: ContentState = .chats {
         didSet {
             switch selectedState {
-            case .chats:
+            case .chats, .all:
                 if selectedDialogue == nil {
                     selectedDialogue = allDialogues.first
                 }
@@ -60,8 +63,20 @@ enum ContentState: String, CaseIterable, Identifiable {
         if !searchText.isEmpty {
             return filterDialogues(matching: searchText, from: allDialogues)
         } else {
-            return allDialogues
+            switch selectedState {
+            case .chats, .images, .speech:
+                return Array(allDialogues.prefix(11)) // Convert the prefix slice to an array
+            case .all:
+                return allDialogues
+            }
         }
+        
+        
+//        if !searchText.isEmpty {
+//            return filterDialogues(matching: searchText, from: allDialogues)
+//        } else {
+//            return allDialogues
+//        }
     }
     
     var placeHolderText: String {

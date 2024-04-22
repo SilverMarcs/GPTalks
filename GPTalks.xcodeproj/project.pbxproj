@@ -105,23 +105,6 @@
 		E4C65F1829CBEE2400AFA884 /* IOSInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C65F1729CBEE2400AFA884 /* IOSInputView.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		E4C65EB529CA9E8000AFA884 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4C65E9629CA9E7E00AFA884 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4C65E9D29CA9E7E00AFA884;
-			remoteInfo = ChatGPT;
-		};
-		E4C65EBF29CA9E8000AFA884 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4C65E9629CA9E7E00AFA884 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4C65E9D29CA9E7E00AFA884;
-			remoteInfo = ChatGPT;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		0803E1492B8338FA00D588C3 /* MessageContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContextMenu.swift; sourceTree = "<group>"; };
 		0817E3A32BC1B5970028AD2F /* PDFExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExtractor.swift; sourceTree = "<group>"; };
@@ -192,8 +175,6 @@
 		E4C65EA629CA9E7E00AFA884 /* ChatGPT.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ChatGPT.xcdatamodel; sourceTree = "<group>"; };
 		E4C65EA829CA9E7E00AFA884 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E4C65EAA29CA9E7F00AFA884 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E4C65EB429CA9E8000AFA884 /* GPTalksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPTalksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4C65EBE29CA9E8000AFA884 /* GPTalksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPTalksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C65ED329CA9F7800AFA884 /* DialogueSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogueSession.swift; sourceTree = "<group>"; };
 		E4C65ED429CA9F7800AFA884 /* Conversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		E4C65EDA29CA9F7800AFA884 /* MessageBubble.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
@@ -230,20 +211,6 @@
 				E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */,
 				083495A52BA8BCBA0009E271 /* OpenAI in Frameworks */,
 				08545C3A2B8D0DD500592108 /* SwiftSoup in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E4C65EB129CA9E8000AFA884 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E4C65EBB29CA9E8000AFA884 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,8 +340,6 @@
 			isa = PBXGroup;
 			children = (
 				E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */,
-				E4C65EB429CA9E8000AFA884 /* GPTalksTests.xctest */,
-				E4C65EBE29CA9E8000AFA884 /* GPTalksUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -530,42 +495,6 @@
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E4C65EB329CA9E8000AFA884 /* GPTalksTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E4C65ECB29CA9E8000AFA884 /* Build configuration list for PBXNativeTarget "GPTalksTests" */;
-			buildPhases = (
-				E4C65EB029CA9E8000AFA884 /* Sources */,
-				E4C65EB129CA9E8000AFA884 /* Frameworks */,
-				E4C65EB229CA9E8000AFA884 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E4C65EB629CA9E8000AFA884 /* PBXTargetDependency */,
-			);
-			name = GPTalksTests;
-			productName = ChatGPTTests;
-			productReference = E4C65EB429CA9E8000AFA884 /* GPTalksTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		E4C65EBD29CA9E8000AFA884 /* GPTalksUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E4C65ECE29CA9E8000AFA884 /* Build configuration list for PBXNativeTarget "GPTalksUITests" */;
-			buildPhases = (
-				E4C65EBA29CA9E8000AFA884 /* Sources */,
-				E4C65EBB29CA9E8000AFA884 /* Frameworks */,
-				E4C65EBC29CA9E8000AFA884 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E4C65EC029CA9E8000AFA884 /* PBXTargetDependency */,
-			);
-			name = GPTalksUITests;
-			productName = ChatGPTUITests;
-			productReference = E4C65EBE29CA9E8000AFA884 /* GPTalksUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -578,14 +507,6 @@
 				TargetAttributes = {
 					E4C65E9D29CA9E7E00AFA884 = {
 						CreatedOnToolsVersion = 14.2;
-					};
-					E4C65EB329CA9E8000AFA884 = {
-						CreatedOnToolsVersion = 14.2;
-						TestTargetID = E4C65E9D29CA9E7E00AFA884;
-					};
-					E4C65EBD29CA9E8000AFA884 = {
-						CreatedOnToolsVersion = 14.2;
-						TestTargetID = E4C65E9D29CA9E7E00AFA884;
 					};
 				};
 			};
@@ -615,8 +536,6 @@
 			projectRoot = "";
 			targets = (
 				E4C65E9D29CA9E7E00AFA884 /* GPTalks */,
-				E4C65EB329CA9E8000AFA884 /* GPTalksTests */,
-				E4C65EBD29CA9E8000AFA884 /* GPTalksUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -627,20 +546,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4C65EAB29CA9E7F00AFA884 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E4C65EB229CA9E8000AFA884 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E4C65EBC29CA9E8000AFA884 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -728,34 +633,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E4C65EB029CA9E8000AFA884 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E4C65EBA29CA9E8000AFA884 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		E4C65EB629CA9E8000AFA884 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4C65E9D29CA9E7E00AFA884 /* GPTalks */;
-			targetProxy = E4C65EB529CA9E8000AFA884 /* PBXContainerItemProxy */;
-		};
-		E4C65EC029CA9E8000AFA884 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4C65E9D29CA9E7E00AFA884 /* GPTalks */;
-			targetProxy = E4C65EBF29CA9E8000AFA884 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		E4C65EC629CA9E8000AFA884 /* Debug */ = {
@@ -987,100 +865,6 @@
 			};
 			name = Release;
 		};
-		E4C65ECC29CA9E8000AFA884 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 2WRET6WW2J;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.luohuanyu.ChatGPTTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GPTalks.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GPTalks";
-			};
-			name = Debug;
-		};
-		E4C65ECD29CA9E8000AFA884 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 2WRET6WW2J;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.luohuanyu.ChatGPTTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GPTalks.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GPTalks";
-			};
-			name = Release;
-		};
-		E4C65ECF29CA9E8000AFA884 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 2WRET6WW2J;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.luohuanyu.ChatGPTUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = ChatGPT;
-			};
-			name = Debug;
-		};
-		E4C65ED029CA9E8000AFA884 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 2WRET6WW2J;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.luohuanyu.ChatGPTUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = ChatGPT;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1098,24 +882,6 @@
 			buildConfigurations = (
 				E4C65EC929CA9E8000AFA884 /* Debug */,
 				E4C65ECA29CA9E8000AFA884 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E4C65ECB29CA9E8000AFA884 /* Build configuration list for PBXNativeTarget "GPTalksTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E4C65ECC29CA9E8000AFA884 /* Debug */,
-				E4C65ECD29CA9E8000AFA884 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E4C65ECE29CA9E8000AFA884 /* Build configuration list for PBXNativeTarget "GPTalksUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E4C65ECF29CA9E8000AFA884 /* Debug */,
-				E4C65ED029CA9E8000AFA884 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

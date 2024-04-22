@@ -50,10 +50,22 @@ struct MessageContextMenu: View {
                     }
                     
                     Button {
-                        conversation.content.copyToPasteboard()
+                        if !conversation.arguments.isEmpty {
+                            conversation.arguments.copyToPasteboard()
+                        } else {
+                            conversation.content.copyToPasteboard()
+                        }
                     } label: {
                         Label("Copy", systemImage: "paperclip")
                     }
+                    
+                    #if !os(macOS)
+                    Button {
+                        toggleTextSelection()
+                    } label: {
+                        Label("Select", systemImage: "text.viewfinder")
+                    }
+                    #endif
                 }
                 
                 Section {

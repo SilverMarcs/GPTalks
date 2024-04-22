@@ -102,7 +102,11 @@ struct MacOSMessages: View {
                     itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in
                         DispatchQueue.main.async {
                             if let image = image as? NSImage {
-                                session.inputImages.append(image)
+                                if session.isEditing {
+                                    session.editingImages.append(image)
+                                } else {
+                                    session.inputImages.append(image)
+                                }
                             } else {
                                 print("Could not load image: \(String(describing: error))")
                             }

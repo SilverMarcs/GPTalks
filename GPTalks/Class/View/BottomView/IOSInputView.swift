@@ -62,7 +62,7 @@ struct IOSInputView: View {
             showMore = false
             session.resetContext()
         } label: {
-            Image(systemName: "eraser.fill")
+            Image(systemName: "eraser")
                 .resizable()
                 .inputImageStyle(padding: 10, imageSize: imageSize)
         }
