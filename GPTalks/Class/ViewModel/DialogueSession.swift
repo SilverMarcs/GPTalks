@@ -214,7 +214,7 @@ import OpenAI
         if let image = getImageFromClipboard() {
             let imageData = image.tiffRepresentation
 
-            if session.isEditing {
+            if isEditing {
                 if !self.editingImages.contains(where: { $0.tiffRepresentation == imageData }) {
                     self.editingImages.append(image)
                 }

@@ -23,11 +23,6 @@ struct MacInputView: View {
     @State var selectedItems: [PhotosPickerItem] = []
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            CustomImportedImagesView(session: session)
-            CustomPDFViewer(session: session)
-            CustomAudioPreviewer(session: session)
-            
             HStack(alignment: .bottom, spacing: 12) {
                 Group {
                     if session.isEditing {
@@ -36,11 +31,6 @@ struct MacInputView: View {
                     
                     moreOptions
                     
-                    if showMore {
-                        CustomImagePickerView(session: session, showMore: $showMore)
-                        CustomPDFPickerView(session: session, showMore: $showMore, imageSize: 25, padding: 7)
-                        CustomAudioPickerView(session: session, showMore: $showMore)
-                    }
                 }
                 .offset(y: -1.15)
                 
@@ -54,7 +44,7 @@ struct MacInputView: View {
                     }
                 }
                 .offset(y: -1.15)
-            }
+//            }
         }
         .onChange(of: session.input) {
             if session.input.count > 3 {
@@ -67,8 +57,6 @@ struct MacInputView: View {
         .animation(.default, value: session.editingPDFPath)
         .animation(.default, value: session.inputAudioPath)
         .animation(.default, value: session.editingAudioPath)
-//        .animation(.default, value: session.input)
-//        .animation(.default, value: session.editingMessage)
         .animation(.default, value: session.isEditing)
         .animation(.default, value: showMore)
         .buttonStyle(.plain)
@@ -79,14 +67,29 @@ struct MacInputView: View {
     
     var moreOptions: some View {
         Button {
-            showMore.toggle()
+            withAnimation {
+                showMore.toggle()
+            }
         } label: {
             Image(systemName: "plus")
                 .resizable()
                 .inputImageStyle(padding: 6, imageSize: imageSize)
                 .rotationEffect(.degrees(showMore ? 45 : 0))
-                .animation(.default, value: showMore)
         }
+        .overlay(
+            Group {
+                if showMore {
+                    VStack {
+                        CustomImagePickerView(session: session, showMore: $showMore)
+                        CustomPDFPickerView(session: session, showMore: $showMore, imageSize: 25, padding: 7)
+                        CustomAudioPickerView(session: session, showMore: $showMore)
+                    }
+                    .background(.regularMaterial)
+                    .cornerRadius(10)
+                    .offset(x: 0, y: -99) // Adjust this value as needed
+                }
+            }, alignment: .top
+        )
     }
     
     var stopEditing: some View {
