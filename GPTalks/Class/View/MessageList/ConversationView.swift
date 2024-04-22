@@ -14,14 +14,18 @@ struct ConversationView: View {
     var body: some View {
         VStack { // TODO dont use vstack
             Group {
-                    if conversation.role == "user" {
-                        UserMessageView(conversation: conversation, session: session)
-                    } else if conversation.role == "assistant" {
-                        AssistantMessageView(conversation: conversation, session: session)
-                    } else if conversation.role == "tool" {
-                        ToolCallView(conversation: conversation, session: session)
-                    }
+                switch conversation.role {
+                case .user:
+                    UserMessageView(conversation: conversation, session: session)
+                case .assistant:
+                    AssistantMessageView(conversation: conversation, session: session)
+                case .tool:
+                    ToolCallView(conversation: conversation, session: session)
+                case .system:
+                    // never coming here
+                    Text(conversation.content)
                 }
+            }
             .opacity(0.9)
 
             if session.conversations.firstIndex(of: conversation) == session.resetMarker {

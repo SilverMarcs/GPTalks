@@ -199,7 +199,7 @@ struct MacOSMessages: View {
     private var alternateList: some View {
         List {
             VStack(spacing: 0) {
-                ForEach(session.filteredConversations()) { conversation in
+                ForEach(session.conversations) { conversation in
                     ConversationView(session: session, conversation: conversation)
                 }
                 
@@ -216,7 +216,7 @@ struct MacOSMessages: View {
     private var normalList: some View {
         ScrollView {
             VStack(spacing: 0) {
-                ForEach(session.filteredConversations()) { conversation in
+                ForEach(session.conversations) { conversation in
                     ConversationView(session: session, conversation: conversation)
                 }
             }

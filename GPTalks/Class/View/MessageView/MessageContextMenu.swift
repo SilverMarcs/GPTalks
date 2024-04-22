@@ -24,7 +24,7 @@ struct MessageContextMenu: View {
         HStack(spacing: 10) {
             Group {
                 Section {
-                    if conversation.role == "user" {
+                    if conversation.role == .user {
                         #if os(macOS)
                         if conversation.content.count > 300 {
                             expandButton
@@ -36,7 +36,7 @@ struct MessageContextMenu: View {
                         } label: {
                             Label("Edit", systemImage: "applepencil.tip")
                         }
-                    } else if conversation.role == "tool" {
+                    } else if conversation.role == .tool {
                         expandButton
                     }
                     

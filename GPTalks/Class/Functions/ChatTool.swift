@@ -111,6 +111,16 @@ enum ChatTool: String, CaseIterable {
         }
     }
     
+    static func countTokensForAllCases() -> Int {
+        var totalTokenCount = 0
+        for tool in ChatTool.allCases {
+            let description = tool.completionToolParam.function.description
+            let tokenCountForDescription = tokenCount(text: description ?? "")
+            totalTokenCount += tokenCountForDescription
+        }
+        return totalTokenCount
+    }
+    
     @ViewBuilder
     var destination: some View {
         @ObservedObject var appConfig = AppConfiguration.shared

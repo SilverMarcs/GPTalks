@@ -8,10 +8,30 @@
 import OpenAI
 import SwiftUI
 
+enum ConversationRole: String, Codable, CaseIterable {
+    case user
+    case assistant
+    case system
+    case tool
+
+    func toChatRole() -> ChatQuery.ChatCompletionMessageParam.Role {
+        switch self {
+        case .user:
+            return .user
+        case .assistant:
+            return .assistant
+        case .system:
+            return .system
+        case .tool:
+            return .tool
+        }
+    }
+}
+
 struct Conversation: Codable, Identifiable, Hashable, Equatable {
     var id = UUID()
     var date = Date()
-    var role: String
+    var role: ConversationRole
     var content: String
     var imagePaths: [String] = []
     var audioPath: String = ""
@@ -21,20 +41,7 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
     var isReplying: Bool = false
 
     func toChat(imageAsPath: Bool = false) -> ChatQuery.ChatCompletionMessageParam {
-        let chatRole: ChatQuery.ChatCompletionMessageParam.Role = {
-            switch role {
-            case "user":
-                return .user
-            case "assistant":
-                return .assistant
-            case "system":
-                return .system
-            case "tool":
-                return .tool
-            default:
-                return .user
-            }
-        }()
+        let chatRole = role.toChatRole()
 
         if chatRole == .assistant, let tool = ChatTool(rawValue: toolRawValue) {
             return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: arguments, name: tool.rawValue))])!
@@ -64,6 +71,12 @@ struct Conversation: Codable, Identifiable, Hashable, Equatable {
 
         return .init(role: chatRole, content: content)!
     }
+
+    func countTokens() -> Int {
+        let textToken = tokenCount(text: content + arguments)
+        let imageToken = imagePaths.count * 85 // this is wrong
+        return textToken + imageToken
+    }
 }
 
 func createVisionMessage(conversation: Conversation) -> ChatQuery.ChatCompletionMessageParam {
@@ -86,7 +99,7 @@ extension ConversationData {
     func sync(with conversation: Conversation) {
         id = conversation.id
         date = conversation.date
-        role = conversation.role
+        role = conversation.role.rawValue
         content = conversation.content
         audioPath = conversation.audioPath
         pdfPath = conversation.pdfPath
@@ -108,7 +121,7 @@ extension Conversation {
         let data = ConversationData(context: viewContext)
         data.id = conversation.id
         data.date = conversation.date
-        data.role = conversation.role
+        data.role = conversation.role.rawValue
         data.content = conversation.content
         data.audioPath = conversation.audioPath
         data.pdfPath = conversation.pdfPath

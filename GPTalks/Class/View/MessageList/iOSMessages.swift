@@ -32,7 +32,7 @@ struct iOSMessages: View {
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
                     VStack(spacing: 0) {
-                        ForEach(session.filteredConversations()) { conversation in
+                        ForEach(session.conversations) { conversation in
                             ConversationView(session: session, conversation: conversation)
                         }
                     }
@@ -105,7 +105,11 @@ struct iOSMessages: View {
                     itemProvider.loadObject(ofClass: UIImage.self) { image, error in
                         DispatchQueue.main.async {
                             if let image = image as? UIImage {
-                                session.inputImages.append(image)
+                                if session.isEditing {
+                                    session.editingImages.append(image)
+                                } else {
+                                    session.inputImages.append(image)
+                                }
                             } else {
                                 print("Could not load image: \(String(describing: error))")
                             }
@@ -249,7 +253,7 @@ struct iOSMessages: View {
                print("App has resumed from background")
                if AppConfiguration.shared.autoResume {
                    isTextFieldFocused = true
-                   if !session.resetMarker == session.conversations.count - 1 {
+                   if !(session.resetMarker == (session.conversations.count - 1)) {
                        session.resetContext()
                    }
                }
