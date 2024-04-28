@@ -16,14 +16,10 @@ struct MacOSMessages: View {
 
     @State private var isUserScrolling = false
     @State var isShowSysPrompt: Bool = false
-    @State var keyDownMonitor: Any?
 
     var body: some View {
-        // TODO: create variable for nav subtitle
-        
         ScrollViewReader { proxy in
             listView
-//                .animation(.default, value: session.inputImages)
             .navigationTitle(session.title)
             .navigationSubtitle(navSubtitle)
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -31,8 +27,7 @@ struct MacOSMessages: View {
                     .background(.bar)
                     .id(session.id)
             }
-            .onChange(of: viewModel.selectedDialogue) {      
-//            .onAppear {
+            .onChange(of: viewModel.selectedDialogue) {
                 if AppConfiguration.shared.alternateMarkdown {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
@@ -43,25 +38,6 @@ struct MacOSMessages: View {
                     scrollToBottom(proxy: proxy, animated: false)
                 }
                 
-                // Remove previous event monitor if exists
-                if let existingMonitor = self.keyDownMonitor {
-                    NSEvent.removeMonitor(existingMonitor)
-                    self.keyDownMonitor = nil
-                }
-
-                // Add new event monitor
-                self.keyDownMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (event) -> NSEvent? in
-                    if event.modifierFlags.contains(.command) && event.characters == "v" {
-                        session.pasteImageFromClipboard()
-                    }
-                    return event
-                }
-            }
-            .onDisappear {
-                if let existingMonitor = self.keyDownMonitor {
-                    NSEvent.removeMonitor(existingMonitor)
-                    self.keyDownMonitor = nil
-                }
             }
             .onChange(of: session.conversations.last?.content) {
                 if !isUserScrolling {
@@ -149,24 +125,22 @@ struct MacOSMessages: View {
                     }
                     .menuIndicator(.hidden)
                 }
-
-                #if os(macOS)
-                ToolbarItem(placement: .keyboard) {
-                    deleteLastMessage
-                }
-                ToolbarItem(placement: .keyboard) {
-                    resetContextButton
-                }
-                ToolbarItem(placement: .keyboard) {
-                    deleteAllMessages
-                }
-                ToolbarItem(placement: .keyboard) {
-                    regenLast
-                }
-                #endif
                 
-                ToolbarItemGroup {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Group {
+                        deleteLastMessage
                         
+                        resetContextButton
+                        
+                        deleteAllMessages
+                        
+                        regenLast
+                        
+                        pasteImage
+                    }
+                    .id(session.id)
+                }
+                ToolbarItemGroup {
                     ProviderPicker(session: session)
 
                     TempSlider(session: session)
@@ -231,10 +205,8 @@ struct MacOSMessages: View {
     
     private var deleteLastMessage: some View {
         Button("Delete Last Message") {
-            if let session = viewModel.selectedDialogue {
-                if session.conversations.count > 0 {
-                    session.removeConversation(session.conversations.last!)
-                }
+            if session.conversations.count > 0 {
+                session.removeConversation(session.conversations.last!)
             }
         }
         .keyboardShortcut(.delete, modifiers: .command)
@@ -243,9 +215,7 @@ struct MacOSMessages: View {
     
     private var resetContextButton: some View {
         Button("Reset Context") {
-            if let session = viewModel.selectedDialogue {
-                session.resetContext()
-            }
+            session.resetContext()
         }
         .keyboardShortcut("k", modifiers: .command)
         .hidden()
@@ -253,9 +223,7 @@ struct MacOSMessages: View {
     
     private var deleteAllMessages: some View {
         Button("Delete all messages") {
-            if let session = viewModel.selectedDialogue {
-                session.removeAllConversations()
-            }
+            session.removeAllConversations()
         }
         .keyboardShortcut(.delete, modifiers: [.command, .shift])
         .hidden()
@@ -263,13 +231,19 @@ struct MacOSMessages: View {
     
     private var regenLast: some View {
         Button("Regenerate") {
-            if let session = viewModel.selectedDialogue {
-                Task { @MainActor in
-                    await session.regenerateLastMessage()
-                }
+            Task { @MainActor in
+                await session.regenerateLastMessage()
             }
         }
         .keyboardShortcut("r", modifiers: .command)
+        .hidden()
+    }
+    
+    private var pasteImage: some View {
+        Button("Paste Image") {
+            session.pasteImageFromClipboard()
+        }
+        .keyboardShortcut("b", modifiers: .command)
         .hidden()
     }
 }

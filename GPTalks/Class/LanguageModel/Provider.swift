@@ -312,7 +312,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             .openai,
             .oxygen,
             .naga,
-//            .kraken,
+            .kraken,
             .shard,
             .custom,
         ]

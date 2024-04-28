@@ -35,6 +35,11 @@ enum Model: String, Codable {
 
     /// naga
     case nplaygroundv25
+    case nsd3
+    case nkandinsky3_1
+    case ngemini
+    case nllama3
+    case nmixtral
     
     /// kraken
     case kplaygroundv25
@@ -108,14 +113,25 @@ enum Model: String, Codable {
             "Midjourney"
             
         /// naga
-        case .sdxl:
-            "SDXL"
         case .nplaygroundv25:
             "Playground"
+        case .nsd3:
+            "SD3"
+        case .nkandinsky3_1:
+            "Kandinsky 3"
+        case .ngemini:
+            "Gemini 1.5P"
+        case .nllama3:
+            "Llama 3"
+        case .nmixtral:
+            "Mixtral"
             
         /// kraken
         case .kplaygroundv25:
             "Playground"
+            
+        case .sdxl:
+            "SDXL"
 
         case .customChat:
             self.id.isEmpty ? "Custom Chat" : self.id
@@ -180,14 +196,25 @@ enum Model: String, Codable {
             "midjourney"
             
         /// naga
-        case .sdxl:
-            "sdxl"
         case .nplaygroundv25:
             "playground-v2.5"
+        case .nsd3:
+            "stable-diffusion-3"
+        case .nkandinsky3_1:
+            "kandinsky-3.1"
+        case .ngemini:
+            "gemini-1.5-pro-latest"
+        case .nllama3:
+            "llama-3-70b-instruct"
+        case .nmixtral:
+            "mixtral-8x22b-instruct"
             
         /// kraken
         case .kplaygroundv25:
             "playground-2.5"
+            
+        case .sdxl:
+            "sdxl"
 
         case .customChat:
             AppConfiguration.shared.customChatModel
@@ -243,7 +270,12 @@ enum Model: String, Codable {
     /// Naga
     static let nagaChatModels: [Model] =
         openAIChatModels +
-        claudeModels
+        claudeModels +
+        [
+            .ngemini,
+            .nllama3,
+            .nmixtral,
+        ]
     
     static let nagaVisionModels: [Model] =
         openAIVisionModels
@@ -253,6 +285,8 @@ enum Model: String, Codable {
         [
             .sdxl,
             .nplaygroundv25,
+            .nsd3,
+            .nkandinsky3_1,
         ]
     
     /// Kraken
