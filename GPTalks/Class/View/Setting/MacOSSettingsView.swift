@@ -29,7 +29,7 @@ struct MacOSSettingsView: View {
                 }
             
             ToolsView()
-                .frame(width: 650, height: 230)
+                .frame(width: 650, height: 250)
                 .tabItem {
                     Label("Plugins", systemImage: "wrench")
                 }

@@ -118,11 +118,11 @@ enum Model: String, Codable {
         case .nsd3:
             "SD3"
         case .nkandinsky3_1:
-            "Kandinsky 3"
+            "Kandinsky-3"
         case .ngemini:
-            "Gemini 1.5P"
+            "Gemini-1.5"
         case .nllama3:
-            "Llama 3"
+            "Llama-3"
         case .nmixtral:
             "Mixtral"
             

@@ -251,7 +251,7 @@ struct iOSMessages: View {
            switch scenePhase {
            case .active:
                print("App has resumed from background")
-               if AppConfiguration.shared.autoResume {
+               if AppConfiguration.shared.autoResume && !session.isReplying {
                    isTextFieldFocused = true
                    if !(session.resetMarker == (session.conversations.count - 1)) {
                        session.resetContext()
