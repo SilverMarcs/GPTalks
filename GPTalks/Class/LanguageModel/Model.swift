@@ -11,6 +11,7 @@ import OpenAI
 enum Model: String, Codable {
     /// openai
     case gpt3t
+    case gpt4o
     case gpt4
     case gpt4t
     case gpt4tp
@@ -63,6 +64,8 @@ enum Model: String, Codable {
         switch self {
         case .gpt3t:
             "GPT-3.5T"
+        case .gpt4o:
+            "GPT-4O"
         case .gpt4:
             "GPT-4"
         case .gpt4t:
@@ -146,10 +149,11 @@ enum Model: String, Codable {
         switch self {
         case .gpt3t:
             "gpt-3.5-turbo"
+        case .gpt4o:
+            "gpt-4o"
         case .gpt4:
             "gpt-4"
         case .gpt4t:
-//            "gpt-4-turbo"
             "gpt-4-turbo-2024-04-09"
         case .gpt4tp:
             "gpt-4-turbo-preview"
@@ -238,6 +242,7 @@ enum Model: String, Codable {
         [
             .gpt3t,
             .gpt4,
+            .gpt4o,
             .gpt4t,
             .gpt4tp,
         ]
