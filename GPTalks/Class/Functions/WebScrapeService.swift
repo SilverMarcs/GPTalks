@@ -44,7 +44,7 @@ func retrieveWebContent(from urlStr: String) async throws -> String {
     }
     
     // return only the first 10000 characters
-    return String(extractedHTML.prefix(2500))
+    return String(extractedHTML.prefix(3000))
 //    return extractedHTML
 
 }

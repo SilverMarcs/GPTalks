@@ -5,20 +5,22 @@
 //  Created by Zabir Raihan on 10/11/2023.
 //
 
-import SwiftUI
 import KeyboardShortcuts
+import SwiftUI
 
 @main
 struct GPTalks: App {
     @State private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
     @State var showingPanel = false
+    @State private var mainWindow: NSWindow?
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .floatingPanel(isPresented: $showingPanel, content: {
-                    PanelTextEditor() {
+                    PanelTextEditor {
                         showingPanel.toggle()
+                        bringMainWindowToFront()
                     }
                     .environment(viewModel)
                 })
@@ -27,6 +29,7 @@ struct GPTalks: App {
                         showingPanel.toggle()
                     }
                 }
+                .background(BackgroundView(window: $mainWindow))
         }
         .environment(viewModel)
         .commands {
@@ -53,4 +56,25 @@ struct GPTalks: App {
         }
 #endif
     }
+    
+    private func bringMainWindowToFront() {
+        if let window = mainWindow {
+            window.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+        }
+    }
+}
+
+struct BackgroundView: NSViewRepresentable {
+    @Binding var window: NSWindow?
+    
+    func makeNSView(context: Context) -> NSView {
+        let nsView = NSView()
+        DispatchQueue.main.async {
+            self.window = nsView.window
+        }
+        return nsView
+    }
+    
+    func updateNSView(_ nsView: NSView, context: Context) {}
 }

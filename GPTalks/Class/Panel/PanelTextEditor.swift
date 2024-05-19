@@ -20,9 +20,10 @@ struct PanelTextEditor: View {
                 .font(.system(size: 18))
                 .scrollContentBackground(.hidden)
                 
-            
             SendButton(size: 26) {
                 dismiss()
+                NSApp.activate(ignoringOtherApps: true)
+                
                 let session = viewModel.addFloatingDialogue()
                 session?.input = prompt
 
@@ -31,7 +32,6 @@ struct PanelTextEditor: View {
                 }
                 
                 prompt = ""
-
             }
             .buttonStyle(.plain)
         }
