@@ -5,8 +5,6 @@
 //  Created by Zabir Raihan on 27/11/2024.
 //
 
-import CoreData
-import SwiftSoup
 import SwiftUI
 
 struct ContentView: View {
@@ -15,8 +13,6 @@ struct ContentView: View {
     
     @State var imageSession: ImageSession = .init()
     @State var transcriptionSession: TranscriptionSession = .init()
-    
-    @State var resumed: Bool = false
     
     var body: some View {
 #if os(macOS)

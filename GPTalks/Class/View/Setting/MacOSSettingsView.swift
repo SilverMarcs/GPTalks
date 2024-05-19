@@ -4,6 +4,7 @@
 //
 //  Created by Zabir Raihan on 27/11/2024.
 //
+import KeyboardShortcuts
 import SwiftUI
 
 #if os(macOS)
@@ -11,25 +12,31 @@ struct MacOSSettingsView: View {
     var body: some View {
         TabView {
             MacOSAppearanceView()
-                .frame(width: 650, height: 310)
+                .frame(width: 620, height: 250)
                 .tabItem {
                     Label("Appearance", systemImage: "wand.and.stars")
                 }
+            
+            MacOSQuickPanelSettings()
+                .frame(width: 620, height: 300)
+                .tabItem {
+                    Label("Quick Panel", systemImage: "bolt.fill")
+                }
         
             MacOSDefaultParameters()
-                .frame(width: 650, height: 470)
+                .frame(width: 620, height: 420)
                 .tabItem {
                     Label("Session", systemImage: "slider.horizontal.3")
                 }
         
             ProviderSettingsView()
-                .frame(width: 650, height: 340)
+                .frame(width: 620, height: 380)
                 .tabItem {
                     Label("Providers", systemImage: "brain.head.profile")
                 }
             
             ToolsView()
-                .frame(width: 650, height: 250)
+                .frame(width: 620, height: 250)
                 .tabItem {
                     Label("Plugins", systemImage: "wrench")
                 }
@@ -75,6 +82,44 @@ struct ProviderSettingsView: View {
     }
 }
 
+struct MacOSQuickPanelSettings: View {
+    @ObservedObject var appConfig = AppConfiguration.shared
+    
+    var body: some View {
+        Form {
+            HStack {
+                Text("Global Shortcut")
+                Spacer()
+                KeyboardShortcuts.Recorder(for: .togglePanel)
+            }
+                
+            Picker("Provider", selection: $appConfig.quickPanelProvider) {
+                ForEach(Provider.availableProviders, id: \.self) { provider in
+                    Text(provider.name)
+                }
+            }
+            
+            Picker("Model", selection: $appConfig.quickPanelModel) {
+                ForEach(appConfig.quickPanelProvider.chatModels, id: \.self) { model in
+                    Text(model.name)
+                }
+            }
+            
+            TextField("Prompt", text: $appConfig.quickPanelPrompt)
+                .textFieldStyle(.roundedBorder)
+            
+            Toggle("Google Search", isOn: $appConfig.qpIsGoogleSearchEnabled)
+            Toggle("URL Scrape", isOn: $appConfig.qpIsUrlScrapeEnabled)
+            Toggle("Image Generate", isOn: $appConfig.qpIsImageGenerateEnabled)
+            Toggle("Transcribe", isOn: $appConfig.qpIsTranscribeEnabled)
+            Toggle("Extract PDF", isOn: $appConfig.qpIsExtractPdfEnabled)
+            Toggle("Vision", isOn: $appConfig.qpIsVisionEnabled)
+        }
+        .padding(30)
+        .frame(width: 350, height: 300)
+    }
+}
+
 struct MacOSAppearanceView: View {
     var body: some View {
         GroupBox("Config") {
@@ -90,11 +135,6 @@ struct MacOSAppearanceView: View {
             
             LabeledPicker(title: "AutoGen Title", width: 300, picker: AutoGenTitleEnabler(isPicker: true))
                 .padding(10)
-            
-//            Divider()            
-//            
-//            LabeledPicker(title: "Smoother Scrolling", width: 300, picker: SmootherScrollPicker(isPicker: true))
-//                .padding(10)
         }
         .padding(30)
     }
@@ -124,16 +164,16 @@ struct MacOSDefaultParameters: View {
 
                 Divider()
 
-                HStack {
-                    Text("Use Tools")
-                    Spacer()
-                    UseToolsPicker(isPicker: true)
-                        .labelsHidden()
-                        .frame(width: widthValue)
-                }
-                .padding(paddingValue)
-
-                Divider()
+//                HStack {
+//                    Text("Use Tools")
+//                    Spacer()
+//                    UseToolsPicker(isPicker: true)
+//                        .labelsHidden()
+//                        .frame(width: widthValue)
+//                }
+//                .padding(paddingValue)
+//
+//                Divider()
                 
                 HStack {
                     VStack {

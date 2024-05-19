@@ -39,8 +39,25 @@ class GoogleSearchService {
         // Decoding the JSON data into a dictionary
         if let jsonResult = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
            let items = jsonResult["items"] as? [[String: Any]] {
+            
+            // Filter out items that contain "Wikipedia" (case insensitive)
+            let filteredItems = items.filter { item in
+                if let link = item["link"] as? String,
+                   (link.range(of: "Wikipedia", options: .caseInsensitive) != nil || link.range(of: "Reddit", options: .caseInsensitive) != nil) {
+                    return false
+                }
+                if let snippet = item["snippet"] as? String,
+                   (snippet.range(of: "Wikipedia", options: .caseInsensitive) != nil || snippet.range(of: "Reddit", options: .caseInsensitive) != nil) {
+                    return false
+                }
+                return true
+            }
+            
+            // Take the top 5 items
+            let topItems = filteredItems.prefix(5)
+            
             // Building a string representation of the search results
-            let searchResultsString = items.map { item -> String in
+            let searchResultsString = topItems.map { item -> String in
                 let title = item["title"] as? String ?? "No title"
                 let link = item["link"] as? String ?? "No link"
                 let snippet = item["snippet"] as? String ?? "No snippet"

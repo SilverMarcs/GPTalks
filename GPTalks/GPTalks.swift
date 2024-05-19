@@ -6,19 +6,27 @@
 //
 
 import SwiftUI
-import HotKey
+import KeyboardShortcuts
 
 @main
 struct GPTalks: App {
     @State private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
-    
-    #if os(macOS)
-    let hotKey = HotKey(key: .space, modifiers: [.option], keyDownHandler: {NSApp.activate(ignoringOtherApps: true)})
-    #endif
+    @State var showingPanel = false
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .floatingPanel(isPresented: $showingPanel, content: {
+                    PanelTextEditor() {
+                        showingPanel.toggle()
+                    }
+                    .environment(viewModel)
+                })
+                .task {
+                    KeyboardShortcuts.onKeyDown(for: .togglePanel) {
+                        showingPanel.toggle()
+                    }
+                }
         }
         .environment(viewModel)
         .commands {

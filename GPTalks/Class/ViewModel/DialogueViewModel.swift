@@ -9,7 +9,7 @@ import CoreData
 import SwiftUI
 
 enum ContentState: String, CaseIterable, Identifiable {
-    case chats = "Recents"   // includes starred
+    case chats = "Recents"
     case all = "All"
     case images = "Images"
     case speech = "Speech"
@@ -173,6 +173,33 @@ enum ContentState: String, CaseIterable, Identifiable {
                 selectedDialogue = session
             }
         }
+    }
+    
+    func addFloatingDialogue() -> DialogueSession? {
+        if selectedState != .chats {
+            selectedState = .chats
+        }
+
+        let newItem = DialogueData(context: viewContext)
+        newItem.id = UUID()
+        newItem.date = Date()
+
+        do {
+            newItem.configuration = try JSONEncoder().encode(DialogueSession.Configuration(quick: true))
+        } catch {
+            print(error.localizedDescription)
+        }
+
+        save()
+
+        if let session = DialogueSession(rawData: newItem) {
+            withAnimation {
+                allDialogues.insert(session, at: 0)
+                selectedDialogue = session
+            }
+        }
+        
+        return allDialogues.first
     }
 
     func deleteDialogue(_ session: DialogueSession) {

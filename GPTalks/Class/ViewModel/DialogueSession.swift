@@ -15,14 +15,39 @@ import OpenAI
         var systemPrompt: String
         var provider: Provider
         var model: Model
-        var useTools: Bool
+        
+        var useGSearch: Bool = false
+        var useUrlScrape: Bool = false
+        var useImageGenerate: Bool = false
+        var useTranscribe: Bool = false
+        var useExtractPdf: Bool = false
+        var useVision: Bool = false
 
         init() {
             provider = AppConfiguration.shared.preferredChatService
             model = provider.preferredChatModel
             temperature = AppConfiguration.shared.temperature
             systemPrompt = AppConfiguration.shared.systemPrompt
-            useTools = AppConfiguration.shared.useTools
+            
+            useGSearch = AppConfiguration.shared.isGoogleSearchEnabled
+            useUrlScrape = AppConfiguration.shared.isUrlScrapeEnabled
+            useImageGenerate = AppConfiguration.shared.isImageGenerateEnabled
+            useTranscribe = AppConfiguration.shared.isTranscribeEnabled
+            useExtractPdf = AppConfiguration.shared.isExtractPdfEnabled
+            useVision = AppConfiguration.shared.isVisionEnabled
+        }
+        
+        init(quick: Bool) {
+            provider = AppConfiguration.shared.quickPanelProvider
+            model = AppConfiguration.shared.quickPanelModel
+            temperature = AppConfiguration.shared.temperature
+            systemPrompt = AppConfiguration.shared.quickPanelPrompt
+            useGSearch = AppConfiguration.shared.qpIsGoogleSearchEnabled
+            useUrlScrape = AppConfiguration.shared.qpIsUrlScrapeEnabled
+            useImageGenerate = AppConfiguration.shared.qpIsImageGenerateEnabled
+            useTranscribe = AppConfiguration.shared.qpIsTranscribeEnabled
+            useExtractPdf = AppConfiguration.shared.qpIsExtractPdfEnabled
+            useVision = AppConfiguration.shared.qpIsVisionEnabled
         }
     }
 
@@ -107,7 +132,7 @@ import OpenAI
         
         let messageTokenCount = adjustedConversations.reduce(0) { $0 + $1.countTokens() }
         let systemPromptTokenCount = tokenCount(text: configuration.systemPrompt)
-        let funcCallTokenCount = configuration.useTools ? ChatTool.countTokensForAllCases() : 0
+        let funcCallTokenCount = ChatTool.countTokensForEnabledCases(configuration: configuration)
         
         let totalTokenCount = messageTokenCount + systemPromptTokenCount + funcCallTokenCount
         
@@ -476,7 +501,7 @@ import OpenAI
             finalMessages.insert(systemPrompt.toChat(), at: 0)
         }
         
-        if configuration.model == .gpt4vision || !configuration.useTools {
+        if configuration.model == .gpt4vision || ChatTool.enabledTools(for: configuration).isEmpty {
             return ChatQuery(messages: finalMessages,
                              model: configuration.model.id,
                              maxTokens: 4000,
@@ -486,7 +511,7 @@ import OpenAI
                              model: configuration.model.id,
                              maxTokens: 4000,
                              temperature: configuration.temperature,
-                             tools: ChatTool.allTools)
+                             tools: ChatTool.enabledTools(for: configuration))
         }
     }
     

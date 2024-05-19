@@ -17,8 +17,11 @@
 		0817E3AB2BC202990028AD2F /* AudioPreviewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0817E3AA2BC202990028AD2F /* AudioPreviewer.swift */; };
 		0817E3AD2BC26BE20028AD2F /* ImportPreviewers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0817E3AC2BC26BE20028AD2F /* ImportPreviewers.swift */; };
 		0817E3AF2BC26C470028AD2F /* MacFilePickers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0817E3AE2BC26C470028AD2F /* MacFilePickers.swift */; };
+		081ABA652BF99EFF005029C7 /* FloatingPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081ABA642BF99EFF005029C7 /* FloatingPanel.swift */; };
+		081ABA682BF9A412005029C7 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 081ABA672BF9A412005029C7 /* KeyboardShortcuts */; };
 		081B02712B81B1A2006AF219 /* ImageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081B02702B81B1A2006AF219 /* ImageSession.swift */; };
 		0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820E06C2B5395E500401A30 /* TextSelectionView.swift */; };
+		0820F23F2BF9B0A60051C8A2 /* PanelTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820F23E2BF9B0A60051C8A2 /* PanelTextEditor.swift */; };
 		0827585F2B8A62B000F2EF8A /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0827585E2B8A62B000F2EF8A /* Components.swift */; };
 		0829D1132B3166D900DFFBB1 /* iOSMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1122B3166D900DFFBB1 /* iOSMessages.swift */; };
 		0829D1152B3166E300DFFBB1 /* MacOSMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0829D1142B3166E300DFFBB1 /* MacOSMessages.swift */; };
@@ -113,8 +116,10 @@
 		0817E3AA2BC202990028AD2F /* AudioPreviewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPreviewer.swift; sourceTree = "<group>"; };
 		0817E3AC2BC26BE20028AD2F /* ImportPreviewers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportPreviewers.swift; sourceTree = "<group>"; };
 		0817E3AE2BC26C470028AD2F /* MacFilePickers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFilePickers.swift; sourceTree = "<group>"; };
+		081ABA642BF99EFF005029C7 /* FloatingPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPanel.swift; sourceTree = "<group>"; };
 		081B02702B81B1A2006AF219 /* ImageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSession.swift; sourceTree = "<group>"; };
 		0820E06C2B5395E500401A30 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
+		0820F23E2BF9B0A60051C8A2 /* PanelTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelTextEditor.swift; sourceTree = "<group>"; };
 		0827585E2B8A62B000F2EF8A /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
 		0829D1122B3166D900DFFBB1 /* iOSMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSMessages.swift; sourceTree = "<group>"; };
 		0829D1142B3166E300DFFBB1 /* MacOSMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSMessages.swift; sourceTree = "<group>"; };
@@ -207,6 +212,7 @@
 				08FB18B82BC29A0700DFD0DC /* MarkdownWebView in Frameworks */,
 				083314702BC29A5E003D42C1 /* MarkdownWebView in Frameworks */,
 				08E2D21E2B7A5F800065B5E8 /* MarkdownWebView in Frameworks */,
+				081ABA682BF9A412005029C7 /* KeyboardShortcuts in Frameworks */,
 				08C594FE2B7FD52C009AB268 /* OpenAI in Frameworks */,
 				E4C65F1129CAA08400AFA884 /* MarkdownUI in Frameworks */,
 				083495A52BA8BCBA0009E271 /* OpenAI in Frameworks */,
@@ -224,6 +230,15 @@
 				0817E3AA2BC202990028AD2F /* AudioPreviewer.swift */,
 			);
 			path = Previewers;
+			sourceTree = "<group>";
+		};
+		081ABA632BF99EF2005029C7 /* Panel */ = {
+			isa = PBXGroup;
+			children = (
+				081ABA642BF99EFF005029C7 /* FloatingPanel.swift */,
+				0820F23E2BF9B0A60051C8A2 /* PanelTextEditor.swift */,
+			);
+			path = Panel;
 			sourceTree = "<group>";
 		};
 		0839834D2B9D505F00A46A84 /* BottomView */ = {
@@ -361,6 +376,7 @@
 		E4C65ED129CA9F7800AFA884 /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				081ABA632BF99EF2005029C7 /* Panel */,
 				0887DB182B9F262800153392 /* Functions */,
 				08723DAB2AFA4911001D59FE /* LanguageModel */,
 				E4C65ED529CA9F7800AFA884 /* View */,
@@ -490,6 +506,7 @@
 				08320B5F2BC89F560037F825 /* MarkdownWebView */,
 				085EC7752BCF0A2D00383058 /* MarkdownWebView */,
 				08FBE1D92BCF0B4D006CD9CB /* GPTEncoder */,
+				081ABA672BF9A412005029C7 /* KeyboardShortcuts */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -530,6 +547,7 @@
 				083495A32BA8BCBA0009E271 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				085EC7742BCF0A2D00383058 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				08FBE1D82BCF0B4D006CD9CB /* XCRemoteSwiftPackageReference "GPTEncoder" */,
+				081ABA662BF9A412005029C7 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -582,6 +600,7 @@
 				E4C65EA929CA9E7E00AFA884 /* ContentView.swift in Sources */,
 				0829D1132B3166D900DFFBB1 /* iOSMessages.swift in Sources */,
 				08E047012B724DE400E81C91 /* ViewModifiers.swift in Sources */,
+				081ABA652BF99EFF005029C7 /* FloatingPanel.swift in Sources */,
 				E4C65F1829CBEE2400AFA884 /* IOSInputView.swift in Sources */,
 				08827D112B28B72B0044213B /* ErrorDescView.swift in Sources */,
 				0817E3AF2BC26C470028AD2F /* MacFilePickers.swift in Sources */,
@@ -591,6 +610,7 @@
 				08664FD72BB7D368001281FA /* OpenAIService.swift in Sources */,
 				0837E4812AFFE7B000C03059 /* Model.swift in Sources */,
 				08DCC4862B99AD8D00737191 /* ToolCallView.swift in Sources */,
+				0820F23F2BF9B0A60051C8A2 /* PanelTextEditor.swift in Sources */,
 				0846F1F62B33D68F002A2EB2 /* ProviderImage.swift in Sources */,
 				08FBE1DC2BCF0BC6006CD9CB /* GPTEncoder.swift in Sources */,
 				E4C65EFE29CA9F7800AFA884 /* Splash.swift in Sources */,
@@ -905,6 +925,14 @@
 				minimumVersion = 0.16.0;
 			};
 		};
+		081ABA662BF9A412005029C7 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		083495A02BA869D50009E271 /* XCRemoteSwiftPackageReference "reeeed" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nate-parrott/reeeed";
@@ -986,6 +1014,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0816CA072B7F97F800D22D5C /* XCRemoteSwiftPackageReference "Splash" */;
 			productName = SplashMarkdown;
+		};
+		081ABA672BF9A412005029C7 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 081ABA662BF9A412005029C7 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
 		};
 		08320B5F2BC89F560037F825 /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
