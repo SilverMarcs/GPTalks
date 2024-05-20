@@ -96,14 +96,6 @@ import OpenAI
     var isStreaming = false
     
     var shouldSwitchToVision: Bool {
-        // Context adjustment logic
-        // TODO: this could probably be a computed variable of dialogsession
-//        var adjustedConversations: [Conversation] = []
-//        if conversations.count > resetMarker + 1 {
-//            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
-//        }
-        
-        // Filtering on adjusted conversations
         return adjustedConversations.contains(where: { ($0.role == .user || $0.role == .assistant) && !$0.imagePaths.isEmpty }) || inputImages.count > 0
     }
 
@@ -496,7 +488,26 @@ import OpenAI
             }
         })
 
-        let systemPrompt = Conversation(role: .system, content: configuration.systemPrompt)
+
+        let toolSysPrompt = """
+        If you have access to multiple tools, never use them in parallel. For example, use the urlScrape function only after googleSearch has successfully returned some results.
+        After google search results have been returned, if they directly answer the user’s question, just give the user the answer. However if the user’s question is more analytical, use the urlScrape tool to browse URLs from the google search results to give a more in-depth response. Finally, use the search and URL results and your
+        own knowledge to give the user a comprehensive answer.
+        Again, Never ever call two tools in parallel.
+        """
+        
+        let count = ChatTool.enabledTools(for: configuration).count
+        
+        let finalSysPrompt = {
+            if count > 0 {
+                self.configuration.systemPrompt + "\n\n" + toolSysPrompt
+            } else {
+                self.configuration.systemPrompt
+            }
+        }
+        
+        let systemPrompt = Conversation(role: .system, content: finalSysPrompt())
+        
         if !systemPrompt.content.isEmpty {
             finalMessages.insert(systemPrompt.toChat(), at: 0)
         }
@@ -531,7 +542,7 @@ import OpenAI
             }
         }
          
-        let uiUpdateInterval = TimeInterval(0.05)
+        let uiUpdateInterval = TimeInterval(0.1)
 
         var lastUIUpdateTime = Date()
         

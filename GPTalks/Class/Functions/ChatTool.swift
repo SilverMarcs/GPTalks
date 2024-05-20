@@ -52,7 +52,7 @@ enum ChatTool: String, CaseIterable {
                             .init(type: .object,
                                   properties: [
                                     "url_list":
-                                        .init(type: .array, description: "The array of URLs of the websites to scrape", items: .init(type: .string), maxItems: 3)
+                                        .init(type: .array, description: "The array of URLs of the websites to scrape", items: .init(type: .string), maxItems: 5)
                                     ]
                                  )
                          )
@@ -60,11 +60,11 @@ enum ChatTool: String, CaseIterable {
         case .googleSearch:
             return .init(function:
                     .init(name: "googleSearch",
-//                          description: "If your preexisting knowledge does not contain info of the user's question, you may use this function to make a google search and retrieve the user's content. if a url has been explicitly given already, use the urlScape function instead. Always prioritize your pre-existing knowledge. Only use this function if the requested info is beyond your knowledge cutoff date. In the case where a google search will help you find the user's question's answer, come up with a meaningful search query to search google with and call the function with it. You will be receiving some website links and a small snippet from that webpage. Usually, the snippets should suffice to answer the user's question. If you feel the user might have made a typo, ask for clarification before searching with google. If you feel the google search does not sufficiently answer the user's query, use your url scraping function to retrieve any of the websites from the search results.",
                           description: """
                                         Use this when
                                         - User is asking about current events or something that requires real-time information (weather, sports scores, etc.)
                                         - User is asking about some term you are totally unfamiliar with (it might be new)
+                                        - Usually prioritize your pre-existing knowledge
                                         """,
                           parameters:
                             .init(type: .object,

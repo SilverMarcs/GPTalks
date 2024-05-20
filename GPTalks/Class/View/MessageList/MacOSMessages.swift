@@ -302,4 +302,3 @@ struct ToolToggle: View {
 }
 
 #endif
-

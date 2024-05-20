@@ -100,7 +100,7 @@ class AppConfiguration: ObservableObject {
     /// quick panel
     @AppStorage("configuration.quickPanelProvider") var quickPanelProvider: Provider = .openai
     @AppStorage("configuration.quickPanelModel") var quickPanelModel: Model = .gpt3t
-    @AppStorage("configuration.quickPanelPrompt") var quickPanelPrompt: String = "You are a helpful assistant. For all responses try to start with a 1-2 sentence summary and then proceed to provide a concise description of that topic. In all cases, keep your responses concise unless explicitly asked to elaborate in detail."
+    @AppStorage("configuration.quickPanelPrompt") var quickPanelPrompt: String = "You are a helpful assistant. For all responses try to start with a 1-2 sentence summary and then proceed to provide a concise description of that topic. In all cases, keep your responses concise unless explicitly asked to elaborate in detail. Use your tools only if you strictly need to. Otherwise, rely on your pre-existing knowledge."
     @AppStorage("configuration.qpIsGoogleSearchEnabled") var qpIsGoogleSearchEnabled: Bool = true
     @AppStorage("configuration.qpIsUrlScrapeEnabled") var qpIsUrlScrapeEnabled: Bool = true
     @AppStorage("configuration.qpIsImageGenerateEnabled") var qpIsImageGenerateEnabled: Bool = false

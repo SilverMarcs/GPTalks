@@ -69,16 +69,19 @@ struct AssistantMessageView: View {
                         }
                     }
                     
-                    if let _ = ChatTool(rawValue: conversation.toolRawValue) {
-                        Text(conversation.arguments)
-                            .textSelection(.enabled)
-                    }
-                    
                     Group {
-                        if AppConfiguration.shared.isMarkdownEnabled {
-                            MarkdownView(text: conversation.content)
+                        if let _ = ChatTool(rawValue: conversation.toolRawValue) {
+                            Text(conversation.arguments)
+//                                .textSelection(.enabled)
                         } else {
-                            Text(conversation.content)
+//                            Group {
+                                if AppConfiguration.shared.isMarkdownEnabled {
+                                    MessageMarkdownView(text: conversation.content)
+                                } else {
+                                    Text(conversation.content)
+                                }
+//                            }
+
                         }
                     }
                     .textSelection(.enabled)

@@ -15,12 +15,12 @@ struct PanelTextEditor: View {
     let dismiss: () -> Void
     
     var body: some View {
-        HStack {
-            TextEditor(text: $prompt)
-                .font(.system(size: 18))
-                .scrollContentBackground(.hidden)
+        HStack {        
+            TextField("Ask AI", text: $prompt)
+                .font(.system(size: 25))
+                .textFieldStyle(.plain)
                 
-            SendButton(size: 26) {
+            SendButton(size: 28) {
                 dismiss()
                 NSApp.activate(ignoringOtherApps: true)
                 
@@ -35,7 +35,9 @@ struct PanelTextEditor: View {
             }
             .buttonStyle(.plain)
         }
-        .padding(10)
+        .padding()
+        .padding(.horizontal, 3)
+        .padding(.bottom, -28)
     }
 }
 #endif

@@ -12,7 +12,7 @@ import SwiftUI
 import MarkdownWebView
 #endif
 
-struct MarkdownView: View {
+struct MessageMarkdownView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var text: String
@@ -95,7 +95,7 @@ struct MarkdownView: View {
     private var theme: Splash.Theme {
         switch colorScheme {
         case .dark:
-            return .wwdc17(withFont: .init(size: 16))
+            return .githubDarkDimmed(withFont: .init(size: 16))
         default:
             return .sunset(withFont: .init(size: 16))
         }

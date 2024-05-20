@@ -21,25 +21,30 @@ class FloatingPanel<Content: View>: NSPanel {
          isPresented: Binding<Bool>) {
         self._isPresented = isPresented
         super.init(contentRect: contentRect,
-                   styleMask: [.nonactivatingPanel, .titled, .resizable, .closable, .fullSizeContentView],
+                   styleMask: [.nonactivatingPanel, .closable, .fullSizeContentView, .titled],
                    backing: backing,
                    defer: flag)
         
         isFloatingPanel = true
         level = .floating
-        collectionBehavior.insert(.fullScreenAuxiliary)
+        collectionBehavior.insert(.fullScreenDisallowsTiling)
         titleVisibility = .hidden
         titlebarAppearsTransparent = true
         isMovableByWindowBackground = true
         hidesOnDeactivate = false
+        isReleasedWhenClosed = false
         standardWindowButton(.closeButton)?.isHidden = true
         standardWindowButton(.miniaturizeButton)?.isHidden = true
         standardWindowButton(.zoomButton)?.isHidden = true
-        animationBehavior = .utilityWindow
+        animationBehavior = .none
+        
+//        isOpaque = false
+//        backgroundColor = .clear
         
         let hostingView = NSHostingView(rootView: view()
             .ignoresSafeArea()
-            .environment(\.floatingPanel, self))
+            .environment(\.floatingPanel, self)
+        )
         
         let visualEffectView = NSVisualEffectView(frame: contentRect)
         visualEffectView.material = .sidebar
@@ -91,7 +96,7 @@ extension EnvironmentValues {
 
 fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
     @Binding var isPresented: Bool
-    var contentRect: CGRect = CGRect(x: 0, y: 0, width: 624, height: 20)
+    var contentRect: CGRect = CGRect(x: 0, y: 0, width: 600, height: 20)
     @ViewBuilder let view: () -> PanelContent
     @State var panel: FloatingPanel<PanelContent>?
  
@@ -123,64 +128,11 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
 
 extension View {
     func floatingPanel<Content: View>(isPresented: Binding<Bool>,
-                                      contentRect: CGRect = CGRect(x: 0, y: 0, width: 624, height: 20),
+                                      contentRect: CGRect = CGRect(x: 0, y: 0, width: 600, height: 20),
                                       @ViewBuilder content: @escaping () -> Content) -> some View {
         self.modifier(FloatingPanelModifier(isPresented: isPresented, contentRect: contentRect, view: content))
     }
 }
-
-//struct VisualEffectView: NSViewRepresentable {
-//    var material: NSVisualEffectView.Material
-//    var blendingMode: NSVisualEffectView.BlendingMode
-//    var state: NSVisualEffectView.State
-//    var emphasized: Bool
-// 
-//    func makeNSView(context: Context) -> NSVisualEffectView {
-//        context.coordinator.visualEffectView
-//    }
-// 
-//    func updateNSView(_ view: NSVisualEffectView, context: Context) {
-//        context.coordinator.update(
-//            material: material,
-//            blendingMode: blendingMode,
-//            state: state,
-//            emphasized: emphasized
-//        )
-//    }
-// 
-//    func makeCoordinator() -> Coordinator {
-//        Coordinator()
-//    }
-// 
-//    class Coordinator {
-//        let visualEffectView = NSVisualEffectView()
-// 
-//        init() {
-//            visualEffectView.blendingMode = .withinWindow
-//        }
-// 
-//        func update(material: NSVisualEffectView.Material,
-//                        blendingMode: NSVisualEffectView.BlendingMode,
-//                        state: NSVisualEffectView.State,
-//                        emphasized: Bool) {
-//            visualEffectView.material = material
-//        }
-//    }
-//}
-
-class MaterialBackgroundView: NSVisualEffectView {
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        self.material = .hudWindow
-        self.blendingMode = .behindWindow
-        self.state = .active
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 extension KeyboardShortcuts.Name {
     static let togglePanel = Self("togglePanel")
 }

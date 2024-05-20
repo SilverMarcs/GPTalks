@@ -20,7 +20,7 @@ struct MacOSSettingsView: View {
             MacOSQuickPanelSettings()
                 .frame(width: 620, height: 300)
                 .tabItem {
-                    Label("Quick Panel", systemImage: "bolt.fill")
+                    Label("Quick Chat", systemImage: "bolt.fill")
                 }
         
             MacOSDefaultParameters()

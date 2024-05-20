@@ -54,7 +54,7 @@ class GoogleSearchService {
             }
             
             // Take the top 5 items
-            let topItems = filteredItems.prefix(5)
+            let topItems = filteredItems.prefix(10)
             
             // Building a string representation of the search results
             let searchResultsString = topItems.map { item -> String in

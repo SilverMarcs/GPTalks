@@ -17,19 +17,19 @@ struct GPTalks: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .floatingPanel(isPresented: $showingPanel, content: {
-                    PanelTextEditor {
-                        showingPanel.toggle()
-                        bringMainWindowToFront()
-                    }
-                    .environment(viewModel)
-                })
                 .task {
                     KeyboardShortcuts.onKeyDown(for: .togglePanel) {
                         showingPanel.toggle()
                     }
                 }
                 .background(BackgroundView(window: $mainWindow))
+                .floatingPanel(isPresented: $showingPanel) {
+                    PanelTextEditor {
+                        showingPanel.toggle()
+                        bringMainWindowToFront()
+                    }
+                    .environment(viewModel)
+                }
         }
         .environment(viewModel)
         .commands {
