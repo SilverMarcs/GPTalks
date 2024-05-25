@@ -294,6 +294,21 @@ enum Model: String, Codable {
             .nkandinsky3_1,
         ]
     
+    /// Mandril
+    static let mandrilChatModels: [Model] =
+        openAIChatModels +
+        claudeModels
+    
+    static let mandrilVisionModels: [Model] =
+        openAIVisionModels
+    
+    static let mandrilImageModels: [Model] =
+        openAIImageModels +
+        [
+            .sdxl,
+            .nplaygroundv25,
+        ]
+    
     /// Kraken
     static let krakenChatModels: [Model] =
         openAIChatModels +

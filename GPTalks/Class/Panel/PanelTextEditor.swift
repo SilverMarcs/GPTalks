@@ -15,12 +15,23 @@ struct PanelTextEditor: View {
     let dismiss: () -> Void
     
     var body: some View {
-        HStack {        
-            TextField("Ask AI", text: $prompt)
+        HStack(spacing: 12) {
+            Button {
+                
+            } label: {
+                Image(systemName: "magnifyingglass")
+                    .resizable()
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 24, height: 24)
+            }
+            .buttonStyle(.plain)
+            
+            TextField("Ask AI...", text: $prompt)
                 .font(.system(size: 25))
                 .textFieldStyle(.plain)
                 
-            SendButton(size: 28) {
+            SendButton2(size: 28) {
                 dismiss()
                 NSApp.activate(ignoringOtherApps: true)
                 
@@ -36,8 +47,8 @@ struct PanelTextEditor: View {
             .buttonStyle(.plain)
         }
         .padding()
-        .padding(.horizontal, 3)
-        .padding(.bottom, -28)
+        .padding(.leading, 3)
+        .padding(.bottom, -30)
     }
 }
 #endif

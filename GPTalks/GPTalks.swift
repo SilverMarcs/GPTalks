@@ -11,12 +11,15 @@ import SwiftUI
 @main
 struct GPTalks: App {
     @State private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
+    #if os(macOS)
     @State var showingPanel = false
     @State private var mainWindow: NSWindow?
+#endif
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+#if os(macOS) && !DEBUG
                 .task {
                     KeyboardShortcuts.onKeyDown(for: .togglePanel) {
                         showingPanel.toggle()
@@ -30,6 +33,7 @@ struct GPTalks: App {
                     }
                     .environment(viewModel)
                 }
+#endif
         }
         .environment(viewModel)
         .commands {
@@ -57,14 +61,17 @@ struct GPTalks: App {
 #endif
     }
     
+#if os(macOS)
     private func bringMainWindowToFront() {
         if let window = mainWindow {
             window.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
         }
     }
+#endif
 }
 
+#if os(macOS)
 struct BackgroundView: NSViewRepresentable {
     @Binding var window: NSWindow?
     
@@ -78,3 +85,4 @@ struct BackgroundView: NSViewRepresentable {
     
     func updateNSView(_ nsView: NSView, context: Context) {}
 }
+#endif

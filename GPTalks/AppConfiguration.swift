@@ -73,6 +73,12 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.NImageModel") var NImageModel: Model = .nplaygroundv25
     @AppStorage("configuration.NColor") var NColor: ProviderColor = .blueColor
     
+    /// mandril
+    @AppStorage("configuration.Mkey") var Mkey = ""
+    @AppStorage("configuration.Mmodel") var Mmodel: Model = .gpt4o
+    @AppStorage("configuration.MImageModel") var MImageModel: Model = .dalle3
+    @AppStorage("configuration.MColor") var MColor: ProviderColor = .orangeColor
+    
     /// kraken
     @AppStorage("configuration.Kkey") var Kkey = ""
     @AppStorage("configuration.Kmodel") var Kmodel: Model = .gpt4t

@@ -204,7 +204,12 @@ struct iOSMessages: View {
                     
                     Section {
                         Menu {
-                            Toggle("Use Tools", isOn: $session.configuration.useTools)
+                            Toggle("GSearch", isOn: $session.configuration.useGSearch)
+                            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
+                            Toggle("Image Generate", isOn: $session.configuration.useImageGenerate)
+                            Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
+                            Toggle("Extract PDF", isOn: $session.configuration.useExtractPdf)
+                            Toggle("Vision", isOn: $session.configuration.useVision)
                         } label: {
                             Label("Tools", systemImage: "hammer")
                         }

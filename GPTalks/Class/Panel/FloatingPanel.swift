@@ -111,8 +111,8 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
             }.onDisappear {
                 panel?.close()
                 panel = nil
-            }.onChange(of: isPresented) { newValue in
-                if newValue {
+            }.onChange(of: isPresented) {
+                if isPresented {
                     present()
                 } else {
                     panel?.close()
