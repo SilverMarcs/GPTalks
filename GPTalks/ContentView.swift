@@ -30,13 +30,18 @@ struct ContentView: View {
                         viewModel.selectedState = .chats
                     }
             } else {
-                if let selectedDialogue = viewModel.selectedDialogue {
-                    MacOSMessages(session: selectedDialogue)
-//                        .id(selectedDialogue.id)
-                        .frame(minWidth: 500)
-                } else {
-                    Text("No Chat Selected")
+                if viewModel.selectedDialogues.count > 1 {
+                    Text("Multiple Dialogues Selected")
                         .font(.title)
+                } else {
+                    if let selectedDialogue = viewModel.selectedDialogues.first {
+                        MacOSMessages(session: selectedDialogue)
+                            .id(selectedDialogue.id)
+                            .frame(minWidth: 500, minHeight: 500)
+                    } else {
+                        Text("No Chat Selected")
+                            .font(.title)
+                    }
                 }
             }
         }

@@ -246,7 +246,12 @@ import OpenAI
 
     func setResetContextMarker(conversation: Conversation) {
         if let index = conversations.firstIndex(of: conversation) {
-            withAnimation {
+            // animation only if the one being reset is not the last one
+            if index != conversations.count - 1 {
+                withAnimation {
+                    resetMarker = index
+                }
+            } else {
                 resetMarker = index
             }
         }

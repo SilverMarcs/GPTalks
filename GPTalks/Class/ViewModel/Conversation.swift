@@ -28,17 +28,40 @@ enum ConversationRole: String, Codable, CaseIterable {
     }
 }
 
-struct Conversation: Codable, Identifiable, Hashable, Equatable {
-    var id = UUID()
-    var date = Date()
+import Foundation
+
+@Observable class Conversation: Codable, Identifiable, Hashable, Equatable {
+    var id: UUID
+    var date: Date
     var role: ConversationRole
     var content: String
-    var imagePaths: [String] = []
-    var audioPath: String = ""
-    var pdfPath: String = ""
-    var toolRawValue: String = ""
-    var arguments: String = ""
-    var isReplying: Bool = false
+    var imagePaths: [String]
+    var audioPath: String
+    var pdfPath: String
+    var toolRawValue: String
+    var arguments: String
+    var isReplying: Bool
+
+    init(id: UUID = UUID(), date: Date = Date(), role: ConversationRole, content: String, imagePaths: [String] = [], audioPath: String = "", pdfPath: String = "", toolRawValue: String = "", arguments: String = "", isReplying: Bool = false) {
+        self.id = id
+        self.date = date
+        self.role = role
+        self.content = content
+        self.imagePaths = imagePaths
+        self.audioPath = audioPath
+        self.pdfPath = pdfPath
+        self.toolRawValue = toolRawValue
+        self.arguments = arguments
+        self.isReplying = isReplying
+    }
+
+    static func == (lhs: Conversation, rhs: Conversation) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 
     func toChat(imageAsPath: Bool = false) -> ChatQuery.ChatCompletionMessageParam {
         let chatRole = role.toChatRole()

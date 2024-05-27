@@ -14,7 +14,7 @@ struct MacOSMessages: View {
 
     var session: DialogueSession
 
-//    @State private var isUserScrolling = false
+    @State private var isUserScrolling = false
     @State var isShowSysPrompt: Bool = false
 
     var body: some View {
@@ -27,7 +27,8 @@ struct MacOSMessages: View {
                     .background(.bar)
                     .id(session.id)
             }
-            .onChange(of: viewModel.selectedDialogue) {
+//            .onChange(of: viewModel.selectedDialogue) {
+            .onAppear {
                 if AppConfiguration.shared.alternateMarkdown {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
@@ -39,21 +40,21 @@ struct MacOSMessages: View {
                 }
                 
             }
-//            .onChange(of: session.conversations.last?.content) {
-//                if !isUserScrolling {
-//                    scrollToBottom(proxy: proxy, animated: true)
-//                }
-//            }
-//            .onChange(of: session.conversations.last?.isReplying) {
-//                if !session.isReplying  {
-//                    isUserScrolling = false
-//                }
-//            }
-//            .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-//                if session.isReplying {
-//                    isUserScrolling = true
-//                }
-//            }
+            .onChange(of: session.conversations.last?.content) {
+                if !isUserScrolling {
+                    scrollToBottom(proxy: proxy, animated: true)
+                }
+            }
+            .onChange(of: session.conversations.last?.isReplying) {
+                if !session.isReplying  {
+                    isUserScrolling = false
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
+                if session.isReplying {
+                    isUserScrolling = true
+                }
+            }
             .onChange(of: session.resetMarker) {
                 if session.resetMarker == session.conversations.count - 1 {
                     scrollToBottom(proxy: proxy)
@@ -68,13 +69,14 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.input) {
-                scrollToBottom(proxy: proxy, animated: false)
+                scrollToBottom(proxy: proxy)
             }
-            .onChange(of: session.isAddingConversation) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    scrollToBottom(proxy: proxy)
-                }
-            }
+//            .onChange(of: session.isAddingConversation) {
+////                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+////                    scrollToBottom(proxy: proxy)
+////                }
+//                scrollToBottom(proxy: proxy)
+//            }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
                     itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in
@@ -140,7 +142,7 @@ struct MacOSMessages: View {
                         
                         pasteImage
                     }
-                    .id(session.id)
+//                    .id(session.id)
                 }
                 ToolbarItemGroup {
                     ProviderPicker(session: session)
@@ -168,23 +170,17 @@ struct MacOSMessages: View {
             VStack(spacing: 0) {
                 ForEach(session.conversations) { conversation in
                     ConversationView(session: session, conversation: conversation)
-//                        .id(conversation.imagePaths)
+                        .animation(.default, value: conversation.isReplying)
                 }
             }
             
             ErrorDescView(session: session)
             
-            if let lastMessage = session.conversations.last {
-                if lastMessage.isReplying && lastMessage.content.count < 750 {
-                    Color.clear
-                        .frame(height: 500)
-                }
-                Color.clear
-                    .frame(height: 30)
-                    .id("bottomID")
-            }
+            Color.clear
+                .frame(height: 30)
+                .id("bottomID")
+        
         }
-        .animation(.default, value: session.conversations.last?.isReplying)
     }
     
     private var deleteLastMessage: some View {

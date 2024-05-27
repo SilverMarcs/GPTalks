@@ -54,6 +54,16 @@ enum ContentState: String, CaseIterable, Identifiable {
     var searchText: String = ""
 
     var selectedDialogue: DialogueSession?
+    
+    var selectedDialogues: Set<DialogueSession> = []
+
+    func deleteSelectedDialogues() {
+        for session in selectedDialogues {
+            deleteDialogue(session)
+        }
+        selectedDialogues.removeAll()
+    }
+    
 
     var shouldShowPlaceholder: Bool {
         return (!searchText.isEmpty && currentDialogues.isEmpty) || currentDialogues.isEmpty
