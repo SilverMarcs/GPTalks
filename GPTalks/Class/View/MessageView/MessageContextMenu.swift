@@ -40,13 +40,15 @@ struct MessageContextMenu: View {
                         expandButton
                     }
                     
-                    Button {
-                        Task { @MainActor in
-                            viewModel.moveUpChat(session: session)
-                            await session.regenerate(from: conversation)
+                    if conversation.role != .tool && conversation.arguments.isEmpty {
+                        Button {
+                            Task { @MainActor in
+                                viewModel.moveUpChat(session: session)
+                                await session.regenerate(from: conversation)
+                            }
+                        } label: {
+                            Label("Regenerate", systemImage: "arrow.2.circlepath")
                         }
-                    } label: {
-                        Label("Regenerate", systemImage: "arrow.2.circlepath")
                     }
                     
                     Button {
