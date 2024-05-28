@@ -107,7 +107,9 @@ enum ContentState: String, CaseIterable, Identifiable {
             allDialogues = dialogueData.compactMap { DialogueSession(rawData: $0) }
             
             if firstTime {
-                selectedDialogue = allDialogues.first
+                if let first = allDialogues.first {
+                    selectedDialogues.insert(first)
+                }
             }
         } catch {
             print("DEBUG: Some error occured while fetching")

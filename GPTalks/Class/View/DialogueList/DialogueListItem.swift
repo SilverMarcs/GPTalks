@@ -85,7 +85,7 @@ struct DialogueListItem: View {
             .labelStyle(.titleAndIcon)
         }
         .swipeActions(edge: .trailing) {
-            deleteButton
+            singleDeleteButton
         }
         .swipeActions(edge: .leading) {
             archiveButton
@@ -116,6 +116,14 @@ struct DialogueListItem: View {
             } label: {
                 Label("Delete", systemImage: "trash")
             }
+        }
+    }
+    
+    var singleDeleteButton: some View {
+        Button(role: .destructive) {
+            viewModel.deleteDialogue(session)
+        } label: {
+            Label("Delete", systemImage: "trash")
         }
     }
     
