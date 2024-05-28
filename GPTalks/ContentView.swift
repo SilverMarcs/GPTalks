@@ -21,13 +21,17 @@ struct ContentView: View {
         } detail: {
             if viewModel.selectedState == .images {
                 ImageCreator(imageSession: imageSession)
-                    .onChange(of: viewModel.selectedDialogue) {
-                        viewModel.selectedState = .chats
+                    .onChange(of: viewModel.selectedDialogues) {
+                        if viewModel.selectedDialogues.count == 1 {
+                            viewModel.selectedState = .all
+                        }
                     }
             } else if viewModel.selectedState == .speech {
                 TranscriptionCreator()
-                    .onChange(of: viewModel.selectedDialogue) {
-                        viewModel.selectedState = .chats
+                    .onChange(of: viewModel.selectedDialogues) {
+                        if viewModel.selectedDialogues.count == 1 {
+                            viewModel.selectedState = .all
+                        }
                     }
             } else {
                 if viewModel.selectedDialogues.count > 1 {
