@@ -22,6 +22,9 @@ struct GPTalks: App {
 #if os(macOS) && !DEBUG
                 .task {
                     KeyboardShortcuts.onKeyDown(for: .togglePanel) {
+                        if !NSApp.isActive {
+                            NSApp.activate(ignoringOtherApps: true)
+                        }
                         showingPanel.toggle()
                     }
                 }

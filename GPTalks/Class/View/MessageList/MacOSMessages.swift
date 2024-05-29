@@ -71,12 +71,6 @@ struct MacOSMessages: View {
             .onChange(of: session.input) {
                 scrollToBottom(proxy: proxy)
             }
-//            .onChange(of: session.isAddingConversation) {
-////                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-////                    scrollToBottom(proxy: proxy)
-////                }
-//                scrollToBottom(proxy: proxy)
-//            }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
                     itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in

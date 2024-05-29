@@ -23,19 +23,12 @@ struct ContentView: View {
                 ImageCreator(imageSession: imageSession)
                     .onChange(of: viewModel.selectedDialogues) {
                         if viewModel.selectedDialogues.count == 1 {
-                            viewModel.selectedState = .all
+                            viewModel.selectedState = .chats
                         }
                     }
-            } else if viewModel.selectedState == .speech {
-                TranscriptionCreator()
-                    .onChange(of: viewModel.selectedDialogues) {
-                        if viewModel.selectedDialogues.count == 1 {
-                            viewModel.selectedState = .all
-                        }
-                    }
-            } else {
+            } else if viewModel.selectedState == .chats {
                 if viewModel.selectedDialogues.count > 1 {
-                    Text("Multiple Dialogues Selected")
+                    Text("\(viewModel.selectedDialogues.count) Chats Selected")
                         .font(.title)
                 } else if viewModel.selectedDialogues.count == 1 {
                     if let selectedDialogue = viewModel.selectedDialogues.first {

@@ -31,7 +31,9 @@ struct MacTextEditor: View {
 //                .padding(.trailing, 15) // for avoiding send button
                 .scrollContentBackground(.hidden)
                 .onAppear {
-                    focused = true
+                    DispatchQueue.main.async {
+                        focused = true
+                    }
                 }
             
         

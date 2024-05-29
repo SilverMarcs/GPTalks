@@ -9,20 +9,20 @@ import CoreData
 import SwiftUI
 
 enum ContentState: String, CaseIterable, Identifiable {
-    case all = "All"
+    case chats = "Chats"
     case images = "Images"
-    case speech = "Speech"
+//    case speech = "Speech"
     
     var id: Self { self }
     
     var image: String {
         switch self {
-        case .all:
+        case .chats:
             return "tray.2.fill"
         case .images:
             return "photo"
-        case .speech:
-            return "waveform"
+//        case .speech:
+//            return "waveform"
         }
     }
 }
@@ -34,17 +34,17 @@ enum ContentState: String, CaseIterable, Identifiable {
 
     var isArchivedSelected: Bool = false
     
-    var selectedState: ContentState = .all {
+    var selectedState: ContentState = .chats 
+    {
         didSet {
             switch selectedState {
-            case .all:
+            case .chats:
                 if selectedDialogues.isEmpty {
-                    if let first = allDialogues.first {
-                        selectedDialogues.insert(first)
-                    }
+//                    if let first = allDialogues.first {
+//                        selectedDialogues.insert(first)
+//                    }
                 }
-                break
-            case .images, .speech:
+            case .images:
                 selectedDialogues = []
             }
         }
@@ -133,15 +133,15 @@ enum ContentState: String, CaseIterable, Identifiable {
     
     func tggleImageAndChat() {
         if selectedState == .images {
-            selectedState = .all
+            selectedState = .chats
         } else {
             selectedState = .images
         }
     }
 
     func addDialogue(conversations: [Conversation] = []) {
-        if selectedState != .all {
-            selectedState = .all
+        if selectedState != .chats {
+            selectedState = .chats
         }
 
         let newItem = DialogueData(context: viewContext)
@@ -173,8 +173,8 @@ enum ContentState: String, CaseIterable, Identifiable {
     }
     
     func addFloatingDialogue() -> DialogueSession? {
-        if selectedState != .all {
-            selectedState = .all
+        if selectedState != .chats {
+            selectedState = .chats
         }
 
         let newItem = DialogueData(context: viewContext)

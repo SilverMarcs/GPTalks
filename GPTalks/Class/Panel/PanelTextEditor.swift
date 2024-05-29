@@ -34,6 +34,7 @@ struct PanelTextEditor: View {
             SendButton2(size: 28) {
                 dismiss()
                 NSApp.activate(ignoringOtherApps: true)
+                NSApp.keyWindow?.makeKeyAndOrderFront(nil)
                 
                 let session = viewModel.addFloatingDialogue()
                 session?.input = prompt

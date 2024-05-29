@@ -1,5 +1,5 @@
 {
-  "originHash" : "0ccba5487016aabc3b2ad1f0b76c2f36a79e7be0568ca85749ac9f75e09ed5a4",
+  "originHash" : "c5c6f31046ad863eafcbb59721b26b33c9b49565e6f18175593039793a3b7010",
   "pins" : [
     {
       "identity" : "fuzi",
@@ -40,10 +40,10 @@
     {
       "identity" : "markdown-webview",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/markdown-webview",
+      "location" : "https://github.com/djmango/markdown-webview",
       "state" : {
-        "branch" : "main",
-        "revision" : "8762ac65037a439fe5e2239c20c3a1cbc3b7e045"
+        "branch" : "master",
+        "revision" : "7475aa35dc580fbde8f09e8f1943d0498cb7d3be"
       }
     },
     {

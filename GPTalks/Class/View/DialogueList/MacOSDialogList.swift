@@ -24,7 +24,6 @@ struct MacOSDialogList: View {
                             .accentColor(.accentColor)
                     }
                     .accentColor(Color("niceColorLighter"))
-//                    .animation(.default, value: viewModel.selectedState)
                     .animation(.default, value: viewModel.searchText)
                     .padding(.top, -8)
                     .onChange(of: viewModel.currentDialogues.count) {
