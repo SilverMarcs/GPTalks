@@ -88,7 +88,7 @@ struct IOSDialogList: View {
                 PlaceHolderView(imageName: "message.fill", title: viewModel.placeHolderText)
             } else {
                 if isIPadOS {
-                    List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
+                    List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogues) { session in
                         DialogueListItem(session: session)
                     }
                     .listStyle(.inset)

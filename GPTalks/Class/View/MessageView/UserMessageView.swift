@@ -59,6 +59,8 @@ struct UserMessageView: View {
         #endif
     }
     
+    @State var dynamicHeight: CGFloat = 1
+    
     var alternateUI: some View {
         VStack(alignment: .trailing) {
             HStack(alignment: .top, spacing: 10) {
@@ -82,8 +84,9 @@ struct UserMessageView: View {
                     Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
                         .textSelection(.enabled)
 #else
-                    Text(conversation.content)
-                        .textSelection(.enabled)
+                    
+                    TextViewWrapper(text: Binding.constant(conversation.content), dynamicHeight: $dynamicHeight)
+                        .frame(height: dynamicHeight)
 #endif
                     
                     ForEach(conversation.imagePaths, id: \.self) { imagePath in

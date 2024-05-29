@@ -17,7 +17,7 @@ struct TextSelectionView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                MarkdownWebView(content)
+                MarkdownWebView(Binding.constant(content))
                     .padding(.horizontal)
                     .padding(.bottom, 45)
             }

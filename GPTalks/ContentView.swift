@@ -52,7 +52,7 @@ struct ContentView: View {
                 NavigationSplitView {
                     IOSDialogList(viewModel: viewModel)
                 } detail: {
-                    if let selectedDialogue = viewModel.selectedDialogue {
+                    if let selectedDialogue = viewModel.selectedDialogues.first {
                         iOSMessages(session: selectedDialogue)
                             .id(selectedDialogue.id)
                     } else {
