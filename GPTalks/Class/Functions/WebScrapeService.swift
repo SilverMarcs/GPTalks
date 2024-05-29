@@ -43,9 +43,37 @@ func retrieveWebContent(from urlStr: String) async throws -> String {
 
     }
     
-    return extractedHTML
+    // return only the first 10000 characters
+    return String(extractedHTML.prefix(5000))
+//    return extractedHTML
 
 }
+
+//func retrieveWebContent(from urlStr: String) async throws -> String {
+//    
+//    var extractedHTML: String = ""
+//    
+//    if let url = URL(string: urlStr) {
+//        DispatchQueue.main.async { Reeeed.warmup() }
+//
+//        let content = try await Reeeed.fetchAndExtractContent(fromURL: url)
+//    
+//        let extracted = content.extracted.content ?? ""
+//        
+//        extractedHTML = stripHTML(from: extracted)
+//        
+//        // Split the extracted text into words
+//        let words = extractedHTML.split(separator: " ")
+//        
+//        // Take the first 1000 words
+//        let first1000Words = words.prefix(1000)
+//        
+//        // Join the words back into a single string
+//        extractedHTML = first1000Words.joined(separator: " ")
+//    }
+//    
+//    return extractedHTML
+//}
 
 // Modify fetchAndParseHTML to include a completion handler that returns an array of String or an error
 func fetchAndParseHTML(from urlString: String, completion: @escaping (Result<[String], Error>) -> Void) {

@@ -74,16 +74,18 @@ struct DialogueListItem: View {
         }
         .contextMenu {
             Group {
-                renameButton
-                
-                archiveButton
+                if viewModel.selectedDialogues.count < 2 {
+                    renameButton
+                    
+                    archiveButton
+                }
                 
                 deleteButton
             }
             .labelStyle(.titleAndIcon)
         }
         .swipeActions(edge: .trailing) {
-            deleteButton
+            singleDeleteButton
         }
         .swipeActions(edge: .leading) {
             archiveButton
@@ -102,6 +104,22 @@ struct DialogueListItem: View {
     }
     
     var deleteButton: some View {
+        if viewModel.selectedDialogues.count > 1 {
+            Button {
+                viewModel.deleteSelectedDialogues()
+            } label: {
+                Label("Delete Sessions", systemImage: "trash")
+            }
+        } else {
+            Button(role: .destructive) {
+                viewModel.deleteDialogue(session)
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+    }
+    
+    var singleDeleteButton: some View {
         Button(role: .destructive) {
             viewModel.deleteDialogue(session)
         } label: {

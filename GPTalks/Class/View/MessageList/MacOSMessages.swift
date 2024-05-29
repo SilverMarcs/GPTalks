@@ -16,23 +16,19 @@ struct MacOSMessages: View {
 
     @State private var isUserScrolling = false
     @State var isShowSysPrompt: Bool = false
-    @State var keyDownMonitor: Any?
 
     var body: some View {
-        // TODO: create variable for nav subtitle
-        
         ScrollViewReader { proxy in
-            listView
+            normalList
             .navigationTitle(session.title)
-//            .navigationSubtitle(session.configuration.systemPrompt.truncated(to: 40))
             .navigationSubtitle(navSubtitle)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 MacInputView(session: session)
                     .background(.bar)
                     .id(session.id)
             }
-            .onChange(of: viewModel.selectedDialogue) {      
-//            .onAppear {
+//            .onChange(of: viewModel.selectedDialogue) {
+            .onAppear {
                 if AppConfiguration.shared.alternateMarkdown {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
@@ -43,25 +39,6 @@ struct MacOSMessages: View {
                     scrollToBottom(proxy: proxy, animated: false)
                 }
                 
-                // Remove previous event monitor if exists
-                if let existingMonitor = self.keyDownMonitor {
-                    NSEvent.removeMonitor(existingMonitor)
-                    self.keyDownMonitor = nil
-                }
-
-                // Add new event monitor
-                self.keyDownMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (event) -> NSEvent? in
-                    if event.modifierFlags.contains(.command) && event.characters == "v" {
-                        session.pasteImageFromClipboard()
-                    }
-                    return event
-                }
-            }
-            .onDisappear {
-                if let existingMonitor = self.keyDownMonitor {
-                    NSEvent.removeMonitor(existingMonitor)
-                    self.keyDownMonitor = nil
-                }
             }
             .onChange(of: session.conversations.last?.content) {
                 if !isUserScrolling {
@@ -84,17 +61,14 @@ struct MacOSMessages: View {
                 }
             }
             .onChange(of: session.errorDesc) {
-                scrollToBottom(proxy: proxy, animated: true)
+                scrollToBottom(proxy: proxy)
             }
             .onChange(of: session.inputImages) {
                 if !session.inputImages.isEmpty {
-                    scrollToBottom(proxy: proxy, animated: true)
+                    scrollToBottom(proxy: proxy)
                 }
             }
             .onChange(of: session.input) {
-                scrollToBottom(proxy: proxy)
-            }
-            .onChange(of: session.isAddingConversation) {
                 scrollToBottom(proxy: proxy)
             }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
@@ -149,24 +123,22 @@ struct MacOSMessages: View {
                     }
                     .menuIndicator(.hidden)
                 }
-
-                #if os(macOS)
-                ToolbarItem(placement: .keyboard) {
-                    deleteLastMessage
-                }
-                ToolbarItem(placement: .keyboard) {
-                    resetContextButton
-                }
-                ToolbarItem(placement: .keyboard) {
-                    deleteAllMessages
-                }
-                ToolbarItem(placement: .keyboard) {
-                    regenLast
-                }
-                #endif
                 
-                ToolbarItemGroup {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Group {
+                        deleteLastMessage
                         
+                        resetContextButton
+                        
+                        deleteAllMessages
+                        
+                        regenLast
+                        
+                        pasteImage
+                    }
+//                    .id(session.id)
+                }
+                ToolbarItemGroup {
                     ProviderPicker(session: session)
 
                     TempSlider(session: session)
@@ -187,37 +159,12 @@ struct MacOSMessages: View {
     }
     
     @ViewBuilder
-    private var listView: some View {
-        if AppConfiguration.shared.smootherScrolling {
-            alternateList
-        } else {
-            normalList
-        }
-    }
-
-    @ViewBuilder
-    private var alternateList: some View {
-        List {
-            VStack(spacing: 0) {
-                ForEach(session.filteredConversations()) { conversation in
-                    ConversationView(session: session, conversation: conversation)
-                }
-                
-                ErrorDescView(session: session)
-            }
-            .padding(.horizontal, -8)
-            .padding(.bottom, 30)
-            .id("bottomID")
-        }
-        .listStyle(.plain)
-    }
-    
-    @ViewBuilder
     private var normalList: some View {
         ScrollView {
             VStack(spacing: 0) {
-                ForEach(session.filteredConversations()) { conversation in
+                ForEach(session.conversations) { conversation in
                     ConversationView(session: session, conversation: conversation)
+                        .animation(.default, value: conversation.isReplying)
                 }
             }
             
@@ -226,15 +173,14 @@ struct MacOSMessages: View {
             Color.clear
                 .frame(height: 30)
                 .id("bottomID")
+        
         }
     }
     
     private var deleteLastMessage: some View {
         Button("Delete Last Message") {
-            if let session = viewModel.selectedDialogue {
-                if session.conversations.count > 0 {
-                    session.removeConversation(session.conversations.last!)
-                }
+            if session.conversations.count > 0 {
+                session.removeConversation(session.conversations.last!)
             }
         }
         .keyboardShortcut(.delete, modifiers: .command)
@@ -243,9 +189,7 @@ struct MacOSMessages: View {
     
     private var resetContextButton: some View {
         Button("Reset Context") {
-            if let session = viewModel.selectedDialogue {
-                session.resetContext()
-            }
+            session.resetContext()
         }
         .keyboardShortcut("k", modifiers: .command)
         .hidden()
@@ -253,9 +197,7 @@ struct MacOSMessages: View {
     
     private var deleteAllMessages: some View {
         Button("Delete all messages") {
-            if let session = viewModel.selectedDialogue {
-                session.removeAllConversations()
-            }
+            session.removeAllConversations()
         }
         .keyboardShortcut(.delete, modifiers: [.command, .shift])
         .hidden()
@@ -263,13 +205,19 @@ struct MacOSMessages: View {
     
     private var regenLast: some View {
         Button("Regenerate") {
-            if let session = viewModel.selectedDialogue {
-                Task { @MainActor in
-                    await session.regenerateLastMessage()
-                }
+            Task { @MainActor in
+                await session.regenerateLastMessage()
             }
         }
         .keyboardShortcut("r", modifiers: .command)
+        .hidden()
+    }
+    
+    private var pasteImage: some View {
+        Button("Paste Image") {
+            session.pasteImageFromClipboard()
+        }
+        .keyboardShortcut("b", modifiers: .command)
         .hidden()
     }
 }
@@ -314,9 +262,17 @@ struct ToolToggle: View {
     @Bindable var session: DialogueSession
     
     var body: some View {
-        Toggle("Use Tools", isOn: $session.configuration.useTools)
+        Menu {
+            Toggle("GSearch", isOn: $session.configuration.useGSearch)
+            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
+            Toggle("Image Generate", isOn: $session.configuration.useImageGenerate)
+            Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
+            Toggle("Extract PDF", isOn: $session.configuration.useExtractPdf)
+            Toggle("Vision", isOn: $session.configuration.useVision)
+        } label: {
+            Text("Use Tools")
+        }
     }
 }
 
 #endif
-

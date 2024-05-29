@@ -25,6 +25,24 @@ struct SendButton: View {
     }
 }
 
+struct SendButton2: View {
+    var size: CGFloat
+    var send: () -> Void
+    
+    var body: some View {
+        Button {
+            send()
+        } label: {
+            Image(systemName: "arrow.up.circle.fill")
+                .resizable()
+                .fontWeight(.semibold)
+                .foregroundStyle(.white, Color.accentColor)
+                .frame(width: size, height: size)
+        }
+        .keyboardShortcut(.defaultAction)
+    }
+}
+
 struct StopButton: View {
     var size: CGFloat
     var stop: () -> Void

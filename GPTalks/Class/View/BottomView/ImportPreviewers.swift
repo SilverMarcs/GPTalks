@@ -64,7 +64,13 @@ struct CustomTextEditorView: View {
     }
     
     var body: some View {
-        MacTextEditor(input: currentMessage)
+        VStack(alignment: .leading) {
+            CustomImportedImagesView(session: session)
+            CustomPDFViewer(session: session)
+            CustomAudioPreviewer(session: session)
+            
+            MacTextEditor(input: currentMessage)
+        }
     }
 }
 #else

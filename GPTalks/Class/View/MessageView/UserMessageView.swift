@@ -51,7 +51,7 @@ struct UserMessageView: View {
         #else
         .toolbar {
             ToolbarItem(placement: .keyboard) {
-                if (session.conversations.filter { $0.role == "user" }.last)?.id == conversation.id {
+                if (session.conversations.filter { $0.role == .user }.last)?.id == conversation.id {
                     editBtn
                 }
             }

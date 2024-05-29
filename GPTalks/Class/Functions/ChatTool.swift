@@ -16,9 +16,24 @@ enum ChatTool: String, CaseIterable {
     case transcribe = "transcribe"
     case extractPdf = "extractPdf"
     case vision = "vision"
-    
-    static var allTools: [ChatQuery.ChatCompletionToolParam] {
-        return ChatTool.allCases.map { $0.completionToolParam }
+
+    static func enabledTools(for configuration: DialogueSession.Configuration) -> [ChatQuery.ChatCompletionToolParam] {
+        return ChatTool.allCases.filter { tool in
+            switch tool {
+            case .googleSearch:
+                return configuration.useGSearch
+            case .urlScrape:
+                return configuration.useUrlScrape
+            case .imageGenerate:
+                return configuration.useImageGenerate
+            case .transcribe:
+                return configuration.useTranscribe
+            case .extractPdf:
+                return configuration.useExtractPdf
+            case .vision:
+                return configuration.useVision
+            }
+        }.map { $0.completionToolParam }
     }
     
     var completionToolParam: ChatQuery.ChatCompletionToolParam {
@@ -26,12 +41,18 @@ enum ChatTool: String, CaseIterable {
         case .urlScrape:
             return .init(function:
                     .init(name: "urlScrape",
-                          description: "This function can be used to retrieve web content of any number of URLs. If you find a previous google search in the chat history, you may find some urls in the search results. You may initially use only one of those urls to call this function to retrieve required info. If a certain URL content had been retrieved earlier, but the user's information was not found from it, you may visit some more urls one by one. Be sure to choose the most appropriate url to call in that case on your own. The function will visit that url and return the webcontent from it. NEVER pass in wikipedia links as the paramater. Only if the user explcitly provides multiple urls, you will visit them all in one go. If after attempting to retrieve a URL's content, content was not properly received, keep accessing urls from previous search results, one at a time.",
+//                          description: "This function can be used to retrieve web content of any number of URLs. If you find a previous google search in the chat history, you may find some urls in the search results. You may initially use only one of those urls to call this function to retrieve required info. If a certain URL content had been retrieved earlier, but the user's information was not found from it, you may visit some more urls one by one. Be sure to choose the most appropriate url to call in that case on your own. The function will visit that url and return the webcontent from it. NEVER pass in wikipedia links as the paramater. Only if the user explcitly provides multiple urls, you will visit them all in one go. If after attempting to retrieve a URL's content, content was not properly received, keep accessing urls from previous search results, one at a time.",
+                          description: """
+                                        You can open a URL directly if one is provided by the user. 
+                                        If you need more context or info, you may also call this with URLs returned by the googleSearch function.
+                                        Use this if the context from a previous googleSearch is not sufficient to answer the user's question and you need more info
+                                        for a more in-depth response.
+                                        """,
                           parameters:
                             .init(type: .object,
                                   properties: [
                                     "url_list":
-                                        .init(type: .array, description: "The array of URLs of the websites to scrape", items: .init(type: .string))
+                                        .init(type: .array, description: "The array of URLs of the websites to scrape", items: .init(type: .string), maxItems: 5)
                                     ]
                                  )
                          )
@@ -39,7 +60,12 @@ enum ChatTool: String, CaseIterable {
         case .googleSearch:
             return .init(function:
                     .init(name: "googleSearch",
-                          description: "If your preexisting knowledge does not contain info of the user's question, you may use this function to make a google search and retrieve the user's content. if a url has been explicitly given already, use the urlScape function instead. Always prioritize your pre-existing knowledge. Only use this function if the requested info is beyond your knowledge cutoff date. In the case where a google search will help you find the user's question's answer, come up with a meaningful search query to search google with and call the function with it. You will be receiving some website links and a small snippet from that webpage. Usually, the snippets should suffice to answer the user's question. If you feel the user might have made a typo, ask for clarification before searching with google. If you feel the google search does not sufficiently answer the user's query, use your url scraping function to retrieve any of the websites from the search results.",
+                          description: """
+                                        Use this when
+                                        - User is asking about current events or something that requires real-time information (weather, sports scores, etc.)
+                                        - User is asking about some term you are totally unfamiliar with (it might be new)
+                                        - Usually prioritize your pre-existing knowledge
+                                        """,
                           parameters:
                             .init(type: .object,
                                   properties: [self.paramName:
@@ -111,6 +137,26 @@ enum ChatTool: String, CaseIterable {
         }
     }
     
+    static func countTokensForEnabledCases(configuration: DialogueSession.Configuration) -> Int {
+        var totalTokenCount = 0
+        for tool in ChatTool.allCases {
+            switch tool {
+            case .googleSearch where configuration.useGSearch,
+                 .urlScrape where configuration.useUrlScrape,
+                 .imageGenerate where configuration.useImageGenerate,
+                 .transcribe where configuration.useTranscribe,
+                 .extractPdf where configuration.useExtractPdf,
+                 .vision where configuration.useVision:
+                let description = tool.completionToolParam.function.description
+                let tokenCountForDescription = tokenCount(text: description ?? "")
+                totalTokenCount += tokenCountForDescription
+            default:
+                continue
+            }
+        }
+        return totalTokenCount
+    }
+    
     @ViewBuilder
     var destination: some View {
         @ObservedObject var appConfig = AppConfiguration.shared
@@ -125,7 +171,7 @@ enum ChatTool: String, CaseIterable {
         case .transcribe:
             TranscriptionConfigurationView()
         case .extractPdf:
-            Text("Extract PDF")
+            PDFExtractConfigurationView()
         case .vision:
             VisionConfigurationView()
         }
@@ -189,6 +235,8 @@ struct URLScrapeConfigurationView: View {
     var body: some View {
         Form {
             Section("Ask the assistant to scrape a webpage for information.") {
+                Toggle("Enable URL Scrape", isOn: $appConfig.isUrlScrapeEnabled)
+                
                 Toggle("Experimental Scraper (Beta)", isOn: appConfig.$useExperimentalWebScraper)
             }
         }
@@ -200,20 +248,19 @@ struct GoogleSearchConfigurationView: View {
     @ObservedObject var appConfig = AppConfiguration.shared
     
     var body: some View {
-        Form {
-            Section("Ask the assistant to make a google search and retrieve the user's content.") {
-                Group {
-                    TextField("GSearch API Key", text: appConfig.$googleApiKey)
-                    
-                    TextField("GSearch Engine ID", text: appConfig.$googleSearchEngineId)
-                }
-                #if os(macOS)
-                .textFieldStyle(.roundedBorder)
-                .padding(.horizontal)
-                #endif
+        Section("Ask the assistant to make a google search and retrieve the user's content.") {
+            Form {
+                Toggle("Enable Google Search", isOn: $appConfig.isGoogleSearchEnabled)
+                
+                TextField("API Key", text: appConfig.$googleApiKey)
+                
+                TextField("Engine ID", text: appConfig.$googleSearchEngineId)
             }
+            #if os(macOS)
+            .textFieldStyle(.roundedBorder)
+            .padding(.horizontal)
+            #endif
         }
-        .navigationTitle("Google Search")
     }
 }
 
@@ -223,6 +270,8 @@ struct ImageGenerateConfigurationView: View {
     var body: some View {
         Form {
             Section("Ask the assistant to generate an image with a description of the image.") {
+                Toggle("Enable Image Generate", isOn: $appConfig.isImageGenerateEnabled)
+                
                 Picker("Image Provider", selection: appConfig.$imageProvider) {
                     ForEach(Provider.allCases, id: \.self) { provider in
                         Text(provider.name)
@@ -251,6 +300,8 @@ struct TranscriptionConfigurationView: View {
     var body: some View {
         Form {
             Section("Upload an audio file and ask the assistant to transcribe it for you.") {
+                Toggle("Enable Transcribe", isOn: $appConfig.isTranscribeEnabled)
+                
                 Picker("Transcription Provider", selection: appConfig.$transcriptionProvider) {
                     ForEach(Provider.allCases, id: \.self) { provider in
                         Text(provider.name)
@@ -267,9 +318,26 @@ struct TranscriptionConfigurationView: View {
                 
                 Toggle("Alternate Player", isOn: appConfig.$alternateAudioPlayer)
                     .toggleStyle(.switch)
+                
             }
         }
         .navigationTitle("Transcribe")
+    #if os(macOS)
+        .frame(maxWidth: 400)
+    #endif
+    }
+}
+
+struct PDFExtractConfigurationView: View {
+    @ObservedObject var appConfig = AppConfiguration.shared
+    
+    var body: some View {
+        Form {
+            Section("Upload a PDF file and ask the assistant to extract the text from it.") {
+                Toggle("Enable Extract PDF", isOn: $appConfig.isExtractPdfEnabled)
+            }
+        }
+        .navigationTitle("Extract PDF")
     #if os(macOS)
         .frame(maxWidth: 400)
     #endif
@@ -282,19 +350,14 @@ struct VisionConfigurationView: View {
     var body: some View {
         Form {
             Section("Ask the assistant to recognize the content of an image.") {
+                Toggle("Enable Vision", isOn: $appConfig.isVisionEnabled)
+                
                 Picker("Visiom Provider", selection: appConfig.$visionProvider) {
                     ForEach(Provider.allCases, id: \.self) { provider in
                         Text(provider.name)
                             .tag(provider.rawValue)
                     }
                 }
-
-//                Picker("Image Model", selection: appConfig.$visionModel) {
-//                    ForEach(appConfig.visionProvider.visionModels, id: \.self) { model in
-//                        Text(model.name)
-//                            .tag(model.rawValue)
-//                    }
-//                }
             }
         }
     #if os(macOS)

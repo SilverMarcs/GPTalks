@@ -9,23 +9,20 @@ import CoreData
 import SwiftUI
 
 enum ContentState: String, CaseIterable, Identifiable {
-    case chats = "Recents"   // includes starred
-    case all = "All"
+    case chats = "Chats"
     case images = "Images"
-    case speech = "Speech"
+//    case speech = "Speech"
     
     var id: Self { self }
     
-    var image : String {
+    var image: String {
         switch self {
-            case .chats:
-                "tray.2"
-            case .all:
-                "tray.2.fill"
-            case .images:
-                "photo"
-            case .speech:
-                "waveform"
+        case .chats:
+            return "tray.2.fill"
+        case .images:
+            return "photo"
+//        case .speech:
+//            return "waveform"
         }
     }
 }
@@ -37,24 +34,33 @@ enum ContentState: String, CaseIterable, Identifiable {
 
     var isArchivedSelected: Bool = false
     
-    var selectedState: ContentState = .chats {
+    var selectedState: ContentState = .chats 
+    {
         didSet {
             switch selectedState {
-            case .chats, .all:
-                if selectedDialogue == nil {
-                    selectedDialogue = allDialogues.first
+            case .chats:
+                if selectedDialogues.isEmpty {
+//                    if let first = allDialogues.first {
+//                        selectedDialogues.insert(first)
+//                    }
                 }
-                break
-            case .images, .speech:
-                selectedDialogue = nil
+            case .images:
+                selectedDialogues = []
             }
         }
     }
     
     var searchText: String = ""
+    
+    var selectedDialogues: Set<DialogueSession> = []
 
-    var selectedDialogue: DialogueSession?
-
+    func deleteSelectedDialogues() {
+        for session in selectedDialogues {
+            deleteDialogue(session)
+        }
+        selectedDialogues.removeAll()
+    }
+    
     var shouldShowPlaceholder: Bool {
         return (!searchText.isEmpty && currentDialogues.isEmpty) || currentDialogues.isEmpty
     }
@@ -62,21 +68,9 @@ enum ContentState: String, CaseIterable, Identifiable {
     var currentDialogues: [DialogueSession] {
         if !searchText.isEmpty {
             return filterDialogues(matching: searchText, from: allDialogues)
-        } else {
-            switch selectedState {
-            case .chats, .images, .speech:
-                return Array(allDialogues.prefix(11)) // Convert the prefix slice to an array
-            case .all:
-                return allDialogues
-            }
+        } else {    
+            return allDialogues
         }
-        
-        
-//        if !searchText.isEmpty {
-//            return filterDialogues(matching: searchText, from: allDialogues)
-//        } else {
-//            return allDialogues
-//        }
     }
     
     var placeHolderText: String {
@@ -97,7 +91,9 @@ enum ContentState: String, CaseIterable, Identifiable {
             allDialogues = dialogueData.compactMap { DialogueSession(rawData: $0) }
             
             if firstTime {
-                selectedDialogue = allDialogues.first
+                if let first = allDialogues.first {
+                    selectedDialogues.insert(first)
+                }
             }
         } catch {
             print("DEBUG: Some error occured while fetching")
@@ -118,9 +114,9 @@ enum ContentState: String, CaseIterable, Identifiable {
         isArchivedSelected.toggle()
     }
 
-    
     func moveUpChat(session: DialogueSession) {
         session.date = Date()
+        session.save()
         
         if session.id == allDialogues.first?.id {
             return
@@ -170,9 +166,38 @@ enum ContentState: String, CaseIterable, Identifiable {
         if let session = DialogueSession(rawData: newItem) {
             withAnimation {
                 allDialogues.insert(session, at: 0)
-                selectedDialogue = session
+            }
+            selectedDialogues = []
+            selectedDialogues.insert(session)
+        }
+    }
+    
+    func addFloatingDialogue() -> DialogueSession? {
+        if selectedState != .chats {
+            selectedState = .chats
+        }
+
+        let newItem = DialogueData(context: viewContext)
+        newItem.id = UUID()
+        newItem.date = Date()
+
+        do {
+            newItem.configuration = try JSONEncoder().encode(DialogueSession.Configuration(quick: true))
+        } catch {
+            print(error.localizedDescription)
+        }
+
+        save()
+
+        if let session = DialogueSession(rawData: newItem) {
+            withAnimation {
+                allDialogues.insert(session, at: 0)
+                selectedDialogues = []
+                selectedDialogues.insert(session)
             }
         }
+        
+        return allDialogues.first
     }
 
     func deleteDialogue(_ session: DialogueSession) {
@@ -180,8 +205,8 @@ enum ContentState: String, CaseIterable, Identifiable {
             return
         }
         
-        if selectedDialogue == session {
-            selectedDialogue = nil
+        if selectedDialogues.contains(where: { $0.id == session.id }) {
+            selectedDialogues.remove(session)
         }
 
         withAnimation {

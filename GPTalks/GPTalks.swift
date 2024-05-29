@@ -5,20 +5,38 @@
 //  Created by Zabir Raihan on 10/11/2023.
 //
 
+import KeyboardShortcuts
 import SwiftUI
-import HotKey
 
 @main
 struct GPTalks: App {
     @State private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
-    
     #if os(macOS)
-    let hotKey = HotKey(key: .space, modifiers: [.option], keyDownHandler: {NSApp.activate(ignoringOtherApps: true)})
-    #endif
+    @State var showingPanel = false
+    @State private var mainWindow: NSWindow?
+#endif
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+#if os(macOS) && !DEBUG
+                .task {
+                    KeyboardShortcuts.onKeyDown(for: .togglePanel) {
+                        if !NSApp.isActive {
+                            NSApp.activate(ignoringOtherApps: true)
+                        }
+                        showingPanel.toggle()
+                    }
+                }
+                .background(BackgroundView(window: $mainWindow))
+                .floatingPanel(isPresented: $showingPanel) {
+                    PanelTextEditor {
+                        showingPanel.toggle()
+                        bringMainWindowToFront()
+                    }
+                    .environment(viewModel)
+                }
+#endif
         }
         .environment(viewModel)
         .commands {
@@ -45,4 +63,29 @@ struct GPTalks: App {
         }
 #endif
     }
+    
+#if os(macOS)
+    private func bringMainWindowToFront() {
+        if let window = mainWindow {
+            window.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+        }
+    }
+#endif
 }
+
+#if os(macOS)
+struct BackgroundView: NSViewRepresentable {
+    @Binding var window: NSWindow?
+    
+    func makeNSView(context: Context) -> NSView {
+        let nsView = NSView()
+        DispatchQueue.main.async {
+            self.window = nsView.window
+        }
+        return nsView
+    }
+    
+    func updateNSView(_ nsView: NSView, context: Context) {}
+}
+#endif

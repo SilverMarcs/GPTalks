@@ -23,38 +23,24 @@ struct MacInputView: View {
     @State var selectedItems: [PhotosPickerItem] = []
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            CustomImportedImagesView(session: session)
-            CustomPDFViewer(session: session)
-            CustomAudioPreviewer(session: session)
-            
-            HStack(alignment: .bottom, spacing: 12) {
-                Group {
-                    if session.isEditing {
-                        stopEditing
-                    }
-                    
-                    moreOptions
-                    
-                    if showMore {
-                        CustomImagePickerView(session: session, showMore: $showMore)
-                        CustomPDFPickerView(session: session, showMore: $showMore, imageSize: 25, padding: 7)
-                        CustomAudioPickerView(session: session, showMore: $showMore)
-                    }
-                }
-                .offset(y: -1.15)
+        HStack(alignment: .bottom, spacing: 12) {
+            Group {
+                moreOptions
                 
-                CustomTextEditorView(session: session)
-                
-                Group {
-                    if session.isReplying {
-                        StopButton(size: imageSize) { session.stopStreaming() }
-                    } else {
-                        SendButton(size: imageSize) { Task { @MainActor in viewModel.moveUpChat(session: session); await session.sendAppropriate() } }
-                    }
-                }
-                .offset(y: -1.15)
+                editControls
             }
+            .offset(y: -1.15)
+            
+            CustomTextEditorView(session: session)
+            
+            Group {
+                if session.isReplying {
+                    StopButton(size: imageSize) { session.stopStreaming() }
+                } else {
+                    SendButton(size: imageSize) { Task { @MainActor in viewModel.moveUpChat(session: session); await session.sendAppropriate() } }
+                }
+            }
+            .offset(y: -1.15)
         }
         .onChange(of: session.input) {
             if session.input.count > 3 {
@@ -67,8 +53,6 @@ struct MacInputView: View {
         .animation(.default, value: session.editingPDFPath)
         .animation(.default, value: session.inputAudioPath)
         .animation(.default, value: session.editingAudioPath)
-//        .animation(.default, value: session.input)
-//        .animation(.default, value: session.editingMessage)
         .animation(.default, value: session.isEditing)
         .animation(.default, value: showMore)
         .buttonStyle(.plain)
@@ -78,27 +62,58 @@ struct MacInputView: View {
     }
     
     var moreOptions: some View {
+        toggleButton
+            .overlay(
+                Group {
+                    if showMore {
+                        VStack {
+                            CustomAudioPickerView(session: session, showMore: $showMore)
+                            CustomPDFPickerView(session: session, showMore: $showMore, imageSize: 25, padding: 7)
+                            CustomImagePickerView(session: session, showMore: $showMore)
+                            toggleButton
+                        }
+                        .padding(5)
+                        .background(.thickMaterial)
+                        .cornerRadius(15)
+//                        .roundedRectangleOverlay(opacity: 0.5)
+//                        .shadow(radius: 2, y: 1)
+                        .offset(x: 0, y: 5) // Adjust this value as needed
+                    }
+                }, alignment: .bottom
+            )
+    }
+    
+    @ViewBuilder
+    var toggleButton: some View {
+        var degree: Double {
+            showMore ? 45 : 0
+        }
+        
         Button {
-            showMore.toggle()
+            withAnimation {
+                showMore.toggle()
+            }
         } label: {
             Image(systemName: "plus")
                 .resizable()
                 .inputImageStyle(padding: 6, imageSize: imageSize)
-                .rotationEffect(.degrees(showMore ? 45 : 0))
-                .animation(.default, value: showMore)
+                .rotationEffect(.degrees(degree))
         }
     }
     
-    var stopEditing: some View {
-        Button {
-            session.resetIsEditing()
-        } label: {
-            Image(systemName: "plus")
-                .resizable()
-                .inputImageStyle(padding: 6, imageSize: imageSize, color: .red)
-                .rotationEffect(.degrees(45))
+    @ViewBuilder
+    var editControls: some View {
+        if session.isEditing {
+            Button {
+                session.resetIsEditing()
+            } label: {
+                Image(systemName: "plus")
+                    .resizable()
+                    .inputImageStyle(padding: 6, imageSize: imageSize, color: .red)
+                    .rotationEffect(.degrees(45))
+            }
+            .keyboardShortcut(.cancelAction)
         }
-        .keyboardShortcut(.cancelAction)
     }
    
     private var verticalPadding: CGFloat {

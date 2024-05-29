@@ -1,5 +1,5 @@
 {
-  "originHash" : "83520c5570c176033497bf080582fb6e2a5fd1797591760ccd0574e4ebd5d6cc",
+  "originHash" : "c5c6f31046ad863eafcbb59721b26b33c9b49565e6f18175593039793a3b7010",
   "pins" : [
     {
       "identity" : "fuzi",
@@ -29,12 +29,21 @@
       }
     },
     {
+      "identity" : "keyboardshortcuts",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
+      "state" : {
+        "revision" : "09e4a10ed6b65b3a40fe07b6bf0c84809313efc4",
+        "version" : "2.0.0"
+      }
+    },
+    {
       "identity" : "markdown-webview",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/markdown-webview",
+      "location" : "https://github.com/djmango/markdown-webview",
       "state" : {
-        "branch" : "main",
-        "revision" : "8762ac65037a439fe5e2239c20c3a1cbc3b7e045"
+        "branch" : "master",
+        "revision" : "7475aa35dc580fbde8f09e8f1943d0498cb7d3be"
       }
     },
     {

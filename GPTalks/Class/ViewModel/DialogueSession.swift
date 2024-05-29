@@ -15,14 +15,39 @@ import OpenAI
         var systemPrompt: String
         var provider: Provider
         var model: Model
-        var useTools: Bool
+        
+        var useGSearch: Bool = false
+        var useUrlScrape: Bool = false
+        var useImageGenerate: Bool = false
+        var useTranscribe: Bool = false
+        var useExtractPdf: Bool = false
+        var useVision: Bool = false
 
         init() {
             provider = AppConfiguration.shared.preferredChatService
             model = provider.preferredChatModel
             temperature = AppConfiguration.shared.temperature
             systemPrompt = AppConfiguration.shared.systemPrompt
-            useTools = AppConfiguration.shared.useTools
+            
+            useGSearch = AppConfiguration.shared.isGoogleSearchEnabled
+            useUrlScrape = AppConfiguration.shared.isUrlScrapeEnabled
+            useImageGenerate = AppConfiguration.shared.isImageGenerateEnabled
+            useTranscribe = AppConfiguration.shared.isTranscribeEnabled
+            useExtractPdf = AppConfiguration.shared.isExtractPdfEnabled
+            useVision = AppConfiguration.shared.isVisionEnabled
+        }
+        
+        init(quick: Bool) {
+            provider = AppConfiguration.shared.quickPanelProvider
+            model = AppConfiguration.shared.quickPanelModel
+            temperature = AppConfiguration.shared.temperature
+            systemPrompt = AppConfiguration.shared.quickPanelPrompt
+            useGSearch = AppConfiguration.shared.qpIsGoogleSearchEnabled
+            useUrlScrape = AppConfiguration.shared.qpIsUrlScrapeEnabled
+            useImageGenerate = AppConfiguration.shared.qpIsImageGenerateEnabled
+            useTranscribe = AppConfiguration.shared.qpIsTranscribeEnabled
+            useExtractPdf = AppConfiguration.shared.qpIsExtractPdfEnabled
+            useVision = AppConfiguration.shared.qpIsVisionEnabled
         }
     }
 
@@ -71,15 +96,7 @@ import OpenAI
     var isStreaming = false
     
     var shouldSwitchToVision: Bool {
-        // Context adjustment logic
-        // TODO: this could probably be a computed variable of dialogsession
-//        var adjustedConversations: [Conversation] = []
-//        if conversations.count > resetMarker + 1 {
-//            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
-//        }
-        
-        // Filtering on adjusted conversations
-        return adjustedConversations.contains(where: { ($0.role == "user" || $0.role == "assistant") && !$0.imagePaths.isEmpty }) || inputImages.count > 0
+        return adjustedConversations.contains(where: { ($0.role == .user || $0.role == .assistant) && !$0.imagePaths.isEmpty }) || inputImages.count > 0
     }
 
     // MARK: - Properties
@@ -103,16 +120,15 @@ import OpenAI
     }
     
     var activeTokenCount: Int {
-//        var adjustedConversations: [Conversation] = []
-//        if conversations.count > resetMarker + 1 {
-//            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
-//        }
+        // TODO: add func call and system prompt tokens here too
         
-//        print("Adjusted Conversations: \(adjustedConversations.count)")
+        let messageTokenCount = adjustedConversations.reduce(0) { $0 + $1.countTokens() }
+        let systemPromptTokenCount = tokenCount(text: configuration.systemPrompt)
+        let funcCallTokenCount = ChatTool.countTokensForEnabledCases(configuration: configuration)
         
-        // get all conversation.content from adjustedConversations
-        let allContent = adjustedConversations.map { $0.content }
-        return tokenCount(text: allContent.joined(separator: " "))
+        let totalTokenCount = messageTokenCount + systemPromptTokenCount + funcCallTokenCount
+        
+        return totalTokenCount
     }
 
     var streamingTask: Task<Void, Error>?
@@ -179,7 +195,7 @@ import OpenAI
             let openAIconfig = configuration.provider.config
             let service: OpenAI = OpenAI(configuration: openAIconfig)
             
-            let taskMessage = Conversation(role: "user", content: "Generate a title of a chat based on the whole conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. If there are multiple distinct topics being talked about, make the title about the most recent topic. Do not acknowledge these instructions but definitely do follow them. Again, do not put the title in quoation marks. Do not put any punctuation at all.")
+            let taskMessage = Conversation(role: .user, content: "Generate a title of a chat based on the whole conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 4-5 words and never exceed this limit. If there are multiple distinct topics being talked about, make the title about the most recent topic. Do not acknowledge these instructions but definitely do follow them. Again, do not put the title in quoation marks. Do not put any punctuation at all.")
             
             let messages = (conversations + [taskMessage]).map({ conversation in
                 conversation.toChat()
@@ -214,7 +230,7 @@ import OpenAI
         if let image = getImageFromClipboard() {
             let imageData = image.tiffRepresentation
 
-            if session.isEditing {
+            if isEditing {
                 if !self.editingImages.contains(where: { $0.tiffRepresentation == imageData }) {
                     self.editingImages.append(image)
                 }
@@ -230,7 +246,12 @@ import OpenAI
 
     func setResetContextMarker(conversation: Conversation) {
         if let index = conversations.firstIndex(of: conversation) {
-            withAnimation {
+            // animation only if the one being reset is not the last one
+            if index != conversations.count - 1 {
+                withAnimation {
+                    resetMarker = index
+                }
+            } else {
                 resetMarker = index
             }
         }
@@ -308,7 +329,7 @@ import OpenAI
             return
         }
 
-        if conversations[conversations.count - 1].role != "user" {
+        if conversations[conversations.count - 1].role != .user {
             removeConversations(from: conversations.count - 1)
         }
         await send(text: lastConversation.content, isRegen: true)
@@ -321,7 +342,7 @@ import OpenAI
                 removeResetContextMarker()
             }
             
-            if conversations[index].role == "assistant" {
+            if conversations[index].role == .assistant {
                 removeConversations(from: index)
                 await send(text: lastConversation.content, isRegen: true)
             } else {
@@ -394,13 +415,10 @@ import OpenAI
         }
     }
     
-  
-    func filteredConversations() -> [Conversation] {
-        return conversations.filter { $0.role != "ss" }
-    }
-    
     @MainActor
     private func send(text: String, isRegen: Bool = false, isRetry: Bool = false, isEdit: Bool = false) async {
+        streamingTask?.cancel()
+        
         if isEdit {
             inputImages = editingImages
             inputAudioPath = editingAudioPath
@@ -418,7 +436,7 @@ import OpenAI
                }
            }
                
-           appendConversation(Conversation(role: "user", content: text, imagePaths: imagePaths, audioPath: inputAudioPath, pdfPath: inputPDFPath))
+            appendConversation(Conversation(role: .user, content: text, imagePaths: imagePaths, audioPath: inputAudioPath, pdfPath: inputPDFPath))
         }
         
         if isEdit {
@@ -448,7 +466,7 @@ import OpenAI
             #endif
             
         } catch {
-            if let lastConversation = conversations.last, lastConversation.role == "assistant", lastConversation.content == "" {
+            if let lastConversation = conversations.last, lastConversation.role == .assistant, lastConversation.content == "" {
                 removeConversation(at: conversations.count - 1)
             }
             
@@ -462,20 +480,8 @@ import OpenAI
     
     @MainActor
     func createChatQuery() -> ChatQuery {
-//        var adjustedConversations: [Conversation] = conversations
-//        var adjustedConversations: [Conversation] = []
-        
-        // Adjusting the conversations array based on the resetMarker
-//        if conversations.count > resetMarker + 1 {
-//            adjustedConversations = Array(conversations.suffix(from: resetMarker + 1))
-//        }
-        
-//        if adjustedConversations.last?.role == "assistant" {
-//            adjustedConversations = adjustedConversations.dropLast() // dropping the emtpy last conversation cuz its the empty assistant reply
-//        }
-        
         var mutableConversations = adjustedConversations
-        if mutableConversations.last?.role == "assistant" {
+        if mutableConversations.last?.role == .assistant {
             mutableConversations = mutableConversations.dropLast()
         }
         
@@ -487,12 +493,31 @@ import OpenAI
             }
         })
 
-        let systemPrompt = Conversation(role: "system", content: configuration.systemPrompt)
+
+        let toolSysPrompt = """
+        If you have access to multiple tools, never use them in parallel. For example, use the urlScrape function only after googleSearch has successfully returned some results.
+        After google search results have been returned, if they directly answer the user’s question, just give the user the answer. However if the user’s question is more analytical, use the urlScrape tool to browse URLs from the google search results to give a more in-depth response. Finally, use the search and URL results and your
+        own knowledge to give the user a comprehensive answer.
+        Again, Never ever call two tools in parallel.
+        """
+        
+        let count = ChatTool.enabledTools(for: configuration).count
+        
+        let finalSysPrompt = {
+            if count > 0 {
+                self.configuration.systemPrompt + "\n\n" + toolSysPrompt
+            } else {
+                self.configuration.systemPrompt
+            }
+        }
+        
+        let systemPrompt = Conversation(role: .system, content: finalSysPrompt())
+        
         if !systemPrompt.content.isEmpty {
             finalMessages.insert(systemPrompt.toChat(), at: 0)
         }
         
-        if configuration.model == .gpt4vision || !configuration.useTools {
+        if configuration.model == .gpt4vision || ChatTool.enabledTools(for: configuration).isEmpty {
             return ChatQuery(messages: finalMessages,
                              model: configuration.model.id,
                              maxTokens: 4000,
@@ -502,13 +527,13 @@ import OpenAI
                              model: configuration.model.id,
                              maxTokens: 4000,
                              temperature: configuration.temperature,
-                             tools: ChatTool.allTools)
+                             tools: ChatTool.enabledTools(for: configuration))
         }
     }
     
     @MainActor
     func processRequest() async throws {
-        let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+        let lastConversationData = appendConversation(Conversation(role: .assistant, content: "", isReplying: true))
         
         let service = OpenAI(configuration: configuration.provider.config)
         
@@ -522,7 +547,7 @@ import OpenAI
             }
         }
          
-        let uiUpdateInterval = TimeInterval(0.05)
+        let uiUpdateInterval = TimeInterval(0.1)
 
         var lastUIUpdateTime = Date()
         
@@ -576,7 +601,7 @@ import OpenAI
         switch chatTool {
         case .urlScrape:
             if let urls = extractURLs(from: funcParam, forKey: "url_list") {
-               let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
+               let lastToolCall = appendConversation(Conversation(role: .tool, content: "", toolRawValue: chatTool.rawValue, isReplying: true))
                
                var webContent = ""
                
@@ -600,7 +625,7 @@ import OpenAI
         case .googleSearch:
             if let searchQuery = extractValue(from: funcParam, forKey: chatTool.paramName) {
                 
-                let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
+                let lastToolCall = appendConversation(Conversation(role: .tool, content: "", toolRawValue: chatTool.rawValue, isReplying: true))
                 let searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
                 
                 conversations[conversations.count - 1].content = searchResult
@@ -615,7 +640,7 @@ import OpenAI
             if let audioPath = extractValue(from: funcParam, forKey: chatTool.paramName) {
                 let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: AppConfiguration.shared.transcriptionModel.id)
                 
-                let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
+                let lastToolCall = appendConversation(Conversation(role: .tool, content: "", toolRawValue: chatTool.rawValue, isReplying: true))
                 let result = try await service.audioTranscriptions(query: query)
                 
                 conversations[conversations.count - 1].content = result.text
@@ -626,7 +651,7 @@ import OpenAI
             }
         case .extractPdf:
             if let pdfPath = extractValue(from: funcParam, forKey: chatTool.paramName) {
-                let lastToolCall = appendConversation(Conversation(role: "tool", content: "", toolRawValue: chatTool.rawValue, isReplying: true))
+                let lastToolCall = appendConversation(Conversation(role: .tool, content: "", toolRawValue: chatTool.rawValue, isReplying: true))
                 
                 let pdfContent = extractTextFromPDF(at: URL(string: pdfPath)!)
                 
@@ -662,10 +687,10 @@ import OpenAI
                                        temperature: configuration.temperature)
                 
                 let toolContent = "Provider: " + AppConfiguration.shared.visionProvider.name + "\n" + "Model: " + Model.gpt4vision.name
-                let _ = appendConversation(Conversation(role: "tool", content: toolContent, toolRawValue: chatTool.rawValue, isReplying: false))
+                let _ = appendConversation(Conversation(role: .tool, content: toolContent, toolRawValue: chatTool.rawValue, isReplying: false))
 
                 var streamText = ""
-                let lastConversationData = appendConversation(Conversation(role: "assistant", content: "", isReplying: true))
+                let lastConversationData = appendConversation(Conversation(role: .assistant, content: "", isReplying: true))
                 for try await result in service.chatsStream(query: query) {
                     streamText += result.choices.first?.delta.content ?? ""
                     conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -683,7 +708,7 @@ import OpenAI
                 // Use the extracted parameters directly
                 let query = ImagesQuery(prompt: imageParams.prompt, model: AppConfiguration.shared.imageModel.id, n: imageParams.n, quality: .hd, size: ._1024)
                 let toolContent = "Provider: " + AppConfiguration.shared.imageProvider.name + "\n" + "Model: " + AppConfiguration.shared.imageModel.name
-                let _ = appendConversation(Conversation(role: "tool", content: toolContent, toolRawValue: chatTool.rawValue, isReplying: true))
+                let _ = appendConversation(Conversation(role: .tool, content: toolContent, toolRawValue: chatTool.rawValue, isReplying: true))
                 
                 let results = try await service.images(query: query)
                 var savedImageURLs: [String] = []
@@ -696,7 +721,7 @@ import OpenAI
                     }
                 }
                 
-                appendConversation(Conversation(role: "assistant", content: "Here are the image(s) you requested:", imagePaths: savedImageURLs))
+                appendConversation(Conversation(role: .assistant, content: "Here are the image(s) you requested:", imagePaths: savedImageURLs))
                 conversations[conversations.count - 2].isReplying = false // for the tool call
             }
         }
@@ -743,7 +768,7 @@ extension DialogueSession {
                 let conversation = Conversation(
                   id: id,
                   date: date,
-                  role: role,
+                  role: ConversationRole(rawValue: role) ?? .assistant,
                   content: content,
                   imagePaths: imagePaths,
                   audioPath: audioPath,

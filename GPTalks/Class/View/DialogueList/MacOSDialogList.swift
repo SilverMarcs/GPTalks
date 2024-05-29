@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MacOSDialogList: View {
     @Bindable var viewModel: DialogueViewModel
-    @State private var previousActiveDialoguesCount = 0 // Add this line
+    @State private var previousActiveDialoguesCount = 0
 
     var body: some View {
         Group {
@@ -17,28 +17,23 @@ struct MacOSDialogList: View {
                 PlaceHolderView(imageName: "message.fill", title: viewModel.placeHolderText)
             } else {
                 ScrollViewReader { proxy in
-                    List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogue) { session in
+                    List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogues) { session in
                         DialogueListItem(session: session)
-//                            .id(session.id)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))
-                            .accentColor(.accentColor) // to keep row colors untouched
+                            .accentColor(.accentColor)
                     }
-                    .accentColor(Color("niceColorLighter")) // to change list selection color
-                    .animation(.default, value: viewModel.selectedState)
+                    .accentColor(Color("niceColorLighter"))
                     .animation(.default, value: viewModel.searchText)
                     .padding(.top, -8)
                     .onChange(of: viewModel.currentDialogues.count) {
-                        // Check if the current count is greater than the previous count
                         if viewModel.currentDialogues.count > previousActiveDialoguesCount {
-                            // If so, it's an addition. Scroll to the first item.
                             if !viewModel.currentDialogues.isEmpty {
                                 withAnimation {
                                     proxy.scrollTo(viewModel.currentDialogues[0].id, anchor: .top)
                                 }
                             }
                         }
-                        // Update the previous count to the current count
                         previousActiveDialoguesCount = viewModel.currentDialogues.count
                     }
                     .onChange(of: viewModel.currentDialogues.first?.date) {
@@ -51,7 +46,6 @@ struct MacOSDialogList: View {
                 }
             }
         }
-
         .frame(minWidth: 290)
         .toolbar {
             Spacer()
@@ -70,6 +64,13 @@ struct MacOSDialogList: View {
                 Image(systemName: "square.and.pencil")
             }
             .keyboardShortcut("n", modifiers: .command)
+            
+            Button("h") {
+                viewModel.deleteSelectedDialogues()
+            }
+            .keyboardShortcut(.delete, modifiers: .command)
+            .hidden()
+            .disabled(viewModel.selectedDialogues.count < 2)
         }
         .listStyle(.inset)
         .scrollContentBackground(.hidden)

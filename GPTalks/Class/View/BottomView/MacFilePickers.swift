@@ -39,6 +39,25 @@ struct ImagePickerView: View {
     }
 }
 
+struct CustomImagePickerView: View {
+    @Bindable var session: DialogueSession
+    var showMore: Binding<Bool>
+    
+    private var currentImages: Binding<[PlatformImage]> {
+        session.isEditing ? $session.editingImages : $session.inputImages
+    }
+    
+    var body: some View {
+        ImagePickerView(onImageAppend: { newImage in
+            currentImages.wrappedValue.append(newImage)
+            showMore.wrappedValue = false
+            if ![Model.gpt4t, Model.gpt4o].contains(session.configuration.model) {
+                session.configuration.useVision = true
+            }
+        })
+    }
+}
+
 struct AudioPickerView: View {
     var onAudioSelect: ((URL) -> Void)? // Closure to handle audio selection.
     
@@ -69,22 +88,6 @@ struct AudioPickerView: View {
     }
 }
 
-struct CustomImagePickerView: View {
-    @Bindable var session: DialogueSession
-    var showMore: Binding<Bool>
-    
-    private var currentImages: Binding<[PlatformImage]> {
-        session.isEditing ? $session.editingImages : $session.inputImages
-    }
-    
-    var body: some View {
-        ImagePickerView(onImageAppend: { newImage in
-            currentImages.wrappedValue.append(newImage)
-            showMore.wrappedValue = false
-        })
-    }
-}
-
 struct CustomAudioPickerView: View {
     @Bindable var session: DialogueSession
     var showMore: Binding<Bool>
@@ -98,6 +101,7 @@ struct CustomAudioPickerView: View {
             withAnimation {
                 currentAudioPath.wrappedValue = selectedURL.absoluteString
                 showMore.wrappedValue = false
+                session.configuration.useTranscribe = true
             }
         })
     }
@@ -136,7 +140,6 @@ struct PDFPickerView: View {
     }
 }
 
-
 struct CustomPDFPickerView: View {
     @Bindable var session: DialogueSession
     var showMore: Binding<Bool>
@@ -152,6 +155,7 @@ struct CustomPDFPickerView: View {
             withAnimation {
                 currentPDFPath.wrappedValue = selectedURL.absoluteString
                 showMore.wrappedValue = false
+                session.configuration.useExtractPdf = true
             }
         }, imageSize: imageSize, padding: padding)
     }

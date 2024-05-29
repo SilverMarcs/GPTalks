@@ -22,6 +22,14 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.preferredChatService") var preferredChatService: Provider = .openai
     @AppStorage("configuration.preferredImageService") var preferredImageService: Provider = .openai
     
+    // tool common
+    @AppStorage("configuration.isGoogleSearchEnabled") var isGoogleSearchEnabled: Bool = true
+    @AppStorage("configuration.isUrlScrapeEnabled") var isUrlScrapeEnabled: Bool = true
+    @AppStorage("configuration.isImageGenerateEnabled") var isImageGenerateEnabled: Bool = true
+    @AppStorage("configuration.isTranscribeEnabled") var isTranscribeEnabled: Bool = true
+    @AppStorage("configuration.isExtractPdfEnabled") var isExtractPdfEnabled: Bool = true
+    @AppStorage("configuration.isVisionEnabled") var isVisionEnabled: Bool = true
+    
     // Google Search
     @AppStorage("configuration.googleApiKey") var googleApiKey = ""
     @AppStorage("configuration.googleSearchEngineId") var googleSearchEngineId = ""
@@ -65,6 +73,12 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.NImageModel") var NImageModel: Model = .nplaygroundv25
     @AppStorage("configuration.NColor") var NColor: ProviderColor = .blueColor
     
+    /// mandril
+    @AppStorage("configuration.Mkey") var Mkey = ""
+    @AppStorage("configuration.Mmodel") var Mmodel: Model = .gpt4o
+    @AppStorage("configuration.MImageModel") var MImageModel: Model = .dalle3
+    @AppStorage("configuration.MColor") var MColor: ProviderColor = .orangeColor
+    
     /// kraken
     @AppStorage("configuration.Kkey") var Kkey = ""
     @AppStorage("configuration.Kmodel") var Kmodel: Model = .gpt4t
@@ -87,4 +101,17 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.customChatModel") var customChatModel: String = ""
     @AppStorage("configuration.customImageModel") var customImageModel: String = ""
     @AppStorage("configuration.customVisionModel") var customVisionModel: String = ""
+    
+    
+    /// quick panel
+    @AppStorage("configuration.quickPanelProvider") var quickPanelProvider: Provider = .openai
+    @AppStorage("configuration.quickPanelModel") var quickPanelModel: Model = .gpt3t
+    @AppStorage("configuration.quickPanelPrompt") var quickPanelPrompt: String = "You are a helpful assistant. For all responses try to start with a 1-2 sentence summary and then proceed to provide a concise description of that topic. In all cases, keep your responses concise unless explicitly asked to elaborate in detail. Use your tools only if you strictly need to. Otherwise, rely on your pre-existing knowledge."
+    @AppStorage("configuration.qpIsGoogleSearchEnabled") var qpIsGoogleSearchEnabled: Bool = true
+    @AppStorage("configuration.qpIsUrlScrapeEnabled") var qpIsUrlScrapeEnabled: Bool = true
+    @AppStorage("configuration.qpIsImageGenerateEnabled") var qpIsImageGenerateEnabled: Bool = false
+    @AppStorage("configuration.qpIsTranscribeEnabled") var qpIsTranscribeEnabled: Bool = false
+    @AppStorage("configuration.qpIsExtractPdfEnabled") var qpIsExtractPdfEnabled: Bool = false
+    @AppStorage("configuration.qpIsVisionEnabled") var qpIsVisionEnabled: Bool = false
+    
 }

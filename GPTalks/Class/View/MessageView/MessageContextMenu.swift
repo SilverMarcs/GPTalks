@@ -24,7 +24,7 @@ struct MessageContextMenu: View {
         HStack(spacing: 10) {
             Group {
                 Section {
-                    if conversation.role == "user" {
+                    if conversation.role == .user {
                         #if os(macOS)
                         if conversation.content.count > 300 {
                             expandButton
@@ -36,17 +36,19 @@ struct MessageContextMenu: View {
                         } label: {
                             Label("Edit", systemImage: "applepencil.tip")
                         }
-                    } else if conversation.role == "tool" {
+                    } else if conversation.role == .tool {
                         expandButton
                     }
                     
-                    Button {
-                        Task { @MainActor in
-                            viewModel.moveUpChat(session: session)
-                            await session.regenerate(from: conversation)
+                    if conversation.role != .tool && conversation.arguments.isEmpty {
+                        Button {
+                            Task { @MainActor in
+                                viewModel.moveUpChat(session: session)
+                                await session.regenerate(from: conversation)
+                            }
+                        } label: {
+                            Label("Regenerate", systemImage: "arrow.2.circlepath")
                         }
-                    } label: {
-                        Label("Regenerate", systemImage: "arrow.2.circlepath")
                     }
                     
                     Button {

@@ -5,8 +5,6 @@
 //  Created by Zabir Raihan on 27/11/2024.
 //
 
-import CoreData
-import SwiftSoup
 import SwiftUI
 
 struct ContentView: View {
@@ -16,8 +14,6 @@ struct ContentView: View {
     @State var imageSession: ImageSession = .init()
     @State var transcriptionSession: TranscriptionSession = .init()
     
-    @State var resumed: Bool = false
-    
     var body: some View {
 #if os(macOS)
         NavigationSplitView {
@@ -25,19 +21,21 @@ struct ContentView: View {
         } detail: {
             if viewModel.selectedState == .images {
                 ImageCreator(imageSession: imageSession)
-                    .onChange(of: viewModel.selectedDialogue) {
-                        viewModel.selectedState = .chats
+                    .onChange(of: viewModel.selectedDialogues) {
+                        if viewModel.selectedDialogues.count == 1 {
+                            viewModel.selectedState = .chats
+                        }
                     }
-            } else if viewModel.selectedState == .speech {
-                TranscriptionCreator()
-                    .onChange(of: viewModel.selectedDialogue) {
-                        viewModel.selectedState = .chats
+            } else if viewModel.selectedState == .chats {
+                if viewModel.selectedDialogues.count > 1 {
+                    Text("\(viewModel.selectedDialogues.count) Chats Selected")
+                        .font(.title)
+                } else if viewModel.selectedDialogues.count == 1 {
+                    if let selectedDialogue = viewModel.selectedDialogues.first {
+                        MacOSMessages(session: selectedDialogue)
+                            .id(selectedDialogue.id)
+                            .frame(minWidth: 500, minHeight: 500)
                     }
-            } else {
-                if let selectedDialogue = viewModel.selectedDialogue {
-                    MacOSMessages(session: selectedDialogue)
-//                        .id(selectedDialogue.id)
-                        .frame(minWidth: 500)
                 } else {
                     Text("No Chat Selected")
                         .font(.title)

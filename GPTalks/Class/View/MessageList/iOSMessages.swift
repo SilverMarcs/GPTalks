@@ -32,7 +32,7 @@ struct iOSMessages: View {
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
                     VStack(spacing: 0) {
-                        ForEach(session.filteredConversations()) { conversation in
+                        ForEach(session.conversations) { conversation in
                             ConversationView(session: session, conversation: conversation)
                         }
                     }
@@ -105,7 +105,11 @@ struct iOSMessages: View {
                     itemProvider.loadObject(ofClass: UIImage.self) { image, error in
                         DispatchQueue.main.async {
                             if let image = image as? UIImage {
-                                session.inputImages.append(image)
+                                if session.isEditing {
+                                    session.editingImages.append(image)
+                                } else {
+                                    session.inputImages.append(image)
+                                }
                             } else {
                                 print("Could not load image: \(String(describing: error))")
                             }
@@ -200,7 +204,12 @@ struct iOSMessages: View {
                     
                     Section {
                         Menu {
-                            Toggle("Use Tools", isOn: $session.configuration.useTools)
+                            Toggle("GSearch", isOn: $session.configuration.useGSearch)
+                            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
+                            Toggle("Image Generate", isOn: $session.configuration.useImageGenerate)
+                            Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
+                            Toggle("Extract PDF", isOn: $session.configuration.useExtractPdf)
+                            Toggle("Vision", isOn: $session.configuration.useVision)
                         } label: {
                             Label("Tools", systemImage: "hammer")
                         }
@@ -247,9 +256,9 @@ struct iOSMessages: View {
            switch scenePhase {
            case .active:
                print("App has resumed from background")
-               if AppConfiguration.shared.autoResume {
+               if AppConfiguration.shared.autoResume && !session.isReplying {
                    isTextFieldFocused = true
-                   if !session.resetMarker == session.conversations.count - 1 {
+                   if !(session.resetMarker == (session.conversations.count - 1)) {
                        session.resetContext()
                    }
                }
