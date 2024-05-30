@@ -16,7 +16,7 @@ struct CustomImageViewModifier: ViewModifier {
         content
 //            .scaledToFit()
             .padding(padding)
-            .fontWeight(.semibold)
+//            .fontWeight(.semibold)
             .foregroundStyle(.secondary)
             .background(color)
             .frame(width: imageSize, height: imageSize)

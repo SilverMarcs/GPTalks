@@ -124,7 +124,7 @@ struct AssistantMessageView: View {
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.4) : .clear)
         #else
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
-        .background(colorScheme == .dark ? Color.gray.opacity(0.12) : Color.gray.opacity(0.07))
+        .background(colorScheme == .dark ? Color.gray.opacity(0.12) : Color.gray.opacity(0.05))
         #endif
         .animation(.default, value: conversation.content.localizedCaseInsensitiveContains(viewModel.searchText))
         .border(.quinary, width: 1)

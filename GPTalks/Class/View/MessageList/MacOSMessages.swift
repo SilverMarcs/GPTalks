@@ -27,7 +27,6 @@ struct MacOSMessages: View {
                     .background(.bar)
                     .id(session.id)
             }
-//            .onChange(of: viewModel.selectedDialogue) {
             .onAppear {
                 if AppConfiguration.shared.alternateMarkdown {
                     scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
@@ -70,6 +69,13 @@ struct MacOSMessages: View {
             }
             .onChange(of: session.input) {
                 scrollToBottom(proxy: proxy)
+            }
+            .onChange(of: session.isEditing) {
+                if session.isEditing {
+                    withAnimation {
+                        proxy.scrollTo(session.conversations[session.editingIndex].id.uuidString, anchor: .top)
+                    }
+                }
             }
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
                 if let itemProvider = providers.first {
@@ -136,7 +142,6 @@ struct MacOSMessages: View {
                         
                         pasteImage
                     }
-//                    .id(session.id)
                 }
                 ToolbarItemGroup {
                     ProviderPicker(session: session)
@@ -164,6 +169,7 @@ struct MacOSMessages: View {
             VStack(spacing: 0) {
                 ForEach(session.conversations) { conversation in
                     ConversationView(session: session, conversation: conversation)
+                        .id(conversation.id.uuidString)
                         .animation(.default, value: conversation.isReplying)
                 }
             }
@@ -257,22 +263,4 @@ struct MacSysPrompt: View {
         .padding(10)
     }
 }
-
-struct ToolToggle: View {
-    @Bindable var session: DialogueSession
-    
-    var body: some View {
-        Menu {
-            Toggle("GSearch", isOn: $session.configuration.useGSearch)
-            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
-            Toggle("Image Generate", isOn: $session.configuration.useImageGenerate)
-            Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
-            Toggle("Extract PDF", isOn: $session.configuration.useExtractPdf)
-            Toggle("Vision", isOn: $session.configuration.useVision)
-        } label: {
-            Text("Use Tools")
-        }
-    }
-}
-
 #endif

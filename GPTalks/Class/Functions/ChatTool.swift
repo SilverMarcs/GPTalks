@@ -41,7 +41,6 @@ enum ChatTool: String, CaseIterable {
         case .urlScrape:
             return .init(function:
                     .init(name: "urlScrape",
-//                          description: "This function can be used to retrieve web content of any number of URLs. If you find a previous google search in the chat history, you may find some urls in the search results. You may initially use only one of those urls to call this function to retrieve required info. If a certain URL content had been retrieved earlier, but the user's information was not found from it, you may visit some more urls one by one. Be sure to choose the most appropriate url to call in that case on your own. The function will visit that url and return the webcontent from it. NEVER pass in wikipedia links as the paramater. Only if the user explcitly provides multiple urls, you will visit them all in one go. If after attempting to retrieve a URL's content, content was not properly received, keep accessing urls from previous search results, one at a time.",
                           description: """
                                         You can open a URL directly if one is provided by the user. 
                                         If you need more context or info, you may also call this with URLs returned by the googleSearch function.
@@ -365,5 +364,22 @@ struct VisionConfigurationView: View {
     #else
         .navigationBarTitle("Vision")
     #endif
+    }
+}
+
+struct ToolToggle: View {
+    @Bindable var session: DialogueSession
+    
+    var body: some View {
+        Menu {
+            Toggle("GSearch", isOn: $session.configuration.useGSearch)
+            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
+            Toggle("Image Generate", isOn: $session.configuration.useImageGenerate)
+            Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
+            Toggle("Extract PDF", isOn: $session.configuration.useExtractPdf)
+            Toggle("Vision", isOn: $session.configuration.useVision)
+        } label: {
+            Text("Use Tools")
+        }
     }
 }

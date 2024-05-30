@@ -36,7 +36,7 @@ struct TextViewWrapper: UIViewRepresentable {
         textView.isEditable = false
         textView.isSelectable = true
         textView.dataDetectorTypes = []
-        textView.font = UIFont.systemFont(ofSize: 17)
+        textView.font = UIFont.systemFont(ofSize: 18)
         textView.backgroundColor = UIColor.clear
 
         // Enable word-by-word selection

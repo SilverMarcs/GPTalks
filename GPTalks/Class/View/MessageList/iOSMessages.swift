@@ -201,40 +201,6 @@ struct iOSMessages: View {
                             Label(session.configuration.systemPrompt, systemImage: "square.text.square")
                         }
                     }
-                    
-                    Section {
-                        Menu {
-                            Toggle("GSearch", isOn: $session.configuration.useGSearch)
-                            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
-                            Toggle("Image Generate", isOn: $session.configuration.useImageGenerate)
-                            Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
-                            Toggle("Extract PDF", isOn: $session.configuration.useExtractPdf)
-                            Toggle("Vision", isOn: $session.configuration.useVision)
-                        } label: {
-                            Label("Tools", systemImage: "hammer")
-                        }
-                    }
-
-                    Section {
-                        Menu {
-                            ProviderPicker(session: session)
-                        } label: {
-                            Label(session.configuration.provider.name, systemImage: "building.2")
-                        }
-
-                        Menu {
-                            ModelPicker(session: session)
-                        } label: {
-                            Label(session.configuration.model.name, systemImage: "cube.box")
-                        }
-
-                        Menu {
-                            TempPicker(session: session)
-                        } label: {
-                            Label("Temperature: " + String(session.configuration.temperature), systemImage: "thermometer.sun")
-                        }
-                        
-                    }
 
                     Section {
                         Menu {
@@ -271,22 +237,60 @@ struct iOSMessages: View {
     }
 
     private var navTitle: some View {
-        HStack {
-            ProviderImage(radius: 9, color: session.configuration.provider.accentColor, frame: 29)
-            
-            VStack(alignment: .leading, spacing: 1) {
-                Text(session.title)
-                    .font(.system(size: 16))
-                    .foregroundStyle(.primary)
-                    .bold()
-                
-                Text(session.configuration.model.name + " • " + session.configuration.systemPrompt)
-                    .font(.system(size: 11))
-                    .foregroundStyle(.secondary)
+//        HStack {
+//            ProviderImage(radius: 9, color: session.configuration.provider.accentColor, frame: 29)
+//            
+//            VStack(alignment: .leading, spacing: 1) {
+//                Text(session.title)
+//                    .font(.system(size: 16))
+//                    .foregroundStyle(.primary)
+//                    .bold()
+//                
+//                Text(session.configuration.model.name + " • " + session.configuration.systemPrompt)
+//                    .font(.system(size: 11))
+//                    .foregroundStyle(.secondary)
+//            }
+//            
+//            Spacer()
+//        }
+        
+        Menu {
+            Section("Config") {
+                Menu {
+                    ProviderPicker(session: session)
+                } label: {
+                    Label(session.configuration.provider.name, systemImage: "building.2")
+                }
+
+                Menu {
+                    ModelPicker(session: session)
+                } label: {
+                    Label(session.configuration.model.name, systemImage: "cube.box")
+                }
+
+                Menu {
+                    TempPicker(session: session)
+                } label: {
+                    Label("Temperature: " + String(session.configuration.temperature), systemImage: "thermometer.sun")
+                }
             }
             
-            Spacer()
+            Section {
+                ToolToggle(session: session)
+            }
+            
+        } label: {
+            HStack {
+                Text(session.configuration.model.name)
+                    .bold()
+                
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 9))
+                    .padding(.top, 2)
+                    .foregroundStyle(.secondary)
+            }
         }
+        .foregroundStyle(.primary)
     }
 
     private var ScrollSpacer: some View {

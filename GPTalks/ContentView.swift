@@ -43,30 +43,16 @@ struct ContentView: View {
             }
         }
         .background(.background)
-        .task {
-            viewModel.fetchDialogueData()
-        }
 #else
-        Group {
-            if isIPadOS {
-                NavigationSplitView {
-                    IOSDialogList(viewModel: viewModel)
-                } detail: {
-                    if let selectedDialogue = viewModel.selectedDialogues.first {
-                        iOSMessages(session: selectedDialogue)
-                            .id(selectedDialogue.id)
-                    } else {
-                        Text("No Chat Selected")
-                            .font(.title)
-                    }
-                }
+        NavigationSplitView {
+            IOSDialogList(viewModel: viewModel)
+        } detail: {
+            if let selectedDialogue = viewModel.selectedDialogue {
+                iOSMessages(session: selectedDialogue)
+                    .id(selectedDialogue.id)
             } else {
-                NavigationStack {
-                    IOSDialogList(viewModel: viewModel)
-                }
-                .task {
-                    viewModel.fetchDialogueData()
-                }
+                Text("No Chat Selected")
+                    .font(.title)
             }
         }
 #endif

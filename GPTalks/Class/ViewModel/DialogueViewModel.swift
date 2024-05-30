@@ -11,7 +11,6 @@ import SwiftUI
 enum ContentState: String, CaseIterable, Identifiable {
     case chats = "Chats"
     case images = "Images"
-//    case speech = "Speech"
     
     var id: Self { self }
     
@@ -21,8 +20,6 @@ enum ContentState: String, CaseIterable, Identifiable {
             return "tray.2.fill"
         case .images:
             return "photo"
-//        case .speech:
-//            return "waveform"
         }
     }
 }
@@ -40,9 +37,11 @@ enum ContentState: String, CaseIterable, Identifiable {
             switch selectedState {
             case .chats:
                 if selectedDialogues.isEmpty {
-//                    if let first = allDialogues.first {
-//                        selectedDialogues.insert(first)
-//                    }
+                    #if os(macOS)
+                    if let first = allDialogues.first {
+                        selectedDialogues.insert(first)
+                    }
+                    #endif
                 }
             case .images:
                 selectedDialogues = []
@@ -53,6 +52,7 @@ enum ContentState: String, CaseIterable, Identifiable {
     var searchText: String = ""
     
     var selectedDialogues: Set<DialogueSession> = []
+    var selectedDialogue: DialogueSession?
 
     func deleteSelectedDialogues() {
         for session in selectedDialogues {
@@ -91,10 +91,13 @@ enum ContentState: String, CaseIterable, Identifiable {
             allDialogues = dialogueData.compactMap { DialogueSession(rawData: $0) }
             
             if firstTime {
+                    #if os(macOS)
                 if let first = allDialogues.first {
                     selectedDialogues.insert(first)
                 }
-            }
+                    #endif
+                }
+            
         } catch {
             print("DEBUG: Some error occured while fetching")
         }
@@ -167,8 +170,12 @@ enum ContentState: String, CaseIterable, Identifiable {
             withAnimation {
                 allDialogues.insert(session, at: 0)
             }
+            #if os(macOS)
             selectedDialogues = []
             selectedDialogues.insert(session)
+            #else
+            selectedDialogue = session
+            #endif
         }
     }
     

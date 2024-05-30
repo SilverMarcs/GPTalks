@@ -105,7 +105,7 @@ struct MessageContextMenu: View {
         Button {
             toggleExpanded()
         } label: {
-            Image(systemName: isExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
+            Label("Expand", systemImage: isExpanded ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
         }
     }
 }
