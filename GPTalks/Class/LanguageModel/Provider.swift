@@ -344,7 +344,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
             .naga,
             .mandril,
             .kraken,
-            .shard,
+//            .shard,
             .custom,
         ]
     }

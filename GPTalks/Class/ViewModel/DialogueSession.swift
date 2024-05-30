@@ -581,6 +581,9 @@ import OpenAI
             conversations[conversations.count - 1].toolRawValue = chatTool.rawValue
             conversations[conversations.count - 1].arguments = funcParam
             conversations[conversations.count - 1].isReplying = false
+//            conversations.last?.toolRawValue = chatTool.rawValue
+//            conversations.last?.arguments = funcParam
+//            conversations.last?.isReplying = false
             
             lastConversationData.sync(with: conversations[conversations.count - 1])
             

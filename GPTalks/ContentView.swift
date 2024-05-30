@@ -46,6 +46,22 @@ struct ContentView: View {
 #else
         NavigationSplitView {
             IOSDialogList(viewModel: viewModel)
+                .onChange(of: scenePhase) {
+                   switch scenePhase {
+                   case .active:
+                       if viewModel.selectedDialogue == nil {
+                           if let first = viewModel.allDialogues.first, first.conversations.isEmpty {
+                               viewModel.selectedDialogue = viewModel.allDialogues.first
+                           } else {
+                               viewModel.addDialogue()
+                           }
+                       }
+                   case .inactive, .background:
+                       break
+                   @unknown default:
+                       break
+                   }
+               }
         } detail: {
             if let selectedDialogue = viewModel.selectedDialogue {
                 iOSMessages(session: selectedDialogue)

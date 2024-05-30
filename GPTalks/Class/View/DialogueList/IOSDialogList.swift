@@ -83,7 +83,6 @@ struct IOSDialogList: View {
 
     @ViewBuilder
     private var list: some View {
-        Group {
             if viewModel.shouldShowPlaceholder {
                 PlaceHolderView(imageName: "message.fill", title: viewModel.placeHolderText)
             } else {
@@ -104,7 +103,6 @@ struct IOSDialogList: View {
 //                    .listStyle(.plain)
 //                }
             }
-        }
     }
 }
 #endif

@@ -22,6 +22,7 @@ struct IOSTextField: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             TextField("Send a message", text: $input, axis: .vertical)
+//                .disableAutocorrection(true)
                 .focused($focused)
                 .multilineTextAlignment(.leading)
                 .lineLimit(1 ... 15)

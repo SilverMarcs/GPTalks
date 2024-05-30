@@ -19,6 +19,7 @@ struct MacOSDialogList: View {
                 ScrollViewReader { proxy in
                     List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogues) { session in
                         DialogueListItem(session: session)
+                            .id(session.id.uuidString)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))
                             .accentColor(.accentColor)
@@ -30,7 +31,7 @@ struct MacOSDialogList: View {
                         if viewModel.currentDialogues.count > previousActiveDialoguesCount {
                             if !viewModel.currentDialogues.isEmpty {
                                 withAnimation {
-                                    proxy.scrollTo(viewModel.currentDialogues[0].id, anchor: .top)
+                                    proxy.scrollTo(viewModel.currentDialogues[0].id.uuidString, anchor: .top)
                                 }
                             }
                         }
@@ -39,7 +40,7 @@ struct MacOSDialogList: View {
                     .onChange(of: viewModel.currentDialogues.first?.date) {
                         if !viewModel.currentDialogues.isEmpty {
                             withAnimation {
-                                proxy.scrollTo(viewModel.currentDialogues[0].id, anchor: .top)
+                                proxy.scrollTo(viewModel.currentDialogues[0].id.uuidString, anchor: .top)
                             }
                         }
                     }
