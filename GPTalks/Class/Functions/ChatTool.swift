@@ -379,7 +379,8 @@ struct ToolToggle: View {
             Toggle("Extract PDF", isOn: $session.configuration.useExtractPdf)
             Toggle("Vision", isOn: $session.configuration.useVision)
         } label: {
-            Text("Use Tools")
+//            Text("Use Tools")
+            Label("Use Tools", systemImage: "hammer")
         }
     }
 }

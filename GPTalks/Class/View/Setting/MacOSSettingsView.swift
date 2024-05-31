@@ -88,7 +88,7 @@ struct MacOSQuickPanelSettings: View {
     var body: some View {
         Form {
             HStack {
-                Text("Global Shortcut")
+                Text("Shortcut")
                 Spacer()
                 KeyboardShortcuts.Recorder(for: .togglePanel)
             }

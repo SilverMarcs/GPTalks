@@ -218,22 +218,6 @@ struct iOSMessages: View {
                 }
             }
         }
-        .onChange(of: scenePhase) {
-           switch scenePhase {
-           case .active:
-               print("App has resumed from background")
-               if AppConfiguration.shared.autoResume && !session.isReplying {
-                   isTextFieldFocused = true
-                   if !(session.resetMarker == (session.conversations.count - 1)) {
-                       session.resetContext()
-                   }
-               }
-           case .inactive, .background:
-               break
-           @unknown default:
-               break
-           }
-       }
     }
 
     private var navTitle: some View {
@@ -255,7 +239,7 @@ struct iOSMessages: View {
 //        }
         
         Menu {
-            Section("Config") {
+            Section(navSubtitle) {
                 Menu {
                     ProviderPicker(session: session)
                 } label: {
@@ -293,6 +277,10 @@ struct iOSMessages: View {
         .foregroundStyle(.primary)
     }
 
+    private var navSubtitle: String {
+        "Tokens: " + session.activeTokenCount.formatToK()
+    }
+    
     private var ScrollSpacer: some View {
         Spacer()
             .id("bottomID")

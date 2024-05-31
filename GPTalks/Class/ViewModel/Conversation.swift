@@ -7,6 +7,7 @@
 
 import OpenAI
 import SwiftUI
+import CoreData
 
 enum ConversationRole: String, Codable, CaseIterable {
     case user
@@ -136,8 +137,6 @@ extension ConversationData {
         }
     }
 }
-
-import CoreData
 
 extension Conversation {
     static func createConversationData(from conversation: Conversation, in viewContext: NSManagedObjectContext) -> ConversationData {
