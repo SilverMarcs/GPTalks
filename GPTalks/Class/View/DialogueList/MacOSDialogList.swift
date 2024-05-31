@@ -12,6 +12,11 @@ struct MacOSDialogList: View {
     @State private var previousActiveDialoguesCount = 0
 
     var body: some View {
+        SearchField("Search", text: $viewModel.searchText) {
+            viewModel.searchText = ""
+        }
+        .padding(.horizontal, 11)
+        
         Group {
             if viewModel.shouldShowPlaceholder {
                 PlaceHolderView(imageName: "message.fill", title: viewModel.placeHolderText)
@@ -26,7 +31,7 @@ struct MacOSDialogList: View {
                     }
                     .accentColor(Color("niceColorLighter"))
                     .animation(.default, value: viewModel.searchText)
-                    .padding(.top, -8)
+                    .padding(.top, -10)
                     .onChange(of: viewModel.currentDialogues.count) {
                         if viewModel.currentDialogues.count > previousActiveDialoguesCount {
                             if !viewModel.currentDialogues.isEmpty {
@@ -47,7 +52,7 @@ struct MacOSDialogList: View {
                 }
             }
         }
-        .frame(minWidth: 290)
+        .frame(minWidth: 280)
         .toolbar {
             Spacer()
 
@@ -75,6 +80,176 @@ struct MacOSDialogList: View {
         }
         .listStyle(.inset)
         .scrollContentBackground(.hidden)
-        .searchable(text: $viewModel.searchText, placement: .toolbar)
+//        .searchable(text: $viewModel.searchText, placement: .toolbar)
+    }
+}
+
+
+import SwiftUI
+
+//
+//  FilterField.swift
+//  ControlRoom
+//
+//  Created by Dave DeLong on 2/12/20.
+//  Copyright © 2020 Paul Hudson. All rights reserved.
+//
+
+import SwiftUI
+
+///// A wrapper around NSSearchField so we get a macOS-native search box
+//struct SearchField: NSViewRepresentable {
+//    /// The text entered by the user.
+//    @Binding var text: String
+//    var onClear: () -> Void
+//
+//    /// Placeholder text for the text field.
+//    let prompt: String
+//
+//    /// Desired height for the text field.
+//    let height: CGFloat
+//
+//    init(_ prompt: String, text: Binding<String>, height: CGFloat = 31, onClear: @escaping () -> Void) {
+//        self.onClear = onClear
+//        self.prompt = prompt
+//        self.height = height
+//        _text = text
+//    }
+//
+//    func makeCoordinator() -> Coordinator {
+//        Coordinator(binding: $text, onClear: onClear)
+//    }
+//
+//    func makeNSView(context: Context) -> NSSearchField {
+//        let textField = NSSearchField(string: text)
+//        textField.placeholderString = prompt
+//        textField.delegate = context.coordinator
+//        textField.bezelStyle = .roundedBezel
+//        textField.focusRingType = .none
+//
+//        // Set the height constraint
+//        textField.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            textField.heightAnchor.constraint(equalToConstant: height)
+//        ])
+//
+//        return textField
+//    }
+//
+//    func updateNSView(_ nsView: NSSearchField, context: Context) {
+//        nsView.stringValue = text
+//    }
+//
+//    class Coordinator: NSObject, NSSearchFieldDelegate {
+//        let binding: Binding<String>
+//        let onClear: () -> Void
+//
+//        init(binding: Binding<String>, onClear: @escaping () -> Void) {
+//            self.binding = binding
+//            self.onClear = onClear
+//            super.init()
+//        }
+//
+//        func controlTextDidChange(_ obj: Notification) {
+//            guard let field = obj.object as? NSTextField else { return }
+//            binding.wrappedValue = field.stringValue
+//
+//            if field.stringValue.isEmpty {
+//                onClear()
+//            }
+//        }
+//    }
+//}
+
+
+import SwiftUI
+
+struct SearchField: NSViewRepresentable {
+    @Binding var text: String
+    var onClear: () -> Void
+    let prompt: String
+    let height: CGFloat
+
+    init(_ prompt: String, text: Binding<String>, height: CGFloat = 30, onClear: @escaping () -> Void) {
+        self.onClear = onClear
+        self.prompt = prompt
+        self.height = height
+        _text = text
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(binding: $text, onClear: onClear)
+    }
+
+    func makeNSView(context: Context) -> NSSearchField {
+        let textField = NSSearchField(string: text)
+        textField.placeholderString = prompt
+        textField.delegate = context.coordinator
+        textField.bezelStyle = .roundedBezel
+        textField.focusRingType = .none
+
+        // Set the height constraint
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            textField.heightAnchor.constraint(equalToConstant: height)
+        ])
+
+        // Customize the search and cancel button colors
+        if let cell = textField.cell as? NSSearchFieldCell {
+            if let searchButton = cell.searchButtonCell {
+                searchButton.image = tintedImage(named: "magnifyingglass", color: .slightlyBrighterSecondaryLabelColor)
+            }
+            if let cancelButton = cell.cancelButtonCell {
+                cancelButton.image = tintedImage(named: "xmark.circle.fill", color: .slightlyBrighterSecondaryLabelColor)
+            }
+        }
+
+        return textField
+    }
+
+    func updateNSView(_ nsView: NSSearchField, context: Context) {
+        nsView.stringValue = text
+    }
+
+    class Coordinator: NSObject, NSSearchFieldDelegate {
+        let binding: Binding<String>
+        let onClear: () -> Void
+
+        init(binding: Binding<String>, onClear: @escaping () -> Void) {
+            self.binding = binding
+            self.onClear = onClear
+            super.init()
+        }
+
+        func controlTextDidChange(_ obj: Notification) {
+            guard let field = obj.object as? NSTextField else { return }
+            binding.wrappedValue = field.stringValue
+
+            if field.stringValue.isEmpty {
+                onClear()
+            }
+        }
+    }
+
+    private func tintedImage(named: String, color: NSColor) -> NSImage? {
+//        guard let image = NSImage(named: named) else { return nil }
+        guard let image = NSImage(systemSymbolName: named, accessibilityDescription: nil) else { return nil }
+        let tintedImage = NSImage(size: image.size)
+
+        tintedImage.lockFocus()
+        let imageRect = NSRect(origin: .zero, size: image.size)
+        image.draw(in: imageRect, from: .zero, operation: .sourceOver, fraction: 1.0)
+        color.set()
+        imageRect.fill(using: .sourceAtop)
+        tintedImage.unlockFocus()
+
+        return tintedImage
+    
+    }
+}
+
+extension NSColor {
+    static var slightlyBrighterSecondaryLabelColor: NSColor {
+        return NSColor.secondaryLabelColor.blended(withFraction: 0.2, of: .white) ?? .secondaryLabelColor
     }
 }

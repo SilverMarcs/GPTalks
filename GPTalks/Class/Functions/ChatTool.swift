@@ -380,7 +380,7 @@ struct ToolToggle: View {
             Toggle("Vision", isOn: $session.configuration.useVision)
         } label: {
 //            Text("Use Tools")
-            Label("Use Tools", systemImage: "hammer.fill")
+            Label("Use Tools", systemImage: "hammer")
         }
     }
 }

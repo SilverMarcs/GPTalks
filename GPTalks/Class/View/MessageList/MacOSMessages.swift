@@ -104,9 +104,9 @@ struct MacOSMessages: View {
                                 Task { await session.generateTitle(forced: true) }
                             }
                             
-                            Button("System Prompt") {
-                                isShowSysPrompt = true
-                            }
+//                            Button("System Prompt") {
+//                                isShowSysPrompt = true
+//                            }
                         }
                         
                         Section {
@@ -152,15 +152,26 @@ struct MacOSMessages: View {
                     ModelPicker(session: session)
                         .frame(width: 100)
                 }
+                
+                ToolbarItem(placement: .automatic) {
+                    Button {
+                        isShowSysPrompt = true
+                    } label: {
+                        Image(systemName: "info.circle")
+                    }
+                    .popover(isPresented: $isShowSysPrompt) {
+                        MacSysPrompt(session: session)
+                    }
+                }
             }
-            .sheet(isPresented: $isShowSysPrompt) {
-                MacSysPrompt(session: session)
-            }
+//            .sheet(isPresented: $isShowSysPrompt) {
+//                MacSysPrompt(session: session)
+//            }
         }
     }
     
     var navSubtitle: String {
-        "Tokens: " + session.activeTokenCount.formatToK() + " • " + session.configuration.systemPrompt.truncated(to: 35)
+        "Tokens: " + session.activeTokenCount.formatToK() + " • " + session.configuration.systemPrompt.truncated(to: 45)
     }
     
     @ViewBuilder
@@ -231,36 +242,31 @@ struct MacOSMessages: View {
 struct MacSysPrompt: View {
     @Environment(\.dismiss) var dismiss
     @Bindable var session: DialogueSession
+    @FocusState private var isFocused: Bool
     
     var body: some View {
-        VStack {
-            HStack {
-                Button("Hidden") {
-                    
-                }
-                .opacity(0)
-                
-                Spacer()
-                
-                Text("System Prompt")
-                    .bold()
-                
-                Spacer()
-                
-                Button("Done") {
-                    dismiss()
-                }
-                .buttonStyle(.borderedProminent)
+        VStack(alignment: .leading) {
+            GroupBox("Title") {
+
+                TextField("Title", text: $session.title)
+                    .focused($isFocused)
+                    .onAppear {
+                        DispatchQueue.main.async {
+                            isFocused = false
+                        }
+                    }
+                    .textFieldStyle(.plain)
+                    .padding(.leading, 5)
             }
             
-            Divider()
-            
-            TextEditor(text: $session.configuration.systemPrompt)
-                .font(.body)
-                .frame(width: 300, height: 150)
-                .scrollContentBackground(.hidden)
+            GroupBox("System Prompt") {
+                TextEditor(text: $session.configuration.systemPrompt)
+                    .font(.body)
+                    .frame(width: 300, height: 120)
+                    .scrollContentBackground(.hidden)
+            }
         }
-        .padding(10)
+        .padding(13)
     }
 }
 #endif
