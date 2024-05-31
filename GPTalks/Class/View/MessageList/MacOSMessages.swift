@@ -12,14 +12,20 @@ import UniformTypeIdentifiers
 struct MacOSMessages: View {
     @Environment(DialogueViewModel.self) private var viewModel
 
-    var session: DialogueSession
+    @Bindable var session: DialogueSession
 
     @State private var isUserScrolling = false
     @State var isShowSysPrompt: Bool = false
 
     var body: some View {
         ScrollViewReader { proxy in
-            normalList
+            Group {
+                if session.conversations.isEmpty {
+                    emptyListView
+                } else {
+                    normalList
+                }
+            }
             .navigationTitle(session.title)
             .navigationSubtitle(navSubtitle)
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -103,10 +109,6 @@ struct MacOSMessages: View {
                             Button("Generate Title") {
                                 Task { await session.generateTitle(forced: true) }
                             }
-                            
-//                            Button("System Prompt") {
-//                                isShowSysPrompt = true
-//                            }
                         }
                         
                         Section {
@@ -164,9 +166,6 @@ struct MacOSMessages: View {
                     }
                 }
             }
-//            .sheet(isPresented: $isShowSysPrompt) {
-//                MacSysPrompt(session: session)
-//            }
         }
     }
     
@@ -191,6 +190,38 @@ struct MacOSMessages: View {
                 .frame(height: 30)
                 .id("bottomID")
         
+        }
+    }
+    
+    private var emptyListView: some View {
+        VStack {
+            Spacer()
+
+            HStack {
+                Image(systemName: "hammer.fill")
+                    .imageScale(.large)
+                    .foregroundStyle(.cyan)
+                Text("Tools")
+                    .font(.title)
+            }
+            
+            VStack(alignment: .leading) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 8) {
+                        CustomToggle(label: "Google Search", isOn: $session.configuration.useGSearch)
+                        CustomToggle(label: "URL Scrape", isOn: $session.configuration.useUrlScrape)
+                        CustomToggle(label: "Image Generate", isOn: $session.configuration.useImageGenerate)
+                    }
+                    VStack(alignment: .leading, spacing: 8) {
+                        CustomToggle(label: "Transcribe", isOn: $session.configuration.useTranscribe)
+                        CustomToggle(label: "Extract PDF", isOn: $session.configuration.useExtractPdf)
+                        CustomToggle(label: "Vision", isOn: $session.configuration.useVision)
+                    }
+                }
+            }
+            .offset(x: 30)
+            
+            Spacer()
         }
     }
     
@@ -236,6 +267,20 @@ struct MacOSMessages: View {
         }
         .keyboardShortcut("b", modifiers: .command)
         .hidden()
+    }
+}
+
+struct CustomToggle: View {
+    let label: String
+    @Binding var isOn: Bool
+
+    var body: some View {
+        HStack {
+            Toggle("", isOn: $isOn)
+                .labelsHidden()
+            Text(label)
+        }
+        .frame(width: 150, alignment: .leading)
     }
 }
 
