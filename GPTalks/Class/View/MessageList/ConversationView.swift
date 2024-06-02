@@ -10,6 +10,8 @@ import SwiftUI
 struct ConversationView: View {
     var session: DialogueSession
     var conversation: Conversation
+    
+    var isQuick: Bool = false
 
     var body: some View {
         VStack { // TODO dont use vstack
