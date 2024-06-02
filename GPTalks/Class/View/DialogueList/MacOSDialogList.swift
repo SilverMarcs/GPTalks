@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(macOS)
 struct MacOSDialogList: View {
     @Bindable var viewModel: DialogueViewModel
     @State private var previousActiveDialoguesCount = 0
@@ -173,3 +174,4 @@ extension NSColor {
         return NSColor.secondaryLabelColor.blended(withFraction: 0.2, of: .white) ?? .secondaryLabelColor
     }
 }
+#endif
