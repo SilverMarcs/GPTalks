@@ -13,7 +13,7 @@ struct PanelTextEditor: View {
     @State var prompt: String = ""
     @Binding var showAdditionalContent: Bool
     
-    @State var session: DialogueSession = DialogueSession()
+    @State var session: DialogueSession = DialogueSession(configuration: .init(quick: true))
     
     @FocusState private var isFocused: Bool
     
@@ -22,11 +22,11 @@ struct PanelTextEditor: View {
     var body: some View {
         VStack {
             HStack(spacing: 12) {
-                Button {
-                    #if DEBUG
-                    showAdditionalContent.toggle()
-                    #endif
-                    isFocused = true
+                Menu {
+                    ProviderPicker(session: session)
+                    ModelPicker(session: session)
+                    ToolToggle(session: session)
+                    
                 } label: {
                     Image(systemName: "magnifyingglass")
                         .resizable()
@@ -35,7 +35,6 @@ struct PanelTextEditor: View {
                         .frame(width: 24, height: 24)
                 }
                 .buttonStyle(.plain)
-                .keyboardShortcut("L", modifiers: [.command])
                 
                 TextField("Ask AI...", text: $prompt)
                     .focused($isFocused)
@@ -62,42 +61,50 @@ struct PanelTextEditor: View {
             if showAdditionalContent {
                 Divider()
                 
-                ScrollView {
-                    VStack(spacing: 0) {
-                        ForEach(session.conversations) { conversation in
-                            ConversationView(session: session, conversation: conversation, isQuick: true)
-                        }
-                    }
-                }
+                conversationView
                 
-                HStack {
-                    Group {
-                        Button {
-                            showAdditionalContent = false
-                            session.removeAllConversations()
-                        } label: {
-                            Image(systemName: "delete.left")
-                                .imageScale(.medium)
-                        }
-                        
-                        
-                        Spacer()
-                        
-                        Button {
-                            addToDB()
-                        } label: {
-                            Image(systemName: "plus.square.on.square")
-                                .imageScale(.medium)
-                        }
-
-                    }
-                    .foregroundColor(.secondary)
-                    .buttonStyle(.plain)
-                    .padding(7)
-                }
-                .background(.ultraThickMaterial)
+                bottomView
             }
         }
+    }
+    
+    private var conversationView: some View {
+        ScrollView {
+            VStack(spacing: 0) {
+                ForEach(session.conversations) { conversation in
+                    ConversationView(session: session, conversation: conversation, isQuick: true)
+                }
+            }
+        }
+    }
+    
+    private var bottomView: some View {
+        HStack {
+            Group {
+                Button {
+                    showAdditionalContent = false
+                    session.removeAllConversations()
+                } label: {
+                    Image(systemName: "delete.left")
+                        .imageScale(.medium)
+                }
+                
+                
+                Spacer()
+                
+                Button {
+                    addToDB()
+                } label: {
+                    Image(systemName: "plus.square.on.square")
+                        .imageScale(.medium)
+                }
+
+            }
+            .foregroundColor(.secondary)
+            .buttonStyle(.plain)
+            .padding(7)
+        }
+        .background(.ultraThickMaterial)
     }
     
     private func addToDB() {
