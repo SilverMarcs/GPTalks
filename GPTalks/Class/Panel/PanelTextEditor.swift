@@ -69,10 +69,18 @@ struct PanelTextEditor: View {
     }
     
     private var conversationView: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                ForEach(session.conversations) { conversation in
-                    ConversationView(session: session, conversation: conversation, isQuick: true)
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(spacing: 0) {
+                    ForEach(session.conversations) { conversation in
+                        ConversationView(session: session, conversation: conversation, isQuick: true)
+                            .id(conversation.id.uuidString)
+                    }
+                }
+                .onChange(of: session.conversations) {
+                    withAnimation {
+                        proxy.scrollTo(session.conversations.last?.id.uuidString, anchor: .bottom)
+                    }
                 }
             }
         }
@@ -130,7 +138,6 @@ struct PanelTextEditor: View {
         
         showAdditionalContent = true
         
-        session.configuration = DialogueSession.Configuration(quick: true)
         session.input = prompt
 
         Task { @MainActor in
