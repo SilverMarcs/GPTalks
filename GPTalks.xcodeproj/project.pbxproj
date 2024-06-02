@@ -18,7 +18,6 @@
 		081ABA682BF9A412005029C7 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 081ABA672BF9A412005029C7 /* KeyboardShortcuts */; };
 		081B02712B81B1A2006AF219 /* ImageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081B02702B81B1A2006AF219 /* ImageSession.swift */; };
 		081E75452BFBD0E30041C24A /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 081E75442BFBD0E30041C24A /* MarkdownUI */; };
-		081E754D2BFBD1290041C24A /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 081E754C2BFBD1290041C24A /* Splash */; };
 		0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820E06C2B5395E500401A30 /* TextSelectionView.swift */; };
 		0820F23F2BF9B0A60051C8A2 /* PanelTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820F23E2BF9B0A60051C8A2 /* PanelTextEditor.swift */; };
 		0820F24E2BF9FA5B0051C8A2 /* MDParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820F24D2BF9FA5B0051C8A2 /* MDParser.swift */; };
@@ -71,6 +70,7 @@
 		08980EC62B97877A0005B522 /* TranscriptionSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08980EC52B97877A0005B522 /* TranscriptionSession.swift */; };
 		08980EC82B9788160005B522 /* TranscriptionGeneration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08980EC72B9788160005B522 /* TranscriptionGeneration.swift */; };
 		08980ECA2B9789830005B522 /* TranscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08980EC92B9789830005B522 /* TranscriptionView.swift */; };
+		08983F1F2C0CDEBE00F52F70 /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 08983F1E2C0CDEBE00F52F70 /* Splash */; };
 		08A1EF4E2B2604D000A88A3A /* UserMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4D2B2604D000A88A3A /* UserMessageView.swift */; };
 		08A1EF502B2606C000A88A3A /* AssistantMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */; };
 		08A1EF522B26100600A88A3A /* DialogueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF512B26100600A88A3A /* DialogueViewModel.swift */; };
@@ -213,10 +213,10 @@
 				0820F25A2BFA0F2C0051C8A2 /* MarkdownWebView in Frameworks */,
 				08896BB52C0CAD6F00ED02E7 /* MarkdownWebView in Frameworks */,
 				081ABA682BF9A412005029C7 /* KeyboardShortcuts in Frameworks */,
+				08983F1F2C0CDEBE00F52F70 /* Splash in Frameworks */,
 				08C594FE2B7FD52C009AB268 /* OpenAI in Frameworks */,
 				083495A52BA8BCBA0009E271 /* OpenAI in Frameworks */,
 				08545C3A2B8D0DD500592108 /* SwiftSoup in Frameworks */,
-				081E754D2BFBD1290041C24A /* Splash in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,8 +497,8 @@
 				081ABA672BF9A412005029C7 /* KeyboardShortcuts */,
 				0820F2592BFA0F2C0051C8A2 /* MarkdownWebView */,
 				081E75442BFBD0E30041C24A /* MarkdownUI */,
-				081E754C2BFBD1290041C24A /* Splash */,
 				08896BB42C0CAD6F00ED02E7 /* MarkdownWebView */,
+				08983F1E2C0CDEBE00F52F70 /* Splash */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -537,8 +537,8 @@
 				08FBE1D82BCF0B4D006CD9CB /* XCRemoteSwiftPackageReference "GPTEncoder" */,
 				081ABA662BF9A412005029C7 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				081E75432BFBD0E30041C24A /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
-				081E754B2BFBD1290041C24A /* XCRemoteSwiftPackageReference "Splash" */,
 				08896BB32C0CAD6F00ED02E7 /* XCRemoteSwiftPackageReference "markdown-webview" */,
+				08983F1D2C0CDEBE00F52F70 /* XCRemoteSwiftPackageReference "Splash" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -917,14 +917,6 @@
 				minimumVersion = 2.3.0;
 			};
 		};
-		081E754B2BFBD1290041C24A /* XCRemoteSwiftPackageReference "Splash" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/JohnSundell/Splash";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.16.0;
-			};
-		};
 		083495A02BA869D50009E271 /* XCRemoteSwiftPackageReference "reeeed" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nate-parrott/reeeed";
@@ -973,6 +965,14 @@
 				kind = branch;
 			};
 		};
+		08983F1D2C0CDEBE00F52F70 /* XCRemoteSwiftPackageReference "Splash" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AugustDev/Splash/";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		08FBE1D82BCF0B4D006CD9CB /* XCRemoteSwiftPackageReference "GPTEncoder" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/alfianlosari/GPTEncoder.git";
@@ -993,11 +993,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 081E75432BFBD0E30041C24A /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
-		};
-		081E754C2BFBD1290041C24A /* Splash */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 081E754B2BFBD1290041C24A /* XCRemoteSwiftPackageReference "Splash" */;
-			productName = Splash;
 		};
 		0820F2592BFA0F2C0051C8A2 /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1048,6 +1043,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 08896BB32C0CAD6F00ED02E7 /* XCRemoteSwiftPackageReference "markdown-webview" */;
 			productName = MarkdownWebView;
+		};
+		08983F1E2C0CDEBE00F52F70 /* Splash */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08983F1D2C0CDEBE00F52F70 /* XCRemoteSwiftPackageReference "Splash" */;
+			productName = Splash;
 		};
 		08C594FA2B7FCEA4009AB268 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;

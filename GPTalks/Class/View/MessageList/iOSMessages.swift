@@ -8,7 +8,9 @@
 #if !os(macOS)
 import SwiftUI
 import UniformTypeIdentifiers
+#if !os(visionOS)
 import VisualEffectView
+#endif
 
 struct iOSMessages: View {
     @Environment(\.colorScheme) var colorScheme
@@ -49,7 +51,7 @@ struct iOSMessages: View {
                 
                 scrollBtn(proxy: proxy)
             }
-            #if !os(visionOS)
+#if !os(visionOS)
             .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                 let bottomReached = value > UIScreen.main.bounds.height
                 shouldStopScroll = bottomReached
@@ -100,25 +102,25 @@ struct iOSMessages: View {
             .onChange(of: session.isAddingConversation) {
                 scrollToBottom(proxy: proxy)
             }
-            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
-                if let itemProvider = providers.first {
-                    itemProvider.loadObject(ofClass: UIImage.self) { image, error in
-                        DispatchQueue.main.async {
-                            if let image = image as? UIImage {
-                                if session.isEditing {
-                                    session.editingImages.append(image)
-                                } else {
-                                    session.inputImages.append(image)
-                                }
-                            } else {
-                                print("Could not load image: \(String(describing: error))")
-                            }
-                        }
-                    }
-                    return true
-                }
-                return false
-            }
+//            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
+//                if let itemProvider = providers.first {
+//                    itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+//                        DispatchQueue.main.async {
+//                            if let image = image as? UIImage {
+//                                if session.isEditing {
+//                                    session.editingImages.append(image)
+//                                } else {
+//                                    session.inputImages.append(image)
+//                                }
+//                            } else {
+//                                print("Could not load image: \(String(describing: error))")
+//                            }
+//                        }
+//                    }
+//                    return true
+//                }
+//                return false
+//            }
             .alert("Rename Session", isPresented: $showRenameDialogue) {
                 TextField("Enter new name", text: $newName)
                 Button("Rename", action: {
@@ -158,10 +160,14 @@ struct iOSMessages: View {
                 session: session,
                 focused: _isTextFieldFocused
             )
+#if !os(visionOS)
             .background(
                 VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 8, scale: 1)
                     .ignoresSafeArea()
             )
+#else
+            .background(.bar)
+#endif
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

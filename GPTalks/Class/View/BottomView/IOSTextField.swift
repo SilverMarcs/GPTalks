@@ -30,14 +30,8 @@ struct IOSTextField: View {
                 .padding(.horizontal, 5)
                 .padding(.trailing, 25) // for avoiding send button
                 .frame(minHeight: imageSize + 7)
+                #if !os(visionOS)
                 .background(
-//                    VisualEffect(colorTint: colorScheme == .dark 
-//                                 ? Color(hex: "48484A")
-//                                 : Color(hex: "CACACE"),
-//                                 colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
-//                        .cornerRadius(18)
-                    
-//                    .clear
                     
                     VisualEffect(colorTint: colorScheme == .dark
                                  ? Color(hex: "101010")
@@ -45,6 +39,7 @@ struct IOSTextField: View {
                                  colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
                         .cornerRadius(18)
                 )
+                #endif
                 .roundedRectangleOverlay()
             
             Group {

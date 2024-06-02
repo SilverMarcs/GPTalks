@@ -28,7 +28,9 @@ struct ImageCreator: View {
             #else
             .navigationTitle(imageSession.configuration.model == .customImage ? AppConfiguration.shared.$customImageModel : Binding.constant(imageSession.configuration.model.name))
             .navigationBarTitleDisplayMode(.inline)
+            #if !os(visionOS)
             .scrollDismissesKeyboard(.immediately)
+            #endif
             #endif
             .onChange(of: imageSession.generations) {
                 withAnimation {

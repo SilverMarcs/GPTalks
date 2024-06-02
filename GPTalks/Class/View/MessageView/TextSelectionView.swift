@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-#if os(iOS)
+#if !os(macOS)
 import MarkdownWebView
 
 struct TextSelectionView: View {
@@ -17,9 +17,15 @@ struct TextSelectionView: View {
     var body: some View {
         NavigationView {
             ScrollView {
+                #if os(visionOS)
+                Text(content)
+                    .padding(.horizontal)
+                    .padding(.bottom, 45)
+                #else
                 MarkdownWebView(content)
                     .padding(.horizontal)
                     .padding(.bottom, 45)
+                #endif
             }
 
             .edgesIgnoringSafeArea(.bottom)

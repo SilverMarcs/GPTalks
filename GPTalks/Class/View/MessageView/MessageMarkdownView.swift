@@ -19,7 +19,15 @@ struct MessageMarkdownView: View {
 
     var body: some View {
         if AppConfiguration.shared.alternateMarkdown {
+            #if os(visionOS)
+            Markdown(text)
+                .markdownCodeSyntaxHighlighter(.splash(theme: theme))
+                .markdownBlockStyle(\.codeBlock) {
+                    CodeBlock(configuration: $0)
+                }
+            #else
             MarkdownWebView(text)
+            #endif
         } else {
             Markdown(text)
                 .markdownCodeSyntaxHighlighter(.splash(theme: theme))
@@ -43,8 +51,11 @@ struct MessageMarkdownView: View {
                         FontSize(.em(0.97))
                     }
                     .padding(12)
-//                    .background(.background.secondary)
+                #if os(visionOS)
+                    .background(.background)
+                #else
                     .background(Color("mdownBgColor"))
+                #endif
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .markdownMargin(top: .zero, bottom: .em(0.8))
 
