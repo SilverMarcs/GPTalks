@@ -19,7 +19,7 @@ struct MessageMarkdownView: View {
 
     var body: some View {
         if AppConfiguration.shared.alternateMarkdown {
-            MarkdownWebView(Binding.constant(text))
+            MarkdownWebView(text)
         } else {
             Markdown(text)
                 .markdownCodeSyntaxHighlighter(.splash(theme: theme))
