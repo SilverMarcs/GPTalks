@@ -20,7 +20,7 @@ struct GPTalks: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-#if os(macOS)
+#if os(macOS) && DEBUG
                 .task {
                     KeyboardShortcuts.onKeyDown(for: .togglePanel) {
                         if !NSApp.isActive {
