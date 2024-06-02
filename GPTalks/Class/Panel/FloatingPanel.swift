@@ -10,9 +10,9 @@ import SwiftUI
 import AppKit
 import KeyboardShortcuts
 
-
 class FloatingPanel<Content: View>: NSPanel {
     @Binding var isPresented: Bool
+    private var heightConstraint: NSLayoutConstraint?
     
     init(view: @escaping () -> Content,
          contentRect: NSRect,
@@ -37,10 +37,7 @@ class FloatingPanel<Content: View>: NSPanel {
         standardWindowButton(.miniaturizeButton)?.isHidden = true
         standardWindowButton(.zoomButton)?.isHidden = true
         animationBehavior = .none
-        
-//        isOpaque = false
-//        backgroundColor = .clear
-        
+
         let hostingView = NSHostingView(rootView: view()
             .ignoresSafeArea()
             .environment(\.floatingPanel, self)
@@ -62,6 +59,12 @@ class FloatingPanel<Content: View>: NSPanel {
         ])
         
         contentView = visualEffectView
+        
+        // Set the initial height constraint
+        heightConstraint = visualEffectView.heightAnchor.constraint(equalToConstant: contentRect.height)
+        heightConstraint?.isActive = true
+        self.contentMinSize = NSSize(width: contentRect.width, height: contentRect.height)
+        self.contentMaxSize = NSSize(width: contentRect.width, height: 500)
     }
     
     override func resignMain() {
@@ -81,7 +84,26 @@ class FloatingPanel<Content: View>: NSPanel {
     override var canBecomeMain: Bool {
         return true
     }
+    
+    func updateHeight(to height: CGFloat) {
+        guard let screenFrame = screen?.visibleFrame else { return }
+        let currentFrame = frame
+        let newFrame = NSRect(x: currentFrame.origin.x,
+                              y: currentFrame.origin.y + (currentFrame.height - height),
+                              width: currentFrame.width,
+                              height: height)
+        
+        // Ensure the new frame is within the screen bounds
+        let adjustedFrame = NSIntersectionRect(newFrame, screenFrame)
+        
+        heightConstraint?.constant = height
+        self.contentMinSize.height = height
+        self.contentMaxSize.height = height
+        self.setFrame(adjustedFrame, display: true, animate: false)
+    }
 }
+
+
 
 private struct FloatingPanelKey: EnvironmentKey {
     static let defaultValue: NSPanel? = nil
@@ -96,7 +118,8 @@ extension EnvironmentValues {
 
 fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
     @Binding var isPresented: Bool
-    var contentRect: CGRect = CGRect(x: 0, y: 0, width: 600, height: 20)
+    @Binding var showAdditionalContent: Bool
+    var contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 60)
     @ViewBuilder let view: () -> PanelContent
     @State var panel: FloatingPanel<PanelContent>?
  
@@ -117,6 +140,12 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
                 } else {
                     panel?.close()
                 }
+            }.onChange(of: showAdditionalContent) { newValue in
+                if newValue {
+                    panel?.updateHeight(to: 500)
+                } else {
+                    panel?.updateHeight(to: contentRect.height)
+                }
             }
     }
  
@@ -126,13 +155,19 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
     }
 }
 
+
+
 extension View {
     func floatingPanel<Content: View>(isPresented: Binding<Bool>,
-                                      contentRect: CGRect = CGRect(x: 0, y: 0, width: 600, height: 20),
+                                      showAdditionalContent: Binding<Bool>,
+                                      contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 60),
                                       @ViewBuilder content: @escaping () -> Content) -> some View {
-        self.modifier(FloatingPanelModifier(isPresented: isPresented, contentRect: contentRect, view: content))
+        self.modifier(FloatingPanelModifier(isPresented: isPresented, showAdditionalContent: showAdditionalContent, contentRect: contentRect, view: content))
     }
 }
+
+
+
 extension KeyboardShortcuts.Name {
     static let togglePanel = Self("togglePanel")
 }

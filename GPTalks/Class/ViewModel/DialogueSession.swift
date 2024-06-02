@@ -151,6 +151,10 @@ import OpenAI
 
     init() {
     }
+    
+    init(configuration: DialogueSession.Configuration) {
+        self.configuration = configuration
+    }
 
     // MARK: - Message Actions
     
@@ -816,6 +820,10 @@ extension DialogueSession {
     }
 
     func removeConversation(at index: Int) {
+        if self.isReplying {
+            return
+        }
+        
         let conversation = conversations[index]
         
         if conversations.count <= 2 {

@@ -14,12 +14,13 @@ struct GPTalks: App {
     #if os(macOS)
     @State var showingPanel = false
     @State private var mainWindow: NSWindow?
+    @State var showAdditionalContent = false
 #endif
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-#if os(macOS) && !DEBUG
+#if os(macOS)
                 .task {
                     KeyboardShortcuts.onKeyDown(for: .togglePanel) {
                         if !NSApp.isActive {
@@ -29,8 +30,8 @@ struct GPTalks: App {
                     }
                 }
                 .background(BackgroundView(window: $mainWindow))
-                .floatingPanel(isPresented: $showingPanel) {
-                    PanelTextEditor {
+                .floatingPanel(isPresented: $showingPanel, showAdditionalContent: $showAdditionalContent) {
+                    PanelTextEditor(showAdditionalContent: $showAdditionalContent) {
                         showingPanel.toggle()
                         bringMainWindowToFront()
                     }

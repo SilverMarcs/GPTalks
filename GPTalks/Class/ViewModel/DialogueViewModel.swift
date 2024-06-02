@@ -179,6 +179,14 @@ enum ContentState: String, CaseIterable, Identifiable {
         }
     }
     
+    func addToDB(dialogue: DialogueSession) {
+        if selectedState != .chats {
+            selectedState = .chats
+        }
+
+        
+    }
+    
     func addFloatingDialogue() -> DialogueSession? {
         if selectedState != .chats {
             selectedState = .chats
