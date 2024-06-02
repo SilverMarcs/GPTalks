@@ -208,18 +208,24 @@ struct MacOSMessages: View {
             VStack(alignment: .leading) {
                 HStack {
                     VStack(alignment: .leading, spacing: 8) {
-                        CustomToggle(label: "Google Search", isOn: $session.configuration.useGSearch)
-                        CustomToggle(label: "URL Scrape", isOn: $session.configuration.useUrlScrape)
-                        CustomToggle(label: "Image Generate", isOn: $session.configuration.useImageGenerate)
+                        Group {
+                            Toggle("Google Search", isOn: $session.configuration.useGSearch)
+                            Toggle("Image Generate", isOn: $session.configuration.useImageGenerate)
+                            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
+                        }
+                        .frame(width: 150, alignment: .leading)
                     }
                     VStack(alignment: .leading, spacing: 8) {
-                        CustomToggle(label: "Transcribe", isOn: $session.configuration.useTranscribe)
-                        CustomToggle(label: "Extract PDF", isOn: $session.configuration.useExtractPdf)
-                        CustomToggle(label: "Vision", isOn: $session.configuration.useVision)
+                        Group {
+                            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
+                            Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
+                            Toggle("Extract PDF", isOn: $session.configuration.useExtractPdf)
+                        }
+                        .frame(width: 150, alignment: .leading)
                     }
                 }
             }
-            .offset(x: 30)
+            .offset(x: 35)
             
             Spacer()
         }
@@ -270,20 +276,6 @@ struct MacOSMessages: View {
     }
 }
 
-struct CustomToggle: View {
-    let label: String
-    @Binding var isOn: Bool
-
-    var body: some View {
-        HStack {
-            Toggle("", isOn: $isOn)
-                .labelsHidden()
-            Text(label)
-        }
-        .frame(width: 150, alignment: .leading)
-    }
-}
-
 struct MacSysPrompt: View {
     @Environment(\.dismiss) var dismiss
     @Bindable var session: DialogueSession
@@ -301,14 +293,16 @@ struct MacSysPrompt: View {
                         }
                     }
                     .textFieldStyle(.plain)
-                    .padding(.leading, 5)
+                    .padding(.horizontal, 3)
+                    .frame(width: 300)
             }
             
             GroupBox("System Prompt") {
-                TextEditor(text: $session.configuration.systemPrompt)
-                    .font(.body)
-                    .frame(width: 300, height: 120)
-                    .scrollContentBackground(.hidden)
+                TextField("System Prompt", text: $session.configuration.systemPrompt, axis: .vertical)
+                    .textFieldStyle(.plain)
+                    .padding(.horizontal, 3)
+                    .frame(width: 300)
+                    .lineLimit(7, reservesSpace: true)
             }
         }
         .padding(13)
