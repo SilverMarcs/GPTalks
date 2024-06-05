@@ -20,7 +20,7 @@ struct PanelTextEditor: View {
     let dismiss: () -> Void
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HStack(spacing: 12) {
                 Menu {
                     ProviderPicker(session: session)
@@ -90,12 +90,12 @@ struct PanelTextEditor: View {
         HStack {
             Group {
                 Button {
-                    showAdditionalContent = false
-                    session.removeAllConversations()
+                    resetChat()
                 } label: {
                     Image(systemName: "delete.left")
                         .imageScale(.medium)
                 }
+                .keyboardShortcut(.delete, modifiers: [.command])
                 
                 
                 Spacer()
@@ -112,7 +112,13 @@ struct PanelTextEditor: View {
             .buttonStyle(.plain)
             .padding(7)
         }
-        .background(.ultraThickMaterial)
+        .background(.regularMaterial)
+    }
+    
+    private func resetChat() {
+        showAdditionalContent = false
+        session.removeAllConversations()
+        session.configuration = .init(quick: true)
     }
     
     private func addToDB() {

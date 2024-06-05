@@ -13,6 +13,7 @@ struct AssistantMessageView: View {
     @Environment(DialogueViewModel.self) private var viewModel
     var conversation: Conversation
     var session: DialogueSession
+    var isQuick: Bool = false
     
     @State var isHovered = false
     @State var hoverxyz = false
@@ -120,7 +121,8 @@ struct AssistantMessageView: View {
         }
         #if os(macOS)
         .padding(.horizontal, 8)
-        .background(.background.tertiary)
+//        .background(.background.tertiary)
+        .background(isQuick ? .regularMaterial : .ultraThickMaterial)
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.4) : .clear)
         #else
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)

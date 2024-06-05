@@ -140,8 +140,8 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
                 } else {
                     panel?.close()
                 }
-            }.onChange(of: showAdditionalContent) { newValue in
-                if newValue {
+            }.onChange(of: showAdditionalContent) {
+                if showAdditionalContent {
                     panel?.updateHeight(to: 500)
                 } else {
                     panel?.updateHeight(to: contentRect.height)

@@ -20,7 +20,7 @@ struct GPTalks: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-#if os(macOS) && DEBUG
+#if os(macOS) && !DEBUG
                 .task {
                     KeyboardShortcuts.onKeyDown(for: .togglePanel) {
                         if !NSApp.isActive {
@@ -38,6 +38,7 @@ struct GPTalks: App {
                     .environment(viewModel)
                 }
 #endif
+
         }
         .environment(viewModel)
         .commands {
@@ -67,11 +68,12 @@ struct GPTalks: App {
     
 #if os(macOS)
     private func bringMainWindowToFront() {
-        if let window = mainWindow {
+        if let window = mainWindow, !window.isKeyWindow {
             window.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
         }
     }
+
 #endif
 }
 

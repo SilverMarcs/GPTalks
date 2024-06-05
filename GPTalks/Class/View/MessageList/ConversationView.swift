@@ -20,7 +20,7 @@ struct ConversationView: View {
                 case .user:
                     UserMessageView(conversation: conversation, session: session)
                 case .assistant:
-                    AssistantMessageView(conversation: conversation, session: session)
+                    AssistantMessageView(conversation: conversation, session: session, isQuick: isQuick)
                 case .tool:
                     ToolCallView(conversation: conversation, session: session)
                 case .system:
