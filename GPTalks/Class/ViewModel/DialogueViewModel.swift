@@ -143,6 +143,13 @@ enum ContentState: String, CaseIterable, Identifiable {
     }
 
     func addDialogue(conversations: [Conversation] = []) {
+        if let first = allDialogues.first {
+            if first.conversations.count == 0 {
+                selectedDialogues = [first]
+                return
+            }
+        }
+        
         if selectedState != .chats {
             selectedState = .chats
         }

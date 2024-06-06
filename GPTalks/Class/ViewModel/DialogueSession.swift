@@ -938,3 +938,36 @@ extension DialogueSession {
         }
     }
 }
+
+extension DialogueSession {
+    public func exportToMd() -> String? {
+        let markdownContent = generateMarkdown(for: conversations)
+
+        let uniqueTimestamp = Int(Date().timeIntervalSince1970)
+        // Specify the file path
+        let filePath = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Downloads/\(title)_\(uniqueTimestamp).md")
+
+        // Write the content to the file
+        do {
+            try markdownContent.write(to: filePath, atomically: true, encoding: .utf8)
+            return filePath.lastPathComponent
+        } catch {
+            return nil
+        }
+
+    }
+    
+    // Function to generate Markdown content
+    private func generateMarkdown(for conversations: [Conversation]) -> String {
+        var markdown = "# Conversations\n\n"
+        
+        for conversation in conversations {
+            markdown += "### \(conversation.role.rawValue.capitalized)\n"
+            markdown += "\(conversation.content)\n\n"
+        }
+        
+        return markdown
+    }
+
+}
+

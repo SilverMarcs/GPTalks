@@ -16,6 +16,8 @@ struct MacOSMessages: View {
 
     @State private var isUserScrolling = false
     @State var isShowSysPrompt: Bool = false
+    
+    @State var editingIndex: Int = 0
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -124,6 +126,10 @@ struct MacOSMessages: View {
                         
                         Section {
                             ToolToggle(session: session)
+                        }
+                        
+                        Section {
+                            ExportMenu(session: session)
                         }
 
                     } label: {
@@ -309,3 +315,27 @@ struct MacSysPrompt: View {
     }
 }
 #endif
+
+struct ExportMenu: View {
+    var session: DialogueSession
+    @State private var isShowExport = false
+    @State private var pathStr = "Downloads/"
+    
+    var body: some View {
+        Menu {
+            
+            Button("Markdown") {
+                if let path = session.exportToMd() {
+                    pathStr = path
+                    isShowExport = true
+                }
+            }
+        } label: {
+            Label("Export", systemImage: "square.and.arrow.up")
+        }
+        .alert(isPresented: $isShowExport) {
+            // TODO: this isnt perfect
+            Alert(title: Text("Notice"), message: Text("Exported as \(pathStr)"), dismissButton: .default(Text("OK")))
+        }
+    }
+}

@@ -22,10 +22,6 @@ struct UserMessageView: View {
     @State var hoverxyz = false
     
     @State var canSelectText = false
-    
-    @State var showPreview: Bool = false
-    
-    @State var dynamicHeight: CGFloat = 10
 
     var body: some View {
         alternateUI
@@ -85,8 +81,6 @@ struct UserMessageView: View {
                         .textSelection(.enabled)
 #else
                     
-//                    TextViewWrapper(text: Binding.constant(conversation.content), dynamicHeight: $dynamicHeight)
-//                        .frame(height: dynamicHeight)
                     Text(conversation.content)
                         .textSelection(.enabled)
 #endif
