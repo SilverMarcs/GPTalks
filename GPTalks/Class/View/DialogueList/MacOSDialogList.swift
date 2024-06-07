@@ -71,7 +71,7 @@ struct MacOSDialogList: View {
                 } label: {
                     Image(systemName: "square.and.pencil")
                 }
-                .keyboardShortcut("n", modifiers: .command)                
+                .keyboardShortcut("n", modifiers: .command)
             }
             
             ToolbarItem(placement: .keyboard) {
