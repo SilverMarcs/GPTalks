@@ -90,6 +90,7 @@
 		08EA25A72B98B09F00EC5E65 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08EA25A62B98B09F00EC5E65 /* OpenAI */; };
 		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
 		08F74EA42B0BC318006D1DD3 /* ServiceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */; };
+		08F788342C12B3CA0084720D /* KBDShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F788332C12B3CA0084720D /* KBDShortcuts.swift */; };
 		08FB18B82BC29A0700DFD0DC /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08FB18B72BC29A0700DFD0DC /* MarkdownWebView */; };
 		08FBE1DA2BCF0B4D006CD9CB /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 08FBE1D92BCF0B4D006CD9CB /* GPTEncoder */; };
 		08FBE1DC2BCF0BC6006CD9CB /* GPTEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08FBE1DB2BCF0BC6006CD9CB /* GPTEncoder.swift */; };
@@ -173,6 +174,7 @@
 		08E2611C2B98978800E4542E /* ToolMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolMessageView.swift; sourceTree = "<group>"; };
 		08ED9EB72B02564D00849A1E /* DialogueListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListItem.swift; sourceTree = "<group>"; };
 		08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSettingsView.swift; sourceTree = "<group>"; };
+		08F788332C12B3CA0084720D /* KBDShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBDShortcuts.swift; sourceTree = "<group>"; };
 		08FBE1DB2BCF0BC6006CD9CB /* GPTEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTEncoder.swift; sourceTree = "<group>"; };
 		E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSSettingsView.swift; sourceTree = "<group>"; };
 		E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -443,6 +445,7 @@
 				E4C65EEB29CA9F7800AFA884 /* SplashSyntax.swift */,
 				085D40BE2AFD66340033F8B5 /* Utils.swift */,
 				08376D802B7CF0D1003258D1 /* ImageSave.swift */,
+				08F788332C12B3CA0084720D /* KBDShortcuts.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -586,6 +589,7 @@
 				08E2611D2B98978800E4542E /* ToolMessageView.swift in Sources */,
 				0820F24E2BF9FA5B0051C8A2 /* MDParser.swift in Sources */,
 				08980EC62B97877A0005B522 /* TranscriptionSession.swift in Sources */,
+				08F788342C12B3CA0084720D /* KBDShortcuts.swift in Sources */,
 				0878E53B2B1683ED00E0D79D /* AppIconView.swift in Sources */,
 				0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */,
 				E4C65EEE29CA9F7800AFA884 /* Conversation.swift in Sources */,

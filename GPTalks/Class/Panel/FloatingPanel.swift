@@ -7,8 +7,6 @@
 
 #if os(macOS)
 import SwiftUI
-import AppKit
-import KeyboardShortcuts
 
 class FloatingPanel<Content: View>: NSPanel {
     @Binding var isPresented: Bool
@@ -119,7 +117,7 @@ extension EnvironmentValues {
 fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
     @Binding var isPresented: Bool
     @Binding var showAdditionalContent: Bool
-    var contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 60)
+    var contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 57)
     @ViewBuilder let view: () -> PanelContent
     @State var panel: FloatingPanel<PanelContent>?
  
@@ -160,16 +158,10 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
 extension View {
     func floatingPanel<Content: View>(isPresented: Binding<Bool>,
                                       showAdditionalContent: Binding<Bool>,
-                                      contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 60),
+                                      contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 57),
                                       @ViewBuilder content: @escaping () -> Content) -> some View {
         self.modifier(FloatingPanelModifier(isPresented: isPresented, showAdditionalContent: showAdditionalContent, contentRect: contentRect, view: content))
     }
-}
-
-
-
-extension KeyboardShortcuts.Name {
-    static let togglePanel = Self("togglePanel")
 }
 
 #endif

@@ -176,7 +176,7 @@ struct MacOSMessages: View {
     }
     
     var navSubtitle: String {
-        "Tokens: " + session.activeTokenCount.formatToK() + " • " + session.configuration.systemPrompt.truncated(to: 45)
+        "Tokens: " + session.activeTokenCount.formatToK() + " • " + session.configuration.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45)
     }
     
     @ViewBuilder

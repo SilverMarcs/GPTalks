@@ -55,29 +55,33 @@ struct MacOSDialogList: View {
         }
         .frame(minWidth: 280)
         .toolbar {
-            Spacer()
-
-            Picker("Select State", selection: $viewModel.selectedState) {
-                ForEach(ContentState.allCases) { state in
-                    Text(state.rawValue).tag(state)
+            ToolbarItemGroup {
+                Spacer()
+                
+                Picker("Select State", selection: $viewModel.selectedState) {
+                    ForEach(ContentState.allCases) { state in
+                        Text(state.rawValue).tag(state)
+                    }
                 }
+                
+                Spacer()
+                
+                Button {
+                    viewModel.addDialogue()
+                } label: {
+                    Image(systemName: "square.and.pencil")
+                }
+                .keyboardShortcut("n", modifiers: .command)                
             }
-
-            Spacer()
-
-            Button {
-                viewModel.addDialogue()
-            } label: {
-                Image(systemName: "square.and.pencil")
-            }
-            .keyboardShortcut("n", modifiers: .command)
             
-            Button("h") {
-                viewModel.deleteSelectedDialogues()
+            ToolbarItem(placement: .keyboard) {
+                Button("h") {
+                    viewModel.deleteSelectedDialogues()
+                }
+                .keyboardShortcut(.delete, modifiers: .command)
+                .hidden()
+                .disabled(viewModel.selectedDialogues.count < 2)
             }
-            .keyboardShortcut(.delete, modifiers: .command)
-            .hidden()
-            .disabled(viewModel.selectedDialogues.count < 2)
         }
         .listStyle(.inset)
         .scrollContentBackground(.hidden)
