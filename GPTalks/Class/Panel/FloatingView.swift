@@ -9,7 +9,7 @@ import SwiftUI
 import KeyboardShortcuts
 
 #if os(macOS)
-struct PanelTextEditor: View {
+struct FloatingView: View {
     @Environment(DialogueViewModel.self) private var viewModel
     @State var prompt: String = ""
     @Binding var showAdditionalContent: Bool
@@ -34,11 +34,6 @@ struct PanelTextEditor: View {
                 bottomView
             }
         }
-        .task {
-            KeyboardShortcuts.onKeyDown(for: .focusQuickPanel) {
-                isFocused = true
-            }
-        }
     }
     
     private var textfieldView: some View {
@@ -57,12 +52,12 @@ struct PanelTextEditor: View {
             }
             .buttonStyle(.plain)
             
-            TextField("Ask AI...", text: $prompt)
+            TextField("Ask Anything...", text: $prompt)
                 .focused($isFocused)
                 .font(.system(size: 25))
                 .textFieldStyle(.plain)
                 
-            Group {
+            ZStack {
                 if session.isReplying {
                     StopButton(size: 28) {
                         Task { @MainActor in
@@ -74,6 +69,14 @@ struct PanelTextEditor: View {
                         send()
                     }
                 }
+                
+                Button {
+                    isFocused = true
+                } label: {
+                    
+                }
+                .hidden()
+                .keyboardShortcut("l", modifiers: .command)
             }
             .buttonStyle(.plain)
         }

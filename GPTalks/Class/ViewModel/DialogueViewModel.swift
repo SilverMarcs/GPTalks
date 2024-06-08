@@ -28,6 +28,8 @@ enum ContentState: String, CaseIterable, Identifiable {
     private let viewContext: NSManagedObjectContext
     
     var allDialogues: [DialogueSession] = []
+    
+    var isExpanded: Bool = false
 
     var isArchivedSelected: Bool = false
     
@@ -192,34 +194,6 @@ enum ContentState: String, CaseIterable, Identifiable {
         }
 
         
-    }
-    
-    func addFloatingDialogue() -> DialogueSession? {
-        if selectedState != .chats {
-            selectedState = .chats
-        }
-
-        let newItem = DialogueData(context: viewContext)
-        newItem.id = UUID()
-        newItem.date = Date()
-
-        do {
-            newItem.configuration = try JSONEncoder().encode(DialogueSession.Configuration(quick: true))
-        } catch {
-            print(error.localizedDescription)
-        }
-
-        save()
-
-        if let session = DialogueSession(rawData: newItem) {
-            withAnimation {
-                allDialogues.insert(session, at: 0)
-                selectedDialogues = []
-                selectedDialogues.insert(session)
-            }
-        }
-        
-        return allDialogues.first
     }
 
     func deleteDialogue(_ session: DialogueSession) {

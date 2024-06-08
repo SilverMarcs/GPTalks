@@ -23,7 +23,7 @@ struct MacOSDialogList: View {
                 PlaceHolderView(imageName: "message.fill", title: viewModel.placeHolderText)
             } else {
                 ScrollViewReader { proxy in
-                    List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogues) { session in
+                    List(viewModel.allDialogues.prefix(viewModel.isExpanded ? viewModel.allDialogues.count : 10), id: \.self, selection: $viewModel.selectedDialogues) { session in
                         DialogueListItem(session: session)
                             .id(session.id.uuidString)
                             .listRowSeparator(.visible)
@@ -119,15 +119,10 @@ struct SearchField: NSViewRepresentable {
             textField.heightAnchor.constraint(equalToConstant: height)
         ])
 
-//        // Customize the search and cancel button colors
-//        if let cell = textField.cell as? NSSearchFieldCell {
-//            if let searchButton = cell.searchButtonCell {
-//                searchButton.image = tintedImage(named: "magnifyingglass", color: .slightlyBrighterSecondaryLabelColor)
-//            }
-//            if let cancelButton = cell.cancelButtonCell {
-//                cancelButton.image = tintedImage(named: "xmark.circle.fill", color: .slightlyBrighterSecondaryLabelColor)
-//            }
-//        }
+        // Add keyboard shortcut listener
+        let shortcutListener = ShortcutListener(searchField: textField)
+        context.coordinator.shortcutListener = shortcutListener
+        shortcutListener.startListening()
 
         return textField
     }
@@ -139,6 +134,7 @@ struct SearchField: NSViewRepresentable {
     class Coordinator: NSObject, NSSearchFieldDelegate {
         let binding: Binding<String>
         let onClear: () -> Void
+        var shortcutListener: ShortcutListener?
 
         init(binding: Binding<String>, onClear: @escaping () -> Void) {
             self.binding = binding
@@ -155,27 +151,25 @@ struct SearchField: NSViewRepresentable {
             }
         }
     }
+}
 
-    private func tintedImage(named: String, color: NSColor) -> NSImage? {
-//        guard let image = NSImage(named: named) else { return nil }
-        guard let image = NSImage(systemSymbolName: named, accessibilityDescription: nil) else { return nil }
-        let tintedImage = NSImage(size: image.size)
+class ShortcutListener {
+    weak var searchField: NSSearchField?
 
-        tintedImage.lockFocus()
-        let imageRect = NSRect(origin: .zero, size: image.size)
-        image.draw(in: imageRect, from: .zero, operation: .sourceOver, fraction: 1.0)
-        color.set()
-        imageRect.fill(using: .sourceAtop)
-        tintedImage.unlockFocus()
+    init(searchField: NSSearchField) {
+        self.searchField = searchField
+    }
 
-        return tintedImage
-    
+    func startListening() {
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self = self else { return event }
+            if event.modifierFlags.contains(.command) && event.characters == "f" {
+                self.searchField?.becomeFirstResponder()
+                return nil
+            }
+            return event
+        }
     }
 }
 
-extension NSColor {
-    static var slightlyBrighterSecondaryLabelColor: NSColor {
-        return NSColor.secondaryLabelColor.blended(withFraction: 0.2, of: .white) ?? .secondaryLabelColor
-    }
-}
 #endif
