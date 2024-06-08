@@ -23,7 +23,7 @@ struct MacOSDialogList: View {
                 PlaceHolderView(imageName: "message.fill", title: viewModel.placeHolderText)
             } else {
                 ScrollViewReader { proxy in
-                    List(viewModel.allDialogues.prefix(viewModel.isExpanded ? viewModel.allDialogues.count : 10), id: \.self, selection: $viewModel.selectedDialogues) { session in
+                    List(viewModel.currentDialogues, id: \.self, selection: $viewModel.selectedDialogues) { session in
                         DialogueListItem(session: session)
                             .id(session.id.uuidString)
                             .listRowSeparator(.visible)

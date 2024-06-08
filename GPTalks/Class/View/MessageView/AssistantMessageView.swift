@@ -122,7 +122,7 @@ struct AssistantMessageView: View {
         #if os(macOS)
         .padding(.horizontal, 8)
 //        .background(.background.tertiary)
-        .background(isQuick ? .regularMaterial : .ultraThickMaterial)
+        .background(isQuick ? .regularMaterial :  (colorScheme == .dark ? .ultraThickMaterial : .ultraThinMaterial))
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.4) : .clear)
         #else
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)

@@ -71,7 +71,7 @@ enum ContentState: String, CaseIterable, Identifiable {
         if !searchText.isEmpty {
             return filterDialogues(matching: searchText, from: allDialogues)
         } else {    
-            return allDialogues
+            return Array(allDialogues.prefix(isExpanded ? allDialogues.count : 10))
         }
     }
     
