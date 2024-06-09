@@ -17,9 +17,12 @@ struct ImagePickerView: View {
         Button {
             importingImage = true
         } label: {
-            Image(systemName: "photo")
-                .resizable()
-                .inputImageStyle(padding: 7, imageSize: 25)
+            HStack {
+                Image(systemName: "photo")
+                    .resizable()
+                    .inputImageStyle(padding: 7, imageSize: 25)
+                Text("Image")
+            }
         }
         .fileImporter(
             isPresented: $importingImage,
@@ -67,9 +70,12 @@ struct AudioPickerView: View {
         Button {
             importingAudio = true
         } label: {
-            Image(systemName: "waveform")
-                .resizable()
-                .inputImageStyle(padding: 6, imageSize: 25)
+            HStack {
+                Image(systemName: "headphones")
+                    .resizable()
+                    .inputImageStyle(padding: 6, imageSize: 25)
+                Text("Audio")
+            }
         }
         .fileImporter(
             isPresented: $importingAudio,
@@ -121,9 +127,12 @@ struct PDFPickerView: View {
         Button {
             importingPDF = true
         } label: {
-            Image(systemName: "newspaper")
-                .resizable()
-                .inputImageStyle(padding: padding, imageSize: imageSize)
+            HStack {
+                Image(systemName: "newspaper")
+//                    .resizable()
+//                    .inputImageStyle(padding: padding, imageSize: imageSize)
+                Text("PDF")
+            }
         }
         .fileImporter(
             isPresented: $importingPDF,

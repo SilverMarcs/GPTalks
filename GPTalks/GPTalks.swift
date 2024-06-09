@@ -52,7 +52,7 @@ struct GPTalks: App {
                 }
                 
                 Section {
-                    Button(viewModel.isExpanded ? "Collapse Session List" : "Expand Session List") {
+                    Button(viewModel.isExpanded ? "Collapse Chat List" : "Expand Chat List") {
                         withAnimation {
                             viewModel.isExpanded.toggle()
                         }

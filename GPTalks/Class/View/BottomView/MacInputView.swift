@@ -25,7 +25,7 @@ struct MacInputView: View {
     var body: some View {
         HStack(alignment: .bottom, spacing: 12) {
             Group {
-                moreOptions
+                toggleButton2
                 
                 editControls
             }
@@ -93,6 +93,24 @@ struct MacInputView: View {
             withAnimation {
                 showMore.toggle()
             }
+        } label: {
+            Image(systemName: "plus")
+                .resizable()
+                .inputImageStyle(padding: 6, imageSize: imageSize)
+                .rotationEffect(.degrees(degree))
+        }
+    }
+    
+    @ViewBuilder
+    var toggleButton2: some View {
+        var degree: Double {
+            showMore ? 45 : 0
+        }
+        
+        Menu {
+            CustomAudioPickerView(session: session, showMore: $showMore)
+            CustomPDFPickerView(session: session, showMore: $showMore, imageSize: 25, padding: 7)
+            CustomImagePickerView(session: session, showMore: $showMore)
         } label: {
             Image(systemName: "plus")
                 .resizable()

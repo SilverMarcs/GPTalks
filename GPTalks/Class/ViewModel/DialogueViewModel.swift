@@ -30,8 +30,6 @@ enum ContentState: String, CaseIterable, Identifiable {
     var allDialogues: [DialogueSession] = []
     
     var isExpanded: Bool = false
-
-    var isArchivedSelected: Bool = false
     
     var selectedState: ContentState = .chats 
     {
@@ -61,6 +59,12 @@ enum ContentState: String, CaseIterable, Identifiable {
             deleteDialogue(session)
         }
         selectedDialogues.removeAll()
+    }
+    
+    func toggleStarredDialogues() {
+        for session in selectedDialogues {
+            session.isArchive.toggle()
+        }
     }
     
     var shouldShowPlaceholder: Bool {
@@ -115,9 +119,6 @@ enum ContentState: String, CaseIterable, Identifiable {
         }
     }
 
-    func toggleArchivedStatus() {
-        isArchivedSelected.toggle()
-    }
 
     func moveUpChat(session: DialogueSession) {
         session.date = Date()
@@ -145,12 +146,12 @@ enum ContentState: String, CaseIterable, Identifiable {
     }
 
     func addDialogue(conversations: [Conversation] = []) {
-        if let first = allDialogues.first {
-            if first.conversations.count == 0 {
-                selectedDialogues = [first]
-                return
-            }
-        }
+//        if let first = allDialogues.first {
+//            if first.conversations.count == 0 {
+//                selectedDialogues = [first]
+//                return
+//            }
+//        }
         
         if selectedState != .chats {
             selectedState = .chats
