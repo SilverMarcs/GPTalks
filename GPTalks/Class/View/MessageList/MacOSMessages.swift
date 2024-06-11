@@ -231,9 +231,10 @@ struct MacOSMessages: View {
                     }
                     VStack(alignment: .leading, spacing: 8) {
                         Group {
-//                            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
-                            Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
                             Toggle("Extract PDF", isOn: $session.configuration.useExtractPdf)
+                            Toggle("Vision", isOn: $session.configuration.useVision)
+                            Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
+
                         }
                         .frame(width: 150, alignment: .leading)
                     }

@@ -127,3 +127,19 @@ struct CustomTextEditorView: View {
     }
 }
 #endif
+
+struct CustomCrossButton: View {
+    var action: () -> Void
+    
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            Image(systemName: "xmark.circle.fill")
+                .foregroundStyle(.background)
+                .background(.primary, in: Circle())
+        }
+        .padding(7)
+        .buttonStyle(.plain)
+    }
+}
