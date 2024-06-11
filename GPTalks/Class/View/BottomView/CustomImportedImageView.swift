@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomImageView: View {
-    var image: PlatformImage // or NSImage for macOS
+    var image: PlatformImage
     
     var body: some View {
         Group {
@@ -26,52 +26,6 @@ struct CustomImageView: View {
         .cornerRadius(6)
     }
 }
-
-//struct ImportedImages: View {
-//    var session: DialogueSession
-//
-//    var body: some View {
-//        ScrollView(.horizontal) {
-//            HStack {
-//                ForEach(Array(session.inputImages.enumerated()), id: \.element) { index, inputImage in
-//                    ZStack(alignment: .topTrailing) {
-//                        CustomImageView(image: inputImage)
-//                            .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
-//                            .aspectRatio(contentMode: .fill)
-//                            .cornerRadius(6)
-//                        
-//                        CustomCrossButton {
-//                            session.inputImages.remove(at: index)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//struct ImportedEditingImages: View {
-//    var session: DialogueSession
-//
-//    var body: some View {
-//        ScrollView(.horizontal) {
-//            HStack {
-//                ForEach(Array(session.editingImages.enumerated()), id: \.element) { index, inputImage in
-//                    ZStack(alignment: .topTrailing) {
-//                        CustomImageView(image: inputImage)
-//                            .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
-//                            .aspectRatio(contentMode: .fill)
-//                            .cornerRadius(6)
-//                        
-//                        CustomCrossButton {
-//                            session.editingImages.remove(at: index)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
 
 import SwiftUI
 

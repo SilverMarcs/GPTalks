@@ -32,7 +32,7 @@ struct MacOSDialogList: View {
                     }
                     .accentColor(Color("niceColorLighter"))
                     .animation(.default, value: viewModel.searchText)
-                    .padding(.top, -10)
+//                    .padding(.top, -10)
                     .onChange(of: viewModel.currentDialogues.count) {
                         if viewModel.currentDialogues.count > previousActiveDialoguesCount {
                             if !viewModel.currentDialogues.isEmpty {
@@ -83,8 +83,8 @@ struct MacOSDialogList: View {
                 .disabled(viewModel.selectedDialogues.count < 2)
             }
         }
-        .listStyle(.inset)
-        .scrollContentBackground(.hidden)
+        .listStyle(.sidebar)
+//        .scrollContentBackground(.hidden)
 //        .searchable(text: $viewModel.searchText, placement: .toolbar)
     }
 }

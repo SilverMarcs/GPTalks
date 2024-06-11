@@ -5,10 +5,8 @@
 //  Created by Zabir Raihan on 10/03/2024..
 //
 
-import PDFKit
-import PhotosUI
-import QuickLook
 import SwiftUI
+import UniformTypeIdentifiers
 
 #if os(macOS)
 struct MacInputView: View {
@@ -16,16 +14,12 @@ struct MacInputView: View {
     
     @Bindable var session: DialogueSession
     
-    @State private var importingImage = false
-    @State private var importingAudio = false
-    @State private var showMore = false
-    
-    @State var selectedItems: [PhotosPickerItem] = []
+    @State private var importingFiles = false
     
     var body: some View {
         HStack(alignment: .bottom, spacing: 12) {
             Group {
-                toggleButton2
+                selectFilesButton
                 
                 editControls
             }
@@ -42,11 +36,6 @@ struct MacInputView: View {
             }
             .offset(y: -1.15)
         }
-        .onChange(of: session.input) {
-            if session.input.count > 3 {
-                showMore = false
-            }
-        }
         .animation(.default, value: session.inputImages)
         .animation(.default, value: session.editingImages)
         .animation(.default, value: session.inputPDFPath)
@@ -54,68 +43,67 @@ struct MacInputView: View {
         .animation(.default, value: session.inputAudioPath)
         .animation(.default, value: session.editingAudioPath)
         .animation(.default, value: session.isEditing)
-        .animation(.default, value: showMore)
         .buttonStyle(.plain)
         .padding(.horizontal)
         .padding(.top, verticalPadding - 2)
         .padding(.bottom, verticalPadding + 2)
-    }
-    
-    var moreOptions: some View {
-        toggleButton
-            .overlay(
-                Group {
-                    if showMore {
-                        VStack {
-                            CustomAudioPickerView(session: session, showMore: $showMore)
-                            CustomPDFPickerView(session: session, showMore: $showMore, imageSize: 25, padding: 7)
-                            CustomImagePickerView(session: session, showMore: $showMore)
-                            toggleButton
-                        }
-                        .padding(5)
-                        .background(.thickMaterial)
-                        .cornerRadius(15)
-//                        .roundedRectangleOverlay(opacity: 0.5)
-//                        .shadow(radius: 2, y: 1)
-                        .offset(x: 0, y: 5) // Adjust this value as needed
-                    }
-                }, alignment: .bottom
-            )
-    }
-    
-    @ViewBuilder
-    var toggleButton: some View {
-        var degree: Double {
-            showMore ? 45 : 0
+        .generalizedFileImporter(isPresented: $importingFiles) { urls in
+            handleSelectedFiles(urls)
         }
-        
+    }
+    
+    var selectFilesButton: some View {
         Button {
-            withAnimation {
-                showMore.toggle()
-            }
+            importingFiles = true
         } label: {
             Image(systemName: "plus")
                 .resizable()
                 .inputImageStyle(padding: 6, imageSize: imageSize)
-                .rotationEffect(.degrees(degree))
         }
     }
-    
-    @ViewBuilder
-    var toggleButton2: some View {
-        var degree: Double {
-            showMore ? 45 : 0
+       
+    func handleSelectedFiles(_ urls: [URL]) {
+        for url in urls {
+            if let type = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType {
+                if type.conforms(to: .audio) {
+                    handleAudioFile(url)
+                } else if type.conforms(to: .pdf) {
+                    handlePDFFile(url)
+                } else if type.conforms(to: .image) {
+                    handleImageFile(url)
+                }
+            }
         }
-        
-        Menu {
-            CustomAudioPickerView(session: session, showMore: $showMore)
-            CustomPDFPickerView(session: session, showMore: $showMore, imageSize: 25, padding: 7)
-            CustomImagePickerView(session: session, showMore: $showMore)
-        } label: {
-            Image(systemName: "plus")
-                .resizable()
-                .inputImageStyle(padding: 6, imageSize: imageSize)
-                .rotationEffect(.degrees(degree))
+    }
+   
+    func handleAudioFile(_ url: URL) {
+        var currentAudioPath: Binding<String> {
+            session.isEditing ? $session.editingAudioPath : $session.inputAudioPath
+        }
+       
+        currentAudioPath.wrappedValue = url.absoluteString
+        session.configuration.useTranscribe = true
+    }
+   
+    func handlePDFFile(_ url: URL) {
+        var currentPDFPath: Binding<String> {
+            session.isEditing ? $session.editingPDFPath : $session.inputPDFPath
+        }
+       
+        currentPDFPath.wrappedValue = url.absoluteString
+        session.configuration.useExtractPdf = true
+    }
+   
+    func handleImageFile(_ url: URL) {
+        var currentImages: Binding<[PlatformImage]> {
+            session.isEditing ? $session.editingImages : $session.inputImages
+        }
+       
+        if let image = NSImage(contentsOf: url) {
+            currentImages.wrappedValue.append(image)
+            if ![Model.gpt4t, Model.gpt4o].contains(session.configuration.model) {
+                session.configuration.useVision = true
+            }
         }
     }
     

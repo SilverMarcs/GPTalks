@@ -1,5 +1,5 @@
 {
-  "originHash" : "04df1b8eba58c8f2fd254e60e1cdfe0810001a8293f246ebcbf6e002ab395254",
+  "originHash" : "54d7592a48cb878e27216efa9b0eb48b3b2381eef8c21265f50195ea4a27d188",
   "pins" : [
     {
       "identity" : "fuzi",
@@ -38,15 +38,6 @@
       }
     },
     {
-      "identity" : "networkimage",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gonzalezreal/NetworkImage",
-      "state" : {
-        "revision" : "7aff8d1b31148d32c5933d75557d42f6323ee3d1",
-        "version" : "6.0.0"
-      }
-    },
-    {
       "identity" : "openai",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SilverMarcs/OpenAI",
@@ -71,15 +62,6 @@
       "state" : {
         "branch" : "master",
         "revision" : "c31eba0866102be9be29391dac641ecb46795702"
-      }
-    },
-    {
-      "identity" : "swift-markdown-ui",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gonzalezreal/swift-markdown-ui",
-      "state" : {
-        "revision" : "ae799d015a5374708f7b4c85f3294c05f2a564e2",
-        "version" : "2.3.0"
       }
     },
     {

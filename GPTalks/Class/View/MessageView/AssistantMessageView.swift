@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AssistantMessageView: View {
-    @Environment (\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) var colorScheme
     
     @Environment(DialogueViewModel.self) private var viewModel
     var conversation: Conversation

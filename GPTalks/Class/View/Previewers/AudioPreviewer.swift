@@ -41,6 +41,8 @@ struct AudioPreviewer: View {
                             Text(audioURL.lastPathComponent)
                                 .font(.callout)
                                 .fontWeight(.bold)
+                                .lineLimit(1)
+                                .truncationMode(.middle)
                             
                             if let fileSize = getFileSizeFormatted(fileURL: audioURL) {
                                 HStack(spacing: 2) {
@@ -57,7 +59,10 @@ struct AudioPreviewer: View {
                                     .font(.caption)
                             }
                         }
+                        
+                        Spacer()
                     }
+                    .frame(width: 215)
                     .bubbleStyle(isMyMessage: false, radius: 10)
                 }
                 .buttonStyle(.plain)

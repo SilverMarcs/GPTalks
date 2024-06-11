@@ -30,6 +30,8 @@ struct PDFViewer: View {
                         Text(pdfURL.lastPathComponent)
                            .font(.callout)
                            .fontWeight(.bold)
+                           .lineLimit(1)
+                           .truncationMode(.middle)
                         
                         if let fileSize = getFileSizeFormatted(fileURL: pdfURL) {
                             HStack(spacing: 2) {
@@ -47,8 +49,9 @@ struct PDFViewer: View {
                                 .font(.caption)
                         }
                     }
-                    
+                    Spacer()
                 }
+                .frame(width: 215)
                 .bubbleStyle(isMyMessage: false, radius: 8)
             }
             .buttonStyle(.plain)

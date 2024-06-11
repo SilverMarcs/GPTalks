@@ -169,3 +169,82 @@ struct CustomPDFPickerView: View {
         }, imageSize: imageSize, padding: padding)
     }
 }
+
+#if os(macOS)
+import SwiftUI
+import UniformTypeIdentifiers
+
+extension View {
+    func audioFileImporter(isPresented: Binding<Bool>, onFileSelected: @escaping (URL) -> Void) -> some View {
+        self.fileImporter(
+            isPresented: isPresented,
+            allowedContentTypes: [.audio],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                if let url = urls.first {
+                    onFileSelected(url)
+                }
+            case .failure(let error):
+                print("File selection error: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func pdfFileImporter(isPresented: Binding<Bool>, onFileSelected: @escaping (URL) -> Void) -> some View {
+        self.fileImporter(
+            isPresented: isPresented,
+            allowedContentTypes: [.pdf],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                if let url = urls.first {
+                    onFileSelected(url)
+                }
+            case .failure(let error):
+                print("File selection error: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func imageFileImporter(isPresented: Binding<Bool>, onImageAppend: ((PlatformImage) -> Void)?) -> some View {
+        self.fileImporter(
+            isPresented: isPresented,
+            allowedContentTypes: [.image],
+            allowsMultipleSelection: true
+        ) { result in
+            switch result {
+            case .success(let urls):
+                for url in urls {
+                    if let image = NSImage(contentsOf: url) {
+                        onImageAppend?(image)
+                    }
+                }
+            case .failure(let error):
+                print("File selection error: \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
+extension View {
+    func generalizedFileImporter(isPresented: Binding<Bool>, onFilesSelected: @escaping ([URL]) -> Void) -> some View {
+        self.fileImporter(
+            isPresented: isPresented,
+            allowedContentTypes: [.audio, .pdf, .image],
+            allowsMultipleSelection: true
+        ) { result in
+            switch result {
+            case .success(let urls):
+                onFilesSelected(urls)
+            case .failure(let error):
+                print("File selection error: \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
+#endif
+

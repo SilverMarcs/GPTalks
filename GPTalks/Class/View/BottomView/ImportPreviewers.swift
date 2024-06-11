@@ -68,8 +68,9 @@ struct CustomTextEditorView: View {
             CustomImportedImagesView(session: session)
             CustomPDFViewer(session: session)
             CustomAudioPreviewer(session: session)
-            
+
             MacTextEditor(input: currentMessage)
+                .padding(.top, 1)
         }
     }
 }

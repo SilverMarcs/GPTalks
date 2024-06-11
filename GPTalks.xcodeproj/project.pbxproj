@@ -17,7 +17,6 @@
 		081ABA652BF99EFF005029C7 /* FloatingPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081ABA642BF99EFF005029C7 /* FloatingPanel.swift */; };
 		081ABA682BF9A412005029C7 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 081ABA672BF9A412005029C7 /* KeyboardShortcuts */; };
 		081B02712B81B1A2006AF219 /* ImageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081B02702B81B1A2006AF219 /* ImageSession.swift */; };
-		081E75452BFBD0E30041C24A /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 081E75442BFBD0E30041C24A /* MarkdownUI */; };
 		0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820E06C2B5395E500401A30 /* TextSelectionView.swift */; };
 		0820F23F2BF9B0A60051C8A2 /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820F23E2BF9B0A60051C8A2 /* FloatingView.swift */; };
 		0820F24E2BF9FA5B0051C8A2 /* MDParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820F24D2BF9FA5B0051C8A2 /* MDParser.swift */; };
@@ -211,7 +210,6 @@
 				08FB18B82BC29A0700DFD0DC /* MarkdownWebView in Frameworks */,
 				083314702BC29A5E003D42C1 /* MarkdownWebView in Frameworks */,
 				08E2D21E2B7A5F800065B5E8 /* MarkdownWebView in Frameworks */,
-				081E75452BFBD0E30041C24A /* MarkdownUI in Frameworks */,
 				0820F25A2BFA0F2C0051C8A2 /* MarkdownWebView in Frameworks */,
 				08896BB52C0CAD6F00ED02E7 /* MarkdownWebView in Frameworks */,
 				081ABA682BF9A412005029C7 /* KeyboardShortcuts in Frameworks */,
@@ -499,7 +497,6 @@
 				08FBE1D92BCF0B4D006CD9CB /* GPTEncoder */,
 				081ABA672BF9A412005029C7 /* KeyboardShortcuts */,
 				0820F2592BFA0F2C0051C8A2 /* MarkdownWebView */,
-				081E75442BFBD0E30041C24A /* MarkdownUI */,
 				08896BB42C0CAD6F00ED02E7 /* MarkdownWebView */,
 				08983F1E2C0CDEBE00F52F70 /* Splash */,
 			);
@@ -539,7 +536,6 @@
 				083495A32BA8BCBA0009E271 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				08FBE1D82BCF0B4D006CD9CB /* XCRemoteSwiftPackageReference "GPTEncoder" */,
 				081ABA662BF9A412005029C7 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
-				081E75432BFBD0E30041C24A /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				08896BB32C0CAD6F00ED02E7 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				08983F1D2C0CDEBE00F52F70 /* XCRemoteSwiftPackageReference "Splash" */,
 			);
@@ -913,14 +909,6 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		081E75432BFBD0E30041C24A /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.3.0;
-			};
-		};
 		083495A02BA869D50009E271 /* XCRemoteSwiftPackageReference "reeeed" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nate-parrott/reeeed";
@@ -992,11 +980,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 081ABA662BF9A412005029C7 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
-		};
-		081E75442BFBD0E30041C24A /* MarkdownUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 081E75432BFBD0E30041C24A /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
-			productName = MarkdownUI;
 		};
 		0820F2592BFA0F2C0051C8A2 /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
