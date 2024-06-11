@@ -1,53 +1,59 @@
 //
-//  AudioPreviewer.swift
+//  ImagePreviewer.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 07/04/2024.
+//  Created by Zabir Raihan on 11/06/2024.
 //
 
 import SwiftUI
-import QuickLook
 
-struct AudioPreviewer: View {
-    var audioURL: URL
+struct ImagePreviewer: View {
+    var imageURL: URL
+    var removeImageAction: () -> Void
     var showRemoveButton: Bool = true
-    var removeAudioAction: () -> Void
+    var showImage: Bool = true
     
     @State var qlItem: URL?
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            if !AppConfiguration.shared.alternateAudioPlayer {
-                AudioPlayerView(audioURL: audioURL)
-                    .frame(maxWidth: 500)
-            } else {
-                Button {
-                    qlItem = audioURL
-                } label: {
+            Button {
+                qlItem = imageURL
+            } label: {
+                if showImage {
+                    if let image = loadImage(from: imageURL.absoluteString) {
+                        Image(nsImage: image)
+                            .resizable()
+                        
+                            .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
+                            .aspectRatio(contentMode: .fill)
+                            .cornerRadius(6)
+                    }
+                } else {
                     HStack {
                         Group {
-                            #if os(macOS)
-                            Image(nsImage: getFileTypeIcon(fileURL: audioURL)!)
+#if os(macOS)
+                            Image(nsImage: getFileTypeIcon(fileURL: imageURL)!)
                                 .resizable()
-                            #else
-                            Image("audio")
+#else
+                            Image(systemName: "photo")
                                 .resizable()
-                            #endif
+#endif
                         }
                         .scaledToFit()
                         .frame(width: 40, height: 40)
                         
                         VStack(alignment: .leading) {
-                            Text(audioURL.lastPathComponent)
+                            Text(imageURL.lastPathComponent)
                                 .font(.callout)
                                 .fontWeight(.bold)
                                 .lineLimit(1)
                                 .truncationMode(.middle)
                             
-                            if let fileSize = getFileSizeFormatted(fileURL: audioURL) {
+                            if let fileSize = getFileSizeFormatted(fileURL: imageURL) {
                                 HStack(spacing: 2) {
                                     Group {
-                                        Text("Audio •")
+                                        Text("Image •")
                                             .font(.caption)
                                         Text(fileSize)
                                             .font(.caption)
@@ -59,17 +65,17 @@ struct AudioPreviewer: View {
                                     .font(.caption)
                             }
                         }
-                        
                         Spacer()
                     }
                     .frame(width: 215)
-                    .bubbleStyle(isMyMessage: false, radius: 10)
+                    .bubbleStyle(isMyMessage: false, radius: 8)
                 }
-                .buttonStyle(.plain)
             }
+            .buttonStyle(.plain)
 
+            // TODO: show this based on a a prameter
             if showRemoveButton {
-                CustomCrossButton(action: removeAudioAction)
+                CustomCrossButton(action: removeImageAction)
 //                    .padding(-10)
             }
         }

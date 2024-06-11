@@ -90,10 +90,18 @@ struct MacOSMessages: View {
                     itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in
                         DispatchQueue.main.async {
                             if let image = image as? NSImage {
-                                if session.isEditing {
-                                    session.editingImages.append(image)
+                                if let filePath = saveImage(image: image) {
+                                    if session.isEditing {
+                                        if !session.editingImages.contains(filePath) {
+                                            session.editingImages.append(filePath)
+                                        }
+                                    } else {
+                                        if !session.inputImages.contains(filePath) {
+                                            session.inputImages.append(filePath)
+                                        }
+                                    }
                                 } else {
-                                    session.inputImages.append(image)
+                                    print("Failed to save image to disk")
                                 }
                             } else {
                                 print("Could not load image: \(String(describing: error))")
@@ -223,7 +231,7 @@ struct MacOSMessages: View {
                     }
                     VStack(alignment: .leading, spacing: 8) {
                         Group {
-                            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
+//                            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
                             Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
                             Toggle("Extract PDF", isOn: $session.configuration.useExtractPdf)
                         }

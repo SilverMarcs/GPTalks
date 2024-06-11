@@ -68,14 +68,14 @@ import OpenAI
     // MARK: - State
     
     var input: String = ""
-    var inputImages: [PlatformImage] = []
+    var inputImages: [String] = []
     var inputAudioPath: String = ""
     var inputPDFPath: String = ""
     
     var isEditing: Bool = false
     var editingMessage: String = ""
     var editingAudioPath: String = ""
-    var editingImages: [PlatformImage] = []
+    var editingImages: [String] = []
     var editingPDFPath: String = ""
     var editingIndex: Int = -1
     
@@ -232,20 +232,20 @@ import OpenAI
     #if os(macOS)
     func pasteImageFromClipboard() {
         if let image = getImageFromClipboard() {
-            let imageData = image.tiffRepresentation
-
+//            let imageData = image.tiffRepresentation
+            
             if isEditing {
-                if !self.editingImages.contains(where: { $0.tiffRepresentation == imageData }) {
-                    self.editingImages.append(image)
+                if let filePath = saveImage(image: image), !editingImages.contains(filePath) {
+                    self.editingImages.append(filePath)
                 }
             } else {
-                // Check if the imageData is already in the array
-                if !self.inputImages.contains(where: { $0.tiffRepresentation == imageData }) {
-                    self.inputImages.append(image)
+                if let filePath = saveImage(image: image), !inputImages.contains(filePath) {
+                    self.inputImages.append(filePath)
                 }
             }
         }
     }
+
     #endif
 
     func setResetContextMarker(conversation: Conversation) {
@@ -375,9 +375,10 @@ import OpenAI
             editingAudioPath = conversation.audioPath
             editingPDFPath = conversation.pdfPath
             for imagePath in conversation.imagePaths {
-                if let image = loadImage(from: imagePath) {
-                    editingImages.append(image)
-                }
+                editingImages.append(imagePath)
+//                if let image = loadImage(from: imagePath) {
+//                    editingImages.append(image)
+//                }
             }
         }
     }
@@ -401,9 +402,10 @@ import OpenAI
             }
 
             for imagePath in conversation.imagePaths {
-                if let image = loadImage(from: imagePath) {
-                    inputImages.append(image)
-                }
+                inputImages.append(imagePath)
+//                if let image = loadImage(from: imagePath) {
+//                    inputImages.append(image)
+//                }
             }
             
             if !conversation.audioPath.isEmpty {
@@ -432,13 +434,14 @@ import OpenAI
         resetErrorDesc()
 
         if !isRegen && !isRetry {
-           var imagePaths: [String] = []
-               
-           for inputImage in inputImages {
-               if let savedURL = saveImage(image: inputImage) {
-                   imagePaths.append(savedURL)
-               }
-           }
+//           var imagePaths: [String] = []
+//
+//           for inputImage in inputImages {
+//               if let savedURL = saveImage(image: inputImage) {
+//                   imagePaths.append(savedURL)
+//               }
+//           }
+            let imagePaths = Array(inputImages)
                
             appendConversation(Conversation(role: .user, content: text, imagePaths: imagePaths, audioPath: inputAudioPath, pdfPath: inputPDFPath))
         }
@@ -490,7 +493,7 @@ import OpenAI
         }
         
         var finalMessages = mutableConversations.map({ conversation in
-            if shouldSwitchToVision && configuration.model != .gpt4vision && configuration.model != .gpt4t && configuration.model != .customChat {
+            if shouldSwitchToVision && configuration.model != .gpt4vision && configuration.model != .gpt4t && configuration.model != .gpt4o && configuration.model != .customChat {
                 return conversation.toChat(imageAsPath: true)
             } else {
                 return conversation.toChat()

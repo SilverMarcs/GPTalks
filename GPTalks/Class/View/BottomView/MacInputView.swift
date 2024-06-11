@@ -23,18 +23,18 @@ struct MacInputView: View {
                 
                 editControls
             }
-            .offset(y: -1.15)
+            .offset(y: -2)
             
             CustomTextEditorView(session: session)
             
             Group {
                 if session.isReplying {
-                    StopButton(size: imageSize) { session.stopStreaming() }
+                    StopButton(size: imageSize - 1) { session.stopStreaming() }
                 } else {
-                    SendButton(size: imageSize) { Task { @MainActor in viewModel.moveUpChat(session: session); await session.sendAppropriate() } }
+                    SendButton(size: imageSize - 1) { Task { @MainActor in viewModel.moveUpChat(session: session); await session.sendAppropriate() } }
                 }
             }
-            .offset(y: -1.15)
+            .offset(y: -2)
         }
         .animation(.default, value: session.inputImages)
         .animation(.default, value: session.editingImages)
@@ -58,7 +58,7 @@ struct MacInputView: View {
         } label: {
             Image(systemName: "plus")
                 .resizable()
-                .inputImageStyle(padding: 6, imageSize: imageSize)
+                .inputImageStyle(padding: 6, imageSize: imageSize - 1)
         }
     }
        
@@ -95,16 +95,11 @@ struct MacInputView: View {
     }
    
     func handleImageFile(_ url: URL) {
-        var currentImages: Binding<[PlatformImage]> {
+        var currentImages: Binding<[String]> {
             session.isEditing ? $session.editingImages : $session.inputImages
         }
-       
-        if let image = NSImage(contentsOf: url) {
-            currentImages.wrappedValue.append(image)
-            if ![Model.gpt4t, Model.gpt4o].contains(session.configuration.model) {
-                session.configuration.useVision = true
-            }
-        }
+        
+        currentImages.wrappedValue.append(url.absoluteString)
     }
     
     @ViewBuilder
@@ -115,7 +110,7 @@ struct MacInputView: View {
             } label: {
                 Image(systemName: "plus")
                     .resizable()
-                    .inputImageStyle(padding: 6, imageSize: imageSize, color: .red)
+                    .inputImageStyle(padding: 6, imageSize: imageSize - 1, color: .red)
                     .rotationEffect(.degrees(45))
             }
             .keyboardShortcut(.cancelAction)

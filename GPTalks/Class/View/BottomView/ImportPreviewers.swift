@@ -10,14 +10,14 @@ import SwiftUI
 struct CustomImportedImagesView: View {
     @Bindable var session: DialogueSession
     
-    private var currentImages: Binding<[PlatformImage]> {
+    private var currentImages: Binding<[String]> {
         session.isEditing ? $session.editingImages : $session.inputImages
     }
     
     var body: some View {
-        if !currentImages.wrappedValue.isEmpty {
-            ImportedImagesView(images: currentImages) { index in
-                currentImages.wrappedValue.remove(at: index)
+        ForEach(currentImages.wrappedValue, id: \.self) { image in
+            ImagePreviewer(imageURL: URL(string: image)!) {
+                self.currentImages.wrappedValue.removeAll(where: { $0 == image })
             }
         }
     }
@@ -63,15 +63,43 @@ struct CustomTextEditorView: View {
         session.isEditing ? $session.editingMessage : $session.input
     }
     
+    private var containsPdfOrAudio: Bool {
+        return !session.inputPDFPath.isEmpty || !session.inputAudioPath.isEmpty || !session.editingPDFPath.isEmpty || !session.editingPDFPath.isEmpty
+    }
+    
+    private var containsImage: Bool {
+        return !session.inputImages.isEmpty || !session.editingImages.isEmpty
+    }
+    
     var body: some View {
-        VStack(alignment: .leading) {
-            CustomImportedImagesView(session: session)
-            CustomPDFViewer(session: session)
-            CustomAudioPreviewer(session: session)
+        VStack(alignment: .leading, spacing: 0) {
+            if containsImage {
+                ScrollView(.horizontal) {
+                    HStack {
+                        CustomImportedImagesView(session: session)
+                    }
+                    .padding(10)
+                }
+            }
+            
+            if containsPdfOrAudio {
+                ScrollView(.horizontal) {
+                    HStack {
+                        CustomPDFViewer(session: session)
+                        CustomAudioPreviewer(session: session)
+                    }
+                }
+                .padding(10)
+                .padding(.top, containsImage ? -7 : 0)
+            }
+            
+            if containsPdfOrAudio || containsImage {
+                Divider()
+            }
 
             MacTextEditor(input: currentMessage)
-                .padding(.top, 1)
         }
+        .roundedRectangleOverlay()
     }
 }
 #else

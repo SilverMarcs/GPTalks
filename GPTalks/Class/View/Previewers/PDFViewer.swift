@@ -59,7 +59,7 @@ struct PDFViewer: View {
             // TODO: show this based on a a prameter
             if showRemoveButton {
                 CustomCrossButton(action: removePDFAction)
-                    .padding(-10)
+//                    .padding(-10)
             }
         }
         .quickLookPreview($qlItem)
