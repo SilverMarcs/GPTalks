@@ -376,9 +376,6 @@ import OpenAI
             editingPDFPath = conversation.pdfPath
             for imagePath in conversation.imagePaths {
                 editingImages.append(imagePath)
-//                if let image = loadImage(from: imagePath) {
-//                    editingImages.append(image)
-//                }
             }
         }
     }
@@ -403,9 +400,6 @@ import OpenAI
 
             for imagePath in conversation.imagePaths {
                 inputImages.append(imagePath)
-//                if let image = loadImage(from: imagePath) {
-//                    inputImages.append(image)
-//                }
             }
             
             if !conversation.audioPath.isEmpty {
@@ -434,13 +428,6 @@ import OpenAI
         resetErrorDesc()
 
         if !isRegen && !isRetry {
-//           var imagePaths: [String] = []
-//
-//           for inputImage in inputImages {
-//               if let savedURL = saveImage(image: inputImage) {
-//                   imagePaths.append(savedURL)
-//               }
-//           }
             let imagePaths = Array(inputImages)
                
             appendConversation(Conversation(role: .user, content: text, imagePaths: imagePaths, audioPath: inputAudioPath, pdfPath: inputPDFPath))
@@ -546,14 +533,8 @@ import OpenAI
         
         let query = createChatQuery()
         
-        if AppConfiguration.shared.isAutoGenerateTitle {
-            if ![Model.gpt4vision, Model.customVision].contains(configuration.model) {
-                Task {
-                    await generateTitle(forced: false)
-                }
-            }
-        }
-         
+        await generateTitle(forced: false)
+        
         let uiUpdateInterval = TimeInterval(0.1)
 
         var lastUIUpdateTime = Date()
@@ -585,17 +566,16 @@ import OpenAI
         }
 
         if let chatTool = chatTool {
-            conversations[conversations.count - 1].toolRawValue = chatTool.rawValue
-            conversations[conversations.count - 1].arguments = funcParam
-            conversations[conversations.count - 1].isReplying = false
-//            conversations.last?.toolRawValue = chatTool.rawValue
-//            conversations.last?.arguments = funcParam
-//            conversations.last?.isReplying = false
+//            conversations[conversations.count - 1].toolRawValue = chatTool.rawValue
+//            conversations[conversations.count - 1].arguments = funcParam
+//            conversations[conversations.count - 1].isReplying = false
+            conversations.last?.toolRawValue = chatTool.rawValue
+            conversations.last?.arguments = funcParam
+            conversations.last?.isReplying = false
             
             lastConversationData.sync(with: conversations[conversations.count - 1])
             
-            try await handleToolCall(chatTool: chatTool, funcParam: funcParam)
-        } else {
+            try await handleToolCall(chatTool: chatTool, funcParam: funcParam) 
             if !streamText.isEmpty {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.conversations[self.conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)

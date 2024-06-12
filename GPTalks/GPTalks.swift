@@ -59,7 +59,7 @@ struct GPTalks: App {
                     }
                     
                     Button("Image Generations") {
-                        viewModel.tggleImageAndChat()
+                        viewModel.toggleImageAndChat()
                     }
                     .keyboardShortcut("i", modifiers: [.command, .shift])
                 }

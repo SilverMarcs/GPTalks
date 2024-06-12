@@ -137,7 +137,7 @@ enum ContentState: String, CaseIterable, Identifiable {
         }
     }
     
-    func tggleImageAndChat() {
+    func toggleImageAndChat() {
         if selectedState == .images {
             selectedState = .chats
         } else {
