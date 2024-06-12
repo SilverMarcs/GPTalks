@@ -23,7 +23,7 @@ struct IOSInputView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             CustomImportedImagesView(session: session)
-            CustomPDFViewer(session: session)
+//            CustomPDFViewer(session: session)
 
             HStack(alignment: .bottom, spacing: 12) {
                 if session.isEditing {
@@ -32,11 +32,11 @@ struct IOSInputView: View {
                 
                 moreOptions
                 
-                if showMore {
-                    addImage
-                    CustomPDFPickerView(session: session, showMore: $showMore, imageSize: imageSize, padding: 10)
-                    resetContext
-                }
+//                if showMore {
+//                    addImage
+//                    CustomPDFPickerView(session: session, showMore: $showMore, imageSize: imageSize, padding: 10)
+//                    resetContext
+//                }
                 
                 CustomTextEditorView(session: session, focused: _focused) {
                     selectedItems = []
@@ -92,16 +92,32 @@ struct IOSInputView: View {
         }
     }
     
+    @State private var imageOpacity: Double = 1.0
+    
     var moreOptions: some View {
-        Button {
-            showMore.toggle()
-        } label: {
-            Image(systemName: "plus")
-                .resizable()
-                .inputImageStyle(padding: 10, imageSize: imageSize)
-                .rotationEffect(.degrees(showMore ? 45 : 0))
-                .animation(.default, value: showMore)
-        }
+        Image(systemName: "plus")
+            .resizable()
+            .inputImageStyle(padding: 10, imageSize: imageSize)
+            .opacity(imageOpacity)
+            .gesture(
+                TapGesture()
+                    .onEnded {
+                        imageOpacity = 0.5
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            imageOpacity = 1.0
+                        }
+                        importingImage = true
+                    }
+                    .simultaneously(with: LongPressGesture(minimumDuration: 0.3)
+                        .onChanged { _ in
+                            imageOpacity = 0.5
+                        }
+                        .onEnded { _ in
+                            imageOpacity = 1.0
+                            session.resetContext()
+                        }
+                    )
+            )
         .photosPicker(
             isPresented: $importingImage,
             selection: $selectedItems,
@@ -114,12 +130,12 @@ struct IOSInputView: View {
                 for newItem in selectedItems {
                     if let data = try? await newItem.loadTransferable(type: Data.self) {
                         if let image = UIImage(data: data) {
-                            let fileName = Date().nowFileName() // Generate a unique file name
-                            if let filePath = saveImage(image: image, fileName: fileName) {
+                            if let filePath = saveImage(image: image) {
                                 if session.isEditing {
                                     session.editingImages.append(filePath)
                                 } else {
                                     session.inputImages.append(filePath)
+                                    print("Image saved to \(filePath)")
                                 }
                             }
                         }
@@ -128,9 +144,13 @@ struct IOSInputView: View {
                 selectedItems = [] // Reset selection
             }
         }
-        .padding(20) // Increase tappable area
-        .padding(-20) // Cancel out visual expansion
-        .background(Color.clear)
+//        .simultaneousGesture(LongPressGesture().onEnded { _ in
+//            session.resetContext()
+//        })
+
+//        .padding(20) // Increase tappable area
+//        .padding(-20) // Cancel out visual expansion
+//        .background(Color.clear)
     }
 
     private var verticalPadding: CGFloat {

@@ -22,11 +22,12 @@ struct MessageMarkdownView: View {
     var body: some View {
         if AppConfiguration.shared.alternateMarkdown {
             #if os(visionOS)
-            Markdown(text)
-                .markdownCodeSyntaxHighlighter(.splash(theme: theme))
-                .markdownBlockStyle(\.codeBlock) {
-                    CodeBlock(configuration: $0)
-                }
+//            Markdown(text)
+//                .markdownCodeSyntaxHighlighter(.splash(theme: theme))
+//                .markdownBlockStyle(\.codeBlock) {
+//                    CodeBlock(configuration: $0)
+//                }
+            Text(try! AttributedString(markdown: text, options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace)))
             #else
             MarkdownWebView(text)
             #endif

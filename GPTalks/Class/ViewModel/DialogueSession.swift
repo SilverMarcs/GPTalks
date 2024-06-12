@@ -429,7 +429,7 @@ import OpenAI
 
         if !isRegen && !isRetry {
             let imagePaths = Array(inputImages)
-               
+       
             appendConversation(Conversation(role: .user, content: text, imagePaths: imagePaths, audioPath: inputAudioPath, pdfPath: inputPDFPath))
         }
         

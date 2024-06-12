@@ -18,23 +18,17 @@ struct ImagePreviewer: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Button {
-                qlItem = imageURL
+                if let fileURL = absoluteURL(forRelativePath: imageURL.relativePath) {
+                   qlItem = fileURL
+                }
             } label: {
                 if showImage {
-                    if let image = loadImage(from: imageURL.absoluteString) {
-                        #if os(macOS)
-                        Image(nsImage: image)
+                    if let image = loadImage(from: properUrl) {
+                        Image(platformImage: image)
                             .resizable()
                             .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
                             .aspectRatio(contentMode: .fill)
                             .cornerRadius(6)
-                        #else
-                        Image(uiImage: image)
-                            .resizable()
-                            .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
-                            .aspectRatio(contentMode: .fill)
-                            .cornerRadius(6)
-                        #endif                        
                     }
                 } else {
                     HStack {
@@ -80,12 +74,19 @@ struct ImagePreviewer: View {
             }
             .buttonStyle(.plain)
 
-            // TODO: show this based on a a prameter
             if showRemoveButton {
                 CustomCrossButton(action: removeImageAction)
-//                    .padding(-10)
             }
         }
         .quickLookPreview($qlItem)
+    }
+    
+    var properUrl: String {
+        #if os(macOS)
+        return imageURL.absoluteString
+        #else
+        return imageURL.relativePath
+        #endif
+        
     }
 }
