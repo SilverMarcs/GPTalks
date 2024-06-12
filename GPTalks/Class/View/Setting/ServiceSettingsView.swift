@@ -167,6 +167,9 @@ struct ServiceSettingsView: View {
             }
         }
         .navigationTitle(provider.name)
+        #if !os(macOS)
+        .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
 
     var chatModelPicker: some View {

@@ -177,10 +177,10 @@ enum ContentState: String, CaseIterable, Identifiable {
         save()
 
         if let session = DialogueSession(rawData: newItem) {
-//            withAnimation {
+            withAnimation {
                 allDialogues.insert(session, at: 0)
-//            }
-            DispatchQueue.main.async {
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
 #if os(macOS)
                 self.selectedDialogues = []
                 self.selectedDialogues.insert(session)

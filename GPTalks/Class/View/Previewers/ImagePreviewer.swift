@@ -18,9 +18,13 @@ struct ImagePreviewer: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Button {
+                #if os(macOS)
+                    qlItem = imageURL
+                #else
                 if let fileURL = absoluteURL(forRelativePath: imageURL.relativePath) {
                    qlItem = fileURL
                 }
+                #endif
             } label: {
                 if showImage {
                     if let image = loadImage(from: properUrl) {

@@ -84,8 +84,6 @@ struct MacOSDialogList: View {
             }
         }
         .listStyle(.sidebar)
-//        .scrollContentBackground(.hidden)
-//        .searchable(text: $viewModel.searchText, placement: .toolbar)
     }
 }
 
