@@ -533,7 +533,9 @@ import OpenAI
         
         let query = createChatQuery()
         
-        await generateTitle(forced: false)
+        Task {
+            await generateTitle(forced: false)
+        }
         
         let uiUpdateInterval = TimeInterval(0.1)
 
@@ -566,16 +568,14 @@ import OpenAI
         }
 
         if let chatTool = chatTool {
-//            conversations[conversations.count - 1].toolRawValue = chatTool.rawValue
-//            conversations[conversations.count - 1].arguments = funcParam
-//            conversations[conversations.count - 1].isReplying = false
             conversations.last?.toolRawValue = chatTool.rawValue
             conversations.last?.arguments = funcParam
             conversations.last?.isReplying = false
             
             lastConversationData.sync(with: conversations[conversations.count - 1])
             
-            try await handleToolCall(chatTool: chatTool, funcParam: funcParam) 
+            try await handleToolCall(chatTool: chatTool, funcParam: funcParam)
+        } else {
             if !streamText.isEmpty {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.conversations[self.conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -922,6 +922,7 @@ extension DialogueSession {
     }
 }
 
+#if os(macOS)
 extension DialogueSession {
     public func exportToMd() -> String? {
         let markdownContent = generateMarkdown(for: conversations)
@@ -953,4 +954,4 @@ extension DialogueSession {
     }
 
 }
-
+#endif

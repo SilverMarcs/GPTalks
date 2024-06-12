@@ -22,12 +22,19 @@ struct ImagePreviewer: View {
             } label: {
                 if showImage {
                     if let image = loadImage(from: imageURL.absoluteString) {
+                        #if os(macOS)
                         Image(nsImage: image)
                             .resizable()
-                        
                             .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
                             .aspectRatio(contentMode: .fill)
                             .cornerRadius(6)
+                        #else
+                        Image(uiImage: image)
+                            .resizable()
+                            .frame(maxWidth: 100, maxHeight: 100, alignment: .center)
+                            .aspectRatio(contentMode: .fill)
+                            .cornerRadius(6)
+                        #endif                        
                     }
                 } else {
                     HStack {

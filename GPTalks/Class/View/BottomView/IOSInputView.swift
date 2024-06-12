@@ -114,10 +114,13 @@ struct IOSInputView: View {
                 for newItem in selectedItems {
                     if let data = try? await newItem.loadTransferable(type: Data.self) {
                         if let image = UIImage(data: data) {
-                            if session.isEditing {
-                                session.editingImages.append(image)
-                            } else {
-                                session.inputImages.append(image)
+                            let fileName = Date().nowFileName() // Generate a unique file name
+                            if let filePath = saveImage(image: image, fileName: fileName) {
+                                if session.isEditing {
+                                    session.editingImages.append(filePath)
+                                } else {
+                                    session.inputImages.append(filePath)
+                                }
                             }
                         }
                     }

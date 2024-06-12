@@ -323,8 +323,6 @@ struct MacSysPrompt: View {
         .padding(13)
     }
 }
-#endif
-
 struct ExportMenu: View {
     var session: DialogueSession
     @State private var isShowExport = false
@@ -348,3 +346,7 @@ struct ExportMenu: View {
         }
     }
 }
+
+
+#endif
+
