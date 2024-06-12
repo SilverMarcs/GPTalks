@@ -23,6 +23,22 @@ struct AutoGenTitleEnabler: View {
     }
 }
 
+struct SeamlessScroller: View {
+    @ObservedObject var configuration: AppConfiguration = .shared
+    var isPicker: Bool = false
+    
+    var body: some View {
+        if isPicker {
+            Picker("Seamless ScrollView", selection: $configuration.seamlessScrollView) {
+                Text("True").tag(true)
+                Text("False").tag(false)
+            }
+        } else {
+            Toggle("Seamless ScrollView", isOn: $configuration.seamlessScrollView)
+        }
+    }
+}
+
 struct MarkdownEnabler: View {
     @ObservedObject var configuration: AppConfiguration = .shared
     var isPicker: Bool = false
@@ -85,12 +101,12 @@ struct SmootherScrollPicker: View {
     
     var body: some View {
         if isPicker {
-            Picker("Smoother Scrolling", selection: $configuration.smootherScrolling) {
+            Picker("Smoother Scrolling", selection: $configuration.seamlessScrollView) {
                 Text("True").tag(true)
                 Text("False").tag(false)
             }
         } else {
-            Toggle("Smoother Scrolling", isOn: $configuration.smootherScrolling)
+            Toggle("Smoother Scrolling", isOn: $configuration.seamlessScrollView)
         }
     }
 }

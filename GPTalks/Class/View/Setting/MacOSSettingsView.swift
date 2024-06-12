@@ -12,7 +12,7 @@ struct MacOSSettingsView: View {
     var body: some View {
         TabView {
             MacOSAppearanceView()
-                .frame(width: 620, height: 250)
+                .frame(width: 620, height: 265)
                 .tabItem {
                     Label("Appearance", systemImage: "wand.and.stars")
                 }
@@ -128,12 +128,17 @@ struct MacOSAppearanceView: View {
                 
             Divider()
                 
-            LabeledPicker(title: "Alternate Markdown", width: 300, picker: AlternateMarkdownEnabler(isPicker: true))
+            LabeledPicker(title: "Better Markdown", width: 300, picker: AlternateMarkdownEnabler(isPicker: true))
                 .padding(10)
                 
             Divider()
             
             LabeledPicker(title: "AutoGen Title", width: 300, picker: AutoGenTitleEnabler(isPicker: true))
+                .padding(10)
+            
+            Divider()
+            
+            LabeledPicker(title: "Seamless ScrollView", width: 300, picker: SeamlessScroller(isPicker: true))
                 .padding(10)
         }
         .padding(30)

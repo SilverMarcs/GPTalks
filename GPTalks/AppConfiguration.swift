@@ -17,7 +17,8 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.alternateMarkdown") var alternateMarkdown: Bool = false
     @AppStorage("configuration.isAutoGenerateTitle") var isAutoGenerateTitle: Bool = true
     @AppStorage("configuration.autoResume") var autoResume: Bool = true
-    @AppStorage("configuration.smootherScrolling") var smootherScrolling: Bool = true
+//    @AppStorage("configuration.smootherScrolling") var smootherScrolling: Bool = true
+    @AppStorage("configuration.seamlessScrollView") var seamlessScrollView: Bool = true
     
     @AppStorage("configuration.preferredChatService") var preferredChatService: Provider = .openai
     @AppStorage("configuration.preferredImageService") var preferredImageService: Provider = .openai

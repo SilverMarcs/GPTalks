@@ -205,6 +205,7 @@ struct MacOSMessages: View {
                 .id("bottomID")
         
         }
+        .scrollContentBackground(AppConfiguration.shared.seamlessScrollView ? .visible : .hidden)
     }
     
     private var emptyListView: some View {
