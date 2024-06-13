@@ -25,7 +25,26 @@ struct MacOSMessages: View {
                 if session.conversations.isEmpty {
                     emptyListView
                 } else {
-                    normalList
+//                    normalList(proxy: proxy)
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            ForEach(session.conversations) { conversation in
+                                ConversationView(session: session, conversation: conversation) {
+                                    proxy.scrollTo(conversation.id, anchor: .top)
+                                }
+                                .id(conversation.id.uuidString)
+                                .animation(.default, value: conversation.isReplying)
+                            }
+                        }
+                        
+                        ErrorDescView(session: session)
+                        
+                        Color.clear
+                            .frame(height: 30)
+                            .id("bottomID")
+                    
+                    }
+                    .scrollContentBackground(AppConfiguration.shared.seamlessScrollView ? .visible : .hidden)
                 }
             }
             .navigationTitle(session.title)
@@ -187,26 +206,31 @@ struct MacOSMessages: View {
         "Tokens: " + session.activeTokenCount.formatToK() + " • " + session.configuration.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45)
     }
     
-    @ViewBuilder
-    private var normalList: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                ForEach(session.conversations) { conversation in
-                    ConversationView(session: session, conversation: conversation)
-                        .id(conversation.id.uuidString)
-                        .animation(.default, value: conversation.isReplying)
-                }
-            }
-            
-            ErrorDescView(session: session)
-            
-            Color.clear
-                .frame(height: 30)
-                .id("bottomID")
-        
-        }
-        .scrollContentBackground(AppConfiguration.shared.seamlessScrollView ? .visible : .hidden)
-    }
+//    @ViewBuilder
+//    private var normalList: some View {
+//        let proxy: ScrollViewProxy
+//        
+//        ScrollView {
+//            VStack(spacing: 0) {
+//                ForEach(session.conversations) { conversation in
+//                    ConversationView(session: session, conversation: conversation) {
+////                        proxy.scrollTo(conversation.id, anchor: .top)
+//                        print("scroll")
+//                    }
+//                    .id(conversation.id.uuidString)
+//                    .animation(.default, value: conversation.isReplying)
+//                }
+//            }
+//            
+//            ErrorDescView(session: session)
+//            
+//            Color.clear
+//                .frame(height: 30)
+//                .id("bottomID")
+//        
+//        }
+//        .scrollContentBackground(AppConfiguration.shared.seamlessScrollView ? .visible : .hidden)
+//    }
     
     private var emptyListView: some View {
         VStack {

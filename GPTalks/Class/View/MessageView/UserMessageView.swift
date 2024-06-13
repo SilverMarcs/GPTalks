@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MarkdownWebView
 
 struct UserMessageView: View {
     @Environment(DialogueViewModel.self) private var viewModel
@@ -23,6 +24,8 @@ struct UserMessageView: View {
     
     @State var canSelectText = false
 
+    var scrollToMessageTop: () -> Void?
+    
     var body: some View {
         alternateUI
         .onHover { isHovered in
@@ -77,8 +80,14 @@ struct UserMessageView: View {
                         .bold()
                     
 #if os(macOS)
-                    Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
-                        .textSelection(.enabled)
+//                    Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
+//                        .textSelection(.enabled)
+                    if AppConfiguration.shared.userMessageMarkdown {
+                        MarkdownWebView(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
+                    } else {
+                        Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
+                            .textSelection(.enabled)
+                    }
 #else
                     
                     Text(conversation.content)
@@ -140,10 +149,10 @@ struct UserMessageView: View {
                 }, toggleTextSelection: {
                     canSelectText.toggle()
                 }, toggleExpanded: {
+                    isExpanded.toggle()
                     withAnimation {
-                        isExpanded.toggle()
+                        scrollToMessageTop()
                     }
-//                    isExpanded.toggle()
                 })
             } else {
                 Image(systemName: "ellipsis")

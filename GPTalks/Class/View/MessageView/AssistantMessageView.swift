@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MarkdownWebView
 
 struct AssistantMessageView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -77,7 +78,8 @@ struct AssistantMessageView: View {
                         } else {
 //                            Group {
                                 if AppConfiguration.shared.isMarkdownEnabled {
-                                    MessageMarkdownView(text: conversation.content)
+//                                    MessageMarkdownView(text: conversation.content)
+                                    MarkdownWebView(conversation.content)
                                 } else {
                                     Text(conversation.content)
                                 }

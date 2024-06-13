@@ -39,6 +39,22 @@ struct SeamlessScroller: View {
     }
 }
 
+struct MarkdownUserMessage: View {
+    @ObservedObject var configuration: AppConfiguration = .shared
+    var isPicker: Bool = false
+    
+    var body: some View {
+        if isPicker {
+            Picker("User Message Markdown", selection: $configuration.userMessageMarkdown) {
+                Text("True").tag(true)
+                Text("False").tag(false)
+            }
+        } else {
+            Toggle("User Message Markdown", isOn: $configuration.userMessageMarkdown)
+        }
+    }
+}
+
 struct MarkdownEnabler: View {
     @ObservedObject var configuration: AppConfiguration = .shared
     var isPicker: Bool = false

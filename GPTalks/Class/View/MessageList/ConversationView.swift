@@ -12,13 +12,17 @@ struct ConversationView: View {
     var conversation: Conversation
     
     var isQuick: Bool = false
+    
+    var scrollToMessageTop: () -> Void = {}
 
     var body: some View {
         VStack { // TODO dont use vstack
             Group {
                 switch conversation.role {
                 case .user:
-                    UserMessageView(conversation: conversation, session: session)
+                        UserMessageView(conversation: conversation, session: session) {
+                            scrollToMessageTop()
+                        }
                 case .assistant:
                     AssistantMessageView(conversation: conversation, session: session, isQuick: isQuick)
                 case .tool:

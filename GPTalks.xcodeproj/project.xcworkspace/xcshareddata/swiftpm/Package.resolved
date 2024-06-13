@@ -1,5 +1,5 @@
 {
-  "originHash" : "54d7592a48cb878e27216efa9b0eb48b3b2381eef8c21265f50195ea4a27d188",
+  "originHash" : "e794bc237fccdd0e476122da544f185d35248d7af5de742f72d964e30411959a",
   "pins" : [
     {
       "identity" : "fuzi",
@@ -38,6 +38,15 @@
       }
     },
     {
+      "identity" : "networkimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/NetworkImage",
+      "state" : {
+        "revision" : "7aff8d1b31148d32c5933d75557d42f6323ee3d1",
+        "version" : "6.0.0"
+      }
+    },
+    {
       "identity" : "openai",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SilverMarcs/OpenAI",
@@ -62,6 +71,15 @@
       "state" : {
         "branch" : "master",
         "revision" : "c31eba0866102be9be29391dac641ecb46795702"
+      }
+    },
+    {
+      "identity" : "swift-markdown-ui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/electricsidecar-dev/swift-markdown-ui.git",
+      "state" : {
+        "branch" : "recursive",
+        "revision" : "f0d1b7fe722e6eda41db2e56f75529956ffa42fa"
       }
     },
     {

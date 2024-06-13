@@ -42,6 +42,9 @@
 		0839835D2B9DCE9900A46A84 /* IOSTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0839835C2B9DCE9900A46A84 /* IOSTextField.swift */; };
 		083BE20B2C18759D00DC1D48 /* ImagePreviewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083BE20A2C18759D00DC1D48 /* ImagePreviewer.swift */; };
 		083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 083E3B182B3A67B9007BE19E /* VisualEffectView */; };
+		084275F92C1AB39B00C2B578 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 084275F82C1AB39B00C2B578 /* MarkdownUI */; };
+		084275FC2C1AC4E800C2B578 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 084275FB2C1AC4E800C2B578 /* MarkdownWebView */; };
+		084275FF2C1AC60400C2B578 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 084275FE2C1AC60400C2B578 /* MarkdownWebView */; };
 		0846F1F62B33D68F002A2EB2 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */; };
 		084C95BD2B94518300778F14 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084C95BC2B94518300778F14 /* ImageView.swift */; };
 		08545C3A2B8D0DD500592108 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 08545C392B8D0DD500592108 /* SwiftSoup */; };
@@ -61,7 +64,6 @@
 		08827D112B28B72B0044213B /* ErrorDescView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08827D102B28B72B0044213B /* ErrorDescView.swift */; };
 		0883CFE42B98B174004A6FEA /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0883CFE32B98B174004A6FEA /* OpenAI */; };
 		0887DB1A2B9F263700153392 /* GoogleSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0887DB192B9F263600153392 /* GoogleSearch.swift */; };
-		08896BB52C0CAD6F00ED02E7 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08896BB42C0CAD6F00ED02E7 /* MarkdownWebView */; };
 		088CF0602B1E43C6009CFDCB /* PlaceHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CF05F2B1E43C6009CFDCB /* PlaceHolderView.swift */; };
 		088CF0622B1E705D009CFDCB /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CF0612B1E705D009CFDCB /* ContextResetDivider.swift */; };
 		088F27282C0722F3008BB9B2 /* SelectableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088F27272C0722F3008BB9B2 /* SelectableTextView.swift */; };
@@ -200,6 +202,7 @@
 				086F6A0A2B94168100DF42F9 /* SwiftUIImageViewer in Frameworks */,
 				08EA25A72B98B09F00EC5E65 /* OpenAI in Frameworks */,
 				0883CFE42B98B174004A6FEA /* OpenAI in Frameworks */,
+				084275FF2C1AC60400C2B578 /* MarkdownWebView in Frameworks */,
 				08320B602BC89F560037F825 /* MarkdownWebView in Frameworks */,
 				08C594FB2B7FCEA4009AB268 /* OpenAI in Frameworks */,
 				083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */,
@@ -211,7 +214,8 @@
 				083314702BC29A5E003D42C1 /* MarkdownWebView in Frameworks */,
 				08E2D21E2B7A5F800065B5E8 /* MarkdownWebView in Frameworks */,
 				0820F25A2BFA0F2C0051C8A2 /* MarkdownWebView in Frameworks */,
-				08896BB52C0CAD6F00ED02E7 /* MarkdownWebView in Frameworks */,
+				084275F92C1AB39B00C2B578 /* MarkdownUI in Frameworks */,
+				084275FC2C1AC4E800C2B578 /* MarkdownWebView in Frameworks */,
 				081ABA682BF9A412005029C7 /* KeyboardShortcuts in Frameworks */,
 				08983F1F2C0CDEBE00F52F70 /* Splash in Frameworks */,
 				08C594FE2B7FD52C009AB268 /* OpenAI in Frameworks */,
@@ -497,8 +501,10 @@
 				08FBE1D92BCF0B4D006CD9CB /* GPTEncoder */,
 				081ABA672BF9A412005029C7 /* KeyboardShortcuts */,
 				0820F2592BFA0F2C0051C8A2 /* MarkdownWebView */,
-				08896BB42C0CAD6F00ED02E7 /* MarkdownWebView */,
 				08983F1E2C0CDEBE00F52F70 /* Splash */,
+				084275F82C1AB39B00C2B578 /* MarkdownUI */,
+				084275FB2C1AC4E800C2B578 /* MarkdownWebView */,
+				084275FE2C1AC60400C2B578 /* MarkdownWebView */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -536,8 +542,9 @@
 				083495A32BA8BCBA0009E271 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				08FBE1D82BCF0B4D006CD9CB /* XCRemoteSwiftPackageReference "GPTEncoder" */,
 				081ABA662BF9A412005029C7 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
-				08896BB32C0CAD6F00ED02E7 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				08983F1D2C0CDEBE00F52F70 /* XCRemoteSwiftPackageReference "Splash" */,
+				084275F72C1AB39B00C2B578 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+				084275FD2C1AC60400C2B578 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -933,6 +940,22 @@
 				kind = branch;
 			};
 		};
+		084275F72C1AB39B00C2B578 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/electricsidecar-dev/swift-markdown-ui.git";
+			requirement = {
+				branch = recursive;
+				kind = branch;
+			};
+		};
+		084275FD2C1AC60400C2B578 /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		08545C382B8D0DD500592108 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
@@ -946,14 +969,6 @@
 			repositoryURL = "https://github.com/SilverMarcs/swiftui-image-viewer";
 			requirement = {
 				branch = main;
-				kind = branch;
-			};
-		};
-		08896BB32C0CAD6F00ED02E7 /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
-			requirement = {
-				branch = master;
 				kind = branch;
 			};
 		};
@@ -1008,6 +1023,20 @@
 			package = 083E3B172B3A67B9007BE19E /* XCRemoteSwiftPackageReference "VisualEffectView" */;
 			productName = VisualEffectView;
 		};
+		084275F82C1AB39B00C2B578 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 084275F72C1AB39B00C2B578 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
+		};
+		084275FB2C1AC4E800C2B578 /* MarkdownWebView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MarkdownWebView;
+		};
+		084275FE2C1AC60400C2B578 /* MarkdownWebView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 084275FD2C1AC60400C2B578 /* XCRemoteSwiftPackageReference "markdown-webview" */;
+			productName = MarkdownWebView;
+		};
 		08545C392B8D0DD500592108 /* SwiftSoup */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 08545C382B8D0DD500592108 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
@@ -1025,11 +1054,6 @@
 		0883CFE32B98B174004A6FEA /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
-		};
-		08896BB42C0CAD6F00ED02E7 /* MarkdownWebView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08896BB32C0CAD6F00ED02E7 /* XCRemoteSwiftPackageReference "markdown-webview" */;
-			productName = MarkdownWebView;
 		};
 		08983F1E2C0CDEBE00F52F70 /* Splash */ = {
 			isa = XCSwiftPackageProductDependency;
