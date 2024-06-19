@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MarkdownWebView
 
 struct ToolCallView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -110,7 +111,9 @@ struct ToolCallView: View {
     var funcCall: some View {
         VStack(alignment: .leading) {
             Button {
-                isExpanded.toggle()
+                withAnimation {
+                    isExpanded.toggle()
+                }
             } label: {
                 HStack(spacing: 4) {
                     if let tool = ChatTool(rawValue: conversation.toolRawValue) {
@@ -134,10 +137,14 @@ struct ToolCallView: View {
             
             
             if isExpanded {
+                #if !os(visionOS)
+                MarkdownWebView(conversation.content)
+                #else
                 Text(conversation.content)
                     .textSelection(.enabled)
                     .padding(.top, 4)
                     .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: isExpanded)
+                #endif
             }
         }
     }

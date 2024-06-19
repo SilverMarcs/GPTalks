@@ -236,7 +236,7 @@ struct URLScrapeConfigurationView: View {
             Section("Ask the assistant to scrape a webpage for information.") {
                 Toggle("Enable URL Scrape", isOn: $appConfig.isUrlScrapeEnabled)
                 
-                Toggle("Experimental Scraper (Beta)", isOn: appConfig.$useExperimentalWebScraper)
+                Toggle("Experimental Scraper (Not Recommended)", isOn: appConfig.$useExperimentalWebScraper)
             }
         }
         .navigationTitle("URL Scrape")

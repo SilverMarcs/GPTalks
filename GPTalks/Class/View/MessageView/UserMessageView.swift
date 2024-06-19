@@ -147,7 +147,9 @@ struct UserMessageView: View {
                 editHandler: {
                     session.setupEditing(conversation: conversation)
                 }, toggleTextSelection: {
-                    canSelectText.toggle()
+                    withAnimation {
+                        canSelectText.toggle()
+                    }
                 }, toggleExpanded: {
                     isExpanded.toggle()
                     withAnimation {

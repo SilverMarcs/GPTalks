@@ -599,11 +599,14 @@ import OpenAI
                    let content: String
                    if AppConfiguration.shared.useExperimentalWebScraper {
                        content = try await retrieveWebContent(from: url)
+                       webContent += "URL: \(url)\nContent:\n\(content)\n\n"
                    } else {
-                       content = try await fetchAndParseHTMLAsync(from: url)
+//                       content = try await fetchAndParseHTMLAsync(from: url)
+                       content = await useReader(from: url)
+                       webContent += content
                    }
                    // Append the URL and its content to webContent with clear separation
-                   webContent += "URL: \(url)\nContent:\n\(content)\n\n"
+//                   webContent += "URL: \(url)\nContent:\n\(content)\n\n"
                }
                
                conversations[conversations.count - 1].content = webContent
@@ -616,7 +619,10 @@ import OpenAI
             if let searchQuery = extractValue(from: funcParam, forKey: chatTool.paramName) {
                 
                 let lastToolCall = appendConversation(Conversation(role: .tool, content: "", toolRawValue: chatTool.rawValue, isReplying: true))
+                
                 let searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
+                
+//                let searchResult = await fetchSearchResults(for: searchQuery) // v v v expensive
                 
                 conversations[conversations.count - 1].content = searchResult
                 lastToolCall.sync(with: conversations[conversations.count - 1])

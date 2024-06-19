@@ -76,6 +76,7 @@
 		08A1EF502B2606C000A88A3A /* AssistantMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */; };
 		08A1EF522B26100600A88A3A /* DialogueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1EF512B26100600A88A3A /* DialogueViewModel.swift */; };
 		08AF74742B720F5B00FB081F /* ImageCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AF74732B720F5B00FB081F /* ImageCreator.swift */; };
+		08B96CF62C2341260023935B /* Reader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B96CF52C2341210023935B /* Reader.swift */; };
 		08C3A16B2B1B7DAB006E4288 /* LabeledPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */; };
 		08C594FB2B7FCEA4009AB268 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08C594FA2B7FCEA4009AB268 /* OpenAI */; };
 		08C594FE2B7FD52C009AB268 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08C594FD2B7FD52C009AB268 /* OpenAI */; };
@@ -165,6 +166,7 @@
 		08A1EF4F2B2606C000A88A3A /* AssistantMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantMessageView.swift; sourceTree = "<group>"; };
 		08A1EF512B26100600A88A3A /* DialogueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueViewModel.swift; sourceTree = "<group>"; };
 		08AF74732B720F5B00FB081F /* ImageCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCreator.swift; sourceTree = "<group>"; };
+		08B96CF52C2341210023935B /* Reader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reader.swift; sourceTree = "<group>"; };
 		08C3A16A2B1B7DAB006E4288 /* LabeledPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledPicker.swift; sourceTree = "<group>"; };
 		08C82E572B7CB00C0029791B /* ImageGeneration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGeneration.swift; sourceTree = "<group>"; };
 		08D533312B2C2D50008B4FA9 /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 		0887DB182B9F262800153392 /* Functions */ = {
 			isa = PBXGroup;
 			children = (
+				08B96CF52C2341210023935B /* Reader.swift */,
 				08DCC4832B98C22E00737191 /* ChatTool.swift */,
 				08545C3B2B8D16F800592108 /* WebScrapeService.swift */,
 				0887DB192B9F263600153392 /* GoogleSearch.swift */,
@@ -573,6 +576,7 @@
 			files = (
 				08F74EA42B0BC318006D1DD3 /* ServiceSettingsView.swift in Sources */,
 				088CF0622B1E705D009CFDCB /* ContextResetDivider.swift in Sources */,
+				08B96CF62C2341260023935B /* Reader.swift in Sources */,
 				E4C65EA229CA9E7E00AFA884 /* GPTalks.swift in Sources */,
 				084C95BD2B94518300778F14 /* ImageView.swift in Sources */,
 				0829D11B2B31938000DFFBB1 /* MacOSDialogList.swift in Sources */,
