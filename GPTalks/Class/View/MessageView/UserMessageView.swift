@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MarkdownWebView
 
 struct UserMessageView: View {
     @Environment(DialogueViewModel.self) private var viewModel
@@ -22,11 +23,9 @@ struct UserMessageView: View {
     @State var hoverxyz = false
     
     @State var canSelectText = false
-    
-    @State var showPreview: Bool = false
-    
-    @State var dynamicHeight: CGFloat = 10
 
+    var scrollToMessageTop: () -> Void?
+    
     var body: some View {
         alternateUI
         .onHover { isHovered in
@@ -81,12 +80,16 @@ struct UserMessageView: View {
                         .bold()
                     
 #if os(macOS)
-                    Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
-                        .textSelection(.enabled)
+//                    Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
+//                        .textSelection(.enabled)
+                    if AppConfiguration.shared.userMessageMarkdown {
+                        MarkdownWebView(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
+                    } else {
+                        Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
+                            .textSelection(.enabled)
+                    }
 #else
                     
-//                    TextViewWrapper(text: Binding.constant(conversation.content), dynamicHeight: $dynamicHeight)
-//                        .frame(height: dynamicHeight)
                     Text(conversation.content)
                         .textSelection(.enabled)
 #endif
@@ -146,10 +149,10 @@ struct UserMessageView: View {
                 }, toggleTextSelection: {
                     canSelectText.toggle()
                 }, toggleExpanded: {
+                    isExpanded.toggle()
                     withAnimation {
-                        isExpanded.toggle()
+                        scrollToMessageTop()
                     }
-//                    isExpanded.toggle()
                 })
             } else {
                 Image(systemName: "ellipsis")

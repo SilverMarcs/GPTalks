@@ -81,6 +81,14 @@ struct DialogueListItem: View {
                 }
                 
                 deleteButton
+                
+                if viewModel.selectedDialogues.count > 1 {
+                    Button {
+                        viewModel.toggleStarredDialogues()
+                    } label: {
+                        Label("Star/Unstar", systemImage: "star")
+                    }
+                }
             }
             .labelStyle(.titleAndIcon)
         }

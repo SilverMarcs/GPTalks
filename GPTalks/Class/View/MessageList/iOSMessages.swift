@@ -61,6 +61,8 @@ struct iOSMessages: View {
             #endif
             .listStyle(.plain)
             .onAppear {
+//                scrollToBottom(proxy: proxy, animated: false)
+                
                 scrollToBottom(proxy: proxy, delay: 0.3)
                 
                 if AppConfiguration.shared.alternateMarkdown && session.conversations.count > 8 {
@@ -170,10 +172,36 @@ struct iOSMessages: View {
 #endif
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                navTitle
+        .navigationTitle(session.configuration.model.name)
+        .toolbarTitleMenu {
+            Section(navSubtitle) {
+                Menu {
+                    ProviderPicker(session: session)
+                } label: {
+                    Label(session.configuration.provider.name, systemImage: "building.2")
+                }
+
+                Menu {
+                    ModelPicker(session: session)
+                } label: {
+                    Label(session.configuration.model.name, systemImage: "cube.box")
+                }
+
+                Menu {
+                    TempPicker(session: session)
+                } label: {
+                    Label("Temperature: " + String(session.configuration.temperature), systemImage: "thermometer.sun")
+                }
             }
+            
+            Section {
+                ToolToggle(session: session)
+            }
+        }
+        .toolbar {
+//            ToolbarItem(placement: .principal) {
+//                navTitle
+//            }
 
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {

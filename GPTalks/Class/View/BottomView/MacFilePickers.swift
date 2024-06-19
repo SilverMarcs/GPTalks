@@ -17,9 +17,12 @@ struct ImagePickerView: View {
         Button {
             importingImage = true
         } label: {
-            Image(systemName: "photo")
-                .resizable()
-                .inputImageStyle(padding: 7, imageSize: 25)
+            HStack {
+                Image(systemName: "photo")
+                    .resizable()
+                    .inputImageStyle(padding: 7, imageSize: 25)
+                Text("Image")
+            }
         }
         .fileImporter(
             isPresented: $importingImage,
@@ -39,24 +42,24 @@ struct ImagePickerView: View {
     }
 }
 
-struct CustomImagePickerView: View {
-    @Bindable var session: DialogueSession
-    var showMore: Binding<Bool>
-    
-    private var currentImages: Binding<[PlatformImage]> {
-        session.isEditing ? $session.editingImages : $session.inputImages
-    }
-    
-    var body: some View {
-        ImagePickerView(onImageAppend: { newImage in
-            currentImages.wrappedValue.append(newImage)
-            showMore.wrappedValue = false
-            if ![Model.gpt4t, Model.gpt4o].contains(session.configuration.model) {
-                session.configuration.useVision = true
-            }
-        })
-    }
-}
+//struct CustomImagePickerView: View {
+//    @Bindable var session: DialogueSession
+//    var showMore: Binding<Bool>
+//    
+//    private var currentImages: Binding<[PlatformImage]> {
+//        session.isEditing ? $session.editingImages : $session.inputImages
+//    }
+//    
+//    var body: some View {
+//        ImagePickerView(onImageAppend: { newImage in
+//            currentImages.wrappedValue.append(newImage)
+//            showMore.wrappedValue = false
+//            if ![Model.gpt4t, Model.gpt4o].contains(session.configuration.model) {
+//                session.configuration.useVision = true
+//            }
+//        })
+//    }
+//}
 
 struct AudioPickerView: View {
     var onAudioSelect: ((URL) -> Void)? // Closure to handle audio selection.
@@ -67,9 +70,12 @@ struct AudioPickerView: View {
         Button {
             importingAudio = true
         } label: {
-            Image(systemName: "waveform")
-                .resizable()
-                .inputImageStyle(padding: 6, imageSize: 25)
+            HStack {
+                Image(systemName: "headphones")
+                    .resizable()
+                    .inputImageStyle(padding: 6, imageSize: 25)
+                Text("Audio")
+            }
         }
         .fileImporter(
             isPresented: $importingAudio,
@@ -121,9 +127,12 @@ struct PDFPickerView: View {
         Button {
             importingPDF = true
         } label: {
-            Image(systemName: "newspaper")
-                .resizable()
-                .inputImageStyle(padding: padding, imageSize: imageSize)
+            HStack {
+                Image(systemName: "newspaper")
+//                    .resizable()
+//                    .inputImageStyle(padding: padding, imageSize: imageSize)
+                Text("PDF")
+            }
         }
         .fileImporter(
             isPresented: $importingPDF,
@@ -160,3 +169,82 @@ struct CustomPDFPickerView: View {
         }, imageSize: imageSize, padding: padding)
     }
 }
+
+#if os(macOS)
+import SwiftUI
+import UniformTypeIdentifiers
+
+extension View {
+    func audioFileImporter(isPresented: Binding<Bool>, onFileSelected: @escaping (URL) -> Void) -> some View {
+        self.fileImporter(
+            isPresented: isPresented,
+            allowedContentTypes: [.audio],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                if let url = urls.first {
+                    onFileSelected(url)
+                }
+            case .failure(let error):
+                print("File selection error: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func pdfFileImporter(isPresented: Binding<Bool>, onFileSelected: @escaping (URL) -> Void) -> some View {
+        self.fileImporter(
+            isPresented: isPresented,
+            allowedContentTypes: [.pdf],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                if let url = urls.first {
+                    onFileSelected(url)
+                }
+            case .failure(let error):
+                print("File selection error: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func imageFileImporter(isPresented: Binding<Bool>, onImageAppend: ((PlatformImage) -> Void)?) -> some View {
+        self.fileImporter(
+            isPresented: isPresented,
+            allowedContentTypes: [.image],
+            allowsMultipleSelection: true
+        ) { result in
+            switch result {
+            case .success(let urls):
+                for url in urls {
+                    if let image = NSImage(contentsOf: url) {
+                        onImageAppend?(image)
+                    }
+                }
+            case .failure(let error):
+                print("File selection error: \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
+extension View {
+    func generalizedFileImporter(isPresented: Binding<Bool>, onFilesSelected: @escaping ([URL]) -> Void) -> some View {
+        self.fileImporter(
+            isPresented: isPresented,
+            allowedContentTypes: [.audio, .pdf, .image],
+            allowsMultipleSelection: true
+        ) { result in
+            switch result {
+            case .success(let urls):
+                onFilesSelected(urls)
+            case .failure(let error):
+                print("File selection error: \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
+#endif
+

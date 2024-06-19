@@ -74,7 +74,7 @@ struct MessageContextMenu: View {
                     Button {
                         session.setResetContextMarker(conversation: conversation)
                     } label: {
-                        Label("Reset Cntext", systemImage: "eraser")
+                        Label("Reset Context", systemImage: "eraser")
                     }
                     
                     Button {

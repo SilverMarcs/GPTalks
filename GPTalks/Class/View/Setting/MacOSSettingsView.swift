@@ -12,7 +12,7 @@ struct MacOSSettingsView: View {
     var body: some View {
         TabView {
             MacOSAppearanceView()
-                .frame(width: 620, height: 250)
+                .frame(width: 620, height: 200)
                 .tabItem {
                     Label("Appearance", systemImage: "wand.and.stars")
                 }
@@ -32,7 +32,7 @@ struct MacOSSettingsView: View {
             ProviderSettingsView()
                 .frame(width: 620, height: 380)
                 .tabItem {
-                    Label("Providers", systemImage: "brain.head.profile")
+                    Label("Providers", systemImage: "cpu")
                 }
             
             ToolsView()
@@ -121,20 +121,17 @@ struct MacOSQuickPanelSettings: View {
 }
 
 struct MacOSAppearanceView: View {
+    @ObservedObject var configuration: AppConfiguration = .shared
+    
     var body: some View {
-        GroupBox("Config") {
-            LabeledPicker(title: "Markdown Enabled", width: 300, picker: MarkdownEnabler(isPicker: true))
-                .padding(10)
-                
-            Divider()
-                
-            LabeledPicker(title: "Alternate Markdown", width: 300, picker: AlternateMarkdownEnabler(isPicker: true))
-                .padding(10)
-                
-            Divider()
-            
-            LabeledPicker(title: "AutoGen Title", width: 300, picker: AutoGenTitleEnabler(isPicker: true))
-                .padding(10)
+        Form {
+            Section {
+                Toggle("AutoGen Title", isOn: $configuration.isAutoGenerateTitle)
+                Toggle("Seamless ScrollView", isOn: $configuration.seamlessScrollView)
+                Toggle("Assistant Message Markdown", isOn: $configuration.isMarkdownEnabled)
+                Toggle("User Message Markdown", isOn: $configuration.userMessageMarkdown)
+//                Toggle("Better Markdown", isOn: $configuration.alternateMarkdown)
+            }
         }
         .padding(30)
     }

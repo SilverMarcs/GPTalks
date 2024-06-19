@@ -28,8 +28,8 @@ enum ContentState: String, CaseIterable, Identifiable {
     private let viewContext: NSManagedObjectContext
     
     var allDialogues: [DialogueSession] = []
-
-    var isArchivedSelected: Bool = false
+    
+    var isExpanded: Bool = false
     
     var selectedState: ContentState = .chats 
     {
@@ -61,6 +61,12 @@ enum ContentState: String, CaseIterable, Identifiable {
         selectedDialogues.removeAll()
     }
     
+    func toggleStarredDialogues() {
+        for session in selectedDialogues {
+            session.isArchive.toggle()
+        }
+    }
+    
     var shouldShowPlaceholder: Bool {
         return (!searchText.isEmpty && currentDialogues.isEmpty) || currentDialogues.isEmpty
     }
@@ -69,7 +75,7 @@ enum ContentState: String, CaseIterable, Identifiable {
         if !searchText.isEmpty {
             return filterDialogues(matching: searchText, from: allDialogues)
         } else {    
-            return allDialogues
+            return Array(allDialogues.prefix(isExpanded ? allDialogues.count : 10))
         }
     }
     
@@ -113,9 +119,6 @@ enum ContentState: String, CaseIterable, Identifiable {
         }
     }
 
-    func toggleArchivedStatus() {
-        isArchivedSelected.toggle()
-    }
 
     func moveUpChat(session: DialogueSession) {
         session.date = Date()
@@ -134,7 +137,7 @@ enum ContentState: String, CaseIterable, Identifiable {
         }
     }
     
-    func tggleImageAndChat() {
+    func toggleImageAndChat() {
         if selectedState == .images {
             selectedState = .chats
         } else {
@@ -143,6 +146,13 @@ enum ContentState: String, CaseIterable, Identifiable {
     }
 
     func addDialogue(conversations: [Conversation] = []) {
+//        if let first = allDialogues.first {
+//            if first.conversations.count == 0 {
+//                selectedDialogues = [first]
+//                return
+//            }
+//        }
+        
         if selectedState != .chats {
             selectedState = .chats
         }
@@ -170,12 +180,14 @@ enum ContentState: String, CaseIterable, Identifiable {
             withAnimation {
                 allDialogues.insert(session, at: 0)
             }
-            #if os(macOS)
-            selectedDialogues = []
-            selectedDialogues.insert(session)
-            #else
-            selectedDialogue = session
-            #endif
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+#if os(macOS)
+                self.selectedDialogues = []
+                self.selectedDialogues.insert(session)
+#else
+                self.selectedDialogue = session
+#endif
+            }
         }
     }
     
@@ -185,34 +197,6 @@ enum ContentState: String, CaseIterable, Identifiable {
         }
 
         
-    }
-    
-    func addFloatingDialogue() -> DialogueSession? {
-        if selectedState != .chats {
-            selectedState = .chats
-        }
-
-        let newItem = DialogueData(context: viewContext)
-        newItem.id = UUID()
-        newItem.date = Date()
-
-        do {
-            newItem.configuration = try JSONEncoder().encode(DialogueSession.Configuration(quick: true))
-        } catch {
-            print(error.localizedDescription)
-        }
-
-        save()
-
-        if let session = DialogueSession(rawData: newItem) {
-            withAnimation {
-                allDialogues.insert(session, at: 0)
-                selectedDialogues = []
-                selectedDialogues.insert(session)
-            }
-        }
-        
-        return allDialogues.first
     }
 
     func deleteDialogue(_ session: DialogueSession) {

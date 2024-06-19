@@ -43,7 +43,7 @@ struct MacTextEditor: View {
             .keyboardShortcut("l", modifiers: .command)
             .hidden()
         }
-        .roundedRectangleOverlay()
+//        .roundedRectangleOverlay()
     }
 }
 #endif

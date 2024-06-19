@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import KeyboardShortcuts
 
 #if os(macOS)
-struct PanelTextEditor: View {
+struct FloatingView: View {
     @Environment(DialogueViewModel.self) private var viewModel
     @State var prompt: String = ""
     @Binding var showAdditionalContent: Bool
@@ -21,42 +22,9 @@ struct PanelTextEditor: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 12) {
-                Menu {
-                    ProviderPicker(session: session)
-                    ModelPicker(session: session)
-                    ToolToggle(session: session)
-                    
-                } label: {
-                    Image(systemName: "magnifyingglass")
-                        .resizable()
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
-                        .frame(width: 24, height: 24)
-                }
-                .buttonStyle(.plain)
-                
-                TextField("Ask AI...", text: $prompt)
-                    .focused($isFocused)
-                    .font(.system(size: 25))
-                    .textFieldStyle(.plain)
-                    
-                Group {
-                    if session.isReplying {
-                        StopButton(size: 28) {
-                            session.stopStreaming()
-                        }
-                    } else {
-                        SendButton2(size: 28) {
-                            send()
-                        }
-                    }
-                }
-                .buttonStyle(.plain)
-            }
-            .padding()
-            .padding(.leading, 3)
-            .padding(.bottom, -9)
+            textfieldView
+                .padding(15)
+                .padding(.leading, 2)
             
             if showAdditionalContent {
                 Divider()
@@ -65,6 +33,52 @@ struct PanelTextEditor: View {
                 
                 bottomView
             }
+        }
+    }
+    
+    private var textfieldView: some View {
+        HStack(spacing: 12) {
+            Menu {
+                ProviderPicker(session: session)
+                ModelPicker(session: session)
+                ToolToggle(session: session)
+                
+            } label: {
+                Image(systemName: "magnifyingglass")
+                    .resizable()
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 24, height: 24)
+            }
+            .buttonStyle(.plain)
+            
+            TextField("Ask Anything...", text: $prompt)
+                .focused($isFocused)
+                .font(.system(size: 25))
+                .textFieldStyle(.plain)
+                
+            ZStack {
+                if session.isReplying {
+                    StopButton(size: 28) {
+                        Task { @MainActor in
+                            session.stopStreaming()
+                        }
+                     }
+                } else {
+                    SendButton2(size: 28) {
+                        send()
+                    }
+                }
+                
+                Button {
+                    isFocused = true
+                } label: {
+                    
+                }
+                .hidden()
+                .keyboardShortcut("l", modifiers: .command)
+            }
+            .buttonStyle(.plain)
         }
     }
     
@@ -106,6 +120,7 @@ struct PanelTextEditor: View {
                     Image(systemName: "plus.square.on.square")
                         .imageScale(.medium)
                 }
+                .keyboardShortcut("N", modifiers: [.command])
 
             }
             .foregroundColor(.secondary)

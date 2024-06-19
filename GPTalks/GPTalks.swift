@@ -31,7 +31,7 @@ struct GPTalks: App {
                 }
                 .background(BackgroundView(window: $mainWindow))
                 .floatingPanel(isPresented: $showingPanel, showAdditionalContent: $showAdditionalContent) {
-                    PanelTextEditor(showAdditionalContent: $showAdditionalContent) {
+                    FloatingView(showAdditionalContent: $showAdditionalContent) {
                         showingPanel.toggle()
                         bringMainWindowToFront()
                     }
@@ -52,8 +52,14 @@ struct GPTalks: App {
                 }
                 
                 Section {
+                    Button(viewModel.isExpanded ? "Collapse Chat List" : "Expand Chat List") {
+                        withAnimation {
+                            viewModel.isExpanded.toggle()
+                        }
+                    }
+                    
                     Button("Image Generations") {
-                        viewModel.tggleImageAndChat()
+                        viewModel.toggleImageAndChat()
                     }
                     .keyboardShortcut("i", modifiers: [.command, .shift])
                 }

@@ -16,6 +16,8 @@ struct MacOSMessages: View {
 
     @State private var isUserScrolling = false
     @State var isShowSysPrompt: Bool = false
+    
+    @State var editingIndex: Int = 0
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -23,7 +25,26 @@ struct MacOSMessages: View {
                 if session.conversations.isEmpty {
                     emptyListView
                 } else {
-                    normalList
+//                    normalList(proxy: proxy)
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            ForEach(session.conversations) { conversation in
+                                ConversationView(session: session, conversation: conversation) {
+                                    proxy.scrollTo(conversation.id, anchor: .top)
+                                }
+                                .id(conversation.id.uuidString)
+                                .animation(.default, value: conversation.isReplying)
+                            }
+                        }
+                        
+                        ErrorDescView(session: session)
+                        
+                        Color.clear
+                            .frame(height: 30)
+                            .id("bottomID")
+                    
+                    }
+                    .scrollContentBackground(AppConfiguration.shared.seamlessScrollView ? .visible : .hidden)
                 }
             }
             .navigationTitle(session.title)
@@ -88,10 +109,18 @@ struct MacOSMessages: View {
                     itemProvider.loadObject(ofClass: NSImage.self) { (image, error) in
                         DispatchQueue.main.async {
                             if let image = image as? NSImage {
-                                if session.isEditing {
-                                    session.editingImages.append(image)
+                                if let filePath = saveImage(image: image) {
+                                    if session.isEditing {
+                                        if !session.editingImages.contains(filePath) {
+                                            session.editingImages.append(filePath)
+                                        }
+                                    } else {
+                                        if !session.inputImages.contains(filePath) {
+                                            session.inputImages.append(filePath)
+                                        }
+                                    }
                                 } else {
-                                    session.inputImages.append(image)
+                                    print("Failed to save image to disk")
                                 }
                             } else {
                                 print("Could not load image: \(String(describing: error))")
@@ -124,6 +153,10 @@ struct MacOSMessages: View {
                         
                         Section {
                             ToolToggle(session: session)
+                        }
+                        
+                        Section {
+                            ExportMenu(session: session)
                         }
 
                     } label: {
@@ -170,28 +203,34 @@ struct MacOSMessages: View {
     }
     
     var navSubtitle: String {
-        "Tokens: " + session.activeTokenCount.formatToK() + " • " + session.configuration.systemPrompt.truncated(to: 45)
+        "Tokens: " + session.activeTokenCount.formatToK() + " • " + session.configuration.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45)
     }
     
-    @ViewBuilder
-    private var normalList: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                ForEach(session.conversations) { conversation in
-                    ConversationView(session: session, conversation: conversation)
-                        .id(conversation.id.uuidString)
-                        .animation(.default, value: conversation.isReplying)
-                }
-            }
-            
-            ErrorDescView(session: session)
-            
-            Color.clear
-                .frame(height: 30)
-                .id("bottomID")
-        
-        }
-    }
+//    @ViewBuilder
+//    private var normalList: some View {
+//        let proxy: ScrollViewProxy
+//        
+//        ScrollView {
+//            VStack(spacing: 0) {
+//                ForEach(session.conversations) { conversation in
+//                    ConversationView(session: session, conversation: conversation) {
+////                        proxy.scrollTo(conversation.id, anchor: .top)
+//                        print("scroll")
+//                    }
+//                    .id(conversation.id.uuidString)
+//                    .animation(.default, value: conversation.isReplying)
+//                }
+//            }
+//            
+//            ErrorDescView(session: session)
+//            
+//            Color.clear
+//                .frame(height: 30)
+//                .id("bottomID")
+//        
+//        }
+//        .scrollContentBackground(AppConfiguration.shared.seamlessScrollView ? .visible : .hidden)
+//    }
     
     private var emptyListView: some View {
         VStack {
@@ -217,9 +256,10 @@ struct MacOSMessages: View {
                     }
                     VStack(alignment: .leading, spacing: 8) {
                         Group {
-                            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
-                            Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
                             Toggle("Extract PDF", isOn: $session.configuration.useExtractPdf)
+                            Toggle("Vision", isOn: $session.configuration.useVision)
+                            Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
+
                         }
                         .frame(width: 150, alignment: .leading)
                     }
@@ -308,4 +348,30 @@ struct MacSysPrompt: View {
         .padding(13)
     }
 }
+struct ExportMenu: View {
+    var session: DialogueSession
+    @State private var isShowExport = false
+    @State private var pathStr = "Downloads/"
+    
+    var body: some View {
+        Menu {
+            
+            Button("Markdown") {
+                if let path = session.exportToMd() {
+                    pathStr = path
+                    isShowExport = true
+                }
+            }
+        } label: {
+            Label("Export", systemImage: "square.and.arrow.up")
+        }
+        .alert(isPresented: $isShowExport) {
+            // TODO: this isnt perfect
+            Alert(title: Text("Notice"), message: Text("Exported as \(pathStr)"), dismissButton: .default(Text("OK")))
+        }
+    }
+}
+
+
 #endif
+

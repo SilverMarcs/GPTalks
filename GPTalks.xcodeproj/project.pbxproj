@@ -17,9 +17,8 @@
 		081ABA652BF99EFF005029C7 /* FloatingPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081ABA642BF99EFF005029C7 /* FloatingPanel.swift */; };
 		081ABA682BF9A412005029C7 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 081ABA672BF9A412005029C7 /* KeyboardShortcuts */; };
 		081B02712B81B1A2006AF219 /* ImageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081B02702B81B1A2006AF219 /* ImageSession.swift */; };
-		081E75452BFBD0E30041C24A /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 081E75442BFBD0E30041C24A /* MarkdownUI */; };
 		0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820E06C2B5395E500401A30 /* TextSelectionView.swift */; };
-		0820F23F2BF9B0A60051C8A2 /* PanelTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820F23E2BF9B0A60051C8A2 /* PanelTextEditor.swift */; };
+		0820F23F2BF9B0A60051C8A2 /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820F23E2BF9B0A60051C8A2 /* FloatingView.swift */; };
 		0820F24E2BF9FA5B0051C8A2 /* MDParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0820F24D2BF9FA5B0051C8A2 /* MDParser.swift */; };
 		0820F25A2BFA0F2C0051C8A2 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 0820F2592BFA0F2C0051C8A2 /* MarkdownWebView */; };
 		0827585F2B8A62B000F2EF8A /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0827585E2B8A62B000F2EF8A /* Components.swift */; };
@@ -38,11 +37,14 @@
 		0837E47D2AFE57A100C03059 /* IosDefaultConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E47C2AFE57A100C03059 /* IosDefaultConfigView.swift */; };
 		0837E4812AFFE7B000C03059 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837E4802AFFE7AF00C03059 /* Model.swift */; };
 		083983512B9D507A00A46A84 /* MacInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083983502B9D507A00A46A84 /* MacInputView.swift */; };
-		083983532B9D51A500A46A84 /* CustomImportedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083983522B9D51A500A46A84 /* CustomImportedImageView.swift */; };
 		083983592B9D84C900A46A84 /* MacTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083983582B9D84C900A46A84 /* MacTextEditor.swift */; };
 		0839835B2B9DBDD800A46A84 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0839835A2B9DBDD800A46A84 /* AudioPlayerView.swift */; };
 		0839835D2B9DCE9900A46A84 /* IOSTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0839835C2B9DCE9900A46A84 /* IOSTextField.swift */; };
+		083BE20B2C18759D00DC1D48 /* ImagePreviewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083BE20A2C18759D00DC1D48 /* ImagePreviewer.swift */; };
 		083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 083E3B182B3A67B9007BE19E /* VisualEffectView */; };
+		084275F92C1AB39B00C2B578 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 084275F82C1AB39B00C2B578 /* MarkdownUI */; };
+		084275FC2C1AC4E800C2B578 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 084275FB2C1AC4E800C2B578 /* MarkdownWebView */; };
+		084275FF2C1AC60400C2B578 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 084275FE2C1AC60400C2B578 /* MarkdownWebView */; };
 		0846F1F62B33D68F002A2EB2 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */; };
 		084C95BD2B94518300778F14 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084C95BC2B94518300778F14 /* ImageView.swift */; };
 		08545C3A2B8D0DD500592108 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 08545C392B8D0DD500592108 /* SwiftSoup */; };
@@ -62,7 +64,6 @@
 		08827D112B28B72B0044213B /* ErrorDescView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08827D102B28B72B0044213B /* ErrorDescView.swift */; };
 		0883CFE42B98B174004A6FEA /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0883CFE32B98B174004A6FEA /* OpenAI */; };
 		0887DB1A2B9F263700153392 /* GoogleSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0887DB192B9F263600153392 /* GoogleSearch.swift */; };
-		08896BB52C0CAD6F00ED02E7 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08896BB42C0CAD6F00ED02E7 /* MarkdownWebView */; };
 		088CF0602B1E43C6009CFDCB /* PlaceHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CF05F2B1E43C6009CFDCB /* PlaceHolderView.swift */; };
 		088CF0622B1E705D009CFDCB /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088CF0612B1E705D009CFDCB /* ContextResetDivider.swift */; };
 		088F27282C0722F3008BB9B2 /* SelectableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088F27272C0722F3008BB9B2 /* SelectableTextView.swift */; };
@@ -90,6 +91,7 @@
 		08EA25A72B98B09F00EC5E65 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08EA25A62B98B09F00EC5E65 /* OpenAI */; };
 		08ED9EB82B02564D00849A1E /* DialogueListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ED9EB72B02564D00849A1E /* DialogueListItem.swift */; };
 		08F74EA42B0BC318006D1DD3 /* ServiceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */; };
+		08F788342C12B3CA0084720D /* KBDShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F788332C12B3CA0084720D /* KBDShortcuts.swift */; };
 		08FB18B82BC29A0700DFD0DC /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08FB18B72BC29A0700DFD0DC /* MarkdownWebView */; };
 		08FBE1DA2BCF0B4D006CD9CB /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 08FBE1D92BCF0B4D006CD9CB /* GPTEncoder */; };
 		08FBE1DC2BCF0BC6006CD9CB /* GPTEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08FBE1DB2BCF0BC6006CD9CB /* GPTEncoder.swift */; };
@@ -119,7 +121,7 @@
 		081ABA642BF99EFF005029C7 /* FloatingPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPanel.swift; sourceTree = "<group>"; };
 		081B02702B81B1A2006AF219 /* ImageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSession.swift; sourceTree = "<group>"; };
 		0820E06C2B5395E500401A30 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
-		0820F23E2BF9B0A60051C8A2 /* PanelTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelTextEditor.swift; sourceTree = "<group>"; };
+		0820F23E2BF9B0A60051C8A2 /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		0820F24D2BF9FA5B0051C8A2 /* MDParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDParser.swift; sourceTree = "<group>"; };
 		0827585E2B8A62B000F2EF8A /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
 		0829D1122B3166D900DFFBB1 /* iOSMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSMessages.swift; sourceTree = "<group>"; };
@@ -133,10 +135,10 @@
 		0837E47C2AFE57A100C03059 /* IosDefaultConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosDefaultConfigView.swift; sourceTree = "<group>"; };
 		0837E4802AFFE7AF00C03059 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		083983502B9D507A00A46A84 /* MacInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacInputView.swift; sourceTree = "<group>"; };
-		083983522B9D51A500A46A84 /* CustomImportedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImportedImageView.swift; sourceTree = "<group>"; };
 		083983582B9D84C900A46A84 /* MacTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTextEditor.swift; sourceTree = "<group>"; };
 		0839835A2B9DBDD800A46A84 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		0839835C2B9DCE9900A46A84 /* IOSTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSTextField.swift; sourceTree = "<group>"; };
+		083BE20A2C18759D00DC1D48 /* ImagePreviewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewer.swift; sourceTree = "<group>"; };
 		0846F1F52B33D68F002A2EB2 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
 		084C95BC2B94518300778F14 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		08545C3B2B8D16F800592108 /* WebScrapeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebScrapeService.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 		08E2611C2B98978800E4542E /* ToolMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolMessageView.swift; sourceTree = "<group>"; };
 		08ED9EB72B02564D00849A1E /* DialogueListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogueListItem.swift; sourceTree = "<group>"; };
 		08F74EA32B0BC318006D1DD3 /* ServiceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSettingsView.swift; sourceTree = "<group>"; };
+		08F788332C12B3CA0084720D /* KBDShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBDShortcuts.swift; sourceTree = "<group>"; };
 		08FBE1DB2BCF0BC6006CD9CB /* GPTEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTEncoder.swift; sourceTree = "<group>"; };
 		E4994DF129DA8B29002981D0 /* MacOSSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSSettingsView.swift; sourceTree = "<group>"; };
 		E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -199,6 +202,7 @@
 				086F6A0A2B94168100DF42F9 /* SwiftUIImageViewer in Frameworks */,
 				08EA25A72B98B09F00EC5E65 /* OpenAI in Frameworks */,
 				0883CFE42B98B174004A6FEA /* OpenAI in Frameworks */,
+				084275FF2C1AC60400C2B578 /* MarkdownWebView in Frameworks */,
 				08320B602BC89F560037F825 /* MarkdownWebView in Frameworks */,
 				08C594FB2B7FCEA4009AB268 /* OpenAI in Frameworks */,
 				083E3B192B3A67B9007BE19E /* VisualEffectView in Frameworks */,
@@ -209,9 +213,9 @@
 				08FB18B82BC29A0700DFD0DC /* MarkdownWebView in Frameworks */,
 				083314702BC29A5E003D42C1 /* MarkdownWebView in Frameworks */,
 				08E2D21E2B7A5F800065B5E8 /* MarkdownWebView in Frameworks */,
-				081E75452BFBD0E30041C24A /* MarkdownUI in Frameworks */,
 				0820F25A2BFA0F2C0051C8A2 /* MarkdownWebView in Frameworks */,
-				08896BB52C0CAD6F00ED02E7 /* MarkdownWebView in Frameworks */,
+				084275F92C1AB39B00C2B578 /* MarkdownUI in Frameworks */,
+				084275FC2C1AC4E800C2B578 /* MarkdownWebView in Frameworks */,
 				081ABA682BF9A412005029C7 /* KeyboardShortcuts in Frameworks */,
 				08983F1F2C0CDEBE00F52F70 /* Splash in Frameworks */,
 				08C594FE2B7FD52C009AB268 /* OpenAI in Frameworks */,
@@ -228,6 +232,7 @@
 			children = (
 				0817E3A72BC1FEB20028AD2F /* PDFViewer.swift */,
 				0817E3AA2BC202990028AD2F /* AudioPreviewer.swift */,
+				083BE20A2C18759D00DC1D48 /* ImagePreviewer.swift */,
 			);
 			path = Previewers;
 			sourceTree = "<group>";
@@ -236,7 +241,7 @@
 			isa = PBXGroup;
 			children = (
 				081ABA642BF99EFF005029C7 /* FloatingPanel.swift */,
-				0820F23E2BF9B0A60051C8A2 /* PanelTextEditor.swift */,
+				0820F23E2BF9B0A60051C8A2 /* FloatingView.swift */,
 			);
 			path = Panel;
 			sourceTree = "<group>";
@@ -246,7 +251,6 @@
 			children = (
 				E4C65F1729CBEE2400AFA884 /* IOSInputView.swift */,
 				083983502B9D507A00A46A84 /* MacInputView.swift */,
-				083983522B9D51A500A46A84 /* CustomImportedImageView.swift */,
 				083983582B9D84C900A46A84 /* MacTextEditor.swift */,
 				0839835A2B9DBDD800A46A84 /* AudioPlayerView.swift */,
 				0839835C2B9DCE9900A46A84 /* IOSTextField.swift */,
@@ -443,6 +447,7 @@
 				E4C65EEB29CA9F7800AFA884 /* SplashSyntax.swift */,
 				085D40BE2AFD66340033F8B5 /* Utils.swift */,
 				08376D802B7CF0D1003258D1 /* ImageSave.swift */,
+				08F788332C12B3CA0084720D /* KBDShortcuts.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -496,9 +501,10 @@
 				08FBE1D92BCF0B4D006CD9CB /* GPTEncoder */,
 				081ABA672BF9A412005029C7 /* KeyboardShortcuts */,
 				0820F2592BFA0F2C0051C8A2 /* MarkdownWebView */,
-				081E75442BFBD0E30041C24A /* MarkdownUI */,
-				08896BB42C0CAD6F00ED02E7 /* MarkdownWebView */,
 				08983F1E2C0CDEBE00F52F70 /* Splash */,
+				084275F82C1AB39B00C2B578 /* MarkdownUI */,
+				084275FB2C1AC4E800C2B578 /* MarkdownWebView */,
+				084275FE2C1AC60400C2B578 /* MarkdownWebView */,
 			);
 			productName = ChatGPT;
 			productReference = E4C65E9E29CA9E7E00AFA884 /* GPTalks.app */;
@@ -536,9 +542,9 @@
 				083495A32BA8BCBA0009E271 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				08FBE1D82BCF0B4D006CD9CB /* XCRemoteSwiftPackageReference "GPTEncoder" */,
 				081ABA662BF9A412005029C7 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
-				081E75432BFBD0E30041C24A /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
-				08896BB32C0CAD6F00ED02E7 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				08983F1D2C0CDEBE00F52F70 /* XCRemoteSwiftPackageReference "Splash" */,
+				084275F72C1AB39B00C2B578 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+				084275FD2C1AC60400C2B578 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 			);
 			productRefGroup = E4C65E9F29CA9E7E00AFA884 /* Products */;
 			projectDirPath = "";
@@ -586,9 +592,11 @@
 				08E2611D2B98978800E4542E /* ToolMessageView.swift in Sources */,
 				0820F24E2BF9FA5B0051C8A2 /* MDParser.swift in Sources */,
 				08980EC62B97877A0005B522 /* TranscriptionSession.swift in Sources */,
+				08F788342C12B3CA0084720D /* KBDShortcuts.swift in Sources */,
 				0878E53B2B1683ED00E0D79D /* AppIconView.swift in Sources */,
 				0820E06D2B5395E500401A30 /* TextSelectionView.swift in Sources */,
 				E4C65EEE29CA9F7800AFA884 /* Conversation.swift in Sources */,
+				083BE20B2C18759D00DC1D48 /* ImagePreviewer.swift in Sources */,
 				E4C65EA929CA9E7E00AFA884 /* ContentView.swift in Sources */,
 				0829D1132B3166D900DFFBB1 /* iOSMessages.swift in Sources */,
 				08E047012B724DE400E81C91 /* ViewModifiers.swift in Sources */,
@@ -602,7 +610,7 @@
 				08664FD72BB7D368001281FA /* OpenAIService.swift in Sources */,
 				0837E4812AFFE7B000C03059 /* Model.swift in Sources */,
 				08DCC4862B99AD8D00737191 /* ToolCallView.swift in Sources */,
-				0820F23F2BF9B0A60051C8A2 /* PanelTextEditor.swift in Sources */,
+				0820F23F2BF9B0A60051C8A2 /* FloatingView.swift in Sources */,
 				0846F1F62B33D68F002A2EB2 /* ProviderImage.swift in Sources */,
 				08FBE1DC2BCF0BC6006CD9CB /* GPTEncoder.swift in Sources */,
 				E4C65EFE29CA9F7800AFA884 /* SplashSyntax.swift in Sources */,
@@ -631,7 +639,6 @@
 				08A1EF4E2B2604D000A88A3A /* UserMessageView.swift in Sources */,
 				E4C65EA429CA9E7E00AFA884 /* Persistence.swift in Sources */,
 				08376D812B7CF0D1003258D1 /* ImageSave.swift in Sources */,
-				083983532B9D51A500A46A84 /* CustomImportedImageView.swift in Sources */,
 				08D533342B2C2ED9008B4FA9 /* MessageMarkdownView.swift in Sources */,
 				087AC1982B6D40A7006B9386 /* EditingView.swift in Sources */,
 				0837E47D2AFE57A100C03059 /* IosDefaultConfigView.swift in Sources */,
@@ -909,14 +916,6 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		081E75432BFBD0E30041C24A /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.3.0;
-			};
-		};
 		083495A02BA869D50009E271 /* XCRemoteSwiftPackageReference "reeeed" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nate-parrott/reeeed";
@@ -941,6 +940,22 @@
 				kind = branch;
 			};
 		};
+		084275F72C1AB39B00C2B578 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/electricsidecar-dev/swift-markdown-ui.git";
+			requirement = {
+				branch = recursive;
+				kind = branch;
+			};
+		};
+		084275FD2C1AC60400C2B578 /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		08545C382B8D0DD500592108 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
@@ -954,14 +969,6 @@
 			repositoryURL = "https://github.com/SilverMarcs/swiftui-image-viewer";
 			requirement = {
 				branch = main;
-				kind = branch;
-			};
-		};
-		08896BB32C0CAD6F00ED02E7 /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
-			requirement = {
-				branch = master;
 				kind = branch;
 			};
 		};
@@ -988,11 +995,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 081ABA662BF9A412005029C7 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
-		};
-		081E75442BFBD0E30041C24A /* MarkdownUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 081E75432BFBD0E30041C24A /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
-			productName = MarkdownUI;
 		};
 		0820F2592BFA0F2C0051C8A2 /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1021,6 +1023,20 @@
 			package = 083E3B172B3A67B9007BE19E /* XCRemoteSwiftPackageReference "VisualEffectView" */;
 			productName = VisualEffectView;
 		};
+		084275F82C1AB39B00C2B578 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 084275F72C1AB39B00C2B578 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
+		};
+		084275FB2C1AC4E800C2B578 /* MarkdownWebView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MarkdownWebView;
+		};
+		084275FE2C1AC60400C2B578 /* MarkdownWebView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 084275FD2C1AC60400C2B578 /* XCRemoteSwiftPackageReference "markdown-webview" */;
+			productName = MarkdownWebView;
+		};
 		08545C392B8D0DD500592108 /* SwiftSoup */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 08545C382B8D0DD500592108 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
@@ -1038,11 +1054,6 @@
 		0883CFE32B98B174004A6FEA /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
-		};
-		08896BB42C0CAD6F00ED02E7 /* MarkdownWebView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08896BB32C0CAD6F00ED02E7 /* XCRemoteSwiftPackageReference "markdown-webview" */;
-			productName = MarkdownWebView;
 		};
 		08983F1E2C0CDEBE00F52F70 /* Splash */ = {
 			isa = XCSwiftPackageProductDependency;

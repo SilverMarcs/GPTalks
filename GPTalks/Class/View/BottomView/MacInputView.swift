@@ -5,10 +5,8 @@
 //  Created by Zabir Raihan on 10/03/2024..
 //
 
-import PDFKit
-import PhotosUI
-import QuickLook
 import SwiftUI
+import UniformTypeIdentifiers
 
 #if os(macOS)
 struct MacInputView: View {
@@ -16,36 +14,27 @@ struct MacInputView: View {
     
     @Bindable var session: DialogueSession
     
-    @State private var importingImage = false
-    @State private var importingAudio = false
-    @State private var showMore = false
-    
-    @State var selectedItems: [PhotosPickerItem] = []
+    @State private var importingFiles = false
     
     var body: some View {
         HStack(alignment: .bottom, spacing: 12) {
             Group {
-                moreOptions
+                selectFilesButton
                 
                 editControls
             }
-            .offset(y: -1.15)
+            .offset(y: -2)
             
             CustomTextEditorView(session: session)
             
             Group {
                 if session.isReplying {
-                    StopButton(size: imageSize) { session.stopStreaming() }
+                    StopButton(size: imageSize - 1) { session.stopStreaming() }
                 } else {
-                    SendButton(size: imageSize) { Task { @MainActor in viewModel.moveUpChat(session: session); await session.sendAppropriate() } }
+                    SendButton(size: imageSize - 1) { Task { @MainActor in viewModel.moveUpChat(session: session); await session.sendAppropriate() } }
                 }
             }
-            .offset(y: -1.15)
-        }
-        .onChange(of: session.input) {
-            if session.input.count > 3 {
-                showMore = false
-            }
+            .offset(y: -2)
         }
         .animation(.default, value: session.inputImages)
         .animation(.default, value: session.editingImages)
@@ -54,51 +43,63 @@ struct MacInputView: View {
         .animation(.default, value: session.inputAudioPath)
         .animation(.default, value: session.editingAudioPath)
         .animation(.default, value: session.isEditing)
-        .animation(.default, value: showMore)
         .buttonStyle(.plain)
         .padding(.horizontal)
         .padding(.top, verticalPadding - 2)
         .padding(.bottom, verticalPadding + 2)
-    }
-    
-    var moreOptions: some View {
-        toggleButton
-            .overlay(
-                Group {
-                    if showMore {
-                        VStack {
-                            CustomAudioPickerView(session: session, showMore: $showMore)
-                            CustomPDFPickerView(session: session, showMore: $showMore, imageSize: 25, padding: 7)
-                            CustomImagePickerView(session: session, showMore: $showMore)
-                            toggleButton
-                        }
-                        .padding(5)
-                        .background(.thickMaterial)
-                        .cornerRadius(15)
-//                        .roundedRectangleOverlay(opacity: 0.5)
-//                        .shadow(radius: 2, y: 1)
-                        .offset(x: 0, y: 5) // Adjust this value as needed
-                    }
-                }, alignment: .bottom
-            )
-    }
-    
-    @ViewBuilder
-    var toggleButton: some View {
-        var degree: Double {
-            showMore ? 45 : 0
+        .generalizedFileImporter(isPresented: $importingFiles) { urls in
+            handleSelectedFiles(urls)
         }
-        
+    }
+    
+    var selectFilesButton: some View {
         Button {
-            withAnimation {
-                showMore.toggle()
-            }
+            importingFiles = true
         } label: {
             Image(systemName: "plus")
                 .resizable()
-                .inputImageStyle(padding: 6, imageSize: imageSize)
-                .rotationEffect(.degrees(degree))
+                .inputImageStyle(padding: 6, imageSize: imageSize - 1)
         }
+    }
+       
+    func handleSelectedFiles(_ urls: [URL]) {
+        for url in urls {
+            if let type = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType {
+                if type.conforms(to: .audio) {
+                    handleAudioFile(url)
+                } else if type.conforms(to: .pdf) {
+                    handlePDFFile(url)
+                } else if type.conforms(to: .image) {
+                    handleImageFile(url)
+                }
+            }
+        }
+    }
+   
+    func handleAudioFile(_ url: URL) {
+        var currentAudioPath: Binding<String> {
+            session.isEditing ? $session.editingAudioPath : $session.inputAudioPath
+        }
+       
+        currentAudioPath.wrappedValue = url.absoluteString
+        session.configuration.useTranscribe = true
+    }
+   
+    func handlePDFFile(_ url: URL) {
+        var currentPDFPath: Binding<String> {
+            session.isEditing ? $session.editingPDFPath : $session.inputPDFPath
+        }
+       
+        currentPDFPath.wrappedValue = url.absoluteString
+        session.configuration.useExtractPdf = true
+    }
+   
+    func handleImageFile(_ url: URL) {
+        var currentImages: Binding<[String]> {
+            session.isEditing ? $session.editingImages : $session.inputImages
+        }
+        
+        currentImages.wrappedValue.append(url.absoluteString)
     }
     
     @ViewBuilder
@@ -109,7 +110,7 @@ struct MacInputView: View {
             } label: {
                 Image(systemName: "plus")
                     .resizable()
-                    .inputImageStyle(padding: 6, imageSize: imageSize, color: .red)
+                    .inputImageStyle(padding: 6, imageSize: imageSize - 1, color: .red)
                     .rotationEffect(.degrees(45))
             }
             .keyboardShortcut(.cancelAction)

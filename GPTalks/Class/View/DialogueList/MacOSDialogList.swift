@@ -32,7 +32,7 @@ struct MacOSDialogList: View {
                     }
                     .accentColor(Color("niceColorLighter"))
                     .animation(.default, value: viewModel.searchText)
-                    .padding(.top, -10)
+//                    .padding(.top, -10)
                     .onChange(of: viewModel.currentDialogues.count) {
                         if viewModel.currentDialogues.count > previousActiveDialoguesCount {
                             if !viewModel.currentDialogues.isEmpty {
@@ -55,33 +55,35 @@ struct MacOSDialogList: View {
         }
         .frame(minWidth: 280)
         .toolbar {
-            Spacer()
-
-            Picker("Select State", selection: $viewModel.selectedState) {
-                ForEach(ContentState.allCases) { state in
-                    Text(state.rawValue).tag(state)
+            ToolbarItemGroup {
+                Spacer()
+                
+                Picker("Select State", selection: $viewModel.selectedState) {
+                    ForEach(ContentState.allCases) { state in
+                        Text(state.rawValue).tag(state)
+                    }
                 }
+                
+                Spacer()
+                
+                Button {
+                    viewModel.addDialogue()
+                } label: {
+                    Image(systemName: "square.and.pencil")
+                }
+                .keyboardShortcut("n", modifiers: .command)
             }
-
-            Spacer()
-
-            Button {
-                viewModel.addDialogue()
-            } label: {
-                Image(systemName: "square.and.pencil")
-            }
-            .keyboardShortcut("n", modifiers: .command)
             
-            Button("h") {
-                viewModel.deleteSelectedDialogues()
+            ToolbarItem(placement: .keyboard) {
+                Button("h") {
+                    viewModel.deleteSelectedDialogues()
+                }
+                .keyboardShortcut(.delete, modifiers: .command)
+                .hidden()
+                .disabled(viewModel.selectedDialogues.count < 2)
             }
-            .keyboardShortcut(.delete, modifiers: .command)
-            .hidden()
-            .disabled(viewModel.selectedDialogues.count < 2)
         }
-        .listStyle(.inset)
-        .scrollContentBackground(.hidden)
-//        .searchable(text: $viewModel.searchText, placement: .toolbar)
+        .listStyle(.sidebar)
     }
 }
 
@@ -115,15 +117,10 @@ struct SearchField: NSViewRepresentable {
             textField.heightAnchor.constraint(equalToConstant: height)
         ])
 
-//        // Customize the search and cancel button colors
-//        if let cell = textField.cell as? NSSearchFieldCell {
-//            if let searchButton = cell.searchButtonCell {
-//                searchButton.image = tintedImage(named: "magnifyingglass", color: .slightlyBrighterSecondaryLabelColor)
-//            }
-//            if let cancelButton = cell.cancelButtonCell {
-//                cancelButton.image = tintedImage(named: "xmark.circle.fill", color: .slightlyBrighterSecondaryLabelColor)
-//            }
-//        }
+        // Add keyboard shortcut listener
+        let shortcutListener = ShortcutListener(searchField: textField)
+        context.coordinator.shortcutListener = shortcutListener
+        shortcutListener.startListening()
 
         return textField
     }
@@ -135,6 +132,7 @@ struct SearchField: NSViewRepresentable {
     class Coordinator: NSObject, NSSearchFieldDelegate {
         let binding: Binding<String>
         let onClear: () -> Void
+        var shortcutListener: ShortcutListener?
 
         init(binding: Binding<String>, onClear: @escaping () -> Void) {
             self.binding = binding
@@ -151,27 +149,25 @@ struct SearchField: NSViewRepresentable {
             }
         }
     }
+}
 
-    private func tintedImage(named: String, color: NSColor) -> NSImage? {
-//        guard let image = NSImage(named: named) else { return nil }
-        guard let image = NSImage(systemSymbolName: named, accessibilityDescription: nil) else { return nil }
-        let tintedImage = NSImage(size: image.size)
+class ShortcutListener {
+    weak var searchField: NSSearchField?
 
-        tintedImage.lockFocus()
-        let imageRect = NSRect(origin: .zero, size: image.size)
-        image.draw(in: imageRect, from: .zero, operation: .sourceOver, fraction: 1.0)
-        color.set()
-        imageRect.fill(using: .sourceAtop)
-        tintedImage.unlockFocus()
+    init(searchField: NSSearchField) {
+        self.searchField = searchField
+    }
 
-        return tintedImage
-    
+    func startListening() {
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self = self else { return event }
+            if event.modifierFlags.contains(.command) && event.characters == "f" {
+                self.searchField?.becomeFirstResponder()
+                return nil
+            }
+            return event
+        }
     }
 }
 
-extension NSColor {
-    static var slightlyBrighterSecondaryLabelColor: NSColor {
-        return NSColor.secondaryLabelColor.blended(withFraction: 0.2, of: .white) ?? .secondaryLabelColor
-    }
-}
 #endif

@@ -1,5 +1,5 @@
 {
-  "originHash" : "b87e9ea547b3ecf8855099523960303a16243500f26823fd0853f450fcdcae8e",
+  "originHash" : "e794bc237fccdd0e476122da544f185d35248d7af5de742f72d964e30411959a",
   "pins" : [
     {
       "identity" : "fuzi",
@@ -34,7 +34,7 @@
       "location" : "https://github.com/SilverMarcs/markdown-webview",
       "state" : {
         "branch" : "master",
-        "revision" : "0f4fea2d171f618b9d54c9698f7e6988820b6f25"
+        "revision" : "c3790a8b2cb301eacbf9ec3ba2449c958c36ee70"
       }
     },
     {
@@ -76,10 +76,10 @@
     {
       "identity" : "swift-markdown-ui",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gonzalezreal/swift-markdown-ui",
+      "location" : "https://github.com/electricsidecar-dev/swift-markdown-ui.git",
       "state" : {
-        "revision" : "ae799d015a5374708f7b4c85f3294c05f2a564e2",
-        "version" : "2.3.0"
+        "branch" : "recursive",
+        "revision" : "f0d1b7fe722e6eda41db2e56f75529956ffa42fa"
       }
     },
     {

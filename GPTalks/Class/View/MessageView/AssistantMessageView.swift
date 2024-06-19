@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import MarkdownWebView
 
 struct AssistantMessageView: View {
-    @Environment (\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) var colorScheme
     
     @Environment(DialogueViewModel.self) private var viewModel
     var conversation: Conversation
@@ -77,7 +78,8 @@ struct AssistantMessageView: View {
                         } else {
 //                            Group {
                                 if AppConfiguration.shared.isMarkdownEnabled {
-                                    MessageMarkdownView(text: conversation.content)
+//                                    MessageMarkdownView(text: conversation.content)
+                                    MarkdownWebView(conversation.content)
                                 } else {
                                     Text(conversation.content)
                                 }
@@ -122,7 +124,7 @@ struct AssistantMessageView: View {
         #if os(macOS)
         .padding(.horizontal, 8)
 //        .background(.background.tertiary)
-        .background(isQuick ? .regularMaterial : .ultraThickMaterial)
+        .background(isQuick ? .regularMaterial :  (colorScheme == .dark ? .ultraThickMaterial : .ultraThinMaterial))
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.4) : .clear)
         #else
         .background(conversation.content.localizedCaseInsensitiveContains(viewModel.searchText) ? .yellow.opacity(0.1) : .clear)
