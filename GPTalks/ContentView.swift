@@ -50,10 +50,12 @@ struct ContentView: View {
                    switch scenePhase {
                    case .active:
                        if viewModel.selectedDialogue == nil {
-                           if let first = viewModel.allDialogues.first, first.conversations.isEmpty {
-                               viewModel.selectedDialogue = viewModel.allDialogues.first
-                           } else {
-                               viewModel.addDialogue()
+                           withAnimation {
+                               if let first = viewModel.allDialogues.first, first.conversations.isEmpty {
+                                   viewModel.selectedDialogue = viewModel.allDialogues.first
+                               } else {
+                                   viewModel.addDialogue()
+                               }
                            }
                        }
                    case .inactive, .background:

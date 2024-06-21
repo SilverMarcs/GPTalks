@@ -620,9 +620,13 @@ import OpenAI
                 
                 let lastToolCall = appendConversation(Conversation(role: .tool, content: "", toolRawValue: chatTool.rawValue, isReplying: true))
                 
-                let searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
+                let searchResult: String
                 
-//                let searchResult = await fetchSearchResults(for: searchQuery) // v v v expensive
+                if AppConfiguration.shared.alternateSearch {
+                    searchResult = await fetchSearchResultsConcise(for: searchQuery) // v v v expensive
+                } else {
+                    searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
+                }
                 
                 conversations[conversations.count - 1].content = searchResult
                 lastToolCall.sync(with: conversations[conversations.count - 1])

@@ -251,6 +251,8 @@ struct GoogleSearchConfigurationView: View {
             Form {
                 Toggle("Enable Google Search", isOn: $appConfig.isGoogleSearchEnabled)
                 
+                Toggle("Alternate Search (Experimental)", isOn: $appConfig.alternateSearch)
+                
                 TextField("API Key", text: appConfig.$googleApiKey)
                 
                 TextField("Engine ID", text: appConfig.$googleSearchEngineId)

@@ -32,6 +32,7 @@ class AppConfiguration: ObservableObject {
     @AppStorage("configuration.isVisionEnabled") var isVisionEnabled: Bool = true
     
     // Google Search
+    @AppStorage("configuration.alternateSearch") var alternateSearch: Bool = false
     @AppStorage("configuration.googleApiKey") var googleApiKey = ""
     @AppStorage("configuration.googleSearchEngineId") var googleSearchEngineId = ""
     
