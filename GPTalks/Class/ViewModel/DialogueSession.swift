@@ -623,7 +623,8 @@ import OpenAI
                 let searchResult: String
                 
                 if AppConfiguration.shared.alternateSearch {
-                    searchResult = await fetchSearchResultsConcise(for: searchQuery) // v v v expensive
+//                    searchResult = await fetchSearchResultsConcise(for: searchQuery) // v v v expensive
+                    searchResult = await fetchFilteredSearchResults(for: searchQuery) // v v v expensive
                 } else {
                     searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
                 }

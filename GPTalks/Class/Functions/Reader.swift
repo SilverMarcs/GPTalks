@@ -114,6 +114,50 @@ func fetchSearchResultsConcise(for query: String, truncateRemaining: Bool = true
     }
 }
 
+
+func fetchFilteredSearchResults(for query: String) async -> String {
+    do {
+        let formattedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        guard let url = URL(string: "https://s.jina.ai/\(formattedQuery)") else {
+            throw URLError(.badURL)
+        }
+        
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        //        request.setValue("true", forHTTPHeaderField: "X-With-Generated-Alt")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw URLError(.badServerResponse)
+        }
+        
+        let decoder = JSONDecoder()
+        let responseData = try decoder.decode(SearchResponseData.self, from: data)
+        
+        // Filter out entries from Wikipedia and Reddit
+        let filteredData = responseData.data.filter { dataContent in
+            !(dataContent.url.contains("wikipedia.org") || dataContent.url.contains("reddit.com"))
+        }
+        
+        let firstTwoResults = Array(filteredData.prefix(3))
+        
+        let formattedResults = firstTwoResults.map { dataContent in
+            """
+            Title: \(dataContent.title)
+            \nURL: \(dataContent.url)
+            \nContent: \(dataContent.content)
+            \nDescription: \(dataContent.description)
+            """
+        }
+        
+        return formattedResults.joined(separator: "\n\n")
+    } catch {
+        return "An error occurred fetching the search results. Error: \(error)"
+    }
+}
+
+
 struct ResponseData: Codable {
     let code: Int
     let status: Int
