@@ -26,7 +26,9 @@ struct ConversationView: View {
                 case .assistant:
                     AssistantMessageView(conversation: conversation, session: session, isQuick: isQuick)
                 case .tool:
-                    ToolCallView(conversation: conversation, session: session)
+                        ToolCallView(conversation: conversation, session: session) {
+                            scrollToMessageTop()
+                        }
                 case .system:
                     // never coming here
                     Text(conversation.content)

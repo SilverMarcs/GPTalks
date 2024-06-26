@@ -14,6 +14,7 @@ struct ToolCallView: View {
     
     var conversation: Conversation
     var session: DialogueSession
+    var scrollToMessageTop: () -> Void?
     
     @State var isHovered = false
     @State var hoverxyz = false
@@ -97,6 +98,7 @@ struct ToolCallView: View {
                     if !conversation.isReplying {
                         withAnimation {
                             isExpanded.toggle()
+                            scrollToMessageTop()
                         }
                     }
                 })
