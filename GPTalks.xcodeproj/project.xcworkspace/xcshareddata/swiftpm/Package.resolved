@@ -1,5 +1,5 @@
 {
-  "originHash" : "7dcf039eecf2c386122f8517797268df1c1d6d061944cc2a95d375b746e7cf50",
+  "originHash" : "fb4a931a647086a8e82029c78646c6cf001f7ac59403edda19ed1c5f38370bf4",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -53,6 +53,15 @@
       "state" : {
         "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
         "version" : "509.1.1"
+      }
+    },
+    {
+      "identity" : "swiftanthropic",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
+      "state" : {
+        "revision" : "7fecba04ab44cf2acacc239f4198facf1b072df3",
+        "version" : "1.6.0"
       }
     }
   ],

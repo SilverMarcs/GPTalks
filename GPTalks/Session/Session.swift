@@ -103,7 +103,8 @@ final class Session {
             }
         }
         
-        let stream = StreamManager.streamResponse(from: updatedConversationGroups, config: config)
+        let streamManager = StreamManager(config: config)
+        let stream = streamManager.streamResponse(from: updatedConversationGroups)
         
         let assistant: Conversation
         if isRegen {
@@ -190,14 +191,21 @@ final class Session {
     
     func deleteConversation(at indexSet: IndexSet) {
         groups.remove(atOffsets: indexSet)
+        if groups.count == 0 {
+            errorMessage = ""
+        }
     }
     
     func deleteConversationGroup(_ conversationGroup: ConversationGroup) {
         groups.removeAll(where: { $0 == conversationGroup })
+        if groups.count == 0 {
+            errorMessage = ""
+        }
     }
     
     func deleteAllConversations() {
         groups.removeAll()
+        errorMessage = ""
     }
     
     func moveConversation(from source: IndexSet, to destination: Int) {

@@ -49,7 +49,10 @@ extension Model {
     
     static func getClaudeModels() -> [Model] {
         return [
-            Model(code: "claude-3.5-sonnet", name: "Claude-3.5S"),
+            Model(code: "claude-3-opus-20240229", name: "Claude-3O"),
+            Model(code: "claude-3-sonnet-20240229", name: "Claude-3S"),
+            Model(code: "claude-3-haiku-20240307", name: "Claude-3H"),
+            Model(code: "claude-3-5-sonnet-20240620", name: "Claude-3.5S"),
         ]
     }
     

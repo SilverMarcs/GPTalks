@@ -11,6 +11,7 @@ import Foundation
 import SwiftData
 import OpenAI
 import GoogleGenerativeAI
+import SwiftAnthropic
 
 @Model
 final class Conversation: NSCopying {
@@ -66,10 +67,10 @@ final class Conversation: NSCopying {
         switch self.role {
         case .user:
             role = "user"
-        case .system:
-            role = "system"
         case .assistant:
-            role = "assistant"
+            role = "model"
+        case .system:
+            role = "user"
         case .tool:
             role = "tool"
         }
@@ -82,7 +83,27 @@ final class Conversation: NSCopying {
         return message
     }
     
+    func toClaude() -> MessageParameter.Message {
+        var role: MessageParameter.Message.Role
+        switch self.role {
+        case .user:
+            role = .user
+        case .assistant:
+            role = .assistant
+        case .system, .tool:
+            role = .assistant
+        }
+        
+        let message = MessageParameter.Message(
+            role: role,
+            content: .text(content)
+        )
+        
+        return message
+    }
+    
     func deleteSelf() {
         group?.deleteConversation(self)
     }
 }
+

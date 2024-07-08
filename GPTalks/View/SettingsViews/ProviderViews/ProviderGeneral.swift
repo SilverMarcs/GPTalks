@@ -21,12 +21,8 @@ struct ProviderGeneral: View {
             }
             
             Section("Host Settings") {
-                if provider.type == .google {
-                    TextField("Host URL", text: .constant("generativelanguage.googleapis.com"))
-                        .disabled(true)
-                } else {
-                    TextField("Host URL", text: $provider.host)
-                }
+                TextField("Host URL", text: $provider.host)
+                
                 SecureField("API Key", text: $provider.apiKey)
             }
 
@@ -41,6 +37,15 @@ struct ProviderGeneral: View {
                 Picker("Type", selection: $provider.type) {
                     ForEach(ProviderType.allCases, id: \.self) { type in
                         Text(type.name).tag(type)
+                    }
+                }
+                .onChange(of: provider.type) {
+                    if provider.type == .google {
+                        provider.host = "generativelanguage.googleapis.com"
+                    } else if provider.type == .openai {
+                        provider.host = "api.openai.com"
+                    } else if provider.type == .claude {
+                        provider.host = "api.anthropic.com"
                     }
                 }
             }

@@ -51,6 +51,7 @@
 		08A222C42C2AC6B300D76C8B /* ConversationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222C32C2AC6B300D76C8B /* ConversationList.swift */; };
 		08A222CB2C2AD08A00D76C8B /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08A222CA2C2AD08A00D76C8B /* OpenAI */; };
 		08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */; };
+		08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB8F2C3C735A002C04E0 /* SwiftAnthropic */; };
 		08C800322C36AE1D009581C5 /* SessionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800312C36AE1D009581C5 /* SessionList.swift */; };
 		08C800372C36B8CC009581C5 /* SessionListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800362C36B8CC009581C5 /* SessionListItem.swift */; };
 		08C8003A2C36BA30009581C5 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800392C36BA30009581C5 /* InputView.swift */; };
@@ -153,6 +154,7 @@
 				08A222CB2C2AD08A00D76C8B /* OpenAI in Frameworks */,
 				081C1D902C3B916D0078BB24 /* IsScrolling in Frameworks */,
 				081637762C3542CA00C7DE52 /* MarkdownWebView in Frameworks */,
+				08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */,
 				08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -403,6 +405,7 @@
 				081637752C3542CA00C7DE52 /* MarkdownWebView */,
 				081C1D8F2C3B916D0078BB24 /* IsScrolling */,
 				08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */,
+				08AAFB8F2C3C735A002C04E0 /* SwiftAnthropic */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -482,6 +485,7 @@
 				08CFA5A52C35D0C40052AA1B /* XCRemoteSwiftPackageReference "OrderedRelationship" */,
 				081C1D8E2C3B916D0078BB24 /* XCRemoteSwiftPackageReference "IsScrolling" */,
 				08F369E42C3C2CF8002E4A35 /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
+				08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -960,6 +964,14 @@
 				kind = branch;
 			};
 		};
+		08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jamesrochabrun/SwiftAnthropic";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
 		08CFA5A52C35D0C40052AA1B /* XCRemoteSwiftPackageReference "OrderedRelationship" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/FiveSheepCo/OrderedRelationship";
@@ -997,6 +1009,11 @@
 		08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GoogleGenerativeAI;
+		};
+		08AAFB8F2C3C735A002C04E0 /* SwiftAnthropic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */;
+			productName = SwiftAnthropic;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
