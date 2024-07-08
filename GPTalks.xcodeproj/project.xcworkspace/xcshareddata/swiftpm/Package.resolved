@@ -1,0 +1,51 @@
+{
+  "originHash" : "675ee0b49b0a9b79838f567afe4ce2d999d77363b70eef8ed99d1e775a12d429",
+  "pins" : [
+    {
+      "identity" : "isscrolling",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/fatbobman/IsScrolling",
+      "state" : {
+        "revision" : "7def8d8f789a326b6f725a76cee8ec3fa69511df",
+        "version" : "1.1.2"
+      }
+    },
+    {
+      "identity" : "markdown-webview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/markdown-webview",
+      "state" : {
+        "branch" : "master",
+        "revision" : "537b128d06411ccfd75323b91aad1c8d0f5cb064"
+      }
+    },
+    {
+      "identity" : "openai",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/OpenAI",
+      "state" : {
+        "branch" : "cancellable",
+        "revision" : "7593b8be724d56ab845f70bf5177226215d48dec"
+      }
+    },
+    {
+      "identity" : "orderedrelationship",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/FiveSheepCo/OrderedRelationship",
+      "state" : {
+        "revision" : "005c59db5b2569c4eb7b7b05394b85773981d88c",
+        "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-syntax.git",
+      "state" : {
+        "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
+        "version" : "509.1.1"
+      }
+    }
+  ],
+  "version" : 3
+}
