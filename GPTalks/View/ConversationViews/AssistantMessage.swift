@@ -67,8 +67,6 @@ struct AssistantMessage: View {
 }
 
 #Preview {
-    let session = Session()
-    
     let codeBlock = """
     This is a code block
     

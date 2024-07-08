@@ -47,6 +47,9 @@ struct ConversationListToolbar: ToolbarContent {
                     Text(model.name)
                 }
             }
+            .onChange(of: session.config.provider) {
+                session.config.model = session.config.provider.chatModel
+            }
             .frame(maxWidth: 150)
         }
         

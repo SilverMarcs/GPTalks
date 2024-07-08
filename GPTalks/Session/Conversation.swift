@@ -10,6 +10,7 @@ import Foundation
 import Foundation
 import SwiftData
 import OpenAI
+import GoogleGenerativeAI
 
 @Model
 final class Conversation: NSCopying {
@@ -48,7 +49,7 @@ final class Conversation: NSCopying {
         self.model = model
     }
     
-    func toQuery() -> ChatQuery.ChatCompletionMessageParam {
+    func toOpenAI() -> ChatQuery.ChatCompletionMessageParam {
         let query = ChatQuery.ChatCompletionMessageParam(
             role: role,
             content: content
@@ -58,6 +59,27 @@ final class Conversation: NSCopying {
         } else {
             fatalError("Could not create query")
         }
+    }
+    
+    func toGoogle() -> ModelContent {
+        var role: String
+        switch self.role {
+        case .user:
+            role = "user"
+        case .system:
+            role = "system"
+        case .assistant:
+            role = "assistant"
+        case .tool:
+            role = "tool"
+        }
+        
+        let message = ModelContent(
+            role: role,
+            parts: [.text(content)]
+        )
+        
+        return message
     }
     
     func deleteSelf() {

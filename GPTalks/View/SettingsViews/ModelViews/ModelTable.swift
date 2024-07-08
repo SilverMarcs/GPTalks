@@ -55,6 +55,12 @@ struct ModelTable: View {
                     Text("Add Claude Models")
                 }
                 
+                Button {
+                    provider.addGoogleModels()
+                } label: {
+                    Text("Add Google Models")
+                }
+                
             } label: {
                 Label("Add", systemImage: "ellipsis.circle")
             }

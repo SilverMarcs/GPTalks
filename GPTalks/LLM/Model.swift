@@ -31,11 +31,13 @@ final class Model {
     func removeSelf() {
         provider?.models.removeAll(where: { $0.id == id })
     }
+}
 
+extension Model {
     static func getDemoModel() -> Model {
         return Model(code: "gpt-3.5-turbo", name: "GPT-3.5T")
     }
-
+    
     static func getOpenaiModels() -> [Model] {
         return [
             Model(code: "gpt-3.5-turbo", name: "GPT-3.5T"),
@@ -48,6 +50,14 @@ final class Model {
     static func getClaudeModels() -> [Model] {
         return [
             Model(code: "claude-3.5-sonnet", name: "Claude-3.5S"),
+        ]
+    }
+    
+    static func getGoogleModels() -> [Model] {
+        return [
+            Model(code: "gemini-1.5-pro", name: "Gemini-1.5P"),
+            Model(code: "gemini-1.5-flash", name: "Gemini-1.5F"),
+            Model(code: "gemini-1.0-pro", name: "Gemini-1.0P"),
         ]
     }
 }

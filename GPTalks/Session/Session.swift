@@ -87,7 +87,6 @@ final class Session {
         let uiUpdateInterval = TimeInterval(0.1)
         var lastUIUpdateTime = Date()
         
-//        var updatedConversationGroups = conversationGroups
         var updatedConversationGroups = groups.map { $0.copy() as! ConversationGroup }
         
         if isRegen {
