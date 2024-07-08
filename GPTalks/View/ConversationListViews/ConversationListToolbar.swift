@@ -50,7 +50,7 @@ struct ConversationListToolbar: ToolbarContent {
             .onChange(of: session.config.provider) {
                 session.config.model = session.config.provider.chatModel
             }
-            .frame(maxWidth: 150)
+            .frame(width: 110)
         }
         
         ToolbarItem(placement: .automatic) {

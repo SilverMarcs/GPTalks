@@ -51,7 +51,10 @@ struct SessionList: View {
             }
             .onChange(of: sessions.count) {
                 if sessions.count > prevCount {
-                    proxy.scrollTo(sessions.first, anchor: .top)
+                    if let first = sessions.first {
+                        sessionVM.selections = [first]
+                        proxy.scrollTo(first, anchor: .top)
+                    }
                 }
             }
             .onAppear {

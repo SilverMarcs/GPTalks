@@ -15,8 +15,8 @@ struct UserMessage: View {
         VStack(alignment: .trailing, spacing: 4) {
             Text(conversation.content)
                 .textSelection(.enabled)
-                .padding(.vertical, 8)
-                .padding(.horizontal, 10)
+                .padding(.vertical, 9)
+                .padding(.horizontal, 11)
                 .background(
                     RoundedRectangle(cornerRadius: 15)
                         .fill(.background.quinary)

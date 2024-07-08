@@ -51,7 +51,7 @@ struct ProviderGeneral: View {
     
     private var header: some View {
         HStack {
-            ProviderImage(color: Color(hex: provider.color))
+            ProviderImage(color: Color(hex: provider.color), frame: 33)
 
             TextEditor(text: $provider.name)
                 .textEditorStyle(.plain)

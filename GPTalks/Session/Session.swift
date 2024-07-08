@@ -183,7 +183,6 @@ final class Session {
     @discardableResult
     func addConversationGroup(conversation: Conversation) -> Conversation {
         let group = ConversationGroup(conversation: conversation, session: self)
-//        conversation.group = group
 
         groups.append(group)
         return conversation

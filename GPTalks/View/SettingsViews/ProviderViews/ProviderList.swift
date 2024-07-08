@@ -27,7 +27,9 @@ struct ProviderList: View {
             }
             .onAppear {
                 DispatchQueue.main.async {
-                    selectedProvider = providers.first
+                    if selectedProvider == nil {
+                        selectedProvider = providers.first
+                    }
                 }
             }
             .safeAreaInset(edge: .bottom) {
