@@ -52,6 +52,14 @@ class Provider {
         }
     }
     
+    func addGoogleModels() {
+        for model in Model.getGoogleModels() {
+            if !models.contains(where: { $0.code == model.code }) {
+                models.append(model)
+            }
+        }
+    }
+    
     static func getDemoProvider() -> Provider {
         let provider = Provider(name: "OpenAI", host: "api.openai.com", apiKey: "")
         provider.addOpenAIModels()
@@ -60,47 +68,3 @@ class Provider {
         return provider
     }
 }
-
-enum ProviderType: Codable, CaseIterable, Identifiable {
-    case openai
-    case claude
-    case google
-    
-    var id: ProviderType { self }
-    
-    var name: String {
-        switch self {
-        case .openai: "OpenAI"
-        case .claude: "Claude"
-        case .google: "Google"
-        }
-    }
-}
-
-import SwiftUI
-
-//@Model
-//class ColorComponents {
-//    let red: Float = 1.0
-//    let green: Float = 1.0
-//    let blue: Float = 1.0
-//    let opacity: Float = 1.0
-//    
-//    init() {}
-//    
-//    init(color: Color.Resolved) {
-//        self.red = color.red
-//        self.green = color.green
-//        self.blue = color.blue
-//        self.opacity = color.opacity
-//    }
-//    
-//    var color: Color {
-//        Color(red: Double(red), green: Double(green), blue: Double(blue))
-//    }
-//    
-//    static func fromColor(_ color: Color) -> ColorComponents {
-//        let resolved = color.resolve(in: EnvironmentValues())
-//        return ColorComponents(color: resolved)
-//    }
-//}

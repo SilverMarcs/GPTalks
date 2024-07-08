@@ -18,7 +18,12 @@ struct ProviderGeneral: View {
         Form {
             Section("Host Settings") {
                 TextField("Name", text: $provider.name)
-                TextField("Host", text: $provider.host)
+                if provider.type == .google {
+                    TextField("Host URL", text: .constant("generativelanguage.googleapis.com"))
+                        .disabled(true)
+                } else {
+                    TextField("Host URL", text: $provider.host)
+                }
                 SecureField("API Key", text: $provider.apiKey)
             }
 

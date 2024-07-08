@@ -50,6 +50,7 @@
 		08A222C12C2ABE5C00D76C8B /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222C02C2ABE5C00D76C8B /* Conversation.swift */; };
 		08A222C42C2AC6B300D76C8B /* ConversationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222C32C2AC6B300D76C8B /* ConversationList.swift */; };
 		08A222CB2C2AD08A00D76C8B /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08A222CA2C2AD08A00D76C8B /* OpenAI */; };
+		08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */; };
 		08C800322C36AE1D009581C5 /* SessionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800312C36AE1D009581C5 /* SessionList.swift */; };
 		08C800372C36B8CC009581C5 /* SessionListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800362C36B8CC009581C5 /* SessionListItem.swift */; };
 		08C8003A2C36BA30009581C5 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800392C36BA30009581C5 /* InputView.swift */; };
@@ -63,6 +64,7 @@
 		08C800552C36F82B009581C5 /* ProviderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800542C36F82B009581C5 /* ProviderList.swift */; };
 		08C800572C36F843009581C5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800562C36F843009581C5 /* SettingsView.swift */; };
 		08C800592C370A30009581C5 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800582C370A30009581C5 /* Model.swift */; };
+		08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F369E22C3C278E002E4A35 /* ProviderType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,6 +142,7 @@
 		08C800542C36F82B009581C5 /* ProviderList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderList.swift; sourceTree = "<group>"; };
 		08C800562C36F843009581C5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		08C800582C370A30009581C5 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		08F369E22C3C278E002E4A35 /* ProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +153,7 @@
 				08A222CB2C2AD08A00D76C8B /* OpenAI in Frameworks */,
 				081C1D902C3B916D0078BB24 /* IsScrolling in Frameworks */,
 				081637762C3542CA00C7DE52 /* MarkdownWebView in Frameworks */,
+				08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,6 +364,7 @@
 				08C800582C370A30009581C5 /* Model.swift */,
 				082181512C38046800171BF3 /* ProviderManager.swift */,
 				0893B2032C396A7C00D4D501 /* ProviderStream.swift */,
+				08F369E22C3C278E002E4A35 /* ProviderType.swift */,
 			);
 			path = LLM;
 			sourceTree = "<group>";
@@ -397,6 +402,7 @@
 				08A222CA2C2AD08A00D76C8B /* OpenAI */,
 				081637752C3542CA00C7DE52 /* MarkdownWebView */,
 				081C1D8F2C3B916D0078BB24 /* IsScrolling */,
+				08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -475,6 +481,7 @@
 				0873CBEA2C353D8400D9CAEB /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				08CFA5A52C35D0C40052AA1B /* XCRemoteSwiftPackageReference "OrderedRelationship" */,
 				081C1D8E2C3B916D0078BB24 /* XCRemoteSwiftPackageReference "IsScrolling" */,
+				08F369E42C3C2CF8002E4A35 /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -551,6 +558,7 @@
 				08C8003D2C36BCAB009581C5 /* ConversationListToolbar.swift in Sources */,
 				08A222832C2AB4FD00D76C8B /* GPTalksApp.swift in Sources */,
 				08C8003A2C36BA30009581C5 /* InputView.swift in Sources */,
+				08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */,
 				08C800322C36AE1D009581C5 /* SessionList.swift in Sources */,
 				08C8004B2C36E658009581C5 /* ConversationListDetail.swift in Sources */,
 				0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */,
@@ -960,6 +968,14 @@
 				minimumVersion = 1.1.0;
 			};
 		};
+		08F369E42C3C2CF8002E4A35 /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/longseespace/generative-ai-swift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -977,6 +993,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 08A222C92C2AD08A00D76C8B /* XCRemoteSwiftPackageReference "OpenAI" */;
 			productName = OpenAI;
+		};
+		08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GoogleGenerativeAI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
