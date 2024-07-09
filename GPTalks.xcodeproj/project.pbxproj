@@ -55,6 +55,9 @@
 		08AAFB932C3C88D9002C04E0 /* StopButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB922C3C88D9002C04E0 /* StopButton.swift */; };
 		08AAFB962C3CF0DD002C04E0 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */; };
 		08AAFB982C3CF0F4002C04E0 /* KeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB972C3CF0F4002C04E0 /* KeyboardShortcuts.swift */; };
+		08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB992C3D0017002C04E0 /* ListCard.swift */; };
+		08AAFB9C2C3D01A6002C04E0 /* SessionListCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9B2C3D01A6002C04E0 /* SessionListCards.swift */; };
+		08AAFB9E2C3D02C0002C04E0 /* SessionListSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9D2C3D02C0002C04E0 /* SessionListSidebar.swift */; };
 		08C800322C36AE1D009581C5 /* SessionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800312C36AE1D009581C5 /* SessionList.swift */; };
 		08C800372C36B8CC009581C5 /* SessionListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800362C36B8CC009581C5 /* SessionListItem.swift */; };
 		08C8003A2C36BA30009581C5 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800392C36BA30009581C5 /* InputView.swift */; };
@@ -135,6 +138,9 @@
 		08A222C32C2AC6B300D76C8B /* ConversationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationList.swift; sourceTree = "<group>"; };
 		08AAFB922C3C88D9002C04E0 /* StopButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopButton.swift; sourceTree = "<group>"; };
 		08AAFB972C3CF0F4002C04E0 /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
+		08AAFB992C3D0017002C04E0 /* ListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCard.swift; sourceTree = "<group>"; };
+		08AAFB9B2C3D01A6002C04E0 /* SessionListCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListCards.swift; sourceTree = "<group>"; };
+		08AAFB9D2C3D02C0002C04E0 /* SessionListSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListSidebar.swift; sourceTree = "<group>"; };
 		08C800312C36AE1D009581C5 /* SessionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionList.swift; sourceTree = "<group>"; };
 		08C800362C36B8CC009581C5 /* SessionListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListItem.swift; sourceTree = "<group>"; };
 		08C800392C36BA30009581C5 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
@@ -357,9 +363,12 @@
 		08C8003F2C36BD7B009581C5 /* SessionListViews */ = {
 			isa = PBXGroup;
 			children = (
+				08AAFB9D2C3D02C0002C04E0 /* SessionListSidebar.swift */,
+				08AAFB9B2C3D01A6002C04E0 /* SessionListCards.swift */,
 				08C800312C36AE1D009581C5 /* SessionList.swift */,
 				08C800362C36B8CC009581C5 /* SessionListItem.swift */,
 				0893B2012C3955CC00D4D501 /* SessionSearch.swift */,
+				08AAFB992C3D0017002C04E0 /* ListCard.swift */,
 			);
 			path = SessionListViews;
 			sourceTree = "<group>";
@@ -549,6 +558,7 @@
 			files = (
 				082181602C3880F700171BF3 /* CustomViewModifiers.swift in Sources */,
 				08AAFB932C3C88D9002C04E0 /* StopButton.swift in Sources */,
+				08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */,
 				08915D942C373340008ADE27 /* ProviderImage.swift in Sources */,
 				08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */,
 				082181682C38EE2F00171BF3 /* ConversationTrailingPopup.swift in Sources */,
@@ -557,6 +567,7 @@
 				08C800592C370A30009581C5 /* Model.swift in Sources */,
 				08C800452C36C10A009581C5 /* ConversationMenu.swift in Sources */,
 				082181712C39099D00171BF3 /* ArrayExtensions.swift in Sources */,
+				08AAFB9C2C3D01A6002C04E0 /* SessionListCards.swift in Sources */,
 				08915D9D2C37EEFA008ADE27 /* AppearanceSettings.swift in Sources */,
 				08C800372C36B8CC009581C5 /* SessionListItem.swift in Sources */,
 				082181582C3823A400171BF3 /* ModelRow.swift in Sources */,
@@ -594,6 +605,7 @@
 				081C1D982C3BD8A50078BB24 /* GeneralSettings.swift in Sources */,
 				086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */,
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,
+				08AAFB9E2C3D02C0002C04E0 /* SessionListSidebar.swift in Sources */,
 				086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */,
 				08C800432C36C045009581C5 /* SessonVM.swift in Sources */,
 				0893B2042C396A7C00D4D501 /* ProviderStream.swift in Sources */,

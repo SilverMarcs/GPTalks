@@ -36,14 +36,9 @@ struct SessionList: View {
     var body: some View {
         @Bindable var sessionVM = sessionVM
 
-        SessionSearch("Search", text: $sessionVM.searchText) {
-            sessionVM.searchText = ""
-        }
-        .padding(.horizontal, 10)
-
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
-                ForEach(sessions, id: \.self) { session in
+                ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
                     SessionListItem(session: session)
                 }
                 .onDelete(perform: deleteItems)

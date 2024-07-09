@@ -12,4 +12,6 @@ import SwiftData
     var selections: Set<Session> = []
     var selection: Session?
     var searchText: String = ""
+    
+    var chatCount: Int = .max
 }

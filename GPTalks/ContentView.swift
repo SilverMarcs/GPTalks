@@ -17,7 +17,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationSplitView {
-            SessionList(searchString: sessionVM.searchText)
+            SessionListSidebar()
         } detail: {
             ConversationListDetail()
         }

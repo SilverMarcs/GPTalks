@@ -15,7 +15,7 @@ extension View {
                 scrollToBottom(proxy: proxy, delay: 0.2)
                 scrollToBottom(proxy: proxy, delay: 0.4)
             }
-            .onChange(of: session.unorderedGroups.last?.activeConversation.content) {
+            .onChange(of: session.groups.last?.activeConversation.content) {
                 if isScrolling.wrappedValue == true {
                     hasUserScrolled.wrappedValue = true
                 }
@@ -30,7 +30,7 @@ extension View {
                 }
             }
             .onChange(of: session.resetMarker) {
-                if session.resetMarker == session.unorderedGroups.count - 1 {
+                if session.resetMarker == session.groups.count - 1 {
                     scrollToBottom(proxy: proxy)
                 }
             }

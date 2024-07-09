@@ -14,10 +14,14 @@ struct ProviderImage: View {
     
     var body: some View {
         ZStack  {
+            RoundedRectangle(cornerRadius: radius)
+                .fill(color)
+                .frame(width: frame, height: frame)
+            
             Image("openaiPng")
                 .resizable()
                 .frame(width: frame - 2, height: frame - 2)
-                .colorMultiply(color)
+//                .colorMultiply(color)
         }
     }
 }
