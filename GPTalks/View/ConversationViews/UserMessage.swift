@@ -10,7 +10,11 @@ import SwiftUI
 struct UserMessage: View {
     var conversation: Conversation
     @State var isHovered: Bool = false
-
+    
+    @State var maxHeight: CGFloat = 400
+    @State var labelSize: CGSize = CGSize()
+    @State var isExpanded: Bool = false
+    
     var body: some View {
         VStack(alignment: .trailing, spacing: 4) {
             Text(conversation.content)
@@ -23,15 +27,46 @@ struct UserMessage: View {
                 )
             
             if let group = conversation.group {
-                ConversationMenu(group: group)
+                ConversationMenu(group: group, labelSize: labelSize, toggleMaxHeight: toggleMaxHeight, isExpanded: isExpanded)
                     .opacity(isHovered ? 1 : 0)
                     .animation(.easeInOut(duration: 0.2), value: isHovered)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .trailing)
+        .frame(maxWidth: .infinity, maxHeight: maxHeight, alignment: .trailing)
         .padding(.leading, 160)
         .onHover { isHovered in
             self.isHovered = isHovered
+        }
+        .background {
+            GeometryReader { geometry in
+                Color.clear
+                    .onAppear {
+                        updateLabelSize(geometry.size)
+                    }
+                    .onChange(of: geometry.size) {
+                        updateLabelSize(geometry.size)
+                    }
+            }
+        }
+    }
+    
+    func updateLabelSize(_ size: CGSize) {
+        DispatchQueue.main.async {
+            if self.labelSize != size {
+                self.labelSize = size
+            }
+        }
+    }
+    
+    func toggleMaxHeight() {
+        withAnimation {
+            if maxHeight == 400 {
+                maxHeight = .infinity
+                isExpanded = true
+            } else {
+                maxHeight = 400
+                isExpanded = false
+            }
         }
     }
 }

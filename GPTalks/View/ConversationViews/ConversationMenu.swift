@@ -10,6 +10,10 @@ import SwiftUI
 struct ConversationMenu: View {
     var group: ConversationGroup
     @Environment(\.modelContext) var modelContext
+    
+    var labelSize: CGSize? = nil
+    var toggleMaxHeight: (() -> Void)? = nil
+    var isExpanded: Bool = false
 
     var body: some View {
         #if os(macOS)
@@ -24,7 +28,7 @@ struct ConversationMenu: View {
 
     var buttons: some View {
         Group {
-            regenButton
+            expandHeight
 
             copyButton
 
@@ -33,9 +37,22 @@ struct ConversationMenu: View {
             forkButton
 
             deleteConversation
+            
+            regenButton
 
             if group.conversations.count > 1 {
                 navigationButtons
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var expandHeight: some View {
+        if let labelSize = labelSize, labelSize.height >= 400 {
+            Button {
+                toggleMaxHeight?()
+            } label: {
+                Label("Expand", systemImage: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right")
             }
         }
     }

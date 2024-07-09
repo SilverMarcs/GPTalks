@@ -13,5 +13,5 @@ import SwiftData
     var selection: Session?
     var searchText: String = ""
     
-    var chatCount: Int = .max
+    var chatCount: Int = 13
 }

@@ -28,6 +28,7 @@
 		0821816F2C39082900171BF3 /* ConversationGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0821816E2C39082900171BF3 /* ConversationGroupView.swift */; };
 		082181712C39099D00171BF3 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181702C39099D00171BF3 /* ArrayExtensions.swift */; };
 		082181752C39258500171BF3 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181742C39258500171BF3 /* ImageUtils.swift */; };
+		08505C9C2C3D3878001EBEEF /* IntegerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */; };
 		086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */; };
 		086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */; };
 		08915D942C373340008ADE27 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D932C373340008ADE27 /* ProviderImage.swift */; };
@@ -58,6 +59,8 @@
 		08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB992C3D0017002C04E0 /* ListCard.swift */; };
 		08AAFB9C2C3D01A6002C04E0 /* SessionListCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9B2C3D01A6002C04E0 /* SessionListCards.swift */; };
 		08AAFB9E2C3D02C0002C04E0 /* SessionListSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9D2C3D02C0002C04E0 /* SessionListSidebar.swift */; };
+		08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFBA02C3D1086002C04E0 /* GPTEncoder */; };
+		08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */; };
 		08C800322C36AE1D009581C5 /* SessionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800312C36AE1D009581C5 /* SessionList.swift */; };
 		08C800372C36B8CC009581C5 /* SessionListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800362C36B8CC009581C5 /* SessionListItem.swift */; };
 		08C8003A2C36BA30009581C5 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800392C36BA30009581C5 /* InputView.swift */; };
@@ -111,6 +114,7 @@
 		0821816E2C39082900171BF3 /* ConversationGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationGroupView.swift; sourceTree = "<group>"; };
 		082181702C39099D00171BF3 /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		082181742C39258500171BF3 /* ImageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
+		08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerExtensions.swift; sourceTree = "<group>"; };
 		086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextResetDivider.swift; sourceTree = "<group>"; };
 		08915D932C373340008ADE27 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
@@ -141,6 +145,7 @@
 		08AAFB992C3D0017002C04E0 /* ListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCard.swift; sourceTree = "<group>"; };
 		08AAFB9B2C3D01A6002C04E0 /* SessionListCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListCards.swift; sourceTree = "<group>"; };
 		08AAFB9D2C3D02C0002C04E0 /* SessionListSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListSidebar.swift; sourceTree = "<group>"; };
+		08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTEncoder.swift; sourceTree = "<group>"; };
 		08C800312C36AE1D009581C5 /* SessionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionList.swift; sourceTree = "<group>"; };
 		08C800362C36B8CC009581C5 /* SessionListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListItem.swift; sourceTree = "<group>"; };
 		08C800392C36BA30009581C5 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
@@ -163,6 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				08A222CB2C2AD08A00D76C8B /* OpenAI in Frameworks */,
+				08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */,
 				081C1D902C3B916D0078BB24 /* IsScrolling in Frameworks */,
 				081637762C3542CA00C7DE52 /* MarkdownWebView in Frameworks */,
 				08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */,
@@ -202,11 +208,13 @@
 			children = (
 				0821816C2C39013400171BF3 /* StringExtensions.swift */,
 				082181702C39099D00171BF3 /* ArrayExtensions.swift */,
+				08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */,
 				082181742C39258500171BF3 /* ImageUtils.swift */,
 				089B22422C394A4F00E248FE /* ButtonUtils.swift */,
 				081C1D912C3BD1970078BB24 /* AppConfig.swift */,
 				081C1D992C3BE91C0078BB24 /* ColorExtensions.swift */,
 				08AAFB972C3CF0F4002C04E0 /* KeyboardShortcuts.swift */,
+				08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -432,6 +440,7 @@
 				08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */,
 				08AAFB8F2C3C735A002C04E0 /* SwiftAnthropic */,
 				08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */,
+				08AAFBA02C3D1086002C04E0 /* GPTEncoder */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -513,6 +522,7 @@
 				08F369E42C3C2CF8002E4A35 /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 				08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
 				08AAFB942C3CF0DD002C04E0 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+				08AAFB9F2C3D1086002C04E0 /* XCRemoteSwiftPackageReference "GPTEncoder" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -580,12 +590,14 @@
 				08A222852C2AB4FD00D76C8B /* ContentView.swift in Sources */,
 				08C800572C36F843009581C5 /* SettingsView.swift in Sources */,
 				082181752C39258500171BF3 /* ImageUtils.swift in Sources */,
+				08505C9C2C3D3878001EBEEF /* IntegerExtensions.swift in Sources */,
 				0821816D2C39013400171BF3 /* StringExtensions.swift in Sources */,
 				081C1D8D2C3B8F690078BB24 /* ConversationListExtended.swift in Sources */,
 				08C800552C36F82B009581C5 /* ProviderList.swift in Sources */,
 				08A222872C2AB4FD00D76C8B /* Session.swift in Sources */,
 				0893B2022C3955CC00D4D501 /* SessionSearch.swift in Sources */,
 				08C800492C36C521009581C5 /* AssistantMessage.swift in Sources */,
+				08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */,
 				089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */,
 				082181622C38C76E00171BF3 /* InputEditor.swift in Sources */,
 				08A222C12C2ABE5C00D76C8B /* Conversation.swift in Sources */,
@@ -1012,6 +1024,14 @@
 				minimumVersion = 2.0.1;
 			};
 		};
+		08AAFB9F2C3D1086002C04E0 /* XCRemoteSwiftPackageReference "GPTEncoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/alfianlosari/GPTEncoder.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.4;
+			};
+		};
 		08CFA5A52C35D0C40052AA1B /* XCRemoteSwiftPackageReference "OrderedRelationship" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/FiveSheepCo/OrderedRelationship";
@@ -1059,6 +1079,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 08AAFB942C3CF0DD002C04E0 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
+		};
+		08AAFBA02C3D1086002C04E0 /* GPTEncoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08AAFB9F2C3D1086002C04E0 /* XCRemoteSwiftPackageReference "GPTEncoder" */;
+			productName = GPTEncoder;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

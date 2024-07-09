@@ -26,7 +26,7 @@ struct ConversationList: View {
 
                     ErrorMessageView(session: session)
                     
-                    Color.clear.id(String.bottomID).frame(height: 25)
+                    Color.clear.id(String.bottomID).frame(height: 20)
                 }
                 .scrollSensor()
                 .padding()
@@ -39,7 +39,7 @@ struct ConversationList: View {
             .scrollStatusMonitor($isScrolling, monitorMode: .common)
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled, isScrolling: $isScrolling)
             .navigationTitle(session.title)
-            .navigationSubtitle(session.config.systemPrompt)
+            .navigationSubtitle(navSubtitle)
             .scrollContentBackground(.visible)
             .safeAreaInset(edge: .bottom) {
                 InputView(session: session)
@@ -48,6 +48,10 @@ struct ConversationList: View {
                 ConversationListToolbar(session: session)
             }
         }
+    }
+    
+    var navSubtitle: String {
+        "Tokens: " + session.tokenCounter.formatToK() + " • " + session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45)
     }
 }
 

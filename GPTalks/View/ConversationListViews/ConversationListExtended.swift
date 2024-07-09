@@ -16,12 +16,16 @@ extension View {
                 scrollToBottom(proxy: proxy, delay: 0.4)
             }
             .onChange(of: session.groups.last?.activeConversation.content) {
-                if isScrolling.wrappedValue == true {
-                    hasUserScrolled.wrappedValue = true
-                }
+//                if isScrolling.wrappedValue == true {
+//                    hasUserScrolled.wrappedValue = true
+//                }
                 
                 if !hasUserScrolled.wrappedValue {
                     scrollToBottom(proxy: proxy)
+                }
+                
+                if isScrolling.wrappedValue == true {
+                    hasUserScrolled.wrappedValue = true
                 }
             }
             .onChange(of: session.isReplying) {

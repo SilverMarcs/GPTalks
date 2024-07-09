@@ -1,5 +1,5 @@
 {
-  "originHash" : "89f710e8d84bc84c51d22e2e30c3f39961dbc90183d798577404785db3a40f4f",
+  "originHash" : "858c7cacca38421806f2c8cb0b5770e6b7b08f933c61eadc5dd289b7f4f2a97d",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -8,6 +8,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "dad49b6e47571dd9973d218d46d63ff7d6646437"
+      }
+    },
+    {
+      "identity" : "gptencoder",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/alfianlosari/GPTEncoder.git",
+      "state" : {
+        "revision" : "a86968867ab4380e36b904a14c42215f71efe8b4",
+        "version" : "1.0.4"
       }
     },
     {
