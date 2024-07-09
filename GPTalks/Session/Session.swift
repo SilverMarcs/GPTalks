@@ -76,6 +76,7 @@ final class Session {
                 
                 let content = inputManager.prompt
                 inputManager.reset()
+                
                 let user = Conversation(role: .user, content: content, model: config.model)
                 addConversationGroup(conversation: user)
             }

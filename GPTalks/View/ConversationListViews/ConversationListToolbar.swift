@@ -24,10 +24,6 @@ struct ConversationListToolbar: ToolbarContent {
             .menuIndicator(.hidden)
         }
         
-        ToolbarItemGroup(placement: .keyboard) {
-            deleteLastMessage
-        }
-        
         ToolbarItemGroup {
             Picker("Provider", selection: $session.config.provider) {
                 ForEach(providers.sorted(by: { $0.date < $1.date }), id: \.self) { provider in
@@ -63,6 +59,13 @@ struct ConversationListToolbar: ToolbarContent {
                 ConversationTrailingPopup(session: session)
             }
         }
+        
+        #if os(macOS)
+        ToolbarItemGroup(placement: .keyboard) {
+            deleteLastMessage
+            editLastMessage
+        }
+        #endif
     }
     
     private var deleteLastMessage: some View {
@@ -74,5 +77,16 @@ struct ConversationListToolbar: ToolbarContent {
             }
         }
         .keyboardShortcut(.delete, modifiers: .command)
+    }
+    
+    private var editLastMessage: some View {
+        Button("Edit Last Message") {
+            guard let lastUserGroup = session.groups.last(where: { $0.role == .user }) else {
+                return
+            }
+            
+            lastUserGroup.setupEditing()
+        }
+        .keyboardShortcut("e", modifiers: .command)
     }
 }

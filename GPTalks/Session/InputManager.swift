@@ -18,6 +18,8 @@ enum InputState {
     var inputPrompt: String = ""
     var tempPrompt: String? = ""
     
+    var inputImagePaths: [String] = []
+    
     var editingPrompt: String = ""
     var editingIndex: Int?
     
@@ -46,7 +48,7 @@ enum InputState {
     }
     
     func setupEditing(for group: ConversationGroup) {
-        tempPrompt = group.activeConversation.content
+        tempPrompt = inputPrompt
         
         state = .editing
         prompt = group.activeConversation.content
