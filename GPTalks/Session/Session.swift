@@ -29,7 +29,6 @@ final class Session {
     }
     
     var adjustedGroups: [ConversationGroup] {
-        // return all groups after the reset marker
         if let resetMarker = resetMarker {
             return Array(groups.suffix(from: resetMarker + 1))
         } else {
@@ -82,7 +81,7 @@ final class Session {
         }
         
         streamingTask = Task(priority: .userInitiated) {
-            try await processRequest(isRegen: isRegen, regenContent: regenContent, assistantGroup: assistantGroup)
+            try await processRequest(regenContent: regenContent, assistantGroup: assistantGroup)
         }
         
         do {
@@ -98,7 +97,7 @@ final class Session {
     }
 
     @MainActor
-    func processRequest(isRegen: Bool, regenContent: String?, assistantGroup: ConversationGroup?) async throws {
+    func processRequest(regenContent: String?, assistantGroup: ConversationGroup?) async throws {
         var streamText = ""
         let uiUpdateInterval = TimeInterval(0.1)
         var lastUIUpdateTime = Date()
@@ -106,7 +105,7 @@ final class Session {
         // Convert ConversationGroups to a list of Conversations
         var conversations = adjustedGroups.map { $0.activeConversation }
         
-        if isRegen, let regenContent = regenContent {
+        if let regenContent = regenContent {
             // Replace the last user message with the regen content
             if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
                 conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, model: config.model)
@@ -121,7 +120,7 @@ final class Session {
         let stream = streamManager.streamResponse(from: conversations)
         
         let assistant: Conversation
-        if isRegen, let assistantGroup = assistantGroup {
+        if let assistantGroup = assistantGroup {
             assistant = assistantGroup.conversations.last! // Use the last (newly added) conversation
         } else {
             assistant = Conversation(role: .assistant, content: "", model: config.model)
