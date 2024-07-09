@@ -42,9 +42,7 @@ struct ConversationMenu: View {
 
     var resetContext: some View {
         Button {
-            withAnimation {
-                group.resetContext()
-            }
+            group.resetContext()
         } label: {
             Label("Reset Context", systemImage: "eraser")
         }

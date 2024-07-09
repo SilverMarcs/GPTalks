@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 import OpenAI
+import SwiftUI
 
 @Model
 final class ConversationGroup: NSCopying {

@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftData
-//import SwiftUI
+import SwiftUI
 import OpenAI
 
 @Model
@@ -33,7 +33,7 @@ final class Session {
     
     @Attribute(.ephemeral) 
     var isReplying: Bool {
-        unorderedGroups.last?.activeConversation.isReplying ?? false
+        groups.last?.activeConversation.isReplying ?? false
     }
     
     @Transient
@@ -142,7 +142,7 @@ final class Session {
 
 
     func regenerateLast() {
-        guard let lastGroup = unorderedGroups.last else {
+        guard let lastGroup = groups.last else {
             return
         }
         
@@ -174,14 +174,19 @@ final class Session {
     }
     
     func resetContext(at group: ConversationGroup) {
-        if let index = unorderedGroups.firstIndex(where: { $0 == group }) {
-            if resetMarker == index {
-                resetMarker = nil
+        if let index = groups.firstIndex(where: { $0 == group }) {
+            let newResetMarker = (resetMarker == index) ? nil : index
+            
+            if index == groups.count - 1 {
+                resetMarker = newResetMarker
             } else {
-                resetMarker = index
+                withAnimation {
+                    resetMarker = newResetMarker
+                }
             }
         }
     }
+
     
     func fork(from group: ConversationGroup) -> Session {
         let newSession = Session(config: config.copy() as! SessionConfig)
