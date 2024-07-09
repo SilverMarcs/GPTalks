@@ -19,10 +19,9 @@ struct SendButton: View {
                 .resizable()
                 .frame(width: size, height: size)
                 .fontWeight(.semibold)
+                .foregroundStyle(.white, Color.accentColor)
         }
-        .keyboardShortcut(.return, modifiers: [.command])
         .buttonStyle(.plain)
-        .foregroundStyle(.white, Color.accentColor)
     }
 }
 

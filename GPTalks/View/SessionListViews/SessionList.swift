@@ -42,7 +42,6 @@ struct SessionList: View {
         .padding(.horizontal, 10)
 
         ScrollViewReader { proxy in
-
             List(selection: $sessionVM.selections) {
                 ForEach(sessions, id: \.self) { session in
                     SessionListItem(session: session)
@@ -53,7 +52,9 @@ struct SessionList: View {
                 if sessions.count > prevCount {
                     if let first = sessions.first {
                         sessionVM.selections = [first]
-                        proxy.scrollTo(first, anchor: .top)
+                        withAnimation {
+                            proxy.scrollTo(first, anchor: .top)
+                        }
                     }
                 }
             }
@@ -112,8 +113,8 @@ struct SessionList: View {
 
         withAnimation {
             modelContext.insert(newItem)
+            sessionVM.selections = [newItem]
         }
-        sessionVM.selections = [newItem]
 
         do {
             try modelContext.save()

@@ -18,7 +18,7 @@ struct UserMessage: View {
                 .padding(.vertical, 9)
                 .padding(.horizontal, 11)
                 .background(
-                    RoundedRectangle(cornerRadius: 15)
+                    RoundedRectangle(cornerRadius: 16)
                         .fill(.background.quinary)
                 )
             

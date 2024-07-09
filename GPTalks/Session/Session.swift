@@ -63,12 +63,12 @@ final class Session {
             addConversationGroup(conversation: user)
         }
         
-        let streamingTask = Task(priority: .userInitiated) {
+        streamingTask = Task(priority: .userInitiated) {
             try await processRequest(isRegen: isRegen, regenContent: regenContent)
         }
         
         do {
-            try await streamingTask.value
+            try await streamingTask?.value
             try self.modelContext?.save()
         } catch {
             print("Error: \(error)")
@@ -158,6 +158,18 @@ final class Session {
         // Trigger the regeneration
         Task {
             await sendInput(isRegen: true, regenContent: userContent)
+        }
+    }
+    
+    func stopStreaming() {
+        streamingTask?.cancel()
+        
+        if let last = groups.last {
+            if last.activeConversation.content.isEmpty {
+                deleteConversationGroup(last)
+            } else {
+                last.activeConversation.isReplying = false
+            }
         }
     }
     

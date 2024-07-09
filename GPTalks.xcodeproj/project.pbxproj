@@ -52,6 +52,9 @@
 		08A222CB2C2AD08A00D76C8B /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08A222CA2C2AD08A00D76C8B /* OpenAI */; };
 		08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */; };
 		08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB8F2C3C735A002C04E0 /* SwiftAnthropic */; };
+		08AAFB932C3C88D9002C04E0 /* StopButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB922C3C88D9002C04E0 /* StopButton.swift */; };
+		08AAFB962C3CF0DD002C04E0 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */; };
+		08AAFB982C3CF0F4002C04E0 /* KeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB972C3CF0F4002C04E0 /* KeyboardShortcuts.swift */; };
 		08C800322C36AE1D009581C5 /* SessionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800312C36AE1D009581C5 /* SessionList.swift */; };
 		08C800372C36B8CC009581C5 /* SessionListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800362C36B8CC009581C5 /* SessionListItem.swift */; };
 		08C8003A2C36BA30009581C5 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800392C36BA30009581C5 /* InputView.swift */; };
@@ -130,6 +133,8 @@
 		08A222BD2C2ABDAF00D76C8B /* InputManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
 		08A222C02C2ABE5C00D76C8B /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Conversation.swift; path = GPTalks/Session/Conversation.swift; sourceTree = SOURCE_ROOT; };
 		08A222C32C2AC6B300D76C8B /* ConversationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationList.swift; sourceTree = "<group>"; };
+		08AAFB922C3C88D9002C04E0 /* StopButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopButton.swift; sourceTree = "<group>"; };
+		08AAFB972C3CF0F4002C04E0 /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
 		08C800312C36AE1D009581C5 /* SessionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionList.swift; sourceTree = "<group>"; };
 		08C800362C36B8CC009581C5 /* SessionListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListItem.swift; sourceTree = "<group>"; };
 		08C800392C36BA30009581C5 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
@@ -156,6 +161,7 @@
 				081637762C3542CA00C7DE52 /* MarkdownWebView in Frameworks */,
 				08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */,
 				08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */,
+				08AAFB962C3CF0DD002C04E0 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +200,7 @@
 				089B22422C394A4F00E248FE /* ButtonUtils.swift */,
 				081C1D912C3BD1970078BB24 /* AppConfig.swift */,
 				081C1D992C3BE91C0078BB24 /* ColorExtensions.swift */,
+				08AAFB972C3CF0F4002C04E0 /* KeyboardShortcuts.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -201,6 +208,7 @@
 		08915D922C373332008ADE27 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
+				08AAFB912C3C88CA002C04E0 /* Buttons */,
 				08915D932C373340008ADE27 /* ProviderImage.swift */,
 				0821815F2C3880F700171BF3 /* CustomViewModifiers.swift */,
 				086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */,
@@ -314,13 +322,21 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		08AAFB912C3C88CA002C04E0 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				082181632C38C92E00171BF3 /* SendButton.swift */,
+				082181652C38CBAE00171BF3 /* PlusButton.swift */,
+				08AAFB922C3C88D9002C04E0 /* StopButton.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
 		08C800382C36BA1E009581C5 /* BottomViews */ = {
 			isa = PBXGroup;
 			children = (
 				08C800392C36BA30009581C5 /* InputView.swift */,
 				082181612C38C76E00171BF3 /* InputEditor.swift */,
-				082181632C38C92E00171BF3 /* SendButton.swift */,
-				082181652C38CBAE00171BF3 /* PlusButton.swift */,
 			);
 			path = BottomViews;
 			sourceTree = "<group>";
@@ -406,6 +422,7 @@
 				081C1D8F2C3B916D0078BB24 /* IsScrolling */,
 				08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */,
 				08AAFB8F2C3C735A002C04E0 /* SwiftAnthropic */,
+				08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -486,6 +503,7 @@
 				081C1D8E2C3B916D0078BB24 /* XCRemoteSwiftPackageReference "IsScrolling" */,
 				08F369E42C3C2CF8002E4A35 /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 				08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
+				08AAFB942C3CF0DD002C04E0 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -530,6 +548,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				082181602C3880F700171BF3 /* CustomViewModifiers.swift in Sources */,
+				08AAFB932C3C88D9002C04E0 /* StopButton.swift in Sources */,
 				08915D942C373340008ADE27 /* ProviderImage.swift in Sources */,
 				08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */,
 				082181682C38EE2F00171BF3 /* ConversationTrailingPopup.swift in Sources */,
@@ -568,6 +587,7 @@
 				0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */,
 				081C1D922C3BD1970078BB24 /* AppConfig.swift in Sources */,
 				08A222C42C2AC6B300D76C8B /* ConversationList.swift in Sources */,
+				08AAFB982C3CF0F4002C04E0 /* KeyboardShortcuts.swift in Sources */,
 				08C800472C36C4ED009581C5 /* UserMessage.swift in Sources */,
 				082181642C38C92E00171BF3 /* SendButton.swift in Sources */,
 				082181552C38138700171BF3 /* ModelTable.swift in Sources */,
@@ -972,6 +992,14 @@
 				minimumVersion = 1.4.0;
 			};
 		};
+		08AAFB942C3CF0DD002C04E0 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.1;
+			};
+		};
 		08CFA5A52C35D0C40052AA1B /* XCRemoteSwiftPackageReference "OrderedRelationship" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/FiveSheepCo/OrderedRelationship";
@@ -1014,6 +1042,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */;
 			productName = SwiftAnthropic;
+		};
+		08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08AAFB942C3CF0DD002C04E0 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

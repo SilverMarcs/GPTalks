@@ -7,6 +7,7 @@
 
 import SwiftUI
 import IsScrolling
+import KeyboardShortcuts
 
 struct ConversationList: View {
     var session: Session
@@ -29,6 +30,11 @@ struct ConversationList: View {
                 }
                 .scrollSensor()
                 .padding()
+            }
+            .task {
+                KeyboardShortcuts.onKeyUp(for: .sendMessage) { [self] in
+                    Task { await session.sendInput() }
+                }
             }
             .scrollStatusMonitor($isScrolling, monitorMode: .common)
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled, isScrolling: $isScrolling)

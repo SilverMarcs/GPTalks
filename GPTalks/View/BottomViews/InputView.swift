@@ -17,8 +17,13 @@ struct InputView: View {
                     
             InputEditor(prompt: $session.inputManager.prompt)
 
-            SendButton(size: imageSize, send: sendInput)  
-                .offset(y: -2.4)
+            if session.isReplying {
+                StopButton(size: imageSize, stop: session.stopStreaming)
+                    .offset(y: -2.4)
+            } else {
+                SendButton(size: imageSize, send: sendInput)
+                    .offset(y: -2.4)
+            }
         }
         .fixedSize(horizontal: false, vertical: true)
         .padding(.horizontal)
