@@ -69,7 +69,7 @@ struct ModelTable: View {
             .menuIndicator(.hidden)
             .frame(width: 10)
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 8)
     }
 
     private var modelListHeader: some View {
@@ -101,13 +101,18 @@ struct ModelTable: View {
         Group {
             HStack {
                 TextField("New Code", text: $newModelCode)
-                TextField("New Name", text: $newModelName)
+                
+                ZStack(alignment: .trailing) {
+                    TextField("New Name", text: $newModelName)
+                    
+                    Button(action: addModel) {
+                        Label("Add", systemImage: "plus")
+                    }
+                    .labelStyle(.iconOnly)
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.blue)
+                }
             }
-
-            Button(action: addModel) {
-                Label("Add", systemImage: "plus")
-            }
-            .labelStyle(.iconOnly)
         }
     }
 

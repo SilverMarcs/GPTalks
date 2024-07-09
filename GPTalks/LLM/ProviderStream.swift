@@ -36,16 +36,17 @@ class StreamManager {
         var messages = conversationGroups.map {
             $0.activeConversation.toOpenAI()
         }
+        
+        let systemPrompt = Conversation(
+            role: .system, content: config.systemPrompt)
+        messages.insert(systemPrompt.toOpenAI(), at: 0)
+        
         let query = ChatQuery(
             messages: messages,
             model: config.model.code,
             maxTokens: 4096,
             temperature: config.temperature,
             stream: true)
-
-        let systemPrompt = Conversation(
-            role: .system, content: config.systemPrompt)
-        messages.insert(systemPrompt.toOpenAI(), at: 0)
 
         return AsyncThrowingStream { continuation in
             Task {

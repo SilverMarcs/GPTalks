@@ -20,7 +20,6 @@ struct AppearanceSettings: View {
                         Text(provider.name).tag(provider.id.uuidString)
                     }
                 }
-
             }
         }
         .onAppear {

@@ -43,11 +43,12 @@ final class Conversation: NSCopying {
         self.group = group
     }
     
-    init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String, model: Model) {
+    init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String, model: Model, isReplying: Bool = false) {
         self.role = role
         self.content = content
         self.group = group
         self.model = model
+        self.isReplying = isReplying
     }
     
     func toOpenAI() -> ChatQuery.ChatCompletionMessageParam {
@@ -100,6 +101,12 @@ final class Conversation: NSCopying {
         )
         
         return message
+    }
+    
+    func countTokens() -> Int {
+        let textToken = tokenCount(text: content)
+//        let imageToken = imagePaths.count * 85 // this is wrong
+        return textToken
     }
     
     func deleteSelf() {

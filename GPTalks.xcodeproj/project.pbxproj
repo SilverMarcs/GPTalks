@@ -29,6 +29,7 @@
 		082181712C39099D00171BF3 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181702C39099D00171BF3 /* ArrayExtensions.swift */; };
 		082181752C39258500171BF3 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181742C39258500171BF3 /* ImageUtils.swift */; };
 		08505C9C2C3D3878001EBEEF /* IntegerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */; };
+		08505C9E2C3D5482001EBEEF /* SessionListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08505C9D2C3D5482001EBEEF /* SessionListToolbar.swift */; };
 		086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */; };
 		086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */; };
 		08915D942C373340008ADE27 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D932C373340008ADE27 /* ProviderImage.swift */; };
@@ -115,6 +116,7 @@
 		082181702C39099D00171BF3 /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		082181742C39258500171BF3 /* ImageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
 		08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerExtensions.swift; sourceTree = "<group>"; };
+		08505C9D2C3D5482001EBEEF /* SessionListToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListToolbar.swift; sourceTree = "<group>"; };
 		086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextResetDivider.swift; sourceTree = "<group>"; };
 		08915D932C373340008ADE27 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
@@ -374,6 +376,7 @@
 				08AAFB9D2C3D02C0002C04E0 /* SessionListSidebar.swift */,
 				08AAFB9B2C3D01A6002C04E0 /* SessionListCards.swift */,
 				08C800312C36AE1D009581C5 /* SessionList.swift */,
+				08505C9D2C3D5482001EBEEF /* SessionListToolbar.swift */,
 				08C800362C36B8CC009581C5 /* SessionListItem.swift */,
 				0893B2012C3955CC00D4D501 /* SessionSearch.swift */,
 				08AAFB992C3D0017002C04E0 /* ListCard.swift */,
@@ -573,6 +576,7 @@
 				08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */,
 				082181682C38EE2F00171BF3 /* ConversationTrailingPopup.swift in Sources */,
 				0821816A2C39001B00171BF3 /* ProviderRow.swift in Sources */,
+				08505C9E2C3D5482001EBEEF /* SessionListToolbar.swift in Sources */,
 				0893B2062C39810900D4D501 /* SessionConfig.swift in Sources */,
 				08C800592C370A30009581C5 /* Model.swift in Sources */,
 				08C800452C36C10A009581C5 /* ConversationMenu.swift in Sources */,

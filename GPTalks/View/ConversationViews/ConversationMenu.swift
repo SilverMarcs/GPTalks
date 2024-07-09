@@ -29,20 +29,18 @@ struct ConversationMenu: View {
     var buttons: some View {
         Group {
             expandHeight
-
-            copyButton
+            
+            regenGroup
+        
+            copyText
 
             resetContext
 
-            forkButton
+            forkSession
 
-            deleteConversation
+            deleteGroup
             
-            regenButton
-
-            if group.conversations.count > 1 {
-                navigationButtons
-            }
+            navigate
         }
     }
     
@@ -65,7 +63,7 @@ struct ConversationMenu: View {
         }
     }
 
-    var forkButton: some View {
+    var forkSession: some View {
         Button {
             if let newSession = group.session?.fork(from: group) {
                 withAnimation {
@@ -82,7 +80,7 @@ struct ConversationMenu: View {
         }
     }
 
-    var copyButton: some View {
+    var copyText: some View {
         Button {
             group.activeConversation.content.copyToPasteboard()
         } label: {
@@ -90,7 +88,7 @@ struct ConversationMenu: View {
         }
     }
 
-    var deleteConversation: some View {
+    var deleteGroup: some View {
         Button {
             withAnimation {
                 group.deleteSelf()
@@ -100,35 +98,60 @@ struct ConversationMenu: View {
         }
     }
 
-    var regenButton: some View {
-        Button {
-            group.session?.regenerateLast()
-        } label: {
-            Label("Regenerate", systemImage: "arrow.2.circlepath")
+    @ViewBuilder
+    var regenGroup: some View {
+        if group.role == .assistant {
+            Button {
+                group.session?.regenerate(assistantGroup: group)
+            } label: {
+                Label("Regenerate", systemImage: "arrow.2.circlepath")
+            }
         }
     }
 
-    var navigationButtons: some View {
-        Group {
+    var navigate: some View {
+        var canNavigateLeft: Bool {
+            guard let session = group.session else { return false }
+            let groups = session.groups
+            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }),
+               groups.count >= 2,
+               indexOfCurrentGroup >= groups.count - 2 {
+                return group.conversations.count > 1 && group.canGoLeft
+            }
+            return group.canGoLeft
+        }
+        
+        var canNavigateRight: Bool {
+            guard let session = group.session else { return false }
+            let groups = session.groups
+            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }),
+               groups.count >= 2,
+               indexOfCurrentGroup >= groups.count - 2 {
+                return group.conversations.count > 1 && group.canGoRight
+            }
+            return group.canGoRight
+        }
+        
+        return Group {
             Button {
                 group.setActiveToLeft()
             } label: {
                 Label("Previous", systemImage: "chevron.left")
             }
-            .disabled(group.canGoLeft == false)
-
+            .disabled(!canNavigateLeft)
+            
             Text(
                 "\(group.activeConversationIndex + 1)/\(group.conversations.count)"
             )
             .foregroundStyle(.secondary)
             .frame(width: 30)
-
+            
             Button {
                 group.setActiveToRight()
             } label: {
                 Label("Next", systemImage: "chevron.right")
             }
-            .disabled(group.canGoRight == false)
+            .disabled(!canNavigateRight)
         }
     }
 }

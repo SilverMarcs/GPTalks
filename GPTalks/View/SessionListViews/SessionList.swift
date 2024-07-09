@@ -11,27 +11,12 @@ import SwiftUI
 struct SessionList: View {
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
-    @ObservedObject var providerManager = ProviderManager.shared
 
     @Query(sort: \Provider.date, order: .reverse) var providers: [Provider]
     @Query var sessions: [Session]
 
     @State var showSettings: Bool = false
     @State private var prevCount = 0
-
-    init(
-        sort: SortDescriptor<Session> = SortDescriptor(
-            \Session.date, order: .reverse), searchString: String
-    ) {
-        _sessions = Query(
-            filter: #Predicate {
-                if searchString.isEmpty {
-                    return true
-                } else {
-                    return $0.title.localizedStandardContains(searchString)
-                }
-            }, sort: [sort], animation: .default)
-    }
 
     var body: some View {
         @Bindable var sessionVM = sessionVM
@@ -61,7 +46,7 @@ struct SessionList: View {
                 }
             }
             .toolbar {
-                toolbarItems
+                SessionListToolbar()
             }
             .popover(isPresented: $showSettings) {
                 SettingsView()
@@ -69,53 +54,19 @@ struct SessionList: View {
             }
         }
     }
-
-    @ToolbarContentBuilder
-    var toolbarItems: some ToolbarContent {
-        #if os(iOS)
-            ToolbarItem(placement: .leading) {
-                Button(action: { showSettings.toggle() }) {
-                    Label("Settings", systemImage: "gear")
+    
+    init(
+        sort: SortDescriptor<Session> = SortDescriptor(
+            \Session.date, order: .reverse), searchString: String
+    ) {
+        _sessions = Query(
+            filter: #Predicate {
+                if searchString.isEmpty {
+                    return true
+                } else {
+                    return $0.title.localizedStandardContains(searchString)
                 }
-            }
-        #endif
-        ToolbarItem {
-            Spacer()
-        }
-
-        ToolbarItem {
-            Button(action: addItem) {
-                Label("Add Item", systemImage: "square.and.pencil")
-            }
-            .keyboardShortcut("n", modifiers: .command)
-        }
-    }
-
-    private func addItem() {
-        let provider: Provider
-        if let defaultProvider = providerManager.getDefault(providers: providers) {
-            provider = defaultProvider
-        } else if let firstProvider = providers.first {
-            provider = firstProvider
-        } else {
-            return
-        }
-
-        let config = SessionConfig(
-            provider: provider, model: provider.chatModel)
-
-        let newItem = Session(config: config)
-
-        withAnimation {
-            modelContext.insert(newItem)
-            sessionVM.selections = [newItem]
-        }
-
-        do {
-            try modelContext.save()
-        } catch {
-            print("Failed to add Session")
-        }
+            }, sort: [sort], animation: .default)
     }
 
     private func deleteItems(offsets: IndexSet) {
@@ -124,6 +75,8 @@ struct SessionList: View {
                 modelContext.delete(sessions[index])
             }
         }
+        
+        try? modelContext.save()
     }
 }
 

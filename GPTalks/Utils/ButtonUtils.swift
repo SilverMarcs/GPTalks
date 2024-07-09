@@ -28,17 +28,13 @@ private struct IconButtonStyleView: View {
     }
 }
 
-struct HoverSquareBackgroundStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        HoverSquareBackgroundStyleView(configuration: configuration)
-    }
-}
+import SwiftUI
 
-private struct HoverSquareBackgroundStyleView: View {
-    let configuration: ButtonStyle.Configuration
+struct HoverSquareBackgroundStyle: ButtonStyle {
+    @Environment(\.isEnabled) var isEnabled
     @State private var isHovering = false
     
-    var body: some View {
+    func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .labelStyle(.iconOnly)
             .padding(5)
@@ -50,6 +46,7 @@ private struct HoverSquareBackgroundStyleView: View {
             .onHover { hovering in
                 isHovering = hovering
             }
+            .foregroundColor(isEnabled ? .primary : .secondary)
     }
 }
 

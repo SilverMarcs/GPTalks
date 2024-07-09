@@ -41,6 +41,7 @@ extension Model {
     static func getOpenaiModels() -> [Model] {
         return [
             Model(code: "gpt-3.5-turbo", name: "GPT-3.5T"),
+            Model(code: "gpt-4", name: "GPT-4"),
             Model(code: "gpt-4-turbo", name: "GPT-4T"),
             Model(code: "gpt-4-turbo-preview", name: "GPT-4TP"),
             Model(code: "gpt-4o", name: "GPT-4O"),

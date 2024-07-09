@@ -20,7 +20,7 @@ class Provider {
     
     var type: ProviderType
     
-    var color: String = "#FFFFFF"
+    var color: String = "#000000"
     
     @Relationship(deleteRule: .cascade)
     var chatModel: Model
