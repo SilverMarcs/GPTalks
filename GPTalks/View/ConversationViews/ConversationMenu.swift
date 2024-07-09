@@ -113,13 +113,13 @@ struct ConversationMenu: View {
 
     @ViewBuilder
     var regenGroup: some View {
-        if group.role == .assistant {
+//        if group.role == .assistant {
             Button {
-                group.session?.regenerate(assistantGroup: group)
+                group.session?.regenerate(group: group)
             } label: {
                 Label("Regenerate", systemImage: "arrow.2.circlepath")
             }
-        }
+//        }
     }
 
     var navigate: some View {

@@ -70,6 +70,8 @@ final class Session {
         
         if !isRegen {
             if inputManager.state == .editing {
+                if inputManager.prompt == inputManager.tempPrompt { return }
+                
                 handleEditingMode()
             } else {
                 guard !inputManager.prompt.isEmpty else { return }
@@ -157,18 +159,73 @@ final class Session {
     }
     
     @MainActor
-    func regenerate(assistantGroup: ConversationGroup) {
-        guard let regenerationContext = prepareRegenerationContext(for: assistantGroup) else { return }
+    func regenerate(group: ConversationGroup) {
+        let regenerationContext: (index: Int, userContent: String, assistantGroup: ConversationGroup)?
         
-        let (index, userContent) = regenerationContext
+        if group.role == .assistant {
+            regenerationContext = prepareRegenerationContextForAssistant(group)
+        } else if group.role == .user {
+            regenerationContext = prepareRegenerationContextForUser(group)
+        } else {
+            return // Invalid group role
+        }
+        
+        guard let (index, userContent, assistantGroup) = regenerationContext else { return }
+        
         groups.removeSubrange((index + 1)...)
         
         let newAssistantConversation = Conversation(role: .assistant, content: "", model: config.model)
-        assistantGroup.addConversation(newAssistantConversation)
+        
+        if assistantGroup.id == group.id {
+            // For .assistant groups
+            assistantGroup.addConversation(newAssistantConversation)
+        } else {
+            // For .user groups
+            if assistantGroup.conversations.isEmpty {
+                // New group created
+                assistantGroup.addConversation(newAssistantConversation)
+            } else {
+                // Existing group found
+                assistantGroup.conversations = [newAssistantConversation]
+            }
+            
+            // Ensure the assistant group is added to groups if it's new
+            if !groups.contains(where: { $0.id == assistantGroup.id }) {
+                groups.append(assistantGroup)
+            }
+        }
         
         Task {
             await sendInput(isRegen: true, regenContent: userContent, assistantGroup: assistantGroup)
         }
+    }
+    
+    private func prepareRegenerationContextForUser(_ group: ConversationGroup) -> (index: Int, userContent: String, assistantGroup: ConversationGroup)? {
+        guard let index = groups.firstIndex(where: { $0.id == group.id }) else {
+            return nil
+        }
+        
+        let userContent = group.activeConversation.content
+        
+        // Find the next assistant group
+        if let nextAssistantGroup = groups.dropFirst(index + 1).first(where: { $0.role == .assistant }) {
+            return (index, userContent, nextAssistantGroup)
+        } else {
+            // Create a new assistant group if none exists
+            let newAssistantGroup = ConversationGroup(role: .assistant)
+            return (index, userContent, newAssistantGroup)
+        }
+    }
+
+
+    private func prepareRegenerationContextForAssistant(_ group: ConversationGroup) -> (index: Int, userContent: String, assistantGroup: ConversationGroup)? {
+        guard let index = groups.firstIndex(where: { $0.id == group.id }),
+              index > 0 else {
+            return nil
+        }
+        
+        let userContent = groups[index - 1].activeConversation.content
+        return (index, userContent, group)
     }
     
     private func prepareRegenerationContext(for assistantGroup: ConversationGroup) -> (index: Int, userContent: String)? {
@@ -221,11 +278,11 @@ final class Session {
     }
     
     @discardableResult
-    func addConversationGroup(conversation: Conversation) -> Conversation {
+    func addConversationGroup(conversation: Conversation) -> ConversationGroup {
         let group = ConversationGroup(conversation: conversation, session: self)
 
         groups.append(group)
-        return conversation
+        return group
     }
     
     func deleteConversation(at indexSet: IndexSet) {

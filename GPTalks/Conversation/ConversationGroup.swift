@@ -43,6 +43,10 @@ final class ConversationGroup: NSCopying {
         return Conversation(role: .user, content: "", group: self)
     }
     
+    init(role: ChatQuery.ChatCompletionMessageParam.Role) {
+        self.role = role
+    }
+    
     init(conversation: Conversation) {
         self.conversations = [conversation]
         self.role = conversation.role
