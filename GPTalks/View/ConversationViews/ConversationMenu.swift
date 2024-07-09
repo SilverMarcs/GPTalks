@@ -113,47 +113,59 @@ struct ConversationMenu: View {
         var canNavigateLeft: Bool {
             guard let session = group.session else { return false }
             let groups = session.groups
-            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }),
-               groups.count >= 2,
-               indexOfCurrentGroup >= groups.count - 2 {
-                return group.conversations.count > 1 && group.canGoLeft
+            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }) {
+                if groups.count >= 2 && indexOfCurrentGroup >= groups.count - 2 {
+                    return group.conversations.count > 1 && group.canGoLeft
+                }
             }
-            return group.canGoLeft
+            return false
         }
         
         var canNavigateRight: Bool {
             guard let session = group.session else { return false }
             let groups = session.groups
-            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }),
-               groups.count >= 2,
-               indexOfCurrentGroup >= groups.count - 2 {
-                return group.conversations.count > 1 && group.canGoRight
+            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }) {
+                if groups.count >= 2 && indexOfCurrentGroup >= groups.count - 2 {
+                    return group.conversations.count > 1 && group.canGoRight
+                }
             }
-            return group.canGoRight
+            return false
+        }
+        
+        var shouldShowButtons: Bool {
+            guard let session = group.session else { return false }
+            let groups = session.groups
+            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }) {
+                return groups.count >= 2 && indexOfCurrentGroup >= groups.count - 2
+            }
+            return false
         }
         
         return Group {
-            Button {
-                group.setActiveToLeft()
-            } label: {
-                Label("Previous", systemImage: "chevron.left")
+            if group.conversations.count > 1 && group.role == .assistant {
+                Button {
+                    group.setActiveToLeft()
+                } label: {
+                    Label("Previous", systemImage: "chevron.left")
+                }
+                .disabled(!shouldShowButtons || !canNavigateLeft)
+                
+                Text(
+                    "\(group.activeConversationIndex + 1)/\(group.conversations.count)"
+                )
+                .foregroundStyle(.secondary)
+                .frame(width: 30)
+                
+                Button {
+                    group.setActiveToRight()
+                } label: {
+                    Label("Next", systemImage: "chevron.right")
+                }
+                .disabled(!shouldShowButtons || !canNavigateRight)
             }
-            .disabled(!canNavigateLeft)
-            
-            Text(
-                "\(group.activeConversationIndex + 1)/\(group.conversations.count)"
-            )
-            .foregroundStyle(.secondary)
-            .frame(width: 30)
-            
-            Button {
-                group.setActiveToRight()
-            } label: {
-                Label("Next", systemImage: "chevron.right")
-            }
-            .disabled(!canNavigateRight)
         }
     }
+
 }
 
 #Preview {

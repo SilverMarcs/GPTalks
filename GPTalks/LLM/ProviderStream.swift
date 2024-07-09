@@ -16,25 +16,28 @@ class StreamManager {
         self.config = config
     }
 
-    func streamResponse(from conversationGroups: [ConversationGroup])
+    func streamResponse(from conversations: [Conversation])
         -> AsyncThrowingStream<String, Error>
     {
         switch config.provider.type {
         case .openai:
-            return streamOpenAIResponse(from: conversationGroups)
+            return streamOpenAIResponse(from: conversations)
         case .claude:
-            return streamClaudeResponse(from: conversationGroups)
+            return streamClaudeResponse(from: conversations)
         case .google:
-            return streamGoogleResponse(from: conversationGroups)
+            return streamGoogleResponse(from: conversations)
         }
     }
 
-    private func streamOpenAIResponse(from conversationGroups: [ConversationGroup]) -> AsyncThrowingStream<String, Error> {
+    private func streamOpenAIResponse(from conversations: [Conversation]) -> AsyncThrowingStream<String, Error> {
         let service = OpenAI(
             configuration: OpenAI.Configuration(
                 token: config.provider.apiKey, host: config.provider.host))
-        var messages = conversationGroups.map {
-            $0.activeConversation.toOpenAI()
+//        var messages = conversationGroups.map {
+//            $0.activeConversation.toOpenAI()
+//        }
+        var messages = conversations.map {
+            $0.toOpenAI()
         }
         
         let systemPrompt = Conversation(
@@ -65,13 +68,16 @@ class StreamManager {
         }
     }
 
-    private func streamClaudeResponse(from conversationGroups: [ConversationGroup]) -> AsyncThrowingStream<String, Error> {
+    private func streamClaudeResponse(from conversations: [Conversation]) -> AsyncThrowingStream<String, Error> {
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
             basePath: "https://" + config.provider.host)
     
-        let messages = conversationGroups.map {
-            $0.activeConversation.toClaude()
+//        let messages = conversationGroups.map {
+//            $0.activeConversation.toClaude()
+//        }
+        let messages = conversations.map {
+            $0.toClaude()
         }
         
         let parameters = MessageParameter(
@@ -98,7 +104,7 @@ class StreamManager {
         }
     }
 
-    private func streamGoogleResponse(from conversationGroups: [ConversationGroup]) -> AsyncThrowingStream<String, Error> {
+    private func streamGoogleResponse(from conversations: [Conversation]) -> AsyncThrowingStream<String, Error> {
         let systemPrompt = ModelContent(
             role: "system", parts: [.text(config.systemPrompt)])
         
@@ -112,16 +118,20 @@ class StreamManager {
             generationConfig: genConfig,
             systemInstruction: systemPrompt)
 
-        let modelContents = conversationGroups.map {
-            $0.activeConversation.toGoogle()
+//        let modelContents = conversationGroups.map {
+//            $0.activeConversation.toGoogle()
+//        }
+        
+        let messages = conversations.map {
+            $0.toGoogle()
         }
-        let _ = model.startChat(history: modelContents)
+        let _ = model.startChat(history: messages)
 
         return AsyncThrowingStream { continuation in
             Task {
                 do {
                     let responseStream = model.generateContentStream(
-                        modelContents)
+                        messages)
 
                     for try await response in responseStream {
                         // Extract the content from the response

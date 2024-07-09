@@ -65,7 +65,7 @@ final class Session {
     }
     
     @MainActor
-    func sendInput(isRegen: Bool = false, regenContent: String? = nil) async {
+    func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil) async {
         errorMessage = ""
         
         if !isRegen && inputManager.prompt.isEmpty {
@@ -82,7 +82,7 @@ final class Session {
         }
         
         streamingTask = Task(priority: .userInitiated) {
-            try await processRequest(isRegen: isRegen, regenContent: regenContent)
+            try await processRequest(isRegen: isRegen, regenContent: regenContent, assistantGroup: assistantGroup)
         }
         
         do {
@@ -98,27 +98,31 @@ final class Session {
     }
 
     @MainActor
-    func processRequest(isRegen: Bool, regenContent: String?) async throws {
+    func processRequest(isRegen: Bool, regenContent: String?, assistantGroup: ConversationGroup?) async throws {
         var streamText = ""
         let uiUpdateInterval = TimeInterval(0.1)
         var lastUIUpdateTime = Date()
         
-        var updatedConversationGroups = adjustedGroups.map { $0.copy() as! ConversationGroup }
+        // Convert ConversationGroups to a list of Conversations
+        var conversations = adjustedGroups.map { $0.activeConversation }
         
         if isRegen, let regenContent = regenContent {
-            // Add the regen content to the last user group
-            if let lastUserGroupIndex = updatedConversationGroups.lastIndex(where: { $0.role == .user }) {
-                let regenUserConversation = Conversation(role: .user, content: regenContent, model: config.model)
-                updatedConversationGroups[lastUserGroupIndex] = ConversationGroup(conversation: regenUserConversation)
+            // Replace the last user message with the regen content
+            if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
+                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, model: config.model)
+            }
+            // Remove the last assistant message if it exists
+            if let lastAssistantIndex = conversations.lastIndex(where: { $0.role == .assistant }) {
+                conversations.remove(at: lastAssistantIndex)
             }
         }
         
         let streamManager = StreamManager(config: config)
-        let stream = streamManager.streamResponse(from: updatedConversationGroups)
+        let stream = streamManager.streamResponse(from: conversations)
         
         let assistant: Conversation
-        if isRegen, let lastAssistantGroup = groups.last(where: { $0.role == .assistant }) {
-            assistant = lastAssistantGroup.conversations.last ?? Conversation(role: .assistant, content: "", model: config.model)
+        if isRegen, let assistantGroup = assistantGroup {
+            assistant = assistantGroup.conversations.last! // Use the last (newly added) conversation
         } else {
             assistant = Conversation(role: .assistant, content: "", model: config.model)
             addConversationGroup(conversation: assistant)
@@ -142,7 +146,6 @@ final class Session {
             }
         }
     }
-
     
     @MainActor
     func regenerate(assistantGroup: ConversationGroup) {
@@ -164,7 +167,7 @@ final class Session {
         
         // Trigger the regeneration
         Task {
-            await sendInput(isRegen: true, regenContent: userContent)
+            await sendInput(isRegen: true, regenContent: userContent, assistantGroup: assistantGroup)
         }
     }
 
