@@ -23,7 +23,6 @@ struct CrossButton: View {
         }
         .keyboardShortcut(.cancelAction)
         .buttonStyle(.plain)
-        
     }
 }
 

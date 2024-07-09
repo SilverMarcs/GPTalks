@@ -69,14 +69,37 @@ final class Session {
         self.date = Date()
         
         if !isRegen {
-            let content = inputManager.prompt
-            inputManager.reset()
-            let user = Conversation(role: .user, content: content, model: config.model)
-            addConversationGroup(conversation: user)
+            if inputManager.state == .editing {
+                handleEditingMode()
+            } else {
+                guard !inputManager.prompt.isEmpty else { return }
+                
+                let content = inputManager.prompt
+                inputManager.reset()
+                let user = Conversation(role: .user, content: content, model: config.model)
+                addConversationGroup(conversation: user)
+            }
         }
         
         streamingTask = Task(priority: .userInitiated) {
             await handleStreamingTask(regenContent: regenContent, assistantGroup: assistantGroup)
+        }
+    }
+    
+    private func handleEditingMode() {
+        if let editingIndex = inputManager.editingIndex,
+           editingIndex < groups.count,
+           groups[editingIndex].activeConversation.role == .user {
+            
+            // Update the content of the user conversation
+            groups[editingIndex].activeConversation.content = inputManager.prompt
+            
+            // Remove all groups after the edited group
+            groups.removeSubrange((editingIndex + 1)...)
+            
+            inputManager.resetEditing()
+        } else {
+            errorMessage = "Error: Invalid editing state"
         }
     }
     

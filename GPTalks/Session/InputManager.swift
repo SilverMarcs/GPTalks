@@ -16,9 +16,11 @@ enum InputState {
     var state: InputState = .normal
     
     var inputPrompt: String = ""
-    var editingPrompt: String = ""
+    var tempPrompt: String? = ""
     
+    var editingPrompt: String = ""
     var editingIndex: Int?
+    
     
     init() {
         
@@ -44,14 +46,17 @@ enum InputState {
     }
     
     func setupEditing(for group: ConversationGroup) {
+        tempPrompt = group.activeConversation.content
+        
         state = .editing
         prompt = group.activeConversation.content
         editingIndex = group.session?.groups.firstIndex(of: group)
     }
     
-    func cancelEditing() {
+    func resetEditing() {
         state = .normal
-        prompt = ""
+        editingIndex = nil
+        prompt = tempPrompt ?? ""
     }
     
     func reset() {
