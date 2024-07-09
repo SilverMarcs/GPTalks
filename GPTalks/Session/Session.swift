@@ -64,9 +64,9 @@ final class Session {
     func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil) async {
         errorMessage = ""
         
-        guard isRegen || !inputManager.prompt.isEmpty else { return }
-        
         self.date = Date()
+        
+        guard isRegen || !inputManager.prompt.isEmpty else { return }
         
         if !isRegen {
             if inputManager.state == .editing {
