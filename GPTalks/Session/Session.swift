@@ -56,9 +56,6 @@ final class Session {
     
     var config: SessionConfig
     
-    @Transient
-    let uiUpdateInterval = TimeInterval(0.1)
-    
     init(config: SessionConfig = SessionConfig()) {
         self.config = config
     }
@@ -67,9 +64,7 @@ final class Session {
     func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil) async {
         errorMessage = ""
         
-        if !isRegen && inputManager.prompt.isEmpty {
-            return
-        }
+        guard isRegen || !inputManager.prompt.isEmpty else { return }
         
         self.date = Date()
         
@@ -81,94 +76,88 @@ final class Session {
         }
         
         streamingTask = Task(priority: .userInitiated) {
-            try await processRequest(regenContent: regenContent, assistantGroup: assistantGroup)
-        }
-        
-        do {
-            try await streamingTask?.value
-        } catch {
-            print("Error: \(error)")
-            errorMessage = error.localizedDescription
-            
-            if let lastGroup = groups.last, lastGroup.activeConversation.content.isEmpty {
-                groups.removeLast()
-            }
+            await handleStreamingTask(regenContent: regenContent, assistantGroup: assistantGroup)
         }
     }
-
+    
     @MainActor
-    func processRequest(regenContent: String?, assistantGroup: ConversationGroup?) async throws {
-        var streamText = ""
-        let uiUpdateInterval = TimeInterval(0.1)
-        var lastUIUpdateTime = Date()
+    private func handleStreamingTask(regenContent: String?, assistantGroup: ConversationGroup?) async {
+        do {
+            try await processRequest(regenContent: regenContent, assistantGroup: assistantGroup)
+        } catch {
+            handleError(error)
+        }
+    }
+    
+    private func handleError(_ error: Error) {
+        print("Error: \(error)")
+        errorMessage = error.localizedDescription
         
-        // Convert ConversationGroups to a list of Conversations
+        if let lastGroup = groups.last, lastGroup.activeConversation.content.isEmpty {
+            groups.removeLast()
+        }
+    }
+    
+    @MainActor
+    private func processRequest(regenContent: String?, assistantGroup: ConversationGroup?) async throws {
+        let conversations = prepareConversations(regenContent: regenContent)
+        let assistant = prepareAssistantConversation(assistantGroup: assistantGroup)
+        
+        let streamHandler = StreamHandler(config: config, assistant: assistant)
+        try await streamHandler.handleStream(from: conversations)
+    }
+    
+    private func prepareConversations(regenContent: String?) -> [Conversation] {
         var conversations = adjustedGroups.map { $0.activeConversation }
         
         if let regenContent = regenContent {
-            // Replace the last user message with the regen content
             if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
                 conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, model: config.model)
             }
-            // Remove the last assistant message if it exists
             if let lastAssistantIndex = conversations.lastIndex(where: { $0.role == .assistant }) {
                 conversations.remove(at: lastAssistantIndex)
             }
         }
         
-        let streamManager = StreamManager(config: config)
-        let stream = streamManager.streamResponse(from: conversations)
-        
-        let assistant: Conversation
+        return conversations
+    }
+    
+    private func prepareAssistantConversation(assistantGroup: ConversationGroup?) -> Conversation {
         if let assistantGroup = assistantGroup {
-            assistant = assistantGroup.conversations.last! // Use the last (newly added) conversation
+            return assistantGroup.conversations.last!
         } else {
-            assistant = Conversation(role: .assistant, content: "", model: config.model)
+            let assistant = Conversation(role: .assistant, content: "", model: config.model)
             addConversationGroup(conversation: assistant)
-        }
-        
-        assistant.isReplying = true
-        
-        for try await content in stream {
-            streamText += content
-            let currentTime = Date()
-            if currentTime.timeIntervalSince(lastUIUpdateTime) >= uiUpdateInterval {
-                assistant.content = streamText
-                lastUIUpdateTime = currentTime
-            }
-        }
-        
-        if !streamText.isEmpty {
-            DispatchQueue.main.asyncAfter(deadline: .now() + uiUpdateInterval) {
-                assistant.content = streamText
-                assistant.isReplying = false
-            }
+            return assistant
         }
     }
     
     @MainActor
     func regenerate(assistantGroup: ConversationGroup) {
-        guard assistantGroup.role == .assistant,
-              let index = groups.firstIndex(where: { $0.id == assistantGroup.id }),
-              index > 0 else {
-            return
-        }
+        guard let regenerationContext = prepareRegenerationContext(for: assistantGroup) else { return }
         
-        // Remove all groups after the given assistant group
+        let (index, userContent) = regenerationContext
         groups.removeSubrange((index + 1)...)
         
-        // Get the user message content from the group right above
-        let userContent = groups[index - 1].activeConversation.content
-        
-        // Add a new conversation to the assistant group
         let newAssistantConversation = Conversation(role: .assistant, content: "", model: config.model)
         assistantGroup.addConversation(newAssistantConversation)
         
-        // Trigger the regeneration
         Task {
             await sendInput(isRegen: true, regenContent: userContent, assistantGroup: assistantGroup)
         }
     }
+    
+    private func prepareRegenerationContext(for assistantGroup: ConversationGroup) -> (index: Int, userContent: String)? {
+        guard assistantGroup.role == .assistant,
+              let index = groups.firstIndex(where: { $0.id == assistantGroup.id }),
+              index > 0 else {
+            return nil
+        }
+        
+        let userContent = groups[index - 1].activeConversation.content
+        return (index, userContent)
+    }
+
 
     func stopStreaming() {
         streamingTask?.cancel()
@@ -238,5 +227,4 @@ final class Session {
         groups.move(fromOffsets: source, toOffset: destination)
     }
 }
-
 

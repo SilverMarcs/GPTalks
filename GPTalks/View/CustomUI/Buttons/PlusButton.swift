@@ -9,11 +9,10 @@ import SwiftUI
 
 struct PlusButton: View {
     var size: CGFloat = 25
-//    var send: () -> Void
     
     var body: some View {
         Button {
-//            send()
+
         } label: {
             Image(systemName: "plus.circle.fill")
                 .resizable()

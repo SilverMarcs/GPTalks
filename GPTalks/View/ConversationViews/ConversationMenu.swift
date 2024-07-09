@@ -30,6 +30,8 @@ struct ConversationMenu: View {
         Group {
             expandHeight
             
+            editGroup
+            
             regenGroup
         
             copyText
@@ -41,6 +43,17 @@ struct ConversationMenu: View {
             deleteGroup
             
             navigate
+        }
+    }
+    
+    @ViewBuilder
+    var editGroup: some View {
+        if group.role == .user {
+            Button {
+                group.setupEditing()
+            } label: {
+                Label("Edit", systemImage: "applepencil.tip")
+            }
         }
     }
     

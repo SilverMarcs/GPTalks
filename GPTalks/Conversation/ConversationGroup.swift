@@ -69,13 +69,6 @@ final class ConversationGroup: NSCopying {
         conversations.removeAll(where: { $0 == conversation })
     }
     
-    func setActive(for conversation: Conversation) {
-        guard let index = conversations.firstIndex(where: { $0 == conversation }) else {
-            return
-        }
-        activeConversationIndex = index
-    }
-    
     var canGoRight: Bool {
         return activeConversationIndex < conversations.count - 1
     }
@@ -102,5 +95,9 @@ final class ConversationGroup: NSCopying {
     
     func resetContext() {
         session?.resetContext(at: self)
+    }
+    
+    func setupEditing() {
+        session?.inputManager.setupEditing(for: self)
     }
 }

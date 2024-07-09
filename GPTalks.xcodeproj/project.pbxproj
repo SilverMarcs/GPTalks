@@ -36,7 +36,6 @@
 		08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D982C37C648008ADE27 /* ProviderDetail.swift */; };
 		08915D9D2C37EEFA008ADE27 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D9C2C37EEFA008ADE27 /* AppearanceSettings.swift */; };
 		0893B2022C3955CC00D4D501 /* SessionSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2012C3955CC00D4D501 /* SessionSearch.swift */; };
-		0893B2042C396A7C00D4D501 /* ProviderStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2032C396A7C00D4D501 /* ProviderStream.swift */; };
 		0893B2062C39810900D4D501 /* SessionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2052C39810900D4D501 /* SessionConfig.swift */; };
 		089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089B22402C393BCB00E248FE /* ConversationGroup.swift */; };
 		089B22432C394A4F00E248FE /* ButtonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089B22422C394A4F00E248FE /* ButtonUtils.swift */; };
@@ -75,6 +74,9 @@
 		08C800552C36F82B009581C5 /* ProviderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800542C36F82B009581C5 /* ProviderList.swift */; };
 		08C800572C36F843009581C5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800562C36F843009581C5 /* SettingsView.swift */; };
 		08C800592C370A30009581C5 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800582C370A30009581C5 /* Model.swift */; };
+		08D174C02C3D901A000257EF /* CrossButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174BF2C3D901A000257EF /* CrossButton.swift */; };
+		08D174C22C3D96F8000257EF /* StreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C12C3D96F8000257EF /* StreamHandler.swift */; };
+		08D174C42C3D972D000257EF /* StreamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C32C3D972D000257EF /* StreamManager.swift */; };
 		08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F369E22C3C278E002E4A35 /* ProviderType.swift */; };
 /* End PBXBuildFile section */
 
@@ -123,7 +125,6 @@
 		08915D982C37C648008ADE27 /* ProviderDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetail.swift; sourceTree = "<group>"; };
 		08915D9C2C37EEFA008ADE27 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		0893B2012C3955CC00D4D501 /* SessionSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSearch.swift; sourceTree = "<group>"; };
-		0893B2032C396A7C00D4D501 /* ProviderStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderStream.swift; sourceTree = "<group>"; };
 		0893B2052C39810900D4D501 /* SessionConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionConfig.swift; sourceTree = "<group>"; };
 		089B22402C393BCB00E248FE /* ConversationGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationGroup.swift; sourceTree = "<group>"; };
 		089B22422C394A4F00E248FE /* ButtonUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonUtils.swift; sourceTree = "<group>"; };
@@ -161,6 +162,9 @@
 		08C800542C36F82B009581C5 /* ProviderList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderList.swift; sourceTree = "<group>"; };
 		08C800562C36F843009581C5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		08C800582C370A30009581C5 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		08D174BF2C3D901A000257EF /* CrossButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossButton.swift; sourceTree = "<group>"; };
+		08D174C12C3D96F8000257EF /* StreamHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamHandler.swift; sourceTree = "<group>"; };
+		08D174C32C3D972D000257EF /* StreamManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamManager.swift; sourceTree = "<group>"; };
 		08F369E22C3C278E002E4A35 /* ProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -312,6 +316,8 @@
 				08A222BD2C2ABDAF00D76C8B /* InputManager.swift */,
 				08C800422C36C045009581C5 /* SessonVM.swift */,
 				0893B2052C39810900D4D501 /* SessionConfig.swift */,
+				08D174C12C3D96F8000257EF /* StreamHandler.swift */,
+				08D174C32C3D972D000257EF /* StreamManager.swift */,
 			);
 			path = Session;
 			sourceTree = "<group>";
@@ -344,6 +350,7 @@
 				082181632C38C92E00171BF3 /* SendButton.swift */,
 				082181652C38CBAE00171BF3 /* PlusButton.swift */,
 				08AAFB922C3C88D9002C04E0 /* StopButton.swift */,
+				08D174BF2C3D901A000257EF /* CrossButton.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -401,7 +408,6 @@
 				08C8004F2C36F667009581C5 /* Provider.swift */,
 				08C800582C370A30009581C5 /* Model.swift */,
 				082181512C38046800171BF3 /* ProviderManager.swift */,
-				0893B2032C396A7C00D4D501 /* ProviderStream.swift */,
 				08F369E22C3C278E002E4A35 /* ProviderType.swift */,
 			);
 			path = LLM;
@@ -604,6 +610,7 @@
 				08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */,
 				089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */,
 				082181622C38C76E00171BF3 /* InputEditor.swift in Sources */,
+				08D174C22C3D96F8000257EF /* StreamHandler.swift in Sources */,
 				08A222C12C2ABE5C00D76C8B /* Conversation.swift in Sources */,
 				08C8003D2C36BCAB009581C5 /* ConversationListToolbar.swift in Sources */,
 				08A222832C2AB4FD00D76C8B /* GPTalksApp.swift in Sources */,
@@ -611,6 +618,7 @@
 				08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */,
 				08C800322C36AE1D009581C5 /* SessionList.swift in Sources */,
 				08C8004B2C36E658009581C5 /* ConversationListDetail.swift in Sources */,
+				08D174C02C3D901A000257EF /* CrossButton.swift in Sources */,
 				0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */,
 				081C1D922C3BD1970078BB24 /* AppConfig.swift in Sources */,
 				08A222C42C2AC6B300D76C8B /* ConversationList.swift in Sources */,
@@ -618,13 +626,13 @@
 				08C800472C36C4ED009581C5 /* UserMessage.swift in Sources */,
 				082181642C38C92E00171BF3 /* SendButton.swift in Sources */,
 				082181552C38138700171BF3 /* ModelTable.swift in Sources */,
+				08D174C42C3D972D000257EF /* StreamManager.swift in Sources */,
 				081C1D982C3BD8A50078BB24 /* GeneralSettings.swift in Sources */,
 				086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */,
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,
 				08AAFB9E2C3D02C0002C04E0 /* SessionListSidebar.swift in Sources */,
 				086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */,
 				08C800432C36C045009581C5 /* SessonVM.swift in Sources */,
-				0893B2042C396A7C00D4D501 /* ProviderStream.swift in Sources */,
 				081C1D9A2C3BE91C0078BB24 /* ColorExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

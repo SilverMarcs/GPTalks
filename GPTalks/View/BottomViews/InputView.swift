@@ -12,6 +12,11 @@ struct InputView: View {
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 15) {
+            if session.inputManager.state == .editing {
+                CrossButton(size: imageSize) { session.inputManager.cancelEditing() }
+                    .offset(y: -2.4)
+            }
+            
             PlusButton(size: imageSize)
                 .offset(y: -2.4)
                     
