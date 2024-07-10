@@ -30,7 +30,9 @@ struct InputView: View {
             })
             
             VStack(alignment: .leading) {
-                InputImageView(session: session)
+                if !session.inputManager.imagePaths.isEmpty {
+                    InputImageView(session: session)
+                }
                 
                 InputEditor(prompt: $session.inputManager.prompt)
             }

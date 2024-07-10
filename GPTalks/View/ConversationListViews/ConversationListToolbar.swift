@@ -64,6 +64,7 @@ struct ConversationListToolbar: ToolbarContent {
         ToolbarItemGroup(placement: .keyboard) {
             deleteLastMessage
             editLastMessage
+            resetLastContext
         }
         #endif
     }

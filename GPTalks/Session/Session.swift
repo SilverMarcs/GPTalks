@@ -44,7 +44,11 @@ final class Session {
     }
     
     @Transient
-    var streamingTask: Task<Void, Error>?
+    var streamingTask: Task<Void, Error>?    
+    @Attribute(.ephemeral)
+    var isStreaming: Bool {
+        streamingTask != nil
+    }
     
     @Attribute(.ephemeral) 
     var isReplying: Bool {
@@ -264,6 +268,7 @@ final class Session {
 
     func stopStreaming() {
         streamingTask?.cancel()
+        streamingTask = nil
         
         if let last = groups.last {
             if last.activeConversation.content.isEmpty {

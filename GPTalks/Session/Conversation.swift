@@ -91,7 +91,6 @@ final class Conversation: NSCopying {
         }
     }
 
-    
     func toGoogle() -> ModelContent {
         // This suports sending a lot of data types
         
@@ -120,43 +119,35 @@ final class Conversation: NSCopying {
     }
     
     func toClaude() -> MessageParameter.Message {
-//        if self.imagePaths.isEmpty {
-//            return MessageParameter.Message(
-//                role: role.toClaudeRole(),
-//                content: .text(content)
-//            )
-//        } else {
-            // Initialize an array to hold ContentObject instances
-            var contentObjects: [MessageParameter.Message.Content.ContentObject] = []
-            
-            // Add the text content
-            contentObjects.append(.text(self.content))
-            
-            // Iterate over each image path, load the image, convert to base64, and append to contentObjects
-            for imagePath in imagePaths {
-                if let url = URL(string: imagePath),
-                   let imageData = try? Data(contentsOf: url) {
-                    let base64String = imageData.base64EncodedString()
-                    let imageSource = MessageParameter.Message.Content.ImageSource(
-                        type: .base64,
-                        mediaType: .jpeg,
-                        data: base64String
-                    )
-                    contentObjects.append(.image(imageSource))
-                } else {
-                    print("Could not load image from path: \(imagePath)")
-                }
+        // Initialize an array to hold ContentObject instances
+        var contentObjects: [MessageParameter.Message.Content.ContentObject] = []
+        
+        // Add the text content
+        contentObjects.append(.text(self.content))
+        
+        // Iterate over each image path, load the image, convert to base64, and append to contentObjects
+        for imagePath in imagePaths {
+            if let url = URL(string: imagePath),
+               let imageData = try? Data(contentsOf: url) {
+                let base64String = imageData.base64EncodedString()
+                let imageSource = MessageParameter.Message.Content.ImageSource(
+                    type: .base64,
+                    mediaType: .jpeg,
+                    data: base64String
+                )
+                contentObjects.append(.image(imageSource))
+            } else {
+                print("Could not load image from path: \(imagePath)")
             }
-            
-            // Create the visionContent with the collected contentObjects
-            let visionContent: MessageParameter.Message = .init(
-                role: self.role.toClaudeRole(),
-                content: .list(contentObjects)
-            )
-            
-            return visionContent
-
-//        }
+        }
+        
+        // Create the visionContent with the collected contentObjects
+        let visionContent: MessageParameter.Message = .init(
+            role: self.role.toClaudeRole(),
+            content: .list(contentObjects)
+        )
+        
+        return visionContent
     }
     
     func countTokens() -> Int {
