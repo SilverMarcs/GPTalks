@@ -65,12 +65,25 @@ struct ConversationListToolbar: ToolbarContent {
             deleteLastMessage
             editLastMessage
             resetLastContext
+            regenLastMessage
         }
         #endif
+    }
+    private var regenLastMessage: some View {
+        Button("Regen Last Message") {
+            if session.isStreaming { return }
+            
+            if let lastGroup = session.groups.last {
+                session.regenerate(group: lastGroup)
+            }
+        }
+        .keyboardShortcut("r", modifiers: .command)
     }
     
     private var deleteLastMessage: some View {
         Button("Delete Last Message") {
+            if session.isStreaming { return }
+            
             if let lastGroup = session.groups.last {
                 session.deleteConversationGroup(lastGroup)
             }

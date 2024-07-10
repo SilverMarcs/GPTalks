@@ -18,7 +18,7 @@ final class Session {
     var isStarred: Bool = false
     var errorMessage: String = ""
     var resetMarker: Int?
-
+    
     @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
     var unorderedGroups =  [ConversationGroup]()
     
@@ -44,13 +44,13 @@ final class Session {
     }
     
     @Transient
-    var streamingTask: Task<Void, Error>?    
+    var streamingTask: Task<Void, Error>?
     @Attribute(.ephemeral)
     var isStreaming: Bool {
         streamingTask != nil
     }
     
-    @Attribute(.ephemeral) 
+    @Attribute(.ephemeral)
     var isReplying: Bool {
         groups.last?.activeConversation.isReplying ?? false
     }
@@ -117,8 +117,8 @@ final class Session {
             return (index, userContent, newAssistantGroup)
         }
     }
-
-
+    
+    
     private func prepareRegenerationContextForAssistant(_ group: ConversationGroup) -> (index: Int, userContent: String, assistantGroup: ConversationGroup)? {
         guard let index = groups.firstIndex(where: { $0.id == group.id }),
               index > 0 else {
@@ -128,7 +128,7 @@ final class Session {
         let userContent = groups[index - 1].activeConversation.content
         return (index, userContent, group)
     }
-
+    
     @MainActor
     func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil) async {
         errorMessage = ""
@@ -208,27 +208,27 @@ final class Session {
         
         guard let (index, userContent, userImagePaths, assistantGroup) = regenerationContext else { return }
         
-        groups.removeSubrange((index + 1)...)
-        
         let newAssistantConversation = Conversation(role: .assistant, content: "", model: config.model, imagePaths: [])
         
-        if assistantGroup.id == group.id {
-            // For .assistant groups
-            assistantGroup.addConversation(newAssistantConversation)
-        } else {
-            // For .user groups
-            if assistantGroup.conversations.isEmpty {
-                // New group created
-                assistantGroup.addConversation(newAssistantConversation)
+        if group.role == .user {
+            // Check if the next group is an assistant group
+            if index + 1 < groups.count && groups[index + 1].role == .assistant {
+                // Add a new conversation to the existing assistant group
+                groups[index + 1].addConversation(newAssistantConversation)
+                // Remove all groups after the next assistant group
+                groups.removeSubrange((index + 2)...)
             } else {
-                // Existing group found
-                assistantGroup.conversations = [newAssistantConversation]
+                // Remove all groups after the current user group
+                groups.removeSubrange((index + 1)...)
+                // Create a new assistant group and add it
+                let newAssistantGroup = ConversationGroup(role: .assistant)
+                newAssistantGroup.addConversation(newAssistantConversation)
+                groups.append(newAssistantGroup)
             }
-            
-            // Ensure the assistant group is added to groups if it's new
-            if !groups.contains(where: { $0.id == assistantGroup.id }) {
-                groups.append(assistantGroup)
-            }
+        } else {
+            // For .assistant groups
+            groups.removeSubrange((index + 1)...)
+            assistantGroup.addConversation(newAssistantConversation)
         }
         
         Task {
@@ -264,8 +264,8 @@ final class Session {
         let userImagePaths = groups[index - 1].activeConversation.imagePaths
         return (index, userContent, userImagePaths, group)
     }
-
-
+    
+    
     func stopStreaming() {
         streamingTask?.cancel()
         streamingTask = nil
@@ -292,7 +292,7 @@ final class Session {
             }
         }
     }
-
+    
     
     func fork(from group: ConversationGroup) -> Session {
         let newSession = Session(config: config.copy() as! SessionConfig)
@@ -307,7 +307,7 @@ final class Session {
     @discardableResult
     func addConversationGroup(conversation: Conversation) -> ConversationGroup {
         let group = ConversationGroup(conversation: conversation, session: self)
-
+        
         groups.append(group)
         return group
     }

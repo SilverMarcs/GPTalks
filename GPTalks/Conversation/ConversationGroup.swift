@@ -65,7 +65,7 @@ final class ConversationGroup: NSCopying {
     }
     
     func deleteConversation(_ conversation: Conversation) {
-        if conversations.count <= 1 {
+        if conversations.count < 1 {
             session?.deleteConversationGroup(self)
             return
         }

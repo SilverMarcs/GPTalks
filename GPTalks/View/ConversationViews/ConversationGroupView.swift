@@ -23,7 +23,7 @@ struct ConversationGroupView: View {
                 Text("Unknown role")
             }
             
-            if group.session?.groups.firstIndex(where: { $0.id == group.id }) == group.session?.resetMarker {
+            if group.session?.groups.firstIndex(where: { $0 == group }) == group.session?.resetMarker {
                 ContextResetDivider() {
                     group.session?.resetMarker = nil
                 }
