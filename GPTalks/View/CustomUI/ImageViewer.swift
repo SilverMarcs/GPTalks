@@ -11,19 +11,23 @@ struct ImageViewer: View {
     let imagePath: String
     let onRemove: () -> Void
     
-    var maxWidth: CGFloat = 100
-    var maxHeight: CGFloat = 100
-    var radius: CGFloat = 7
+    var maxWidth: CGFloat
+    var maxHeight: CGFloat
+    var radius: CGFloat
+    
+    var isCrossable: Bool
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
             if let image = Image(filePath: imagePath) {
                 image
                     .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: maxWidth, maxHeight: maxHeight, alignment: .center)
+                    .scaledToFill()
+                    .frame(maxWidth: maxWidth, maxHeight: maxHeight)
                     .clipShape(RoundedRectangle(cornerRadius: radius))
-                
+            }
+            
+            if isCrossable {
                 Button(action: onRemove) {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundStyle(.white)
@@ -31,18 +35,17 @@ struct ImageViewer: View {
                 .shadow(radius: 5)
                 .buttonStyle(.plain)
                 .padding(5)
-            } else {
-                
             }
         }
     }
     
-    init(imagePath: String, maxWidth: CGFloat = 100, maxHeight: CGFloat = 100, radius: CGFloat = 7, onRemove: @escaping () -> Void) {
+    init(imagePath: String, maxWidth: CGFloat = 100, maxHeight: CGFloat = 100, radius: CGFloat = 7, isCrossable: Bool = true, onRemove: @escaping () -> Void) {
         self.imagePath = imagePath
         self.maxWidth = maxWidth
         self.maxHeight = maxHeight
         self.radius = radius
         self.onRemove = onRemove
+        self.isCrossable = isCrossable
     }
 }
 

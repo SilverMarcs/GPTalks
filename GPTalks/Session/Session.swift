@@ -61,52 +61,6 @@ final class Session {
     }
     
     @MainActor
-    func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil) async {
-        errorMessage = ""
-        
-        self.date = Date()
-        
-        guard isRegen || !inputManager.prompt.isEmpty else { return }
-        
-        if !isRegen {
-            if inputManager.state == .editing {
-                if inputManager.prompt == inputManager.tempNormalPrompt { return }
-                
-                handleEditingMode()
-            } else {
-                guard !inputManager.prompt.isEmpty else { return }
-                
-                let content = inputManager.prompt
-                inputManager.reset()
-                
-                let user = Conversation(role: .user, content: content, model: config.model)
-                addConversationGroup(conversation: user)
-            }
-        }
-        
-        streamingTask = Task(priority: .userInitiated) {
-            await handleStreamingTask(regenContent: regenContent, assistantGroup: assistantGroup)
-        }
-    }
-    
-    private func handleEditingMode() {
-        if let editingIndex = inputManager.editingIndex,
-           editingIndex < groups.count,
-           groups[editingIndex].activeConversation.role == .user {
-            
-            // Update the content of the user conversation
-            groups[editingIndex].activeConversation.content = inputManager.prompt
-            
-            // Remove all groups after the edited group
-            groups.removeSubrange((editingIndex + 1)...)
-            
-            inputManager.resetEditing()
-        } else {
-            errorMessage = "Error: Invalid editing state"
-        }
-    }
-    
-    @MainActor
     private func handleStreamingTask(regenContent: String?, assistantGroup: ConversationGroup?) async {
         do {
             try await processRequest(regenContent: regenContent, assistantGroup: assistantGroup)
@@ -133,70 +87,13 @@ final class Session {
         try await streamHandler.handleStream(from: conversations)
     }
     
-    private func prepareConversations(regenContent: String?) -> [Conversation] {
-        var conversations = adjustedGroups.map { $0.activeConversation }
-        
-        if let regenContent = regenContent {
-            if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
-                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, model: config.model)
-            }
-            if let lastAssistantIndex = conversations.lastIndex(where: { $0.role == .assistant }) {
-                conversations.remove(at: lastAssistantIndex)
-            }
-        }
-        
-        return conversations
-    }
-    
     private func prepareAssistantConversation(assistantGroup: ConversationGroup?) -> Conversation {
         if let assistantGroup = assistantGroup {
             return assistantGroup.conversations.last!
         } else {
-            let assistant = Conversation(role: .assistant, content: "", model: config.model)
+            let assistant = Conversation(role: .assistant, content: "", model: config.model, imagePaths: [])
             addConversationGroup(conversation: assistant)
             return assistant
-        }
-    }
-    
-    @MainActor
-    func regenerate(group: ConversationGroup) {
-        let regenerationContext: (index: Int, userContent: String, assistantGroup: ConversationGroup)?
-        
-        if group.role == .assistant {
-            regenerationContext = prepareRegenerationContextForAssistant(group)
-        } else if group.role == .user {
-            regenerationContext = prepareRegenerationContextForUser(group)
-        } else {
-            return // Invalid group role
-        }
-        
-        guard let (index, userContent, assistantGroup) = regenerationContext else { return }
-        
-        groups.removeSubrange((index + 1)...)
-        
-        let newAssistantConversation = Conversation(role: .assistant, content: "", model: config.model)
-        
-        if assistantGroup.id == group.id {
-            // For .assistant groups
-            assistantGroup.addConversation(newAssistantConversation)
-        } else {
-            // For .user groups
-            if assistantGroup.conversations.isEmpty {
-                // New group created
-                assistantGroup.addConversation(newAssistantConversation)
-            } else {
-                // Existing group found
-                assistantGroup.conversations = [newAssistantConversation]
-            }
-            
-            // Ensure the assistant group is added to groups if it's new
-            if !groups.contains(where: { $0.id == assistantGroup.id }) {
-                groups.append(assistantGroup)
-            }
-        }
-        
-        Task {
-            await sendInput(isRegen: true, regenContent: userContent, assistantGroup: assistantGroup)
         }
     }
     
@@ -227,16 +124,141 @@ final class Session {
         let userContent = groups[index - 1].activeConversation.content
         return (index, userContent, group)
     }
+
+    @MainActor
+    func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil) async {
+        errorMessage = ""
+        
+        self.date = Date()
+        
+        guard isRegen || !inputManager.prompt.isEmpty else { return }
+        
+        if !isRegen {
+            if inputManager.state == .editing {
+                if inputManager.prompt == inputManager.tempNormalPrompt { return }
+                
+                handleEditingMode()
+            } else {
+                guard !inputManager.prompt.isEmpty else { return }
+                
+                let content = inputManager.prompt
+                let imagePaths = inputManager.imagePaths
+                inputManager.reset()
+                
+                let user = Conversation(role: .user, content: content, imagePaths: imagePaths)
+                addConversationGroup(conversation: user)
+            }
+        }
+        
+        streamingTask = Task(priority: .userInitiated) {
+            await handleStreamingTask(regenContent: regenContent, assistantGroup: assistantGroup)
+        }
+    }
     
-    private func prepareRegenerationContext(for assistantGroup: ConversationGroup) -> (index: Int, userContent: String)? {
-        guard assistantGroup.role == .assistant,
-              let index = groups.firstIndex(where: { $0.id == assistantGroup.id }),
+    private func handleEditingMode() {
+        if let editingIndex = inputManager.editingIndex,
+           editingIndex < groups.count,
+           groups[editingIndex].activeConversation.role == .user {
+            
+            // Update the content and imagePaths of the user conversation
+            groups[editingIndex].activeConversation.content = inputManager.prompt
+            groups[editingIndex].activeConversation.imagePaths = inputManager.imagePaths
+            
+            // Remove all groups after the edited group
+            groups.removeSubrange((editingIndex + 1)...)
+            
+            inputManager.resetEditing()
+        } else {
+            errorMessage = "Error: Invalid editing state"
+        }
+    }
+    
+    private func prepareConversations(regenContent: String?) -> [Conversation] {
+        var conversations = adjustedGroups.map { $0.activeConversation }
+        
+        if let regenContent = regenContent {
+            if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
+                // Use the existing imagePaths when regenerating
+                let existingImagePaths = conversations[lastUserIndex].imagePaths
+                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, imagePaths: existingImagePaths)
+            }
+            if let lastAssistantIndex = conversations.lastIndex(where: { $0.role == .assistant }) {
+                conversations.remove(at: lastAssistantIndex)
+            }
+        }
+        
+        return conversations
+    }
+    
+    @MainActor
+    func regenerate(group: ConversationGroup) {
+        let regenerationContext: (index: Int, userContent: String, userImagePaths: [String], assistantGroup: ConversationGroup)?
+        
+        if group.role == .assistant {
+            regenerationContext = prepareRegenerationContextForAssistant(group)
+        } else if group.role == .user {
+            regenerationContext = prepareRegenerationContextForUser(group)
+        } else {
+            return // Invalid group role
+        }
+        
+        guard let (index, userContent, userImagePaths, assistantGroup) = regenerationContext else { return }
+        
+        groups.removeSubrange((index + 1)...)
+        
+        let newAssistantConversation = Conversation(role: .assistant, content: "", imagePaths: [])
+        
+        if assistantGroup.id == group.id {
+            // For .assistant groups
+            assistantGroup.addConversation(newAssistantConversation)
+        } else {
+            // For .user groups
+            if assistantGroup.conversations.isEmpty {
+                // New group created
+                assistantGroup.addConversation(newAssistantConversation)
+            } else {
+                // Existing group found
+                assistantGroup.conversations = [newAssistantConversation]
+            }
+            
+            // Ensure the assistant group is added to groups if it's new
+            if !groups.contains(where: { $0.id == assistantGroup.id }) {
+                groups.append(assistantGroup)
+            }
+        }
+        
+        Task {
+            await sendInput(isRegen: true, regenContent: userContent, assistantGroup: assistantGroup)
+        }
+    }
+    
+    private func prepareRegenerationContextForUser(_ group: ConversationGroup) -> (index: Int, userContent: String, userImagePaths: [String], assistantGroup: ConversationGroup)? {
+        guard let index = groups.firstIndex(where: { $0.id == group.id }) else {
+            return nil
+        }
+        
+        let userContent = group.activeConversation.content
+        let userImagePaths = group.activeConversation.imagePaths
+        
+        // Find the next assistant group
+        if let nextAssistantGroup = groups.dropFirst(index + 1).first(where: { $0.role == .assistant }) {
+            return (index, userContent, userImagePaths, nextAssistantGroup)
+        } else {
+            // Create a new assistant group if none exists
+            let newAssistantGroup = ConversationGroup(role: .assistant)
+            return (index, userContent, userImagePaths, newAssistantGroup)
+        }
+    }
+    
+    private func prepareRegenerationContextForAssistant(_ group: ConversationGroup) -> (index: Int, userContent: String, userImagePaths: [String], assistantGroup: ConversationGroup)? {
+        guard let index = groups.firstIndex(where: { $0.id == group.id }),
               index > 0 else {
             return nil
         }
         
         let userContent = groups[index - 1].activeConversation.content
-        return (index, userContent)
+        let userImagePaths = groups[index - 1].activeConversation.imagePaths
+        return (index, userContent, userImagePaths, group)
     }
 
 

@@ -82,5 +82,6 @@ enum InputState {
     
     func reset() {
         prompt = ""
+        imagePaths = []
     }
 }

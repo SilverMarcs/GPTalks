@@ -39,6 +39,13 @@ final class Conversation: NSCopying {
         self.imagePaths = imagePaths
     }
     
+    init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String, model: Model, imagePaths: [String] = []) {
+        self.role = role
+        self.content = content
+        self.model = model
+        self.imagePaths = imagePaths
+    }
+    
     init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String, group: ConversationGroup, imagePaths: [String] = []) {
         self.role = role
         self.content = content

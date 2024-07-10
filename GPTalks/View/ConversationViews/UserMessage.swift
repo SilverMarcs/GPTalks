@@ -17,6 +17,18 @@ struct UserMessage: View {
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 4) {
+            ScrollView {
+                HStack {
+                    ForEach(conversation.imagePaths, id: \.self) { imagePath in
+                        ImageViewer(imagePath: imagePath, maxWidth: 200, maxHeight: 200, isCrossable: false) {
+                            if let index = conversation.imagePaths.firstIndex(of: imagePath) {
+                                conversation.imagePaths.remove(at: index)
+                            }
+                        }
+                    }
+                }
+            }
+            
             Text(conversation.content)
                 .textSelection(.enabled)
                 .padding(.vertical, 8)

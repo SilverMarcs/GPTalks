@@ -14,7 +14,7 @@ struct InputImageView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(session.inputManager.imagePaths, id: \.self) { imagePath in
-                    ImageViewer(imagePath: imagePath, maxWidth: .infinity) {
+                    ImageViewer(imagePath: imagePath, maxWidth: .infinity, maxHeight: 100, isCrossable: true) {
                         if let index = session.inputManager.imagePaths.firstIndex(of: imagePath) {
                             session.inputManager.imagePaths.remove(at: index)
                         }
