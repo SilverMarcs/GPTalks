@@ -27,20 +27,23 @@ final class Conversation: NSCopying {
     var model: Model?
     
     var content: String
+    var imagePaths: [String] = []
     var role: ChatQuery.ChatCompletionMessageParam.Role
     
     @Attribute(.ephemeral)
     var isReplying: Bool = false
     
-    init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String) {
+    init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String, imagePaths: [String] = []) {
         self.role = role
         self.content = content
+        self.imagePaths = imagePaths
     }
     
-    init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String, group: ConversationGroup) {
+    init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String, group: ConversationGroup, imagePaths: [String] = []) {
         self.role = role
         self.content = content
         self.group = group
+        self.imagePaths = imagePaths
     }
     
     init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String, model: Model, isReplying: Bool = false) {

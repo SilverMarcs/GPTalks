@@ -9,10 +9,11 @@ import SwiftUI
 
 struct PlusButton: View {
     var size: CGFloat = 25
+    var action: () -> Void
     
     var body: some View {
         Button {
-
+            action()
         } label: {
             Image(systemName: "plus.circle.fill")
                 .resizable()
@@ -26,6 +27,6 @@ struct PlusButton: View {
 }
 
 #Preview {
-    PlusButton()
+    PlusButton() { }
         .padding()
 }

@@ -70,7 +70,7 @@ final class Session {
         
         if !isRegen {
             if inputManager.state == .editing {
-                if inputManager.prompt == inputManager.tempPrompt { return }
+                if inputManager.prompt == inputManager.tempNormalPrompt { return }
                 
                 handleEditingMode()
             } else {

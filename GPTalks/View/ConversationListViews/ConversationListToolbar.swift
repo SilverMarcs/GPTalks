@@ -71,9 +71,7 @@ struct ConversationListToolbar: ToolbarContent {
     private var deleteLastMessage: some View {
         Button("Delete Last Message") {
             if let lastConversation = session.groups.last {
-//                withAnimation {
-                    session.deleteConversationGroup(lastConversation)
-//                }
+                session.deleteConversationGroup(lastConversation)
             }
         }
         .keyboardShortcut(.delete, modifiers: .command)
