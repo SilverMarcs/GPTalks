@@ -74,7 +74,7 @@ final class Session {
         errorMessage = error.localizedDescription
         
         if let lastGroup = groups.last, lastGroup.activeConversation.content.isEmpty {
-            groups.removeLast()
+            lastGroup.deleteConversation(lastGroup.activeConversation)
         }
     }
     
@@ -206,7 +206,7 @@ final class Session {
         
         groups.removeSubrange((index + 1)...)
         
-        let newAssistantConversation = Conversation(role: .assistant, content: "", imagePaths: [])
+        let newAssistantConversation = Conversation(role: .assistant, content: "", model: config.model, imagePaths: [])
         
         if assistantGroup.id == group.id {
             // For .assistant groups

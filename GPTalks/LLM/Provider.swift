@@ -15,12 +15,12 @@ class Provider {
     
     var name: String
     var host: String
-    @Attribute(.allowsCloudEncryption)
+//    @Attribute(.allowsCloudEncryption)
     var apiKey: String
     
     var type: ProviderType
     
-    var color: String = "#000000"
+    var color: String = "#00947A"
     
     @Relationship(deleteRule: .cascade)
     var chatModel: Model

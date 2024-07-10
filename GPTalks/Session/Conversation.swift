@@ -28,32 +28,32 @@ final class Conversation: NSCopying {
     
     var content: String
     var imagePaths: [String] = []
-    var role: ChatQuery.ChatCompletionMessageParam.Role
+    var role: ConversationRole
     
     @Attribute(.ephemeral)
     var isReplying: Bool = false
     
-    init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String, imagePaths: [String] = []) {
+    init(role: ConversationRole, content: String, imagePaths: [String] = []) {
         self.role = role
         self.content = content
         self.imagePaths = imagePaths
     }
     
-    init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String, model: Model, imagePaths: [String] = []) {
+    init(role: ConversationRole, content: String, model: Model, imagePaths: [String] = []) {
         self.role = role
         self.content = content
         self.model = model
         self.imagePaths = imagePaths
     }
     
-    init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String, group: ConversationGroup, imagePaths: [String] = []) {
+    init(role: ConversationRole, content: String, group: ConversationGroup, imagePaths: [String] = []) {
         self.role = role
         self.content = content
         self.group = group
         self.imagePaths = imagePaths
     }
     
-    init(role: ChatQuery.ChatCompletionMessageParam.Role, content: String, model: Model, isReplying: Bool = false) {
+    init(role: ConversationRole, content: String, model: Model, isReplying: Bool = false) {
         self.role = role
         self.content = content
         self.group = group
@@ -62,60 +62,106 @@ final class Conversation: NSCopying {
     }
     
     func toOpenAI() -> ChatQuery.ChatCompletionMessageParam {
-        let query = ChatQuery.ChatCompletionMessageParam(
-            role: role,
-            content: content
-        )
-        if let query = query {
-            return query
+        if self.imagePaths.isEmpty {
+            return ChatQuery.ChatCompletionMessageParam(
+                role: self.role.toOpenAIRole(),
+                content: self.content
+            )!
         } else {
-            fatalError("Could not create query")
+            let visionContent: [ChatQuery.ChatCompletionMessageParam.ChatCompletionUserMessageParam.Content.VisionContent] = [
+                .chatCompletionContentPartTextParam(.init(text: self.content))
+            ] + self.imagePaths.map { imagePath in
+                if let url = URL(string: imagePath),
+                   let imageData = try? Data(contentsOf: url) {
+                    return .chatCompletionContentPartImageParam(
+                        .init(imageUrl: .init(
+                            url: imageData,
+                            detail: .auto
+                        ))
+                    )
+                } else {
+                    return .chatCompletionContentPartTextParam(.init(text: "Failed to load image. Notify the user."))
+                }
+            }
+            
+            return ChatQuery.ChatCompletionMessageParam(
+                role: self.role.toOpenAIRole(),
+                content: visionContent
+            )!
         }
     }
+
     
     func toGoogle() -> ModelContent {
-        var role: String
-        switch self.role {
-        case .user:
-            role = "user"
-        case .assistant:
-            role = "model"
-        case .system:
-            role = "user"
-        case .tool:
-            role = "tool"
+        // This suports sending a lot of data types
+        
+        if self.imagePaths.isEmpty {
+            return ModelContent(
+                role: role.toGoogleRole(),
+                parts: [.text(content)]
+            )
+        } else {
+            let visionContent: [ModelContent.Part] = [
+                .text(content)
+            ] + self.imagePaths.map { imagePath in
+                if let url = URL(string: imagePath),
+                   let imageData = try? Data(contentsOf: url) {
+                    return .jpeg(imageData)
+                } else {
+                    return .text("Failed to load image. Notify the user.")
+                }
+            }
+            
+            return ModelContent(
+                role: role.toGoogleRole(),
+                parts: visionContent
+            )
         }
-        
-        let message = ModelContent(
-            role: role,
-            parts: [.text(content)]
-        )
-        
-        return message
     }
     
     func toClaude() -> MessageParameter.Message {
-        var role: MessageParameter.Message.Role
-        switch self.role {
-        case .user:
-            role = .user
-        case .assistant:
-            role = .assistant
-        case .system, .tool:
-            role = .assistant
-        }
-        
-        let message = MessageParameter.Message(
-            role: role,
-            content: .text(content)
-        )
-        
-        return message
+//        if self.imagePaths.isEmpty {
+//            return MessageParameter.Message(
+//                role: role.toClaudeRole(),
+//                content: .text(content)
+//            )
+//        } else {
+            // Initialize an array to hold ContentObject instances
+            var contentObjects: [MessageParameter.Message.Content.ContentObject] = []
+            
+            // Add the text content
+            contentObjects.append(.text(self.content))
+            
+            // Iterate over each image path, load the image, convert to base64, and append to contentObjects
+            for imagePath in imagePaths {
+                if let url = URL(string: imagePath),
+                   let imageData = try? Data(contentsOf: url) {
+                    let base64String = imageData.base64EncodedString()
+                    let imageSource = MessageParameter.Message.Content.ImageSource(
+                        type: .base64,
+                        mediaType: .jpeg,
+                        data: base64String
+                    )
+                    contentObjects.append(.image(imageSource))
+                } else {
+                    print("Could not load image from path: \(imagePath)")
+                }
+            }
+            
+            // Create the visionContent with the collected contentObjects
+            let visionContent: MessageParameter.Message = .init(
+                role: self.role.toClaudeRole(),
+                content: .list(contentObjects)
+            )
+            
+            return visionContent
+
+//        }
     }
     
     func countTokens() -> Int {
         let textToken = tokenCount(text: content)
-//        let imageToken = imagePaths.count * 85 // this is wrong
+        // TODO: Count image tokens
         return textToken
     }
     
@@ -123,4 +169,3 @@ final class Conversation: NSCopying {
         group?.deleteConversation(self)
     }
 }
-

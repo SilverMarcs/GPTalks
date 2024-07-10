@@ -70,11 +70,20 @@ struct ConversationListToolbar: ToolbarContent {
     
     private var deleteLastMessage: some View {
         Button("Delete Last Message") {
-            if let lastConversation = session.groups.last {
-                session.deleteConversationGroup(lastConversation)
+            if let lastGroup = session.groups.last {
+                session.deleteConversationGroup(lastGroup)
             }
         }
         .keyboardShortcut(.delete, modifiers: .command)
+    }
+    
+    private var resetLastContext: some View {
+        Button("Reset Context at Last Message") {
+            if let lastGroup = session.groups.last {
+                session.resetContext(at: lastGroup)
+            }
+        }
+        .keyboardShortcut("k", modifiers: .command)
     }
     
     private var editLastMessage: some View {

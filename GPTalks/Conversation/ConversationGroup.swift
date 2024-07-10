@@ -21,7 +21,7 @@ final class ConversationGroup: NSCopying {
     var date: Date = Date()
     var session: Session?
     
-    var role: ChatQuery.ChatCompletionMessageParam.Role {
+    var role: ConversationRole {
         get { return activeConversation.role }
         set { activeConversation.role = newValue }
     }
@@ -43,7 +43,7 @@ final class ConversationGroup: NSCopying {
         return Conversation(role: .user, content: "", group: self)
     }
     
-    init(role: ChatQuery.ChatCompletionMessageParam.Role) {
+    init(role: ConversationRole) {
         self.role = role
     }
     

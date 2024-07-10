@@ -7,22 +7,6 @@
 
 import SwiftUI
 
-struct CustomImageViewModifier: ViewModifier {
-    let padding: CGFloat
-    let imageSize: CGFloat
-    let color: Color
-    
-    func body(content: Content) -> some View {
-        content
-            .padding(padding)
-            .foregroundStyle(.secondary)
-            .background(color)
-            .frame(width: imageSize, height: imageSize)
-            .clipShape(Rectangle())
-    }
-}
-
-
 #if os(macOS)
 typealias PlatformImage = NSImage
 #else
@@ -30,12 +14,6 @@ typealias PlatformImage = UIImage
 #endif
 
 extension Image {
-    func customImageStyle(padding: CGFloat = 0, imageSize: CGFloat, color: Color = .clear) -> some View {
-        self
-            .resizable()
-            .modifier(CustomImageViewModifier(padding: padding, imageSize: imageSize, color: color))
-    }
-    
     init(platformImage: PlatformImage) {
 #if os(macOS)
         self.init(nsImage: platformImage)
@@ -69,7 +47,7 @@ extension PlatformImage {
                 try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
             }
             
-            let fileURL = folderURL.appendingPathComponent("\(fileName).jpg")
+        let fileURL = folderURL.appendingPathComponent("\(fileName).jpg")
             if FileManager.default.createFile(atPath: fileURL.path, contents: imageData, attributes: nil) {
                 return fileURL.absoluteString
             } else {
@@ -104,7 +82,51 @@ extension View {
     }
 }
 
+func loadImageAsBase64(from imagePath: String) -> String? {
+    guard let url = URL(string: imagePath),
+          let imageData = try? Data(contentsOf: url) else {
+        return nil
+    }
+    return imageData.base64EncodedString()
+}
+
+import Foundation
+
+//func loadImageData(from imagePath: String) -> Data? {
+//    guard let url = URL(string: imagePath) else {
+//        print("Invalid URL from image path: \(imagePath)")
+//        return nil
+//    }
+//    
+//    do {
+//        let imageData = try Data(contentsOf: url)
+//        return imageData
+//    } catch {
+//        print("Error loading image data from path: \(imagePath)")
+//        print("Error details: \(error)")
+//        return nil
+//    }
+//}
+
+func loadImageData(from filePath: String) -> Data? {
+    // Convert the string to a URL
+    guard let fileURL = URL(string: filePath) else {
+        print("Invalid URL")
+        return nil
+    }
+    
+    do {
+        // Attempt to create a Data object with the contents of the file
+        let data = try Data(contentsOf: fileURL)
+        return data
+    } catch {
+        // If there was an error loading the file, print the error
+        print("Error loading data from file: \(error)")
+        return nil
+    }
+}
+
 #Preview {
     Image(systemName: "arrow.2.circlepath")
-        .customImageStyle(imageSize: 20)
+//        .customImageStyle(imageSize: 20)
 }

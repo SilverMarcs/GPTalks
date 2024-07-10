@@ -9,6 +9,7 @@ import Foundation
 
 enum ProviderType: Codable, CaseIterable, Identifiable {
     case openai
+//    case anthropic
     case claude
     case google
     
@@ -17,7 +18,7 @@ enum ProviderType: Codable, CaseIterable, Identifiable {
     var name: String {
         switch self {
         case .openai: "OpenAI"
-        case .claude: "Claude"
+        case .claude: "Anthropic"
         case .google: "Google"
         }
     }

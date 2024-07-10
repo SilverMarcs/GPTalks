@@ -17,16 +17,8 @@ struct UserMessage: View {
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 4) {
-            ScrollView {
-                HStack {
-                    ForEach(conversation.imagePaths, id: \.self) { imagePath in
-                        ImageViewer(imagePath: imagePath, maxWidth: 200, maxHeight: 200, isCrossable: false) {
-                            if let index = conversation.imagePaths.firstIndex(of: imagePath) {
-                                conversation.imagePaths.remove(at: index)
-                            }
-                        }
-                    }
-                }
+            if !conversation.imagePaths.isEmpty {
+                imageList
             }
             
             Text(conversation.content)
@@ -58,6 +50,20 @@ struct UserMessage: View {
                     .onChange(of: geometry.size) {
                         updateLabelSize(geometry.size)
                     }
+            }
+        }
+    }
+    
+    var imageList: some View {
+        ScrollView {
+            HStack {
+                ForEach(conversation.imagePaths, id: \.self) { imagePath in
+                    ImageViewer(imagePath: imagePath, maxWidth: 200, maxHeight: 200, isCrossable: false) {
+                        if let index = conversation.imagePaths.firstIndex(of: imagePath) {
+                            conversation.imagePaths.remove(at: index)
+                        }
+                    }
+                }
             }
         }
     }
