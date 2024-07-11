@@ -286,11 +286,11 @@
 				08A222C22C2AC6A800D76C8B /* View */,
 				08A222BF2C2ABE4300D76C8B /* Conversation */,
 				08A222BC2C2ABD9E00D76C8B /* Session */,
+				0821816B2C39011100171BF3 /* Utils */,
 				08A222822C2AB4FD00D76C8B /* GPTalksApp.swift */,
 				08A222842C2AB4FD00D76C8B /* ContentView.swift */,
 				08A222882C2AB4FE00D76C8B /* Assets.xcassets */,
 				08A2228A2C2AB4FE00D76C8B /* GPTalks.entitlements */,
-				0821816B2C39011100171BF3 /* Utils */,
 				08A2228B2C2AB4FE00D76C8B /* Preview Content */,
 			);
 			path = GPTalks;
