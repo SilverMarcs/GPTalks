@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Observable class SessionVM {
     var selections: Set<Session> = []

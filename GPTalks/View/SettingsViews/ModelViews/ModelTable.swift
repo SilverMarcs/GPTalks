@@ -64,9 +64,7 @@ struct ModelTable: View {
             } label: {
                 Label("Add", systemImage: "ellipsis.circle")
             }
-            .menuStyle(.borderlessButton)
-            .labelStyle(.iconOnly)
-            .menuIndicator(.hidden)
+            .menuStyle(SimpleIconOnly())
             .frame(width: 10)
         }
         .padding(.horizontal, 8)

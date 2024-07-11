@@ -28,6 +28,7 @@ struct UserMessage: View {
                 .background(
                     RoundedRectangle(cornerRadius: 15)
                         .fill(.background.quinary)
+                        .fill(conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
                 )
             
             if let group = conversation.group {
@@ -52,6 +53,10 @@ struct UserMessage: View {
                     }
             }
         }
+    }
+    
+    var indexOfConversationGroup: Int {
+        conversation.group?.session?.groups.firstIndex(where: { $0 == conversation.group }) ?? 0
     }
     
     var imageList: some View {
@@ -82,6 +87,7 @@ struct UserMessage: View {
             } else {
                 maxHeight = 400
                 isExpanded = false
+                conversation.group?.session?.proxy?.scrollTo(conversation.group, anchor: .top)
             }
         }
     }

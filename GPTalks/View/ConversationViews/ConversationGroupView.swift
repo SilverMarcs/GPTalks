@@ -17,8 +17,10 @@ struct ConversationGroupView: View {
             switch group.role {
             case .user:
                 UserMessage(conversation: group.activeConversation)
+                    .padding(.top, 5)
             case .assistant:
                 AssistantMessage(conversation: group.activeConversation)
+                    .padding(.top, 5)
             default:
                 Text("Unknown role")
             }

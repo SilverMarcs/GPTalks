@@ -10,6 +10,7 @@ import SwiftUI
 struct ConversationMenu: View {
     var group: ConversationGroup
     @Environment(\.modelContext) var modelContext
+    @Environment(SessionVM.self) var sessionVM
     
     var labelSize: CGSize? = nil
     var toggleMaxHeight: (() -> Void)? = nil
@@ -113,13 +114,11 @@ struct ConversationMenu: View {
 
     @ViewBuilder
     var regenGroup: some View {
-//        if group.role == .assistant {
-            Button {
-                group.session?.regenerate(group: group)
-            } label: {
-                Label("Regenerate", systemImage: "arrow.2.circlepath")
-            }
-//        }
+        Button {
+            group.session?.regenerate(group: group)
+        } label: {
+            Label("Regenerate", systemImage: "arrow.2.circlepath")
+        }
     }
 
     var navigate: some View {
@@ -178,7 +177,6 @@ struct ConversationMenu: View {
             }
         }
     }
-
 }
 
 #Preview {

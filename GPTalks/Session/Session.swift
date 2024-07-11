@@ -53,6 +53,9 @@ final class Session {
     }
     
     @Transient
+    var proxy: ScrollViewProxy?
+    
+    @Transient
     var isReplying: Bool {
         groups.last?.activeConversation.isReplying ?? false
     }

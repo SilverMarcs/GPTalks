@@ -12,6 +12,7 @@ import KeyboardShortcuts
 struct ConversationList: View {
     var session: Session
     @Environment(\.modelContext) var modelContext
+    @Environment(SessionVM.self) private var sessionVM
     
     @State private var hasUserScrolled = false
     @State private var isScrolling = false
@@ -30,6 +31,9 @@ struct ConversationList: View {
                 }
                 .scrollSensor()
                 .padding()
+            }
+            .onAppear {
+                session.proxy = proxy
             }
             .task {
                 KeyboardShortcuts.onKeyUp(for: .sendMessage) { [self] in

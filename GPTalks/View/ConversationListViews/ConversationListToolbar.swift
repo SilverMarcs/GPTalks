@@ -9,6 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct ConversationListToolbar: ToolbarContent {
+    @Environment(SessionVM.self) var sessionVM
+    
     @Bindable var session: Session
     @Query var providers: [Provider]
     
@@ -130,9 +132,7 @@ struct ConversationListToolbar: ToolbarContent {
             guard let lastUserGroup = session.groups.last(where: { $0.role == .user }) else {
                 return
             }
-            withAnimation {
-                lastUserGroup.setupEditing()
-            }
+            lastUserGroup.setupEditing()
         }
         .keyboardShortcut("e", modifiers: .command)
     }

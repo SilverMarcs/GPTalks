@@ -32,7 +32,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     
     var imageOffset: CGFloat {
         switch self {
-        case .openai: 5
+        case .openai: 4
         case .anthropic: 6
         case .google: 12
         }

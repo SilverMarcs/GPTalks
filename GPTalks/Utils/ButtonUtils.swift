@@ -38,3 +38,18 @@ struct HoverSquareBackgroundStyle: ButtonStyle {
     }
 }
 
+#Preview {
+    VStack {
+        Menu {
+            Button("Open") { }
+            Button("Save") { }
+            Button("Close") { }
+        } label: {
+            Label("File", systemImage: "doc")
+        }
+        .menuStyle(SimpleIconOnly())
+    }
+    .padding()
+    .frame(width: 200)
+}
+

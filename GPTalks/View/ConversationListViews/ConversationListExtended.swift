@@ -38,7 +38,9 @@ extension View {
                 scrollToBottom(proxy: proxy)
             }
             .onChange(of: session.inputManager.prompt) {
-                scrollToBottom(proxy: proxy)
+                if session.inputManager.state == .normal {
+                    scrollToBottom(proxy: proxy)
+                }
             }
     }
 }
