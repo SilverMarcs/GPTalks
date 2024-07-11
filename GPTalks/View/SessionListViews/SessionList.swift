@@ -63,9 +63,9 @@ struct SessionList: View {
         _sessions = Query(
             filter: #Predicate {
                 if searchString.isEmpty {
-                    return true
+                    return !$0.isQuick
                 } else {
-                    return $0.title.localizedStandardContains(searchString)
+                    return !$0.isQuick && $0.title.localizedStandardContains(searchString)
                 }
             }, sort: [sort], animation: .default)
     }

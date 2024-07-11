@@ -36,26 +36,7 @@ struct SessionListToolbar: ToolbarContent {
     }
     
     private func addItem() {
-        let provider: Provider
-        if let defaultProvider = providerManager.getDefault(providers: providers) {
-            provider = defaultProvider
-        } else if let firstProvider = providers.first {
-            provider = firstProvider
-        } else {
-            return
-        }
-        
-        let config = SessionConfig(
-            provider: provider, model: provider.chatModel)
-        
-        let newItem = Session(config: config)
-        
-        withAnimation {
-            modelContext.insert(newItem)
-            sessionVM.selections = [newItem]
-        }
-        
-        try? modelContext.save()
+        sessionVM.addItem(providerManager: providerManager, providers: providers, modelContext: modelContext)
     }
 }
 

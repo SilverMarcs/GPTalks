@@ -17,6 +17,15 @@ struct SettingsView: View {
                     Label("General", systemImage: "gear")
                 }
             
+            #if os(macOS)
+            QuickPanelSettings()
+                .padding(.horizontal, 80)
+                .frame(width: 700, height: 140)
+                .tabItem {
+                    Label("Quick Panel", systemImage: "bolt.fill")
+                }
+            #endif
+            
             ParameterSettings()
                 .padding(.horizontal, 80)
                 .frame(width: 700, height: 300)

@@ -18,6 +18,7 @@ final class Session {
     var isStarred: Bool = false
     var errorMessage: String = ""
     var resetMarker: Int?
+    var isQuick: Bool = false
     
     @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
     var unorderedGroups =  [ConversationGroup]()
@@ -303,6 +304,8 @@ final class Session {
     
     @MainActor
     func generateTitle(forced: Bool = false) async {
+        if isQuick { return }
+        
         if forced || adjustedGroups.count == 1 {
             
             if adjustedGroups.isEmpty {

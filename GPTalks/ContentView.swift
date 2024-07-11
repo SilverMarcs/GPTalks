@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import KeyboardShortcuts
 
 struct ContentView: View {
     @Environment(SessionVM.self) private var sessionVM
@@ -14,6 +15,12 @@ struct ContentView: View {
     @Query private var providers: [Provider]
 
     @ObservedObject var providerManager = ProviderManager.shared
+    
+#if os(macOS)
+    @State var showingPanel = false
+    @State private var mainWindow: NSWindow?
+    @State var showAdditionalContent = false
+#endif
     
     var body: some View {
         NavigationSplitView {
@@ -35,8 +42,51 @@ struct ContentView: View {
                 }
             }
         }
+        .background(BackgroundView(window: $mainWindow))
+        .task {
+            KeyboardShortcuts.onKeyDown(for: .togglePanel) {
+                if !NSApp.isActive {
+                    NSApp.activate(ignoringOtherApps: true)
+                }
+                showingPanel.toggle()
+            }
+        }
+        .floatingPanel(isPresented: $showingPanel, showAdditionalContent: $showAdditionalContent) {
+            QuickPanel(showAdditionalContent: $showAdditionalContent) {
+                showingPanel.toggle()
+                bringMainWindowToFront()
+            }
+            .modelContainer(modelContext.container)
+            .environment(sessionVM)
+        }
     }
+    
+#if os(macOS)
+    private func bringMainWindowToFront() {
+        if let window = mainWindow, !window.isKeyWindow {
+            window.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+        }
+    }
+    
+#endif
 }
+
+#if os(macOS)
+struct BackgroundView: NSViewRepresentable {
+    @Binding var window: NSWindow?
+    
+    func makeNSView(context: Context) -> NSView {
+        let nsView = NSView()
+        DispatchQueue.main.async {
+            self.window = nsView.window
+        }
+        return nsView
+    }
+    
+    func updateNSView(_ nsView: NSView, context: Context) {}
+}
+#endif
 
 #Preview {
     ContentView()

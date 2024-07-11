@@ -62,12 +62,12 @@ class StreamManager {
     
     private func nonStreamingClaudeResponse(from conversations: [Conversation]) async throws -> String {
         // Default implementation for Claude
-        return "Non-streaming response not implemented for Claude"
+        return "New Session"
     }
     
     private func nonStreamingGoogleResponse(from conversations: [Conversation]) async throws -> String {
         // Default implementation for Google
-        return "Non-streaming response not implemented for Google"
+        return "New Session"
     }
     
     private func streamOpenAIResponse(from conversations: [Conversation]) -> AsyncThrowingStream<String, Error> {

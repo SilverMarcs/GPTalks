@@ -40,6 +40,9 @@
 		0893B2062C39810900D4D501 /* SessionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2052C39810900D4D501 /* SessionConfig.swift */; };
 		089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089B22402C393BCB00E248FE /* ConversationGroup.swift */; };
 		089B22432C394A4F00E248FE /* ButtonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089B22422C394A4F00E248FE /* ButtonUtils.swift */; };
+		089C7E102C4058CF005E3BE9 /* FloatingSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E0F2C4058CF005E3BE9 /* FloatingSetup.swift */; };
+		089C7E122C405904005E3BE9 /* QuickPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E112C405904005E3BE9 /* QuickPanel.swift */; };
+		089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */; };
 		08A222832C2AB4FD00D76C8B /* GPTalksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222822C2AB4FD00D76C8B /* GPTalksApp.swift */; };
 		08A222852C2AB4FD00D76C8B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222842C2AB4FD00D76C8B /* ContentView.swift */; };
 		08A222872C2AB4FD00D76C8B /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222862C2AB4FD00D76C8B /* Session.swift */; };
@@ -134,6 +137,9 @@
 		0893B2052C39810900D4D501 /* SessionConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionConfig.swift; sourceTree = "<group>"; };
 		089B22402C393BCB00E248FE /* ConversationGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationGroup.swift; sourceTree = "<group>"; };
 		089B22422C394A4F00E248FE /* ButtonUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonUtils.swift; sourceTree = "<group>"; };
+		089C7E0F2C4058CF005E3BE9 /* FloatingSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingSetup.swift; sourceTree = "<group>"; };
+		089C7E112C405904005E3BE9 /* QuickPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanel.swift; sourceTree = "<group>"; };
+		089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelSettings.swift; sourceTree = "<group>"; };
 		08A2227F2C2AB4FD00D76C8B /* GPTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08A222822C2AB4FD00D76C8B /* GPTalksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTalksApp.swift; sourceTree = "<group>"; };
 		08A222842C2AB4FD00D76C8B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -260,6 +266,8 @@
 		089C7E0E2C404E86005E3BE9 /* QuickPanel */ = {
 			isa = PBXGroup;
 			children = (
+				089C7E0F2C4058CF005E3BE9 /* FloatingSetup.swift */,
+				089C7E112C405904005E3BE9 /* QuickPanel.swift */,
 			);
 			path = QuickPanel;
 			sourceTree = "<group>";
@@ -443,6 +451,7 @@
 				08915D9C2C37EEFA008ADE27 /* AppearanceSettings.swift */,
 				081C1D932C3BD33F0078BB24 /* ParameterSettings.swift */,
 				081C1D972C3BD8A50078BB24 /* GeneralSettings.swift */,
+				089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */,
 			);
 			path = SettingsViews;
 			sourceTree = "<group>";
@@ -624,6 +633,7 @@
 				0821816D2C39013400171BF3 /* StringExtensions.swift in Sources */,
 				085645442C3F98DF00ED84DA /* TitleMaker.swift in Sources */,
 				081C1D8D2C3B8F690078BB24 /* ConversationListExtended.swift in Sources */,
+				089C7E102C4058CF005E3BE9 /* FloatingSetup.swift in Sources */,
 				08C800552C36F82B009581C5 /* ProviderList.swift in Sources */,
 				08A222872C2AB4FD00D76C8B /* Session.swift in Sources */,
 				0893B2022C3955CC00D4D501 /* SessionSearch.swift in Sources */,
@@ -636,6 +646,7 @@
 				08D174C62C3DC2A8000257EF /* DateUtils.swift in Sources */,
 				08C8003D2C36BCAB009581C5 /* ConversationListToolbar.swift in Sources */,
 				08A222832C2AB4FD00D76C8B /* GPTalksApp.swift in Sources */,
+				089C7E122C405904005E3BE9 /* QuickPanel.swift in Sources */,
 				08C8003A2C36BA30009581C5 /* InputView.swift in Sources */,
 				08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */,
 				08C800322C36AE1D009581C5 /* SessionList.swift in Sources */,
@@ -651,6 +662,7 @@
 				08D174C42C3D972D000257EF /* StreamManager.swift in Sources */,
 				081C1D982C3BD8A50078BB24 /* GeneralSettings.swift in Sources */,
 				086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */,
+				089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */,
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,
 				08149A572C3E5E5B004485AC /* ConversationRole.swift in Sources */,
 				08AAFB9E2C3D02C0002C04E0 /* SessionListSidebar.swift in Sources */,

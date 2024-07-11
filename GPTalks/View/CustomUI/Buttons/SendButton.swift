@@ -22,6 +22,7 @@ struct SendButton: View {
                 .foregroundStyle(.white, Color.accentColor)
         }
         .buttonStyle(.plain)
+        .keyboardShortcut(.defaultAction)
     }
 }
 

@@ -35,7 +35,6 @@ struct GPTalksApp: App {
             Model.self,
             ConversationGroup.self,
             SessionConfig.self,
-//            ColorComponents.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         

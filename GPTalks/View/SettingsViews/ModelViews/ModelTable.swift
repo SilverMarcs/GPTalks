@@ -33,15 +33,6 @@ struct ModelTable: View {
     
     private var header: some View {
         HStack {
-            Picker("Default Model", selection: $provider.chatModel) {
-                ForEach(provider.models, id: \.self) { model in
-                    Text(model.name).tag(model)
-                }
-            }
-            .frame(width: 240)
-            
-            Spacer()
-            
             Menu {
                 Button {
                     provider.addOpenAIModels()
@@ -66,6 +57,19 @@ struct ModelTable: View {
             }
             .menuStyle(SimpleIconOnly())
             .frame(width: 10)
+            
+            
+            Picker("Default Model", selection: $provider.chatModel) {
+                ForEach(provider.models, id: \.self) { model in
+                    Text(model.name).tag(model)
+                }
+            }
+                
+            Picker("Quick Model", selection: $provider.quickChatModel) {
+                ForEach(provider.models, id: \.self) { model in
+                    Text(model.name).tag(model)
+                }
+            }
         }
         .padding(.horizontal, 8)
     }
