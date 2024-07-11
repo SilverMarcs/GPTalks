@@ -65,7 +65,7 @@ enum ProviderDetailTab: CaseIterable {
 }
 
 #Preview {
-    let provider = Provider.getDemoProvider()
+    let provider = Provider.factory(type: .openai)
 
     ProviderDetail(provider: provider)
 }

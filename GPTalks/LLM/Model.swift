@@ -48,7 +48,7 @@ extension Model {
         ]
     }
     
-    static func getClaudeModels() -> [Model] {
+    static func getAnthropicModels() -> [Model] {
         return [
             Model(code: "claude-3-opus-20240229", name: "Claude-3O"),
             Model(code: "claude-3-sonnet-20240229", name: "Claude-3S"),

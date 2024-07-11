@@ -13,10 +13,10 @@ class Provider {
     var id: UUID = UUID()
     var date: Date = Date()
     
-    var name: String
-    var host: String
-//    @Attribute(.allowsCloudEncryption)
-    var apiKey: String
+    var name: String = ""
+    var host: String = ""
+    @Attribute(.allowsCloudEncryption)
+    var apiKey: String = ""
     
     var type: ProviderType
     
@@ -28,12 +28,21 @@ class Provider {
     @Relationship(deleteRule: .cascade)
     var models =  [Model]()
     
-    init(name: String, host: String, apiKey: String, type: ProviderType = .openai) {
-        self.name = name
-        self.host = host
-        self.apiKey = apiKey
-        self.chatModel = Model(code: "gpt-3.5-turbo", name: "GPT-3.5 Turbo")
-        self.type = type
+    init() {
+        self.chatModel = Model.getDemoModel()
+        self.type = .openai
+    }
+    
+    static func factory(type: ProviderType) -> Provider {
+        let provider = Provider()
+        provider.type = type
+        provider.name = type.name
+        provider.host = type.defaultHost
+        provider.models = type.getDefaultModels()
+        provider.chatModel = provider.models.first!
+        provider.color = type.defaultColor
+        
+        return provider
     }
 
     func addOpenAIModels() {
@@ -45,7 +54,7 @@ class Provider {
     }
     
     func addClaudeModels() {
-        for model in Model.getClaudeModels() {
+        for model in Model.getAnthropicModels() {
             if !models.contains(where: { $0.code == model.code }) {
                 models.append(model)
             }
@@ -58,13 +67,5 @@ class Provider {
                 models.append(model)
             }
         }
-    }
-    
-    static func getDemoProvider() -> Provider {
-        let provider = Provider(name: "OpenAI", host: "api.openai.com", apiKey: "")
-        provider.addOpenAIModels()
-        provider.chatModel = provider.models.first!
-        
-        return provider
     }
 }

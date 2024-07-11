@@ -24,7 +24,7 @@ final class SessionConfig: NSCopying {
     var model: Model
     
 //    init(provider: Provider, model: Model) {
-    init(provider: Provider = Provider.getDemoProvider(), model: Model = Model.getDemoModel()) {
+    init(provider: Provider = Provider.factory(type: .openai), model: Model = Model.getDemoModel()) {
         self.provider = provider
         self.model = model
     }

@@ -13,7 +13,7 @@ struct ProviderRow: View {
     
     var body: some View {
         HStack {
-            ProviderImage(radius: 7, color: Color(hex: provider.color), frame: 20)
+            ProviderImage(provider: provider, radius: 6, frame: 20)
             Text(provider.name)
             Spacer()
             if selectionManager.defaultProvider == provider.id.uuidString {
@@ -26,7 +26,7 @@ struct ProviderRow: View {
 }
 
 #Preview {
-    let provider = Provider.getDemoProvider()
+    let provider = Provider.factory(type: .openai)
     
     ProviderRow(provider: provider)
 }

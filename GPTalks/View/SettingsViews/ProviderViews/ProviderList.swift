@@ -33,23 +33,33 @@ struct ProviderList: View {
                 }
             }
             .safeAreaInset(edge: .bottom) {
-                HStack {
-                    Button(action: addProvider) {
-                        Label("Create Provider", systemImage: "plus")
-                    }
-                    .labelStyle(.iconOnly)
-                    
-                    Spacer()
-                }
-                .padding()
+                addButton
+                    .padding()
             }
         }
     }
     
-    private func addProvider() {
-        let newProvider = Provider(name: "New Provider", host: "new-provider.com", apiKey: "")
-        newProvider.addOpenAIModels()
-        newProvider.chatModel = newProvider.models.first!
+    private var addButton: some View {
+        HStack {
+            Menu {
+                ForEach(ProviderType.allCases, id: \.self) { type in
+                    Button(action: { addProvider(type: type) }) {
+                        Text(type.name)
+                    }
+                }
+            } label: {
+                Label("Create Provider", systemImage: "plus")
+            }
+            .menuStyle(SimpleIconOnly())
+            
+            
+            Spacer()
+        }
+    }
+
+    
+    private func addProvider(type: ProviderType) {
+        let newProvider = Provider.factory(type: type)
         
         withAnimation {
             modelContext.insert(newProvider)

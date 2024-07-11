@@ -136,7 +136,7 @@ struct ModelTable: View {
 }
 
 #Preview {
-    let provider = Provider.getDemoProvider()
+    let provider = Provider.factory(type: .openai)
 
     ModelTable(provider: provider)
         .modelContainer(for: Provider.self, inMemory: true)

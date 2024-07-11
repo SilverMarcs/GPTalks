@@ -39,15 +39,6 @@ struct ProviderGeneral: View {
                         Text(type.name).tag(type)
                     }
                 }
-                .onChange(of: provider.type) {
-                    if provider.type == .google {
-                        provider.host = "generativelanguage.googleapis.com"
-                    } else if provider.type == .openai {
-                        provider.host = "api.openai.com"
-                    } else if provider.type == .claude {
-                        provider.host = "api.anthropic.com"
-                    }
-                }
             }
 
         }
@@ -56,7 +47,7 @@ struct ProviderGeneral: View {
     
     private var header: some View {
         HStack {
-            ProviderImage(color: Color(hex: provider.color), frame: 33)
+            ProviderImage(provider: provider, frame: 33)
 
             TextEditor(text: $provider.name)
                 .textEditorStyle(.plain)
@@ -93,8 +84,7 @@ struct ProviderGeneral: View {
 }
 
 #Preview {
-    let provider = Provider.getDemoProvider()
-    provider.type = .google
+    let provider = Provider.factory(type: .openai)
 
     return ProviderGeneral(provider: provider)
         .padding()

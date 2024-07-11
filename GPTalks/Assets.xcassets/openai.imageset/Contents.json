@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "visualhunter-a1bf6d3746-2 1.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "visualhunter-a1bf6d3746-2.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "visualhunter-a1bf6d3746-2 2.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

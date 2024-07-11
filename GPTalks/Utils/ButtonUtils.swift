@@ -7,24 +7,12 @@
 
 import SwiftUI
 
-struct HoverProminentPlain: ButtonStyle {
+struct SimpleIconOnly: MenuStyle {
     func makeBody(configuration: Configuration) -> some View {
-        IconButtonStyleView(configuration: configuration)
-    }
-}
-
-private struct IconButtonStyleView: View {
-    let configuration: ButtonStyle.Configuration
-    @State private var isHovering = false
-    
-    var body: some View {
-        configuration.label
+        Menu(configuration)
             .labelStyle(.iconOnly)
-            .foregroundStyle(isHovering ? .primary : .secondary)
-            .contentShape(Rectangle())
-            .onHover { hovering in
-                isHovering = hovering
-            }
+            .menuIndicator(.hidden)
+            .menuStyle(.borderlessButton)
     }
 }
 

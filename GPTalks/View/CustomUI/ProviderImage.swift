@@ -8,23 +8,28 @@
 import SwiftUI
 
 struct ProviderImage: View {
-    var radius: CGFloat = 10
-    var color: Color = .primary
+    var provider: Provider
+    
+    var radius: CGFloat = 9
     var frame: CGFloat = 29
     
     var body: some View {
-        ZStack  {
+        ZStack {
+            // Background rounded rectangle
             RoundedRectangle(cornerRadius: radius)
-                .fill(color)
+                .fill(Color(hex: provider.color))
                 .frame(width: frame, height: frame)
             
-            Image("openaiPng")
+            // Image
+            Image(provider.type.imageName)
                 .resizable()
-                .frame(width: frame - 2, height: frame - 2)
-//                .colorMultiply(color)
+                .scaledToFit()
+                .frame(width: frame - provider.type.imageOffset,
+                       height: frame - provider.type.imageOffset)
         }
     }
 }
+
 #Preview {
-    ProviderImage()
+    ProviderImage(provider: Provider.factory(type: .openai))
 }

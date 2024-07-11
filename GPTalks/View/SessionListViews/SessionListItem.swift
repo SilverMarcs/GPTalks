@@ -18,7 +18,7 @@ struct SessionListItem: View {
     
     var body: some View {
         HStack {
-            ProviderImage(color: Color(hex: session.config.provider.color))
+            ProviderImage(provider: session.config.provider)
             
             VStack {
                 HStack {

@@ -1,5 +1,5 @@
 {
-  "originHash" : "858c7cacca38421806f2c8cb0b5770e6b7b08f933c61eadc5dd289b7f4f2a97d",
+  "originHash" : "337d86534963504918b4d0ad9aec1029860634eddd4cbffb78e15554fa89855e",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -53,24 +53,6 @@
       "state" : {
         "branch" : "cancellable",
         "revision" : "7593b8be724d56ab845f70bf5177226215d48dec"
-      }
-    },
-    {
-      "identity" : "orderedrelationship",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/FiveSheepCo/OrderedRelationship",
-      "state" : {
-        "revision" : "005c59db5b2569c4eb7b7b05394b85773981d88c",
-        "version" : "1.1.0"
-      }
-    },
-    {
-      "identity" : "swift-syntax",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-syntax.git",
-      "state" : {
-        "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
-        "version" : "509.1.1"
       }
     },
     {

@@ -26,7 +26,7 @@ struct ContentView: View {
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 if providers.isEmpty {
-                    let newProvider = Provider.getDemoProvider()
+                    let newProvider = Provider.factory(type: .openai)
                     modelContext.insert(newProvider)
                     
                     if providerManager.getDefault(providers: providers) == nil {

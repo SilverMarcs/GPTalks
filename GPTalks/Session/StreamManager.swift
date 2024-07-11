@@ -23,7 +23,7 @@ class StreamManager {
         switch config.provider.type {
         case .openai:
             return streamOpenAIResponse(from: conversations)
-        case .claude:
+        case .anthropic:
             return streamClaudeResponse(from: conversations)
         case .google:
             return streamGoogleResponse(from: conversations)
@@ -34,7 +34,7 @@ class StreamManager {
         switch config.provider.type {
         case .openai:
             return try await nonStreamingOpenAIResponse(from: conversations)
-        case .claude:
+        case .anthropic:
             return try await nonStreamingClaudeResponse(from: conversations)
         case .google:
             return try await nonStreamingGoogleResponse(from: conversations)
