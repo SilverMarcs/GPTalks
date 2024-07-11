@@ -87,7 +87,6 @@ struct UserMessage: View {
             } else {
                 maxHeight = 400
                 isExpanded = false
-                conversation.group?.session?.proxy?.scrollTo(conversation.group, anchor: .top)
             }
         }
     }

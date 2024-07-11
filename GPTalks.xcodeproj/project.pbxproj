@@ -10,7 +10,6 @@
 		08149A572C3E5E5B004485AC /* ConversationRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08149A562C3E5E5B004485AC /* ConversationRole.swift */; };
 		081637762C3542CA00C7DE52 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 081637752C3542CA00C7DE52 /* MarkdownWebView */; };
 		081C1D8D2C3B8F690078BB24 /* ConversationListExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D8C2C3B8F690078BB24 /* ConversationListExtended.swift */; };
-		081C1D902C3B916D0078BB24 /* IsScrolling in Frameworks */ = {isa = PBXBuildFile; productRef = 081C1D8F2C3B916D0078BB24 /* IsScrolling */; };
 		081C1D922C3BD1970078BB24 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D912C3BD1970078BB24 /* AppConfig.swift */; };
 		081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D932C3BD33F0078BB24 /* ParameterSettings.swift */; };
 		081C1D982C3BD8A50078BB24 /* GeneralSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D972C3BD8A50078BB24 /* GeneralSettings.swift */; };
@@ -185,7 +184,6 @@
 			files = (
 				08A222CB2C2AD08A00D76C8B /* OpenAI in Frameworks */,
 				08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */,
-				081C1D902C3B916D0078BB24 /* IsScrolling in Frameworks */,
 				081637762C3542CA00C7DE52 /* MarkdownWebView in Frameworks */,
 				08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */,
 				08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */,
@@ -257,6 +255,13 @@
 				082181692C39001B00171BF3 /* ProviderRow.swift */,
 			);
 			path = ProviderViews;
+			sourceTree = "<group>";
+		};
+		089C7E0E2C404E86005E3BE9 /* QuickPanel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = QuickPanel;
 			sourceTree = "<group>";
 		};
 		08A222762C2AB4FD00D76C8B = {
@@ -354,6 +359,7 @@
 				08C8003B2C36BC56009581C5 /* ConversationListViews */,
 				08C800382C36BA1E009581C5 /* BottomViews */,
 				08C8003F2C36BD7B009581C5 /* SessionListViews */,
+				089C7E0E2C404E86005E3BE9 /* QuickPanel */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -460,7 +466,6 @@
 			packageProductDependencies = (
 				08A222CA2C2AD08A00D76C8B /* OpenAI */,
 				081637752C3542CA00C7DE52 /* MarkdownWebView */,
-				081C1D8F2C3B916D0078BB24 /* IsScrolling */,
 				08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */,
 				08AAFB8F2C3C735A002C04E0 /* SwiftAnthropic */,
 				08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */,
@@ -541,7 +546,6 @@
 			packageReferences = (
 				08A222C92C2AD08A00D76C8B /* XCRemoteSwiftPackageReference "OpenAI" */,
 				0873CBEA2C353D8400D9CAEB /* XCRemoteSwiftPackageReference "markdown-webview" */,
-				081C1D8E2C3B916D0078BB24 /* XCRemoteSwiftPackageReference "IsScrolling" */,
 				08F369E42C3C2CF8002E4A35 /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 				08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
 				08AAFB942C3CF0DD002C04E0 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
@@ -1015,14 +1019,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		081C1D8E2C3B916D0078BB24 /* XCRemoteSwiftPackageReference "IsScrolling" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/fatbobman/IsScrolling";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.2;
-			};
-		};
 		0873CBEA2C353D8400D9CAEB /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
@@ -1078,11 +1074,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0873CBEA2C353D8400D9CAEB /* XCRemoteSwiftPackageReference "markdown-webview" */;
 			productName = MarkdownWebView;
-		};
-		081C1D8F2C3B916D0078BB24 /* IsScrolling */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 081C1D8E2C3B916D0078BB24 /* XCRemoteSwiftPackageReference "IsScrolling" */;
-			productName = IsScrolling;
 		};
 		08A222CA2C2AD08A00D76C8B /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;

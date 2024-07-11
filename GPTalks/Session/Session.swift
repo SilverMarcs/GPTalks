@@ -144,8 +144,6 @@ final class Session {
         
         if !isRegen {
             if inputManager.state == .editing {
-                if inputManager.prompt == inputManager.tempNormalPrompt { return }
-                
                 handleEditingMode()
             } else {
                 guard !inputManager.prompt.isEmpty else { return }

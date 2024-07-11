@@ -63,6 +63,9 @@ struct ConversationMenu: View {
         if let labelSize = labelSize, labelSize.height >= 400 {
             Button {
                 toggleMaxHeight?()
+                withAnimation {
+                    group.session?.proxy?.scrollTo(group, anchor: .top)
+                }
             } label: {
                 Label("Expand", systemImage: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right")
             }

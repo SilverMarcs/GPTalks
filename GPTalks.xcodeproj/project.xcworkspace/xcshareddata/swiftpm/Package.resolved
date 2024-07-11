@@ -1,5 +1,5 @@
 {
-  "originHash" : "337d86534963504918b4d0ad9aec1029860634eddd4cbffb78e15554fa89855e",
+  "originHash" : "7ba5958583955e160205fcc674bdde0989097898fdfe83971af89ee6f4928b15",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -17,15 +17,6 @@
       "state" : {
         "revision" : "a86968867ab4380e36b904a14c42215f71efe8b4",
         "version" : "1.0.4"
-      }
-    },
-    {
-      "identity" : "isscrolling",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/fatbobman/IsScrolling",
-      "state" : {
-        "revision" : "7def8d8f789a326b6f725a76cee8ec3fa69511df",
-        "version" : "1.1.2"
       }
     },
     {

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import IsScrolling
+//import IsScrolling
 import KeyboardShortcuts
 
 struct ConversationList: View {
@@ -29,18 +29,24 @@ struct ConversationList: View {
                     
                     Color.clear.id(String.bottomID).frame(height: 20)
                 }
-                .scrollSensor()
+//                .scrollSensor()
                 .padding()
+                .padding(.top, -10)
             }
             .onAppear {
                 session.proxy = proxy
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
+                if session.isReplying {
+                    hasUserScrolled = true
+                }
             }
             .task {
                 KeyboardShortcuts.onKeyUp(for: .sendMessage) { [self] in
                     Task { await session.sendInput() }
                 }
             }
-            .scrollStatusMonitor($isScrolling, monitorMode: .common)
+//            .scrollStatusMonitor($isScrolling, monitorMode: .common)
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled, isScrolling: $isScrolling)
             .navigationTitle(session.title)
             .navigationSubtitle(navSubtitle)
