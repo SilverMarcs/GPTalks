@@ -17,7 +17,13 @@ struct ConversationListToolbar: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigation) {
             Menu {
+                Section {
+                    generateTitle
+                }
                 
+                Section {
+                    deleteAllMessages
+                }
             } label: {
                 Image(systemName: "slider.vertical.3")
             }
@@ -69,6 +75,25 @@ struct ConversationListToolbar: ToolbarContent {
         }
         #endif
     }
+    
+    private var generateTitle: some View {
+        Button("Generate Title") {
+            if session.isStreaming { return }
+            
+            Task {
+                await session.generateTitle(forced: true)
+            }
+        }
+    }
+    
+    private var deleteAllMessages: some View {
+        Button("Delete All Messages") {
+            if session.isStreaming { return }
+            
+            session.deleteAllConversations()
+        }
+    }
+    
     private var regenLastMessage: some View {
         Button("Regen Last Message") {
             if session.isStreaming { return }

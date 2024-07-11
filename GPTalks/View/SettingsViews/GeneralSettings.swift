@@ -15,6 +15,10 @@ struct GeneralSettings: View {
             Section("Markdown") {
                 Toggle("Assistant Message Markdown", isOn: $config.assistantMarkdown)
             }
+            
+            Section("Behaviour") {
+                Toggle("Autogen Title", isOn: $config.autogenTitle)
+            }
         }
         .formStyle(.grouped)
     }

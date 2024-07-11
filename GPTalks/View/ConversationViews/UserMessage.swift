@@ -58,10 +58,8 @@ struct UserMessage: View {
         ScrollView {
             HStack {
                 ForEach(conversation.imagePaths, id: \.self) { imagePath in
-                    ImageViewer(imagePath: imagePath, maxWidth: 200, maxHeight: 200, isCrossable: false) {
-                        if let index = conversation.imagePaths.firstIndex(of: imagePath) {
-                            conversation.imagePaths.remove(at: index)
-                        }
+                    ImageViewer(imagePath: imagePath, maxWidth: 200, maxHeight: 200, radius: 9, isCrossable: false) {
+                            print("Should not be removed like this")
                     }
                 }
             }

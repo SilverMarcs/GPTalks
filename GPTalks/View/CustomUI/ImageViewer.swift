@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import QuickLook
 
 struct ImageViewer: View {
     let imagePath: String
@@ -16,6 +17,8 @@ struct ImageViewer: View {
     var radius: CGFloat
     
     var isCrossable: Bool
+    
+    @State var qlItem: URL?
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -37,6 +40,20 @@ struct ImageViewer: View {
                 .padding(5)
             }
         }
+        .onTapGesture {
+            setupQLItem()
+        }
+        .quickLookPreview($qlItem)
+    }
+    
+    private func setupQLItem() {
+#if os(macOS)
+        qlItem = URL(string: imagePath)!
+#else
+        if let fileURL = absoluteURL(forRelativePath: imageUrlPath) {
+            qlItem = fileURL
+        }
+#endif
     }
     
     init(imagePath: String, maxWidth: CGFloat = 100, maxHeight: CGFloat = 100, radius: CGFloat = 7, isCrossable: Bool = true, onRemove: @escaping () -> Void) {

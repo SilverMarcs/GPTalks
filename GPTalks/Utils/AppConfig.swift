@@ -12,6 +12,7 @@ class AppConfig: ObservableObject {
     
     // General
     @AppStorage("assistantMarkdown") var assistantMarkdown: Bool = true
+    @AppStorage("autogenTitle") var autogenTitle: Bool = true
     
     // Parameters
     @AppStorage("temperature") var temperature: Double = 1.0

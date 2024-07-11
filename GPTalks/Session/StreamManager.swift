@@ -30,11 +30,51 @@ class StreamManager {
         }
     }
     
+    func nonStreamingResponse(from conversations: [Conversation]) async throws -> String {
+        switch config.provider.type {
+        case .openai:
+            return try await nonStreamingOpenAIResponse(from: conversations)
+        case .claude:
+            return try await nonStreamingClaudeResponse(from: conversations)
+        case .google:
+            return try await nonStreamingGoogleResponse(from: conversations)
+        }
+    }
+    
+    private func nonStreamingOpenAIResponse(from conversations: [Conversation]) async throws -> String {
+        let service = OpenAI(configuration: OpenAI.Configuration(token: config.provider.apiKey, host: config.provider.host))
+        
+        var messages = conversations.map { $0.toOpenAI() }
+        let systemPrompt = Conversation(role: .system, content: config.systemPrompt)
+        messages.insert(systemPrompt.toOpenAI(), at: 0)
+        
+        let query = ChatQuery(
+            messages: messages,
+            model: config.model.code,
+            maxTokens: 4096,
+            temperature: config.temperature,
+            stream: false
+        )
+        
+        let result = try await service.chats(query: query)
+        return result.choices.first?.message.content?.string ?? ""
+    }
+    
+    private func nonStreamingClaudeResponse(from conversations: [Conversation]) async throws -> String {
+        // Default implementation for Claude
+        return "Non-streaming response not implemented for Claude"
+    }
+    
+    private func nonStreamingGoogleResponse(from conversations: [Conversation]) async throws -> String {
+        // Default implementation for Google
+        return "Non-streaming response not implemented for Google"
+    }
+    
     private func streamOpenAIResponse(from conversations: [Conversation]) -> AsyncThrowingStream<String, Error> {
         let service = OpenAI(
             configuration: OpenAI.Configuration(
                 token: config.provider.apiKey, host: config.provider.host))
-
+        
         var messages = conversations.map {
             $0.toOpenAI()
         }
@@ -71,7 +111,7 @@ class StreamManager {
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
             basePath: "https://" + config.provider.host)
-
+        
         let messages = conversations.map {
             $0.toClaude()
         }

@@ -28,6 +28,7 @@ struct SessionList: View {
                 }
                 .onDelete(perform: deleteItems)
             }
+            .frame(minWidth: 240)
             .onChange(of: sessions.count) {
                 if sessions.count > prevCount {
                     if let first = sessions.first {

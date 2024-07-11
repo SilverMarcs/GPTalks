@@ -51,7 +51,9 @@ struct ConversationList: View {
     }
     
     var navSubtitle: String {
-        "Tokens: " + session.tokenCounter.formatToK() + " • " + session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45)
+        "Tokens: " 
+        + session.tokenCounter.formatToK()
+        + " • " + session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45)
     }
 }
 

@@ -52,4 +52,12 @@ class StreamHandler {
             try? context.save()
         }
     }
+    
+    @MainActor
+    func handleNonStreamingResponse(from conversations: [Conversation]) async throws -> String {
+        let streamManager = StreamManager(config: config)
+        let response = try await streamManager.nonStreamingResponse(from: conversations)
+        
+        return response
+    }
 }

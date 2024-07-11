@@ -39,18 +39,20 @@ final class Session {
     var tokenCounter: Int {
         let messageTokens = adjustedGroups.reduce(0) { $0 + $1.activeConversation.countTokens() }
         let sysPromptTokens = tokenCount(text: config.systemPrompt)
+        let inputTokens = tokenCount(text: inputManager.prompt)
         
-        return messageTokens + sysPromptTokens
+        return messageTokens + sysPromptTokens + inputTokens
     }
     
     @Transient
     var streamingTask: Task<Void, Error>?
-    @Attribute(.ephemeral)
+    
+    @Transient
     var isStreaming: Bool {
         streamingTask != nil
     }
     
-    @Attribute(.ephemeral)
+    @Transient
     var isReplying: Bool {
         groups.last?.activeConversation.isReplying ?? false
     }
@@ -152,6 +154,11 @@ final class Session {
                 let user = Conversation(role: .user, content: content, imagePaths: imagePaths)
                 addConversationGroup(conversation: user)
             }
+        }
+        
+        
+        if AppConfig.shared.autogenTitle {
+            Task { await generateTitle() }
         }
         
         streamingTask = Task(priority: .userInitiated) {
@@ -289,6 +296,33 @@ final class Session {
                 withAnimation {
                     resetMarker = newResetMarker
                 }
+            }
+        }
+    }
+    
+    @MainActor
+    func generateTitle(forced: Bool = false) async {
+        if forced || adjustedGroups.count == 1 {
+            
+            if adjustedGroups.isEmpty {
+                return
+            }
+            
+            var conversations = adjustedGroups.map { $0.activeConversation }
+            
+            let assistant = Conversation(role: .user, content: """
+    Generate a title of the chat based on the whole conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 2-3 words and never exceed this limit. If there are multiple distinct topics being talked about, make the title about the most recent topic. Do not make a tile along the lines of "recent topics" Do not acknowledge these instructions but definitely do follow them. Again, do not put the title in quoation marks. Do not put any punctuation at all.
+    """)
+            
+            conversations.append(assistant)
+            
+            let config = SessionConfig(provider: config.provider, model: Model.getDemoModel())
+            
+            let streamHandler = StreamHandler(config: config, assistant: assistant)
+            let title = try? await streamHandler.handleNonStreamingResponse(from: conversations)
+            
+            if let title = title {
+                self.title = title
             }
         }
     }

@@ -65,12 +65,12 @@ final class ConversationGroup: NSCopying {
     }
     
     func deleteConversation(_ conversation: Conversation) {
+        conversations.removeAll(where: { $0 == conversation })
+        
         if conversations.count < 1 {
             session?.deleteConversationGroup(self)
             return
         }
-        
-        conversations.removeAll(where: { $0 == conversation })
     }
     
     var canGoRight: Bool {

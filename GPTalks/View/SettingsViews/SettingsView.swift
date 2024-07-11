@@ -12,7 +12,7 @@ struct SettingsView: View {
         TabView {
             GeneralSettings()
                 .padding(.horizontal, 80)
-                .frame(width: 700, height: 130)
+                .frame(width: 700, height: 200)
                 .tabItem {
                     Label("General", systemImage: "gear")
                 }
