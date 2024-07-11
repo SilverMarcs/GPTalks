@@ -31,7 +31,7 @@ struct ConversationList: View {
                 }
 //                .scrollSensor()
                 .padding()
-                .padding(.top, -10)
+                .padding(.top, -15)
             }
             .onAppear {
                 session.proxy = proxy

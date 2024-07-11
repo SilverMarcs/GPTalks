@@ -22,10 +22,15 @@ struct HoverSquareBackgroundStyle: ButtonStyle {
     @Environment(\.isEnabled) var isEnabled
     @State private var isHovering = false
     
+    let size: CGFloat = 25 // Fixed size for the button
+    let imagePadding: CGFloat = 12 // Padding around the image
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .labelStyle(.iconOnly)
-            .padding(5)
+            .frame(width: size - (imagePadding * 2), height: size - (imagePadding * 2)) // Set frame for image
+            .aspectRatio(contentMode: .fit) // Ensure image fits within frame
+            .frame(width: size, height: size) // Set overall button size
             .background(
                 RoundedRectangle(cornerRadius: 4)
                     .fill(isHovering ? Color.gray.opacity(0.2) : Color.clear)
@@ -40,14 +45,30 @@ struct HoverSquareBackgroundStyle: ButtonStyle {
 
 #Preview {
     VStack {
-        Menu {
-            Button("Open") { }
-            Button("Save") { }
-            Button("Close") { }
-        } label: {
-            Label("File", systemImage: "doc")
+//        Menu {
+//            Button("Open") { }
+//            Button("Save") { }
+//            Button("Close") { }
+//        } label: {
+//            Label("File", systemImage: "doc")
+//        }
+//        .menuStyle(SimpleIconOnly())
+        
+        HStack(spacing: 0) {
+            Button {
+                print("Button tapped")
+            } label: {
+                Image(systemName: "paperclip")
+            }
+            .buttonStyle(HoverSquareBackgroundStyle())
+            
+            Button {
+                print("Button tapped")
+            } label: {
+                Image(systemName: "arrow.trianglehead.2.counterclockwise.rotate.90")
+            }
+            .buttonStyle(HoverSquareBackgroundStyle())
         }
-        .menuStyle(SimpleIconOnly())
     }
     .padding()
     .frame(width: 200)
