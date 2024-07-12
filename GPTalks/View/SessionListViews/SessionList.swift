@@ -22,13 +22,13 @@ struct SessionList: View {
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
-                
                 ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
                     SessionListItem(session: session)
                         .listRowSeparator(.visible)
                         .listRowSeparatorTint(Color.gray.opacity(0.2))
                 }
                 .onDelete(perform: deleteItems)
+                .onMove(perform: move)
             }
             .toolbar {
                 SessionListToolbar()
@@ -65,7 +65,7 @@ struct SessionList: View {
     
     init(
         sort: SortDescriptor<Session> = SortDescriptor(
-            \Session.date, order: .reverse), searchString: String
+            \Session.order, order: .forward), searchString: String
     ) {
         _sessions = Query(
             filter: #Predicate {
@@ -82,6 +82,15 @@ struct SessionList: View {
             for index in offsets {
                 modelContext.delete(sessions[index])
             }
+        }
+    }
+    
+    private func move(from source: IndexSet, to destination: Int) {
+        var updatedSessions = sessions
+        updatedSessions.move(fromOffsets: source, toOffset: destination)
+        
+        for (index, session) in updatedSessions.enumerated() {
+            session.order = index
         }
         
         try? modelContext.save()

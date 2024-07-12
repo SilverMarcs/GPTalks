@@ -11,6 +11,7 @@ import SwiftData
 @Model
 final class Model: Hashable {
     var id: UUID = UUID()
+    var order: Int = 0
 
     var code: String
     var name: String

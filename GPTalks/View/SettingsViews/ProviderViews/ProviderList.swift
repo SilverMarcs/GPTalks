@@ -10,7 +10,7 @@ import SwiftData
 
 struct ProviderList: View {
     @Environment(\.modelContext) var modelContext
-    @Query(sort: \Provider.date) var providers: [Provider]
+    @Query(sort: \Provider.order) var providers: [Provider]
     @ObservedObject var providerManager = ProviderManager.shared
     
     @State var selectedProvider: Provider?
@@ -24,7 +24,9 @@ struct ProviderList: View {
                     }
                 }
                 .onDelete(perform: deleteProviders)
+                .onMove(perform: move)
             }
+            #if os(macOS)
             .onAppear {
                 DispatchQueue.main.async {
                     if selectedProvider == nil {
@@ -32,6 +34,7 @@ struct ProviderList: View {
                     }
                 }
             }
+            #endif
             .safeAreaInset(edge: .bottom) {
                 addButton
                     .padding()
@@ -52,11 +55,9 @@ struct ProviderList: View {
             }
             .menuStyle(SimpleIconOnly())
             
-            
             Spacer()
         }
     }
-
     
     private func addProvider(type: ProviderType) {
         let newProvider = Provider.factory(type: type)
@@ -95,6 +96,17 @@ struct ProviderList: View {
                 modelContext.delete(providers[index])
             }
         }
+    }
+    
+    private func move(from source: IndexSet, to destination: Int) {
+        var updatedProviders = providers
+        updatedProviders.move(fromOffsets: source, toOffset: destination)
+        
+        for (index, provider) in updatedProviders.enumerated() {
+            provider.order = index
+        }
+        
+        try? modelContext.save()
     }
 }
 

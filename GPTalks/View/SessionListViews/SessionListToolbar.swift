@@ -9,33 +9,52 @@ import SwiftUI
 import SwiftData
 
 struct SessionListToolbar: ToolbarContent {
+    #if !os(macOS)
+    @Environment(\.editMode) var editMode
+    #endif
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     @ObservedObject var providerManager = ProviderManager.shared
     
     @Query(sort: \Provider.date, order: .reverse) var providers: [Provider]
+    @Query var sessions: [Session]
     
     @State var showSettings: Bool = false
     
     var body: some ToolbarContent {
 #if !os(macOS)
         ToolbarItem(placement: .navigationBarLeading) {
-            Button(action: { showSettings.toggle() }) {
-                Label("Settings", systemImage: "gear")
-            }
-            .labelStyle(.titleOnly)
-            .popover(isPresented: $showSettings) {
-                NavigationStack {
-                    SettingsView()
-                        .navigationTitle("Settings")
-                        .toolbarTitleDisplayMode(.inline)
-                        .toolbar {
-                            Button("Done") {
-                                showSettings.toggle()
+            if editMode?.wrappedValue == .inactive {
+                Menu {
+                    Button(action: { withAnimation { editMode?.wrappedValue = .active }}) {
+                        Label("Edit", systemImage: "pencil")
+                    }
+                    Button(action: { showSettings.toggle() }) {
+                        Label("Settings", systemImage: "gear")
+                    }
+                } label: {
+                    Label("More", systemImage: "ellipsis.circle")
+                        .labelStyle(.titleOnly)
+                }
+                .popover(isPresented: $showSettings) {
+                    NavigationView {
+                        SettingsView()
+                            .navigationTitle("Settings")
+                            .toolbarTitleDisplayMode(.inline)
+                            .toolbar {
+                                Button("Done") {
+                                    showSettings.toggle()
+                                }
                             }
-                        }
+                    }
+                }
+            } else {
+                Button(action: { withAnimation {editMode?.wrappedValue = .inactive }}) {
+                    Label("Done", systemImage: "pencil")
+                        .labelStyle(.titleOnly)
                 }
             }
+    
         }
 #endif
         ToolbarItem {
@@ -51,7 +70,7 @@ struct SessionListToolbar: ToolbarContent {
     }
     
     private func addItem() {
-        sessionVM.addItem(providerManager: providerManager, providers: providers, modelContext: modelContext)
+        sessionVM.addItem(sessions: sessions, providerManager: providerManager, providers: providers, modelContext: modelContext)
     }
 }
 

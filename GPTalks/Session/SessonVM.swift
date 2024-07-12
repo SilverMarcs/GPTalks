@@ -16,7 +16,7 @@ import SwiftUI
     
     var chatCount: Int = 12
     
-    func addItem(providerManager: ProviderManager, providers: [Provider], modelContext: ModelContext) {
+    func addItem(sessions: [Session], providerManager: ProviderManager, providers: [Provider], modelContext: ModelContext) {
         let provider: Provider
         if let defaultProvider = providerManager.getDefault(providers: providers) {
             provider = defaultProvider
@@ -32,6 +32,12 @@ import SwiftUI
         let newItem = Session(config: config)
         
         withAnimation {
+            // Increment the order of all existing items
+            for session in sessions {
+                session.order += 1
+            }
+            
+            newItem.order = 0  // Set the new item's order to 0 (top of the list)
             modelContext.insert(newItem)
             self.selections = [newItem]
         }

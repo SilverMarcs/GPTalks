@@ -90,9 +90,12 @@ struct ModelTable: View {
 
     private var modelList: some View {
         List {
-            ForEach(provider.models, id: \.self) { model in
+            ForEach(provider.models.sorted { $0.order < $1.order }, id: \.self) { model in
                 ModelRow(model: model)
             }
+//            .onMove { indices, newOffset in
+//                provider.models.move(fromOffsets: indices, toOffset: newOffset)
+//            }
 
             modelAdder
         }

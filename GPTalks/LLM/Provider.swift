@@ -12,6 +12,7 @@ import SwiftData
 class Provider {
     var id: UUID = UUID()
     var date: Date = Date()
+    var order: Int = 0
     
     var name: String = ""
     var host: String = ""

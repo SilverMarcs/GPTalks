@@ -63,7 +63,7 @@ struct ConversationListToolbar: ToolbarContent {
     
     private var providerPicker: some View {
         Picker("Provider", selection: $session.config.provider) {
-            ForEach(providers.sorted(by: { $0.date < $1.date }), id: \.self) { provider in
+            ForEach(providers.sorted(by: { $0.order < $1.order }), id: \.self) { provider in
                 Text(provider.name).tag(provider.id)
             }
         }
@@ -71,7 +71,7 @@ struct ConversationListToolbar: ToolbarContent {
     
     private var modelPicker: some View {
         Picker("Model", selection: $session.config.model) {
-            ForEach(session.config.provider.models.sorted(by: { $0.name < $1.name }), id: \.self) { model in
+            ForEach(session.config.provider.models.sorted(by: { $0.order < $1.order }), id: \.self) { model in
                 Text(model.name)
             }
         }
@@ -168,7 +168,7 @@ struct ConversationListToolbar: View {
     
     private var providerPicker: some View {
         Picker("Provider", selection: $session.config.provider) {
-            ForEach(providers.sorted(by: { $0.date < $1.date }), id: \.self) { provider in
+            ForEach(providers.sorted(by: { $0.order < $1.order }), id: \.self) { provider in
                 Text(provider.name).tag(provider.id)
             }
         }
@@ -176,7 +176,7 @@ struct ConversationListToolbar: View {
     
     private var modelPicker: some View {
         Picker("Model", selection: $session.config.model) {
-            ForEach(session.config.provider.models.sorted(by: { $0.name < $1.name }), id: \.self) { model in
+            ForEach(session.config.provider.models.sorted(by: { $0.order < $1.order }), id: \.self) { model in
                 Text(model.name)
             }
         }

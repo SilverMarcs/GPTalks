@@ -14,6 +14,7 @@ import OpenAI
 final class Session {
     var id: UUID = UUID()
     var date: Date = Date()
+    var order: Int = 0
     var title: String = "New Session"
     var isStarred: Bool = false
     var errorMessage: String = ""

@@ -105,6 +105,7 @@ struct SessionListItem: View {
             } label: {
                 Label("Edit", systemImage: "pencil")
             }
+            .tint(.accentColor)
         }
     }
 }
