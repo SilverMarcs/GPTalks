@@ -18,6 +18,7 @@ struct AssistantMessage: View {
         VStack(alignment: .leading) {
             HStack(alignment: .top, spacing: 14) {
                 assistantImage
+//                ProviderImage(provider: conversation.group?.session?.config.provider ?? Provider.factory(type: .openai), frame: 20)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     if let model = conversation.model {
@@ -37,17 +38,25 @@ struct AssistantMessage: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-                    
+                    #if os(macOS)
                     if let group = conversation.group, !conversation.isReplying {
                         ConversationMenu(group: group)
                             .opacity(isHovered ? 1 : 0)
                             .animation(.easeInOut(duration: 0.2), value: isHovered)
                     }
+                    #endif
                 }
                 .padding(.top, 2)
             }
         }
         .padding(.trailing, 30)
+#if !os(macOS)
+        .contextMenu {
+            if let group = conversation.group, !conversation.isReplying {
+                ConversationMenu(group: group)
+            }
+        }
+#endif
         .onHover { isHovered in
             self.isHovered = isHovered
         }

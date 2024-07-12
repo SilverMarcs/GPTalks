@@ -11,37 +11,58 @@ struct SettingsView: View {
     var body: some View {
         TabView {
             GeneralSettings()
-                .padding(.horizontal, 80)
-                .frame(width: 700, height: 200)
+                .platformPadding()
+                .frame(minHeight: 200)
                 .tabItem {
                     Label("General", systemImage: "gear")
                 }
             
             #if os(macOS)
             QuickPanelSettings()
-                .padding(.horizontal, 80)
-                .frame(width: 700, height: 140)
+                .platformPadding()
+                .frame(minHeight: 140)
                 .tabItem {
                     Label("Quick Panel", systemImage: "bolt.fill")
                 }
-            #endif
+#endif
             
             ParameterSettings()
-                .padding(.horizontal, 80)
-                .frame(width: 700, height: 300)
+                .platformPadding()
+                .frame(minHeight: 300)
                 .tabItem {
                     Label("Parameters", systemImage: "slider.horizontal.3")
                 }
             
             ProviderList()
-                .frame(width: 700, height: 400)
+#if os(macOS)
+            .frame(minWidth: 700, minHeight: 400)
+            #endif
                 .tabItem {
                     Label("Providers", systemImage: "cpu")
                 }
         }
+
     }
 }
 
 #Preview {
     SettingsView()
+}
+
+struct PlatformPadding: ViewModifier {
+    func body(content: Content) -> some View {
+#if os(macOS)
+        content
+            .padding(.horizontal, 80)
+            .frame(width: 700)
+#else
+        content
+#endif
+    }
+}
+
+extension View {
+    func platformPadding() -> some View {
+        self.modifier(PlatformPadding())
+    }
 }

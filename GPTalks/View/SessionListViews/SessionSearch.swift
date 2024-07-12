@@ -92,10 +92,10 @@ class ShortcutListener {
         }
     }
 }
-#endif
 
 #Preview {
     SessionSearch("Hi", text: .constant(""), height: 30) {
         print("Clear")
     }
 }
+#endif

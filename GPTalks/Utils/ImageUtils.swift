@@ -23,15 +23,24 @@ extension Image {
     }
     
     init?(filePath: String) {
+        #if os(macOS)
         guard let url = URL(string: filePath),
               let platformImage = PlatformImage(contentsOf: url) else {
             return nil
         }
         self.init(platformImage: platformImage)
+        #else
+        guard let data = loadImageData(from: filePath),
+              let platformImage = PlatformImage(data: data) else {
+            return nil
+        }
+        self.init(platformImage: platformImage)
+        #endif
     }
 }
 
 extension PlatformImage {
+    #if os(macOS)
     func save(fileName: String = Date().nowFileName(), inFolder folderName: String = "GPTalks") -> String? {
         guard let data = self.tiffRepresentation,
               let bitmapImage = NSBitmapImageRep(data: data),
@@ -59,6 +68,41 @@ extension PlatformImage {
             return nil
         }
     }
+    #else
+    func save(fileName: String = Date().nowFileName(), inFolder folderName: String = "GPTalks") -> String? {
+        var imageData: Data? = nil
+        var fileType: String = ""
+        
+        if let jpegData = self.jpegData(compressionQuality: 0.7) {
+            imageData = jpegData
+            fileType = ".jpg"
+        }
+        
+        guard let data = imageData else {
+            return nil
+        }
+        
+        do {
+            let directory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let folderURL = directory.appendingPathComponent(folderName, isDirectory: true)
+            
+            if !FileManager.default.fileExists(atPath: folderURL.path) {
+                try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
+            }
+            
+            let fullFileName = fileName + fileType
+            let fileURL = folderURL.appendingPathComponent(fullFileName)
+            
+            try data.write(to: fileURL)
+            
+            // Return the relative path from the Documents directory
+            return folderName + "/" + fullFileName
+        } catch {
+            print(error.localizedDescription)
+            return nil
+        }
+    }
+    #endif
 }
 
 extension View {
@@ -71,9 +115,15 @@ extension View {
             switch result {
             case .success(let urls):
                 for url in urls {
+                    #if os(macOS)
                     if let image = NSImage(contentsOf: url) {
                         onImageAppend?(image)
                     }
+                    #else
+                    if let image = UIImage(contentsOfFile: url.path) {
+                        onImageAppend?(image)
+                    }
+                    #endif
                 }
             case .failure(let error):
                 print("File selection error: \(error.localizedDescription)")
@@ -92,22 +142,7 @@ func loadImageAsBase64(from imagePath: String) -> String? {
 
 import Foundation
 
-//func loadImageData(from imagePath: String) -> Data? {
-//    guard let url = URL(string: imagePath) else {
-//        print("Invalid URL from image path: \(imagePath)")
-//        return nil
-//    }
-//    
-//    do {
-//        let imageData = try Data(contentsOf: url)
-//        return imageData
-//    } catch {
-//        print("Error loading image data from path: \(imagePath)")
-//        print("Error details: \(error)")
-//        return nil
-//    }
-//}
-
+#if os(mac)
 func loadImageData(from filePath: String) -> Data? {
     // Convert the string to a URL
     guard let fileURL = URL(string: filePath) else {
@@ -125,6 +160,15 @@ func loadImageData(from filePath: String) -> Data? {
         return nil
     }
 }
+#else
+func loadImageData(from filePath: String) -> Data? {
+    guard let url = URL(string: filePath),
+          let data = try? Data(contentsOf: url) else {
+        return nil
+    }
+    return data
+}
+#endif
 
 #Preview {
     Image(systemName: "arrow.2.circlepath")

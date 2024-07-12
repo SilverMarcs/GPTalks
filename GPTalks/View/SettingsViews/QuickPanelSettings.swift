@@ -8,6 +8,7 @@
 import KeyboardShortcuts
 import SwiftUI
 
+#if os(macOS)
 struct QuickPanelSettings: View {
     var body: some View {
         Form {
@@ -26,3 +27,4 @@ struct QuickPanelSettings: View {
 #Preview {
     QuickPanelSettings()
 }
+#endif

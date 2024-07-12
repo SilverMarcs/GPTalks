@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import IsScrolling
+//import IsScrolling
 
 extension View {
     func applyObservers(proxy: ScrollViewProxy, session: Session, hasUserScrolled: Binding<Bool>, isScrolling: Binding<Bool>) -> some View {

@@ -96,7 +96,9 @@ struct ModelTable: View {
 
             modelAdder
         }
+        #if os(macOS)
         .alternatingRowBackgrounds()
+        #endif
     }
 
     private var modelAdder: some View {

@@ -15,12 +15,11 @@ struct SessionList: View {
     @Query(sort: \Provider.date, order: .reverse) var providers: [Provider]
     @Query var sessions: [Session]
 
-    @State var showSettings: Bool = false
     @State private var prevCount = 0
 
     var body: some View {
         @Bindable var sessionVM = sessionVM
-
+        
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
                 ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
@@ -28,7 +27,7 @@ struct SessionList: View {
                 }
                 .onDelete(perform: deleteItems)
             }
-            .frame(minWidth: 240)
+
             .onChange(of: sessions.count) {
                 if sessions.count > prevCount {
                     if let first = sessions.first {
@@ -39,6 +38,11 @@ struct SessionList: View {
                     }
                 }
             }
+            .toolbar {
+                SessionListToolbar()
+            }
+            #if os(macOS)
+            .frame(minWidth: 240)
             .onAppear {
                 if let first = sessions.first {
                     DispatchQueue.main.async {
@@ -46,13 +50,11 @@ struct SessionList: View {
                     }
                 }
             }
-            .toolbar {
-                SessionListToolbar()
-            }
-            .popover(isPresented: $showSettings) {
-                SettingsView()
-                    .modelContainer(modelContext.container)
-            }
+            #endif
+            #if !os(macOS)
+            .listStyle(.inset)
+            .searchable(text: $sessionVM.searchText)
+            #endif
         }
     }
     

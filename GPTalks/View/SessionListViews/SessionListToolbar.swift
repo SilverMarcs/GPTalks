@@ -15,11 +15,17 @@ struct SessionListToolbar: ToolbarContent {
     
     @Query(sort: \Provider.date, order: .reverse) var providers: [Provider]
     
+    @State var showSettings: Bool = false
+    
     var body: some ToolbarContent {
-#if os(iOS)
-        ToolbarItem(placement: .leading) {
+#if !os(macOS)
+        ToolbarItem(placement: .navigationBarLeading) {
             Button(action: { showSettings.toggle() }) {
                 Label("Settings", systemImage: "gear")
+            }
+            .popover(isPresented: $showSettings) {
+                SettingsView()
+                    .modelContainer(modelContext.container)
             }
         }
 #endif
@@ -27,7 +33,7 @@ struct SessionListToolbar: ToolbarContent {
             Spacer()
         }
         
-        ToolbarItem {
+        ToolbarItem(placement: .automatic) {
             Button(action: addItem) {
                 Label("Add Item", systemImage: "square.and.pencil")
             }

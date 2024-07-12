@@ -31,11 +31,13 @@ struct UserMessage: View {
                         .fill(conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
                 )
             
+            #if os(macOS)
             if let group = conversation.group {
                 ConversationMenu(group: group, labelSize: labelSize, toggleMaxHeight: toggleMaxHeight, isExpanded: isExpanded)
                     .opacity(isHovered ? 1 : 0)
                     .animation(.easeInOut(duration: 0.2), value: isHovered)
             }
+            #endif
         }
         .frame(maxWidth: .infinity, maxHeight: maxHeight, alignment: .trailing)
         .padding(.leading, 160)
@@ -53,6 +55,13 @@ struct UserMessage: View {
                     }
             }
         }
+#if !os(macOS)
+        .contextMenu {
+            if let group = conversation.group {
+                ConversationMenu(group: group, labelSize: labelSize, toggleMaxHeight: toggleMaxHeight, isExpanded: isExpanded)
+            }
+        }
+#endif
     }
     
     var indexOfConversationGroup: Int {

@@ -50,9 +50,9 @@ struct ImageViewer: View {
 #if os(macOS)
         qlItem = URL(string: imagePath)!
 #else
-        if let fileURL = absoluteURL(forRelativePath: imageUrlPath) {
-            qlItem = fileURL
-        }
+//        if let fileURL = absoluteURL(forRelativePath: imageUrlPath) {
+//            qlItem = fileURL
+//        }
 #endif
     }
     

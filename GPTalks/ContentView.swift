@@ -28,7 +28,6 @@ struct ContentView: View {
         } detail: {
             ConversationListDetail()
         }
-        .frame(minWidth: 600, minHeight: 400)
         .background(.background)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -42,6 +41,8 @@ struct ContentView: View {
                 }
             }
         }
+        #if os(macOS)
+        .frame(minWidth: 600, minHeight: 400)
         .background(BackgroundView(window: $mainWindow))
         .task {
             KeyboardShortcuts.onKeyDown(for: .togglePanel) {
@@ -59,6 +60,7 @@ struct ContentView: View {
             .modelContainer(modelContext.container)
             .environment(sessionVM)
         }
+        #endif
     }
     
 #if os(macOS)
@@ -68,7 +70,6 @@ struct ContentView: View {
             NSApp.activate(ignoringOtherApps: true)
         }
     }
-    
 #endif
 }
 

@@ -32,6 +32,7 @@ struct InputEditor: View {
             isFocused = true
         }
         .font(.body)
+        #if os(macOS)
         .toolbar {
             ToolbarItem(placement: .keyboard) {
                 Button {
@@ -42,6 +43,7 @@ struct InputEditor: View {
                 .keyboardShortcut("l", modifiers: .command)
             }
         }
+        #endif
     }
     
     var padding: CGFloat = 6

@@ -36,6 +36,7 @@ struct ConversationList: View {
             .onAppear {
                 session.proxy = proxy
             }
+            #if os(macOS)
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 if session.isReplying {
                     hasUserScrolled = true
@@ -46,10 +47,11 @@ struct ConversationList: View {
                     Task { await session.sendInput() }
                 }
             }
+            .navigationSubtitle(navSubtitle)
+            #endif
 //            .scrollStatusMonitor($isScrolling, monitorMode: .common)
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled, isScrolling: $isScrolling)
             .navigationTitle(session.title)
-            .navigationSubtitle(navSubtitle)
             .scrollContentBackground(.visible)
             .safeAreaInset(edge: .bottom) {
                 InputView(session: session)

@@ -181,11 +181,10 @@ struct QuickPanel: View {
     }
 }
 
-#endif
-
 #Preview {
     let showAdditionalContent = Binding.constant(true)
     let dismiss = {}
     
     QuickPanel(showAdditionalContent: showAdditionalContent, dismiss: dismiss)
 }
+#endif

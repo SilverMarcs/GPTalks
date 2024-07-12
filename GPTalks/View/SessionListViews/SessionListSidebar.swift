@@ -13,10 +13,12 @@ struct SessionListSidebar: View {
     var body: some View {
         @Bindable var sessionVM = sessionVM
         
+        #if os(macOS)
         SessionSearch("Search", text: $sessionVM.searchText) {
             sessionVM.searchText = ""
         }
         .padding(.horizontal, 10)
+        #endif
         
         SessionListCards()
             .padding(.horizontal, 10)
