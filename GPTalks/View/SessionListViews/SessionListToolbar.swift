@@ -23,9 +23,18 @@ struct SessionListToolbar: ToolbarContent {
             Button(action: { showSettings.toggle() }) {
                 Label("Settings", systemImage: "gear")
             }
+            .labelStyle(.titleOnly)
             .popover(isPresented: $showSettings) {
-                SettingsView()
-                    .modelContainer(modelContext.container)
+                NavigationStack {
+                    SettingsView()
+                        .navigationTitle("Settings")
+                        .toolbarTitleDisplayMode(.inline)
+                        .toolbar {
+                            Button("Done") {
+                                showSettings.toggle()
+                            }
+                        }
+                }
             }
         }
 #endif

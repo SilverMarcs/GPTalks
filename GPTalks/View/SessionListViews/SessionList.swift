@@ -22,6 +22,7 @@ struct SessionList: View {
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
+                
                 ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
                     SessionListItem(session: session)
                         .listRowSeparator(.visible)
@@ -29,7 +30,21 @@ struct SessionList: View {
                 }
                 .onDelete(perform: deleteItems)
             }
-
+            .toolbar {
+                SessionListToolbar()
+            }
+            #if os(macOS)
+            .frame(minWidth: 240)
+            .listStyle(.inset)
+            .scrollContentBackground(.hidden)
+            .padding(.top, -9)
+            .onAppear {
+                if let first = sessions.first {
+                    DispatchQueue.main.async {
+                        sessionVM.selections = [first]
+                    }
+                }
+            }
             .onChange(of: sessions.count) {
                 if sessions.count > prevCount {
                     if let first = sessions.first {
@@ -40,24 +55,9 @@ struct SessionList: View {
                     }
                 }
             }
-            .toolbar {
-                SessionListToolbar()
-            }
-            #if os(macOS)
-            .frame(minWidth: 240)
-            .listStyle(.inset)
-            .scrollContentBackground(.hidden)
-            .padding(.top, -8)
-            .onAppear {
-                if let first = sessions.first {
-                    DispatchQueue.main.async {
-                        sessionVM.selections = [first]
-                    }
-                }
-            }
-            #endif
-            #if !os(macOS)
-            .listStyle(.inset)
+            #else
+            .navigationTitle("Sessions")
+            .listStyle(.insetGrouped)
             .searchable(text: $sessionVM.searchText)
             #endif
         }

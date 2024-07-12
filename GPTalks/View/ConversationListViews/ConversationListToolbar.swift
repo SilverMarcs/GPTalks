@@ -8,9 +8,8 @@
 import SwiftUI
 import SwiftData
 
+#if os(macOS)
 struct ConversationListToolbar: ToolbarContent {
-    @Environment(SessionVM.self) var sessionVM
-    
     @Bindable var session: Session
     @Query var providers: [Provider]
     
@@ -33,28 +32,12 @@ struct ConversationListToolbar: ToolbarContent {
         }
         
         ToolbarItemGroup {
-            Picker("Provider", selection: $session.config.provider) {
-                ForEach(providers.sorted(by: { $0.date < $1.date }), id: \.self) { provider in
-                    Text(provider.name).tag(provider.id)
-                }
-            }
+            providerPicker
             
-            Slider(value: $session.config.temperature, in: 0 ... 2, step: 0.2) {} minimumValueLabel: {
-                Text("0")
-            } maximumValueLabel: {
-                Text("2")
-            }
-            .frame(width: 130)
+            temperatureSlider
             
-            Picker("Model", selection: $session.config.model) {
-                ForEach(session.config.provider.models.sorted(by: { $0.name < $1.name }), id: \.self) { model in
-                    Text(model.name)
-                }
-            }
-            .onChange(of: session.config.provider) {
-                session.config.model = session.config.provider.chatModel
-            }
-            .frame(width: 110)
+            modelPicker
+                .frame(width: 110)
         }
         
         ToolbarItem(placement: .automatic) {
@@ -76,6 +59,31 @@ struct ConversationListToolbar: ToolbarContent {
             regenLastMessage
         }
         #endif
+    }
+    
+    private var providerPicker: some View {
+        Picker("Provider", selection: $session.config.provider) {
+            ForEach(providers.sorted(by: { $0.date < $1.date }), id: \.self) { provider in
+                Text(provider.name).tag(provider.id)
+            }
+        }
+    }
+    
+    private var modelPicker: some View {
+        Picker("Model", selection: $session.config.model) {
+            ForEach(session.config.provider.models.sorted(by: { $0.name < $1.name }), id: \.self) { model in
+                Text(model.name)
+            }
+        }
+    }
+    
+    private var temperatureSlider: some View {
+        Slider(value: $session.config.temperature, in: 0 ... 2, step: 0.2) {} minimumValueLabel: {
+            Text("0")
+        } maximumValueLabel: {
+            Text("2")
+        }
+        .frame(width: 130)
     }
     
     private var generateTitle: some View {
@@ -137,3 +145,41 @@ struct ConversationListToolbar: ToolbarContent {
         .keyboardShortcut("e", modifiers: .command)
     }
 }
+#else
+struct ConversationListToolbar: View {
+    @Bindable var session: Session
+    @Query var providers: [Provider]
+    
+    var body: some View {
+        Section {
+            Menu {
+                providerPicker
+            } label: {
+                Label(session.config.provider.name, systemImage: "building.2")
+            }
+            
+            Menu {
+                modelPicker
+            } label: {
+                Label(session.config.model.name, systemImage: "cube.box")
+            }
+        }
+    }
+    
+    private var providerPicker: some View {
+        Picker("Provider", selection: $session.config.provider) {
+            ForEach(providers.sorted(by: { $0.date < $1.date }), id: \.self) { provider in
+                Text(provider.name).tag(provider.id)
+            }
+        }
+    }
+    
+    private var modelPicker: some View {
+        Picker("Model", selection: $session.config.model) {
+            ForEach(session.config.provider.models.sorted(by: { $0.name < $1.name }), id: \.self) { model in
+                Text(model.name)
+            }
+        }
+    }
+}
+#endif

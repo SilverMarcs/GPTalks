@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class Model {
+final class Model: Hashable {
     var id: UUID = UUID()
 
     var code: String

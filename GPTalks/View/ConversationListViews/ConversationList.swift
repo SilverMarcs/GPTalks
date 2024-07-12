@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-//import IsScrolling
 import KeyboardShortcuts
 
 struct ConversationList: View {
@@ -16,6 +15,7 @@ struct ConversationList: View {
     
     @State private var hasUserScrolled = false
     @State private var isScrolling = false
+    @State private var isShowSysPrompt = false
     
     var body: some View {
         ScrollViewReader { proxy in
@@ -27,9 +27,16 @@ struct ConversationList: View {
 
                     ErrorMessageView(session: session)
                     
+                    #if os(macOS)
                     Color.clear.id(String.bottomID).frame(height: 20)
+                    #else
+                    GeometryReader { geometry in
+                        Color.clear
+                            .id(String.bottomID)
+                            .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
+                    }
+                    #endif
                 }
-//                .scrollSensor()
                 .padding()
                 .padding(.top, -15)
             }
@@ -48,16 +55,39 @@ struct ConversationList: View {
                 }
             }
             .navigationSubtitle(navSubtitle)
-            #endif
-//            .scrollStatusMonitor($isScrolling, monitorMode: .common)
-            .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled, isScrolling: $isScrolling)
             .navigationTitle(session.title)
+            .toolbar {
+                ConversationListToolbar(session: session)
+            }
+            #else
+            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+                let bottomReached = value > UIScreen.main.bounds.height
+                hasUserScrolled = bottomReached
+            }
+            .toolbarTitleDisplayMode(.inline)
+            .scrollDismissesKeyboard(.immediately)
+            .navigationTitle(session.config.model.name)
+            .toolbarTitleMenu {
+                ConversationListToolbar(session: session)
+            }
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button {
+                        isShowSysPrompt.toggle()
+                    } label: {
+                        Image(systemName: "info.circle")
+                    }
+                    .popover(isPresented: $isShowSysPrompt) {
+                        ConversationTrailingPopup(session: session)
+                    }
+                }
+            }
+            #endif
+            .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled, isScrolling: $isScrolling)
+
             .scrollContentBackground(.visible)
             .safeAreaInset(edge: .bottom) {
                 InputView(session: session)
-            }
-            .toolbar {
-                ConversationListToolbar(session: session)
             }
         }
     }

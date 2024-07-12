@@ -27,9 +27,18 @@ struct UserMessage: View {
                 .padding(.horizontal, 11)
                 .background(
                     RoundedRectangle(cornerRadius: 15)
+                    #if os(macOS)
                         .fill(.background.quinary)
+                    #else
+                        .fill(.background.secondary)
+                    #endif
                         .fill(conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
                 )
+                .contextMenu {
+                    if let group = conversation.group {
+                        ConversationMenu(group: group, labelSize: labelSize, toggleMaxHeight: toggleMaxHeight, isExpanded: isExpanded)
+                    }
+                }
             
             #if os(macOS)
             if let group = conversation.group {
@@ -56,11 +65,6 @@ struct UserMessage: View {
             }
         }
 #if !os(macOS)
-        .contextMenu {
-            if let group = conversation.group {
-                ConversationMenu(group: group, labelSize: labelSize, toggleMaxHeight: toggleMaxHeight, isExpanded: isExpanded)
-            }
-        }
 #endif
     }
     

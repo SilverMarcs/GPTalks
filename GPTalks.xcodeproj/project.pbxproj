@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		080ED38D2C415B6200046424 /* PreferenceKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080ED38C2C415B6200046424 /* PreferenceKeys.swift */; };
 		08149A572C3E5E5B004485AC /* ConversationRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08149A562C3E5E5B004485AC /* ConversationRole.swift */; };
 		081637762C3542CA00C7DE52 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 081637752C3542CA00C7DE52 /* MarkdownWebView */; };
 		081C1D8D2C3B8F690078BB24 /* ConversationListExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D8C2C3B8F690078BB24 /* ConversationListExtended.swift */; };
@@ -105,6 +106,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		080ED38C2C415B6200046424 /* PreferenceKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceKeys.swift; sourceTree = "<group>"; };
 		08149A562C3E5E5B004485AC /* ConversationRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationRole.swift; sourceTree = "<group>"; };
 		081C1D8C2C3B8F690078BB24 /* ConversationListExtended.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListExtended.swift; sourceTree = "<group>"; };
 		081C1D912C3BD1970078BB24 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				08AAFB972C3CF0F4002C04E0 /* KeyboardShortcuts.swift */,
 				08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */,
 				08D174C52C3DC2A8000257EF /* DateUtils.swift */,
+				080ED38C2C415B6200046424 /* PreferenceKeys.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -640,6 +643,7 @@
 				08C800492C36C521009581C5 /* AssistantMessage.swift in Sources */,
 				08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */,
 				089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */,
+				080ED38D2C415B6200046424 /* PreferenceKeys.swift in Sources */,
 				082181622C38C76E00171BF3 /* InputEditor.swift in Sources */,
 				08D174C22C3D96F8000257EF /* StreamHandler.swift in Sources */,
 				08A222C12C2ABE5C00D76C8B /* Conversation.swift in Sources */,

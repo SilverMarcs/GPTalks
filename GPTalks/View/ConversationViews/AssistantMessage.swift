@@ -69,7 +69,7 @@ struct AssistantMessage: View {
             .padding(5)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(.background.secondary)
+                    .fill(.background)
                     .stroke(.tertiary, lineWidth: 1)
             )
     }

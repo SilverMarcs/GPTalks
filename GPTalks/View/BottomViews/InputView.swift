@@ -11,6 +11,7 @@ struct InputView: View {
     @Bindable var session: Session
     
     @State var isPresented: Bool = false
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         HStack(alignment: .bottom, spacing: 15) {
@@ -34,7 +35,8 @@ struct InputView: View {
                     InputImageView(session: session)
                 }
                 
-                InputEditor(prompt: $session.inputManager.prompt)
+                InputEditor(prompt: $session.inputManager.prompt,
+                            isFocused: _isFocused)
             }
             
             if session.isReplying {
@@ -52,9 +54,16 @@ struct InputView: View {
         .ignoresSafeArea()
     }
     
-    var imageSize: CGFloat = 23
+    var imageSize: CGFloat {
+      #if os(macOS)
+        23
+        #else
+        30
+        #endif
+    }
     
     private func sendInput() {
+        isFocused = false
         Task { @MainActor in
             await session.sendInput()
         }

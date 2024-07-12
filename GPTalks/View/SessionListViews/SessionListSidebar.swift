@@ -17,13 +17,21 @@ struct SessionListSidebar: View {
         SessionSearch("Search", text: $sessionVM.searchText) {
             sessionVM.searchText = ""
         }
-        .padding(.horizontal, 10)
-        #endif
+        .padding(.horizontal, padding)
         
         SessionListCards()
-            .padding(.horizontal, 10)
+            .padding(.horizontal, padding)
+        #endif
         
         SessionList(searchString: sessionVM.searchText)
+    }
+    
+    var padding: CGFloat {
+        #if os(macOS)
+        return 10
+        #else
+        return 15
+        #endif
     }
 }
 

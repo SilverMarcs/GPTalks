@@ -24,7 +24,7 @@ struct SettingsView: View {
                 .tabItem {
                     Label("Quick Panel", systemImage: "bolt.fill")
                 }
-#endif
+            #endif
             
             ParameterSettings()
                 .platformPadding()
@@ -34,7 +34,7 @@ struct SettingsView: View {
                 }
             
             ProviderList()
-#if os(macOS)
+            #if os(macOS)
             .frame(maxWidth: 700, minHeight: 400)
             #endif
                 .tabItem {
