@@ -48,9 +48,9 @@ struct SessionListItem: View {
         }
         .padding(3)
         .frame(height: 40)
-        .swipeActions(edge: .trailing) {
-            swipeActionsTrailing
-        }
+//        .swipeActions(edge: .trailing) {
+//            swipeActionsTrailing
+//        }
         .swipeActions(edge: .leading) {
             swipeActionsLeading
         }

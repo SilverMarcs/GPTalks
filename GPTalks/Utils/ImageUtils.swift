@@ -142,7 +142,7 @@ func loadImageAsBase64(from imagePath: String) -> String? {
 
 import Foundation
 
-#if os(mac)
+#if os(macOS)
 func loadImageData(from filePath: String) -> Data? {
     // Convert the string to a URL
     guard let fileURL = URL(string: filePath) else {

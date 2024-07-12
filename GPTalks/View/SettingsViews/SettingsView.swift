@@ -35,7 +35,7 @@ struct SettingsView: View {
             
             ProviderList()
 #if os(macOS)
-            .frame(minWidth: 700, minHeight: 400)
+            .frame(maxWidth: 700, minHeight: 400)
             #endif
                 .tabItem {
                     Label("Providers", systemImage: "cpu")

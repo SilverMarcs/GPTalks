@@ -24,6 +24,8 @@ struct SessionList: View {
             List(selection: $sessionVM.selections) {
                 ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
                     SessionListItem(session: session)
+                        .listRowSeparator(.visible)
+                        .listRowSeparatorTint(Color.gray.opacity(0.2))
                 }
                 .onDelete(perform: deleteItems)
             }
@@ -43,6 +45,9 @@ struct SessionList: View {
             }
             #if os(macOS)
             .frame(minWidth: 240)
+            .listStyle(.inset)
+            .scrollContentBackground(.hidden)
+            .padding(.top, -8)
             .onAppear {
                 if let first = sessions.first {
                     DispatchQueue.main.async {
