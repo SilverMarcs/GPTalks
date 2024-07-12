@@ -12,7 +12,7 @@ struct SettingsView: View {
         TabView {
             GeneralSettings()
                 .platformPadding()
-                .frame(minHeight: 200)
+                .frame(height: 200)
                 .tabItem {
                     Label("General", systemImage: "gear")
                 }
@@ -20,7 +20,7 @@ struct SettingsView: View {
             #if os(macOS)
             QuickPanelSettings()
                 .platformPadding()
-                .frame(minHeight: 140)
+                .frame(height: 140)
                 .tabItem {
                     Label("Quick Panel", systemImage: "bolt.fill")
                 }
@@ -28,14 +28,14 @@ struct SettingsView: View {
             
             ParameterSettings()
                 .platformPadding()
-                .frame(minHeight: 300)
+                .frame(height: 300)
                 .tabItem {
                     Label("Parameters", systemImage: "slider.horizontal.3")
                 }
             
             ProviderList()
             #if os(macOS)
-            .frame(maxWidth: 700, minHeight: 400)
+                .frame(width: 700, height: 450)
             #endif
                 .tabItem {
                     Label("Providers", systemImage: "cpu")

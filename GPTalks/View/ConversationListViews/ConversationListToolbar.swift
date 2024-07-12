@@ -33,6 +33,9 @@ struct ConversationListToolbar: ToolbarContent {
         
         ToolbarItemGroup {
             providerPicker
+                .onChange(of: session.config.provider) {
+                    session.config.model = session.config.provider.chatModel
+                }
             
             temperatureSlider
             

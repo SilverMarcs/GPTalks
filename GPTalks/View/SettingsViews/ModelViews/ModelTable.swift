@@ -16,125 +16,110 @@ struct ModelTable: View {
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 10) {
-
-            header
-
-            VStack(spacing: 0) {
-                modelListHeader
-                
-                Divider()
-                    .opacity(0.5)
-                
-                modelList
-            }
-        }
-
-    }
-    
-    private var header: some View {
-        HStack {
-            Menu {
-                Button {
-                    provider.addOpenAIModels()
-                } label: {
-                    Text("Add OpenAI Models")
-                }
-                
-                Button {
-                    provider.addClaudeModels()
-                } label: {
-                    Text("Add Claude Models")
-                }
-                
-                Button {
-                    provider.addGoogleModels()
-                } label: {
-                    Text("Add Google Models")
-                }
-                
-            } label: {
-                Label("Add", systemImage: "ellipsis.circle")
-            }
-            .menuStyle(SimpleIconOnly())
-            .frame(width: 10)
-            
-            
-            Picker("Default Model", selection: $provider.chatModel) {
-                ForEach(provider.models, id: \.self) { model in
-                    Text(model.name).tag(model)
-                }
-            }
-                
-            Picker("Quick Model", selection: $provider.quickChatModel) {
-                ForEach(provider.models, id: \.self) { model in
-                    Text(model.name).tag(model)
-                }
-            }
-        }
-        .padding(.horizontal, 8)
-    }
-
-    private var modelListHeader: some View {
-        HStack {
-            Group {
-                Text("Code")
-                Text("Name")
-            }
-            .bold()
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .padding(.horizontal)
-        .padding(.vertical, 4)
-        .background(.background)
-    }
-
-    private var modelList: some View {
-        List {
-            ForEach(provider.models.sorted { $0.order < $1.order }, id: \.self) { model in
-                ModelRow(model: model)
-            }
-//            .onMove { indices, newOffset in
-//                provider.models.move(fromOffsets: indices, toOffset: newOffset)
-//            }
+            modelTable
 
             modelAdder
         }
-        #if os(macOS)
-        .alternatingRowBackgrounds()
-        #endif
     }
 
-    private var modelAdder: some View {
-        Group {
-            HStack {
-                TextField("New Code", text: $newModelCode)
-                
-                ZStack(alignment: .trailing) {
-                    TextField("New Name", text: $newModelName)
-                    
-                    Button(action: addModel) {
-                        Label("Add", systemImage: "plus")
-                    }
-                    .labelStyle(.iconOnly)
-                    .buttonStyle(.plain)
-                    .foregroundStyle(.blue)
+    @ViewBuilder
+    var modelTable: some View {
+        Table(of: Model.self) {
+            TableColumn("Code") { model in
+                TextField(
+                    "Code",
+                    text: Binding(
+                        get: { model.code },
+                        set: { model.code = $0 }
+                    ))
+
+            }
+
+            TableColumn("Name") { model in
+                TextField(
+                    "Name",
+                    text: Binding(
+                        get: { model.name },
+                        set: { model.name = $0 }
+                    ))
+
+            }
+
+            TableColumn("Action") { model in
+                Button {
+                    removeModel(model: model)
+                } label: {
+                    Label("Remove", systemImage: "minus.circle.fill")
+                        .foregroundStyle(.red)
+                        .labelStyle(.iconOnly)
                 }
             }
+        } rows: {
+            ForEach(
+                provider.models.sorted(by: { $0.name < $1.name }), id: \.self
+            ) { model in
+                TableRow(model)
+            }
         }
+
+    }
+
+    private var header: some View {
+        Menu {
+            Button {
+                provider.addOpenAIModels()
+            } label: {
+                Text("Add OpenAI Models")
+            }
+
+            Button {
+                provider.addClaudeModels()
+            } label: {
+                Text("Add Claude Models")
+            }
+
+            Button {
+                provider.addGoogleModels()
+            } label: {
+                Text("Add Google Models")
+            }
+
+        } label: {
+            Label("Add", systemImage: "cpu")
+        }
+        .menuStyle(SimpleIconOnly())
     }
 
     private func removeModel(model: Model) {
-        model.removeSelf()
+        withAnimation {
+            model.removeSelf()
+        }
+    }
+
+    var modelAdder: some View {
+        HStack {
+            header
+            
+            TextField("New Code", text: $newModelCode)
+            TextField("New Name", text: $newModelName)
+            Button(action: addModel) {
+                Label("Add", systemImage: "plus.circle")
+            }
+        }
+        .textFieldStyle(.roundedBorder)
     }
 
     private func addModel() {
         if newModelCode.isEmpty || newModelName.isEmpty {
             return
         }
-        
+
         let model = Model(
             code: newModelCode, name: newModelName, provider: provider)
-        provider.models.append(model)
+        
+        withAnimation {
+            provider.models.append(model)
+        }
 
         newModelCode = ""
         newModelName = ""

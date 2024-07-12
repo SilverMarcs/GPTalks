@@ -17,6 +17,8 @@ final class Model: Hashable {
     var name: String
     
     var provider: Provider?
+    
+    var isAddRow: Bool = false
 
     init() {
         self.code = ""

@@ -25,6 +25,20 @@ struct ProviderGeneral: View {
                 
                 SecureField("API Key", text: $provider.apiKey)
             }
+            
+            Section("Default Models") {
+                Picker("Default Model", selection: $provider.chatModel) {
+                    ForEach(provider.models, id: \.self) { model in
+                        Text(model.name).tag(model)
+                    }
+                }
+                
+                Picker("Quick Model", selection: $provider.quickChatModel) {
+                    ForEach(provider.models, id: \.self) { model in
+                        Text(model.name).tag(model)
+                    }
+                }
+            }
 
             Section("Customisation") {
                 ColorPicker("Accent Color", selection: $color)
