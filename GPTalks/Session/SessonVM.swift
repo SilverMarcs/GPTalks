@@ -45,6 +45,21 @@ import SwiftUI
         try? modelContext.save()
     }
     
+    func fork(session: Session, sessions: [Session], providerManager: ProviderManager, providers: [Provider], modelContext: ModelContext) {
+        withAnimation {
+            // Increment the order of all existing items
+            for existingSession in sessions {
+                existingSession.order += 1
+            }
+            
+            session.order = 0  // Set the forked session's order to 0 (top of the list)
+            modelContext.insert(session)
+            self.selections = [session]
+        }
+        
+        try? modelContext.save()
+    }
+    
     func addQuickItem(providerManager: ProviderManager, providers: [Provider], modelContext: ModelContext) -> Session {
         if let defaultProvider = providerManager.getDefault(providers: providers) {
             let provider = defaultProvider

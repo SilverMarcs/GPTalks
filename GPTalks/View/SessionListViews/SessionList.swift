@@ -79,9 +79,20 @@ struct SessionList: View {
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            for index in offsets {
-                modelContext.delete(sessions[index])
+            for index in offsets.sorted().reversed() {
+                if !sessions[index].isStarred {
+                    modelContext.delete(sessions[index])
+                }
             }
+            
+            // Then, update the order of remaining items
+            let remainingSessions = sessions.filter { !$0.isDeleted }
+            for (newIndex, session) in remainingSessions.enumerated() {
+                session.order = newIndex
+            }
+            
+            // Save changes
+            try? modelContext.save()
         }
     }
     

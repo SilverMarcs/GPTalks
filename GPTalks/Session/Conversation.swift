@@ -17,6 +17,9 @@ import SwiftAnthropic
 final class Conversation: NSCopying {
     func copy(with zone: NSZone? = nil) -> Any {
         let copy = Conversation(role: role, content: content)
+        copy.model = model
+        copy.imagePaths = imagePaths
+        
         return copy
     }
     

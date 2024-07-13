@@ -16,12 +16,14 @@ struct ModelTable: View {
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 10) {
+            #if os(macOS)
             modelTable
-
-            modelAdder
+            #else
+            modelList
+            #endif
         }
     }
-
+    
     @ViewBuilder
     var modelTable: some View {
         Table(of: Model.self) {
@@ -61,7 +63,35 @@ struct ModelTable: View {
                 TableRow(model)
             }
         }
-
+        
+        modelAdder
+    }
+    
+    var modelList: some View {
+        VStack(alignment: .trailing, spacing: 10) {
+            header
+            
+            List {
+                ForEach(provider.models.sorted { $0.order < $1.order }, id: \.self) { model in
+                    ModelRow(model: model)
+                }
+                
+                HStack {
+                    TextField("New Code", text: $newModelCode)
+                    
+                    ZStack(alignment: .trailing) {
+                        TextField("New Name", text: $newModelName)
+                        
+                        Button(action: addModel) {
+                            Label("Add", systemImage: "plus")
+                        }
+                        .labelStyle(.iconOnly)
+                        .buttonStyle(.plain)
+                        .foregroundStyle(.blue)
+                    }
+                }
+            }
+        }
     }
 
     private var header: some View {
@@ -105,6 +135,7 @@ struct ModelTable: View {
             Button(action: addModel) {
                 Label("Add", systemImage: "plus.circle")
             }
+            .buttonStyle(.borderedProminent)
         }
         .textFieldStyle(.roundedBorder)
     }

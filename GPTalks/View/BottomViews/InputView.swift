@@ -50,7 +50,11 @@ struct InputView: View {
         .fixedSize(horizontal: false, vertical: true)
         .padding(.horizontal)
         .padding(.vertical, 14)
+        #if os(macOS)
         .background(.bar)
+        #else
+        .background(.background)
+        #endif
         .ignoresSafeArea()
     }
     

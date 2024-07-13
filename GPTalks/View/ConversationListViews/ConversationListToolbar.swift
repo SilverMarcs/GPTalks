@@ -33,10 +33,7 @@ struct ConversationListToolbar: ToolbarContent {
         
         ToolbarItemGroup {
             providerPicker
-                .onChange(of: session.config.provider) {
-                    session.config.model = session.config.provider.chatModel
-                }
-            
+
             temperatureSlider
             
             modelPicker
@@ -70,11 +67,14 @@ struct ConversationListToolbar: ToolbarContent {
                 Text(provider.name).tag(provider.id)
             }
         }
+        .onChange(of: session.config.provider) {
+            session.config.model = session.config.provider.chatModel
+        }
     }
     
     private var modelPicker: some View {
         Picker("Model", selection: $session.config.model) {
-            ForEach(session.config.provider.models.sorted(by: { $0.order < $1.order }), id: \.self) { model in
+            ForEach(session.config.provider.models, id: \.self) { model in
                 Text(model.name)
             }
         }

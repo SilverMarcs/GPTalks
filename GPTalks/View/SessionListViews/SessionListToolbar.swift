@@ -37,16 +37,7 @@ struct SessionListToolbar: ToolbarContent {
                         .labelStyle(.titleOnly)
                 }
                 .popover(isPresented: $showSettings) {
-                    NavigationView {
                         SettingsView()
-                            .navigationTitle("Settings")
-                            .toolbarTitleDisplayMode(.inline)
-                            .toolbar {
-                                Button("Done") {
-                                    showSettings.toggle()
-                                }
-                            }
-                    }
                 }
             } else {
                 Button(action: { withAnimation {editMode?.wrappedValue = .inactive }}) {

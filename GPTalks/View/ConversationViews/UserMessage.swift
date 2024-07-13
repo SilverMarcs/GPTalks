@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct UserMessage: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     var conversation: Conversation
     @State var isHovered: Bool = false
     

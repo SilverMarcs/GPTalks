@@ -6,11 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ConversationMenu: View {
     var group: ConversationGroup
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) var sessionVM
+    @ObservedObject var providerManager = ProviderManager.shared
+    
+    @Query var providers: [Provider]
+    @Query var sessions: [Session]
     
     var labelSize: CGSize? = nil
     var toggleMaxHeight: (() -> Void)? = nil
@@ -83,14 +88,7 @@ struct ConversationMenu: View {
     var forkSession: some View {
         Button {
             if let newSession = group.session?.fork(from: group) {
-                withAnimation {
-                    modelContext.insert(newSession)
-                }
-            }
-            do {
-                try modelContext.save()
-            } catch {
-                print("Failed to save session: \(error)")
+                sessionVM.fork(session: newSession, sessions: sessions, providerManager: providerManager, providers: providers, modelContext: modelContext)
             }
         } label: {
             Label("Fork Session", systemImage: "arrow.branch")
