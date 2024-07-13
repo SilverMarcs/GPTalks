@@ -37,7 +37,7 @@ struct SessionListToolbar: ToolbarContent {
                         .labelStyle(.titleOnly)
                 }
                 .popover(isPresented: $showSettings) {
-                        SettingsView()
+                    SettingsView()
                 }
             } else {
                 Button(action: { withAnimation {editMode?.wrappedValue = .inactive }}) {

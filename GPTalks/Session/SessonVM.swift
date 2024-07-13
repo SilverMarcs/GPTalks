@@ -14,7 +14,11 @@ import SwiftUI
     var selection: Session?
     var searchText: String = ""
     
+    #if os(macOS)
     var chatCount: Int = 12
+    #else
+    var chatCount: Int = .max
+    #endif
     
     func addItem(sessions: [Session], providerManager: ProviderManager, providers: [Provider], modelContext: ModelContext) {
         let provider: Provider

@@ -8,61 +8,51 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
-        TabView {
-            GeneralSettings()
-                .platformPadding()
-                .frame(height: 200)
-                .tabItem {
-                    Label("General", systemImage: "gear")
+#if os(iOS)
+        NavigationStack {
+            List {
+                NavigationLink("General", destination: GeneralSettings())
+                NavigationLink("Parameters", destination: ParameterSettings())
+                NavigationLink("Providers", destination: ProviderList())
+            }
+            .navigationTitle("Settings")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
                 }
-            
-            #if os(macOS)
-            QuickPanelSettings()
-                .platformPadding()
-                .frame(height: 140)
-                .tabItem {
-                    Label("Quick Panel", systemImage: "bolt.fill")
-                }
-            #endif
-            
-            ParameterSettings()
-                .platformPadding()
-                .frame(height: 300)
-                .tabItem {
-                    Label("Parameters", systemImage: "slider.horizontal.3")
-                }
-            
-            ProviderList()
-            #if os(macOS)
-                .frame(width: 700, height: 450)
-            #endif
-                .tabItem {
-                    Label("Providers", systemImage: "cpu")
-                }
+            }
         }
-
+#else
+        TabView {
+            settingsTab(content: GeneralSettings(), label: "General", icon: "gear")
+            
+            settingsTab(content: QuickPanelSettings(), label: "Quick Panel", icon: "bolt.fill")
+            
+            settingsTab(content: ParameterSettings(), label: "Parameters", icon: "slider.horizontal.3")
+            
+            settingsTab(content: ProviderList(), label: "Providers", icon: "cpu", padding: 0)
+        }
+#endif
     }
+    
+#if os(macOS)
+    @ViewBuilder
+    private func settingsTab<Content: View>(content: Content, label: String, icon: String, padding: CGFloat = 80) -> some View {
+        content
+            .padding(.horizontal, padding)
+            .frame(width: 700)
+            .tabItem {
+                Label(label, systemImage: icon)
+            }
+    }
+#endif
 }
 
 #Preview {
     SettingsView()
-}
-
-struct PlatformPadding: ViewModifier {
-    func body(content: Content) -> some View {
-#if os(macOS)
-        content
-            .padding(.horizontal, 80)
-            .frame(width: 700)
-#else
-        content
-#endif
-    }
-}
-
-extension View {
-    func platformPadding() -> some View {
-        self.modifier(PlatformPadding())
-    }
 }

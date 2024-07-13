@@ -63,10 +63,7 @@ struct SessionList: View {
         }
     }
     
-    init(
-        sort: SortDescriptor<Session> = SortDescriptor(
-            \Session.order, order: .forward), searchString: String
-    ) {
+    init(searchString: String) {
         _sessions = Query(
             filter: #Predicate {
                 if searchString.isEmpty {
@@ -74,7 +71,13 @@ struct SessionList: View {
                 } else {
                     return !$0.isQuick && $0.title.localizedStandardContains(searchString)
                 }
-            }, sort: [sort], animation: .default)
+            },
+            sort: [
+                SortDescriptor(\Session.order, order: .forward),
+                SortDescriptor(\Session.date, order: .reverse)
+            ],
+            animation: .default
+        )
     }
 
     private func deleteItems(offsets: IndexSet) {
@@ -110,7 +113,7 @@ struct SessionList: View {
 
 #Preview {
     SessionList(
-        sort: SortDescriptor(\Session.date, order: .reverse), searchString: ""
+        searchString: ""
     )
     .frame(width: 400)
     .modelContainer(for: Session.self, inMemory: true)

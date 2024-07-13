@@ -62,8 +62,14 @@ struct ProviderGeneral: View {
     private var header: some View {
         HStack {
             ProviderImage(provider: provider, frame: 33)
-
-            TextEditor(text: $provider.name)
+            
+            Group {
+#if os(macOS)
+                TextEditor(text: $provider.name)
+#else
+                TextField("Name", text: $provider.name)
+#endif
+            }
                 .textEditorStyle(.plain)
                 .font(.title)
                 .padding(5)

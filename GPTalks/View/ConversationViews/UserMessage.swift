@@ -51,7 +51,7 @@ struct UserMessage: View {
             #endif
         }
         .frame(maxWidth: .infinity, maxHeight: maxHeight, alignment: .trailing)
-        .padding(.leading, 160)
+        .padding(.leading, leadingPadding)
         .onHover { isHovered in
             self.isHovered = isHovered
         }
@@ -68,6 +68,14 @@ struct UserMessage: View {
         }
 #if !os(macOS)
 #endif
+    }
+    
+    var leadingPadding: CGFloat {
+        #if os(macOS)
+        160
+        #else
+        60
+        #endif
     }
     
     var indexOfConversationGroup: Int {

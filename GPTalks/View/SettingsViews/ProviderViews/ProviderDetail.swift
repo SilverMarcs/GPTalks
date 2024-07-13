@@ -7,37 +7,40 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct ProviderDetail: View {
     var provider: Provider
-
     @State private var selectedTab: ProviderDetailTab = .general
-
+    
     var body: some View {
         VStack(spacing: 0) {
-            Picker("Tabs", selection: $selectedTab) {
-                ForEach(filteredTabs, id: \.self) { tab in
-                    Text(tab.title)
-                }
-            }
-            .labelsHidden()
-            .pickerStyle(.segmented)
-            .padding(.top)
-            .frame(width: 240)
-
+#if os(macOS)
+            picker
+                .padding(.top)
+#endif
+            
             switch selectedTab {
             case .general:
                 ProviderGeneral(provider: provider)
-                    .padding(.horizontal)
-                    .padding(.bottom)
             case .models:
                 ModelTable(provider: provider)
-                    .padding()
             case .image:
-                Text("Image")
+                VStack {
+                    Text("Not implemented yet.")
+                    Spacer()
+                }
             }
         }
+#if os(iOS)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                picker
+            }
+        }
+#endif
     }
-
+    
     private var filteredTabs: [ProviderDetailTab] {
         if provider.type == .openai {
             return ProviderDetailTab.allCases
@@ -45,7 +48,23 @@ struct ProviderDetail: View {
             return ProviderDetailTab.allCases.filter { $0 != .image }
         }
     }
+
+    private var picker: some View {
+        Picker("Tabs", selection: $selectedTab) {
+            ForEach(filteredTabs, id: \.self) { tab in
+                Text(tab.title).tag(tab)
+            }
+        }
+        .pickerStyle(.segmented)
+        .labelsHidden()
+        .fixedSize()
+#if os(macOS)
+        .frame(width: 240)
+#endif
+    }
+
 }
+
 
 enum ProviderDetailTab: CaseIterable {
     case general

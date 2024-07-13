@@ -130,6 +130,7 @@ final class Session {
     func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil) async {
         errorMessage = ""
         self.date = Date()
+        self.order = 0
         
         if !isRegen {
             if inputManager.state == .editing {

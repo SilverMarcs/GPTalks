@@ -16,31 +16,46 @@ struct ProviderList: View {
     @State var selectedProvider: Provider?
     
     var body: some View {
+#if os(macOS)
         NavigationView {
-            List(selection: $selectedProvider) {
-                ForEach(providers, id: \.self) { provider in
-                    NavigationLink(destination: ProviderDetail(provider: provider)) {
-                        ProviderRow(provider: provider)
-                    }
-                }
-                .onDelete(perform: deleteProviders)
-                .onMove(perform: move)
-            }
-            #if os(macOS)
-            .onAppear {
-                DispatchQueue.main.async {
-                    if selectedProvider == nil {
-                        selectedProvider = providers.first
-                    }
+            content
+        }
+#else
+        content
+#endif
+    }
+    
+    var content: some View {
+        List(selection: $selectedProvider) {
+            ForEach(providers, id: \.self) { provider in
+                NavigationLink(destination: ProviderDetail(provider: provider)) {
+                    ProviderRow(provider: provider)
                 }
             }
-            #endif
-            .safeAreaInset(edge: .bottom) {
-                addButton
-                    .padding()
+            .onDelete(perform: deleteProviders)
+            .onMove(perform: move)
+        }
+#if os(macOS)
+        .onAppear {
+            DispatchQueue.main.async {
+                if selectedProvider == nil {
+                    selectedProvider = providers.first
+                }
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            addButton
+                .padding()
+        }
+#else
+        .navigationTitle("Providers")
+        .toolbar {
+            addButton
+        }
+#endif
+
     }
+
     
     private var addButton: some View {
         HStack {

@@ -15,64 +15,64 @@ struct ModelTable: View {
     @State var newModelName: String = ""
 
     var body: some View {
-        VStack(alignment: .trailing, spacing: 10) {
-            #if os(macOS)
-            modelTable
-            #else
-            modelList
-            #endif
-        }
+        #if os(macOS)
+        modelTable
+            .padding()
+        #else
+        modelList
+        #endif
     }
     
     @ViewBuilder
     var modelTable: some View {
-        Table(of: Model.self) {
-            TableColumn("Code") { model in
-                TextField(
-                    "Code",
-                    text: Binding(
-                        get: { model.code },
-                        set: { model.code = $0 }
-                    ))
-
-            }
-
-            TableColumn("Name") { model in
-                TextField(
-                    "Name",
-                    text: Binding(
-                        get: { model.name },
-                        set: { model.name = $0 }
-                    ))
-
-            }
-
-            TableColumn("Action") { model in
-                Button {
-                    removeModel(model: model)
-                } label: {
-                    Label("Remove", systemImage: "minus.circle.fill")
-                        .foregroundStyle(.red)
-                        .labelStyle(.iconOnly)
+        VStack {
+            Table(of: Model.self) {
+                TableColumn("Code") { model in
+                    TextField(
+                        "Code",
+                        text: Binding(
+                            get: { model.code },
+                            set: { model.code = $0 }
+                        ))
+                    
+                }
+                
+                TableColumn("Name") { model in
+                    TextField(
+                        "Name",
+                        text: Binding(
+                            get: { model.name },
+                            set: { model.name = $0 }
+                        ))
+                    
+                }
+                
+                TableColumn("Action") { model in
+                    Button {
+                        removeModel(model: model)
+                    } label: {
+                        Label("Remove", systemImage: "minus.circle.fill")
+                            .foregroundStyle(.red)
+                            .labelStyle(.iconOnly)
+                    }
+                }
+            } rows: {
+                ForEach(
+                    provider.models, id: \.self
+                ) { model in
+                    TableRow(model)
                 }
             }
-        } rows: {
-            ForEach(
-                provider.models.sorted(by: { $0.name < $1.name }), id: \.self
-            ) { model in
-                TableRow(model)
-            }
+            
+            modelAdder
         }
-        
-        modelAdder
     }
     
+    #if !os(macOS)
     var modelList: some View {
         VStack(alignment: .trailing, spacing: 10) {
-            header
-            
             List {
-                ForEach(provider.models.sorted { $0.order < $1.order }, id: \.self) { model in
+                ForEach(provider.models, id: \.self) { model in
                     ModelRow(model: model)
                 }
                 
@@ -92,7 +92,13 @@ struct ModelTable: View {
                 }
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                header
+            }
+        }
     }
+    #endif
 
     private var header: some View {
         Menu {

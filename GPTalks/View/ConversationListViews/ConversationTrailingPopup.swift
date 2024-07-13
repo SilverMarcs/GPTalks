@@ -12,33 +12,33 @@ struct ConversationTrailingPopup: View {
     @FocusState private var isFocused: Bool
 
     var body: some View {
-        VStack(alignment: .leading) {
-            GroupBox("Title") {
-
-                TextField("Title", text: $session.title)
+        Form {
+            Section("Title") {
+                TextEditor(text: $session.title)
+                    .font(.body)
                     .focused($isFocused)
                     .onAppear {
                         DispatchQueue.main.async {
                             isFocused = false
                         }
                     }
-                    .textFieldStyle(.plain)
-                    .padding(.horizontal, 3)
-                    .frame(width: 300)
             }
 
-            GroupBox("System Prompt") {
-                TextField(
-                    "System Prompt", text: $session.config.systemPrompt,
-                    axis: .vertical
-                )
-                .textFieldStyle(.plain)
-                .padding(.horizontal, 3)
-                .frame(width: 300)
-                .lineLimit(7, reservesSpace: true)
+            Section("System Prompt") {
+                TextEditor(text: $session.config.systemPrompt)
+                    .font(.body)
+                    .onChange(of: session.config.systemPrompt) {
+                        session.config.systemPrompt = String(
+                            session.config.systemPrompt.trimmingCharacters(
+                                in: .whitespacesAndNewlines))
+                    }
             }
         }
-        .padding(13)
+        .textEditorStyle(.plain)
+        .formStyle(.grouped)
+        #if os(macOS)
+            .frame(width: 400, height: 250)
+        #endif
     }
 }
 

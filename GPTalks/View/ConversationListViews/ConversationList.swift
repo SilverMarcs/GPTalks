@@ -20,7 +20,7 @@ struct ConversationList: View {
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
-                VStack(spacing: 0) {
+                VStack(spacing: spacing) {
                     ForEach(session.groups, id: \.self) { group in
                         ConversationGroupView(group: group)
                     }
@@ -90,6 +90,14 @@ struct ConversationList: View {
                 InputView(session: session)
             }
         }
+    }
+    
+    var spacing: CGFloat {
+        #if os(macOS)
+        0
+        #else
+        15
+        #endif
     }
     
     var navSubtitle: String {
