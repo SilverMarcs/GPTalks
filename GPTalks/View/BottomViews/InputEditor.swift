@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import VisualEffectView
 
 struct InputEditor: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @Binding var prompt: String
     @FocusState var isFocused: Bool
     
@@ -29,9 +32,17 @@ struct InputEditor: View {
                 .padding(padding)
                 .padding(.leading, leadingPadding)
         }
-        .modifier(RoundedRectangleOverlayModifier(radius: 18))
         .font(.body)
-        #if os(macOS)
+        .modifier(RoundedRectangleOverlayModifier(radius: radius))
+#if !os(macOS)
+        .background(
+            VisualEffect(colorTint: colorScheme == .dark
+                         ? Color(hex: "050505")
+                         : Color(hex: "FAFAFE"),
+                         colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
+            .cornerRadius(radius)
+        )
+#else
         .onAppear {
             isFocused = true
         }
@@ -45,7 +56,11 @@ struct InputEditor: View {
                 .keyboardShortcut("l", modifiers: .command)
             }
         }
-        #endif
+#endif
+    }
+    
+    var radius: CGFloat {
+        18
     }
     
     var padding: CGFloat {

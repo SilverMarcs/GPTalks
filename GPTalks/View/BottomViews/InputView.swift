@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import VisualEffectView
 
 struct InputView: View {
+    @Environment(\.colorScheme) var colorScheme
     @Bindable var session: Session
     
     @State var isPresented: Bool = false
@@ -53,7 +55,15 @@ struct InputView: View {
         #if os(macOS)
         .background(.bar)
         #else
-        .background(.background)
+        .background(
+            VisualEffect(
+                colorTint: colorScheme == .dark ? .black : .white,
+                colorTintAlpha: 0.7,
+                blurRadius: 15,
+                scale: 1
+            )
+            .ignoresSafeArea()
+        )
         #endif
         .ignoresSafeArea()
     }

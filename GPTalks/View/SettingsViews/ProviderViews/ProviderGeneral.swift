@@ -23,7 +23,8 @@ struct ProviderGeneral: View {
             Section("Host Settings") {
                 TextField("Host URL", text: $provider.host)
                 
-                SecureField("API Key", text: $provider.apiKey)
+                TextField("API Key", text: $provider.apiKey)
+                    .truncationMode(.middle)
             }
             
             Section("Default Models") {
@@ -71,7 +72,11 @@ struct ProviderGeneral: View {
 #endif
             }
                 .textEditorStyle(.plain)
+            #if os(macOS)
                 .font(.title)
+            #else
+                .font(.title2)
+            #endif
                 .padding(5)
                 .onChange(of: provider.name) {
                     provider.name = String(provider.name.trimmingCharacters(in: .whitespacesAndNewlines).prefix(18))

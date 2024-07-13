@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 #if os(macOS)
 typealias PlatformImage = NSImage
@@ -70,15 +71,7 @@ extension PlatformImage {
     }
     #else
     func save(fileName: String = Date().nowFileName(), inFolder folderName: String = "GPTalks") -> String? {
-        var imageData: Data? = nil
-        var fileType: String = ""
-        
-        if let jpegData = self.jpegData(compressionQuality: 0.7) {
-            imageData = jpegData
-            fileType = ".jpg"
-        }
-        
-        guard let data = imageData else {
+        guard let jpegData = self.jpegData(compressionQuality: 0.7) else {
             return nil
         }
         
@@ -90,10 +83,10 @@ extension PlatformImage {
                 try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
             }
             
-            let fullFileName = fileName + fileType
+            let fullFileName = fileName + ".jpg"
             let fileURL = folderURL.appendingPathComponent(fullFileName)
             
-            try data.write(to: fileURL)
+            try jpegData.write(to: fileURL)
             
             // Return the relative path from the Documents directory
             return folderName + "/" + fullFileName
@@ -106,7 +99,9 @@ extension PlatformImage {
 }
 
 extension View {
-    func imageFileImporter(isPresented: Binding<Bool>, onImageAppend: ((PlatformImage) -> Void)?) -> some View {
+    @ViewBuilder
+    func imageFileImporter(isPresented: Binding<Bool>, onImageAppend: @escaping (PlatformImage) -> Void) -> some View {
+#if os(macOS)
         self.fileImporter(
             isPresented: isPresented,
             allowedContentTypes: [.image],
@@ -115,22 +110,52 @@ extension View {
             switch result {
             case .success(let urls):
                 for url in urls {
-                    #if os(macOS)
                     if let image = NSImage(contentsOf: url) {
-                        onImageAppend?(image)
+                        onImageAppend(image)
                     }
-                    #else
-                    if let image = UIImage(contentsOfFile: url.path) {
-                        onImageAppend?(image)
-                    }
-                    #endif
                 }
             case .failure(let error):
                 print("File selection error: \(error.localizedDescription)")
             }
         }
+#else
+        self.modifier(ImagePickerModifier(isPresented: isPresented, onImageAppend: onImageAppend))
+#endif
     }
 }
+
+#if !os(macOS)
+struct ImagePickerModifier: ViewModifier {
+    @Binding var isPresented: Bool
+    let onImageAppend: (UIImage) -> Void
+    @State private var selectedItems = [PhotosPickerItem]()
+    
+    func body(content: Content) -> some View {
+        content
+            .photosPicker(
+                isPresented: $isPresented,
+                selection: $selectedItems,
+                maxSelectionCount: 5,
+                matching: .images,
+                photoLibrary: .shared()
+            )
+            .onChange(of: selectedItems) {
+                Task {
+                    for item in selectedItems {
+                        if let data = try? await item.loadTransferable(type: Data.self),
+                           let uiImage = UIImage(data: data) {
+                            DispatchQueue.main.async {
+                                onImageAppend(uiImage)
+                            }
+                        }
+                    }
+                    selectedItems.removeAll()
+                }
+            }
+    }
+}
+#endif
+
 
 func loadImageAsBase64(from imagePath: String) -> String? {
     guard let url = URL(string: imagePath),
@@ -162,11 +187,22 @@ func loadImageData(from filePath: String) -> Data? {
 }
 #else
 func loadImageData(from filePath: String) -> Data? {
-    guard let url = URL(string: filePath),
-          let data = try? Data(contentsOf: url) else {
+    guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        print("Documents directory not found.")
         return nil
     }
-    return data
+    
+    // Append the relative path to the documents directory to form the full file URL
+    let fileURL = documentsDirectory.appendingPathComponent(filePath)
+    
+    // Attempt to load and return the data from the file URL
+    do {
+        let data = try Data(contentsOf: fileURL)
+        return data
+    } catch {
+        print("Failed to load data: \(error.localizedDescription)")
+        return nil
+    }
 }
 #endif
 

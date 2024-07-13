@@ -21,7 +21,9 @@ struct ProviderList: View {
             content
         }
 #else
-        content
+        NavigationStack {
+            content
+        }
 #endif
     }
     

@@ -31,6 +31,7 @@
 		0821816F2C39082900171BF3 /* ConversationGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0821816E2C39082900171BF3 /* ConversationGroupView.swift */; };
 		082181712C39099D00171BF3 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181702C39099D00171BF3 /* ArrayExtensions.swift */; };
 		082181752C39258500171BF3 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181742C39258500171BF3 /* ImageUtils.swift */; };
+		0842DFEC2C42C4AB0005BD5F /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 0842DFEB2C42C4AB0005BD5F /* VisualEffectView */; };
 		08505C9C2C3D3878001EBEEF /* IntegerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */; };
 		08505C9E2C3D5482001EBEEF /* SessionListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08505C9D2C3D5482001EBEEF /* SessionListToolbar.swift */; };
 		085645442C3F98DF00ED84DA /* TitleMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085645432C3F98DF00ED84DA /* TitleMaker.swift */; };
@@ -195,6 +196,7 @@
 				081637762C3542CA00C7DE52 /* MarkdownWebView in Frameworks */,
 				08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */,
 				08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */,
+				0842DFEC2C42C4AB0005BD5F /* VisualEffectView in Frameworks */,
 				080ED3932C42480600046424 /* OpenAI in Frameworks */,
 				080ED3902C423C4400046424 /* OpenAI in Frameworks */,
 				08AAFB962C3CF0DD002C04E0 /* KeyboardShortcuts in Frameworks */,
@@ -485,6 +487,7 @@
 				08AAFBA02C3D1086002C04E0 /* GPTEncoder */,
 				080ED38F2C423C4400046424 /* OpenAI */,
 				080ED3922C42480600046424 /* OpenAI */,
+				0842DFEB2C42C4AB0005BD5F /* VisualEffectView */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -565,6 +568,7 @@
 				08AAFB942C3CF0DD002C04E0 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				08AAFB9F2C3D1086002C04E0 /* XCRemoteSwiftPackageReference "GPTEncoder" */,
 				080ED3912C42480600046424 /* XCRemoteSwiftPackageReference "OpenAI" */,
+				0842DFEA2C42C4AB0005BD5F /* XCRemoteSwiftPackageReference "VisualEffectView" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1048,6 +1052,14 @@
 				kind = branch;
 			};
 		};
+		0842DFEA2C42C4AB0005BD5F /* XCRemoteSwiftPackageReference "VisualEffectView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SilverMarcs/VisualEffectView";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		0873CBEA2C353D8400D9CAEB /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
@@ -1104,6 +1116,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0873CBEA2C353D8400D9CAEB /* XCRemoteSwiftPackageReference "markdown-webview" */;
 			productName = MarkdownWebView;
+		};
+		0842DFEB2C42C4AB0005BD5F /* VisualEffectView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0842DFEA2C42C4AB0005BD5F /* XCRemoteSwiftPackageReference "VisualEffectView" */;
+			productName = VisualEffectView;
 		};
 		08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;

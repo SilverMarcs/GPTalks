@@ -74,8 +74,7 @@ final class Conversation: NSCopying {
             let visionContent: [ChatQuery.ChatCompletionMessageParam.ChatCompletionUserMessageParam.Content.VisionContent] = [
                 .chatCompletionContentPartTextParam(.init(text: self.content))
             ] + self.imagePaths.map { imagePath in
-                if let url = URL(string: imagePath),
-                   let imageData = try? Data(contentsOf: url) {
+                if let imageData = loadImageData(from: imagePath) {
                     return .chatCompletionContentPartImageParam(
                         .init(imageUrl: .init(
                             url: imageData,
@@ -106,8 +105,7 @@ final class Conversation: NSCopying {
             let visionContent: [ModelContent.Part] = [
                 .text(content)
             ] + self.imagePaths.map { imagePath in
-                if let url = URL(string: imagePath),
-                   let imageData = try? Data(contentsOf: url) {
+                if let imageData = loadImageData(from: imagePath) {
                     return .jpeg(imageData)
                 } else {
                     return .text("Failed to load image. Notify the user.")
@@ -130,8 +128,7 @@ final class Conversation: NSCopying {
         
         // Iterate over each image path, load the image, convert to base64, and append to contentObjects
         for imagePath in imagePaths {
-            if let url = URL(string: imagePath),
-               let imageData = try? Data(contentsOf: url) {
+            if let imageData = loadImageData(from: imagePath) {
                 let base64String = imageData.base64EncodedString()
                 let imageSource = MessageParameter.Message.Content.ImageSource(
                     type: .base64,

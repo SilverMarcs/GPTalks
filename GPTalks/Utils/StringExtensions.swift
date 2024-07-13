@@ -27,4 +27,16 @@ extension String {
             return self
         }
     }
+    
+    func absoluteURL() -> URL? {
+        // Get the URL for the Documents directory
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return nil
+        }
+        
+        // Append the relative path to the Documents directory URL
+        let fileURL = documentsDirectory.appendingPathComponent(self)
+        
+        return fileURL
+    }
 }

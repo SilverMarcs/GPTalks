@@ -1,5 +1,5 @@
 {
-  "originHash" : "55a2e33897d3bf6b99c46a4e3c080d6a5f2bbdc16ebb68f9ae4f19b80096c03d",
+  "originHash" : "efdef79bc93f3ba001199feac69c8a4f3ecfcd9a47615aa93eec1ade2df582cd",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -43,7 +43,7 @@
       "location" : "https://github.com/SilverMarcs/OpenAI",
       "state" : {
         "branch" : "cancellable",
-        "revision" : "a0c8e320c5dc5ee8fdaa6995ccc11a0d5e4e0de1"
+        "revision" : "e978916dc5b772ee8322d1cfbfa3710dce1c3e0a"
       }
     },
     {
@@ -51,8 +51,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
       "state" : {
-        "revision" : "7fecba04ab44cf2acacc239f4198facf1b072df3",
-        "version" : "1.6.0"
+        "revision" : "853c539a58cc20a55d37c050b9384e96dd7826b0",
+        "version" : "1.7.0"
+      }
+    },
+    {
+      "identity" : "visualeffectview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/VisualEffectView",
+      "state" : {
+        "branch" : "master",
+        "revision" : "a47ca84e0f0b92d8e4264a6d306f152758ffc02d"
       }
     }
   ],
