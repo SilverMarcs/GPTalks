@@ -30,7 +30,7 @@ struct SessionListCards: View {
     
     private var spacing: CGFloat {
         #if os(macOS)
-        return 10
+        return 9
         #else
         return 13
         #endif

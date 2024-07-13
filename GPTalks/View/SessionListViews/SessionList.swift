@@ -12,6 +12,8 @@ struct SessionList: View {
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
+    @ObservedObject var config = AppConfig.shared
+    
     @Query(sort: \Provider.date, order: .reverse) var providers: [Provider]
     @Query var sessions: [Session]
     
@@ -41,7 +43,7 @@ struct SessionList: View {
             .frame(minWidth: 240)
             .listStyle(.inset)
             .scrollContentBackground(.hidden)
-            .padding(.top, -10)
+            .padding(.top, -9)
             .onAppear {
                 if let first = sessions.first {
                     DispatchQueue.main.async {

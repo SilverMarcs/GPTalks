@@ -11,18 +11,57 @@ struct SessionListItem: View {
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) private var sessionVM
     
+    @ObservedObject var config = AppConfig.shared
+    
     @Bindable var session: Session
     
     @State var isEditing = false
     @FocusState var isFocused: Bool
     
     var body: some View {
+        Group {
+            if config.compactList {
+                compact
+            } else {
+                large
+            }
+        }
+        .swipeActions(edge: .leading) {
+            swipeActionsLeading
+        }
+    }
+    
+    var compact: some View {
         HStack {
-            ProviderImage(provider: session.config.provider)
+            ProviderImage(provider: session.config.provider, radius: 8, frame: 24)
+            
+            titleField
+                .font(.headline)
+                .fontWeight(.regular)
+            
+            Spacer()
+            
+            Text(session.config.model.name)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            
+            if session.isStarred {
+                Image(systemName: "star.fill")
+                    .foregroundStyle(.orange)
+                    .imageScale(.small)
+            }
+        }
+        .padding(4)
+    }
+    
+    var large: some View {
+        HStack {
+            ProviderImage(provider: session.config.provider, radius: 9, frame: 29)
             
             VStack {
                 HStack {
                     titleField
+                        .font(.headline)
                     
                     Spacer()
                     
@@ -48,12 +87,6 @@ struct SessionListItem: View {
         }
         .padding(3)
         .frame(height: 40)
-//        .swipeActions(edge: .trailing) {
-//            swipeActionsTrailing
-//        }
-        .swipeActions(edge: .leading) {
-            swipeActionsLeading
-        }
     }
     
     var subText: String {
@@ -73,10 +106,10 @@ struct SessionListItem: View {
                 })
                 .padding(.vertical, -2)
                 .focused($isFocused)
-                .font(.headline)
+//                .font(.headline)
             } else {
                 Text(session.title)
-                    .font(.headline)
+//                    .font(.headline)
                     .lineLimit(1)
             }
         }
