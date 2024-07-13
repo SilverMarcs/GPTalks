@@ -78,12 +78,16 @@ struct UserMessage: View {
         ScrollView {
             HStack {
                 ForEach(conversation.imagePaths, id: \.self) { imagePath in
-                    ImageViewer(imagePath: imagePath, maxWidth: 200, maxHeight: 200, radius: 9, isCrossable: false) {
-                            print("Should not be removed like this")
+                    ImageViewer(imagePath: imagePath, maxWidth: maxImageSize, maxHeight: maxImageSize, radius: 9, isCrossable: false) {
+                            print("Should not be removed from here")
                     }
                 }
             }
         }
+    }
+    
+    private var maxImageSize: CGFloat {
+        300
     }
     
     func updateLabelSize(_ size: CGSize) {

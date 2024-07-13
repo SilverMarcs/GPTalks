@@ -78,6 +78,8 @@ final class Session {
         } catch {
             handleError(error)
         }
+        streamingTask?.cancel()
+        streamingTask = nil
     }
     
     private func handleError(_ error: Error) {
@@ -97,7 +99,7 @@ final class Session {
         let streamHandler = StreamHandler(config: config, assistant: assistant)
         try await streamHandler.handleStream(from: conversations)
     }
-    
+
     private func prepareAssistantConversation(assistantGroup: ConversationGroup?) -> Conversation {
         if let assistantGroup = assistantGroup {
             return assistantGroup.conversations.last!
@@ -108,41 +110,26 @@ final class Session {
         }
     }
     
-    private func prepareRegenerationContextForUser(_ group: ConversationGroup) -> (index: Int, userContent: String, assistantGroup: ConversationGroup)? {
-        guard let index = groups.firstIndex(where: { $0.id == group.id }) else {
-            return nil
+    private func prepareConversations(regenContent: String?) -> [Conversation] {
+        var conversations = adjustedGroups.map { $0.activeConversation }
+        
+        if let regenContent = regenContent {
+            if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
+                let existingImagePaths = conversations[lastUserIndex].imagePaths
+                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, imagePaths: existingImagePaths)
+            }
+            if let lastAssistantIndex = conversations.lastIndex(where: { $0.role == .assistant }) {
+                conversations.remove(at: lastAssistantIndex)
+            }
         }
         
-        let userContent = group.activeConversation.content
-        
-        // Find the next assistant group
-        if let nextAssistantGroup = groups.dropFirst(index + 1).first(where: { $0.role == .assistant }) {
-            return (index, userContent, nextAssistantGroup)
-        } else {
-            // Create a new assistant group if none exists
-            let newAssistantGroup = ConversationGroup(role: .assistant)
-            return (index, userContent, newAssistantGroup)
-        }
-    }
-    
-    
-    private func prepareRegenerationContextForAssistant(_ group: ConversationGroup) -> (index: Int, userContent: String, assistantGroup: ConversationGroup)? {
-        guard let index = groups.firstIndex(where: { $0.id == group.id }),
-              index > 0 else {
-            return nil
-        }
-        
-        let userContent = groups[index - 1].activeConversation.content
-        return (index, userContent, group)
+        return conversations
     }
     
     @MainActor
     func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil) async {
         errorMessage = ""
-        
         self.date = Date()
-        
-        guard isRegen || !inputManager.prompt.isEmpty else { return }
         
         if !isRegen {
             if inputManager.state == .editing {
@@ -159,7 +146,6 @@ final class Session {
             }
         }
         
-        
         if AppConfig.shared.autogenTitle {
             Task { await generateTitle() }
         }
@@ -174,11 +160,9 @@ final class Session {
            editingIndex < groups.count,
            groups[editingIndex].activeConversation.role == .user {
             
-            // Update the content and imagePaths of the user conversation
             groups[editingIndex].activeConversation.content = inputManager.prompt
             groups[editingIndex].activeConversation.imagePaths = inputManager.imagePaths
             
-            // Remove all groups after the edited group
             groups.removeSubrange((editingIndex + 1)...)
             
             inputManager.resetEditing()
@@ -187,94 +171,27 @@ final class Session {
         }
     }
     
-    private func prepareConversations(regenContent: String?) -> [Conversation] {
-        var conversations = adjustedGroups.map { $0.activeConversation }
-        
-        if let regenContent = regenContent {
-            if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
-                // Use the existing imagePaths when regenerating
-                let existingImagePaths = conversations[lastUserIndex].imagePaths
-                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, imagePaths: existingImagePaths)
-            }
-            if let lastAssistantIndex = conversations.lastIndex(where: { $0.role == .assistant }) {
-                conversations.remove(at: lastAssistantIndex)
-            }
-        }
-        
-        return conversations
-    }
-    
     @MainActor
     func regenerate(group: ConversationGroup) {
-        let regenerationContext: (index: Int, userContent: String, userImagePaths: [String], assistantGroup: ConversationGroup)?
+        guard group.role == .assistant else { return }
         
-        if group.role == .assistant {
-            regenerationContext = prepareRegenerationContextForAssistant(group)
-        } else if group.role == .user {
-            regenerationContext = prepareRegenerationContextForUser(group)
-        } else {
-            return // Invalid group role
-        }
+        guard let index = groups.firstIndex(where: { $0.id == group.id }),
+              index > 0 else { return }
         
-        guard let (index, userContent, userImagePaths, assistantGroup) = regenerationContext else { return }
+        let userGroup = groups[index - 1]
+        let userContent = userGroup.activeConversation.content
+//        let userImagePaths = userGroup.activeConversation.imagePaths
         
         let newAssistantConversation = Conversation(role: .assistant, content: "", model: config.model, imagePaths: [])
+        group.addConversation(newAssistantConversation)
         
-        if group.role == .user {
-            // Check if the next group is an assistant group
-            if index + 1 < groups.count && groups[index + 1].role == .assistant {
-                // Add a new conversation to the existing assistant group
-                groups[index + 1].addConversation(newAssistantConversation)
-                // Remove all groups after the next assistant group
-                groups.removeSubrange((index + 2)...)
-            } else {
-                // Remove all groups after the current user group
-                groups.removeSubrange((index + 1)...)
-                // Create a new assistant group and add it
-                let newAssistantGroup = ConversationGroup(role: .assistant)
-                newAssistantGroup.addConversation(newAssistantConversation)
-                groups.append(newAssistantGroup)
-            }
-        } else {
-            // For .assistant groups
-            groups.removeSubrange((index + 1)...)
-            assistantGroup.addConversation(newAssistantConversation)
-        }
+        // Remove all groups after the current assistant group
+        groups.removeSubrange((index + 1)...)
         
         Task {
-            await sendInput(isRegen: true, regenContent: userContent, assistantGroup: assistantGroup)
+            await sendInput(isRegen: true, regenContent: userContent, assistantGroup: group)
         }
     }
-    
-    private func prepareRegenerationContextForUser(_ group: ConversationGroup) -> (index: Int, userContent: String, userImagePaths: [String], assistantGroup: ConversationGroup)? {
-        guard let index = groups.firstIndex(where: { $0.id == group.id }) else {
-            return nil
-        }
-        
-        let userContent = group.activeConversation.content
-        let userImagePaths = group.activeConversation.imagePaths
-        
-        // Find the next assistant group
-        if let nextAssistantGroup = groups.dropFirst(index + 1).first(where: { $0.role == .assistant }) {
-            return (index, userContent, userImagePaths, nextAssistantGroup)
-        } else {
-            // Create a new assistant group if none exists
-            let newAssistantGroup = ConversationGroup(role: .assistant)
-            return (index, userContent, userImagePaths, newAssistantGroup)
-        }
-    }
-    
-    private func prepareRegenerationContextForAssistant(_ group: ConversationGroup) -> (index: Int, userContent: String, userImagePaths: [String], assistantGroup: ConversationGroup)? {
-        guard let index = groups.firstIndex(where: { $0.id == group.id }),
-              index > 0 else {
-            return nil
-        }
-        
-        let userContent = groups[index - 1].activeConversation.content
-        let userImagePaths = groups[index - 1].activeConversation.imagePaths
-        return (index, userContent, userImagePaths, group)
-    }
-    
     
     func stopStreaming() {
         streamingTask?.cancel()

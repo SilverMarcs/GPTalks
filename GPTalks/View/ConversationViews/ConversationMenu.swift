@@ -58,7 +58,7 @@ struct ConversationMenu: View {
             Button {
                 group.setupEditing()
             } label: {
-                Label("Edit", systemImage: "applepencil.tip")
+                Label("Edit", systemImage: "pencil.and.outline")
             }
         }
     }
@@ -116,7 +116,14 @@ struct ConversationMenu: View {
     @ViewBuilder
     var regenGroup: some View {
         Button {
-            group.session?.regenerate(group: group)
+            if group.role == .assistant {
+                group.session?.regenerate(group: group)
+            } else if group.role == .user {
+                group.setupEditing()
+                Task {
+                    await group.session?.sendInput()
+                }
+            }
         } label: {
             Label("Regenerate", systemImage: "arrow.2.circlepath")
         }
@@ -200,6 +207,7 @@ struct ConversationMenu: View {
         ConversationGroupView(group: group)
         ConversationGroupView(group: group2)
     }
+    .environment(SessionVM())
     .frame(width: 500)
     .padding()
 }

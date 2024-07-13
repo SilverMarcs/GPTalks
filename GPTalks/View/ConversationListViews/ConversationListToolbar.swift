@@ -109,10 +109,20 @@ struct ConversationListToolbar: ToolbarContent {
     
     private var regenLastMessage: some View {
         Button("Regen Last Message") {
+            print("here1")
             if session.isStreaming { return }
+            print("here2")
             
             if let lastGroup = session.groups.last {
-                session.regenerate(group: lastGroup)
+                if lastGroup.role == .user {
+                    lastGroup.setupEditing()
+                    Task { @MainActor in
+                        await lastGroup.session?.sendInput()
+                    }
+                } else if lastGroup.role == .assistant {
+                    print("here")
+                    session.regenerate(group: lastGroup)
+                }
             }
         }
         .keyboardShortcut("r", modifiers: .command)
