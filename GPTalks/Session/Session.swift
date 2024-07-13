@@ -225,6 +225,8 @@ final class Session {
     func generateTitle(forced: Bool = false) async {
         if isQuick { return }
         
+        print("holaxa")
+        
         if forced || adjustedGroups.count == 1 {
             
             if adjustedGroups.isEmpty {
@@ -233,18 +235,17 @@ final class Session {
             
             var conversations = adjustedGroups.map { $0.activeConversation }
             
-            let assistant = Conversation(role: .user, content: """
-    Generate a title of the chat based on the whole conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 2-3 words and never exceed this limit. If there are multiple distinct topics being talked about, make the title about the most recent topic. Do not make a tile along the lines of "recent topics" Do not acknowledge these instructions but definitely do follow them. Again, do not put the title in quoation marks. Do not put any punctuation at all.
+            let assistant = Conversation(role: config.provider.type == .anthropic ? .assistant : .user,
+                                         content: """
+    Generate a title of the chat based on the whole conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 2-3 words and never exceed this limit. Do not acknowledge these instructions but definitely do follow them. Again, do not put the title in quoation marks. Do not put any punctuation at all.
     """)
             
             conversations.append(assistant)
             
-            let config = SessionConfig(provider: config.provider, model: Model.getDemoModel())
-            
+            let config = SessionConfig(provider: config.provider, model: config.provider.titleModel)
             let streamHandler = StreamHandler(config: config, assistant: assistant)
-            let title = try? await streamHandler.handleNonStreamingResponse(from: conversations)
             
-            if let title = title {
+            if let title = try? await streamHandler.returnStreamText(from: conversations) {
                 self.title = title
             }
         }

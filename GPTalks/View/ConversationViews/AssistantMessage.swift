@@ -34,9 +34,11 @@ struct AssistantMessage: View {
                     }
                     
                     if conversation.isReplying {
-                        Text("Generating...")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        ProgressView()
+                            .controlSize(.small)
+//                        Text("Generating...")
+//                            .font(.caption)
+//                            .foregroundStyle(.secondary)
                     }
                     #if os(macOS)
                     if let group = conversation.group, !conversation.isReplying {

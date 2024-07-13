@@ -41,6 +41,20 @@ class StreamHandler {
     }
     
     @MainActor
+    func returnStreamText(from conversations: [Conversation]) async throws -> String {
+        var streamText = ""
+        
+        let streamManager = StreamManager(config: config)
+        let stream = streamManager.streamResponse(from: conversations)
+        
+        for try await content in stream {
+            streamText += content
+        }
+        
+        return streamText
+    }
+    
+    @MainActor
     private func finalizeStream(streamText: String) {
         if !streamText.isEmpty {
             DispatchQueue.main.asyncAfter(deadline: .now() + uiUpdateInterval) {

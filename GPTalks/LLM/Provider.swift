@@ -27,6 +27,8 @@ class Provider {
     var chatModel: Model
     @Relationship(deleteRule: .cascade)
     var quickChatModel: Model
+    @Relationship(deleteRule: .cascade)
+    var titleModel: Model
     
     @Relationship(deleteRule: .cascade)
     var models =  [Model]()
@@ -34,6 +36,7 @@ class Provider {
     init() {
         self.chatModel = Model.getDemoModel()
         self.quickChatModel = Model.getDemoModel()
+        self.titleModel = Model.getDemoModel()
         self.type = .openai
     }
     
@@ -45,6 +48,7 @@ class Provider {
         provider.models = type.getDefaultModels()
         provider.chatModel = provider.models.first!
         provider.quickChatModel = provider.models.first!
+        provider.titleModel = provider.models.first!
         provider.color = type.defaultColor
         
         return provider

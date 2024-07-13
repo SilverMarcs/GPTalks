@@ -32,7 +32,6 @@ struct ParameterSettings: View {
                     .frame(height: 100)
                     .scrollContentBackground(.hidden)
             }
-
         }
         .formStyle(.grouped)
     }

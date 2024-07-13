@@ -49,7 +49,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     var defaultColor: String {
         switch self {
         case .openai: "#00947A"
-        case .anthropic: "#E2967C"
+        case .anthropic: "#E66D4B"
         case .google: "#E64335"
         }
     }

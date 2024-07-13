@@ -18,4 +18,7 @@ class AppConfig: ObservableObject {
     // Parameters
     @AppStorage("temperature") var temperature: Double = 1.0
     @AppStorage("configuration.systemPrompt") var systemPrompt: String = "You are a helpful assistant."
+    
+    // Quick
+    @AppStorage("configuration.quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremely concise"
 }

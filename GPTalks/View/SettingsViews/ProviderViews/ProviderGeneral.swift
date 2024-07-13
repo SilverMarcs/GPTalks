@@ -25,16 +25,18 @@ struct ProviderGeneral: View {
                 
                 TextField("API Key", text: $provider.apiKey)
                     .truncationMode(.middle)
+                
+
             }
-            
+    
             Section("Default Models") {
-                Picker("Default Model", selection: $provider.chatModel) {
+                Picker("Chat Model", selection: $provider.chatModel) {
                     ForEach(provider.models, id: \.self) { model in
                         Text(model.name).tag(model)
                     }
                 }
                 
-                Picker("Quick Model", selection: $provider.quickChatModel) {
+                Picker("Title Model", selection: $provider.titleModel) {
                     ForEach(provider.models, id: \.self) { model in
                         Text(model.name).tag(model)
                     }
