@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ListCard: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     var icon: String
     var iconColor: Color
     var title: String
@@ -18,7 +20,7 @@ struct ListCard: View {
         Button {
             action()
         } label: {
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: spacing) {
                 HStack {
                     Image(systemName: icon)
                         .font(.title)
@@ -37,12 +39,48 @@ struct ListCard: View {
                     .opacity(0.8)
                     .padding(.leading, 2)
             }
-            .padding(.vertical, 5)
-            .padding(.horizontal, 8)
+            .padding(.vertical, verticalPadding)
+            .padding(.horizontal, horizontalPadding)
+            #if os(macOS)
             .background(.quaternary.opacity(0.8))
-            .cornerRadius(8)
+            #else
+            .background(colorScheme == .dark ? AnyShapeStyle(.background.secondary) : AnyShapeStyle(.background))
+            #endif
+            .cornerRadius(radius)
         }
         .buttonStyle(.plain)
+    }
+    
+    private var radius: CGFloat {
+    #if os(macOS)
+        return 8
+    #else
+        return 10
+    #endif
+    }
+    
+    private var verticalPadding: CGFloat {
+        #if os(macOS)
+        return 5
+        #else
+        return 7
+        #endif
+    }
+    
+    private var horizontalPadding: CGFloat {
+        #if os(macOS)
+        return 8
+        #else
+        return 10
+        #endif
+    }
+    
+    private var spacing: CGFloat {
+        #if os(macOS)
+        return 6
+        #else
+        return 10
+        #endif
     }
 }
 

@@ -13,7 +13,7 @@ struct SessionListCards: View {
     @Query var sessions: [Session]
     
     var body: some View {
-        HStack {
+        HStack(spacing: spacing) {
             ListCard(
                 icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
                 count: String(sessions.count)) {
@@ -26,7 +26,14 @@ struct SessionListCards: View {
             ) {
             }
         }
-        .background(.clear)
+    }
+    
+    private var spacing: CGFloat {
+        #if os(macOS)
+        return 10
+        #else
+        return 13
+        #endif
     }
     
     func toggleChatCount() {

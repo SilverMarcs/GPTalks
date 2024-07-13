@@ -11,17 +11,21 @@ import SwiftUI
 struct SessionList: View {
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
-
+    
     @Query(sort: \Provider.date, order: .reverse) var providers: [Provider]
     @Query var sessions: [Session]
-
+    
     @State private var prevCount = 0
-
+    
     var body: some View {
         @Bindable var sessionVM = sessionVM
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
+                #if !os(macOS)
+                cardView
+                #endif
+                
                 ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
                     SessionListItem(session: session)
                         .listRowSeparator(.visible)
@@ -33,11 +37,11 @@ struct SessionList: View {
             .toolbar {
                 SessionListToolbar()
             }
-            #if os(macOS)
+#if os(macOS)
             .frame(minWidth: 240)
             .listStyle(.inset)
             .scrollContentBackground(.hidden)
-            .padding(.top, -9)
+            .padding(.top, -10)
             .onAppear {
                 if let first = sessions.first {
                     DispatchQueue.main.async {
@@ -55,11 +59,11 @@ struct SessionList: View {
                     }
                 }
             }
-            #else
+#else
             .navigationTitle("Sessions")
             .listStyle(.insetGrouped)
             .searchable(text: $sessionVM.searchText)
-            #endif
+#endif
         }
     }
     
@@ -79,7 +83,19 @@ struct SessionList: View {
             animation: .default
         )
     }
-
+    
+    #if !os(macOS)
+    private var cardView: some View {
+        Section {
+            SessionListCards()
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+        }
+        .listSectionSpacing(15)
+    }
+    #endif
+    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets.sorted().reversed() {
