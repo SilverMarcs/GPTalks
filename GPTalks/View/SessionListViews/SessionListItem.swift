@@ -91,7 +91,11 @@ struct SessionListItem: View {
                 }
             }
         }
+        #if os (macOS)
         .padding(5)
+        #else
+        .padding(3)
+        #endif
     }
     
     var subText: String {

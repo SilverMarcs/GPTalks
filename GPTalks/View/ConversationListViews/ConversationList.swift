@@ -27,15 +27,11 @@ struct ConversationList: View {
 
                     ErrorMessageView(session: session)
                     
-                    #if os(macOS)
-                    Color.clear.id(String.bottomID).frame(height: 20)
-                    #else
                     GeometryReader { geometry in
                         Color.clear
                             .id(String.bottomID)
                             .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
                     }
-                    #endif
                 }
                 .padding()
                 .padding(.top, -15)
@@ -43,12 +39,15 @@ struct ConversationList: View {
             .onAppear {
                 session.proxy = proxy
             }
-            #if os(macOS)
-            .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-                if session.isReplying {
-                    hasUserScrolled = true
-                }
+            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+                #if os(macOS)
+                let bottomReached = value > NSScreen.main!.frame.height
+                #else
+                let bottomReached = value > UIScreen.main.bounds.height
+                #endif
+                hasUserScrolled = bottomReached
             }
+            #if os(macOS)
             .task {
                 KeyboardShortcuts.onKeyUp(for: .sendMessage) { [self] in
                     Task { await session.sendInput() }
@@ -60,10 +59,6 @@ struct ConversationList: View {
                 ConversationListToolbar(session: session)
             }
             #else
-            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                let bottomReached = value > UIScreen.main.bounds.height
-                hasUserScrolled = bottomReached
-            }
             .toolbarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.immediately)
             .navigationTitle(session.config.model.name)
