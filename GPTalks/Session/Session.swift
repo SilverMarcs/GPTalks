@@ -65,6 +65,7 @@ final class Session {
     @Transient
     var inputManager = InputManager()
     
+    @Relationship(deleteRule: .nullify)
     var config: SessionConfig
     
     init(config: SessionConfig = SessionConfig()) {
@@ -129,8 +130,8 @@ final class Session {
     @MainActor
     func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil) async {
         errorMessage = ""
-        self.date = Date()
         self.order = 0
+        self.date = Date()
         
         if !isRegen {
             if inputManager.state == .editing {
@@ -246,7 +247,8 @@ final class Session {
             let streamHandler = StreamHandler(config: config, assistant: assistant)
             
             if let title = try? await streamHandler.returnStreamText(from: conversations) {
-                self.title = title
+                self.title = title.trimmingCharacters(
+                    in: .newlines)
             }
         }
     }

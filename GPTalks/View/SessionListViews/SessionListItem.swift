@@ -71,9 +71,12 @@ struct SessionListItem: View {
                 
                 HStack {
                     Text(subText)
+                    #if os(macOS)
                         .font(.callout)
+                    #else
+                        .font(.footnote)
+                    #endif
                         .foregroundStyle(.secondary)
-                        .lineLimit(1)
                     
                     Spacer()
                     

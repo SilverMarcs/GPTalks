@@ -49,20 +49,15 @@ struct QuickPanel: View {
     private var textfieldView: some View {
         HStack(spacing: 12) {
             Menu {
-                Picker("Provider", selection: $session.config.provider) {
-                    ForEach(providers.sorted(by: { $0.date < $1.date }), id: \.self) { provider in
-                        Text(provider.name).tag(provider.id)
+                ProviderPicker(
+                    provider: $session.config.provider,
+                    providers: providers.sorted(by: { $0.order < $1.order }),
+                    onChange: { newProvider in
+                        session.config.model = newProvider.quickChatModel
                     }
-                }
-                
-                Picker("Model", selection: $session.config.model) {
-                    ForEach(session.config.provider.models.sorted(by: { $0.name < $1.name }), id: \.self) { model in
-                        Text(model.name)
-                    }
-                }
-                .onChange(of: session.config.provider) {
-                    session.config.model = session.config.provider.quickChatModel
-                }
+                )
+                                
+                ModelPicker(model: $session.config.model, models: session.config.provider.models)
                 
             } label: {
                 Image(systemName: "magnifyingglass")

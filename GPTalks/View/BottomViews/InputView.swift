@@ -22,15 +22,8 @@ struct InputView: View {
                     .offset(y: -2.4)
             }
             
-            PlusButton(size: imageSize) {
-                isPresented = true
-            }
-            .offset(y: -2.4)
-            .imageFileImporter(isPresented: $isPresented, onImageAppend: { image in
-                if let path = image.save() {
-                    session.inputManager.imagePaths.append(path)
-                }
-            })
+            plusButton
+//                .offset(y: -2.4)
             
             VStack(alignment: .leading) {
                 if !session.inputManager.imagePaths.isEmpty {
@@ -51,7 +44,7 @@ struct InputView: View {
         }
         .fixedSize(horizontal: false, vertical: true)
         .padding(.horizontal)
-        .padding(.vertical, 14)
+        .padding(.vertical, verticalPadding)
         #if os(macOS)
         .background(.bar)
         #else
@@ -66,6 +59,43 @@ struct InputView: View {
         )
         #endif
         .ignoresSafeArea()
+    }
+    
+    var verticalPadding: CGFloat {
+        #if os(macOS)
+        14
+        #else
+        9
+        #endif
+    }
+    
+    var plusButton: some View {
+        Group {
+#if os(macOS)
+        PlusButton(size: imageSize) {
+            isPresented = true
+        }
+#else
+        PlusImage()
+            .gesture(
+                TapGesture()
+                    .onEnded {
+                        isPresented = true
+                    }
+                    .simultaneously(with: LongPressGesture(minimumDuration: 0.3).onEnded { _ in
+                        if let lastGroup = session.groups.last {
+                            session.resetContext(at: lastGroup)
+                        }
+                    })
+            )
+#endif
+        }
+//        .offset(y: -2.4)
+        .imageFileImporter(isPresented: $isPresented, onImageAppend: { image in
+            if let path = image.save() {
+                session.inputManager.imagePaths.append(path)
+            }
+        })
     }
     
     var imageSize: CGFloat {

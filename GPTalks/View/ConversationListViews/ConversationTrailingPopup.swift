@@ -22,6 +22,11 @@ struct ConversationTrailingPopup: View {
                             isFocused = false
                         }
                     }
+                    .onChange(of: session.title) {
+                        session.title = String(
+                            session.title.trimmingCharacters(
+                                in: .newlines))
+                    }
             }
 
             Section("System Prompt") {
@@ -30,7 +35,7 @@ struct ConversationTrailingPopup: View {
                     .onChange(of: session.config.systemPrompt) {
                         session.config.systemPrompt = String(
                             session.config.systemPrompt.trimmingCharacters(
-                                in: .whitespacesAndNewlines))
+                                in: .newlines))
                     }
             }
         }

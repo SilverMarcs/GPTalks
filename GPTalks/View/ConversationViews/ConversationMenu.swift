@@ -162,6 +162,7 @@ struct ConversationMenu: View {
         }
         
         return Group {
+            #if os(macOS)
             if group.conversations.count > 1 && group.role == .assistant {
                 Button {
                     group.setActiveToLeft()
@@ -183,6 +184,23 @@ struct ConversationMenu: View {
                 }
                 .disabled(!shouldShowButtons || !canNavigateRight)
             }
+            #else
+            Section("Iterations: \(group.activeConversationIndex + 1)/\(group.conversations.count)") {
+                Button {
+                    group.setActiveToLeft()
+                } label: {
+                    Label("Previous", systemImage: "chevron.left")
+                }
+                .disabled(!shouldShowButtons || !canNavigateLeft)
+                
+                Button {
+                    group.setActiveToRight()
+                } label: {
+                    Label("Next", systemImage: "chevron.right")
+                }
+                .disabled(!shouldShowButtons || !canNavigateRight)
+            }
+            #endif
         }
     }
 }

@@ -32,11 +32,17 @@ struct ConversationListToolbar: ToolbarContent {
         }
         
         ToolbarItemGroup {
-            providerPicker
+            ProviderPicker(
+                provider: $session.config.provider,
+                providers: providers.sorted(by: { $0.order < $1.order }),
+                onChange: { newProvider in
+                    session.config.model = newProvider.chatModel
+                }
+            )
 
             temperatureSlider
             
-            modelPicker
+            ModelPicker(model: $session.config.model, models: session.config.provider.models)
                 .frame(width: 110)
         }
         
@@ -59,25 +65,6 @@ struct ConversationListToolbar: ToolbarContent {
             regenLastMessage
         }
         #endif
-    }
-    
-    private var providerPicker: some View {
-        Picker("Provider", selection: $session.config.provider) {
-            ForEach(providers.sorted(by: { $0.order < $1.order }), id: \.self) { provider in
-                Text(provider.name).tag(provider.id)
-            }
-        }
-        .onChange(of: session.config.provider) {
-            session.config.model = session.config.provider.chatModel
-        }
-    }
-    
-    private var modelPicker: some View {
-        Picker("Model", selection: $session.config.model) {
-            ForEach(session.config.provider.models, id: \.self) { model in
-                Text(model.name)
-            }
-        }
     }
     
     private var temperatureSlider: some View {
@@ -166,33 +153,54 @@ struct ConversationListToolbar: View {
     var body: some View {
         Section {
             Menu {
-                providerPicker
+                ProviderPicker(
+                    provider: $session.config.provider,
+                    providers: providers.sorted(by: { $0.order < $1.order }),
+                    onChange: { newProvider in
+                        session.config.model = newProvider.chatModel
+                    }
+                )
             } label: {
                 Label(session.config.provider.name, systemImage: "building.2")
             }
             
             Menu {
-                modelPicker
+                ModelPicker(model: $session.config.model, models: session.config.provider.models)
             } label: {
                 Label(session.config.model.name, systemImage: "cube.box")
             }
         }
     }
+}
+#endif
+
+struct ProviderPicker: View {
+    @Binding var provider: Provider
+    var providers: [Provider]
+    var onChange: ((Provider) -> Void)?
     
-    private var providerPicker: some View {
-        Picker("Provider", selection: $session.config.provider) {
-            ForEach(providers.sorted(by: { $0.order < $1.order }), id: \.self) { provider in
-                Text(provider.name).tag(provider.id)
+    var body: some View {
+        Picker("Select a provider", selection: $provider) {
+            ForEach(providers) { provider in
+                Text(provider.name).tag(provider)
             }
         }
+        .onChange(of: provider) {
+            onChange?(provider)
+        }
     }
+}
+
+
+struct ModelPicker: View {
+    @Binding var model: Model
+    var models: [Model]
     
-    private var modelPicker: some View {
-        Picker("Model", selection: $session.config.model) {
-            ForEach(session.config.provider.models.sorted(by: { $0.order < $1.order }), id: \.self) { model in
+    var body: some View {
+        Picker("Model", selection: $model) {
+            ForEach(models, id: \.self) { model in
                 Text(model.name)
             }
         }
     }
 }
-#endif

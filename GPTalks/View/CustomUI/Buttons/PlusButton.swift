@@ -26,6 +26,17 @@ struct PlusButton: View {
     }
 }
 
+struct PlusImage: View {
+    var size: CGFloat = 33
+    
+    var body: some View {
+        Image(systemName: "plus.circle.fill")
+            .resizable()
+            .frame(width: size, height: size)
+            .foregroundStyle(.secondary, .quinary)
+    }
+}
+
 #Preview {
     PlusButton() { }
         .padding()

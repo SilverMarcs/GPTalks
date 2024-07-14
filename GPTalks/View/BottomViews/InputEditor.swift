@@ -31,6 +31,9 @@ struct InputEditor: View {
                 .scrollContentBackground(.hidden)
                 .padding(padding)
                 .padding(.leading, leadingPadding)
+            #if !os(macOS)
+            .padding(.trailing, leadingPadding)
+            #endif
         }
         .font(.body)
         .modifier(RoundedRectangleOverlayModifier(radius: radius))
