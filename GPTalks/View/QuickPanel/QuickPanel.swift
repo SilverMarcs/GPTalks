@@ -61,7 +61,7 @@ struct QuickPanel: View {
                     }
                 }
                 .onChange(of: session.config.provider) {
-                    session.config.model = session.config.provider.chatModel
+                    session.config.model = session.config.provider.quickChatModel
                 }
                 
             } label: {
