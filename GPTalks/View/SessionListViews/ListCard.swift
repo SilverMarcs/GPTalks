@@ -53,7 +53,7 @@ struct ListCard: View {
     
     private var radius: CGFloat {
     #if os(macOS)
-        return 8
+        return 7
     #else
         return 10
     #endif

@@ -33,11 +33,12 @@ struct SessionListItem: View {
     
     var compact: some View {
         HStack {
-            ProviderImage(provider: session.config.provider, radius: 8, frame: 24)
+            ProviderImage(provider: session.config.provider, radius: 8, frame: 23)
             
             titleField
                 .font(.headline)
                 .fontWeight(.regular)
+                .lineLimit(1)
             
             Spacer()
             
@@ -51,7 +52,7 @@ struct SessionListItem: View {
                     .imageScale(.small)
             }
         }
-        .padding(4)
+        .padding(3)
     }
     
     var large: some View {
@@ -61,6 +62,7 @@ struct SessionListItem: View {
             VStack {
                 HStack {
                     titleField
+                        .lineLimit(1)
                         .font(.headline)
                     
                     Spacer()
@@ -77,6 +79,7 @@ struct SessionListItem: View {
                         .font(.footnote)
                     #endif
                         .foregroundStyle(.secondary)
+                        .lineLimit(1)
                     
                     Spacer()
                     
@@ -88,8 +91,7 @@ struct SessionListItem: View {
                 }
             }
         }
-        .padding(3)
-        .frame(height: 40)
+        .padding(5)
     }
     
     var subText: String {
@@ -109,10 +111,8 @@ struct SessionListItem: View {
                 })
                 .padding(.vertical, -2)
                 .focused($isFocused)
-//                .font(.headline)
             } else {
                 Text(session.title)
-//                    .font(.headline)
                     .lineLimit(1)
             }
         }
