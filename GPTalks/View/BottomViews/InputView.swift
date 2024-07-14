@@ -23,7 +23,9 @@ struct InputView: View {
             }
             
             plusButton
-//                .offset(y: -2.4)
+#if os(macOS)
+                .offset(y: -2.4)
+#endif
             
             VStack(alignment: .leading) {
                 if !session.inputManager.imagePaths.isEmpty {
@@ -61,14 +63,6 @@ struct InputView: View {
         .ignoresSafeArea()
     }
     
-    var verticalPadding: CGFloat {
-        #if os(macOS)
-        14
-        #else
-        9
-        #endif
-    }
-    
     var plusButton: some View {
         Group {
 #if os(macOS)
@@ -90,12 +84,19 @@ struct InputView: View {
             )
 #endif
         }
-//        .offset(y: -2.4)
         .imageFileImporter(isPresented: $isPresented, onImageAppend: { image in
             if let path = image.save() {
                 session.inputManager.imagePaths.append(path)
             }
         })
+    }
+    
+    var verticalPadding: CGFloat {
+#if os(macOS)
+        14
+#else
+        9
+#endif
     }
     
     var imageSize: CGFloat {

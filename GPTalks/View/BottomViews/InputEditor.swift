@@ -15,6 +15,38 @@ struct InputEditor: View {
     @FocusState var isFocused: Bool
     
     var body: some View {
+        Group {
+            #if os(macOS)
+            macosView
+            #else
+            iosView
+            #endif
+        }
+        .font(.body)
+        .onAppear {
+            isFocused = true
+        }
+
+    }
+    
+    #if !os(macOS)
+    var iosView: some View {
+        TextField("Send a message", text: $prompt, axis: .vertical)
+            .padding(padding)
+            .padding(.leading, 5)
+            .modifier(RoundedRectangleOverlayModifier(radius: radius))
+            .background(
+                VisualEffect(colorTint: colorScheme == .dark
+                             ? Color(hex: "050505")
+                             : Color(hex: "FAFAFE"),
+                             colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
+                .cornerRadius(radius)
+            )
+    }
+    #endif
+    
+    @ViewBuilder
+    var macosView: some View {
         ZStack(alignment: .leading) {
             if prompt.isEmpty {
                 Text("Send a message")
@@ -31,24 +63,8 @@ struct InputEditor: View {
                 .scrollContentBackground(.hidden)
                 .padding(padding)
                 .padding(.leading, leadingPadding)
-            #if !os(macOS)
-            .padding(.trailing, leadingPadding)
-            #endif
         }
-        .font(.body)
         .modifier(RoundedRectangleOverlayModifier(radius: radius))
-#if !os(macOS)
-        .background(
-            VisualEffect(colorTint: colorScheme == .dark
-                         ? Color(hex: "050505")
-                         : Color(hex: "FAFAFE"),
-                         colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
-            .cornerRadius(radius)
-        )
-#else
-        .onAppear {
-            isFocused = true
-        }
         .toolbar {
             ToolbarItem(placement: .keyboard) {
                 Button {
@@ -59,7 +75,6 @@ struct InputEditor: View {
                 .keyboardShortcut("l", modifiers: .command)
             }
         }
-#endif
     }
     
     var radius: CGFloat {
@@ -70,7 +85,7 @@ struct InputEditor: View {
         #if os(macOS)
         return 6
         #else
-        return -2
+        return 6
         #endif
     }
     
