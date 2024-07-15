@@ -34,7 +34,7 @@
 		0842DFEC2C42C4AB0005BD5F /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 0842DFEB2C42C4AB0005BD5F /* VisualEffectView */; };
 		08505C9C2C3D3878001EBEEF /* IntegerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */; };
 		08505C9E2C3D5482001EBEEF /* SessionListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08505C9D2C3D5482001EBEEF /* SessionListToolbar.swift */; };
-		085645442C3F98DF00ED84DA /* TitleMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085645432C3F98DF00ED84DA /* TitleMaker.swift */; };
+		085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085645432C3F98DF00ED84DA /* TitleGenerator.swift */; };
 		086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */; };
 		086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */; };
 		08915D942C373340008ADE27 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D932C373340008ADE27 /* ProviderImage.swift */; };
@@ -131,7 +131,7 @@
 		082181742C39258500171BF3 /* ImageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
 		08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerExtensions.swift; sourceTree = "<group>"; };
 		08505C9D2C3D5482001EBEEF /* SessionListToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListToolbar.swift; sourceTree = "<group>"; };
-		085645432C3F98DF00ED84DA /* TitleMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleMaker.swift; sourceTree = "<group>"; };
+		085645432C3F98DF00ED84DA /* TitleGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleGenerator.swift; sourceTree = "<group>"; };
 		086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextResetDivider.swift; sourceTree = "<group>"; };
 		08915D932C373340008ADE27 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
@@ -350,7 +350,7 @@
 				0893B2052C39810900D4D501 /* SessionConfig.swift */,
 				08D174C12C3D96F8000257EF /* StreamHandler.swift */,
 				08D174C32C3D972D000257EF /* StreamManager.swift */,
-				085645432C3F98DF00ED84DA /* TitleMaker.swift */,
+				085645432C3F98DF00ED84DA /* TitleGenerator.swift */,
 			);
 			path = Session;
 			sourceTree = "<group>";
@@ -641,7 +641,7 @@
 				082181752C39258500171BF3 /* ImageUtils.swift in Sources */,
 				08505C9C2C3D3878001EBEEF /* IntegerExtensions.swift in Sources */,
 				0821816D2C39013400171BF3 /* StringExtensions.swift in Sources */,
-				085645442C3F98DF00ED84DA /* TitleMaker.swift in Sources */,
+				085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */,
 				081C1D8D2C3B8F690078BB24 /* ConversationListExtended.swift in Sources */,
 				089C7E102C4058CF005E3BE9 /* FloatingSetup.swift in Sources */,
 				08C800552C36F82B009581C5 /* ProviderList.swift in Sources */,

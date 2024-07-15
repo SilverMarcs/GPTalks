@@ -64,11 +64,12 @@ struct SessionListItem: View {
                     titleField
                         .lineLimit(1)
                         .font(.headline)
+                        .fontWeight(.semibold)
                     
                     Spacer()
                     
                     Text(session.config.model.name)
-                        .font(.subheadline)
+                        .font(.caption)
                 }
                 
                 HStack {

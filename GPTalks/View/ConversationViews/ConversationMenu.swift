@@ -72,7 +72,8 @@ struct ConversationMenu: View {
                     group.session?.proxy?.scrollTo(group, anchor: .top)
                 }
             } label: {
-                Label("Expand", systemImage: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right")
+                Label(isExpanded ? "Collapse" : "Expand",
+                      systemImage: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right")
             }
         }
     }

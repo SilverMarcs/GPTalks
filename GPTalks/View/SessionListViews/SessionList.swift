@@ -43,7 +43,7 @@ struct SessionList: View {
             .frame(minWidth: 240)
             .listStyle(.inset)
             .scrollContentBackground(.hidden)
-            .padding(.top, -9)
+            .padding(.top, -10)
             .onAppear {
                 if let first = sessions.first {
                     DispatchQueue.main.async {

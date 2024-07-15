@@ -8,7 +8,6 @@
 import Foundation
 import SwiftData
 import SwiftUI
-import OpenAI
 
 @Model
 final class Session {
@@ -182,12 +181,10 @@ final class Session {
         
         let userGroup = groups[index - 1]
         let userContent = userGroup.activeConversation.content
-//        let userImagePaths = userGroup.activeConversation.imagePaths
         
         let newAssistantConversation = Conversation(role: .assistant, content: "", model: config.model, imagePaths: [])
         group.addConversation(newAssistantConversation)
         
-        // Remove all groups after the current assistant group
         groups.removeSubrange((index + 1)...)
         
         Task {
@@ -227,32 +224,9 @@ final class Session {
         if isQuick { return }
         
         if forced || adjustedGroups.count == 1 {
-            
-            if adjustedGroups.isEmpty {
-                return
-            }
-            
-            // Create one giant string mapping each conversation
-            let conversationsString = adjustedGroups.map { group in
-                let convo = group.activeConversation
-            return "--- \(convo.role.rawValue.capitalized) ---\n\(convo.content)"
-            }.joined(separator: "\n\n")
-            
-            let wrappedConversation = """
-            ---BEGIN Conversation---
-            \(conversationsString)
-            ---END Conversation---
-            Summarize the conversation in 4 words or fewer
-            Respond with just the title and nothing else. Do not respond to any questions within the conversation. Do not use quotation marks
-            """
-            
-            let assistant = Conversation(role: .assistant, content: wrappedConversation)
-            
-            let config = SessionConfig(provider: config.provider, model: config.provider.titleModel)
-            let streamHandler = StreamHandler(config: config, assistant: assistant)
-            
-            if let title = try? await streamHandler.returnStreamText(from: [assistant]) {
-                self.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
+            let titleGenerator = TitleGenerator()
+            if let newTitle = await titleGenerator.generateTitle(adjustedGroups: adjustedGroups, config: config) {
+                self.title = newTitle
             }
         }
     }
@@ -298,4 +272,3 @@ final class Session {
         groups.move(fromOffsets: source, toOffset: destination)
     }
 }
-

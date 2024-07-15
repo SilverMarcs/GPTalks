@@ -34,6 +34,7 @@ struct InputEditor: View {
         TextField("Send a message", text: $prompt, axis: .vertical)
             .padding(padding)
             .padding(.leading, 5)
+            .lineLimit(12)
             .modifier(RoundedRectangleOverlayModifier(radius: radius))
             .background(
                 VisualEffect(colorTint: colorScheme == .dark
@@ -58,7 +59,7 @@ struct InputEditor: View {
             
             TextEditor(text: $prompt)
                 .focused($isFocused)
-                .frame(maxHeight: maxHeight)
+                .frame(maxHeight: 280)
                 .fixedSize(horizontal: false, vertical: true)
                 .scrollContentBackground(.hidden)
                 .padding(padding)
@@ -94,14 +95,6 @@ struct InputEditor: View {
         return 0
         #else
         return 10
-        #endif
-    }
-    
-    var maxHeight: CGFloat {
-        #if os(macOS)
-        return 280
-        #else
-        return 200
         #endif
     }
 }
