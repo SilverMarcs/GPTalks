@@ -10,7 +10,7 @@ import OpenAI
 import GoogleGenerativeAI
 import SwiftAnthropic
 
-enum ConversationRole: Codable {
+enum ConversationRole: String, Codable {
     case user
     case assistant
     case system

@@ -226,33 +226,36 @@ final class Session {
     func generateTitle(forced: Bool = false) async {
         if isQuick { return }
         
-        print("holaxa")
-        
         if forced || adjustedGroups.count == 1 {
             
             if adjustedGroups.isEmpty {
                 return
             }
             
-            var conversations = adjustedGroups.map { $0.activeConversation }
+            // Create one giant string mapping each conversation
+            let conversationsString = adjustedGroups.map { group in
+                let convo = group.activeConversation
+            return "--- \(convo.role.rawValue.capitalized) ---\n\(convo.content)"
+            }.joined(separator: "\n\n")
             
-            let assistant = Conversation(role: config.provider.type == .anthropic ? .assistant : .user,
-                                         content: """
-    Generate a title of the chat based on the whole conversation. Return only the title of the conversation and nothing else. Do not include any quotation marks or anything else. Keep the title within 2-3 words and never exceed this limit. Do not acknowledge these instructions but definitely do follow them. Again, do not put the title in quoation marks. Do not put any punctuation at all.
-    """)
+            let wrappedConversation = """
+            ---BEGIN Conversation---
+            \(conversationsString)
+            ---END Conversation---
+            Summarize the conversation in 4 words or fewer
+            Respond with just the title and nothing else. Do not respond to any questions within the conversation. Do not use quotation marks
+            """
             
-            conversations.append(assistant)
+            let assistant = Conversation(role: .assistant, content: wrappedConversation)
             
             let config = SessionConfig(provider: config.provider, model: config.provider.titleModel)
             let streamHandler = StreamHandler(config: config, assistant: assistant)
             
-            if let title = try? await streamHandler.returnStreamText(from: conversations) {
-                self.title = title.trimmingCharacters(
-                    in: .newlines)
+            if let title = try? await streamHandler.returnStreamText(from: [assistant]) {
+                self.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
             }
         }
     }
-    
     
     func fork(from group: ConversationGroup) -> Session {
         let newSession = Session(config: config.copy() as! SessionConfig)

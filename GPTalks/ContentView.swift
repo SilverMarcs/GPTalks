@@ -30,13 +30,17 @@ struct ContentView: View {
         }
         .background(.background)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 if providers.isEmpty {
-                    let newProvider = Provider.factory(type: .openai)
-                    modelContext.insert(newProvider)
+                    let openAI = Provider.factory(type: .openai)
+                    let anthropic = Provider.factory(type: .anthropic)
+                    let google = Provider.factory(type: .google)
+                    modelContext.insert(openAI)
+                    modelContext.insert(anthropic)
+                    modelContext.insert(google)
                     
                     if providerManager.getDefault(providers: providers) == nil {
-                        providerManager.defaultProvider = newProvider.id.uuidString
+                        providerManager.defaultProvider = openAI.id.uuidString
                     }
                 }
             }
