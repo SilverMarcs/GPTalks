@@ -157,7 +157,9 @@ struct ConversationListToolbar: View {
                     provider: $session.config.provider,
                     providers: providers.sorted(by: { $0.order < $1.order }),
                     onChange: { newProvider in
-                        session.config.model = newProvider.chatModel
+                        DispatchQueue.main.async {
+                            session.config.model = newProvider.chatModel
+                        }
                     }
                 )
             } label: {
