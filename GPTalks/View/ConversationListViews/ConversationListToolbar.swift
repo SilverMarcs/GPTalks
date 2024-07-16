@@ -182,7 +182,7 @@ struct ProviderPicker: View {
     var onChange: ((Provider) -> Void)?
     
     var body: some View {
-        Picker("Select a provider", selection: $provider) {
+        Picker("Provider", selection: $provider) {
             ForEach(providers) { provider in
                 Text(provider.name).tag(provider)
             }

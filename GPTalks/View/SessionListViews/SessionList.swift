@@ -35,6 +35,9 @@ struct SessionList: View {
                 }
                 .onDelete(perform: deleteItems)
                 .onMove(perform: move)
+                #if !os(macOS)
+                .listSectionSeparator(.hidden)
+                #endif
             }
             .toolbar {
                 SessionListToolbar()
