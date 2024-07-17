@@ -48,7 +48,8 @@ struct ConversationTrailingPopup: View {
 }
 
 #Preview {
-    let session = Session()
+    let config = SessionConfig()
+    let session = Session(config: config)
     ConversationTrailingPopup(session: session)
         .padding()
 }

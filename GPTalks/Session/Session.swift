@@ -67,7 +67,7 @@ final class Session {
     @Relationship(deleteRule: .nullify)
     var config: SessionConfig
     
-    init(config: SessionConfig = SessionConfig()) {
+    init(config: SessionConfig) {
         self.config = config
     }
     

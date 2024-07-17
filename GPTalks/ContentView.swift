@@ -42,6 +42,10 @@ struct ContentView: View {
                     if providerManager.getDefault(providers: providers) == nil {
                         providerManager.defaultProvider = openAI.id.uuidString
                     }
+                    
+                    if providerManager.getQuickProvider(providers: providers) == nil {
+                        providerManager.quickProvider = openAI.id.uuidString
+                    }
                 }
             }
         }

@@ -152,8 +152,11 @@ struct SessionListItem: View {
 }
 
 #Preview {
+    let config = SessionConfig()
+    let session = Session(config: config)
+    
     List {
-        SessionListItem(session: Session())
+        SessionListItem(session: session)
             .environment(SessionVM())
     }
     .frame(width: 250)

@@ -18,8 +18,6 @@ struct AssistantMessage: View {
         VStack(alignment: .leading) {
             HStack(alignment: .top, spacing: 14) {
                 assistantImage
-//                ProviderImage(provider: conversation.group?.session?.config.provider ?? Provider.factory(type: .openai), frame: 20)
-                
                 VStack(alignment: .leading, spacing: 4) {
                     if let model = conversation.model {
                         Text(model.name)
@@ -36,9 +34,6 @@ struct AssistantMessage: View {
                     if conversation.isReplying {
                         ProgressView()
                             .controlSize(.small)
-//                        Text("Generating...")
-//                            .font(.caption)
-//                            .foregroundStyle(.secondary)
                     }
                     #if os(macOS)
                     if let group = conversation.group, !conversation.isReplying {

@@ -31,7 +31,7 @@ import SwiftUI
         }
         
         let config = SessionConfig(
-            provider: provider, model: provider.chatModel)
+            provider: provider)
         
         let newItem = Session(config: config)
         
@@ -65,15 +65,14 @@ import SwiftUI
     }
     
     func addQuickItem(providerManager: ProviderManager, providers: [Provider], modelContext: ModelContext) -> Session {
-        if let defaultProvider = providerManager.getQuickProvider(providers: providers) {
-            let config = SessionConfig(provider: defaultProvider, model: defaultProvider.quickChatModel)
+        if let defaultQuickProvider = providerManager.getQuickProvider(providers: providers) {
+            let config = SessionConfig(provider: defaultQuickProvider, isQuick: true)
             let session = Session(config: config)
             session.isQuick = true
-            session.config.model = defaultProvider.quickChatModel
             
             return session
         }
         
-        return Session()
+        return Session(config: SessionConfig())
     }
 }

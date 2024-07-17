@@ -26,5 +26,7 @@ struct InputImageView: View {
 }
 
 #Preview {
-    InputImageView(session: Session())
+    let config = SessionConfig()
+    let session = Session(config: config)
+    InputImageView(session: session)
 }

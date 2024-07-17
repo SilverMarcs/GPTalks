@@ -116,7 +116,9 @@ struct InputView: View {
 }
 
 #Preview {
-    let session = Session()
+    let config = SessionConfig()
+    let session = Session(config: config)
+    
     session.inputManager.prompt = "Hello, World"
     
     return InputView(session: session)

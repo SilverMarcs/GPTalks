@@ -23,10 +23,18 @@ final class SessionConfig: NSCopying {
     @Relationship(deleteRule: .cascade)
     var model: Model
     
-//    init(provider: Provider, model: Model) {
-    init(provider: Provider = Provider.factory(type: .openai), model: Model = Model.getDemoModel()) {
+    init(provider: Provider, model: Model) {
         self.provider = provider
         self.model = model
+    }
+    
+    init(provider: Provider = Provider.factory(type: .openai), isQuick: Bool = false) {
+        self.provider = provider
+        if isQuick {
+            self.model = provider.quickChatModel
+        } else {
+            self.model = provider.chatModel
+        }
     }
     
     init(provider: Provider, model: Model, temperature: Double, systemPrompt: String) {

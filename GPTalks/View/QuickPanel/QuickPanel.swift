@@ -20,7 +20,7 @@ struct QuickPanel: View {
     @State var prompt: String = ""
     @Binding var showAdditionalContent: Bool
     
-    @State var session: Session = Session()
+    @State var session: Session = Session(config: SessionConfig(isQuick: true))
     
     @FocusState private var isFocused: Bool
     

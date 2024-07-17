@@ -37,7 +37,8 @@ struct ConversationGroupView: View {
 
 
 #Preview {
-    let session = Session()
+    let config = SessionConfig()
+    let session = Session(config: config)
 
     let userConversation = Conversation(role: .user, content: "Hello, World!")
     let assistantConversation = Conversation(

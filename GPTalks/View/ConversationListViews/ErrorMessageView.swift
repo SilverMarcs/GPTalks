@@ -30,7 +30,8 @@ struct ErrorMessageView: View {
 }
 
 #Preview {
-    let session = Session()
+    let config = SessionConfig()
+    let session = Session(config: config)
     
     ErrorMessageView(session: session)
 }

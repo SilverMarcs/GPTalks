@@ -33,7 +33,7 @@ class Provider {
     @Relationship(deleteRule: .cascade)
     var models =  [Model]()
     
-    init() {
+    private init() {
         self.chatModel = Model.getDemoModel()
         self.quickChatModel = Model.getDemoModel()
         self.titleModel = Model.getDemoModel()
