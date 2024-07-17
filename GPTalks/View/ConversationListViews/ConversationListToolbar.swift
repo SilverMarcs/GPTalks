@@ -199,9 +199,11 @@ struct ModelPicker: View {
     var models: [Model]
     
     var body: some View {
-        Picker("Model", selection: $model) {
-            ForEach(models, id: \.self) { model in
-                Text(model.name)
+        if model != nil {
+            Picker("Model", selection: $model) {
+                ForEach(models, id: \.self) { model in
+                    Text(model.name)
+                }
             }
         }
     }

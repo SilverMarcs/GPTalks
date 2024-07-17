@@ -22,6 +22,7 @@ class Provider {
     var type: ProviderType
     
     var color: String = "#00947A"
+    var isEnabled: Bool = true
     
     @Relationship(deleteRule: .cascade)
     var chatModel: Model

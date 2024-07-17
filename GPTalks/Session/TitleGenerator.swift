@@ -7,8 +7,8 @@
 
 import Foundation
 
-class TitleGenerator {
-    func generateTitle(adjustedGroups: [ConversationGroup], config: SessionConfig) async -> String? {
+enum TitleGenerator {
+    static func generateTitle(adjustedGroups: [ConversationGroup], config: SessionConfig) async -> String? {
         if adjustedGroups.isEmpty {
             return nil
         }
@@ -28,12 +28,12 @@ class TitleGenerator {
         Do not wrap the title in quotation marks
         """
         
-        let assistant = Conversation(role: .assistant, content: wrappedConversation)
+        let user = Conversation(role: .user, content: wrappedConversation)
         
         let titleConfig = SessionConfig(provider: config.provider, model: config.provider.titleModel)
-        let streamHandler = StreamHandler(config: titleConfig, assistant: assistant)
+        let streamHandler = StreamHandler(config: titleConfig, assistant: user)
         
-        if let title = try? await streamHandler.returnStreamText(from: [assistant]) {
+        if let title = try? await streamHandler.returnStreamText(from: [user]) {
             return title.trimmingCharacters(in: .whitespacesAndNewlines)
         }
         

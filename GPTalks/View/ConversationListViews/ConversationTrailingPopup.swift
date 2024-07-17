@@ -14,7 +14,7 @@ struct ConversationTrailingPopup: View {
     var body: some View {
         Form {
             Section("Title") {
-                TextEditor(text: $session.title)
+                title
                     .font(.body)
                     .focused($isFocused)
                     .onAppear {
@@ -30,7 +30,7 @@ struct ConversationTrailingPopup: View {
             }
 
             Section("System Prompt") {
-                TextEditor(text: $session.config.systemPrompt)
+                sysPrompt
                     .font(.body)
                     .onChange(of: session.config.systemPrompt) {
                         session.config.systemPrompt = String(
@@ -43,6 +43,24 @@ struct ConversationTrailingPopup: View {
         .formStyle(.grouped)
         #if os(macOS)
             .frame(width: 400, height: 250)
+        #endif
+    }
+    
+    private var title: some View {
+        #if os(macOS)
+        TextEditor(text: $session.title)
+        #else
+        TextField("Title", text: $session.title)
+            .lineLimit(1)
+        #endif
+    }
+    
+    private var sysPrompt: some View {
+        #if os(macOS)
+        TextEditor(text: $session.config.systemPrompt)
+        #else
+        TextField("System Prompt", text: $session.config.systemPrompt, axis: .vertical)
+            .lineLimit(5, reservesSpace: true)
         #endif
     }
 }
