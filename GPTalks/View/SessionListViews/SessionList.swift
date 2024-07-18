@@ -65,7 +65,7 @@ struct SessionList: View {
                 }
             }
 #else
-            .navigationTitle("Sessions")
+            .navigationTitle("Chats")
             .listStyle(.insetGrouped)
             .searchable(text: $sessionVM.searchText)
 #endif

@@ -11,7 +11,6 @@ struct SimpleIconOnly: MenuStyle {
     func makeBody(configuration: Configuration) -> some View {
         Menu(configuration)
             .menuStyle(BorderlessButtonMenuStyle())
-//            .menuIndicator(.hidden)
             .labelStyle(.iconOnly)
             .fixedSize()
     }

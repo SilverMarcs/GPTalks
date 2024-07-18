@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-//import IsScrolling
 
 extension View {
     func applyObservers(proxy: ScrollViewProxy, session: Session, hasUserScrolled: Binding<Bool>, isScrolling: Binding<Bool>) -> some View {
@@ -38,6 +37,11 @@ extension View {
                     scrollToBottom(proxy: proxy)
                 }
             }
+        #if canImport(UIKit)
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) { _ in
+                scrollToBottom(proxy: proxy)
+            }
+        #endif
     }
 }
 

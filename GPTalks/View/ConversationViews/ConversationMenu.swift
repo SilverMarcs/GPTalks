@@ -59,6 +59,7 @@ struct ConversationMenu: View {
                 group.setupEditing()
             } label: {
                 Label("Edit", systemImage: "pencil.and.outline")
+                    .help("Edit")
             }
         }
     }
@@ -74,6 +75,7 @@ struct ConversationMenu: View {
             } label: {
                 Label(isExpanded ? "Collapse" : "Expand",
                       systemImage: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right")
+                .help("Expand")
             }
         }
     }
@@ -83,6 +85,7 @@ struct ConversationMenu: View {
             group.resetContext()
         } label: {
             Label("Reset Context", systemImage: "eraser")
+                .help("Reset Context")
         }
     }
 
@@ -93,6 +96,7 @@ struct ConversationMenu: View {
             }
         } label: {
             Label("Fork Session", systemImage: "arrow.branch")
+                .help("Fork Session")
         }
     }
 
@@ -100,7 +104,8 @@ struct ConversationMenu: View {
         Button {
             group.activeConversation.content.copyToPasteboard()
         } label: {
-            Label("Copy", systemImage: "paperclip")
+            Label("Copy Text", systemImage: "paperclip")
+                .help("Copy Text")
         }
     }
 
@@ -111,6 +116,7 @@ struct ConversationMenu: View {
             }
         } label: {
             Label("Delete", systemImage: "minus.circle")
+                .help("Delete")
         }
     }
 
@@ -127,6 +133,7 @@ struct ConversationMenu: View {
             }
         } label: {
             Label("Regenerate", systemImage: "arrow.2.circlepath")
+                .help("Regenerate")
         }
     }
 
@@ -169,6 +176,7 @@ struct ConversationMenu: View {
                     group.setActiveToLeft()
                 } label: {
                     Label("Previous", systemImage: "chevron.left")
+                        .help("Previous")
                 }
                 .disabled(!shouldShowButtons || !canNavigateLeft)
                 
@@ -182,6 +190,7 @@ struct ConversationMenu: View {
                     group.setActiveToRight()
                 } label: {
                     Label("Next", systemImage: "chevron.right")
+                        .help("Next")
                 }
                 .disabled(!shouldShowButtons || !canNavigateRight)
             }

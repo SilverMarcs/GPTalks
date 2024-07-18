@@ -38,7 +38,7 @@ struct SessionListCards: View {
     
     func toggleChatCount() {
         if sessionVM.chatCount == .max {
-            sessionVM.chatCount = 13
+            sessionVM.chatCount = 12
         } else {
             sessionVM.chatCount = .max
         }

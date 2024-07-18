@@ -59,17 +59,20 @@ struct SessionListItem: View {
         HStack {
             ProviderImage(provider: session.config.provider, radius: 9, frame: 29)
             
-            VStack {
+            VStack(alignment: .leading) {
                 HStack {
                     titleField
                         .lineLimit(1)
                         .font(.headline)
                         .fontWeight(.semibold)
+                        .opacity(0.9)
                     
                     Spacer()
                     
                     Text(session.config.model.name)
                         .font(.caption)
+                        .opacity(0.9)
+                        .fontWidth(.compressed)
                 }
                 
                 HStack {

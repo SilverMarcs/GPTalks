@@ -50,7 +50,7 @@ struct ProviderList: View {
                 .padding()
         }
 #else
-        .navigationTitle("Providers")
+//        .navigationTitle("Providers")
         .toolbar {
             addButton
         }
