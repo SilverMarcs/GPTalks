@@ -23,7 +23,11 @@ struct SessionListSidebar: View {
             .padding(.horizontal, padding)
         #endif
         
-        SessionList(searchString: sessionVM.searchText)
+        if sessionVM.state == .chats {
+            SessionList(searchString: sessionVM.searchText)
+        } else {
+            ImageSessionList()
+        }
     }
     
     var padding: CGFloat {

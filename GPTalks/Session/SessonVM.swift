@@ -14,6 +14,8 @@ import SwiftUI
     var selection: Session?
     var searchText: String = ""
     
+    var state: ListState = .chats
+    
     #if os(macOS)
     var chatCount: Int = 12
     #else
@@ -75,4 +77,9 @@ import SwiftUI
         
         return Session(config: SessionConfig())
     }
+}
+
+enum ListState {
+    case chats
+    case images
 }

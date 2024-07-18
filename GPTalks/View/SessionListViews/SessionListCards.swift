@@ -24,6 +24,7 @@ struct SessionListCards: View {
                 icon: "photo.circle.fill", iconColor: .cyan, title: "Images",
                 count: "0"
             ) {
+                sessionVM.state = .images
             }
         }
     }
@@ -37,10 +38,14 @@ struct SessionListCards: View {
     }
     
     func toggleChatCount() {
-        if sessionVM.chatCount == .max {
-            sessionVM.chatCount = 12
+        if sessionVM.state == .chats {
+            if sessionVM.chatCount == .max {
+                sessionVM.chatCount = 12
+            } else {
+                sessionVM.chatCount = .max
+            }
         } else {
-            sessionVM.chatCount = .max
+            sessionVM.state = .chats
         }
     }
 }
