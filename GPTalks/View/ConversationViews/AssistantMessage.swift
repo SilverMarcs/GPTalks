@@ -16,7 +16,7 @@ struct AssistantMessage: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            HStack(alignment: .top, spacing: 14) {
+            HStack(alignment: .top, spacing: spacing) {
                 assistantImage
                 VStack(alignment: .leading, spacing: 4) {
                     if let model = conversation.model {
@@ -59,10 +59,27 @@ struct AssistantMessage: View {
         }
     }
     
+    var spacing: CGFloat {
+        #if os(macOS)
+        14
+        #else
+        7
+        #endif
+    }
+    
+    @ViewBuilder
     var assistantImage: some View {
+        var size: CGFloat {
+            #if os(macOS)
+            14
+            #else
+            10
+            #endif
+        }
+        
         Image(systemName: "sparkles")
             .resizable()
-            .frame(width: 14, height: 14)
+            .frame(width: size, height: size)
             .padding(5)
             .background(
                 RoundedRectangle(cornerRadius: 12)
