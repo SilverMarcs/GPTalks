@@ -61,6 +61,7 @@ struct InputEditor: View {
     var inputView: some View {
         ZStack(alignment: .bottomTrailing) {
             TextField("Send a message", text: $prompt, axis: .vertical)
+                .focused($isFocused)
                 .padding(padding)
                 .padding(.leading, 5)
                 .lineLimit(10)

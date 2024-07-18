@@ -14,7 +14,6 @@ struct SessionList: View {
     
     @ObservedObject var config = AppConfig.shared
     
-    @Query(sort: \Provider.date, order: .reverse) var providers: [Provider]
     @Query var sessions: [Session]
     
     @State private var prevCount = 0

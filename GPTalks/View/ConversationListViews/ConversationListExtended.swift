@@ -10,10 +10,12 @@ import SwiftUI
 extension View {
     func applyObservers(proxy: ScrollViewProxy, session: Session, hasUserScrolled: Binding<Bool>, isScrolling: Binding<Bool>) -> some View {
         self
+        #if os(macOS)
             .onAppear {
                 scrollToBottom(proxy: proxy, delay: 0.2)
                 scrollToBottom(proxy: proxy, delay: 0.4)
             }
+        #endif
             .onChange(of: session.groups.last?.activeConversation.content) {
                 if !hasUserScrolled.wrappedValue && session.isStreaming {
                     scrollToBottom(proxy: proxy)

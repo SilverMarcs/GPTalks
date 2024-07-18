@@ -70,28 +70,31 @@ struct ModelTable: View {
     
     #if !os(macOS)
     var modelList: some View {
-        VStack(alignment: .trailing, spacing: 10) {
-            List {
-                ForEach(provider.models, id: \.self) { model in
-                    ModelRow(model: model)
-                }
-                
-                HStack {
-                    TextField("New Code", text: $newModelCode)
+        List {
+            HStack {
+                Group {
+                    Text("Code")
                     
-                    ZStack(alignment: .trailing) {
-                        TextField("New Name", text: $newModelName)
-                        
-                        Button(action: addModel) {
-                            Label("Add", systemImage: "plus")
-                        }
-                        .labelStyle(.iconOnly)
-                        .buttonStyle(.plain)
-                        .foregroundStyle(.blue)
-                    }
+                    Text("Name")
+                }
+                .bold()
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            
+            ForEach(provider.models, id: \.self) { model in
+                ModelRow(model: model)
+            }
+            
+            Section ("Add New"){
+                TextField("New Code", text: $newModelCode)
+                TextField("New Name", text: $newModelName)
+                Button(action: addModel) {
+                    Label("Add", systemImage: "plus")
                 }
             }
+            
         }
+        .scrollDismissesKeyboard(.immediately)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 header
