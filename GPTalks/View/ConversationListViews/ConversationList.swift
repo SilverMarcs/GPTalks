@@ -69,7 +69,7 @@ struct ConversationList: View {
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
             .scrollContentBackground(.visible)
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                InputView(session: session)
+                ChatInputView(session: session)
             }
         }
     }

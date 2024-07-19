@@ -13,10 +13,27 @@ struct GenericSlider: View {
     var min: Double
     var max: Double
     var label: String
+    var defaultValue: String
+    
+    @State var showPopover = false
     
     var body: some View {
         Slider(value: $value, in: min ... max, step: steps) {
-            Text(label)
+            HStack {
+                Text(label)
+                Button {
+                    showPopover.toggle()
+                } label: {
+                    Label("Default", systemImage: "info.circle")
+                }
+                .labelStyle(.iconOnly)
+                .buttonStyle(.plain)
+                .foregroundStyle(.secondary)
+                .popover(isPresented: $showPopover) {
+                    Text("Default: " + defaultValue)
+                        .padding()
+                }
+            }
         } minimumValueLabel: {
             Text(String(Int(min)))
         } maximumValueLabel: {
@@ -26,13 +43,13 @@ struct GenericSlider: View {
 }
 
 struct TemperatureSlider: View {
-    // default 1
+
     @Binding var temperature: Double
     var shortLabel: Bool = false
     
     var body: some View {
         GenericSlider(value: $temperature, steps: 0.2, min: 0, max: 2,
-                      label: shortLabel ? "Temp" : "Temperature")
+                      label: shortLabel ? "Temp" : "Temperature", defaultValue: "1.0")
     }
 }
 
@@ -42,28 +59,26 @@ struct PresencePenaltySlider: View {
     
     var body: some View {
         GenericSlider(value: $penalty, steps: 0.4, min: -2, max: 2,
-                      label: shortLabel ? "P-Penalty" : "Presence Penalty")
+                      label: shortLabel ? "P-Penalty" : "Presence Penalty", defaultValue: "Check Docs")
     }
 }
 
 struct FrequencyPenaltySlider: View {
-    // default 0
     @Binding var penalty: Double
     var shortLabel: Bool = false
     
     var body: some View {
         GenericSlider(value: $penalty, steps: 0.2, min: 0, max: 2,
-                      label: shortLabel ? "F-Penalty" : "Frequency Penalty")
+                      label: shortLabel ? "F-Penalty" : "Frequency Penalty", defaultValue: "0.0")
     }
 }
 
 struct TopPSlider: View {
-    // default 1
     @Binding var topP: Double
     
     var body: some View {
         GenericSlider(value: $topP, steps: 0.1, min: 0, max: 1,
-                      label: "Top P")
+                      label: "Top P", defaultValue: "1.0")
     }
 }
 

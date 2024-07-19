@@ -26,8 +26,16 @@ struct ConversationListDetail: View {
                 }
             }
         } else {
-            Text("Select an item")
-                .font(.title)
+            Group {
+                if sessionVM.state == .chats && sessionVM.selections.count > 1 {
+                    Text(String(sessionVM.selections.count) + "items selected")
+                } else if sessionVM.state == .images && sessionVM.imageSelections.count > 1 {
+                    Text(String(sessionVM.imageSelections.count) + "items selected")
+                } else {
+                    Text("Select an item")
+                }
+            }
+            .font(.title)
         }
     }
 }

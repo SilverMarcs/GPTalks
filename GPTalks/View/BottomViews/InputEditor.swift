@@ -20,9 +20,8 @@ struct InputEditor: View {
         inputView
         .font(.body)
         .onAppear {
-            isFocused = true
+            DispatchQueue.main.async { isFocused = true }
         }
-
     }
     
     #if os(macOS)
@@ -30,7 +29,7 @@ struct InputEditor: View {
     var inputView: some View {
         ZStack(alignment: .leading) {
             if prompt.isEmpty {
-                Text("Send a message")
+                Text("Prompt")
                     .padding(padding)
                     .padding(.leading, 6)
                     .padding(.leading, leadingPadding)

@@ -1,5 +1,5 @@
 //
-//  InputView.swift
+//  ChatInputView.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 04/07/2024.
@@ -8,7 +8,7 @@
 import SwiftUI
 import VisualEffectView
 
-struct InputView: View {
+struct ChatInputView: View {
     @Environment(\.colorScheme) var colorScheme
     @Bindable var session: Session
     
@@ -105,6 +105,6 @@ struct InputView: View {
     
     session.inputManager.prompt = "Hello, World"
     
-    return InputView(session: session)
+    return ChatInputView(session: session)
         .padding()
 }

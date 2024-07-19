@@ -22,8 +22,7 @@ struct ImageSessionList: View {
                 SessionListCards()
                 
                 ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
-//                    SessionListItem(session: session)
-                    Text(session.title)
+                    ImageListRow(session: session)
                         .listRowSeparator(.visible)
                         .listRowSeparatorTint(Color.gray.opacity(0.2))
                 }

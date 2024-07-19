@@ -15,9 +15,6 @@ struct SessionListItem: View {
     
     @Bindable var session: Session
     
-    @State var isEditing = false
-    @FocusState var isFocused: Bool
-    
     var body: some View {
         Group {
             if config.compactList {
@@ -35,10 +32,11 @@ struct SessionListItem: View {
         HStack {
             ProviderImage(provider: session.config.provider, radius: 8, frame: 23)
             
-            titleField
+            Text(session.title)
+                .lineLimit(1)
                 .font(.headline)
                 .fontWeight(.regular)
-                .lineLimit(1)
+                .opacity(0.9)
             
             Spacer()
             
@@ -61,7 +59,7 @@ struct SessionListItem: View {
             
             VStack(alignment: .leading) {
                 HStack {
-                    titleField
+                    Text(session.title)
                         .lineLimit(1)
                         .font(.headline)
                         .fontWeight(.semibold)
@@ -111,20 +109,20 @@ struct SessionListItem: View {
     }
 
     
-    var titleField: some View {
-        Group {
-            if isEditing {
-                TextField("Title", text: $session.title, onCommit: {
-                    isEditing.toggle()
-                })
-                .padding(.vertical, -2)
-                .focused($isFocused)
-            } else {
-                Text(session.title)
-                    .lineLimit(1)
-            }
-        }
-    }
+//    var titleField: some View {
+//        Group {
+//            if isEditing {
+//                TextField("Title", text: $session.title, onCommit: {
+//                    isEditing.toggle()
+//                })
+//                .padding(.vertical, -2)
+//                .focused($isFocused)
+//            } else {
+//                Text(session.title)
+//                    .lineLimit(1)
+//            }
+//        }
+//    }
     
     var swipeActionsTrailing: some View {
         Button(role: .destructive) {
@@ -142,14 +140,6 @@ struct SessionListItem: View {
                 Label("Star", systemImage: "star")
             }
             .tint(.orange)
-            
-            Button {
-                isEditing.toggle()
-                isFocused = true
-            } label: {
-                Label("Edit", systemImage: "pencil")
-            }
-            .tint(.accentColor)
         }
     }
 }
