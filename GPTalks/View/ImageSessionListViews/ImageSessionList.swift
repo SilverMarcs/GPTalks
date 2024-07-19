@@ -79,10 +79,9 @@ struct ImageSessionList: View {
             for (newIndex, session) in remainingSessions.enumerated() {
                 session.order = newIndex
             }
-            
-            // Save changes
-            try? modelContext.save()
         }
+        
+        try? modelContext.save()
     }
     
     private func move(from source: IndexSet, to destination: Int) {
@@ -90,7 +89,9 @@ struct ImageSessionList: View {
         updatedSessions.move(fromOffsets: source, toOffset: destination)
         
         for (index, session) in updatedSessions.enumerated() {
-            session.order = index
+            withAnimation {
+                session.order = index
+            }
         }
         
         try? modelContext.save()

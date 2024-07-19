@@ -173,8 +173,8 @@ struct ModelTable: View {
         HStack {
             header
             
-            TextField("New Code", text: $newModelCode)
-            TextField("New Name", text: $newModelName)
+            TextField("Code", text: $newModelCode)
+            TextField("Name", text: $newModelName)
             Button(action: addModel) {
                 Label("Add", systemImage: "plus.circle")
             }

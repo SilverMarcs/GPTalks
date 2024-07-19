@@ -15,15 +15,42 @@ struct ImageInspector: View {
     
     var body: some View {
         Form {
-            ProviderPicker(provider: $session.config.provider, providers: providers) { provider in
-                print(provider.name)
+            Section("Title") {
+                TextField("Title", text: $session.title)
+                    .labelsHidden()
             }
             
-            ModelPicker(model: $session.config.model, models: session.config.provider.imageModels)
+            Section("Models") {
+                ProviderPicker(provider: $session.config.provider, providers: providers) { provider in
+                    print(provider.name)
+                }
+                
+                ModelPicker(model: $session.config.model, models: session.config.provider.imageModels)
+            }
             
-            Picker("N", selection: $session.config.numImages) {
-                ForEach(1 ... 4, id: \.self) { num in
-                    Text("n: " + String(num)).tag(num)
+            Section("Parameters") {
+                Picker("N", selection: $session.config.numImages) {
+                    ForEach(1 ... 4, id: \.self) { num in
+                        Text(String(num)).tag(num)
+                    }
+                }
+                
+                Picker("Quality", selection: $session.config.quality) {
+                    ForEach(ImagesQuery.Quality.allCases, id: \.self) { quality in
+                        Text(quality.rawValue.capitalized).tag(quality)
+                    }
+                }
+                
+                Picker("Size", selection: $session.config.size) {
+                    ForEach(ImagesQuery.Size.allCases, id: \.self) { size in
+                        Text(size.rawValue.capitalized).tag(size)
+                    }
+                }
+                
+                Picker("Style", selection: $session.config.style) {
+                    ForEach(ImagesQuery.Style.allCases, id: \.self) { style in
+                        Text(style.rawValue.capitalized).tag(style)
+                    }
                 }
             }
         }

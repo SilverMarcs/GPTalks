@@ -69,6 +69,7 @@ struct SessionList: View {
         withAnimation {
             for index in offsets.sorted().reversed() {
                 if !sessions[index].isStarred {
+                    // TODO: check if part of sessionVM.selections
                     modelContext.delete(sessions[index])
                 }
             }
@@ -79,9 +80,9 @@ struct SessionList: View {
                 session.order = newIndex
             }
             
-            // Save changes
-            try? modelContext.save()
         }
+        
+        try? modelContext.save()
     }
     
     private func move(from source: IndexSet, to destination: Int) {
@@ -89,7 +90,9 @@ struct SessionList: View {
         updatedSessions.move(fromOffsets: source, toOffset: destination)
         
         for (index, session) in updatedSessions.enumerated() {
-            session.order = index
+            withAnimation {
+                session.order = index
+            }
         }
         
         try? modelContext.save()

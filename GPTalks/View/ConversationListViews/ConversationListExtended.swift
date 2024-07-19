@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    func applyObservers(proxy: ScrollViewProxy, session: Session, hasUserScrolled: Binding<Bool>, isScrolling: Binding<Bool>) -> some View {
+    func applyObservers(proxy: ScrollViewProxy, session: Session, hasUserScrolled: Binding<Bool>) -> some View {
         self
         #if os(macOS)
             .onAppear {

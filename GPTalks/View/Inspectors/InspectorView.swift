@@ -27,9 +27,13 @@ struct InspectorView: View {
         .navigationTitle("Config")
         .inspectorColumnWidth(min: 275, ideal: 300, max: 350)
         .toolbar {
-            if showingInspector, sessionVM.selections.count == 1, let first = sessionVM.selections.first {
+            if showingInspector, sessionVM.state == .chats, sessionVM.selections.count == 1, let first = sessionVM.selections.first {
                 Text("Tokens: " + first.tokenCounter.formatToK()).foregroundStyle(.secondary)
                 
+                Spacer()
+            }
+            
+            if sessionVM.state == .images {
                 Spacer()
             }
                 

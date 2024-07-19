@@ -102,7 +102,7 @@ struct ProviderList: View {
             var providersToDelete = offsets
             // Check if any of the selected providers is the default provider
             for index in offsets {
-                if providers[index].id.uuidString == defaultProviderID {
+                if providers[index].id.uuidString == defaultProviderID && providers[index].name == "OpenAI" {
                     // Remove the default provider from the deletion set
                     providersToDelete.remove(index)
                 }

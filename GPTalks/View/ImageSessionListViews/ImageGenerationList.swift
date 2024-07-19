@@ -19,16 +19,9 @@ struct ImageGenerationList: View {
                 ImageGenerationView(generation: generation)
             }
         }
+        .navigationTitle("Image Generation")
         .safeAreaInset(edge: .bottom) {
-            TextField("Prompt", text: $session.prompt)
-                .textFieldStyle(.roundedBorder)
-                .padding()
-            Button("Generate") {
-                print("sending")
-                Task {
-                    await session.send()
-                }
-            }
+            ImageInputView(session: session)
         }
     }
 }

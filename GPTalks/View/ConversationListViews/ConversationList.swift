@@ -14,8 +14,8 @@ struct ConversationList: View {
     @Environment(SessionVM.self) private var sessionVM
     
     @State private var hasUserScrolled = false
-    @State private var isScrolling = false
-    @State private var isShowSysPrompt = false
+    
+    @State var showingInspector: Bool = false
     
     var body: some View {
         ScrollViewReader { proxy in
@@ -59,26 +59,14 @@ struct ConversationList: View {
                 ConversationListToolbar(session: session)
             }
             #else
+            .inspector(isPresented: $showingInspector) {
+                InspectorView(showingInspector: $showingInspector)
+            }
             .toolbarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.immediately)
             .navigationTitle(session.config.model.name)
-//            .toolbarTitleMenu {
-//                ConversationListToolbar(session: session)
-//            }
-//            .toolbar {
-//                ToolbarItem(placement: .automatic) {
-//                    Button {
-//                        isShowSysPrompt.toggle()
-//                    } label: {
-//                        Image(systemName: "info.circle")
-//                    }
-//                    .popover(isPresented: $isShowSysPrompt) {
-//                        ConversationTrailingPopup(session: session)
-//                    }
-//                }
-//            }
             #endif
-            .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled, isScrolling: $isScrolling)
+            .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
             .scrollContentBackground(.visible)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 InputView(session: session)

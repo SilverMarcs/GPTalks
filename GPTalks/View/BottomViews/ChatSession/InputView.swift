@@ -44,23 +44,7 @@ struct InputView: View {
                     .offset(y: -2.4)
             }
         }
-        .fixedSize(horizontal: false, vertical: true)
-        .padding(.horizontal)
-        .padding(.vertical, verticalPadding)
-        #if os(macOS)
-        .background(.bar)
-        #else
-        .background(
-            VisualEffect(
-                colorTint: colorScheme == .dark ? .black : .white,
-                colorTintAlpha: 0.7,
-                blurRadius: 15,
-                scale: 1
-            )
-            .ignoresSafeArea()
-        )
-        #endif
-        .ignoresSafeArea()
+        .modifier(CommonInputStyling())
     }
     
     var plusButton: some View {

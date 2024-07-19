@@ -74,6 +74,8 @@
 		08A222BE2C2ABDB400D76C8B /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222BD2C2ABDAF00D76C8B /* InputManager.swift */; };
 		08A222C12C2ABE5C00D76C8B /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222C02C2ABE5C00D76C8B /* Conversation.swift */; };
 		08A222C42C2AC6B300D76C8B /* ConversationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222C32C2AC6B300D76C8B /* ConversationList.swift */; };
+		08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A313462C4AD03300C3E578 /* ImageInputView.swift */; };
+		08A313492C4AD0DC00C3E578 /* CommonModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A313482C4AD0DC00C3E578 /* CommonModifiers.swift */; };
 		08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */; };
 		08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB8F2C3C735A002C04E0 /* SwiftAnthropic */; };
 		08AAFB932C3C88D9002C04E0 /* StopButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB922C3C88D9002C04E0 /* StopButton.swift */; };
@@ -191,6 +193,8 @@
 		08A222BD2C2ABDAF00D76C8B /* InputManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
 		08A222C02C2ABE5C00D76C8B /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Conversation.swift; path = GPTalks/Session/Conversation.swift; sourceTree = SOURCE_ROOT; };
 		08A222C32C2AC6B300D76C8B /* ConversationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationList.swift; sourceTree = "<group>"; };
+		08A313462C4AD03300C3E578 /* ImageInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageInputView.swift; sourceTree = "<group>"; };
+		08A313482C4AD0DC00C3E578 /* CommonModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonModifiers.swift; sourceTree = "<group>"; };
 		08AAFB922C3C88D9002C04E0 /* StopButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopButton.swift; sourceTree = "<group>"; };
 		08AAFB972C3CF0F4002C04E0 /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
 		08AAFB992C3D0017002C04E0 /* ListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCard.swift; sourceTree = "<group>"; };
@@ -457,6 +461,25 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		08A313442C4ACFF000C3E578 /* ChatSession */ = {
+			isa = PBXGroup;
+			children = (
+				087928362C48CFFB008646CD /* ExpandedTextField.swift */,
+				08C800392C36BA30009581C5 /* InputView.swift */,
+				08D174C72C3DD729000257EF /* InputImageView.swift */,
+				082181612C38C76E00171BF3 /* InputEditor.swift */,
+			);
+			path = ChatSession;
+			sourceTree = "<group>";
+		};
+		08A313452C4AD00F00C3E578 /* ImageSession */ = {
+			isa = PBXGroup;
+			children = (
+				08A313462C4AD03300C3E578 /* ImageInputView.swift */,
+			);
+			path = ImageSession;
+			sourceTree = "<group>";
+		};
 		08AAFB912C3C88CA002C04E0 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
@@ -472,10 +495,9 @@
 		08C800382C36BA1E009581C5 /* BottomViews */ = {
 			isa = PBXGroup;
 			children = (
-				087928362C48CFFB008646CD /* ExpandedTextField.swift */,
-				08C800392C36BA30009581C5 /* InputView.swift */,
-				08D174C72C3DD729000257EF /* InputImageView.swift */,
-				082181612C38C76E00171BF3 /* InputEditor.swift */,
+				08A313452C4AD00F00C3E578 /* ImageSession */,
+				08A313442C4ACFF000C3E578 /* ChatSession */,
+				08A313482C4AD0DC00C3E578 /* CommonModifiers.swift */,
 			);
 			path = BottomViews;
 			sourceTree = "<group>";
@@ -737,6 +759,7 @@
 				087928372C48CFFB008646CD /* ExpandedTextField.swift in Sources */,
 				085361112C4938C4007DAB62 /* ImageGenerationList.swift in Sources */,
 				08C800492C36C521009581C5 /* AssistantMessage.swift in Sources */,
+				08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */,
 				08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */,
 				089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */,
 				080ED38D2C415B6200046424 /* PreferenceKeys.swift in Sources */,
@@ -758,6 +781,7 @@
 				08D174C02C3D901A000257EF /* CrossButton.swift in Sources */,
 				0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */,
 				081C1D922C3BD1970078BB24 /* AppConfig.swift in Sources */,
+				08A313492C4AD0DC00C3E578 /* CommonModifiers.swift in Sources */,
 				08A222C42C2AC6B300D76C8B /* ConversationList.swift in Sources */,
 				08AAFB982C3CF0F4002C04E0 /* KeyboardShortcuts.swift in Sources */,
 				08C800472C36C4ED009581C5 /* UserMessage.swift in Sources */,

@@ -11,6 +11,7 @@ import SwiftData
 struct SessionListCards: View {
     @Environment(SessionVM.self) private var sessionVM
     @Query var sessions: [Session]
+    @Query var imageSessions: [ImageSession]
     
     var body: some View {
         Section {
@@ -23,18 +24,18 @@ struct SessionListCards: View {
                 
                 ListCard(
                     icon: "photo.circle.fill", iconColor: .cyan, title: "Images",
-                    count: "0"
+                    count: String(imageSessions.count)
                 ) {
                     sessionVM.state = .images
                 }
             }
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
             #if os(macOS)
                 .listRowInsets(EdgeInsets(top: 0, leading: -5, bottom: 8, trailing: -5))
             #else
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             #endif
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
         }
         #if !os(macOS)
         .listSectionSpacing(15)
