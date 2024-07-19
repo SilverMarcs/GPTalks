@@ -6,41 +6,31 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ImageListRow: View {
+    @Environment(\.modelContext) var modelContext
     @Bindable var session: ImageSession
     
     var body: some View {
-        HStack {
-            ProviderImage(provider: session.config.provider, radius: 7, frame: frame)
-            
-            Text(session.title)
-                .font(.headline)
-                .fontWeight(.regular)
-                .lineLimit(1)
-            
-            Spacer()
-            
-            Text(session.config.model.name)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .fontWidth(.compressed)
-            
-            if session.isStarred {
-                Image(systemName: "star.fill")
-                    .foregroundStyle(.orange)
-                    .imageScale(.small)
-            }
+        CommonCompactRow(provider: session.config.provider,
+                         model: session.config.model,
+                         title: session.title,
+                         isStarred: session.isStarred)
+        .swipeActions(edge: .leading) {
+            swipeActionsLeading
         }
-        .padding(3)
     }
     
-    var frame: CGFloat {
-        #if os(macOS)
-        20
-        #else
-        23
-        #endif
+    var swipeActionsLeading: some View {
+        Group {
+            Button {
+                session.isStarred.toggle()
+            } label: {
+                Label("Star", systemImage: "star")
+            }
+            .tint(.orange)
+        }
     }
 }
 

@@ -76,6 +76,7 @@
 		08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A313462C4AD03300C3E578 /* ImageInputView.swift */; };
 		08A313492C4AD0DC00C3E578 /* CommonModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A313482C4AD0DC00C3E578 /* CommonModifiers.swift */; };
 		08A3134B2C4ADEA000C3E578 /* ImageListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A3134A2C4ADEA000C3E578 /* ImageListRow.swift */; };
+		08A3134D2C4AE7B800C3E578 /* CommonCompactRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A3134C2C4AE7B800C3E578 /* CommonCompactRow.swift */; };
 		08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */; };
 		08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB8F2C3C735A002C04E0 /* SwiftAnthropic */; };
 		08AAFB932C3C88D9002C04E0 /* StopButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB922C3C88D9002C04E0 /* StopButton.swift */; };
@@ -195,6 +196,7 @@
 		08A313462C4AD03300C3E578 /* ImageInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageInputView.swift; sourceTree = "<group>"; };
 		08A313482C4AD0DC00C3E578 /* CommonModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonModifiers.swift; sourceTree = "<group>"; };
 		08A3134A2C4ADEA000C3E578 /* ImageListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListRow.swift; sourceTree = "<group>"; };
+		08A3134C2C4AE7B800C3E578 /* CommonCompactRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonCompactRow.swift; sourceTree = "<group>"; };
 		08AAFB922C3C88D9002C04E0 /* StopButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopButton.swift; sourceTree = "<group>"; };
 		08AAFB972C3CF0F4002C04E0 /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
 		08AAFB992C3D0017002C04E0 /* ListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCard.swift; sourceTree = "<group>"; };
@@ -263,6 +265,7 @@
 				085361102C4938C4007DAB62 /* ImageGenerationList.swift */,
 				085361122C4939C5007DAB62 /* ImageGenerationView.swift */,
 				08A3134A2C4ADEA000C3E578 /* ImageListRow.swift */,
+				08A3134C2C4AE7B800C3E578 /* CommonCompactRow.swift */,
 			);
 			path = ImageSessionListViews;
 			sourceTree = "<group>";
@@ -725,6 +728,7 @@
 				085361092C4923E2007DAB62 /* ImageConfig.swift in Sources */,
 				0821816F2C39082900171BF3 /* ConversationGroupView.swift in Sources */,
 				089B22432C394A4F00E248FE /* ButtonUtils.swift in Sources */,
+				08A3134D2C4AE7B800C3E578 /* CommonCompactRow.swift in Sources */,
 				08A222BE2C2ABDB400D76C8B /* InputManager.swift in Sources */,
 				08A222852C2AB4FD00D76C8B /* ContentView.swift in Sources */,
 				08C800572C36F843009581C5 /* SettingsView.swift in Sources */,

@@ -18,39 +18,18 @@ struct SessionListItem: View {
     var body: some View {
         Group {
             if config.compactList {
-                compact
+                CommonCompactRow(provider: session.config.provider,
+                                 model: session.config.model,
+                                 title: session.title,
+                                 isStarred: session.isStarred)
             } else {
                 large
             }
         }
+//        .animation(.default, value: config.compactList)
         .swipeActions(edge: .leading) {
             swipeActionsLeading
         }
-    }
-    
-    var compact: some View {
-        HStack {
-            ProviderImage(provider: session.config.provider, radius: 8, frame: 23)
-            
-            Text(session.title)
-                .lineLimit(1)
-                .font(.headline)
-                .fontWeight(.regular)
-                .opacity(0.9)
-            
-            Spacer()
-            
-            Text(session.config.model.name)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            
-            if session.isStarred {
-                Image(systemName: "star.fill")
-                    .foregroundStyle(.orange)
-                    .imageScale(.small)
-            }
-        }
-        .padding(3)
     }
     
     var large: some View {
@@ -69,7 +48,8 @@ struct SessionListItem: View {
                     
                     Text(session.config.model.name)
                         .font(.caption)
-                        .opacity(0.9)
+//                        .opacity(0.9)
+                        .foregroundStyle(.secondary)
                         .fontWidth(.compressed)
                 }
                 
@@ -108,30 +88,6 @@ struct SessionListItem: View {
         return lastMessage.isEmpty ? "Start a conversation" : lastMessage
     }
 
-    
-//    var titleField: some View {
-//        Group {
-//            if isEditing {
-//                TextField("Title", text: $session.title, onCommit: {
-//                    isEditing.toggle()
-//                })
-//                .padding(.vertical, -2)
-//                .focused($isFocused)
-//            } else {
-//                Text(session.title)
-//                    .lineLimit(1)
-//            }
-//        }
-//    }
-    
-    var swipeActionsTrailing: some View {
-        Button(role: .destructive) {
-            modelContext.delete(session)
-        } label: {
-            Label("Delete", systemImage: "trash")
-        }
-    }
-    
     var swipeActionsLeading: some View {
         Group {
             Button {

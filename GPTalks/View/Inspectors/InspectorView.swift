@@ -33,7 +33,9 @@ struct InspectorView: View {
                 Spacer()
             }
             
-            if sessionVM.state == .images {
+            if showingInspector, sessionVM.state == .images {
+                Text("Config").foregroundStyle(.secondary)
+                
                 Spacer()
             }
                 
