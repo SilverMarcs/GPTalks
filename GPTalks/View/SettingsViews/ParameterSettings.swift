@@ -13,17 +13,11 @@ struct ParameterSettings: View {
     var body: some View {
         Form {
             Section("Parameters") {
-                HStack {
-                    Text("Temperature")
-
-                    Slider(value: $config.temperature, in: 0...2, step: 0.1) {
-                    } minimumValueLabel: {
-                        Text("0")
-                    } maximumValueLabel: {
-                        Text("2")
-                    }
-                }
-
+                TemperatureSlider(temperature: $config.temperature)
+                TopPSlider(topP: $config.topP)
+                FrequencyPenaltySlider(penalty: $config.frequencyPenalty)
+                PresencePenaltySlider(penalty: $config.presencePenalty)
+                MaxTokensPicker(value: $config.maxTokens)
             }
 
             Section("System Prompt") {

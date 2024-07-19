@@ -51,8 +51,11 @@ class StreamManager {
         let query = ChatQuery(
             messages: messages,
             model: config.model.code,
-            maxTokens: 4096,
+            frequencyPenalty: config.frequencyPenalty,
+            maxTokens: config.maxTokens,
+            presencePenalty: config.presencePenalty,
             temperature: config.temperature,
+            topP: config.topP,
             stream: false
         )
         

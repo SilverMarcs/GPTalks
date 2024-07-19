@@ -22,6 +22,8 @@ struct ContentView: View {
     @State var showAdditionalContent = false
 #endif
     
+    @State var showingInspector: Bool = true
+    
     var body: some View {
         NavigationSplitView {
             SessionListSidebar()
@@ -67,6 +69,9 @@ struct ContentView: View {
             }
             .modelContainer(modelContext.container)
             .environment(sessionVM)
+        }
+        .inspector(isPresented: $showingInspector) {
+            InspectorView(showingInspector: $showingInspector)
         }
         #endif
     }

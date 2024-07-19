@@ -7,11 +7,10 @@
 
 import SwiftUI
 import SwiftData
+import OpenAI
 
 struct ImageInspector: View {
     @Bindable var session: ImageSession
-    @Binding var showInspector: Bool
-    
     @Query var providers: [Provider]
     
     var body: some View {
@@ -22,14 +21,9 @@ struct ImageInspector: View {
             
             ModelPicker(model: $session.config.model, models: session.config.provider.imageModels)
             
-            
-        }
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showInspector.toggle()
-                } label: {
-                    Label("Inspector", systemImage: "sidebar.right")
+            Picker("N", selection: $session.config.numImages) {
+                ForEach(1 ... 4, id: \.self) { num in
+                    Text("n: " + String(num)).tag(num)
                 }
             }
         }

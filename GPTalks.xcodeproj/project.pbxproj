@@ -42,6 +42,12 @@
 		085361112C4938C4007DAB62 /* ImageGenerationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361102C4938C4007DAB62 /* ImageGenerationList.swift */; };
 		085361132C4939C5007DAB62 /* ImageGenerationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361122C4939C5007DAB62 /* ImageGenerationView.swift */; };
 		085361152C4941E6007DAB62 /* ImageInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361142C4941E6007DAB62 /* ImageInspector.swift */; };
+		085361182C4A3071007DAB62 /* ChatInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361172C4A3071007DAB62 /* ChatInspector.swift */; };
+		0853611A2C4A3087007DAB62 /* InspectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361192C4A3087007DAB62 /* InspectorView.swift */; };
+		0853611F2C4A38C9007DAB62 /* GenericSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0853611E2C4A38C9007DAB62 /* GenericSlider.swift */; };
+		085361212C4A38FA007DAB62 /* ModelPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361202C4A38FA007DAB62 /* ModelPicker.swift */; };
+		085361232C4A390D007DAB62 /* ProviderPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361222C4A390D007DAB62 /* ProviderPicker.swift */; };
+		085361252C4A5ECC007DAB62 /* MaxTokensPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361242C4A5ECC007DAB62 /* MaxTokensPicker.swift */; };
 		085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085645432C3F98DF00ED84DA /* TitleGenerator.swift */; };
 		086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */; };
 		086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */; };
@@ -149,6 +155,12 @@
 		085361102C4938C4007DAB62 /* ImageGenerationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGenerationList.swift; sourceTree = "<group>"; };
 		085361122C4939C5007DAB62 /* ImageGenerationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGenerationView.swift; sourceTree = "<group>"; };
 		085361142C4941E6007DAB62 /* ImageInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageInspector.swift; sourceTree = "<group>"; };
+		085361172C4A3071007DAB62 /* ChatInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInspector.swift; sourceTree = "<group>"; };
+		085361192C4A3087007DAB62 /* InspectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorView.swift; sourceTree = "<group>"; };
+		0853611E2C4A38C9007DAB62 /* GenericSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSlider.swift; sourceTree = "<group>"; };
+		085361202C4A38FA007DAB62 /* ModelPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPicker.swift; sourceTree = "<group>"; };
+		085361222C4A390D007DAB62 /* ProviderPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderPicker.swift; sourceTree = "<group>"; };
+		085361242C4A5ECC007DAB62 /* MaxTokensPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxTokensPicker.swift; sourceTree = "<group>"; };
 		085645432C3F98DF00ED84DA /* TitleGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleGenerator.swift; sourceTree = "<group>"; };
 		086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextResetDivider.swift; sourceTree = "<group>"; };
@@ -247,7 +259,6 @@
 				085361102C4938C4007DAB62 /* ImageGenerationList.swift */,
 				0853610E2C4938C1007DAB62 /* ImageSessionRow.swift */,
 				085361122C4939C5007DAB62 /* ImageGenerationView.swift */,
-				085361142C4941E6007DAB62 /* ImageInspector.swift */,
 			);
 			path = ImageSessionListViews;
 			sourceTree = "<group>";
@@ -287,6 +298,27 @@
 				085361082C4923E2007DAB62 /* ImageConfig.swift */,
 			);
 			path = ImageSession;
+			sourceTree = "<group>";
+		};
+		085361162C4A304D007DAB62 /* Inspectors */ = {
+			isa = PBXGroup;
+			children = (
+				085361142C4941E6007DAB62 /* ImageInspector.swift */,
+				085361172C4A3071007DAB62 /* ChatInspector.swift */,
+				085361192C4A3087007DAB62 /* InspectorView.swift */,
+			);
+			path = Inspectors;
+			sourceTree = "<group>";
+		};
+		0853611D2C4A3763007DAB62 /* SessionConfigViews */ = {
+			isa = PBXGroup;
+			children = (
+				0853611E2C4A38C9007DAB62 /* GenericSlider.swift */,
+				085361202C4A38FA007DAB62 /* ModelPicker.swift */,
+				085361222C4A390D007DAB62 /* ProviderPicker.swift */,
+				085361242C4A5ECC007DAB62 /* MaxTokensPicker.swift */,
+			);
+			path = SessionConfigViews;
 			sourceTree = "<group>";
 		};
 		08915D922C373332008ADE27 /* CustomUI */ = {
@@ -418,6 +450,8 @@
 				08C800382C36BA1E009581C5 /* BottomViews */,
 				08C8003F2C36BD7B009581C5 /* SessionListViews */,
 				0819479F2C48DCE50061227B /* ImageSessionListViews */,
+				085361162C4A304D007DAB62 /* Inspectors */,
+				0853611D2C4A3763007DAB62 /* SessionConfigViews */,
 				089C7E0E2C404E86005E3BE9 /* QuickPanel */,
 			);
 			path = View;
@@ -669,6 +703,7 @@
 				08505C9E2C3D5482001EBEEF /* SessionListToolbar.swift in Sources */,
 				087928352C48CF6F008646CD /* ExpandButton.swift in Sources */,
 				0893B2062C39810900D4D501 /* SessionConfig.swift in Sources */,
+				085361212C4A38FA007DAB62 /* ModelPicker.swift in Sources */,
 				08D174C82C3DD729000257EF /* InputImageView.swift in Sources */,
 				08C800592C370A30009581C5 /* Model.swift in Sources */,
 				08C800452C36C10A009581C5 /* ConversationMenu.swift in Sources */,
@@ -706,6 +741,7 @@
 				089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */,
 				080ED38D2C415B6200046424 /* PreferenceKeys.swift in Sources */,
 				082181622C38C76E00171BF3 /* InputEditor.swift in Sources */,
+				0853611A2C4A3087007DAB62 /* InspectorView.swift in Sources */,
 				08D174C22C3D96F8000257EF /* StreamHandler.swift in Sources */,
 				085361052C491BF0007DAB62 /* ImageSession.swift in Sources */,
 				08A222C12C2ABE5C00D76C8B /* Conversation.swift in Sources */,
@@ -715,6 +751,7 @@
 				089C7E122C405904005E3BE9 /* QuickPanel.swift in Sources */,
 				085361152C4941E6007DAB62 /* ImageInspector.swift in Sources */,
 				08C8003A2C36BA30009581C5 /* InputView.swift in Sources */,
+				085361182C4A3071007DAB62 /* ChatInspector.swift in Sources */,
 				08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */,
 				08C800322C36AE1D009581C5 /* SessionList.swift in Sources */,
 				08C8004B2C36E658009581C5 /* ConversationListDetail.swift in Sources */,
@@ -725,7 +762,9 @@
 				08AAFB982C3CF0F4002C04E0 /* KeyboardShortcuts.swift in Sources */,
 				08C800472C36C4ED009581C5 /* UserMessage.swift in Sources */,
 				082181642C38C92E00171BF3 /* SendButton.swift in Sources */,
+				085361232C4A390D007DAB62 /* ProviderPicker.swift in Sources */,
 				082181552C38138700171BF3 /* ModelTable.swift in Sources */,
+				085361252C4A5ECC007DAB62 /* MaxTokensPicker.swift in Sources */,
 				08D174C42C3D972D000257EF /* StreamManager.swift in Sources */,
 				081C1D982C3BD8A50078BB24 /* GeneralSettings.swift in Sources */,
 				086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */,
@@ -733,6 +772,7 @@
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,
 				08149A572C3E5E5B004485AC /* ConversationRole.swift in Sources */,
 				08AAFB9E2C3D02C0002C04E0 /* SessionListSidebar.swift in Sources */,
+				0853611F2C4A38C9007DAB62 /* GenericSlider.swift in Sources */,
 				086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */,
 				08C800432C36C045009581C5 /* SessonVM.swift in Sources */,
 				081C1D9A2C3BE91C0078BB24 /* ColorExtensions.swift in Sources */,

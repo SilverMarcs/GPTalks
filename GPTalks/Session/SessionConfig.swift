@@ -16,6 +16,10 @@ final class SessionConfig: NSCopying {
     }
     
     var temperature: Double = AppConfig.shared.temperature
+    var frequencyPenalty: Double = AppConfig.shared.frequencyPenalty
+    var presencePenalty: Double = AppConfig.shared.presencePenalty
+    var topP: Double = AppConfig.shared.topP
+    var maxTokens: Int = AppConfig.shared.maxTokens
     var systemPrompt: String = AppConfig.shared.systemPrompt
     
     @Relationship(deleteRule: .nullify)

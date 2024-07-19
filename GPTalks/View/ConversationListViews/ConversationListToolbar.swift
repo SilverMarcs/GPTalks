@@ -8,7 +8,6 @@
 import SwiftUI
 import SwiftData
 
-#if os(macOS)
 struct ConversationListToolbar: ToolbarContent {
     @Bindable var session: Session
     @Query var providers: [Provider]
@@ -18,43 +17,11 @@ struct ConversationListToolbar: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigation) {
             Menu {
-                Section {
-                    generateTitle
-                }
-                
-                Section {
-                    deleteAllMessages
-                }
+
             } label: {
                 Image(systemName: "slider.vertical.3")
             }
             .menuIndicator(.hidden)
-        }
-        
-        ToolbarItemGroup {
-            ProviderPicker(
-                provider: $session.config.provider,
-                providers: providers.sorted(by: { $0.order < $1.order }),
-                onChange: { newProvider in
-                    session.config.model = newProvider.chatModel
-                }
-            )
-
-            temperatureSlider
-            
-            ModelPicker(model: $session.config.model, models: session.config.provider.models)
-                .frame(width: 110)
-        }
-        
-        ToolbarItem(placement: .automatic) {
-            Button {
-                isShowSysPrompt.toggle()
-            } label: {
-                Image(systemName: "info.circle")
-            }
-            .popover(isPresented: $isShowSysPrompt) {
-                ConversationTrailingPopup(session: session)
-            }
         }
         
         #if os(macOS)
@@ -66,34 +33,6 @@ struct ConversationListToolbar: ToolbarContent {
         }
         #endif
     }
-    
-    private var temperatureSlider: some View {
-        Slider(value: $session.config.temperature, in: 0 ... 2, step: 0.2) {} minimumValueLabel: {
-            Text("0")
-        } maximumValueLabel: {
-            Text("2")
-        }
-        .frame(width: 130)
-    }
-    
-    private var generateTitle: some View {
-        Button("Generate Title") {
-            if session.isStreaming { return }
-            
-            Task {
-                await session.generateTitle(forced: true)
-            }
-        }
-    }
-    
-    private var deleteAllMessages: some View {
-        Button("Delete All Messages") {
-            if session.isStreaming { return }
-            
-            session.deleteAllConversations()
-        }
-    }
-    
     private var regenLastMessage: some View {
         Button("Regen Last Message") {
             print("here1")
@@ -143,68 +82,5 @@ struct ConversationListToolbar: ToolbarContent {
             lastUserGroup.setupEditing()
         }
         .keyboardShortcut("e", modifiers: .command)
-    }
-}
-#else
-struct ConversationListToolbar: View {
-    @Bindable var session: Session
-    @Query var providers: [Provider]
-    
-    var body: some View {
-        Section {
-            Menu {
-                ProviderPicker(
-                    provider: $session.config.provider,
-                    providers: providers.sorted(by: { $0.order < $1.order }),
-                    onChange: { newProvider in
-                        DispatchQueue.main.async {
-                            session.config.model = newProvider.chatModel
-                        }
-                    }
-                )
-            } label: {
-                Label(session.config.provider.name, systemImage: "building.2")
-            }
-            
-            Menu {
-                ModelPicker(model: $session.config.model, models: session.config.provider.models)
-            } label: {
-                Label(session.config.model.name, systemImage: "cube.box")
-            }
-        }
-    }
-}
-#endif
-
-struct ProviderPicker: View {
-    @Binding var provider: Provider
-    var providers: [Provider]
-    var onChange: ((Provider) -> Void)?
-    
-    var body: some View {
-        Picker("Provider", selection: $provider) {
-            ForEach(providers) { provider in
-                Text(provider.name).tag(provider)
-            }
-        }
-        .onChange(of: provider) {
-            onChange?(provider)
-        }
-    }
-}
-
-
-struct ModelPicker: View {
-    @Binding var model: Model
-    var models: [Model]
-    
-    var body: some View {
-        if model != nil {
-            Picker("Model", selection: $model) {
-                ForEach(models, id: \.self) { model in
-                    Text(model.name)
-                }
-            }
-        }
     }
 }

@@ -53,7 +53,7 @@ struct ConversationList: View {
                     Task { await session.sendInput() }
                 }
             }
-            .navigationSubtitle(navSubtitle)
+            .navigationSubtitle( session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))
             .navigationTitle(session.title)
             .toolbar {
                 ConversationListToolbar(session: session)
@@ -62,24 +62,23 @@ struct ConversationList: View {
             .toolbarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.immediately)
             .navigationTitle(session.config.model.name)
-            .toolbarTitleMenu {
-                ConversationListToolbar(session: session)
-            }
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    Button {
-                        isShowSysPrompt.toggle()
-                    } label: {
-                        Image(systemName: "info.circle")
-                    }
-                    .popover(isPresented: $isShowSysPrompt) {
-                        ConversationTrailingPopup(session: session)
-                    }
-                }
-            }
+//            .toolbarTitleMenu {
+//                ConversationListToolbar(session: session)
+//            }
+//            .toolbar {
+//                ToolbarItem(placement: .automatic) {
+//                    Button {
+//                        isShowSysPrompt.toggle()
+//                    } label: {
+//                        Image(systemName: "info.circle")
+//                    }
+//                    .popover(isPresented: $isShowSysPrompt) {
+//                        ConversationTrailingPopup(session: session)
+//                    }
+//                }
+//            }
             #endif
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled, isScrolling: $isScrolling)
-
             .scrollContentBackground(.visible)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 InputView(session: session)

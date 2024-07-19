@@ -10,7 +10,6 @@ import SwiftData
 
 struct ImageGenerationList: View {
     @Bindable var session: ImageSession
-    @State var showInspector = false
     
     @Query var providers: [Provider]
     
@@ -19,9 +18,6 @@ struct ImageGenerationList: View {
             ForEach(session.imageGenerations, id: \.self) { generation in
                 ImageGenerationView(generation: generation)
             }
-        }
-        .inspector(isPresented: $showInspector) {
-            ImageInspector(session: session, showInspector: $showInspector)
         }
         .safeAreaInset(edge: .bottom) {
             TextField("Prompt", text: $session.prompt)

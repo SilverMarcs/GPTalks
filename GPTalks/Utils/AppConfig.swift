@@ -17,6 +17,10 @@ class AppConfig: ObservableObject {
     
     // Parameters
     @AppStorage("temperature") var temperature: Double = 1.0
+    @AppStorage("presencePenalty") var presencePenalty: Double = 1.0
+    @AppStorage("frequencyPenalty") var frequencyPenalty: Double = 0.0
+    @AppStorage("topP") var topP: Double = 1.0
+    @AppStorage("maxTokens") var maxTokens: Int = 4096
     @AppStorage("configuration.systemPrompt") var systemPrompt: String = "You are a helpful assistant."
     
     // Quick
