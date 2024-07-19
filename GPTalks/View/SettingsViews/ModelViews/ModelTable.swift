@@ -27,6 +27,17 @@ struct ModelTable: View {
     var modelTable: some View {
         VStack {
             Table(of: Model.self) {
+                TableColumn("Image") { model in
+                    Toggle(
+                        "Image",
+                        isOn: Binding(
+                            get: { model.supportsImage },
+                            set: { model.supportsImage = $0 }
+                        ))
+                    .labelsHidden()
+                    
+                }
+                
                 TableColumn("Code") { model in
                     TextField(
                         "Code",
@@ -58,10 +69,11 @@ struct ModelTable: View {
                 }
             } rows: {
                 ForEach(
-                    provider.models, id: \.self
+                    provider.models.sorted { $0.supportsImage && !$1.supportsImage }, id: \.self
                 ) { model in
                     TableRow(model)
                 }
+
             }
             
             modelAdder

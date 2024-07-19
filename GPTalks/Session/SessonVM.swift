@@ -11,7 +11,8 @@ import SwiftUI
 
 @Observable class SessionVM {
     var selections: Set<Session> = []
-    var selection: Session?
+    var imageSelections: Set<ImageSession> = []
+    
     var searchText: String = ""
     
     var state: ListState = .chats
@@ -21,6 +22,32 @@ import SwiftUI
     #else
     var chatCount: Int = .max
     #endif
+    
+    func addimageSession(imageSessions: [ImageSession], providerManager: ProviderManager, providers: [Provider], modelContext: ModelContext) {
+        let provider: Provider
+        if let defaultProvider = providerManager.getDefault(providers: providers) {
+            provider = defaultProvider
+        } else if let firstProvider = providers.first {
+            provider = firstProvider
+        } else {
+            return
+        }
+        
+        let newItem = ImageSession(config: ImageConfig(provider: provider, model: provider.imageModel))
+        
+        withAnimation {
+            // Increment the order of all existing items
+            for session in imageSessions {
+                session.order += 1
+            }
+            
+            newItem.order = 0  // Set the new item's order to 0 (top of the list)
+            modelContext.insert(newItem)
+            self.imageSelections = [newItem]
+        }
+        
+        try? modelContext.save()
+    }
     
     func addItem(sessions: [Session], providerManager: ProviderManager, providers: [Provider], modelContext: ModelContext) {
         let provider: Provider
@@ -79,7 +106,7 @@ import SwiftUI
     }
 }
 
-enum ListState {
+enum ListState: String {
     case chats
     case images
 }

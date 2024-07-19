@@ -81,7 +81,7 @@ struct ConversationList: View {
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled, isScrolling: $isScrolling)
 
             .scrollContentBackground(.visible)
-            .safeAreaInset(edge: .bottom) {
+            .safeAreaInset(edge: .bottom, spacing: 0) {
                 InputView(session: session)
             }
         }

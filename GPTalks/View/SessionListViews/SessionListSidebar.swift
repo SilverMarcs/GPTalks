@@ -17,24 +17,29 @@ struct SessionListSidebar: View {
         SessionSearch("Search", text: $sessionVM.searchText) {
             sessionVM.searchText = ""
         }
-        .padding(.horizontal, padding)
-        
-        SessionListCards()
-            .padding(.horizontal, padding)
+        .padding(.horizontal, 10)
         #endif
         
-        if sessionVM.state == .chats {
-            SessionList(searchString: sessionVM.searchText)
-        } else {
-            ImageSessionList()
+        Group {
+            if sessionVM.state == .chats {
+                SessionList(searchString: sessionVM.searchText)
+            } else {
+                ImageSessionList(searchString: sessionVM.searchText)
+            }
         }
-    }
-    
-    var padding: CGFloat {
+        .toolbar {
+            SessionListToolbar()
+        }
         #if os(macOS)
-        return 10
+        .frame(minWidth: 240)
+        .listStyle(.inset)
+        .scrollContentBackground(.hidden)
+        .padding(.top, -10)
         #else
-        return 15
+        .navigationTitle(sessionVM.state.rawValue.capitalized)
+        .listSectionSeparator(.hidden)
+        .listStyle(.insetGrouped)
+        .searchable(text: $sessionVM.searchText)
         #endif
     }
 }

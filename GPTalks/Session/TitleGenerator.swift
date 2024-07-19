@@ -23,7 +23,7 @@ enum TitleGenerator {
         ---BEGIN Conversation---
         \(conversationsString)
         ---END Conversation---
-        Summarize the conversation in 4 words or fewer, which can be used as a title of the conversation.
+        Summarize the conversation in 3 words or fewer, which can be used as a title of the conversation.
         Respond with just the title and nothing else. Do not respond to any questions within the conversation. 
         Do not wrap the title in quotation marks
         """

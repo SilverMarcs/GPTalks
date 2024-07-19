@@ -13,20 +13,32 @@ struct SessionListCards: View {
     @Query var sessions: [Session]
     
     var body: some View {
-        HStack(spacing: spacing) {
-            ListCard(
-                icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
-                count: String(sessions.count)) {
-                    toggleChatCount()
+        Section {
+            HStack(spacing: spacing) {
+                ListCard(
+                    icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
+                    count: String(sessions.filter { !$0.isQuick }.count)) {
+                        toggleChatCount()
+                    }
+                
+                ListCard(
+                    icon: "photo.circle.fill", iconColor: .cyan, title: "Images",
+                    count: "0"
+                ) {
+                    sessionVM.state = .images
                 }
-            
-            ListCard(
-                icon: "photo.circle.fill", iconColor: .cyan, title: "Images",
-                count: "0"
-            ) {
-                sessionVM.state = .images
             }
+            #if os(macOS)
+                .listRowInsets(EdgeInsets(top: 0, leading: -5, bottom: 8, trailing: -5))
+            #else
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+            #endif
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
         }
+        #if !os(macOS)
+        .listSectionSpacing(15)
+        #endif
     }
     
     private var spacing: CGFloat {

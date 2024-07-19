@@ -30,14 +30,26 @@ class Provider {
     var quickChatModel: Model
     @Relationship(deleteRule: .cascade)
     var titleModel: Model
+    @Relationship(deleteRule: .cascade)
+    var imageModel: Model
     
     @Relationship(deleteRule: .cascade)
     var models =  [Model]()
     
+    var chatModels: [Model] {
+        return models.filter { !$0.supportsImage}
+    }
+    
+    var imageModels: [Model] {
+        return models.filter { $0.supportsImage}
+    }
+    
     private init() {
+        // never use this initializer
         self.chatModel = Model.getDemoModel()
         self.quickChatModel = Model.getDemoModel()
         self.titleModel = Model.getDemoModel()
+        self.imageModel = Model.getDemoImageModel()
         self.type = .openai
     }
     
@@ -47,10 +59,17 @@ class Provider {
         provider.name = type.name
         provider.host = type.defaultHost
         provider.models = type.getDefaultModels()
-        provider.chatModel = provider.models.first!
-        provider.quickChatModel = provider.models.first!
-        provider.titleModel = provider.models.first!
         provider.color = type.defaultColor
+        
+        if let first = provider.chatModels.first {
+            provider.chatModel = first
+            provider.quickChatModel = first
+            provider.titleModel = first
+        }
+        
+        if let first = provider.imageModels.first {
+            provider.imageModel = first
+        }
         
         return provider
     }

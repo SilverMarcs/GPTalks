@@ -12,20 +12,14 @@ struct SessionList: View {
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
-    @ObservedObject var config = AppConfig.shared
-    
     @Query var sessions: [Session]
-    
-    @State private var prevCount = 0
     
     var body: some View {
         @Bindable var sessionVM = sessionVM
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
-                #if !os(macOS)
-                cardView
-                #endif
+                SessionListCards()
                 
                 ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
                     SessionListItem(session: session)
@@ -34,39 +28,21 @@ struct SessionList: View {
                 }
                 .onDelete(perform: deleteItems)
                 .onMove(perform: move)
-                #if !os(macOS)
-                .listSectionSeparator(.hidden)
-                #endif
             }
-            .toolbar {
-                SessionListToolbar()
+            .onChange(of: sessions.count) {
+                if let first = sessions.first {
+                    sessionVM.selections = [first]
+                    proxy.scrollTo(first, anchor: .top)
+                }
             }
 #if os(macOS)
-            .frame(minWidth: 240)
-            .listStyle(.inset)
-            .scrollContentBackground(.hidden)
-            .padding(.top, -10)
             .onAppear {
-                if let first = sessions.first {
+                if let first = sessions.first, sessionVM.selections.isEmpty {
                     DispatchQueue.main.async {
                         sessionVM.selections = [first]
                     }
                 }
             }
-            .onChange(of: sessions.count) {
-                if sessions.count > prevCount {
-                    if let first = sessions.first {
-                        sessionVM.selections = [first]
-                        withAnimation {
-                            proxy.scrollTo(first, anchor: .top)
-                        }
-                    }
-                }
-            }
-#else
-            .navigationTitle("Chats")
-            .listStyle(.insetGrouped)
-            .searchable(text: $sessionVM.searchText)
 #endif
         }
     }
@@ -82,25 +58,14 @@ struct SessionList: View {
             },
             sort: [
                 SortDescriptor(\Session.order, order: .forward),
-                SortDescriptor(\Session.date, order: .reverse)
             ],
             animation: .default
         )
     }
-    
-    #if !os(macOS)
-    private var cardView: some View {
-        Section {
-            SessionListCards()
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
-        }
-        .listSectionSpacing(15)
-    }
-    #endif
-    
+
     private func deleteItems(offsets: IndexSet) {
+        // if current selection is in the index, then set to nil
+        
         withAnimation {
             for index in offsets.sorted().reversed() {
                 if !sessions[index].isStarred {

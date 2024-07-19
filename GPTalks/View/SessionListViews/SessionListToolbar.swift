@@ -18,6 +18,7 @@ struct SessionListToolbar: ToolbarContent {
     
     @Query(sort: \Provider.date, order: .reverse) var providers: [Provider]
     @Query var sessions: [Session]
+    @Query var imageSessions: [ImageSession]
     
     @State var showSettings: Bool = false
     
@@ -36,7 +37,7 @@ struct SessionListToolbar: ToolbarContent {
                     Label("More", systemImage: "ellipsis.circle")
                         .labelStyle(.titleOnly)
                 }
-                .popover(isPresented: $showSettings) {
+                .sheet(isPresented: $showSettings) {
                     SettingsView()
                 }
             } else {
@@ -61,7 +62,11 @@ struct SessionListToolbar: ToolbarContent {
     }
     
     private func addItem() {
-        sessionVM.addItem(sessions: sessions, providerManager: providerManager, providers: providers, modelContext: modelContext)
+        if sessionVM.state == .chats {
+            sessionVM.addItem(sessions: sessions, providerManager: providerManager, providers: providers, modelContext: modelContext)
+        } else {
+            sessionVM.addimageSession(imageSessions: imageSessions, providerManager: providerManager, providers: providers, modelContext: modelContext)
+        }
     }
 }
 

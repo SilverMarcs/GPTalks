@@ -18,9 +18,9 @@ final class SessionConfig: NSCopying {
     var temperature: Double = AppConfig.shared.temperature
     var systemPrompt: String = AppConfig.shared.systemPrompt
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var provider: Provider
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var model: Model
     
     init(provider: Provider, model: Model) {
