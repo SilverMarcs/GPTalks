@@ -55,33 +55,15 @@ struct ChatInspector: View {
     }
     
     private var title: some View {
-        Group {
-#if os(macOS)
-            TextEditor(text: $session.title)
-                .font(.body)
-                .textEditorStyle(.plain)
-#else
-            TextField("Title", text: $session.title)
-                .lineLimit(1)
-#endif
-        }
-        .onChange(of: session.title) {
-            session.title = String(
-                session.title.trimmingCharacters(
-                    in: .newlines))
-        }
+        TextField("Title", text: $session.title)
+            .lineLimit(1)
+            .labelsHidden()
     }
     
     private var sysPrompt: some View {
-        #if os(macOS)
-        TextEditor(text: $session.config.systemPrompt)
-            .font(.body)
-            .textEditorStyle(.plain)
-            .frame(minHeight: 70, maxHeight: 125)
-        #else
         TextField("System Prompt", text: $session.config.systemPrompt, axis: .vertical)
             .lineLimit(5, reservesSpace: true)
-        #endif
+            .labelsHidden()
     }
     
     private var generateTitle: some View {

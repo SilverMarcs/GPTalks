@@ -21,9 +21,9 @@ struct ProviderGeneral: View {
             }
             
             Section("Host Settings") {
-                TextField("Host URL", text: $provider.host)
+                TextField("Host URL ", text: $provider.host)
                 
-                TextField("API Key", text: $provider.apiKey)
+                TextField("API Key ", text: $provider.apiKey)
                     .truncationMode(.middle)
                 
 

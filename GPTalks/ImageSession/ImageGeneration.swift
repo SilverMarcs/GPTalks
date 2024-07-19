@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 import OpenAI
-import AppKit
+import SwiftUI
 
 @Model
 class ImageGeneration {
