@@ -39,4 +39,39 @@ extension String {
         
         return fileURL
     }
+    
+    static private let demoAssistant: String =
+    """
+    This is a code block.
+    
+    ```swift
+    struct ContentView: View {
+        var body: some View {
+            Text("Hello, World!")
+        }
+    }
+    ```
+    
+    Thank you for using me.
+    """
+    
+    static private let demoAssistant2: String =
+    """
+    ## Heading   
+    There are three ways to print a string in python
+    1. Not printing
+    2. Printing carelessly
+    3. Blaming it on Teammates
+    
+    ### Subheading
+    But whats even better is the ability to see into the future.  
+        
+    Thank you for using me.
+    """
+    
+    static let assistantDemos = [demoAssistant, demoAssistant2]
+    
+    static private let demoImage: String = "file:///Users/Zabir/Pictures/GPTalks/20240718_203104560.jpg"
+    static private let demoImage2: String = "file:///Users/Zabir/Pictures/GPTalks/20240718_203358964.jpg"
+    static let demoImages = [demoImage, demoImage2]
 }

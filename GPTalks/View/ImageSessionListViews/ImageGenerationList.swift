@@ -7,26 +7,59 @@
 
 import SwiftUI
 import SwiftData
+import KeyboardShortcuts
 
 struct ImageGenerationList: View {
     @Bindable var session: ImageSession
     
     @Query var providers: [Provider]
     
+    @State var prevCount: Int = 0
+    
     var body: some View {
-        List {
-            ForEach(session.imageGenerations, id: \.self) { generation in
-                ImageGenerationView(generation: generation)
+        ScrollViewReader { proxy in
+            Text(String(session.imageGenerations.count))
+            ScrollView {
+                VStack(spacing: 35) {
+                    ForEach(session.imageGenerations, id: \.self) { generation in
+                        ImageGenerationView(generation: generation)
+                    }
+                    
+                    Color.clear
+                        .id(String.bottomID)
+                }
+                .padding()
             }
-        }
-        .navigationTitle("Image Generation")
-        .safeAreaInset(edge: .bottom) {
-            ImageInputView(session: session)
+            .toolbar {
+                ImageGenerationListToolbar(session: session)
+            }
+            .onAppear {
+                scrollToBottom(proxy: proxy)
+            }
+            .onChange(of: session.imageGenerations.count) {
+                if session.imageGenerations.count > prevCount {
+                    scrollToBottom(proxy: proxy, delay: 0.1)
+                } else {
+                    prevCount = session.imageGenerations.count
+                }
+            }
+            .scrollContentBackground(.visible)
+            .navigationTitle("Image Generation")
+            .safeAreaInset(edge: .bottom) {
+                ImageInputView(session: session)
+            }
+#if !os(macOS)
+            .toolbarTitleDisplayMode(.inline)
+            .scrollDismissesKeyboard(.immediately)
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) { _ in
+                scrollToBottom(proxy: proxy)
+            }
+#endif
         }
     }
 }
 
 
-//#Preview {
-//    ImageGenerationList()
-//}
+#Preview {
+    ImageGenerationList(session: ImageSession(config: ImageConfig()))
+}

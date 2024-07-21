@@ -144,6 +144,11 @@ final class Session {
                 
                 let user = Conversation(role: .user, content: content, imagePaths: imagePaths)
                 addConversationGroup(conversation: user)
+                
+//                #if DEBUG
+//                addConversationGroup(conversation: Conversation(role: .assistant, content: .assistantDemos.randomElement()!))
+//                return
+//                #endif
             }
         }
         

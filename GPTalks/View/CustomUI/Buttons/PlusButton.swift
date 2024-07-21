@@ -20,7 +20,7 @@ struct PlusButton: View {
                 .frame(width: size, height: size)
                 .foregroundStyle(.secondary, .quinary)
         }
-        .keyboardShortcut(.return, modifiers: .command)
+        .keyboardShortcut("i", modifiers: .command)
         .buttonStyle(.plain)
 
     }

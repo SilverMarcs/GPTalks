@@ -34,7 +34,7 @@ struct ConversationList: View {
                     }
                 }
                 .padding()
-                .padding(.top, -15)
+                .padding(.top, -5)
             }
             .onAppear {
                 session.proxy = proxy
@@ -48,11 +48,6 @@ struct ConversationList: View {
                 hasUserScrolled = bottomReached
             }
             #if os(macOS)
-            .task {
-                KeyboardShortcuts.onKeyUp(for: .sendMessage) { [self] in
-                    Task { await session.sendInput() }
-                }
-            }
             .navigationSubtitle( session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))
             .navigationTitle(session.title)
             .toolbar {

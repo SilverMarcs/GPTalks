@@ -92,7 +92,9 @@ struct ChatInputView: View {
     }
     
     private func sendInput() {
+        #if !os(macOS)
         isFocused = false
+        #endif
         Task { @MainActor in
             await session.sendInput()
         }

@@ -23,26 +23,38 @@ class ImageGeneration {
     
     @Relationship(deleteRule: .nullify)
     var config: ImageConfig
+    
     var imagePaths: [String] = []
     
     @Attribute(.ephemeral)
-    var isGenerating: Bool = false
+    var state: GenerationState
+    
     @Transient
     var generatingTask: Task<Void, Error>?
-    
-//    init(config: ImageConfig) {
-//        self.config = config
-//    }
-    
+
     init(prompt: String, config: ImageConfig, session: ImageSession) {
         self.prompt = prompt
         self.config = config
         self.session = session
+        self.state = .generating
+    }
+    
+    func sendDemo() async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.imagePaths.append(.demoImages.randomElement()!)
+            self.state = .success
+            return
+        }
     }
     
     @MainActor
     func send() async {
-        isGenerating = true
+        state = .generating
+        
+//        #if DEBUG
+//        await self.sendDemo()
+//        return
+//        #endif
 
         let service = OpenAI(
             configuration: OpenAI.Configuration(
@@ -60,36 +72,33 @@ class ImageGeneration {
 
                 // Download and store image data asynchronously
                 for urlResult in results.data {
-                    print("line 62", urlResult.url)
                     if let urlString = urlResult.url, let url = URL(string: urlString) {
-                        print("line 64", urlString)
                         do {
                             let (data, _) = try await URLSession.shared.data(from: url)
                             
                             #if os(macOS)
                             if let platformImage = NSImage(data: data) {
                                 if let savedPath = platformImage.save() {
-//                                    await MainActor.run {
-                                        self.imagePaths.append(savedPath)
-//                                    }
+                                    print(savedPath)
+                                    self.imagePaths.append(savedPath)
                                 }
                             }
                             #else
                             if let platformImage = UIImage(data: data) {
                                 if let savedPath = platformImage.save() {
-//                                    await MainActor.run {
-                                        self.imagePaths.append(savedPath)
-//                                    }
+                                    self.imagePaths.append(savedPath)
                                 }
                             }
                             #endif
                         } catch {
                             errorMessage = "Error downloading image: \(error)"
+                            state = .error
                         }
                     }
                 }
             } catch {
                 errorMessage = "Error fetching images: \(error)"
+                state = .error
             }
         }
 
@@ -107,17 +116,27 @@ class ImageGeneration {
 
             application.endBackgroundTask(taskId)
             #endif
-            isGenerating = false
+            state = .success
         } catch {
             errorMessage = error.localizedDescription
-            isGenerating = false
+            state = .error
         }
     }
     
     @MainActor
     func stopGenerating() {
         generatingTask?.cancel()
+        state = .error
         errorMessage = "Generation was stopped"
-        isGenerating = false
     }
+    
+    func deleteSelf() {
+        session?.deleteGeneration(self)
+    }
+}
+
+enum GenerationState: Codable {
+    case generating
+    case success
+    case error
 }

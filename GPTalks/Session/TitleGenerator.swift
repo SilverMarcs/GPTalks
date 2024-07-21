@@ -39,4 +39,12 @@ enum TitleGenerator {
         
         return nil
     }
+    
+//    static func generateImageTitle(generations: [ImageGeneration], config: ImageConfig) async -> String? {
+//        if generations.isEmpty {
+//            return
+//        }
+//        
+        
+//    }
 }

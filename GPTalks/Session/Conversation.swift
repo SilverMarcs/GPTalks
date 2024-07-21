@@ -94,7 +94,7 @@ final class Conversation: NSCopying {
     }
 
     func toGoogle() -> ModelContent {
-        // This suports sending a lot of data types
+        // This supports sending a lot of data types
         
         if self.imagePaths.isEmpty {
             return ModelContent(

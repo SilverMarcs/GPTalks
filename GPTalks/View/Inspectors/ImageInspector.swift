@@ -22,7 +22,7 @@ struct ImageInspector: View {
             
             Section("Models") {
                 ProviderPicker(provider: $session.config.provider, providers: providers) { provider in
-                    print(provider.name)
+                    session.config.model = provider.imageModel
                 }
                 
                 ModelPicker(model: $session.config.model, models: session.config.provider.imageModels)
@@ -53,7 +53,24 @@ struct ImageInspector: View {
                     }
                 }
             }
+            
+            Section("") {
+                
+            }
         }
+    }
+    
+    private var deleteAllMessages: some View {
+        Button(role: .destructive) {
+            session.deleteAllGenerations()
+        } label: {
+            HStack {
+                Spacer()
+                Text("Delete All Generations")
+                Spacer()
+            }
+        }
+        .foregroundStyle(.red)
     }
 }
 

@@ -36,7 +36,7 @@ struct ChatInspector: View {
             
             Section("Parameters") {
                 TemperatureSlider(temperature: $session.config.temperature, shortLabel: true)
-                TopPSlider(topP: $session.config.topP)
+                TopPSlider(topP: $session.config.topP, shortLabel: true)
                 FrequencyPenaltySlider(penalty: $session.config.frequencyPenalty, shortLabel: true)
                 PresencePenaltySlider(penalty: $session.config.presencePenalty, shortLabel: true)
                 MaxTokensPicker(value: $session.config.maxTokens)

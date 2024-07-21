@@ -31,27 +31,34 @@ class ImageSession {
     
     @MainActor
     func send() async {
-
-//        let query = ImagesQuery(prompt: prompt,
-//                                model: config.model.code,
-//                                n: config.numImages,
-//                                quality: config.quality,
-//                                size: config.size)
-
+        order = 0
+        
+        guard !prompt.isEmpty else { return }
         
         let generation = ImageGeneration(prompt: self.prompt, config: config, session: self)
 
-//        withAnimation {
         imageGenerations.append(generation)
-//        }
 
         await generation.send()
-        
-//        if let index = generations.firstIndex(where: { $0.id == tempImageGeneration.id }) {
-//            await generations[index].send(query: query, configuration: configuration)
-//        }
-
     }
     
+    @MainActor
+    func generateTitle(forced: Bool = false) async {
+        if forced || imageGenerations.count == 1 {
+            
+        }
+    }
+    
+    func deleteGeneration(_ generation: ImageGeneration) {
+        withAnimation {
+            imageGenerations.removeAll(where: { $0 == generation })
+        }
+    }
+    
+    func deleteAllGenerations() {
+        withAnimation {
+            imageGenerations.removeAll()
+        }
+    }
 }
 

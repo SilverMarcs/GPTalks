@@ -24,6 +24,11 @@ class ImageConfig {
     var quality: ImagesQuery.Quality = ImagesQuery.Quality.standard
     var style: ImagesQuery.Style = ImagesQuery.Style.natural
     
+    init(provider: Provider = Provider.factory(type: .openai)) {
+        self.provider = provider
+        self.model = provider.imageModel
+    }
+    
     init(provider: Provider, model: Model) {
         self.provider = provider
         self.model = model

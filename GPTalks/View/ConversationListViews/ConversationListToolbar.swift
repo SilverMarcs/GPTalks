@@ -6,13 +6,9 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ConversationListToolbar: ToolbarContent {
     @Bindable var session: Session
-    @Query var providers: [Provider]
-    
-    @State var isShowSysPrompt: Bool = false
     
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigation) {
@@ -26,6 +22,7 @@ struct ConversationListToolbar: ToolbarContent {
         
         #if os(macOS)
         ToolbarItemGroup(placement: .keyboard) {
+            sendMessage
             deleteLastMessage
             editLastMessage
             resetLastContext
@@ -33,11 +30,19 @@ struct ConversationListToolbar: ToolbarContent {
         }
         #endif
     }
+    
+    private var sendMessage: some View {
+        Button("Send") {
+            Task {
+                await session.sendInput()
+            }
+        }
+        .keyboardShortcut(.return, modifiers: .command)
+    }
+    
     private var regenLastMessage: some View {
         Button("Regen Last Message") {
-            print("here1")
             if session.isStreaming { return }
-            print("here2")
             
             if let lastGroup = session.groups.last {
                 if lastGroup.role == .user {
@@ -46,7 +51,6 @@ struct ConversationListToolbar: ToolbarContent {
                         await lastGroup.session?.sendInput()
                     }
                 } else if lastGroup.role == .assistant {
-                    print("here")
                     session.regenerate(group: lastGroup)
                 }
             }
