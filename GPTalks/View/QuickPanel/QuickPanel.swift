@@ -57,7 +57,7 @@ struct QuickPanel: View {
                     }
                 )
                                 
-                ModelPicker(model: $session.config.model, models: session.config.provider.models)
+                ModelPicker(model: $session.config.model, models: session.config.provider.models, label: "Model")
                 
             } label: {
                 Image(systemName: "magnifyingglass")

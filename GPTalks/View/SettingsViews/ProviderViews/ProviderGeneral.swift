@@ -30,9 +30,9 @@ struct ProviderGeneral: View {
             }
     
             Section("Default Models") {
-                ModelPicker(model: $provider.chatModel, models: provider.chatModels)
+                ModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
                 
-                ModelPicker(model: $provider.titleModel, models: provider.chatModels)
+                ModelPicker(model: $provider.titleModel, models: provider.chatModels, label: "Title Model")
             }
 
             Section("Customisation") {

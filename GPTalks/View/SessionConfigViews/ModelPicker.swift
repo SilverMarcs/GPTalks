@@ -10,9 +10,10 @@ import SwiftUI
 struct ModelPicker: View {
     @Binding var model: Model
     var models: [Model]
+    var label: String = "Model"
     
     var body: some View {
-        Picker("Model", selection: $model) {
+        Picker(label, selection: $model) {
             ForEach(models, id: \.self) { model in
                 Text(model.name)
             }

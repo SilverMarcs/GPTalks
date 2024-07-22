@@ -31,7 +31,6 @@ struct SessionList: View {
             }
             .onChange(of: sessions.count) {
                 if let first = sessions.first {
-                    sessionVM.selections = [first]
                     proxy.scrollTo(first, anchor: .top)
                 }
             }

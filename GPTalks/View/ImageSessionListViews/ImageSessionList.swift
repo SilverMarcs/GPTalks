@@ -31,7 +31,6 @@ struct ImageSessionList: View {
             }
             .onChange(of: sessions.count) {
                 if let first = sessions.first {
-                    sessionVM.imageSelections = [first]
                     proxy.scrollTo(first, anchor: .top)
                 }
             }

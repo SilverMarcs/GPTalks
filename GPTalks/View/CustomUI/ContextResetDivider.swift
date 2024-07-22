@@ -27,7 +27,7 @@ struct ContextResetDivider: View {
             
             Divider()
         }
-        .foregroundStyle(.brown)
+        .foregroundStyle(.orange)
     }
 }
 

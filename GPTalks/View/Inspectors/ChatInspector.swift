@@ -31,7 +31,7 @@ struct ChatInspector: View {
                         session.config.model = newProvider.chatModel
                     }
                 )
-                ModelPicker(model: $session.config.model, models: session.config.provider.chatModels)
+                ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
             }
             
             Section("Parameters") {
