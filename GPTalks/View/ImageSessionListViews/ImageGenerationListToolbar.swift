@@ -19,32 +19,5 @@ struct ImageGenerationListToolbar: ToolbarContent {
             }
             .menuIndicator(.hidden)
         }
-        
-        ToolbarItemGroup(placement: .keyboard) {
-            sendMessage
-            deleteLastGeneration
-        }
-    }
-    
-    private var sendMessage: some View {
-        Button("Send") {
-            Task {
-                await session.send()
-            }
-        }
-        .keyboardShortcut(.return, modifiers: .command)
-    }
-    
-    private var deleteLastGeneration: some View {
-        Button("Delete Last Message") {
-            if let last = session.imageGenerations.last {
-                last.deleteSelf()
-            }
-        }
-        .keyboardShortcut(.delete, modifiers: .command)
     }
 }
-
-//#Preview {
-//    ImageGenerationListToolbar()
-//}

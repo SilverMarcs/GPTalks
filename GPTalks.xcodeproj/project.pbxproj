@@ -46,6 +46,9 @@
 		085361212C4A38FA007DAB62 /* ModelPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361202C4A38FA007DAB62 /* ModelPicker.swift */; };
 		085361232C4A390D007DAB62 /* ProviderPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361222C4A390D007DAB62 /* ProviderPicker.swift */; };
 		085361252C4A5ECC007DAB62 /* MaxTokensPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361242C4A5ECC007DAB62 /* MaxTokensPicker.swift */; };
+		085524E22C4ED2A400CBB827 /* MenuCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E12C4ED2A400CBB827 /* MenuCommands.swift */; };
+		085524E42C4ED2B800CBB827 /* ChatCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E32C4ED2B800CBB827 /* ChatCommands.swift */; };
+		085524E62C4ED2DA00CBB827 /* ImageCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E52C4ED2DA00CBB827 /* ImageCommands.swift */; };
 		085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085645432C3F98DF00ED84DA /* TitleGenerator.swift */; };
 		086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */; };
 		086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */; };
@@ -163,6 +166,9 @@
 		085361202C4A38FA007DAB62 /* ModelPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPicker.swift; sourceTree = "<group>"; };
 		085361222C4A390D007DAB62 /* ProviderPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderPicker.swift; sourceTree = "<group>"; };
 		085361242C4A5ECC007DAB62 /* MaxTokensPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxTokensPicker.swift; sourceTree = "<group>"; };
+		085524E12C4ED2A400CBB827 /* MenuCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCommands.swift; sourceTree = "<group>"; };
+		085524E32C4ED2B800CBB827 /* ChatCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCommands.swift; sourceTree = "<group>"; };
+		085524E52C4ED2DA00CBB827 /* ImageCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommands.swift; sourceTree = "<group>"; };
 		085645432C3F98DF00ED84DA /* TitleGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleGenerator.swift; sourceTree = "<group>"; };
 		086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextResetDivider.swift; sourceTree = "<group>"; };
@@ -331,6 +337,16 @@
 			path = SessionConfigViews;
 			sourceTree = "<group>";
 		};
+		085524E02C4ED29400CBB827 /* MenubarCommands */ = {
+			isa = PBXGroup;
+			children = (
+				085524E12C4ED2A400CBB827 /* MenuCommands.swift */,
+				085524E32C4ED2B800CBB827 /* ChatCommands.swift */,
+				085524E52C4ED2DA00CBB827 /* ImageCommands.swift */,
+			);
+			path = MenubarCommands;
+			sourceTree = "<group>";
+		};
 		08915D922C373332008ADE27 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -454,6 +470,7 @@
 		08A222C22C2AC6A800D76C8B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				085524E02C4ED29400CBB827 /* MenubarCommands */,
 				08915D922C373332008ADE27 /* CustomUI */,
 				08C800512C36F79E009581C5 /* SettingsViews */,
 				08C800402C36BF54009581C5 /* ConversationViews */,
@@ -721,6 +738,7 @@
 				082181712C39099D00171BF3 /* ArrayExtensions.swift in Sources */,
 				08AAFB9C2C3D01A6002C04E0 /* SessionListCards.swift in Sources */,
 				08915D9D2C37EEFA008ADE27 /* AppearanceSettings.swift in Sources */,
+				085524E62C4ED2DA00CBB827 /* ImageCommands.swift in Sources */,
 				08C800372C36B8CC009581C5 /* SessionListItem.swift in Sources */,
 				082181582C3823A400171BF3 /* ModelRow.swift in Sources */,
 				082181522C38046800171BF3 /* ProviderManager.swift in Sources */,
@@ -737,6 +755,7 @@
 				082181752C39258500171BF3 /* ImageUtils.swift in Sources */,
 				0819479E2C48DCDB0061227B /* ImageSessionList.swift in Sources */,
 				08505C9C2C3D3878001EBEEF /* IntegerExtensions.swift in Sources */,
+				085524E42C4ED2B800CBB827 /* ChatCommands.swift in Sources */,
 				0821816D2C39013400171BF3 /* StringExtensions.swift in Sources */,
 				085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */,
 				081C1D8D2C3B8F690078BB24 /* ConversationListExtended.swift in Sources */,
@@ -749,6 +768,7 @@
 				087928372C48CFFB008646CD /* ExpandedTextField.swift in Sources */,
 				085361112C4938C4007DAB62 /* ImageGenerationList.swift in Sources */,
 				08C800492C36C521009581C5 /* AssistantMessage.swift in Sources */,
+				085524E22C4ED2A400CBB827 /* MenuCommands.swift in Sources */,
 				08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */,
 				08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */,
 				089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */,

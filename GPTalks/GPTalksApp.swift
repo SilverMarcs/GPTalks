@@ -20,6 +20,8 @@ struct GPTalksApp: App {
         .modelContainer(sharedModelContainer)
         .commands {
             InspectorCommands()
+            
+            MenuCommands(sessionVM: sessionVM)
         }
 
         #if os(macOS)

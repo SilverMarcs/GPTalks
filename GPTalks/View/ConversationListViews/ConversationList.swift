@@ -16,7 +16,6 @@ struct ConversationList: View {
     @Environment(SessionVM.self) private var sessionVM
     
     @State private var hasUserScrolled = false
-    
     @State var showingInspector: Bool = false
     
     var body: some View {

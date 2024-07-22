@@ -39,9 +39,6 @@ struct QuickPanel: View {
                 Divider()
                 
                 ConversationList(session: session, isQuick: true)
-//                conversationView
-//                    .safeAreaPadding()
-                
                 
                 bottomView
             }

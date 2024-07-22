@@ -59,10 +59,6 @@ struct ImageInspector: View {
                     }
                 }
             }
-            
-            Section("") {
-                
-            }
         }
     }
     

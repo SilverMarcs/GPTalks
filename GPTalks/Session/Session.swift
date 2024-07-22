@@ -263,11 +263,11 @@ final class Session {
     }
     
     func deleteConversationGroup(_ conversationGroup: ConversationGroup) {
-        withAnimation {
-            groups.removeAll(where: { $0 == conversationGroup })
-        }
         if groups.count == 0 {
             errorMessage = ""
+        }
+        withAnimation {
+            groups.removeAll(where: { $0 == conversationGroup })
         }
     }
     

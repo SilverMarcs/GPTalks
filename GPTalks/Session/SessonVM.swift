@@ -9,6 +9,11 @@ import Foundation
 import SwiftData
 import SwiftUI
 
+enum ListState: String {
+    case chats
+    case images
+}
+
 @Observable class SessionVM {
     var providerManager: ProviderManager
     
@@ -28,31 +33,62 @@ import SwiftUI
     #else
     var chatCount: Int = .max
     #endif
+
+}
+
+//MARK: Chat Session
+extension SessionVM {
+    public var activeSession: Session? {
+        guard selections.count == 1 else { return nil }
+        return selections.first
+    }
     
-    func addimageSession(imageSessions: [ImageSession], providers: [Provider], modelContext: ModelContext) {
-        let provider: Provider
-        if let defaultProvider = providerManager.getDefault(providers: providers) {
-            provider = defaultProvider
-        } else if let firstProvider = providers.first {
-            provider = firstProvider
-        } else {
-            return
+    func sendMessage() {
+        guard let session = activeSession else { return }
+        Task { @MainActor in
+            await session.sendInput()
         }
+    }
+    
+    func regenLastMessage() {
+        guard let session = activeSession, !session.isStreaming else { return }
         
-        let newItem = ImageSession(config: ImageConfig(provider: provider, model: provider.imageModel))
-        
-        withAnimation {
-            // Increment the order of all existing items
-            for session in imageSessions {
-                session.order += 1
+        if let lastGroup = session.groups.last {
+            if lastGroup.role == .user {
+                lastGroup.setupEditing()
+                Task { @MainActor in
+                    await lastGroup.session?.sendInput()
+                }
+            } else if lastGroup.role == .assistant {
+                Task { @MainActor in
+                    session.regenerate(group: lastGroup)
+                }
             }
-            
-            newItem.order = 0  // Set the new item's order to 0 (top of the list)
-            modelContext.insert(newItem)
-            self.imageSelections = [newItem]
         }
+    }
+    
+    func deleteLastMessage() {
+        guard let session = activeSession, !session.isStreaming else { return }
         
-        try? modelContext.save()
+        if let lastGroup = session.groups.last {
+            session.deleteConversationGroup(lastGroup)
+        }
+    }
+    
+    func resetLastContext() {
+        guard let session = activeSession else { return }
+        
+        if let lastGroup = session.groups.last {
+            session.resetContext(at: lastGroup)
+        }
+    }
+    
+    func editLastMessage() {
+        guard let session = activeSession else { return }
+        
+        if let lastUserGroup = session.groups.last(where: { $0.role == .user }) {
+            lastUserGroup.setupEditing()
+        }
     }
     
     func addItem(sessions: [Session], providers: [Provider], modelContext: ModelContext) {
@@ -112,7 +148,50 @@ import SwiftUI
     }
 }
 
-enum ListState: String {
-    case chats
-    case images
+//MARK: Image Session
+extension SessionVM {
+    public var activeImageSession: ImageSession? {
+        guard imageSelections.count == 1 else { return nil }
+        return imageSelections.first
+    }
+    
+    func sendImageGenerationRequest() {
+        guard let session = activeImageSession else { return }
+        Task {
+            await session.send()
+        }
+    }
+    
+    func deleteLastImageGeneration() {
+        guard let session = activeImageSession else { return }
+        if let last = session.imageGenerations.last {
+            last.deleteSelf()
+        }
+    }
+    
+    func addimageSession(imageSessions: [ImageSession], providers: [Provider], modelContext: ModelContext) {
+        let provider: Provider
+        if let defaultProvider = providerManager.getDefault(providers: providers) {
+            provider = defaultProvider
+        } else if let firstProvider = providers.first {
+            provider = firstProvider
+        } else {
+            return
+        }
+        
+        let newItem = ImageSession(config: ImageConfig(provider: provider, model: provider.imageModel))
+        
+        withAnimation {
+            // Increment the order of all existing items
+            for session in imageSessions {
+                session.order += 1
+            }
+            
+            newItem.order = 0  // Set the new item's order to 0 (top of the list)
+            modelContext.insert(newItem)
+            self.imageSelections = [newItem]
+        }
+        
+        try? modelContext.save()
+    }
 }

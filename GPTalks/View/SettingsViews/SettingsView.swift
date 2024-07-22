@@ -36,7 +36,6 @@ struct SettingsView: View {
                     }
             }
             #if os(macOS)
-//            .padding(.horizontal, 80)
             .frame(width: 700, height: 410)
             #endif
         }
