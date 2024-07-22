@@ -54,6 +54,9 @@ struct ConversationList: View {
                 ConversationListToolbar(session: session)
             }
             #else
+            .onTapGesture {
+                showingInspector = false
+            }
             .toolbar {
                 showInspector
             }

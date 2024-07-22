@@ -31,7 +31,6 @@ struct SettingsView: View {
                     }
 
                 ProviderList()
-                    .padding(.horizontal, -80)
                     .tabItem {
                         Label("Providers", systemImage: "cpu")
                     }

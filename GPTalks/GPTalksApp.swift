@@ -18,6 +18,9 @@ struct GPTalksApp: App {
                 .environment(sessionVM)
         }
         .modelContainer(sharedModelContainer)
+        .commands {
+            InspectorCommands()
+        }
 
         #if os(macOS)
         Settings {

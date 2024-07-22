@@ -53,6 +53,9 @@ struct AssistantMessage: View {
             if let group = conversation.group, !conversation.isReplying {
                 ConversationMenu(group: group)
             }
+        } preview: {
+            Text("Assistant Message")
+                .padding()
         }
 #endif
         .onHover { isHovered in

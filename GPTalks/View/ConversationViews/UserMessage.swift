@@ -40,6 +40,9 @@ struct UserMessage: View {
                     if let group = conversation.group {
                         ConversationMenu(group: group, labelSize: labelSize, toggleMaxHeight: toggleMaxHeight, isExpanded: isExpanded)
                     }
+                } preview: {
+                    Text("User Message")
+                        .padding()
                 }
             
             #if os(macOS)

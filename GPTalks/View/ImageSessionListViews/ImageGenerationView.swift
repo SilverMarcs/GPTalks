@@ -73,6 +73,7 @@ struct ImageGenerationView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .contentShape(.rect)
         .contextMenu {
             Button {
                 generation.deleteSelf()

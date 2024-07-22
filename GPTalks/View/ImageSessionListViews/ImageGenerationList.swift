@@ -43,6 +43,9 @@ struct ImageGenerationList: View {
             }
 #else
             .navigationTitle(session.config.model.name)
+            .onTapGesture {
+                showingInspector = false
+            }
             .toolbar {
                 showInspector
             }

@@ -33,7 +33,11 @@ struct PlusImage: View {
         Image(systemName: "plus.circle.fill")
             .resizable()
             .frame(width: size, height: size)
+        #if os(macOS)
             .foregroundStyle(.secondary, .quinary)
+        #else
+            .foregroundStyle(.secondary, Color.gray.opacity(0.2))
+        #endif
     }
 }
 
