@@ -13,6 +13,7 @@ struct ModelTable: View {
 
     @State var newModelCode: String = ""
     @State var newModelName: String = ""
+    @State var supportsImage: Bool = false
 
     var body: some View {
         #if os(macOS)
@@ -160,9 +161,15 @@ struct ModelTable: View {
                 Button(action: addModel) {
                     Label("Add", systemImage: "plus.circle")
                 }
+                .buttonStyle(.plain)
+                .foregroundStyle(.blue)
             }
             
             HStack {
+                Toggle("Supports Image", isOn: $supportsImage)
+                    .help("Supports Image")
+                    .toggleStyle(.checkbox)
+                    .labelsHidden()
                 TextField("Code ", text: $newModelCode)
                 TextField("Name ", text: $newModelName)
             }
@@ -190,10 +197,11 @@ struct ModelTable: View {
         }
 
         let model = Model(
-            code: newModelCode, name: newModelName, provider: provider)
+            code: newModelCode, name: newModelName, provider: provider, supportsImage: supportsImage)
         
         provider.models.append(model)
 
+        supportsImage = false
         newModelCode = ""
         newModelName = ""
     }

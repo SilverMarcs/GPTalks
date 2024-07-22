@@ -35,10 +35,19 @@ struct GenericSlider: View {
                 .buttonStyle(.plain)
                 .foregroundStyle(.secondary)
                 .popover(isPresented: $showPopover) {
-                    if let defaultValue {
-                        Text("Default: " + defaultValue)
-                            .padding()
+                    HStack {
+                        if let defaultValue {
+                            Text("Default: " + defaultValue)
+                            
+                            Button("Reset") {
+                                if let double = Double(defaultValue) {
+                                    value = double
+                                }
+                            }
+                            .foregroundStyle(.red)
+                        }
                     }
+                    .padding()
                 }
             }
         } minimumValueLabel: {

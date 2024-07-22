@@ -38,6 +38,13 @@ extension Image {
         self.init(platformImage: platformImage)
         #endif
     }
+    
+    init?(data: Data) {
+        guard let platformImage = PlatformImage.from(data: data) else {
+            return nil
+        }
+        self.init(platformImage: platformImage)
+    }
 }
 
 extension PlatformImage {
@@ -96,6 +103,14 @@ extension PlatformImage {
         }
     }
     #endif
+    
+    static func from(data: Data) -> PlatformImage? {
+        #if os(macOS)
+        return NSImage(data: data)
+        #else
+        return UIImage(data: data)
+        #endif
+    }
 }
 
 extension View {

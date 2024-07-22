@@ -9,14 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class Model: Hashable, NSCopying {
-    func copy(with zone: NSZone? = nil) -> Any {
-        let copy = Model(code: code, name: name)
-        copy.provider = provider
-        copy.order = order
-        
-        return copy
-    }
+final class Model: Hashable {
     var id: UUID = UUID()
     var order: Int = 0
     var supportsImage: Bool = false
