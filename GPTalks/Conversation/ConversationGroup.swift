@@ -106,15 +106,15 @@ final class ConversationGroup: NSCopying {
     func resetContext() {
         session?.resetContext(at: self)
 
-        if let indexOfGroup = session?.groups.firstIndex(where: { $0.id == id }) {
-            if let nextGroup = session?.groups[safe: indexOfGroup + 1] {
-                DispatchQueue.main.async {
-                    withAnimation {
-                        self.session?.proxy?.scrollTo(nextGroup, anchor: .top)
-                    }
-                }
-            }
-        }
+//        if let indexOfGroup = session?.groups.firstIndex(where: { $0.id == id }) {
+//            if let nextGroup = session?.groups[safe: indexOfGroup + 1] {
+//                DispatchQueue.main.async {
+//                    withAnimation {
+//                        self.session?.proxy?.scrollTo(nextGroup, anchor: .top)
+//                    }
+//                }
+//            }
+//        }
     }
     
     func setupEditing() {

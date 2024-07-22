@@ -26,14 +26,6 @@ extension View {
                     hasUserScrolled.wrappedValue = false
                 }
             }
-            .onChange(of: session.resetMarker) {
-                if session.resetMarker == session.groups.count - 1 {
-                    scrollToBottom(proxy: proxy)
-                }
-            }
-            .onChange(of: session.errorMessage) {
-                scrollToBottom(proxy: proxy)
-            }
             .onChange(of: session.inputManager.prompt) {
                 if session.inputManager.state == .normal {
                     scrollToBottom(proxy: proxy)

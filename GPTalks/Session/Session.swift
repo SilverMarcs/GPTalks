@@ -89,6 +89,9 @@ final class Session {
         if let lastGroup = groups.last, lastGroup.activeConversation.content.isEmpty {
             lastGroup.deleteConversation(lastGroup.activeConversation)
         }
+        if let proxy = proxy {
+            scrollToBottom(proxy: proxy)
+        }
     }
     
     @MainActor
@@ -174,6 +177,9 @@ final class Session {
             inputManager.resetEditing()
         } else {
             errorMessage = "Error: Invalid editing state"
+            if let proxy = proxy {
+                scrollToBottom(proxy: proxy)
+            }
         }
     }
     
@@ -216,6 +222,9 @@ final class Session {
             
             if index == groups.count - 1 {
                 resetMarker = newResetMarker
+                if let proxy = proxy {
+                    scrollToBottom(proxy: proxy)
+                }
             } else {
                 withAnimation {
                     resetMarker = newResetMarker

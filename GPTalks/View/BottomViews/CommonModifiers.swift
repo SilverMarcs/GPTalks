@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import VisualEffectView
 
 struct CommonInputStyling: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
+    
     func body(content: Content) -> some View {
         content
             .fixedSize(horizontal: false, vertical: true)

@@ -33,7 +33,7 @@ struct ConversationList: View {
                             .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
                     }
                 }
-                .padding()
+                .safeAreaPadding()
                 .padding(.top, -5)
             }
             .onAppear {

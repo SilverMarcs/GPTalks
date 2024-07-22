@@ -63,9 +63,9 @@ struct SessionListToolbar: ToolbarContent {
     
     private func addItem() {
         if sessionVM.state == .chats {
-            sessionVM.addItem(sessions: sessions, providerManager: providerManager, providers: providers, modelContext: modelContext)
+            sessionVM.addItem(sessions: sessions, providers: providers, modelContext: modelContext)
         } else {
-            sessionVM.addimageSession(imageSessions: imageSessions, providerManager: providerManager, providers: providers, modelContext: modelContext)
+            sessionVM.addimageSession(imageSessions: imageSessions, providers: providers, modelContext: modelContext)
         }
     }
 }

@@ -30,17 +30,9 @@ struct ProviderGeneral: View {
             }
     
             Section("Default Models") {
-                Picker("Chat Model", selection: $provider.chatModel) {
-                    ForEach(provider.models, id: \.self) { model in
-                        Text(model.name).tag(model)
-                    }
-                }
+                ModelPicker(model: $provider.chatModel, models: provider.chatModels)
                 
-                Picker("Title Model", selection: $provider.titleModel) {
-                    ForEach(provider.models, id: \.self) { model in
-                        Text(model.name).tag(model)
-                    }
-                }
+                ModelPicker(model: $provider.titleModel, models: provider.chatModels)
             }
 
             Section("Customisation") {

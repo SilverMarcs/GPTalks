@@ -10,6 +10,12 @@ import SwiftData
 import SwiftUI
 
 @Observable class SessionVM {
+    var providerManager: ProviderManager
+    
+    init(providerManager: ProviderManager = ProviderManager.shared) {
+        self.providerManager = providerManager
+    }
+    
     var selections: Set<Session> = []
     var imageSelections: Set<ImageSession> = []
     
@@ -23,7 +29,7 @@ import SwiftUI
     var chatCount: Int = .max
     #endif
     
-    func addimageSession(imageSessions: [ImageSession], providerManager: ProviderManager, providers: [Provider], modelContext: ModelContext) {
+    func addimageSession(imageSessions: [ImageSession], providers: [Provider], modelContext: ModelContext) {
         let provider: Provider
         if let defaultProvider = providerManager.getDefault(providers: providers) {
             provider = defaultProvider
@@ -49,7 +55,7 @@ import SwiftUI
         try? modelContext.save()
     }
     
-    func addItem(sessions: [Session], providerManager: ProviderManager, providers: [Provider], modelContext: ModelContext) {
+    func addItem(sessions: [Session], providers: [Provider], modelContext: ModelContext) {
         let provider: Provider
         if let defaultProvider = providerManager.getDefault(providers: providers) {
             provider = defaultProvider

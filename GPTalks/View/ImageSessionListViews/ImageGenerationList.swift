@@ -18,7 +18,6 @@ struct ImageGenerationList: View {
     
     var body: some View {
         ScrollViewReader { proxy in
-            Text(String(session.imageGenerations.count))
             ScrollView {
                 VStack(spacing: 35) {
                     ForEach(session.imageGenerations, id: \.self) { generation in
@@ -28,7 +27,7 @@ struct ImageGenerationList: View {
                     Color.clear
                         .id(String.bottomID)
                 }
-                .padding()
+                .safeAreaPadding()
             }
             .toolbar {
                 ImageGenerationListToolbar(session: session)

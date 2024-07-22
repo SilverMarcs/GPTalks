@@ -67,7 +67,7 @@ struct PresencePenaltySlider: View {
     var body: some View {
         GenericSlider(value: $penalty, steps: 0.4, min: -2, max: 2,
                       label: shortLabel ? "P-Penalty" : "Presence Penalty",
-                      defaultValue: shortLabel ? nil : "Check Docs")
+                      defaultValue: shortLabel ? nil : "0.0")
     }
 }
 

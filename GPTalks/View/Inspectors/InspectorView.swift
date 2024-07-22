@@ -25,7 +25,7 @@ struct InspectorView: View {
             }
         }
         .navigationTitle("Config")
-        .inspectorColumnWidth(min: 230, ideal: 260, max: 300)
+        .inspectorColumnWidth(min: 245, ideal: 265, max: 300)
         .toolbar {
             if showingInspector, sessionVM.state == .chats, sessionVM.selections.count == 1, let first = sessionVM.selections.first {
                 Text("Tokens: " + first.tokenCounter.formatToK()).foregroundStyle(.secondary)

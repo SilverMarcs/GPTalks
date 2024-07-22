@@ -59,6 +59,7 @@ extension Model {
             Model(code: "gpt-4-turbo", name: "GPT-4T"),
             Model(code: "gpt-4-turbo-preview", name: "GPT-4TP"),
             Model(code: "gpt-4o", name: "GPT-4O"),
+            Model(code: "gpt-4o-mini", name: "GPT-4Om"),
             
             Model(code: "dall-e-2", name: "DALL-E-2", supportsImage: true),
             Model(code: "dall-e-3", name: "DALL-E-3", supportsImage: true),

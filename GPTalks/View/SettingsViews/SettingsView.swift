@@ -11,24 +11,6 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-#if os(iOS)
-        TabView {
-            GeneralSettings()
-                .tabItem {
-                    Label("General", systemImage: "gear")
-                }
-            
-            ParameterSettings()
-                .tabItem {
-                    Label("Parameters", systemImage: "slider.horizontal.3")
-                }
-            
-            ProviderList()
-                .tabItem {
-                    Label("Providers", systemImage: "cpu")
-                }
-        }
-#else
         TabView {
             Group {
                 GeneralSettings()
@@ -36,10 +18,12 @@ struct SettingsView: View {
                         Label("General", systemImage: "gear")
                     }
 
+                #if os(macOS)
                 QuickPanelSettings()
                     .tabItem {
                         Label("Quick Panel", systemImage: "bolt.fill")
                     }
+                #endif
                 
                 ParameterSettings()
                     .tabItem {
@@ -52,10 +36,11 @@ struct SettingsView: View {
                         Label("Providers", systemImage: "cpu")
                     }
             }
-            .padding(.horizontal, 80)
+            #if os(macOS)
+            .safeAreaPadding(.horizontal, 80)
             .frame(width: 700, height: 410)
+            #endif
         }
-#endif
     }
 }
 
