@@ -17,7 +17,7 @@ class ImageConfig {
     @Relationship(deleteRule: .nullify)
     var provider: Provider
     @Relationship(deleteRule: .nullify)
-    var model: Model
+    var model: AIModel
     
     var numImages: Int = 1
     var size: ImagesQuery.Size = ImagesQuery.Size._256
@@ -29,7 +29,7 @@ class ImageConfig {
         self.model = provider.imageModel
     }
     
-    init(provider: Provider, model: Model) {
+    init(provider: Provider, model: AIModel) {
         self.provider = provider
         self.model = model
     }

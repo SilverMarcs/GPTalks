@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ModelPicker: View {
-    @Binding var model: Model
-    var models: [Model]
+    @Binding var model: AIModel
+    var models: [AIModel]
     var label: String = "Model"
     
     var body: some View {

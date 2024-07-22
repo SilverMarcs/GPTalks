@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CommonCompactRow: View {
     var provider: Provider
-    var model: Model
+    var model: AIModel
     var title: String
     var isStarred: Bool
     

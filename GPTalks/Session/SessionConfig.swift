@@ -25,9 +25,9 @@ final class SessionConfig: NSCopying {
     @Relationship(deleteRule: .nullify)
     var provider: Provider
     @Relationship(deleteRule: .nullify)
-    var model: Model
+    var model: AIModel
     
-    init(provider: Provider, model: Model) {
+    init(provider: Provider, model: AIModel) {
         self.provider = provider
         self.model = model
     }
@@ -41,7 +41,7 @@ final class SessionConfig: NSCopying {
         }
     }
     
-    init(provider: Provider, model: Model, temperature: Double, systemPrompt: String) {
+    init(provider: Provider, model: AIModel, temperature: Double, systemPrompt: String) {
         self.provider = provider
         self.model = model
         self.temperature = temperature

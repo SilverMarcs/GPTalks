@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ModelRow: View {
-    @Bindable var model: Model
+    @Bindable var model: AIModel
     
     var body: some View {
         HStack {
@@ -30,7 +30,7 @@ struct ModelRow: View {
 }
 
 #Preview {
-    let model = Model(code: "gpt-3.5-turbo", name: "GPT-3.5 Turbo")
+    let model = AIModel(code: "gpt-3.5-turbo", name: "GPT-3.5 Turbo")
     
     ModelRow(model: model)
 }

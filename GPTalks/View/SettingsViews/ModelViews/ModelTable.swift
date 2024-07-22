@@ -23,13 +23,15 @@ struct ModelTable: View {
         #endif
     }
     
+    @State private var selection: Set<AIModel.ID> = []
+    
     @ViewBuilder
     var modelTable: some View {
             Form {
                 modelAdder
                 
                 Section("") {
-                    Table(of: Model.self) {
+                    Table(provider.models, selection: $selection) {
                         TableColumn("Image") { model in
                             Toggle(
                                 "Image",
@@ -38,7 +40,6 @@ struct ModelTable: View {
                                     set: { model.supportsImage = $0 }
                                 ))
                             .labelsHidden()
-                            
                         }
                         
                         TableColumn("Code") { model in
@@ -48,7 +49,6 @@ struct ModelTable: View {
                                     get: { model.code },
                                     set: { model.code = $0 }
                                 ))
-                            
                         }
                         
                         TableColumn("Name") { model in
@@ -58,26 +58,12 @@ struct ModelTable: View {
                                     get: { model.name },
                                     set: { model.name = $0 }
                                 ))
-                            
                         }
-                        
-                        TableColumn("Action") { model in
-                            Button {
-                                removeModel(model: model)
-                            } label: {
-                                Label("Remove", systemImage: "minus.circle.fill")
-                                    .foregroundStyle(.red)
-                                    .labelStyle(.iconOnly)
-                            }
-                        }
-                    } rows: {
-                        ForEach(
-                            provider.models.sorted { $0.supportsImage && !$1.supportsImage }, id: \.self
-                        ) { model in
-                            TableRow(model)
-                        }
+
                     }
                     .labelsHidden()
+                    .onDeleteCommand(perform: deleteSelectedModels)
+                           
                 }
                 .padding(.top, -50)
             }
@@ -148,11 +134,7 @@ struct ModelTable: View {
         .menuStyle(BorderlessButtonMenuStyle())
         .fixedSize()
     }
-
-    private func removeModel(model: Model) {
-        model.removeSelf()
-    }
-
+    
     #if os(macOS)
     var modelAdder: some View {
         Group {
@@ -199,7 +181,7 @@ struct ModelTable: View {
             return
         }
 
-        let model = Model(
+        let model = AIModel(
             code: newModelCode, name: newModelName, provider: provider, supportsImage: supportsImage)
         
         provider.models.append(model)
@@ -208,7 +190,17 @@ struct ModelTable: View {
         newModelCode = ""
         newModelName = ""
     }
-
+    
+    func deleteModels(at offsets: IndexSet) {
+        let modelsToDelete = offsets.map { provider.models[$0] }
+        provider.models.remove(atOffsets: offsets)
+        selection.subtract(modelsToDelete.map { $0.id })
+    }
+    
+    func deleteSelectedModels() {
+        provider.models.removeAll(where: { selection.contains($0.id) })
+        selection.removeAll()
+    }
 }
 
 #Preview {

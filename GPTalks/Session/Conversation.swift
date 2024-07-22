@@ -27,7 +27,7 @@ final class Conversation: NSCopying {
     var date: Date = Date()
     
     var group: ConversationGroup?
-    var model: Model?
+    var model: AIModel?
     
     var content: String
     var imagePaths: [String] = []
@@ -42,7 +42,7 @@ final class Conversation: NSCopying {
         self.imagePaths = imagePaths
     }
     
-    init(role: ConversationRole, content: String, model: Model, imagePaths: [String] = []) {
+    init(role: ConversationRole, content: String, model: AIModel, imagePaths: [String] = []) {
         self.role = role
         self.content = content
         self.model = model
@@ -56,7 +56,7 @@ final class Conversation: NSCopying {
         self.imagePaths = imagePaths
     }
     
-    init(role: ConversationRole, content: String, model: Model, isReplying: Bool = false) {
+    init(role: ConversationRole, content: String, model: AIModel, isReplying: Bool = false) {
         self.role = role
         self.content = content
         self.group = group

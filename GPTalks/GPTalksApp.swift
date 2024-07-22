@@ -37,7 +37,7 @@ struct GPTalksApp: App {
             Session.self,
             Conversation.self,
             Provider.self,
-            Model.self,
+            AIModel.self,
             ConversationGroup.self,
             SessionConfig.self,
             ImageSession.self,

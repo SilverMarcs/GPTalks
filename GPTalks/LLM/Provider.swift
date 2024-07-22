@@ -25,31 +25,31 @@ class Provider {
     var isEnabled: Bool = true
     
     @Relationship(deleteRule: .cascade)
-    var chatModel: Model
+    var chatModel: AIModel
     @Relationship(deleteRule: .cascade)
-    var quickChatModel: Model
+    var quickChatModel: AIModel
     @Relationship(deleteRule: .cascade)
-    var titleModel: Model
+    var titleModel: AIModel
     @Relationship(deleteRule: .cascade)
-    var imageModel: Model
+    var imageModel: AIModel
     
     @Relationship(deleteRule: .cascade)
-    var models =  [Model]()
+    var models =  [AIModel]()
     
-    var chatModels: [Model] {
+    var chatModels: [AIModel] {
         return models.filter { !$0.supportsImage}
     }
     
-    var imageModels: [Model] {
+    var imageModels: [AIModel] {
         return models.filter { $0.supportsImage}
     }
     
     private init() {
         // never use this initializer
-        self.chatModel = Model.getDemoModel()
-        self.quickChatModel = Model.getDemoModel()
-        self.titleModel = Model.getDemoModel()
-        self.imageModel = Model.getDemoImageModel()
+        self.chatModel = AIModel.getDemoModel()
+        self.quickChatModel = AIModel.getDemoModel()
+        self.titleModel = AIModel.getDemoModel()
+        self.imageModel = AIModel.getDemoImageModel()
         self.type = .openai
     }
     
@@ -75,7 +75,7 @@ class Provider {
     }
 
     func addOpenAIModels() {
-        for model in Model.getOpenaiModels() {
+        for model in AIModel.getOpenaiModels() {
             if !models.contains(where: { $0.code == model.code }) {
                 models.append(model)
             }
@@ -83,7 +83,7 @@ class Provider {
     }
     
     func addClaudeModels() {
-        for model in Model.getAnthropicModels() {
+        for model in AIModel.getAnthropicModels() {
             if !models.contains(where: { $0.code == model.code }) {
                 models.append(model)
             }
@@ -91,7 +91,7 @@ class Provider {
     }
     
     func addGoogleModels() {
-        for model in Model.getGoogleModels() {
+        for model in AIModel.getGoogleModels() {
             if !models.contains(where: { $0.code == model.code }) {
                 models.append(model)
             }

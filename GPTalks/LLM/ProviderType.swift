@@ -54,11 +54,11 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         }
     }
     
-    func getDefaultModels() -> [Model] {
+    func getDefaultModels() -> [AIModel] {
         switch self {
-        case .openai: return Model.getOpenaiModels()
-        case .anthropic: return Model.getAnthropicModels()
-        case .google: return Model.getGoogleModels()
+        case .openai: return AIModel.getOpenaiModels()
+        case .anthropic: return AIModel.getAnthropicModels()
+        case .google: return AIModel.getGoogleModels()
         }
     }
 }
