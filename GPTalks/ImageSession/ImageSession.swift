@@ -24,6 +24,9 @@ class ImageSession {
     
     @Relationship(deleteRule: .cascade)
     var config: ImageConfig
+    
+    @Transient
+    var proxy: ScrollViewProxy?
 
     init(config: ImageConfig) {
         self.config = config
@@ -40,12 +43,18 @@ class ImageSession {
         imageGenerations.append(generation)
 
         await generation.send()
+        
+        if let proxy = proxy {
+            scrollToBottom(proxy: proxy, delay: 0.1)
+        }
     }
     
     @MainActor
     func generateTitle(forced: Bool = false) async {
         if forced || imageGenerations.count == 1 {
-            
+            if let newTitle = await TitleGenerator.generateImageTitle(generations: imageGenerations, config: config) {
+                self.title = newTitle
+            }
         }
     }
     

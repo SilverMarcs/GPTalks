@@ -33,7 +33,7 @@ struct ConversationList: View {
                             .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
                     }
                 }
-                .safeAreaPadding()
+                .padding()
                 .padding(.top, -5)
             }
             .onAppear {
@@ -54,6 +54,9 @@ struct ConversationList: View {
                 ConversationListToolbar(session: session)
             }
             #else
+            .toolbar {
+                showInspector
+            }
             .inspector(isPresented: $showingInspector) {
                 InspectorView(showingInspector: $showingInspector)
             }
@@ -68,6 +71,18 @@ struct ConversationList: View {
             }
         }
     }
+    
+    #if !os(macOS)
+    private var showInspector: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            Button {
+                showingInspector.toggle()
+            } label: {
+                Label("Show Inspector", systemImage: "info.circle")
+            }
+        }
+    }
+    #endif
     
     var spacing: CGFloat {
         #if os(macOS)

@@ -20,7 +20,6 @@ struct ConversationListToolbar: ToolbarContent {
             .menuIndicator(.hidden)
         }
         
-        #if os(macOS)
         ToolbarItemGroup(placement: .keyboard) {
             sendMessage
             deleteLastMessage
@@ -28,7 +27,6 @@ struct ConversationListToolbar: ToolbarContent {
             resetLastContext
             regenLastMessage
         }
-        #endif
     }
     
     private var sendMessage: some View {

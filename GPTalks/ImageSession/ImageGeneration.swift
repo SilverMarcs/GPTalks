@@ -76,10 +76,8 @@ class ImageGeneration {
                         do {
                             let (data, _) = try await URLSession.shared.data(from: url)
                             
-                            if let image = Image(data: data) {
-                                if let savedPath = PlatformImage.from(data: data)?.save() {
-                                    self.imagePaths.append(savedPath)
-                                }
+                            if let savedPath = PlatformImage.from(data: data)?.save() {
+                                self.imagePaths.append(savedPath)
                             }
                         } catch {
                             errorMessage = "Error downloading image: \(error)"

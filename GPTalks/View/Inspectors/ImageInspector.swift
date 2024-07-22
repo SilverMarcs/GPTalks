@@ -16,8 +16,14 @@ struct ImageInspector: View {
     var body: some View {
         Form {
             Section("Title") {
-                TextField("Title", text: $session.title)
-                    .labelsHidden()
+                HStack(spacing: 0) {
+                    TextField("Title", text: $session.title)
+                        .labelsHidden()
+                    
+                    Spacer()
+                    
+                    generateTitle
+                }
             }
             
             Section("Models") {
@@ -58,6 +64,16 @@ struct ImageInspector: View {
                 
             }
         }
+    }
+    
+    private var generateTitle: some View {
+        Button {
+            Task { await session.generateTitle(forced: true) }
+        } label: {
+            Image(systemName: "sparkles")
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(.link)
     }
     
     private var deleteAllMessages: some View {

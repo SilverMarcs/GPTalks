@@ -24,7 +24,6 @@ struct InspectorView: View {
                 }
             }
         }
-        .navigationTitle("Config")
         .inspectorColumnWidth(min: 245, ideal: 265, max: 300)
         .toolbar {
             if showingInspector, sessionVM.state == .chats, sessionVM.selections.count == 1, let first = sessionVM.selections.first {
@@ -39,15 +38,18 @@ struct InspectorView: View {
                 Spacer()
             }
                 
+            #if os(macOS)
             Button {
                 showingInspector.toggle()
             } label: {
                 Label("Inspector", systemImage: "info.circle")
             }
+            #endif
         }
     }
 }
 
-//#Preview {
-//    InspectorView()
-//}
+#Preview {
+    InspectorView(showingInspector: .constant(true))
+        .environment(SessionVM())
+}

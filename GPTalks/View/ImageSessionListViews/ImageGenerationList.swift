@@ -13,8 +13,7 @@ struct ImageGenerationList: View {
     @Bindable var session: ImageSession
     
     @Query var providers: [Provider]
-    
-    @State var prevCount: Int = 0
+    @State private var showingInspector: Bool = false
     
     var body: some View {
         ScrollViewReader { proxy in
@@ -27,27 +26,30 @@ struct ImageGenerationList: View {
                     Color.clear
                         .id(String.bottomID)
                 }
-                .safeAreaPadding()
-            }
-            .toolbar {
-                ImageGenerationListToolbar(session: session)
+                .padding()
             }
             .onAppear {
+                session.proxy = proxy
                 scrollToBottom(proxy: proxy)
             }
-            .onChange(of: session.imageGenerations.count) {
-                if session.imageGenerations.count > prevCount {
-                    scrollToBottom(proxy: proxy, delay: 0.1)
-                } else {
-                    prevCount = session.imageGenerations.count
-                }
-            }
             .scrollContentBackground(.visible)
-            .navigationTitle("Image Generation")
+
             .safeAreaInset(edge: .bottom) {
                 ImageInputView(session: session)
             }
-#if !os(macOS)
+#if os(macOS)
+            .navigationTitle(session.title)
+            .toolbar {
+                ImageGenerationListToolbar(session: session)
+            }
+#else
+            .navigationTitle(session.config.model.name)
+            .toolbar {
+                showInspector
+            }
+            .inspector(isPresented: $showingInspector) {
+                InspectorView(showingInspector: $showingInspector)
+            }
             .toolbarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.immediately)
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) { _ in
@@ -56,6 +58,18 @@ struct ImageGenerationList: View {
 #endif
         }
     }
+    
+    #if !os(macOS)
+    private var showInspector: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            Button {
+                showingInspector.toggle()
+            } label: {
+                Label("Show Inspector", systemImage: "info.circle")
+            }
+        }
+    }
+    #endif
 }
 
 

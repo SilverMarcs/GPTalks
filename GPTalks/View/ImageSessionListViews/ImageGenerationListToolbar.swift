@@ -20,12 +20,10 @@ struct ImageGenerationListToolbar: ToolbarContent {
             .menuIndicator(.hidden)
         }
         
-        #if os(macOS)
         ToolbarItemGroup(placement: .keyboard) {
             sendMessage
             deleteLastGeneration
         }
-        #endif
     }
     
     private var sendMessage: some View {
