@@ -12,23 +12,32 @@ struct ImageGenerationView: View {
     
     var body: some View {
         VStack(spacing: 10) {
-            Text(generation.prompt)
-                .textSelection(.enabled)
-                .padding(.vertical, 7)
-                .padding(.horizontal, 11)
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                    #if os(macOS)
-                        .fill(.background.quinary)
-                    #else
-                        .fill(.background.secondary)
-                    #endif
-                )
-                .frame(maxWidth: .infinity, alignment: .trailing)
+            
+            HStack {
+                if generation.state == .generating {
+                    StopButton {
+                        generation.stopGenerating()
+                    }
+                }
+                
+                Text(generation.prompt)
+                    .textSelection(.enabled)
+                    .padding(.vertical, 7)
+                    .padding(.horizontal, 11)
+                    .background(
+                        RoundedRectangle(cornerRadius: 15)
+                        #if os(macOS)
+                            .fill(.background.quinary)
+                        #else
+                            .fill(.background.secondary)
+                        #endif
+                    )
+            }
+            .frame(maxWidth: .infinity, alignment: .trailing)
             
             VStack(alignment: .leading) {
                 Text(generation.config.model.name)
-                .foregroundStyle(.accent)
+                    .foregroundStyle(.accent)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .padding(.leading, 5)
@@ -36,6 +45,8 @@ struct ImageGenerationView: View {
                 if generation.state == .error {
                     Text(generation.errorMessage)
                         .foregroundStyle(.red)
+                        .padding(.leading, 5)
+                        .padding(.top, 1)
                 } else {
                     ScrollView(.horizontal) {
                         HStack(spacing: 10) {
@@ -51,8 +62,6 @@ struct ImageGenerationView: View {
                                                 .fill(.background.secondary)
                                             #endif
                                         )}
-
-                                
                             } else if generation.state == .success {
                                 ForEach(generation.imagePaths, id: \.self) { path in
                                     ImageViewer(imagePath: path, maxWidth: 250, maxHeight: 250, isCrossable: false) { }
@@ -62,6 +71,7 @@ struct ImageGenerationView: View {
                     }
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .contextMenu {
             Button {
@@ -80,6 +90,7 @@ struct ImageGenerationView: View {
         #endif
     }
 }
+
 
 //#Preview {
 //    ImageGenerationView()

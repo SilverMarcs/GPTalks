@@ -79,15 +79,21 @@ class ImageGeneration {
                             if let savedPath = PlatformImage.from(data: data)?.save() {
                                 self.imagePaths.append(savedPath)
                             }
+                            
+                            state = .success
                         } catch {
-                            errorMessage = "Error downloading image: \(error)"
-                            state = .error
+                            if state != .error {
+                                errorMessage = "Error downloading image: \(error)"
+                                state = .error
+                            }
                         }
                     }
                 }
             } catch {
-                errorMessage = "Error fetching images: \(error)"
-                state = .error
+                if state != .error {
+                    errorMessage = "Error fetching images: \(error)"
+                    state = .error
+                }
             }
         }
 
@@ -106,7 +112,6 @@ class ImageGeneration {
 
             application.endBackgroundTask(taskId)
             #endif
-            state = .success
         } catch {
             errorMessage = error.localizedDescription
             state = .error

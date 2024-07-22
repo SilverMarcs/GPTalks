@@ -33,8 +33,7 @@ struct ImageGenerationList: View {
                 scrollToBottom(proxy: proxy)
             }
             .scrollContentBackground(.visible)
-
-            .safeAreaInset(edge: .bottom) {
+            .safeAreaInset(edge: .bottom, spacing: 0) {
                 ImageInputView(session: session)
             }
 #if os(macOS)

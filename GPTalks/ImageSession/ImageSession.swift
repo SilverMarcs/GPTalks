@@ -41,12 +41,12 @@ class ImageSession {
         let generation = ImageGeneration(prompt: self.prompt, config: config, session: self)
 
         imageGenerations.append(generation)
-
-        await generation.send()
         
         if let proxy = proxy {
             scrollToBottom(proxy: proxy, delay: 0.1)
         }
+
+        await generation.send()
     }
     
     @MainActor
