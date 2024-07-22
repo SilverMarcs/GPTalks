@@ -9,22 +9,26 @@ import SwiftUI
 
 struct ParameterSettings: View {
     @ObservedObject var config = AppConfig.shared
+    @State var expandAdvanced: Bool = false
 
     var body: some View {
         Form {
-            Section("Parameters") {
+            Section("Basic") {
                 TemperatureSlider(temperature: $config.temperature)
-                TopPSlider(topP: $config.topP)
-                FrequencyPenaltySlider(penalty: $config.frequencyPenalty)
-                PresencePenaltySlider(penalty: $config.presencePenalty)
                 MaxTokensPicker(value: $config.maxTokens)
             }
 
             Section("System Prompt") {
                 TextEditor(text: $config.systemPrompt)
                     .font(.body)
-                    .frame(height: 100)
+                    .frame(height: 80)
                     .scrollContentBackground(.hidden)
+            }
+            
+            Section("Advanced", isExpanded: $expandAdvanced) {
+                TopPSlider(topP: $config.topP)
+                FrequencyPenaltySlider(penalty: $config.frequencyPenalty)
+                PresencePenaltySlider(penalty: $config.presencePenalty)
             }
         }
         .formStyle(.grouped)

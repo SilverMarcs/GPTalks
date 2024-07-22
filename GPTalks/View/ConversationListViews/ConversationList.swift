@@ -10,6 +10,8 @@ import KeyboardShortcuts
 
 struct ConversationList: View {
     var session: Session
+    var isQuick: Bool = false
+    
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) private var sessionVM
     
@@ -70,7 +72,11 @@ struct ConversationList: View {
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
             .scrollContentBackground(.visible)
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                ChatInputView(session: session)
+                if !isQuick {
+                    ChatInputView(session: session)
+                } else {
+                    EmptyView()
+                }
             }
         }
     }

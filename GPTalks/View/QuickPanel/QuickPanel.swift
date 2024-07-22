@@ -38,8 +38,10 @@ struct QuickPanel: View {
             if showAdditionalContent {
                 Divider()
                 
-                conversationView
-                    .padding()
+                ConversationList(session: session, isQuick: true)
+//                conversationView
+//                    .safeAreaPadding()
+                
                 
                 bottomView
             }
@@ -81,6 +83,7 @@ struct QuickPanel: View {
                 SendButton(size: 28) {
                     send()
                 }
+                .keyboardShortcut(.defaultAction)
             }
         }
     }

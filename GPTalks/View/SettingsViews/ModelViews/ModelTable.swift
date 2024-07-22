@@ -89,8 +89,8 @@ struct ModelTable: View {
         List {
             HStack {
                 Group {
+                    Text("Image")
                     Text("Code")
-                    
                     Text("Name")
                 }
                 .bold()
@@ -102,6 +102,9 @@ struct ModelTable: View {
             }
             
             Section ("Add New"){
+                Toggle("Supports Image", isOn: $supportsImage)
+                    .toggleStyle(.checkbox)
+                    .labelsHidden()
                 TextField("New Code", text: $newModelCode)
                 TextField("New Name", text: $newModelName)
                 Button(action: addModel) {

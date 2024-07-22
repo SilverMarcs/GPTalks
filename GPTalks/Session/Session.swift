@@ -262,15 +262,10 @@ final class Session {
         return group
     }
     
-    func deleteConversation(at indexSet: IndexSet) {
-        groups.remove(atOffsets: indexSet)
-        if groups.count == 0 {
-            errorMessage = ""
-        }
-    }
-    
     func deleteConversationGroup(_ conversationGroup: ConversationGroup) {
-        groups.removeAll(where: { $0 == conversationGroup })
+        withAnimation {
+            groups.removeAll(where: { $0 == conversationGroup })
+        }
         if groups.count == 0 {
             errorMessage = ""
         }
@@ -279,9 +274,5 @@ final class Session {
     func deleteAllConversations() {
         groups.removeAll()
         errorMessage = ""
-    }
-    
-    func moveConversation(from source: IndexSet, to destination: Int) {
-        groups.move(fromOffsets: source, toOffset: destination)
     }
 }

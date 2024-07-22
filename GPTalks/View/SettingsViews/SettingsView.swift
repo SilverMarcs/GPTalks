@@ -36,7 +36,7 @@ struct SettingsView: View {
                     }
             }
             #if os(macOS)
-            .safeAreaPadding(.horizontal, 80)
+//            .padding(.horizontal, 80)
             .frame(width: 700, height: 410)
             #endif
         }

@@ -24,5 +24,5 @@ class AppConfig: ObservableObject {
     @AppStorage("configuration.systemPrompt") var systemPrompt: String = "You are a helpful assistant."
     
     // Quick
-    @AppStorage("configuration.quickSystemPrompt") var quickSystemPrompt: String = "You are a helpful assistant."
+    @AppStorage("configuration.quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."
 }
