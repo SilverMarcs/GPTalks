@@ -24,7 +24,11 @@ struct ProviderDetail: View {
             case .general:
                 ProviderGeneral(provider: provider)
             case .models:
+                #if os(macOS)
                 ModelTable(provider: provider)
+                #else
+                ModelList(provider: provider)
+                #endif
             case .image:
                 VStack {
                     Text("Not implemented yet.")

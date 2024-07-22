@@ -1,9 +1,10 @@
 //
-//  ModelTable.swift
+//  ModelTable 2.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 05/07/2024.
+//  Created by Zabir Raihan on 23/07/2024.
 //
+
 
 import SwiftUI
 
@@ -16,130 +17,58 @@ struct ModelTable: View {
     @State var supportsImage: Bool = false
 
     var body: some View {
-        #if os(macOS)
         modelTable
-        #else
-        modelList
-        #endif
     }
     
     @State private var selection: Set<AIModel.ID> = []
     
-    @ViewBuilder
     var modelTable: some View {
-            Form {
-                modelAdder
-                
-                Section("") {
-                    Table(provider.models, selection: $selection) {
-                        TableColumn("Image") { model in
-                            Toggle(
-                                "Image",
-                                isOn: Binding(
-                                    get: { model.supportsImage },
-                                    set: { model.supportsImage = $0 }
-                                ))
-                            .labelsHidden()
-                        }
-                        
-                        TableColumn("Code") { model in
-                            TextField(
-                                "Code",
-                                text: Binding(
-                                    get: { model.code },
-                                    set: { model.code = $0 }
-                                ))
-                        }
-                        
-                        TableColumn("Name") { model in
-                            TextField(
-                                "Name",
-                                text: Binding(
-                                    get: { model.name },
-                                    set: { model.name = $0 }
-                                ))
-                        }
-
+        Form {
+            modelAdder
+            
+            Section("") {
+                Table(provider.models.sorted { $0.supportsImage && !$1.supportsImage }, selection: $selection) {
+                    TableColumn("Image") { model in
+                        Toggle(
+                            "Image",
+                            isOn: Binding(
+                                get: { model.supportsImage },
+                                set: { model.supportsImage = $0 }
+                            ))
+                        .labelsHidden()
                     }
-                    .labelsHidden()
-                    .onDeleteCommand(perform: deleteSelectedModels)
-                           
+                    .width(max: 40)
+                    
+                    TableColumn("Code") { model in
+                        TextField(
+                            "Code",
+                            text: Binding(
+                                get: { model.code },
+                                set: { model.code = $0 }
+                            ))
+                    }
+                    
+                    TableColumn("Name") { model in
+                        TextField(
+                            "Name",
+                            text: Binding(
+                                get: { model.name },
+                                set: { model.name = $0 }
+                            ))
+                    }
                 }
-                .padding(.top, -50)
+                .labelsHidden()
+                .onDeleteCommand(perform: deleteSelectedModels)
             }
-            .formStyle(.grouped)
-    }
-    
-    #if !os(macOS)
-    var modelList: some View {
-        List {
-            HStack {
-                Group {
-                    Text("Image")
-                    Text("Code")
-                    Text("Name")
-                }
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            
-            ForEach(provider.models, id: \.self) { model in
-                ModelRow(model: model)
-            }
-            
-            Section ("Add New"){
-                Toggle("Supports Image", isOn: $supportsImage)
-                    .toggleStyle(.checkbox)
-                    .labelsHidden()
-                TextField("New Code", text: $newModelCode)
-                TextField("New Name", text: $newModelName)
-                Button(action: addModel) {
-                    Label("Add", systemImage: "plus")
-                }
-            }
-            
+            .padding(.top, -50)
         }
-        .scrollDismissesKeyboard(.immediately)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                header
-            }
-        }
+        .formStyle(.grouped)
     }
-    #endif
 
-    private var header: some View {
-        Menu {
-            Button {
-                provider.addOpenAIModels()
-            } label: {
-                Text("OpenAI Models")
-            }
-
-            Button {
-                provider.addClaudeModels()
-            } label: {
-                Text("Anthropic Models")
-            }
-
-            Button {
-                provider.addGoogleModels()
-            } label: {
-                Text("Google Models")
-            }
-
-        } label: {
-            Label("Presets", systemImage: "cpu")
-        }
-        .menuStyle(BorderlessButtonMenuStyle())
-        .fixedSize()
-    }
-    
-    #if os(macOS)
     var modelAdder: some View {
         Group {
             HStack {
-                header
+                PresetModelAdder(provider: provider)
                 
                 Spacer()
                 
@@ -151,31 +80,16 @@ struct ModelTable: View {
             }
             
             HStack {
-                Toggle("Supports Image", isOn: $supportsImage)
-                    .help("Supports Image")
-                    .toggleStyle(.checkbox)
-                    .labelsHidden()
                 TextField("Code ", text: $newModelCode)
                 TextField("Name ", text: $newModelName)
+                Toggle("Image", isOn: $supportsImage)
+                    .help("Supports Image")
+                    .toggleStyle(.checkbox)
+//                    .labelsHidden()
             }
         }
     }
-    #else
-    var modelAdder: some View {
-        HStack {
-            header
-            
-            TextField("Code", text: $newModelCode)
-            TextField("Name", text: $newModelName)
-            Button(action: addModel) {
-                Label("Add", systemImage: "plus.circle")
-            }
-            .buttonStyle(.borderedProminent)
-        }
-        .textFieldStyle(.roundedBorder)
-    }
-    #endif
-
+    
     private func addModel() {
         if newModelCode.isEmpty || newModelName.isEmpty {
             return
@@ -189,12 +103,6 @@ struct ModelTable: View {
         supportsImage = false
         newModelCode = ""
         newModelName = ""
-    }
-    
-    func deleteModels(at offsets: IndexSet) {
-        let modelsToDelete = offsets.map { provider.models[$0] }
-        provider.models.remove(atOffsets: offsets)
-        selection.subtract(modelsToDelete.map { $0.id })
     }
     
     func deleteSelectedModels() {
