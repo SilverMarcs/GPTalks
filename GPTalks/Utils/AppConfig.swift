@@ -25,4 +25,7 @@ class AppConfig: ObservableObject {
     
     // Quick
     @AppStorage("configuration.quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."
+    
+    //
+    @AppStorage("sidebarFocus") var sidebarFocus: Bool = false
 }

@@ -19,7 +19,7 @@ struct ModelTable2: View {
         modelTable
     }
     
-    @State private var selections: Set<AIModel.ID> = []
+    @State private var selections: Set<AIModel> = []
     
     var modelTable: some View {
         Form {
@@ -79,7 +79,10 @@ struct ModelTable2: View {
     }
     
     private func deleteItems(at offsets: IndexSet) {
-        provider.models.remove(atOffsets: offsets)
+        // Create a mapping from the sorted indices to the original indices
+        let sortedIndices = offsets.map { provider.sortedModels[$0].id }
+        // Remove the items from the original array based on their id
+        provider.models.removeAll { sortedIndices.contains($0.id) }
     }
 
     private func moveItems(from source: IndexSet, to destination: Int) {
@@ -132,7 +135,7 @@ struct ModelTable2: View {
         }
 
         let model = AIModel(
-            code: newModelCode, name: newModelName, provider: provider, supportsImage: supportsImage)
+            code: newModelCode, name: newModelName, provider: provider, supportsImage: supportsImage, order: provider.models.count)
         
         provider.models.append(model)
 

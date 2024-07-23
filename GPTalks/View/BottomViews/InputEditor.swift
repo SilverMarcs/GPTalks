@@ -20,15 +20,9 @@ struct InputEditor: View {
         inputView
         .font(.body)
         .onAppear {
-            #if os(macOS)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                isFocused = true
-            }
-            #else
-            if !isPadOS() {
+            if !isPadOS() && !AppConfig.shared.sidebarFocus {
                 DispatchQueue.main.async { isFocused = true }
             }
-            #endif
         }
     }
     
@@ -57,6 +51,7 @@ struct InputEditor: View {
             ToolbarItem(placement: .keyboard) {
                 Button {
                     isFocused = true
+                    AppConfig.shared.sidebarFocus = false
                 } label: {
                     Image(systemName: "keyboard.chevron.compact.down")
                 }

@@ -36,6 +36,10 @@ class Provider {
     @Relationship(deleteRule: .nullify)
     var models =  [AIModel]()
     
+    var sortedModels: [AIModel] {
+        models.sorted(by: { $0.order < $1.order })
+    }
+    
     var chatModels: [AIModel] {
         return models.filter { !$0.supportsImage}
     }

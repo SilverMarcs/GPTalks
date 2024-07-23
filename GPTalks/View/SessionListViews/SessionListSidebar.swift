@@ -35,6 +35,7 @@ struct SessionListSidebar: View {
             
             ToolbarItemGroup(placement: .keyboard) {
                 Button("Focus sidebar") {
+                    AppConfig.shared.sidebarFocus = true
                     isSidebarFocused = true
                 }
                 .keyboardShortcut(.leftArrow, modifiers: [.command, .shift])

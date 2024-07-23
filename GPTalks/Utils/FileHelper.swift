@@ -19,7 +19,6 @@ struct FileHelper {
             let fileURL = documentsDirectory.appendingPathComponent(path)
             try Foundation.FileManager.default.removeItem(at: fileURL)
             #endif
-            print("Successfully deleted file at: \(path)")
         } catch {
             print("Error deleting file: \(error.localizedDescription)")
         }

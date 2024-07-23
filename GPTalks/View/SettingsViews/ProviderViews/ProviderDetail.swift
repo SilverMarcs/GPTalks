@@ -25,7 +25,7 @@ struct ProviderDetail: View {
                 ProviderGeneral(provider: provider)
             case .models:
                 #if os(macOS)
-                ModelTable(provider: provider)
+                ModelTable2(provider: provider)
                 #else
                 ModelList(provider: provider)
                 #endif
