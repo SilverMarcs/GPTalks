@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import KeyboardShortcuts
+import UniformTypeIdentifiers
 
 struct ConversationList: View {
     var session: Session
@@ -80,6 +80,10 @@ struct ConversationList: View {
                 InspectorView(showingInspector: $showingInspector)
             }
             #endif
+            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
+                session.inputManager.handleImageDrop(providers)
+                return true
+            }
         }
     }
     

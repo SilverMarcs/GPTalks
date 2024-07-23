@@ -23,6 +23,7 @@ struct SessionList: View {
                 
                 ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
                     SessionListItem(session: session)
+                        .id(session.id)
                         .listRowSeparator(.visible)
                         .listRowSeparatorTint(Color.gray.opacity(0.2))
                     #if !os(macOS)

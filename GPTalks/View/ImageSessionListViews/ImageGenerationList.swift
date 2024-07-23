@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-import KeyboardShortcuts
 
 struct ImageGenerationList: View {
     @Bindable var session: ImageSession

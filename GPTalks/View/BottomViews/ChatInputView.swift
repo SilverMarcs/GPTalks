@@ -23,9 +23,9 @@ struct ChatInputView: View {
             }
             
             plusButton
-#if os(macOS)
+            #if os(macOS)
                 .offset(y: -2.4)
-#endif
+            #endif
             
             VStack(alignment: .leading) {
                 if !session.inputManager.imagePaths.isEmpty {
@@ -44,9 +44,16 @@ struct ChatInputView: View {
                     .offset(y: -2.4)
             }
         }
+        .id(session.id)
         .modifier(CommonInputStyling())
+        .onAppear {
+            session.inputManager.setupPasteboardMonitoring()
+        }
+        .onDisappear {
+            session.inputManager.removePasteboardMonitoring()
+        }
     }
-    
+
     var plusButton: some View {
         Group {
 #if os(macOS)
