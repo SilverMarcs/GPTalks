@@ -75,9 +75,11 @@ struct ConversationList: View {
                     EmptyView()
                 }
             }
+            #if !os(macOS)
             .inspector(isPresented: $showingInspector) {
                 InspectorView(showingInspector: $showingInspector)
             }
+            #endif
         }
     }
     

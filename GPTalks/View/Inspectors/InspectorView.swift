@@ -39,6 +39,8 @@ struct InspectorView: View {
             }
                 
             #if os(macOS)
+            Spacer()
+            
             Button {
                 showingInspector.toggle()
             } label: {

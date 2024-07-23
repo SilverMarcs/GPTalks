@@ -64,7 +64,7 @@ final class Session {
     @Transient
     var inputManager = InputManager()
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var config: SessionConfig
     
     init(config: SessionConfig) {

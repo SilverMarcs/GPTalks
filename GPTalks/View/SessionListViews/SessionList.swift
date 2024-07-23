@@ -25,6 +25,9 @@ struct SessionList: View {
                     SessionListItem(session: session)
                         .listRowSeparator(.visible)
                         .listRowSeparatorTint(Color.gray.opacity(0.2))
+                    #if !os(macOS)
+                        .listSectionSeparator(.hidden)
+                    #endif
                 }
                 .onDelete(perform: deleteItems)
                 .onMove(perform: move)

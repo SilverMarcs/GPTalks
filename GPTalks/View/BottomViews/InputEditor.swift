@@ -21,7 +21,9 @@ struct InputEditor: View {
         .font(.body)
         .onAppear {
             #if os(macOS)
-            DispatchQueue.main.async { isFocused = true }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                isFocused = true
+            }
             #else
             if !isPadOS() {
                 DispatchQueue.main.async { isFocused = true }

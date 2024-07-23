@@ -24,16 +24,16 @@ class Provider {
     var color: String = "#00947A"
     var isEnabled: Bool = true
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var chatModel: AIModel
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var quickChatModel: AIModel
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var titleModel: AIModel
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var imageModel: AIModel
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var models =  [AIModel]()
     
     var chatModels: [AIModel] {

@@ -89,8 +89,11 @@ class StreamManager {
         let query = ChatQuery(
             messages: messages,
             model: config.model.code,
-            maxTokens: 4096,
+            frequencyPenalty: config.frequencyPenalty,
+            maxTokens: config.maxTokens,
+            presencePenalty: config.presencePenalty,
             temperature: config.temperature,
+            topP: config.topP,
             stream: true)
         
         return AsyncThrowingStream { continuation in
@@ -122,10 +125,12 @@ class StreamManager {
         let parameters = MessageParameter(
             model: .other(config.model.code),
             messages: messages,
-            maxTokens: 4096,
+            maxTokens: config.maxTokens,
             system: config.systemPrompt,
             stream: true,
-            temperature: config.temperature)
+            temperature: config.temperature,
+            topP: config.topP
+        )
         return AsyncThrowingStream { continuation in
             Task {
                 do {
@@ -149,7 +154,8 @@ class StreamManager {
         
         let genConfig = GenerationConfig(
             temperature: Float(config.temperature),
-            maxOutputTokens: 8192)
+            topP: Float(config.topP),
+            maxOutputTokens: config.maxTokens)
         
         let model = GenerativeModel(
             name: config.model.code,

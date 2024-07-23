@@ -21,7 +21,3 @@ struct ConversationListToolbar: ToolbarContent {
         }
     }
 }
-
-//#Preview {
-//    ConversationListToolbar(session: Session(config: SessionConfig()))
-//}
