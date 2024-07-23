@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+#if os(macOS)
 struct ModelTable: View {
     @Environment(\.modelContext) var modelContext
     @Bindable var provider: Provider
@@ -37,7 +38,7 @@ struct ModelTable: View {
                             ))
                         .labelsHidden()
                     }
-                    .width(max: 40)
+                    .width(max: 37)
                     
                     TableColumn("Code") { model in
                         TextField(
@@ -82,10 +83,11 @@ struct ModelTable: View {
             HStack {
                 TextField("Code ", text: $newModelCode)
                 TextField("Name ", text: $newModelName)
-                Toggle("Image", isOn: $supportsImage)
-                    .help("Supports Image")
-                    .toggleStyle(.checkbox)
-//                    .labelsHidden()
+                Toggle(isOn: $supportsImage) {
+                    Image(systemName: "photo")
+                }
+                .help("Supports Image")
+                .toggleStyle(.checkbox)
             }
         }
     }
@@ -98,7 +100,9 @@ struct ModelTable: View {
         let model = AIModel(
             code: newModelCode, name: newModelName, provider: provider, supportsImage: supportsImage)
         
-        provider.models.append(model)
+        withAnimation {
+            provider.models.append(model)
+        }
 
         supportsImage = false
         newModelCode = ""
@@ -107,7 +111,9 @@ struct ModelTable: View {
     
     func deleteSelectedModels() {
         provider.models.removeAll(where: { selection.contains($0.id) })
-        selection.removeAll()
+        withAnimation {
+            selection.removeAll()
+        }
     }
 }
 
@@ -117,3 +123,4 @@ struct ModelTable: View {
     ModelTable(provider: provider)
         .modelContainer(for: Provider.self, inMemory: true)
 }
+#endif

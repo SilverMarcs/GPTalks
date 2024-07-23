@@ -43,17 +43,19 @@ struct HoverSquareBackgroundStyle: ButtonStyle {
     }
 }
 
+struct TextLeftIconRightLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack {
+            configuration.title
+            Spacer()
+            configuration.icon
+        }
+    }
+}
+
+
 #Preview {
     VStack {
-//        Menu {
-//            Button("Open") { }
-//            Button("Save") { }
-//            Button("Close") { }
-//        } label: {
-//            Label("File", systemImage: "doc")
-//        }
-//        .menuStyle(SimpleIconOnly())
-        
         HStack(spacing: 0) {
             Button {
                 print("Button tapped")

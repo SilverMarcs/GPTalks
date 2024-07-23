@@ -20,7 +20,7 @@ final class SessionConfig: NSCopying {
     var presencePenalty: Double = AppConfig.shared.presencePenalty
     var topP: Double = AppConfig.shared.topP
     var maxTokens: Int = AppConfig.shared.maxTokens
-    var systemPrompt: String = AppConfig.shared.systemPrompt
+    var systemPrompt: String
     
     @Relationship(deleteRule: .nullify)
     var provider: Provider
@@ -30,14 +30,17 @@ final class SessionConfig: NSCopying {
     init(provider: Provider, model: AIModel) {
         self.provider = provider
         self.model = model
+        self.systemPrompt = AppConfig.shared.systemPrompt
     }
     
     init(provider: Provider = Provider.factory(type: .openai), isQuick: Bool = false) {
         self.provider = provider
         if isQuick {
             self.model = provider.quickChatModel
+            self.systemPrompt = AppConfig.shared.quickSystemPrompt
         } else {
             self.model = provider.chatModel
+            self.systemPrompt = AppConfig.shared.systemPrompt
         }
     }
     

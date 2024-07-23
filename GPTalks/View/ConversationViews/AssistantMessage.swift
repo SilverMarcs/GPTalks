@@ -30,6 +30,7 @@ struct AssistantMessage: View {
                         MarkdownWebView(conversation.content)
                     } else {
                         Text(conversation.content)
+                            .textSelection(.enabled)
                     }
                     
                     if conversation.isReplying {

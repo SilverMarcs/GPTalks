@@ -19,24 +19,14 @@ struct ModelList: View {
 
     var body: some View {
         List {
-            HStack {
-                Group {
-                    Text("Image")
-                    Text("Code")
-                    Text("Name")
+            Section ("Models") {
+                ForEach(provider.models, id: \.self) { model in
+                    ModelRow(model: model)
                 }
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            
-            ForEach(provider.models, id: \.self) { model in
-                ModelRow(model: model)
             }
             
             Section ("Add New"){
                 Toggle("Supports Image", isOn: $supportsImage)
-                    .toggleStyle(.checkbox)
-                    .labelsHidden()
                 TextField("New Code", text: $newModelCode)
                 TextField("New Name", text: $newModelName)
                 Button(action: addModel) {

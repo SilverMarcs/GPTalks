@@ -11,13 +11,15 @@ struct ModelRow: View {
     @Bindable var model: AIModel
     
     var body: some View {
-        HStack {
-            Group {
+        DisclosureGroup {
+                Toggle("Supports Image", isOn: $model.supportsImage)
+                
                 TextField("Code", text: $model.code)
                 
                 TextField("Name", text: $model.name)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
+        } label: {
+            Text(model.name)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .swipeActions(edge: .trailing) {
             Button(role: .destructive) {

@@ -20,7 +20,13 @@ struct InputEditor: View {
         inputView
         .font(.body)
         .onAppear {
+            #if os(macOS)
             DispatchQueue.main.async { isFocused = true }
+            #else
+            if !isPadOS() {
+                DispatchQueue.main.async { isFocused = true }
+            }
+            #endif
         }
     }
     

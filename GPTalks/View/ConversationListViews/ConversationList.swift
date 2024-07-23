@@ -30,6 +30,7 @@ struct ConversationList: View {
                     
                     GeometryReader { geometry in
                         Color.clear
+                            .frame(height: spacerHeight)
                             .id(String.bottomID)
                             .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
                     }
@@ -61,9 +62,6 @@ struct ConversationList: View {
             .toolbar {
                 showInspector
             }
-            .inspector(isPresented: $showingInspector) {
-                InspectorView(showingInspector: $showingInspector)
-            }
             .toolbarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.immediately)
             .navigationTitle(session.config.model.name)
@@ -76,6 +74,9 @@ struct ConversationList: View {
                 } else {
                     EmptyView()
                 }
+            }
+            .inspector(isPresented: $showingInspector) {
+                InspectorView(showingInspector: $showingInspector)
             }
         }
     }
@@ -91,6 +92,14 @@ struct ConversationList: View {
         }
     }
     #endif
+    
+    var spacerHeight: CGFloat {
+        #if os(macOS)
+        20
+        #else
+        10
+        #endif
+    }
     
     var spacing: CGFloat {
         #if os(macOS)
@@ -112,4 +121,5 @@ struct ConversationList: View {
     let session = Session(config: config)
     
     ConversationList(session: session)
+        .environment(SessionVM())
 }

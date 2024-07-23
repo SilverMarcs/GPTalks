@@ -24,11 +24,12 @@ final class AIModel: Hashable, Identifiable {
         self.name = ""
     }
 
-    init(code: String, name: String, provider: Provider? = nil, supportsImage: Bool = false) {
+    init(code: String, name: String, provider: Provider? = nil, supportsImage: Bool = false, order: Int = .max) {
         self.code = code
         self.name = name
         self.provider = provider
         self.supportsImage = supportsImage
+        self.order = order
     }
     
     func removeSelf() {
@@ -47,32 +48,32 @@ extension AIModel {
     
     static func getOpenaiModels() -> [AIModel] {
         return [
-            AIModel(code: "gpt-3.5-turbo", name: "GPT-3.5T"),
-            AIModel(code: "gpt-4", name: "GPT-4"),
-            AIModel(code: "gpt-4-turbo", name: "GPT-4T"),
-            AIModel(code: "gpt-4-turbo-preview", name: "GPT-4TP"),
-            AIModel(code: "gpt-4o", name: "GPT-4O"),
-            AIModel(code: "gpt-4o-mini", name: "GPT-4Om"),
+            AIModel(code: "dall-e-2", name: "DALL-E-2", supportsImage: true, order: 0),
+            AIModel(code: "dall-e-3", name: "DALL-E-3", supportsImage: true, order: 1),
             
-            AIModel(code: "dall-e-2", name: "DALL-E-2", supportsImage: true),
-            AIModel(code: "dall-e-3", name: "DALL-E-3", supportsImage: true),
+            AIModel(code: "gpt-4o", name: "GPT-4O", order: 2),
+            AIModel(code: "gpt-4o-mini", name: "GPT-4Om", order: 3),
+            AIModel(code: "gpt-4-turbo", name: "GPT-4T", order: 4),
+            AIModel(code: "gpt-4-turbo-preview", name: "GPT-4TP", order: 5),
+            AIModel(code: "gpt-4", name: "GPT-4", order: 6),
+            AIModel(code: "gpt-3.5-turbo", name: "GPT-3.5T", order: 7),
         ]
     }
     
     static func getAnthropicModels() -> [AIModel] {
         return [
-            AIModel(code: "claude-3-opus-20240229", name: "Claude-3O"),
-            AIModel(code: "claude-3-sonnet-20240229", name: "Claude-3S"),
-            AIModel(code: "claude-3-haiku-20240307", name: "Claude-3H"),
-            AIModel(code: "claude-3-5-sonnet-20240620", name: "Claude-3.5S"),
+            AIModel(code: "claude-3-opus-20240229", name: "Claude-3O", order: 3),
+            AIModel(code: "claude-3-sonnet-20240229", name: "Claude-3S", order: 2),
+            AIModel(code: "claude-3-haiku-20240307", name: "Claude-3H", order: 1),
+            AIModel(code: "claude-3-5-sonnet-20240620", name: "Claude-3.5S", order: 0),
         ]
     }
     
     static func getGoogleModels() -> [AIModel] {
         return [
-            AIModel(code: "gemini-1.5-pro", name: "Gemini-1.5P"),
-            AIModel(code: "gemini-1.5-flash", name: "Gemini-1.5F"),
-            AIModel(code: "gemini-1.0-pro", name: "Gemini-1.0P"),
+            AIModel(code: "gemini-1.5-pro", name: "Gemini-1.5P", order: 0),
+            AIModel(code: "gemini-1.5-flash", name: "Gemini-1.5F", order: 1),
+            AIModel(code: "gemini-1.0-pro", name: "Gemini-1.0P", order: 2),
         ]
     }
 }

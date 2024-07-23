@@ -14,7 +14,7 @@ struct ModelPicker: View {
     
     var body: some View {
         Picker(label, selection: $model) {
-            ForEach(models, id: \.self) { model in
+            ForEach(models.sorted(by: {$0.order < $1.order } ), id: \.self) { model in
                 Text(model.name)
             }
         }

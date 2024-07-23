@@ -64,3 +64,11 @@ extension ModelContext {
         }
     }
 }
+
+func isPadOS() -> Bool {
+    #if os(macOS)
+    return false
+    #else
+    return UIDevice.current.userInterfaceIdiom == .pad
+    #endif
+}
