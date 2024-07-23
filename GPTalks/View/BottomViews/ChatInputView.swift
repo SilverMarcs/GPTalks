@@ -45,12 +45,16 @@ struct ChatInputView: View {
             }
         }
         .modifier(CommonInputStyling())
-        .onAppear {
-            session.inputManager.setupPasteboardMonitoring()
+        #if os(macOS)
+        .toolbar {
+            ToolbarItem(placement: .keyboard) {
+                Button("Paste Image") {
+                    session.inputManager.handlePaste()
+                }
+                .keyboardShortcut("b")
+            }
         }
-        .onDisappear {
-            session.inputManager.removePasteboardMonitoring()
-        }
+        #endif
     }
 
     var plusButton: some View {

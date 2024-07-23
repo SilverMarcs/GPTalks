@@ -101,8 +101,6 @@ extension InputManager {
             if let savedPath = image.save() {
                 imagePaths.append(savedPath)
             }
-        } else if let string = pasteboard.string(forType: .string) {
-            prompt += string
         }
         #else
         let pasteboard = UIPasteboard.general
@@ -110,33 +108,6 @@ extension InputManager {
             if let savedPath = image.save() {
                 imagePaths.append(savedPath)
             }
-        } else if let string = pasteboard.string {
-            prompt += string
-        }
-        #endif
-    }
-    
-    func setupPasteboardMonitoring() {
-        #if os(macOS)
-        localEventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            if event.modifierFlags.contains(.command) && event.charactersIgnoringModifiers == "v" {
-                self?.handlePaste()
-                return nil
-            }
-            return event
-        }
-        #else
-        // For iOS, you might want to implement a different mechanism
-        // This is just a placeholder
-        print("Paste monitoring not implemented for iOS in this example")
-        #endif
-    }
-
-    func removePasteboardMonitoring() {
-        #if os(macOS)
-        if let monitor = localEventMonitor {
-            NSEvent.removeMonitor(monitor)
-            localEventMonitor = nil
         }
         #endif
     }
