@@ -17,6 +17,7 @@ struct InputImageView: View {
                     ImageViewer(imagePath: imagePath, maxWidth: .infinity, maxHeight: 100, isCrossable: true) {
                         if let index = session.inputManager.imagePaths.firstIndex(of: imagePath) {
                             session.inputManager.imagePaths.remove(at: index)
+                            FileHelper.deleteFile(at: imagePath)
                         }
                     }
                 }
