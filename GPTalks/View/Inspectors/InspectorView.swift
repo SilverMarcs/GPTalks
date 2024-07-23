@@ -17,10 +17,12 @@ struct InspectorView: View {
             case .chats:
                 if sessionVM.selections.count == 1, let first = sessionVM.selections.first {
                     ChatInspector(session: first)
+                        .id(first.id)
                 }
             case .images:
                 if sessionVM.imageSelections.count == 1, let first = sessionVM.imageSelections.first {
                     ImageInspector(session: first)
+                        .id(first.id)
                 }
             }
         }

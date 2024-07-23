@@ -44,7 +44,7 @@ struct ChatInputView: View {
                     .offset(y: -2.4)
             }
         }
-        .id(session.id)
+//        .id(session.id)
         .modifier(CommonInputStyling())
         .onAppear {
             session.inputManager.setupPasteboardMonitoring()
