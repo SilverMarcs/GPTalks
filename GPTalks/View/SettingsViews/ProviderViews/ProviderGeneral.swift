@@ -10,6 +10,7 @@ import SwiftUI
 struct ProviderGeneral: View {
     @Bindable var provider: Provider
     @ObservedObject var providerManager = ProviderManager.shared
+    @State var showKey: Bool = false
 
     @State private var color =
         Color(.sRGB, red: 1, green: 1, blue: 1)
@@ -21,12 +22,27 @@ struct ProviderGeneral: View {
             }
             
             Section("Host Settings") {
-                TextField("Host URL ", text: $provider.host)
+                TextField("Host URL", text: $provider.host)
                 
-                TextField("API Key ", text: $provider.apiKey)
-                    .truncationMode(.middle)
+                HStack {
+                    if showKey {
+                        TextField("API Key", text: $provider.apiKey)
+                    } else {
+                        SecureField("API Key", text: $provider.apiKey)
+                    }
+                    
+                    Button {
+                        showKey.toggle()
+                    } label: {
+                        Image(systemName: !showKey ? "eye.slash" : "eye" )
+                    }
+                    .buttonStyle(.plain)
+                }
+                .autocorrectionDisabled(true)
+                #if !os(macOS)
+                .textInputAutocapitalization(.never)
+                #endif
                 
-
             }
     
             Section("Default Models") {
