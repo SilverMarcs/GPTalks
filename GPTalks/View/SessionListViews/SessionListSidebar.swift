@@ -39,12 +39,12 @@ struct SessionListSidebar: View {
                     AppConfig.shared.sidebarFocus = true
                     isSidebarFocused = true
                 }
-                .keyboardShortcut(.leftArrow, modifiers: [.command, .shift])
+                .keyboardShortcut(.leftArrow, modifiers: [.command, .option])
                 
                 Button("Focus Chat") {
                     AppConfig.shared.sidebarFocus = false
                 }
-                .keyboardShortcut(.rightArrow, modifiers: [.command, .shift])
+                .keyboardShortcut(.rightArrow, modifiers: [.command, .option])
             }
             #endif
         }

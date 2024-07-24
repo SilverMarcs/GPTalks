@@ -50,9 +50,7 @@
 		085524E62C4ED2DA00CBB827 /* ImageCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E52C4ED2DA00CBB827 /* ImageCommands.swift */; };
 		085524E82C4ED61F00CBB827 /* ConversationListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E72C4ED61F00CBB827 /* ConversationListToolbar.swift */; };
 		085524EA2C4EDEC400CBB827 /* ModelList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E92C4EDEC400CBB827 /* ModelList.swift */; };
-		085524EC2C4EDED000CBB827 /* ModelTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524EB2C4EDED000CBB827 /* ModelTable.swift */; };
 		085524EE2C4EDF6600CBB827 /* PresetModelAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524ED2C4EDF6600CBB827 /* PresetModelAdder.swift */; };
-		085524F02C4EE06900CBB827 /* ImageModelTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524EF2C4EE06900CBB827 /* ImageModelTable.swift */; };
 		085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085645432C3F98DF00ED84DA /* TitleGenerator.swift */; };
 		085910C82C4F7A5A0086E493 /* ChatSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085910C72C4F7A5A0086E493 /* ChatSessionVM.swift */; };
 		085910CA2C4F7A720086E493 /* ImageSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085910C92C4F7A720086E493 /* ImageSessionVM.swift */; };
@@ -116,8 +114,10 @@
 		08D174C62C3DC2A8000257EF /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C52C3DC2A8000257EF /* DateUtils.swift */; };
 		08D174C82C3DD729000257EF /* InputImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C72C3DD729000257EF /* InputImageView.swift */; };
 		08D174CA2C3E3C78000257EF /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C92C3E3C78000257EF /* ImageViewer.swift */; };
+		08D8F4472C51C1C20051C916 /* ModelCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8F4462C51C1C20051C916 /* ModelCollection.swift */; };
+		08D8F44B2C51C4E50051C916 /* ModelAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8F44A2C51C4E50051C916 /* ModelAdder.swift */; };
 		08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F369E22C3C278E002E4A35 /* ProviderType.swift */; };
-		08F38F1C2C4F387700B85FDB /* ModelTable 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F38F1B2C4F387700B85FDB /* ModelTable 2.swift */; };
+		08F38F1C2C4F387700B85FDB /* ModelTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F38F1B2C4F387700B85FDB /* ModelTable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,9 +177,7 @@
 		085524E52C4ED2DA00CBB827 /* ImageCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommands.swift; sourceTree = "<group>"; };
 		085524E72C4ED61F00CBB827 /* ConversationListToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListToolbar.swift; sourceTree = "<group>"; };
 		085524E92C4EDEC400CBB827 /* ModelList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelList.swift; sourceTree = "<group>"; };
-		085524EB2C4EDED000CBB827 /* ModelTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTable.swift; sourceTree = "<group>"; };
 		085524ED2C4EDF6600CBB827 /* PresetModelAdder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetModelAdder.swift; sourceTree = "<group>"; };
-		085524EF2C4EE06900CBB827 /* ImageModelTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModelTable.swift; sourceTree = "<group>"; };
 		085645432C3F98DF00ED84DA /* TitleGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleGenerator.swift; sourceTree = "<group>"; };
 		085910C72C4F7A5A0086E493 /* ChatSessionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionVM.swift; sourceTree = "<group>"; };
 		085910C92C4F7A720086E493 /* ImageSessionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSessionVM.swift; sourceTree = "<group>"; };
@@ -243,8 +241,10 @@
 		08D174C52C3DC2A8000257EF /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		08D174C72C3DD729000257EF /* InputImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputImageView.swift; sourceTree = "<group>"; };
 		08D174C92C3E3C78000257EF /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
+		08D8F4462C51C1C20051C916 /* ModelCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelCollection.swift; sourceTree = "<group>"; };
+		08D8F44A2C51C4E50051C916 /* ModelAdder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelAdder.swift; sourceTree = "<group>"; };
 		08F369E22C3C278E002E4A35 /* ProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderType.swift; sourceTree = "<group>"; };
-		08F38F1B2C4F387700B85FDB /* ModelTable 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelTable 2.swift"; sourceTree = "<group>"; };
+		08F38F1B2C4F387700B85FDB /* ModelTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -296,12 +296,12 @@
 		082181562C38238B00171BF3 /* ModelViews */ = {
 			isa = PBXGroup;
 			children = (
-				08F38F1B2C4F387700B85FDB /* ModelTable 2.swift */,
+				08D8F4462C51C1C20051C916 /* ModelCollection.swift */,
+				08F38F1B2C4F387700B85FDB /* ModelTable.swift */,
 				082181572C3823A400171BF3 /* ModelRow.swift */,
-				085524EB2C4EDED000CBB827 /* ModelTable.swift */,
 				085524E92C4EDEC400CBB827 /* ModelList.swift */,
 				085524ED2C4EDF6600CBB827 /* PresetModelAdder.swift */,
-				085524EF2C4EE06900CBB827 /* ImageModelTable.swift */,
+				08D8F44A2C51C4E50051C916 /* ModelAdder.swift */,
 			);
 			path = ModelViews;
 			sourceTree = "<group>";
@@ -755,12 +755,12 @@
 				085361212C4A38FA007DAB62 /* ModelPicker.swift in Sources */,
 				08D174C82C3DD729000257EF /* InputImageView.swift in Sources */,
 				08C800592C370A30009581C5 /* AIModel.swift in Sources */,
+				08D8F4472C51C1C20051C916 /* ModelCollection.swift in Sources */,
 				08C800452C36C10A009581C5 /* ConversationMenu.swift in Sources */,
 				082181712C39099D00171BF3 /* ArrayExtensions.swift in Sources */,
 				08AAFB9C2C3D01A6002C04E0 /* SessionListCards.swift in Sources */,
 				08915D9D2C37EEFA008ADE27 /* AppearanceSettings.swift in Sources */,
 				085524E62C4ED2DA00CBB827 /* ImageCommands.swift in Sources */,
-				085524EC2C4EDED000CBB827 /* ModelTable.swift in Sources */,
 				08C800372C36B8CC009581C5 /* SessionListItem.swift in Sources */,
 				082181582C3823A400171BF3 /* ModelRow.swift in Sources */,
 				085910C82C4F7A5A0086E493 /* ChatSessionVM.swift in Sources */,
@@ -801,7 +801,6 @@
 				089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */,
 				080ED38D2C415B6200046424 /* PreferenceKeys.swift in Sources */,
 				082181622C38C76E00171BF3 /* InputEditor.swift in Sources */,
-				085524F02C4EE06900CBB827 /* ImageModelTable.swift in Sources */,
 				0853611A2C4A3087007DAB62 /* InspectorView.swift in Sources */,
 				08D174C22C3D96F8000257EF /* StreamHandler.swift in Sources */,
 				085361052C491BF0007DAB62 /* ImageSession.swift in Sources */,
@@ -823,7 +822,8 @@
 				08A313492C4AD0DC00C3E578 /* CommonModifiers.swift in Sources */,
 				08A222C42C2AC6B300D76C8B /* ConversationList.swift in Sources */,
 				08AAFB982C3CF0F4002C04E0 /* KeyboardShortcuts.swift in Sources */,
-				08F38F1C2C4F387700B85FDB /* ModelTable 2.swift in Sources */,
+				08F38F1C2C4F387700B85FDB /* ModelTable.swift in Sources */,
+				08D8F44B2C51C4E50051C916 /* ModelAdder.swift in Sources */,
 				08C800472C36C4ED009581C5 /* UserMessage.swift in Sources */,
 				082181642C38C92E00171BF3 /* SendButton.swift in Sources */,
 				085361232C4A390D007DAB62 /* ProviderPicker.swift in Sources */,

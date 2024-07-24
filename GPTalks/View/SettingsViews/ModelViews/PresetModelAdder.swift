@@ -11,7 +11,7 @@ struct PresetModelAdder: View {
     var provider: Provider
     
     var body: some View {
-        Menu {
+//        Menu {
             Button {
                 provider.addOpenAIModels()
             } label: {
@@ -30,11 +30,11 @@ struct PresetModelAdder: View {
                 Text("Google Models")
             }
 
-        } label: {
-            Label("Presets", systemImage: "cpu")
-        }
-        .menuStyle(BorderlessButtonMenuStyle())
-        .fixedSize()
+//        } label: {
+//            Label("Presets", systemImage: "cpu")
+//        }
+//        .menuStyle(BorderlessButtonMenuStyle())
+//        .fixedSize()
     }
 }
 

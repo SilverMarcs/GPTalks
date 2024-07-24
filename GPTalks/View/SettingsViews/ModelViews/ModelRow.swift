@@ -11,23 +11,38 @@ struct ModelRow: View {
     @Bindable var model: AIModel
     
     var body: some View {
-        DisclosureGroup {
-                Toggle("Supports Image", isOn: $model.supportsImage)
-                
-                TextField("Code", text: $model.code)
-                
-                TextField("Name", text: $model.name)
-        } label: {
-            Text(model.name)
-                .frame(maxWidth: .infinity, alignment: .leading)
+        #if os(macOS)
+        HStack(spacing: 0) {
+            Toggle("Image", isOn: $model.supportsImage)
+            .labelsHidden()
+            .frame(width: 20, alignment: .leading)
+            
+            TextField("Code", text: $model.code)
+            .frame(maxWidth: .infinity)
+            .padding(.leading, 15)
+            
+            TextField("Name", text: $model.name)
+            .frame(maxWidth: .infinity)
         }
-        .swipeActions(edge: .trailing) {
-            Button(role: .destructive) {
-                model.removeSelf()
-            } label: {
-                Label("Delete", systemImage: "trash")
+        #else
+        DisclosureGroup {
+            Toggle("Image", isOn: $model.supportsImage)
+            
+            TextField("Code", text: $model.code)
+            
+            TextField("Name", text: $model.name)
+        } label: {
+            HStack {
+                Text(model.name)
+                Spacer()
+                if model.supportsImage {
+                    Image(systemName:  "photo")
+                        .foregroundStyle(.secondary)
+                        .imageScale(.small)
+                }
             }
         }
+        #endif
     }
 }
 

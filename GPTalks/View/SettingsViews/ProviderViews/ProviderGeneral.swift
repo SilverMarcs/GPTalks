@@ -35,6 +35,8 @@ struct ProviderGeneral: View {
                         showKey.toggle()
                     } label: {
                         Image(systemName: !showKey ? "eye.slash" : "eye" )
+                            .imageScale(.medium)
+                            .foregroundStyle(.secondary)
                     }
                     .buttonStyle(.plain)
                 }

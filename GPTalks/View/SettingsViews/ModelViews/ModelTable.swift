@@ -1,14 +1,12 @@
 //
-//  ModelTable 2.swift
+//  ModelTable.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 23/07/2024.
 //
 
-
 import SwiftUI
 
-#if os(macOS)
 struct ModelTable: View {
     @Environment(\.modelContext) var modelContext
     @Bindable var provider: Provider
@@ -21,50 +19,35 @@ struct ModelTable: View {
         modelTable
     }
     
-    @State private var selection: Set<AIModel.ID> = []
+    @State private var selections: Set<AIModel> = []
     
     var modelTable: some View {
         Form {
             modelAdder
             
             Section("") {
-                Table(provider.models.sorted { $0.supportsImage && !$1.supportsImage }, selection: $selection) {
-                    TableColumn("Image") { model in
-                        Toggle(
-                            "Image",
-                            isOn: Binding(
-                                get: { model.supportsImage },
-                                set: { model.supportsImage = $0 }
-                            ))
-                        .labelsHidden()
-                    }
-                    .width(max: 37)
-                    
-                    TableColumn("Code") { model in
-                        TextField(
-                            "Code",
-                            text: Binding(
-                                get: { model.code },
-                                set: { model.code = $0 }
-                            ))
-                    }
-                    
-                    TableColumn("Name") { model in
-                        TextField(
-                            "Name",
-                            text: Binding(
-                                get: { model.name },
-                                set: { model.name = $0 }
-                            ))
+                List(selection: $selections) {
+                    Section(header:
+                        HStack(spacing: 0) {
+                            Image(systemName: "photo").frame(width: 20)
+                            Text("Code").frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.leading, 17)
+                            Text("Name").frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    ) {
+                        ModelCollection(provider: provider)
                     }
                 }
+                #if os(macOS)
+                .alternatingRowBackgrounds()
+                #endif
                 .labelsHidden()
-                .onDeleteCommand(perform: deleteSelectedModels)
             }
             .padding(.top, -50)
         }
         .formStyle(.grouped)
     }
+
 
     var modelAdder: some View {
         Group {
@@ -87,7 +70,10 @@ struct ModelTable: View {
                     Image(systemName: "photo")
                 }
                 .help("Supports Image")
+                #if os(macOS)
                 .toggleStyle(.checkbox)
+                #endif
+
             }
         }
     }
@@ -98,23 +84,19 @@ struct ModelTable: View {
         }
 
         let model = AIModel(
-            code: newModelCode, name: newModelName, provider: provider, supportsImage: supportsImage)
+            code: newModelCode, name: newModelName, provider: provider, supportsImage: supportsImage, order: provider.models.count)
         
-        withAnimation {
-            provider.models.append(model)
-        }
+        provider.models.append(model)
 
         supportsImage = false
         newModelCode = ""
         newModelName = ""
     }
     
-    func deleteSelectedModels() {
-        provider.models.removeAll(where: { selection.contains($0.id) })
-        withAnimation {
-            selection.removeAll()
-        }
-    }
+//    func deleteSelectedModels() {
+//        provider.models.removeAll(where: { selection.contains($0.id) })
+//        selection.removeAll()
+//    }
 }
 
 #Preview {
@@ -123,4 +105,3 @@ struct ModelTable: View {
     ModelTable(provider: provider)
         .modelContainer(for: Provider.self, inMemory: true)
 }
-#endif
