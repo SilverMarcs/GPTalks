@@ -33,13 +33,20 @@ struct SessionListSidebar: View {
         .toolbar {
             SessionListToolbar()
             
+            #if os(macOS)
             ToolbarItemGroup(placement: .keyboard) {
                 Button("Focus sidebar") {
                     AppConfig.shared.sidebarFocus = true
                     isSidebarFocused = true
                 }
                 .keyboardShortcut(.leftArrow, modifiers: [.command, .shift])
+                
+                Button("Focus Chat") {
+                    AppConfig.shared.sidebarFocus = false
+                }
+                .keyboardShortcut(.rightArrow, modifiers: [.command, .shift])
             }
+            #endif
         }
         #if os(macOS)
         .frame(minWidth: 240)
