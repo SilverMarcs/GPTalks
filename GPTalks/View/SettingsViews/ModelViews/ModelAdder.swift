@@ -10,24 +10,25 @@ import SwiftUI
 struct ModelAdder: View {
     @Environment(\.dismiss) var dismiss
     var provider: Provider
+    var modelType: ModelType
     
     @State var newModelCode: String = ""
     @State var newModelName: String = ""
-    @State var supportsImage: Bool = false
     
     var body: some View {
         Form {
-            Section {
-                Toggle("Image", isOn: $supportsImage)
+            Section(header: Text(modelType.rawValue.capitalized)) {
+                TextField("Code", text: $newModelCode)
+                TextField("Name", text: $newModelName)
             }
-            
-            TextField("Code", text: $newModelCode)
-            TextField("Name", text: $newModelName)
             
             Section {
                 Button(action: addModel) {
                     Label("Add", systemImage: "plus")
+                        .foregroundStyle(.accent)
                 }
+                .contentShape(Rectangle())
+                .buttonStyle(.plain)
             }
         }
         .formStyle(.grouped)
@@ -39,7 +40,7 @@ struct ModelAdder: View {
         }
 
         let model = AIModel(
-            code: newModelCode, name: newModelName, provider: provider, supportsImage: supportsImage)
+            code: newModelCode, name: newModelName, provider: provider, modelType: modelType)
         
         provider.models.append(model)
         
@@ -48,5 +49,5 @@ struct ModelAdder: View {
 }
 
 #Preview {
-    ModelAdder(provider: Provider.factory(type: .openai))
+    ModelAdder(provider: Provider.factory(type: .openai), modelType: .chat)
 }

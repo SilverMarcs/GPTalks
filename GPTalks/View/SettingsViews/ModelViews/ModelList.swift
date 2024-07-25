@@ -8,38 +8,63 @@
 
 import SwiftUI
 
-struct ModelList: View {
-    @Environment(\.modelContext) var modelContext
+struct ChatModelListView: View {
     @Bindable var provider: Provider
     
+    var body: some View {
+        ModelListView(provider: provider, models: $provider.chatModels, modelType: .chat)
+    }
+}
+
+struct ImageModelListView: View {
+    @Bindable var provider: Provider
+    
+    var body: some View {
+        ModelListView(provider: provider, models: $provider.imageModels, modelType: .image)
+    }
+}
+
+struct ModelListView<T: AIModel>: View {
+    @Environment(\.modelContext) var modelContext
+    @Bindable var provider: Provider
+    @Binding var models: [T]
+    
     @State var showAdder: Bool = false
-    @State private var selections: Set<AIModel> = []
+    @State private var selections: Set<T> = []
+    @State var searchText: String = ""
+    
+    var modelType: ModelType
     
     var body: some View {
         content
             .sheet(isPresented: $showAdder) {
-                ModelAdder(provider: provider)
+                ModelAdder(provider: provider, modelType: modelType)
             }
             .scrollDismissesKeyboard(.immediately)
             .toolbar {
                 toolbarItem
             }
+            .searchable(text: $searchText)
     }
+
 
     #if os(macOS)
     var content: some View {
         Form {
             List(selection: $selections) {
                 Section(header:
-                    HStack(spacing: 0) {
-                        Image(systemName: "photo").frame(width: 20)
-                            .offset(y: -1)
+                    HStack(spacing: 5) {
+                        Text("Show").frame(maxWidth: 30, alignment: .center)
                         Text("Code").frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.leading, 17)
+                            .padding(.leading, 15)
                         Text("Name").frame(maxWidth: .infinity, alignment: .leading)
                     }
                 ) {
-                    ModelCollection(provider: provider)
+                    ForEach(filteredModels, id: \.self) { model in
+                        ModelRow(model: model)
+                    }
+                    .onDelete(perform: deleteItems)
+                    .onMove(perform: moveItems)
                 }
             }
             .alternatingRowBackgrounds()
@@ -48,12 +73,64 @@ struct ModelList: View {
         .formStyle(.grouped)
     }
     #else
+    @Environment(\.editMode) var editMode
+    
     var content: some View {
-        List {
-            ModelCollection(provider: provider)
+        List(selection: $selections) {
+            ForEach(filteredModels, id: \.self) { model in
+                ModelRow(model: model)
+            }
+            .onDelete(perform: deleteItems)
+            .onMove(perform: moveItems)
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                HStack {
+                    EditButton()
+
+                    Spacer()
+                    
+                    if editMode?.wrappedValue == .active {
+                        Button {
+                            selections = Set(filteredModels)
+                        } label: {
+                            Label("Select All", systemImage: "checkmark.circle")
+                                .labelStyle(.iconOnly)
+                        }
+                        
+                        Button {
+                            selections = []
+                        } label: {
+                            Label("Deselect All", systemImage: "xmark.circle")
+                                .labelStyle(.iconOnly)
+                        }
+                        
+                        Button(role: .destructive) {
+                            for model in selections {
+                                provider.models.removeAll { $0.id == model.id }
+                            }
+                        } label: {
+                            Label("Delete", systemImage: "minus.circle.fill")
+                                .labelStyle(.iconOnly)
+                                .foregroundStyle(.white, .red)
+                        }
+
+                    }
+                }
+            }
         }
     }
     #endif
+    
+    var filteredModels: [T] {
+        if searchText.isEmpty {
+            return models.sorted(by: { $0.order < $1.order })
+        } else {
+            return models.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+                                  .sorted(by: { $0.order < $1.order })
+        }
+    }
+
     
     var toolbarItem: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
@@ -64,29 +141,71 @@ struct ModelList: View {
                             await provider.refreshModels()
                         }
                     } label: {
-                        Label("Refresh Models", systemImage: "plus")
+                        Label("Refresh Models", systemImage: "arrow.trianglehead.2.counterclockwise.rotate.90")
+                    }
+                }
+                
+                Section {
+                    Button {
+                        for model in filteredModels {
+                            model.isEnabled = false
+                        }
+                    } label: {
+                        Label("Disable All", systemImage: "minus.circle")
+                    }
+                    
+                    Button {
+                        for model in filteredModels {
+                            model.isEnabled = true
+                        }
+                    } label: {
+                        Label("Enable All", systemImage: "checkmark.circle")
                     }
                 }
                 
                 Button {
                     showAdder = true
                 } label: {
-                    Label("Custom Model", systemImage: "plus")
+                    Label("Add Custom Model", systemImage: "plus")
                 }
             } label: {
-                Label("Add", systemImage: "plus")
+                Label("Add", systemImage: "ellipsis.circle")
             }
             .menuStyle(BorderlessButtonMenuStyle())
             .fixedSize()
         }
     }
-}
+    
+    private func deleteItems(at offsets: IndexSet) {
+        let sortedModels = models.sorted(by: { $0.order < $1.order })
+        let sortedIndices = offsets.map { sortedModels[$0].id }
+        models.removeAll { sortedIndices.contains($0.id) }
+        
+        // Update the order of remaining items
+        for (index, model) in models.enumerated() {
+            model.order = index
+        }
+    }
 
-#Preview {
-    let provider = Provider.factory(type: .openai)
-
-    NavigationStack {
-        ModelList(provider: provider)
-            .modelContainer(for: Provider.self, inMemory: true)
+    private func moveItems(from source: IndexSet, to destination: Int) {
+        var sortedModels = models.sorted(by: { $0.order < $1.order })
+        sortedModels.move(fromOffsets: source, toOffset: destination)
+        
+        for (index, model) in sortedModels.enumerated() {
+            withAnimation {
+                model.order = index
+            }
+        }
+        
+        models = sortedModels
     }
 }
+
+//#Preview {
+//    let provider = Provider.factory(type: .openai)
+//
+//    NavigationStack {
+//        ModelList(provider: provider)
+//            .modelContainer(for: Provider.self, inMemory: true)
+//    }
+//}

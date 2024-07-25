@@ -23,7 +23,6 @@ struct SessionList: View {
                 
                 ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
                     SessionListItem(session: session)
-//                        .id(session.id)
                         .listRowSeparator(.visible)
                         .listRowSeparatorTint(Color.gray.opacity(0.2))
                     #if !os(macOS)
@@ -67,8 +66,6 @@ struct SessionList: View {
     }
 
     private func deleteItems(offsets: IndexSet) {
-        // if current selection is in the index, then set to nil
-        
         withAnimation {
             for index in offsets.sorted().reversed() {
                 if !sessions[index].isStarred {
@@ -77,7 +74,6 @@ struct SessionList: View {
                 }
             }
             
-            // Then, update the order of remaining items
             let remainingSessions = sessions.filter { !$0.isDeleted }
             for (newIndex, session) in remainingSessions.enumerated() {
                 session.order = newIndex

@@ -73,6 +73,7 @@ struct ProviderGeneral: View {
         .toolbar {
             Toggle("Enabled", isOn: $provider.isEnabled)
                 .toggleStyle(.switch)
+                .labelsHidden()
         }
     }
     

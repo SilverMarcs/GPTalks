@@ -11,35 +11,47 @@ struct ModelRow: View {
     @Bindable var model: AIModel
     
     var body: some View {
-        #if os(macOS)
-        HStack(spacing: 0) {
-            Toggle("Image", isOn: $model.supportsImage)
-            .frame(width: 20, alignment: .leading)
-            
-            TextField("Code", text: $model.code)
-            .padding(.leading, 15)
-            
-            TextField("Name", text: $model.name)
-        }
-        #else
-        DisclosureGroup {
-            Toggle("Image", isOn: $model.supportsImage)
-            
-            TextField("Code", text: $model.code)
-            
-            TextField("Name", text: $model.name)
-        } label: {
-            HStack {
-                Text(model.name)
-                Spacer()
-                if model.supportsImage {
-                    Image(systemName:  "photo")
-                        .foregroundStyle(.secondary)
-                        .imageScale(.small)
-                }
+        Group {
+#if os(macOS)
+            HStack(spacing: 0) {
+                Toggle("Enabled", isOn: $model.isEnabled)
+                    .frame(width: 30, alignment: .center)
+
+                TextField("Code", text: $model.code)
+                    .padding(.leading, 17)
+                
+                TextField("Name", text: $model.name)
+                
             }
+#else
+            DisclosureGroup {
+                TextField("Code", text: $model.code)
+                
+                TextField("Name", text: $model.name)
+                
+            } label: {
+                Text(model.name)
+                    .opacity(model.isEnabled ? 1 : 0.5)
+            }
+#endif
         }
-        #endif
+        .swipeActions(edge: .leading) {
+            #if !os(macOS)
+            Button {
+                model.isEnabled.toggle()
+            } label: {
+                Image(systemName: model.isEnabled ? "xmark" : "checkmark")
+            }
+            .tint(model.isEnabled ? .gray.opacity(0.7) : .accentColor)
+            #endif
+            
+            Button {
+                model.modelType = model.modelType == .image ? .chat : .image
+            } label: {
+                Image(systemName: model.modelType == .chat ? "photo" : "bubble.left")
+            }
+            .tint(model.modelType == .chat ? .pink : .green)
+        }
     }
 }
 

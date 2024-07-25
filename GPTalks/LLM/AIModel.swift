@@ -12,7 +12,7 @@ import SwiftData
 final class AIModel: Hashable, Identifiable {
     var id: UUID = UUID()
     var order: Int = 0
-    var supportsImage: Bool = false
+    var modelType: ModelType = ModelType.chat
 
     var code: String
     var name: String
@@ -25,11 +25,11 @@ final class AIModel: Hashable, Identifiable {
         self.name = ""
     }
 
-    init(code: String, name: String, provider: Provider? = nil, supportsImage: Bool = false, order: Int = .max) {
+    init(code: String, name: String, provider: Provider? = nil, modelType: ModelType = .chat, order: Int = .max) {
         self.code = code
         self.name = name
         self.provider = provider
-        self.supportsImage = supportsImage
+        self.modelType = modelType
         self.order = order
     }
     
@@ -38,22 +38,28 @@ final class AIModel: Hashable, Identifiable {
     }
 }
 
+
+enum ModelType: String, CaseIterable, Codable {
+    case chat
+    case image
+}
+
 extension AIModel {
     static func getDemoModel() -> AIModel {
         return AIModel(code: "gpt-3.5-turbo", name: "GPT-3.5T")
     }
     
     static func getDemoImageModel() -> AIModel {
-        return AIModel(code: "dall-e-3", name: "DALL-E-3", supportsImage: true)
+        return AIModel(code: "dall-e-3", name: "DALL-E-3", modelType: .image)
     }
     
     static func getOpenaiModels() -> [AIModel] {
         return [
-            AIModel(code: "dall-e-2", name: "DALL-E-2", supportsImage: true, order: 0),
-            AIModel(code: "dall-e-3", name: "DALL-E-3", supportsImage: true, order: 1),
+            AIModel(code: "dall-e-2", name: "DALL-E-2", modelType: .image, order: 0),
+            AIModel(code: "dall-e-3", name: "DALL-E-3", modelType: .image, order: 1),
             
-            AIModel(code: "gpt-4o", name: "GPT-4O", order: 2),
-            AIModel(code: "gpt-4o-mini", name: "GPT-4Om", order: 3),
+            AIModel(code: "gpt-4o", name: "GPT-4o", order: 2),
+            AIModel(code: "gpt-4o-mini", name: "GPT-4om", order: 3),
             AIModel(code: "gpt-4-turbo", name: "GPT-4T", order: 4),
             AIModel(code: "gpt-4-turbo-preview", name: "GPT-4TP", order: 5),
             AIModel(code: "gpt-4", name: "GPT-4", order: 6),

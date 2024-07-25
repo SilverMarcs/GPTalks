@@ -41,11 +41,21 @@ class Provider {
     }
     
     var chatModels: [AIModel] {
-        return models.filter { !$0.supportsImage}
+        get {
+            return models.filter { $0.modelType == .chat}
+        }
+        set {
+            models = newValue + imageModels
+        }
     }
     
     var imageModels: [AIModel] {
-        return models.filter { $0.supportsImage}
+        get {
+            return models.filter { $0.modelType == .image}
+        }
+        set {
+            models = chatModels + newValue
+        }
     }
     
     private init() {

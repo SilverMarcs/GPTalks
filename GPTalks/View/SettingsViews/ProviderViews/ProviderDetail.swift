@@ -19,12 +19,9 @@ struct ProviderDetail: View {
             case .general:
                 ProviderGeneral(provider: provider)
             case .models:
-                ModelList(provider: provider)
+                ChatModelListView(provider: provider)
             case .image:
-                Form {
-                    Text("Not implemented yet.")
-                }
-                .formStyle(.grouped)
+                ImageModelListView(provider: provider)
             }
         }
         .navigationTitle("Providers")
@@ -47,7 +44,7 @@ struct ProviderDetail: View {
     private var picker: some View {
         Picker("Tabs", selection: $selectedTab) {
             ForEach(filteredTabs, id: \.self) { tab in
-                Text(tab.title).tag(tab)
+                Text(tab.rawValue.capitalized).tag(tab)
             }
         }
         .pickerStyle(.segmented)
@@ -56,21 +53,10 @@ struct ProviderDetail: View {
 }
 
 
-enum ProviderDetailTab: CaseIterable {
+enum ProviderDetailTab: String, CaseIterable {
     case general
     case models
     case image
-
-    var title: String {
-        switch self {
-        case .general:
-            "General"
-        case .models:
-            "Models"
-        case .image:
-            "Image"
-        }
-    }
 }
 
 #Preview {
