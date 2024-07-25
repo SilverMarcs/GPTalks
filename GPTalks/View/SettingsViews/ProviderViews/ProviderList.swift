@@ -8,40 +8,40 @@
 import SwiftUI
 import SwiftData
 
-extension AnyTransition {
-    static var slideFromRight: AnyTransition {
-        AnyTransition.asymmetric(
-            insertion: .move(edge: .trailing),
-            removal: .move(edge: .leading)
-        )
-    }
-}
-
 struct ProviderList: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \Provider.order) var providers: [Provider]
     @ObservedObject var providerManager = ProviderManager.shared
     
-    @Binding var selectedProvider: Provider?
-    @Binding var selectedSidebarItem: SidebarItem?
+    @State var selectedProvider: Provider?
     
     var body: some View {
-        Form {
-            List(selection: $selectedProvider) {
-                ForEach(providers, id: \.self) { provider in
-                    Button {
-                        selectedProvider = provider
-                        selectedSidebarItem = .providerDetail(provider)
-                    } label: {
-                        ProviderRow(provider: provider)
-                    }
-                    .buttonStyle(.plain)
-                }
-                .onDelete(perform: deleteProviders)
-                .onMove(perform: move)
+        #if os(macOS)
+        NavigationStack {
+            Form {
+                content
             }
+            .formStyle(.grouped)
         }
-        .formStyle(.grouped)
+        #else
+        NavigationStack {
+            content
+        }
+        #endif
+    }
+    
+    var content: some View {
+        List(selection: $selectedProvider) {
+            ForEach(providers, id: \.self) { provider in
+                NavigationLink(destination: ProviderDetail(provider: provider)) {
+                    ProviderRow(provider: provider)
+                }
+            }
+            .onDelete(perform: deleteProviders)
+            .onMove(perform: move)
+        }
+        .navigationTitle("Providers")
+        .toolbarTitleDisplayMode(.inline)
         .toolbar {
             addButton
         }
@@ -64,20 +64,15 @@ struct ProviderList: View {
         let newProvider = Provider.factory(type: type)
         
         withAnimation {
-            modelContext.insert(newProvider)
-        }
-        
-        DispatchQueue.main.async {
-            selectedProvider = newProvider
-            if providerManager.defaultProvider == nil {
-                providerManager.defaultProvider = newProvider.id.uuidString
+            for provider in providers {
+                provider.order += 1
             }
-        }
-        
-        do {
-            try modelContext.save()
-        } catch {
-            print("Failed to save Provider")
+            
+            newProvider.order = 0
+            modelContext.insert(newProvider)
+        } completion: {
+            selectedProvider = newProvider
+            try? modelContext.save()
         }
     }
     
@@ -96,6 +91,8 @@ struct ProviderList: View {
             for index in providersToDelete {
                 modelContext.delete(providers[index])
             }
+        } completion: {
+            try? modelContext.save()
         }
     }
     
@@ -104,7 +101,9 @@ struct ProviderList: View {
         updatedProviders.move(fromOffsets: source, toOffset: destination)
         
         for (index, provider) in updatedProviders.enumerated() {
-            provider.order = index
+            withAnimation {
+                provider.order = index
+            }
         }
         
         try? modelContext.save()
@@ -112,6 +111,6 @@ struct ProviderList: View {
 }
 
 #Preview {
-    ProviderList(selectedProvider: .constant(nil), selectedSidebarItem: .constant(.providers))
+    ProviderList()
         .modelContainer(for: Provider.self, inMemory: true)
 }

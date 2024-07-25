@@ -12,7 +12,6 @@ import SwiftUI
 struct ProviderDetail: View {
     var provider: Provider
     @State private var selectedTab: ProviderDetailTab = .general
-    @Binding var selectedSidebarItem: SidebarItem?
     
     var body: some View {
         Group {
@@ -20,31 +19,21 @@ struct ProviderDetail: View {
             case .general:
                 ProviderGeneral(provider: provider)
             case .models:
-                #if os(macOS)
-                ModelTable(provider: provider)
-                #else
                 ModelList(provider: provider)
-                #endif
             case .image:
-                VStack(alignment: .center) {
+                Form {
                     Text("Not implemented yet.")
                 }
+                .formStyle(.grouped)
             }
         }
+        .navigationTitle("Providers")
+        .toolbarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 picker
             }
-            
-            ToolbarItem(placement: .navigation) {
-                Button(action: {
-                    selectedSidebarItem = .providers
-                }) {
-                    Label("Back", systemImage: "chevron.left")
-                }
-            }
         }
-        .navigationTitle(provider.name)
     }
     
     private var filteredTabs: [ProviderDetailTab] {
@@ -62,13 +51,8 @@ struct ProviderDetail: View {
             }
         }
         .pickerStyle(.segmented)
-        .labelsHidden()
         .fixedSize()
-#if os(macOS)
-        .frame(width: 240)
-#endif
     }
-
 }
 
 
@@ -92,5 +76,5 @@ enum ProviderDetailTab: CaseIterable {
 #Preview {
     let provider = Provider.factory(type: .openai)
 
-    ProviderDetail(provider: provider, selectedSidebarItem: .constant(.providerDetail(provider)))
+    ProviderDetail(provider: provider)
 }

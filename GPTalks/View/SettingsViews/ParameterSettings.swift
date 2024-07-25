@@ -30,14 +30,16 @@ struct ParameterSettings: View {
                     .scrollContentBackground(.hidden)
             }
             
-            #if os(macOS)
+//            #if os(macOS)
             Section("Advanced", isExpanded: $expandAdvanced) {
                 TopPSlider(topP: $config.topP)
                 FrequencyPenaltySlider(penalty: $config.frequencyPenalty)
                 PresencePenaltySlider(penalty: $config.presencePenalty)
             }
-            #endif
+//            #endif
         }
+        .navigationTitle("Parameters")
+        .toolbarTitleDisplayMode(.inline)
         .formStyle(.grouped)
     }
 }

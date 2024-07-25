@@ -7,14 +7,6 @@
 
 import SwiftUI
 
-enum SidebarItem: Hashable {
-    case general
-    case quickPanel
-    case parameters
-    case providers
-    case providerDetail(Provider)
-}
-
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     
@@ -23,9 +15,7 @@ struct SettingsView: View {
     #else
     @State private var selectedSidebarItem: SidebarItem?
     #endif
-
-    @State private var selectedProvider: Provider?
-
+    
     var body: some View {
         NavigationSplitView {
             List(selection: $selectedSidebarItem) {
@@ -43,6 +33,14 @@ struct SettingsView: View {
                 Label("Providers", systemImage: "cpu")
                     .tag(SidebarItem.providers)
             }
+            .navigationTitle("Settings")
+            .toolbar(removing: .sidebarToggle)
+            .toolbar{
+                Spacer()
+                #if !os(macOS)
+                DismissButton()
+                #endif
+            }
         } detail: {
             switch selectedSidebarItem {
             case .general:
@@ -56,46 +54,21 @@ struct SettingsView: View {
             case .parameters:
                 ParameterSettings()
             case .providers:
-                ProviderList(selectedProvider: $selectedProvider, selectedSidebarItem: $selectedSidebarItem)
-            case .providerDetail(let provider):
-                ProviderDetail(provider: provider, selectedSidebarItem: $selectedSidebarItem)
+                ProviderList()
             case .none:
                 Text("Select an option from the sidebar")
             }
         }
-        
-        
-        
-//        TabView {
-//            Group {
-//                GeneralSettings()
-//                    .tabItem {
-//                        Label("General", systemImage: "gear")
-//                    }
-//
-//                #if os(macOS)
-//                QuickPanelSettings()
-//                    .tabItem {
-//                        Label("Quick Panel", systemImage: "bolt.fill")
-//                    }
-//                #endif
-//                
-//                ParameterSettings()
-//                    .tabItem {
-//                        Label("Parameters", systemImage: "slider.horizontal.3")
-//                    }
-//
-//                ProviderList()
-//                    .tabItem {
-//                        Label("Providers", systemImage: "cpu")
-//                    }
-//            }
-//            #if os(macOS)
-//            .frame(width: 700, height: 410)
-//            #endif
-//        }
     }
 }
+
+enum SidebarItem {
+    case general
+    case quickPanel
+    case parameters
+    case providers
+}
+
 
 #Preview {
     SettingsView()

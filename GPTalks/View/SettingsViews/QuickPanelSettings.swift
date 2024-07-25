@@ -68,6 +68,7 @@ struct QuickPanelSettings: View {
                     .scrollContentBackground(.hidden)
             }
         }
+        .navigationTitle("Quick Panel")
         .formStyle(.grouped)
     }
 }

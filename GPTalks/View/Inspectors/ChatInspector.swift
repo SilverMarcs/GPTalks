@@ -44,13 +44,13 @@ struct ChatInspector: View {
                 sysPrompt
             }
             
-            #if os(macOS)
+//            #if os(macOS)
             Section("Advanced", isExpanded: $expandAdvanced) {
                 TopPSlider(topP: $session.config.topP, shortLabel: true)
                 FrequencyPenaltySlider(penalty: $session.config.frequencyPenalty, shortLabel: true)
                 PresencePenaltySlider(penalty: $session.config.presencePenalty, shortLabel: true)
             }
-            #endif
+//            #endif
             
             Section("") {
                 resetContext

@@ -23,6 +23,7 @@ struct GeneralSettings: View {
         }
         .formStyle(.grouped)
         .navigationTitle("General")
+        .toolbarTitleDisplayMode(.inline)
     }
 }
 
