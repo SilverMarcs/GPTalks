@@ -78,6 +78,17 @@ class Provider {
         return provider
     }
 
+    @MainActor
+    func refreshModels() async {
+        let refreshModels = await type.refreshModels(provider: self)
+        
+        for model in refreshModels {
+            if !models.contains(where: { $0.code == model.code }) {
+                models.append(model)
+            }
+        }
+    }
+    
     func addOpenAIModels() {
         for model in AIModel.getOpenaiModels() {
             if !models.contains(where: { $0.code == model.code }) {

@@ -22,23 +22,7 @@ struct ModelList: View {
             }
             .scrollDismissesKeyboard(.immediately)
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Section {
-                            PresetModelAdder(provider: provider)
-                        }
-                        
-                        Button {
-                            showAdder = true
-                        } label: {
-                            Label("Custom Model", systemImage: "plus")
-                        }
-                    } label: {
-                        Label("Add", systemImage: "plus")
-                    }
-                    .menuStyle(BorderlessButtonMenuStyle())
-                    .fixedSize()
-                }
+                toolbarItem
             }
     }
 
@@ -70,6 +54,32 @@ struct ModelList: View {
         }
     }
     #endif
+    
+    var toolbarItem: some ToolbarContent {
+        ToolbarItem(placement: .primaryAction) {
+            Menu {
+                Section {
+                    Button {
+                        Task { @MainActor in
+                            await provider.refreshModels()
+                        }
+                    } label: {
+                        Label("Refresh Models", systemImage: "plus")
+                    }
+                }
+                
+                Button {
+                    showAdder = true
+                } label: {
+                    Label("Custom Model", systemImage: "plus")
+                }
+            } label: {
+                Label("Add", systemImage: "plus")
+            }
+            .menuStyle(BorderlessButtonMenuStyle())
+            .fixedSize()
+        }
+    }
 }
 
 #Preview {

@@ -9,12 +9,7 @@ import SwiftUI
 
 struct ParameterSettings: View {
     @ObservedObject var config = AppConfig.shared
-    #if os(macOS)
     @State var expandAdvanced: Bool = true
-    #else
-    @State var expandAdvanced: Bool = false
-    #endif
-    
 
     var body: some View {
         Form {

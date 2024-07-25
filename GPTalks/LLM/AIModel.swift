@@ -16,6 +16,7 @@ final class AIModel: Hashable, Identifiable {
 
     var code: String
     var name: String
+    var isEnabled: Bool = true
     
     var provider: Provider?
 

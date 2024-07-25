@@ -14,13 +14,17 @@ struct ProviderPicker: View {
     
     var body: some View {
         Picker("Provider", selection: $provider) {
-            ForEach(providers) { provider in
+            ForEach(filteredProviders.sorted(by: { $0.order < $1.order })) { provider in
                 Text(provider.name).tag(provider)
             }
         }
         .onChange(of: provider) {
             onChange?(provider)
         }
+    }
+    
+    private var filteredProviders: [Provider] {
+        providers.filter { $0.isEnabled }
     }
 }
 

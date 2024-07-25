@@ -70,6 +70,10 @@ struct ProviderGeneral: View {
 
         }
         .formStyle(.grouped)
+        .toolbar {
+            Toggle("Enabled", isOn: $provider.isEnabled)
+                .toggleStyle(.switch)
+        }
     }
     
     private var header: some View {

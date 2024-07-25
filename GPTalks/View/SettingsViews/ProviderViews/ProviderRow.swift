@@ -30,6 +30,7 @@ struct ProviderRow: View {
         .padding(5)
         .contentShape(Rectangle())
         #endif
+        .opacity(provider.isEnabled ? 1 : 0.5)
     }
     
     private var size: CGFloat {
