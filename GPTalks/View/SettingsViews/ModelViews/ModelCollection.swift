@@ -11,7 +11,7 @@ struct ModelCollection: View {
    var provider: Provider
     
     var body: some View {
-        ForEach(provider.models.sorted(by: { $0.order < $1.order }), id: \.id) { model in
+        ForEach(provider.models.sorted(by: { $0.order < $1.order }), id: \.self) { model in
             ModelRow(model: model)
         }
         .onDelete(perform: deleteItems)

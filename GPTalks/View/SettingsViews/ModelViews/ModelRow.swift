@@ -14,15 +14,12 @@ struct ModelRow: View {
         #if os(macOS)
         HStack(spacing: 0) {
             Toggle("Image", isOn: $model.supportsImage)
-            .labelsHidden()
             .frame(width: 20, alignment: .leading)
             
             TextField("Code", text: $model.code)
-            .frame(maxWidth: .infinity)
             .padding(.leading, 15)
             
             TextField("Name", text: $model.name)
-            .frame(maxWidth: .infinity)
         }
         #else
         DisclosureGroup {

@@ -18,11 +18,11 @@ struct ModelAdder: View {
     var body: some View {
         Form {
             Section {
-                Toggle("Supports Image", isOn: $supportsImage)
+                Toggle("Image", isOn: $supportsImage)
             }
             
-            TextField("New Code", text: $newModelCode)
-            TextField("New Name", text: $newModelName)
+            TextField("Code", text: $newModelCode)
+            TextField("Name", text: $newModelName)
             
             Section {
                 Button(action: addModel) {
@@ -30,6 +30,7 @@ struct ModelAdder: View {
                 }
             }
         }
+        .formStyle(.grouped)
     }
     
     private func addModel() {
@@ -43,10 +44,6 @@ struct ModelAdder: View {
         provider.models.append(model)
         
         dismiss()
-
-//        supportsImage = false
-//        newModelCode = ""
-//        newModelName = ""
     }
 }
 
