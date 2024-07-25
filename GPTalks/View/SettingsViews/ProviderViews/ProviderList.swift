@@ -43,6 +43,22 @@ struct ProviderList: View {
         .navigationTitle("Providers")
         .toolbarTitleDisplayMode(.inline)
         .toolbar {
+            Button {
+                backupProviders(providers)
+            } label: {
+                Label("Backup", systemImage: "square.and.arrow.up")
+            }
+            
+            Button {
+                for provider in restoreProviders() {
+                    if !providers.contains(where: { $0.name == provider.name && $0.id == provider.id }) {
+                        modelContext.insert(provider)
+                    }
+                }
+            } label: {
+                Label("Restore", systemImage: "square.and.arrow.down")
+            }
+            
             addButton
         }
     }

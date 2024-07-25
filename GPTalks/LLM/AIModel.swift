@@ -21,8 +21,8 @@ final class AIModel: Hashable, Identifiable {
     var provider: Provider?
 
     init() {
-        self.code = ""
-        self.name = ""
+        self.code = "Dummy"
+        self.name = "Dummy"
     }
 
     init(code: String, name: String, provider: Provider? = nil, modelType: ModelType = .chat, order: Int = .max) {

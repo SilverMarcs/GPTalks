@@ -57,13 +57,45 @@ class Provider {
             models = chatModels + newValue
         }
     }
+
+    public init(id: UUID = UUID(),
+                date: Date = Date(),
+                order: Int = 0,
+                name: String,
+                host: String,
+                apiKey: String,
+                type: ProviderType,
+                color: String,
+                isEnabled: Bool,
+                chatModel: AIModel,
+                quickChatModel: AIModel,
+                titleModel: AIModel,
+                imageModel: AIModel,
+                models: [AIModel] = []) {
+        self.id = id
+        self.date = date
+        self.order = order
+        self.name = name
+        self.host = host
+        self.apiKey = apiKey
+        self.type = type
+        self.color = color
+        self.isEnabled = isEnabled
+        self.chatModel = chatModel
+        self.quickChatModel = quickChatModel
+        self.titleModel = titleModel
+        self.imageModel = imageModel
+        self.models = models
+    }
+    
     
     private init() {
-        // never use this initializer
-        self.chatModel = AIModel.getDemoModel()
-        self.quickChatModel = AIModel.getDemoModel()
-        self.titleModel = AIModel.getDemoModel()
-        self.imageModel = AIModel.getDemoImageModel()
+        let demoModel = AIModel.getDemoModel()
+        
+        self.chatModel = demoModel
+        self.quickChatModel = demoModel
+        self.titleModel = demoModel
+        self.imageModel = demoModel
         self.type = .openai
     }
     
