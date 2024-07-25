@@ -21,7 +21,15 @@ struct ProviderRow: View {
                     .imageScale(.small)
                     .foregroundStyle(.orange)
             }
+            #if os(macOS)
+            Image(systemName: "chevron.right")
+                .foregroundStyle(.secondary)
+            #endif
         }
+        #if os(macOS)
+        .padding(5)
+        .contentShape(Rectangle())
+        #endif
     }
     
     private var size: CGFloat {

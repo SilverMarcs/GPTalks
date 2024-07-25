@@ -8,71 +8,56 @@
 import SwiftUI
 import SwiftData
 
+extension AnyTransition {
+    static var slideFromRight: AnyTransition {
+        AnyTransition.asymmetric(
+            insertion: .move(edge: .trailing),
+            removal: .move(edge: .leading)
+        )
+    }
+}
+
 struct ProviderList: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \Provider.order) var providers: [Provider]
     @ObservedObject var providerManager = ProviderManager.shared
     
-    @State var selectedProvider: Provider?
+    @Binding var selectedProvider: Provider?
+    @Binding var selectedSidebarItem: SidebarItem?
     
     var body: some View {
-#if os(macOS)
-        NavigationView {
-            content
-        }
-#else
-        NavigationStack {
-            content
-        }
-#endif
-    }
-    
-    var content: some View {
-        List(selection: $selectedProvider) {
-            ForEach(providers, id: \.self) { provider in
-                NavigationLink(destination: ProviderDetail(provider: provider)) {
-                    ProviderRow(provider: provider)
+        Form {
+            List(selection: $selectedProvider) {
+                ForEach(providers, id: \.self) { provider in
+                    Button {
+                        selectedProvider = provider
+                        selectedSidebarItem = .providerDetail(provider)
+                    } label: {
+                        ProviderRow(provider: provider)
+                    }
+                    .buttonStyle(.plain)
                 }
-            }
-            .onDelete(perform: deleteProviders)
-            .onMove(perform: move)
-        }
-#if os(macOS)
-        .onAppear {
-            DispatchQueue.main.async {
-                if selectedProvider == nil {
-                    selectedProvider = providers.first
-                }
+                .onDelete(perform: deleteProviders)
+                .onMove(perform: move)
             }
         }
-        .safeAreaInset(edge: .bottom) {
-            addButton
-                .padding()
-        }
-#else
+        .formStyle(.grouped)
         .toolbar {
             addButton
         }
-#endif
-
     }
-
     
     private var addButton: some View {
-        HStack {
-            Menu {
-                ForEach(ProviderType.allCases, id: \.self) { type in
-                    Button(action: { addProvider(type: type) }) {
-                        Text(type.name)
-                    }
+        Menu {
+            ForEach(ProviderType.allCases, id: \.self) { type in
+                Button(action: { addProvider(type: type) }) {
+                    Text(type.name)
                 }
-            } label: {
-                Label("Create Provider", systemImage: "plus")
             }
-            .menuStyle(SimpleIconOnly())
-            
-            Spacer()
+        } label: {
+            Label("Create Provider", systemImage: "plus")
         }
+        .menuStyle(SimpleIconOnly())
     }
     
     private func addProvider(type: ProviderType) {
@@ -127,6 +112,6 @@ struct ProviderList: View {
 }
 
 #Preview {
-    ProviderList()
+    ProviderList(selectedProvider: .constant(nil), selectedSidebarItem: .constant(.providers))
         .modelContainer(for: Provider.self, inMemory: true)
 }

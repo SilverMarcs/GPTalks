@@ -10,6 +10,7 @@ import SwiftData
 
 @main
 struct GPTalksApp: App {
+    @Environment(\.openWindow) private var openWindow
     @State private var sessionVM = SessionVM()
     
     var body: some Scene {
@@ -22,10 +23,17 @@ struct GPTalksApp: App {
             InspectorCommands()
             
             MenuCommands(sessionVM: sessionVM)
+            
+            CommandGroup(after: .sidebar) {
+                Button("Connection doctor") {
+                    openWindow(id: "settings")
+                }
+                .keyboardShortcut(",", modifiers: .command)
+            }
         }
 
         #if os(macOS)
-        Settings {
+        Window("Settings", id: "settings") {
             SettingsView()
         }
         .modelContainer(sharedModelContainer)
