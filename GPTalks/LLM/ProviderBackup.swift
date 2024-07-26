@@ -91,7 +91,8 @@ extension ProviderBackup.AIModelBackup {
             code: self.code,
             name: self.name,
             modelType: self.modelType,
-            order: self.order
+            order: self.order,
+            isEnabled: self.isEnabled
         )
     }
 }

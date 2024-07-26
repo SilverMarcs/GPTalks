@@ -6,10 +6,14 @@ Supports iOS, iPadOS, MacOS and visionOS.
 - OpenAI
 - Google Generative AI
 - Anthropic Claude
-- Any other OpenAI compatible provider (OpenRouter, Perplexity, etc.)
-- OpenAI Compaible Local LLMs (untested)
+- Any other OpenAI compatible provider (OpenRouter, Groq, Perplexity, etc.)
+- OpenAI compatible Local LLMs (untested)
 
-Currently only Chat Completion (Streaming) is supported but other services such as Image generation and Transcription are also planned.
+## Features Supported:
+- Chat Completion (streaming)
+- Image Generation
 
 ## Usage Instructions
-Open Settings Menu on respective platform, choose or create desired API provider and paste your API key and start chatting.
+Open Settings Menu, choose or create desired API provider and paste your API key and start chatting.
+
+*The minimum targets are iOS 18 or above and macOS 15 or above due to the immaturity and unstability of SwiftData on lower platforms.*

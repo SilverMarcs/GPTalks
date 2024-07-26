@@ -46,7 +46,7 @@ struct ModelListView<T: AIModel>: View {
             #if os(macOS)
             .searchable(text: $searchText, placement: .toolbar)
             #else
-            .searchable(text: $searchText, placement: .navigationBarDrawer)
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
             #endif
     }
 
