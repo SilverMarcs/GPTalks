@@ -25,7 +25,7 @@ struct GPTalksApp: App {
             MenuCommands(sessionVM: sessionVM)
             
             CommandGroup(after: .sidebar) {
-                Button("Connection doctor") {
+                Button("Settings") {
                     openWindow(id: "settings")
                 }
                 .keyboardShortcut(",", modifiers: .command)

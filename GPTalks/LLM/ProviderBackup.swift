@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftData
 import UniformTypeIdentifiers
 
 struct ProviderBackup: Codable {
@@ -38,8 +39,8 @@ struct ProviderBackup: Codable {
 
 extension ProviderBackup {
     init(from provider: Provider) {
-        self.id = provider.id
-        self.date = provider.date
+        self.id = UUID()
+        self.date = Date()
         self.order = provider.order
         self.name = provider.name
         self.host = provider.host
@@ -57,8 +58,8 @@ extension ProviderBackup {
     func toProvider() -> Provider {
         let models = self.models.map { $0.toAIModel() }
         return Provider(
-            id: self.id,
-            date: self.date,
+            id: UUID(),
+            date: Date(),
             order: self.order,
             name: self.name,
             host: self.host,
@@ -112,14 +113,28 @@ struct ProvidersDocument: FileDocument {
     }
 
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        let data = try JSONEncoder().encode(providers.map { ProviderBackup(from: $0) })
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try encoder.encode(providers.map { ProviderBackup(from: $0) })
         return FileWrapper(regularFileWithContents: data)
     }
+
 }
 
-
 func restoreProviders(from url: URL) throws -> [Provider] {
-    let data = try Data(contentsOf: url)
-    let backups = try JSONDecoder().decode([ProviderBackup].self, from: data)
-    return backups.map { $0.toProvider() }
+    guard url.startAccessingSecurityScopedResource() else {
+        throw NSError(domain: "FileAccessError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to access the security-scoped resource."])
+    }
+    defer {
+        url.stopAccessingSecurityScopedResource()
+    }
+
+    do {
+        let data = try Data(contentsOf: url)
+        let backups = try JSONDecoder().decode([ProviderBackup].self, from: data)
+        return backups.map { $0.toProvider() }
+    } catch {
+        print("Error reading or decoding file: \(error)")
+        throw error
+    }
 }

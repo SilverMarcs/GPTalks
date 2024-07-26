@@ -61,6 +61,8 @@ struct ProviderList: View {
             Label("Actions", systemImage: "ellipsis.circle")
         }
         .menuStyle(SimpleIconOnly())
+        .fileExporter(isExporting: $isExporting, providers: providers)
+        .fileImporter(isImporting: $isImporting, modelContext: modelContext, providers: providers)
     }
     
     private var addButton: some View {
@@ -131,19 +133,6 @@ struct ProviderList: View {
         } label: {
             Label("Backup", systemImage: "square.and.arrow.up")
         }
-        .fileExporter(
-            isPresented: $isExporting,
-            document: ProvidersDocument(providers: providers),
-            contentType: .json,
-            defaultFilename: "providers_backup"
-        ) { result in
-            switch result {
-            case .success(let url):
-                print("Backup saved to: \(url.path)")
-            case .failure(let error):
-               print("Error saving backup: \(error.localizedDescription)")
-            }
-        }
     }
     
     private var importButton: some View {
@@ -151,28 +140,6 @@ struct ProviderList: View {
             isImporting = true
         } label: {
             Label("Restore", systemImage: "square.and.arrow.down")
-        }
-        .fileImporter(
-            isPresented: $isImporting,
-            allowedContentTypes: [.json],
-            allowsMultipleSelection: false
-        ) { result in
-            switch result {
-            case .success(let urls):
-                guard let url = urls.first else { return }
-                do {
-                    let restoredProviders = try restoreProviders(from: url)
-                    for provider in restoredProviders {
-                        if !providers.contains(where: { $0.name == provider.name && $0.id == provider.id }) {
-                            modelContext.insert(provider)
-                        }
-                    }
-                } catch {
-                   print("Error restoring backup: \(error.localizedDescription)")
-                }
-            case .failure(let error):
-                print("Error selecting file: \(error.localizedDescription)")
-            }
         }
     }
 }

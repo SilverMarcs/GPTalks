@@ -162,7 +162,7 @@ struct ModelListView<T: AIModel>: View {
         if searchText.isEmpty {
             return models.sorted(by: { $0.order < $1.order })
         } else {
-            return models.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+            return models.filter { $0.name.localizedCaseInsensitiveContains(searchText) || $0.name.localizedCaseInsensitiveContains(searchText) }
                                   .sorted(by: { $0.order < $1.order })
         }
     }
