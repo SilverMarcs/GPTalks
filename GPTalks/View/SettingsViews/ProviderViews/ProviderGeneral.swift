@@ -54,13 +54,25 @@ struct ProviderGeneral: View {
             }
 
             Section("Customisation") {
-                ColorPicker("Accent Color", selection: $color)
-                    .onAppear {
-                        color = Color(hex: provider.color)
+                HStack {
+                    ColorPicker("Accent Color", selection: $color)
+                        .onAppear {
+                            color = Color(hex: provider.color)
+                        }
+                        .onChange(of: color) {
+                            provider.color = color.toHex()
+                        }
+
+                    Button {
+                        color = Color.getRandomColor()
+                    } label: {
+                        Image(systemName: "die.face.2")
+                            .foregroundStyle(.secondary)
                     }
-                    .onChange(of: color) {
-                        provider.color = color.toHex()
-                    }
+                    .buttonStyle(.plain)
+                    .rotationEffect(.degrees(45))
+                }
+                    
                 Picker("Type", selection: $provider.type) {
                     ForEach(ProviderType.allCases, id: \.self) { type in
                         Text(type.name).tag(type)
@@ -130,5 +142,5 @@ struct ProviderGeneral: View {
 
     return ProviderGeneral(provider: provider)
         .padding()
-        .frame(width: 500)
+        .frame(width: 500, height: 600)
 }

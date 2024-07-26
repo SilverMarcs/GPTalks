@@ -55,18 +55,49 @@ extension Color {
             return String(format: "#%02lX%02lX%02lX", lroundf(Float(r * 255)), lroundf(Float(g * 255)), lroundf(Float(b * 255)))
         }
     }
-}
+    
+    static let randomColors: [String] = [
+        "#438DAD",
+        "#4B62CA",
+        "#376288",
+        "#006CF9",
+        "#B53651",
+        "#A8656C",
+        "#9D6293",
+        "#6A5678",
+        "#A25277"
+    ]
+
+    
+    static func getRandomColor() -> Color {
+        let chance = Int.random(in: 1...100)
+        if chance <= 50 {
+            return generateRandomColor()
+        } else {
+            return Color(hex: randomColors.randomElement()!)
+        }
+    }
+
+    private static func generateRandomColor() -> Color {
+        let red = Double.random(in: 0.3...0.7)
+        let green = Double.random(in: 0.3...0.7)
+        let blue = Double.random(in: 0.3...0.7)
+        return Color(red: red, green: green, blue: blue)
+    }}
+
+
 
 
 #Preview {
-//    let session = Session()
+    ScrollView {
+        ForEach(Color.randomColors, id: \.self) { color in
+            Text(color)
+                .background(Color(hex: color))
+                .foregroundColor(.white)
+                .padding()
+        }
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
     
-    Color(hex: "FF0000FF")
     
-    Text(Color(hex: "FF0000FF").toHex())
-    
-//    SessionListItem(session: session)
-//        .frame(width: 230)
-//        .modelContainer(for: Session.self, inMemory: true)
-//        .environment(SessionVM())
 }

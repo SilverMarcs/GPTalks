@@ -40,13 +40,15 @@ struct ModelListView<T: AIModel>: View {
             .sheet(isPresented: $showAdder) {
                 ModelAdder(provider: provider, modelType: modelType)
             }
-            .scrollDismissesKeyboard(.immediately)
             .toolbar {
                 toolbarItem
             }
-            .searchable(text: $searchText)
+            #if os(macOS)
+            .searchable(text: $searchText, placement: .toolbar)
+            #else
+            .searchable(text: $searchText, placement: .navigationBarDrawer)
+            #endif
     }
-
 
     #if os(macOS)
     var content: some View {
@@ -61,7 +63,20 @@ struct ModelListView<T: AIModel>: View {
                     }
                 ) {
                     ForEach(filteredModels, id: \.self) { model in
-                        ModelRow(model: model)
+                        ModelRow(model: model, selections: $selections)
+                        .contextMenu {
+                            Button(action: {
+                                toggleModelType(for: selections.isEmpty ? [model] : Array(selections))
+                            }) {
+                                Label("Toggle Chat/Image", systemImage: "arrow.triangle.2.circlepath")
+                            }
+                            
+                            Button(action: {
+                                toggleEnabled(for: selections.isEmpty ? [model] : Array(selections))
+                            }) {
+                                Label("Toggle Enabled", systemImage: "power")
+                            }
+                        }
                     }
                     .onDelete(perform: deleteItems)
                     .onMove(perform: moveItems)
@@ -74,11 +89,10 @@ struct ModelListView<T: AIModel>: View {
     }
     #else
     @Environment(\.editMode) var editMode
-    
     var content: some View {
         List(selection: $selections) {
             ForEach(filteredModels, id: \.self) { model in
-                ModelRow(model: model)
+                ModelRow(model: model, selections: $selections)
             }
             .onDelete(perform: deleteItems)
             .onMove(perform: moveItems)
@@ -91,30 +105,52 @@ struct ModelListView<T: AIModel>: View {
                     Spacer()
                     
                     if editMode?.wrappedValue == .active {
-                        Button {
-                            selections = Set(filteredModels)
-                        } label: {
-                            Label("Select All", systemImage: "checkmark.circle")
-                                .labelStyle(.iconOnly)
-                        }
-                        
-                        Button {
-                            selections = []
-                        } label: {
-                            Label("Deselect All", systemImage: "xmark.circle")
-                                .labelStyle(.iconOnly)
-                        }
-                        
-                        Button(role: .destructive) {
-                            for model in selections {
-                                provider.models.removeAll { $0.id == model.id }
+                        Menu {
+                            Section {
+                                Button {
+                                    toggleModelType(for: Array(selections))
+                                } label: {
+                                    Label("Toggle Chat/Image", systemImage: "photo")
+                                }
+                                
+                                Button {
+                                    toggleEnabled(for: Array(selections))
+                                } label: {
+                                    Label("Toggle Enabled", systemImage: "power")
+                                }
+                            }
+                            
+                            
+                            Section {
+                                Button {
+                                    selections = Set(filteredModels)
+                                } label: {
+                                    Label("Select All", systemImage: "checkmark.circle")
+                                        .labelStyle(.iconOnly)
+                                }
+                                
+                                Button {
+                                    selections = []
+                                } label: {
+                                    Label("Deselect All", systemImage: "xmark.circle")
+                                        .labelStyle(.iconOnly)
+                                }
+                            }
+                            
+                            Section {
+                                Button(role: .destructive) {
+                                    for model in selections {
+                                        provider.models.removeAll { $0.id == model.id }
+                                    }
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                        .labelStyle(.iconOnly)
+                                        .foregroundStyle(.white, .red)
+                                }
                             }
                         } label: {
-                            Label("Delete", systemImage: "minus.circle.fill")
-                                .labelStyle(.iconOnly)
-                                .foregroundStyle(.white, .red)
+                            Label("Actions", systemImage: "ellipsis.circle")
                         }
-
                     }
                 }
             }
@@ -145,31 +181,13 @@ struct ModelListView<T: AIModel>: View {
                     }
                 }
                 
-                Section {
-                    Button {
-                        for model in filteredModels {
-                            model.isEnabled = false
-                        }
-                    } label: {
-                        Label("Disable All", systemImage: "minus.circle")
-                    }
-                    
-                    Button {
-                        for model in filteredModels {
-                            model.isEnabled = true
-                        }
-                    } label: {
-                        Label("Enable All", systemImage: "checkmark.circle")
-                    }
-                }
-                
                 Button {
                     showAdder = true
                 } label: {
                     Label("Add Custom Model", systemImage: "plus")
                 }
             } label: {
-                Label("Add", systemImage: "ellipsis.circle")
+                Label("Add", systemImage: "plus")
             }
             .menuStyle(BorderlessButtonMenuStyle())
             .fixedSize()
@@ -199,13 +217,20 @@ struct ModelListView<T: AIModel>: View {
         
         models = sortedModels
     }
+    
+    private func toggleModelType(for models: [T]) {
+        for model in models {
+            if model.modelType == .chat {
+                model.modelType = .image
+            } else {
+                model.modelType = .chat
+            }
+        }
+    }
+    
+    private func toggleEnabled(for models: [T]) {
+        for model in models {
+            model.isEnabled.toggle()
+        }
+    }
 }
-
-//#Preview {
-//    let provider = Provider.factory(type: .openai)
-//
-//    NavigationStack {
-//        ModelList(provider: provider)
-//            .modelContainer(for: Provider.self, inMemory: true)
-//    }
-//}

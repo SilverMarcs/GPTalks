@@ -12,6 +12,7 @@ import SwiftData
 final class AIModel: Hashable, Identifiable {
     var id: UUID = UUID()
     var order: Int = 0
+    // TODO: rename to just type
     var modelType: ModelType = ModelType.chat
 
     var code: String

@@ -573,10 +573,10 @@
 		08C8004E2C36F648009581C5 /* LLM */ = {
 			isa = PBXGroup;
 			children = (
-				08F52EF32C52C3AB00E4482C /* ProviderBackup.swift */,
 				08C8004F2C36F667009581C5 /* Provider.swift */,
 				08C800582C370A30009581C5 /* AIModel.swift */,
 				082181512C38046800171BF3 /* ProviderManager.swift */,
+				08F52EF32C52C3AB00E4482C /* ProviderBackup.swift */,
 				08F369E22C3C278E002E4A35 /* ProviderType.swift */,
 			);
 			path = LLM;
