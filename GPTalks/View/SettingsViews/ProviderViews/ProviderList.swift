@@ -62,18 +62,17 @@ struct ProviderList: View {
         }
         .navigationTitle("Providers")
         .toolbarTitleDisplayMode(.inline)
+        .fileExporter(isExporting: $isExporting, providers: providers)
+        .fileImporter(isImporting: $isImporting, modelContext: modelContext, providers: providers)
     }
     
     private var backupButtons: some View {
         Menu {
             exportButton
-            
             importButton
         } label: {
             Label("Actions", systemImage: "opticaldiscdrive")
         }
-        .fileExporter(isExporting: $isExporting, providers: providers)
-        .fileImporter(isImporting: $isImporting, modelContext: modelContext, providers: providers)
     }
     
     private var addButton: some View {
@@ -100,7 +99,7 @@ struct ProviderList: View {
         Button {
             isImporting = true
         } label: {
-            Label("Restore", systemImage: "square.and.arrow.down")
+            Label("Import", systemImage: "square.and.arrow.down")
         }
     }
 }
