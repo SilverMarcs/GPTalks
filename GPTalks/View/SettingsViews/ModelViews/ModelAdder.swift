@@ -16,22 +16,56 @@ struct ModelAdder: View {
     @State var newModelName: String = ""
     
     var body: some View {
-        Form {
-            Section(header: Text(modelType.rawValue.capitalized)) {
-                TextField("Code", text: $newModelCode)
-                TextField("Name", text: $newModelName)
-            }
-            
-            Section {
-                Button(action: addModel) {
-                    Label("Add", systemImage: "plus")
-                        .foregroundStyle(.accent)
+        NavigationStack {
+            Form {
+                Section(header: Text(modelType.rawValue.capitalized)) {
+                    TextField("Code", text: $newModelCode)
+                    TextField("Name", text: $newModelName)
                 }
-                .contentShape(Rectangle())
-                .buttonStyle(.plain)
             }
+            #if !os(macOS)
+                        .navigationTitle("Add Model")
+                        .toolbarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    cancelButton
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    addButton
+                }
+            }
+            #endif
+            .formStyle(.grouped)
+            
+            #if os(macOS)
+            Divider()
+            
+            HStack {
+                Spacer()
+                
+                cancelButton
+                
+                addButton
+                .keyboardShortcut(.defaultAction)
+            }
+            .padding()
+            #endif
         }
-        .formStyle(.grouped)
+
+    }
+    
+    private var addButton: some View {
+        Button("Add") {
+            addModel()
+        }
+        .disabled(newModelCode.isEmpty || newModelName.isEmpty)
+    }
+    
+    private var cancelButton: some View {
+        Button("Cancel") {
+            dismiss()
+        }
     }
     
     private func addModel() {

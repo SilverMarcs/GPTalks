@@ -53,7 +53,7 @@ struct GenericSlider: View {
                     .frame(width: 0)
             } maximumValueLabel: {
                 Text(String(format: "%.1f", bindingValue))
-                    .frame(width: 20)
+                    .frame(width: 17)
             }
         } else {
             HStack {

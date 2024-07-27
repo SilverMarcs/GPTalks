@@ -12,17 +12,40 @@ import SwiftData
 struct GPTalksApp: App {
     @Environment(\.openWindow) private var openWindow
     @State private var sessionVM = SessionVM()
-    
+    @State private var isMainWindowActive = false
+
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(sessionVM)
+            #if os(macOS)
+                .onAppear {
+                    NSWindow.allowsAutomaticWindowTabbing = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        if let window = NSApplication.shared.windows.first {
+                            window.identifier = NSUserInterfaceItemIdentifier("main")
+                        }
+                    }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { notification in
+                    if let window = notification.object as? NSWindow, window.identifier == NSUserInterfaceItemIdentifier("main") {
+                        isMainWindowActive = true
+                    }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: NSWindow.didResignKeyNotification)) { notification in
+                    if let window = notification.object as? NSWindow, window.identifier == NSUserInterfaceItemIdentifier("main") {
+                        isMainWindowActive = false
+                    }
+                }
+            #endif
         }
         .modelContainer(sharedModelContainer)
         .commands {
             InspectorCommands()
             
-            MenuCommands(sessionVM: sessionVM)
+            if isMainWindowActive {
+                MenuCommands(sessionVM: sessionVM)
+            }
             
             CommandGroup(after: .sidebar) {
                 Button("Settings") {
@@ -35,7 +58,9 @@ struct GPTalksApp: App {
         #if os(macOS)
         Window("Settings", id: "settings") {
             SettingsView()
+            
         }
+//        .restorationBehavior(.disabled)
         .modelContainer(sharedModelContainer)
         #endif
     }

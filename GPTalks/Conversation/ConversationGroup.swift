@@ -82,7 +82,7 @@ final class ConversationGroup: NSCopying {
             activeConversationIndex += 1
         }
         withAnimation {
-            session?.proxy?.scrollTo(self, anchor: .top)
+            session?.proxy?.scrollTo(self, anchor: .bottom)
         }
     }
     
@@ -95,7 +95,7 @@ final class ConversationGroup: NSCopying {
             activeConversationIndex -= 1
         }
         withAnimation {
-            session?.proxy?.scrollTo(self, anchor: .top)
+            session?.proxy?.scrollTo(self, anchor: .bottom)
         }
     }
     
