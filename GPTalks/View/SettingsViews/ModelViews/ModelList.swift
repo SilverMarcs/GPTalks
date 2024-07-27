@@ -189,8 +189,8 @@ struct ModelListView<T: AIModel>: View {
             } label: {
                 Label("Add", systemImage: "plus")
             }
-            .menuStyle(BorderlessButtonMenuStyle())
-            .fixedSize()
+//            .menuStyle(BorderlessButtonMenuStyle())
+//            .fixedSize()
         }
     }
     

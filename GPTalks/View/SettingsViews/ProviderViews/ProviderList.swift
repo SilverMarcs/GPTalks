@@ -26,9 +26,26 @@ struct ProviderList: View {
             }
             .formStyle(.grouped)
         }
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                backupButtons
+                    .menuIndicator(.hidden)
+            }
+            
+            ToolbarItem {
+                addButton
+            }
+        }
         #else
         NavigationStack {
             content
+        }
+        .toolbar {
+            addButton
+        }
+        .toolbarTitleMenu {
+            importButton
+            exportButton
         }
         #endif
     }
@@ -45,11 +62,6 @@ struct ProviderList: View {
         }
         .navigationTitle("Providers")
         .toolbarTitleDisplayMode(.inline)
-        .toolbar {
-            backupButtons
-
-            addButton
-        }
     }
     
     private var backupButtons: some View {
@@ -58,9 +70,8 @@ struct ProviderList: View {
             
             importButton
         } label: {
-            Label("Actions", systemImage: "ellipsis.circle")
+            Label("Actions", systemImage: "opticaldiscdrive")
         }
-        .menuStyle(SimpleIconOnly())
         .fileExporter(isExporting: $isExporting, providers: providers)
         .fileImporter(isImporting: $isImporting, modelContext: modelContext, providers: providers)
     }
@@ -69,15 +80,32 @@ struct ProviderList: View {
         Menu {
             ForEach(ProviderType.allCases, id: \.self) { type in
                 Button(action: { addProvider(type: type) }) {
-                    Text(type.name)
+                    Label(type.name, image: type.imageName)
                 }
             }
         } label: {
             Label("Create Provider", systemImage: "plus")
         }
-        .menuStyle(SimpleIconOnly())
     }
     
+    private var exportButton: some View {
+        Button {
+            isExporting = true
+        } label: {
+            Label("Backup", systemImage: "square.and.arrow.up")
+        }
+    }
+    
+    private var importButton: some View {
+        Button {
+            isImporting = true
+        } label: {
+            Label("Restore", systemImage: "square.and.arrow.down")
+        }
+    }
+}
+
+extension ProviderList {
     private func addProvider(type: ProviderType) {
         let newProvider = Provider.factory(type: type)
         
@@ -125,22 +153,6 @@ struct ProviderList: View {
         }
         
         try? modelContext.save()
-    }
-    
-    private var exportButton: some View {
-        Button {
-            isExporting = true
-        } label: {
-            Label("Backup", systemImage: "square.and.arrow.up")
-        }
-    }
-    
-    private var importButton: some View {
-        Button {
-            isImporting = true
-        } label: {
-            Label("Restore", systemImage: "square.and.arrow.down")
-        }
     }
 }
 
