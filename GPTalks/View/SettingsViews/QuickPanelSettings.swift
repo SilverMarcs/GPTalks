@@ -40,7 +40,7 @@ struct QuickPanelSettings: View {
             
             Section("LLM") {
                 Picker("Provider", selection: providerBinding) {
-                    ForEach(providers, id: \.id) { provider in
+                    ForEach(providers.filter { $0.isEnabled }, id: \.self) { provider in
                         Text(provider.name).tag(provider as Provider?)
                     }
                 }
@@ -54,7 +54,7 @@ struct QuickPanelSettings: View {
                             }
                         }
                     )) {
-                        ForEach(provider.models, id: \.self) { model in
+                        ForEach(provider.chatModels, id: \.self) { model in
                             Text(model.name).tag(model)
                         }
                     }

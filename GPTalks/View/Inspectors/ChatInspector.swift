@@ -11,7 +11,7 @@ import SwiftData
 struct ChatInspector: View {
     @Bindable var session: Session
     @Query var providers: [Provider]
-    @State var expandAdvanced: Bool = false
+    @State var expandAdvanced: Bool = true
     
     var body: some View {
         Form {

@@ -11,6 +11,7 @@ struct ProviderGeneral: View {
     @Bindable var provider: Provider
     @ObservedObject var providerManager = ProviderManager.shared
     @State var showKey: Bool = false
+    @State var showPopover: Bool = false
 
     @State private var color =
         Color(.sRGB, red: 1, green: 1, blue: 1)
@@ -22,7 +23,22 @@ struct ProviderGeneral: View {
             }
             
             Section("Host Settings") {
-                TextField("Host URL", text: $provider.host)
+
+                HStack {
+                    TextField("Host URL", text: $provider.host)
+                    
+                    Button {
+                        showPopover.toggle()
+                    } label: {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                    .popover(isPresented: $showPopover) {
+                        Text("Omit https:// and /v1/ from the URL.\nFor example: api.openai.com")
+                            .padding()
+                    }
+                }
                 
                 HStack {
                     if showKey {

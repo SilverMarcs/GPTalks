@@ -9,8 +9,8 @@ import Foundation
 import SwiftData
 
 @Model
-final class SessionConfig: NSCopying {
-    func copy(with zone: NSZone? = nil) -> Any {
+final class SessionConfig {
+    func copy() -> SessionConfig {
         let copy = SessionConfig(provider: provider, model: model, temperature: temperature, systemPrompt: systemPrompt)
         return copy
     }
