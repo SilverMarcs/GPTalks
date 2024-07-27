@@ -96,6 +96,11 @@
 		08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFBA02C3D1086002C04E0 /* GPTEncoder */; };
 		08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */; };
 		08C1ACDB2C54A8F600B86D37 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08C1ACDA2C54A8F600B86D37 /* OpenAI */; };
+		08C1ACDE2C54B89B00B86D37 /* SessionConfigDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACDD2C54B89B00B86D37 /* SessionConfigDefaults.swift */; };
+		08C1ACE02C54BC8A00B86D37 /* TemperatureSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACDF2C54BC8A00B86D37 /* TemperatureSlider.swift */; };
+		08C1ACE22C54BC9C00B86D37 /* PresencePenaltySlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACE12C54BC9C00B86D37 /* PresencePenaltySlider.swift */; };
+		08C1ACE42C54BCA600B86D37 /* FrequencyPenaltySlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACE32C54BCA600B86D37 /* FrequencyPenaltySlider.swift */; };
+		08C1ACE62C54BCB600B86D37 /* TopPSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACE52C54BCB600B86D37 /* TopPSlider.swift */; };
 		08C49FD82C502EC90085792F /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C49FD72C502EC90085792F /* FileHelper.swift */; };
 		08C800322C36AE1D009581C5 /* SessionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800312C36AE1D009581C5 /* SessionList.swift */; };
 		08C800372C36B8CC009581C5 /* SessionListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800362C36B8CC009581C5 /* SessionListItem.swift */; };
@@ -223,6 +228,11 @@
 		08AAFB9B2C3D01A6002C04E0 /* SessionListCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListCards.swift; sourceTree = "<group>"; };
 		08AAFB9D2C3D02C0002C04E0 /* SessionListSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListSidebar.swift; sourceTree = "<group>"; };
 		08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTEncoder.swift; sourceTree = "<group>"; };
+		08C1ACDD2C54B89B00B86D37 /* SessionConfigDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionConfigDefaults.swift; sourceTree = "<group>"; };
+		08C1ACDF2C54BC8A00B86D37 /* TemperatureSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureSlider.swift; sourceTree = "<group>"; };
+		08C1ACE12C54BC9C00B86D37 /* PresencePenaltySlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresencePenaltySlider.swift; sourceTree = "<group>"; };
+		08C1ACE32C54BCA600B86D37 /* FrequencyPenaltySlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyPenaltySlider.swift; sourceTree = "<group>"; };
+		08C1ACE52C54BCB600B86D37 /* TopPSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopPSlider.swift; sourceTree = "<group>"; };
 		08C49FD72C502EC90085792F /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		08C800312C36AE1D009581C5 /* SessionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionList.swift; sourceTree = "<group>"; };
 		08C800362C36B8CC009581C5 /* SessionListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListItem.swift; sourceTree = "<group>"; };
@@ -316,7 +326,6 @@
 				08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */,
 				082181742C39258500171BF3 /* ImageUtils.swift */,
 				089B22422C394A4F00E248FE /* ButtonUtils.swift */,
-				081C1D912C3BD1970078BB24 /* AppConfig.swift */,
 				081C1D992C3BE91C0078BB24 /* ColorExtensions.swift */,
 				08AAFB972C3CF0F4002C04E0 /* KeyboardShortcuts.swift */,
 				08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */,
@@ -350,6 +359,10 @@
 			isa = PBXGroup;
 			children = (
 				0853611E2C4A38C9007DAB62 /* GenericSlider.swift */,
+				08C1ACE52C54BCB600B86D37 /* TopPSlider.swift */,
+				08C1ACE32C54BCA600B86D37 /* FrequencyPenaltySlider.swift */,
+				08C1ACE12C54BC9C00B86D37 /* PresencePenaltySlider.swift */,
+				08C1ACDF2C54BC8A00B86D37 /* TemperatureSlider.swift */,
 				085361202C4A38FA007DAB62 /* ModelPicker.swift */,
 				085361222C4A390D007DAB62 /* ProviderPicker.swift */,
 				085361242C4A5ECC007DAB62 /* MaxTokensPicker.swift */,
@@ -492,6 +505,7 @@
 		08A222C22C2AC6A800D76C8B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				08C1ACDC2C54B89300B86D37 /* UserDefaults */,
 				085524E02C4ED29400CBB827 /* MenubarCommands */,
 				08915D922C373332008ADE27 /* CustomUI */,
 				08C800512C36F79E009581C5 /* SettingsViews */,
@@ -518,6 +532,15 @@
 				084C743F2C521A8A0015AE2F /* DismissButton.swift */,
 			);
 			path = Buttons;
+			sourceTree = "<group>";
+		};
+		08C1ACDC2C54B89300B86D37 /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				08C1ACDD2C54B89B00B86D37 /* SessionConfigDefaults.swift */,
+				081C1D912C3BD1970078BB24 /* AppConfig.swift */,
+			);
+			path = UserDefaults;
 			sourceTree = "<group>";
 		};
 		08C800382C36BA1E009581C5 /* BottomViews */ = {
@@ -780,16 +803,20 @@
 				08A222852C2AB4FD00D76C8B /* ContentView.swift in Sources */,
 				08C800572C36F843009581C5 /* SettingsView.swift in Sources */,
 				082181752C39258500171BF3 /* ImageUtils.swift in Sources */,
+				08C1ACE02C54BC8A00B86D37 /* TemperatureSlider.swift in Sources */,
+				08C1ACE22C54BC9C00B86D37 /* PresencePenaltySlider.swift in Sources */,
 				0819479E2C48DCDB0061227B /* ImageSessionList.swift in Sources */,
 				08505C9C2C3D3878001EBEEF /* IntegerExtensions.swift in Sources */,
 				085524E42C4ED2B800CBB827 /* ChatCommands.swift in Sources */,
 				0821816D2C39013400171BF3 /* StringExtensions.swift in Sources */,
+				08C1ACE62C54BCB600B86D37 /* TopPSlider.swift in Sources */,
 				085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */,
 				081C1D8D2C3B8F690078BB24 /* ConversationListExtended.swift in Sources */,
 				089C7E102C4058CF005E3BE9 /* FloatingSetup.swift in Sources */,
 				08C800552C36F82B009581C5 /* ProviderList.swift in Sources */,
 				08A222872C2AB4FD00D76C8B /* Session.swift in Sources */,
 				085361132C4939C5007DAB62 /* ImageGenerationView.swift in Sources */,
+				08C1ACE42C54BCA600B86D37 /* FrequencyPenaltySlider.swift in Sources */,
 				0893B2022C3955CC00D4D501 /* SessionSearch.swift in Sources */,
 				085524EA2C4EDEC400CBB827 /* ModelList.swift in Sources */,
 				08A3134B2C4ADEA000C3E578 /* ImageListRow.swift in Sources */,
@@ -798,6 +825,7 @@
 				08C800492C36C521009581C5 /* AssistantMessage.swift in Sources */,
 				085524E22C4ED2A400CBB827 /* MenuCommands.swift in Sources */,
 				085524E82C4ED61F00CBB827 /* ConversationListToolbar.swift in Sources */,
+				08C1ACDE2C54B89B00B86D37 /* SessionConfigDefaults.swift in Sources */,
 				08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */,
 				085910CA2C4F7A720086E493 /* ImageSessionVM.swift in Sources */,
 				08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */,

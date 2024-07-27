@@ -11,7 +11,7 @@ import SwiftData
 struct ChatInspector: View {
     @Bindable var session: Session
     @Query var providers: [Provider]
-    @State var expandAdvanced: Bool = true
+    @State var expandAdvanced: Bool = false
     
     var body: some View {
         Form {
@@ -44,11 +44,13 @@ struct ChatInspector: View {
                 sysPrompt
             }
             
+            #if os(macOS)
             Section("Advanced", isExpanded: $expandAdvanced) {
                 TopPSlider(topP: $session.config.topP, shortLabel: true)
                 FrequencyPenaltySlider(penalty: $session.config.frequencyPenalty, shortLabel: true)
                 PresencePenaltySlider(penalty: $session.config.presencePenalty, shortLabel: true)
             }
+            #endif
             
             Section("") {
                 resetContext

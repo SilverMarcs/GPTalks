@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ParameterSettings: View {
-    @ObservedObject var config = AppConfig.shared
-    @State var expandAdvanced: Bool = true
+    @ObservedObject var config = SessionConfigDefaults.shared
+    @State var expandAdvanced: Bool = false
 
     var body: some View {
         Form {
@@ -25,13 +25,13 @@ struct ParameterSettings: View {
                     .scrollContentBackground(.hidden)
             }
             
-//            #if os(macOS)
+            #if os(macOS)
             Section("Advanced", isExpanded: $expandAdvanced) {
                 TopPSlider(topP: $config.topP)
                 FrequencyPenaltySlider(penalty: $config.frequencyPenalty)
                 PresencePenaltySlider(penalty: $config.presencePenalty)
             }
-//            #endif
+            #endif
         }
         .navigationTitle("Parameters")
         .toolbarTitleDisplayMode(.inline)

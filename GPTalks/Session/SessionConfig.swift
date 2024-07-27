@@ -15,11 +15,11 @@ final class SessionConfig {
         return copy
     }
     
-    var temperature: Double = AppConfig.shared.temperature
-    var frequencyPenalty: Double = AppConfig.shared.frequencyPenalty
-    var presencePenalty: Double = AppConfig.shared.presencePenalty
-    var topP: Double = AppConfig.shared.topP
-    var maxTokens: Int = AppConfig.shared.maxTokens
+    var temperature: Double? = SessionConfigDefaults.shared.temperature
+    var frequencyPenalty: Double? = SessionConfigDefaults.shared.frequencyPenalty
+    var presencePenalty: Double? = SessionConfigDefaults.shared.presencePenalty
+    var topP: Double? = SessionConfigDefaults.shared.topP
+    var maxTokens: Int? = SessionConfigDefaults.shared.maxTokens
     var systemPrompt: String
     
     @Relationship(deleteRule: .nullify)
@@ -30,7 +30,7 @@ final class SessionConfig {
     init(provider: Provider, model: AIModel) {
         self.provider = provider
         self.model = model
-        self.systemPrompt = AppConfig.shared.systemPrompt
+        self.systemPrompt = SessionConfigDefaults.shared.systemPrompt
     }
     
     init(provider: Provider = Provider.factory(type: .openai), isQuick: Bool = false) {
@@ -40,11 +40,11 @@ final class SessionConfig {
             self.systemPrompt = AppConfig.shared.quickSystemPrompt
         } else {
             self.model = provider.chatModel
-            self.systemPrompt = AppConfig.shared.systemPrompt
+            self.systemPrompt = SessionConfigDefaults.shared.systemPrompt
         }
     }
     
-    init(provider: Provider, model: AIModel, temperature: Double, systemPrompt: String) {
+    init(provider: Provider, model: AIModel, temperature: Double?, systemPrompt: String) {
         self.provider = provider
         self.model = model
         self.temperature = temperature

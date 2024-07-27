@@ -8,12 +8,25 @@
 import SwiftUI
 
 struct MaxTokensPicker: View {
-    @Binding var value: Int
+    @Binding var value: Int?
+    let defaultValue: Int = 4096 // You can adjust this default value as needed
     
     var body: some View {
-        Picker("Max Tokens", selection: $value) {
-            ForEach(options, id: \.self) { option in
-                Text(String(option)).tag(option)
+        if let value = value {
+            Picker("Max Tokens", selection: $value) {
+                ForEach(options, id: \.self) { option in
+                    Text(String(option)).tag(option)
+                }
+            }
+        } else {
+            HStack {
+                Text("Max Tokens")
+                Spacer()
+                Button("Set") {
+                    self.value = defaultValue
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(.link)
             }
         }
     }

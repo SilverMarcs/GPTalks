@@ -125,7 +125,7 @@ class StreamManager {
         let parameters = MessageParameter(
             model: .other(config.model.code),
             messages: messages,
-            maxTokens: config.maxTokens,
+            maxTokens: config.maxTokens ?? 4096,
             system: config.systemPrompt,
             stream: true,
             temperature: config.temperature,
@@ -153,9 +153,10 @@ class StreamManager {
             role: "system", parts: [.text(config.systemPrompt)])
         
         let genConfig = GenerationConfig(
-            temperature: Float(config.temperature),
-            topP: Float(config.topP),
-            maxOutputTokens: config.maxTokens)
+            temperature: config.temperature.map { Float($0) },
+            topP: config.topP.map { Float($0) },
+            maxOutputTokens: config.maxTokens
+        )
         
         let model = GenerativeModel(
             name: config.model.code,
