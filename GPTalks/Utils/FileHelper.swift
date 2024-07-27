@@ -82,13 +82,107 @@ struct FileImporterModifier: ViewModifier {
     }
 }
 
-// Extension to make it easier to use these modifiers
 extension View {
-    func fileExporter(isExporting: Binding<Bool>, providers: [Provider]) -> some View {
+    func providerExporter(isExporting: Binding<Bool>, providers: [Provider]) -> some View {
         self.modifier(FileExporterModifier(isExporting: isExporting, providers: providers))
     }
     
-    func fileImporter(isImporting: Binding<Bool>, modelContext: ModelContext, providers: [Provider]) -> some View {
+    func providerImporter(isImporting: Binding<Bool>, modelContext: ModelContext, providers: [Provider]) -> some View {
         self.modifier(FileImporterModifier(isImporting: isImporting, modelContext: modelContext, providers: providers))
     }
 }
+
+struct SessionFileExporterModifier: ViewModifier {
+    @Binding var isExporting: Bool
+    let sessions: [Session]
+    
+    func body(content: Content) -> some View {
+        content
+            .fileExporter(
+                isPresented: $isExporting,
+                document: SessionsDocument(sessions: sessions),
+                contentType: .json,
+                defaultFilename: "sessions_backup"
+            ) { result in
+                switch result {
+                case .success(let url):
+                    print("Sessions backup saved to: \(url.path)")
+                case .failure(let error):
+                    print("Error saving sessions backup: \(error.localizedDescription)")
+                }
+            }
+    }
+}
+
+struct SessionFileImporterModifier: ViewModifier {
+    @Binding var isImporting: Bool
+    let modelContext: ModelContext
+    let existingSessions: [Session]
+    let providers: [Provider]
+    
+    func body(content: Content) -> some View {
+        content
+            .fileImporter(
+                isPresented: $isImporting,
+                allowedContentTypes: [.json],
+                allowsMultipleSelection: false
+            ) { result in
+                switch result {
+                case .success(let urls):
+                    guard let url = urls.first else { return }
+                    do {
+                        let restoredSessions = try restoreSessions(from: url, providers: providers)
+                        for session in restoredSessions {
+                            if !existingSessions.contains(where: { $0.date == session.date }) {
+                                modelContext.insert(session)
+                            }
+                        }
+                    } catch {
+                        print("Error restoring sessions backup: \(error.localizedDescription)")
+                    }
+                case .failure(let error):
+                    print("Error selecting file: \(error.localizedDescription)")
+                }
+            }
+    }
+}
+
+extension View {
+    func sessionExporter(isExporting: Binding<Bool>, sessions: [Session]) -> some View {
+        self.modifier(SessionFileExporterModifier(isExporting: isExporting, sessions: sessions))
+    }
+    
+    func sessionImporter(isImporting: Binding<Bool>, modelContext: ModelContext, existingSessions: [Session], providers: [Provider]) -> some View {
+        self.modifier(SessionFileImporterModifier(isImporting: isImporting, modelContext: modelContext, existingSessions: existingSessions, providers: providers))
+    }
+}
+
+
+//public func exportToMd(group) -> String? {
+//    let markdownContent = generateMarkdown(for: conversations)
+//
+//    let uniqueTimestamp = Int(Date().timeIntervalSince1970)
+//    // Specify the file path
+//    let filePath = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Downloads/\(title)_\(uniqueTimestamp).md")
+//
+//    // Write the content to the file
+//    do {
+//        try markdownContent.write(to: filePath, atomically: true, encoding: .utf8)
+//        return filePath.lastPathComponent
+//    } catch {
+//        return nil
+//    }
+//
+//}
+//
+//// Function to generate Markdown content
+//private func generateMarkdown(for conversations: [Conversation]) -> String {
+//    var markdown = "# Conversations\n\n"
+//
+//    for conversation in conversations {
+//        markdown += "### \(conversation.role.rawValue.capitalized)\n"
+//        markdown += "\(conversation.content)\n\n"
+//    }
+//
+//    return markdown
+//}

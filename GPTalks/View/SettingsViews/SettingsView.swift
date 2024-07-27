@@ -32,6 +32,9 @@ struct SettingsView: View {
                 
                 Label("Providers", systemImage: "cpu")
                     .tag(SidebarItem.providers)
+                
+                Label("Backup", systemImage: "opticaldiscdrive")
+                    .tag(SidebarItem.backup)
             }
             .navigationTitle("Settings")
             .toolbar(removing: .sidebarToggle)
@@ -55,6 +58,8 @@ struct SettingsView: View {
                 ParameterSettings()
             case .providers:
                 ProviderList()
+            case .backup:
+                BackupSettings()
             case .none:
                 Text("Select an option from the sidebar")
             }
@@ -67,6 +72,7 @@ enum SidebarItem {
     case quickPanel
     case parameters
     case providers
+    case backup
 }
 
 

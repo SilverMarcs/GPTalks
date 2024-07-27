@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftUI
-import SwiftData
 import UniformTypeIdentifiers
 
 struct ProviderBackup: Codable {

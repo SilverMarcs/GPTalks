@@ -12,29 +12,24 @@ import SwiftUI
 
 @Model
 final class ConversationGroup: NSCopying {
-    func copy(with zone: NSZone? = nil) -> Any {
-        let copy = ConversationGroup(conversation: activeConversation.copy() as! Conversation)
-        return copy
-    }
-    
     var id: UUID = UUID()
     var date: Date = Date()
     var session: Session?
+    
+    var activeConversationIndex: Int = 0
+    
+    @Relationship(deleteRule: .cascade, inverse: \Conversation.group)
+    var conversationsUnsorted: [Conversation] = []
     
     var role: ConversationRole {
         get { return activeConversation.role }
         set { activeConversation.role = newValue }
     }
     
-    @Relationship(deleteRule: .cascade, inverse: \Conversation.group)
-    var conversationsUnsorted: [Conversation] = []
-    
     var conversations: [Conversation] {
         get { return conversationsUnsorted.sorted(by: { $0.date < $1.date }) }
         set { conversationsUnsorted = newValue }
     }
-    
-    var activeConversationIndex: Int = 0
     
     var activeConversation: Conversation {
         if let conversation = conversations[safe: activeConversationIndex] {
@@ -108,5 +103,10 @@ final class ConversationGroup: NSCopying {
         withAnimation {
             session?.proxy?.scrollTo(self, anchor: .top)
         }
+    }
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = ConversationGroup(conversation: activeConversation.copy() as! Conversation)
+        return copy
     }
 }

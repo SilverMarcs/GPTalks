@@ -14,7 +14,6 @@ struct SessionListToolbar: ToolbarContent {
     #endif
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
-    @ObservedObject var providerManager = ProviderManager.shared
     
     @Query(sort: \Provider.date, order: .reverse) var providers: [Provider]
     @Query var sessions: [Session]
@@ -25,28 +24,80 @@ struct SessionListToolbar: ToolbarContent {
     var body: some ToolbarContent {
 #if !os(macOS)
         ToolbarItem(placement: .navigationBarLeading) {
-            if editMode?.wrappedValue == .inactive {
-                Menu {
-                    Button(action: { withAnimation { editMode?.wrappedValue = .active }}) {
+            Menu {
+                if editMode?.wrappedValue == .inactive {
+                    Button {
+                        withAnimation {
+                            editMode?.wrappedValue = .active
+                            sessionVM.chatCount = .max
+                        }
+                    } label: {
                         Label("Edit", systemImage: "pencil")
                     }
-                    Button(action: { showSettings.toggle() }) {
-                        Label("Settings", systemImage: "gear")
+                }
+                
+                Button(action: { showSettings.toggle() }) {
+                    Label("Settings", systemImage: "gear")
+                }
+            } label: {
+                Label("More", systemImage: "ellipsis.circle")
+                    .labelStyle(.titleOnly)
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
+            }
+        }
+        
+        
+        if editMode?.wrappedValue == .active {
+            ToolbarItem(placement: .bottomBar) {
+                HStack {
+                    Button {
+                        withAnimation {
+                            editMode?.wrappedValue = .inactive
+                            sessionVM.chatCount = 12
+                        }
+                    } label: {
+                        Text("Done")
                     }
-                } label: {
-                    Label("More", systemImage: "ellipsis.circle")
-                        .labelStyle(.titleOnly)
-                }
-                .sheet(isPresented: $showSettings) {
-                    SettingsView()
-                }
-            } else {
-                Button(action: { withAnimation {editMode?.wrappedValue = .inactive }}) {
-                    Label("Done", systemImage: "pencil")
-                        .labelStyle(.titleOnly)
+                    
+                    Spacer()
+                    
+                    Menu {
+                        Button {
+                            for session in sessionVM.selections {
+                                session.isStarred.toggle()
+                            }
+                        } label: {
+                            Label("Toggle Starred", systemImage: "star")
+                        }
+                        
+                        Section {
+                            Button {
+                                sessionVM.selections = Set(sessions)
+                            } label: {
+                                Label("Select All", systemImage: "checkmark.circle")
+                            }
+                            
+                            Button {
+                                sessionVM.selections = []
+                            } label: {
+                                Label("Deselect All", systemImage: "xmark.circle")
+                            }
+                        }
+                        
+                        Button(role: .destructive) {
+                            for session in sessionVM.selections {
+                                modelContext.delete(session)
+                            }
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    } label: {
+                        Label("Actions", systemImage: "ellipsis.circle")
+                    }
                 }
             }
-    
         }
 #endif
         ToolbarItem {

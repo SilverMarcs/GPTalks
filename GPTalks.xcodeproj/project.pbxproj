@@ -29,6 +29,8 @@
 		0821816F2C39082900171BF3 /* ConversationGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0821816E2C39082900171BF3 /* ConversationGroupView.swift */; };
 		082181712C39099D00171BF3 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181702C39099D00171BF3 /* ArrayExtensions.swift */; };
 		082181752C39258500171BF3 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181742C39258500171BF3 /* ImageUtils.swift */; };
+		082A632E2C54EADF003996B7 /* ChatSessionBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082A632D2C54EADF003996B7 /* ChatSessionBackup.swift */; };
+		082A63302C54F862003996B7 /* BackupSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082A632F2C54F862003996B7 /* BackupSettings.swift */; };
 		0842DFEC2C42C4AB0005BD5F /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 0842DFEB2C42C4AB0005BD5F /* VisualEffectView */; };
 		084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084C743F2C521A8A0015AE2F /* DismissButton.swift */; };
 		084C74432C5231980015AE2F /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 084C74422C5231980015AE2F /* OpenAI */; };
@@ -165,6 +167,8 @@
 		0821816E2C39082900171BF3 /* ConversationGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationGroupView.swift; sourceTree = "<group>"; };
 		082181702C39099D00171BF3 /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		082181742C39258500171BF3 /* ImageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
+		082A632D2C54EADF003996B7 /* ChatSessionBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionBackup.swift; sourceTree = "<group>"; };
+		082A632F2C54F862003996B7 /* BackupSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupSettings.swift; sourceTree = "<group>"; };
 		084C743F2C521A8A0015AE2F /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
 		08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerExtensions.swift; sourceTree = "<group>"; };
 		08505C9D2C3D5482001EBEEF /* SessionListToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListToolbar.swift; sourceTree = "<group>"; };
@@ -343,6 +347,7 @@
 				085361062C49225E007DAB62 /* ImageGeneration.swift */,
 				085361042C491BF0007DAB62 /* ImageSession.swift */,
 				085361082C4923E2007DAB62 /* ImageConfig.swift */,
+				085910C92C4F7A720086E493 /* ImageSessionVM.swift */,
 			);
 			path = ImageSession;
 			sourceTree = "<group>";
@@ -489,7 +494,7 @@
 				085645432C3F98DF00ED84DA /* TitleGenerator.swift */,
 				08C800422C36C045009581C5 /* SessonVM.swift */,
 				085910C72C4F7A5A0086E493 /* ChatSessionVM.swift */,
-				085910C92C4F7A720086E493 /* ImageSessionVM.swift */,
+				082A632D2C54EADF003996B7 /* ChatSessionBackup.swift */,
 			);
 			path = Session;
 			sourceTree = "<group>";
@@ -616,6 +621,7 @@
 				081C1D932C3BD33F0078BB24 /* ParameterSettings.swift */,
 				081C1D972C3BD8A50078BB24 /* GeneralSettings.swift */,
 				089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */,
+				082A632F2C54F862003996B7 /* BackupSettings.swift */,
 			);
 			path = SettingsViews;
 			sourceTree = "<group>";
@@ -778,6 +784,7 @@
 				08915D942C373340008ADE27 /* ProviderImage.swift in Sources */,
 				08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */,
 				0821816A2C39001B00171BF3 /* ProviderRow.swift in Sources */,
+				082A63302C54F862003996B7 /* BackupSettings.swift in Sources */,
 				08505C9E2C3D5482001EBEEF /* SessionListToolbar.swift in Sources */,
 				087928352C48CF6F008646CD /* ExpandButton.swift in Sources */,
 				0893B2062C39810900D4D501 /* SessionConfig.swift in Sources */,
@@ -799,6 +806,7 @@
 				08C800502C36F667009581C5 /* Provider.swift in Sources */,
 				085361092C4923E2007DAB62 /* ImageConfig.swift in Sources */,
 				0821816F2C39082900171BF3 /* ConversationGroupView.swift in Sources */,
+				082A632E2C54EADF003996B7 /* ChatSessionBackup.swift in Sources */,
 				089B22432C394A4F00E248FE /* ButtonUtils.swift in Sources */,
 				08A3134D2C4AE7B800C3E578 /* CommonCompactRow.swift in Sources */,
 				08A222BE2C2ABDB400D76C8B /* InputManager.swift in Sources */,

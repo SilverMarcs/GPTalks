@@ -19,6 +19,7 @@ struct ProviderList: View {
     @State private var exportURL: URL?
     
     var body: some View {
+        Group {
         #if os(macOS)
         NavigationStack {
             Form {
@@ -26,28 +27,15 @@ struct ProviderList: View {
             }
             .formStyle(.grouped)
         }
-        .toolbar {
-            ToolbarItem(placement: .navigation) {
-                backupButtons
-                    .menuIndicator(.hidden)
-            }
-            
-            ToolbarItem {
-                addButton
-            }
-        }
         #else
         NavigationStack {
             content
         }
+        #endif
+        }
         .toolbar {
             addButton
         }
-        .toolbarTitleMenu {
-            importButton
-            exportButton
-        }
-        #endif
     }
     
     var content: some View {
@@ -62,17 +50,8 @@ struct ProviderList: View {
         }
         .navigationTitle("Providers")
         .toolbarTitleDisplayMode(.inline)
-        .fileExporter(isExporting: $isExporting, providers: providers)
-        .fileImporter(isImporting: $isImporting, modelContext: modelContext, providers: providers)
-    }
-    
-    private var backupButtons: some View {
-        Menu {
-            exportButton
-            importButton
-        } label: {
-            Label("Actions", systemImage: "opticaldiscdrive")
-        }
+        .providerExporter(isExporting: $isExporting, providers: providers)
+        .providerImporter(isImporting: $isImporting, modelContext: modelContext, providers: providers)
     }
     
     private var addButton: some View {
@@ -84,22 +63,6 @@ struct ProviderList: View {
             }
         } label: {
             Label("Create Provider", systemImage: "plus")
-        }
-    }
-    
-    private var exportButton: some View {
-        Button {
-            isExporting = true
-        } label: {
-            Label("Backup", systemImage: "square.and.arrow.up")
-        }
-    }
-    
-    private var importButton: some View {
-        Button {
-            isImporting = true
-        } label: {
-            Label("Import", systemImage: "square.and.arrow.down")
         }
     }
 }

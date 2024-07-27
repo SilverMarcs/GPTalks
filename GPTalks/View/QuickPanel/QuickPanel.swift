@@ -141,7 +141,7 @@ struct QuickPanel: View {
     private func resetChat() {
         showAdditionalContent = false
         session.deleteAllConversations()
-        //        session.configuration = .init(quick: true)
+        session.config = .init(isQuick: true)
     }
     
     private func addToDB() {
