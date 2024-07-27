@@ -37,6 +37,7 @@ struct ProviderGeneral: View {
                     .popover(isPresented: $showPopover) {
                         Text("Omit https:// and /v1/ from the URL.\nFor example: api.openai.com")
                             .padding()
+                            .presentationCompactAdaptation(.popover)
                     }
                 }
                 

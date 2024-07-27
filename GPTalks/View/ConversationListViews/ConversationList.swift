@@ -32,7 +32,9 @@ struct ConversationList: View {
                         Color.clear
                             .frame(height: spacerHeight)
                             .id(String.bottomID)
+                        #if !os(macOS)
                             .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
+                        #endif
                     }
                 }
                 .padding()
@@ -41,14 +43,6 @@ struct ConversationList: View {
             .onAppear {
                 session.proxy = proxy
             }
-            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                #if os(macOS)
-                let bottomReached = value > NSScreen.main!.frame.height
-                #else
-                let bottomReached = value > UIScreen.main.bounds.height
-                #endif
-                hasUserScrolled = bottomReached
-            }
             #if os(macOS)
             .navigationSubtitle( session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))
             .navigationTitle(session.title)
@@ -56,6 +50,10 @@ struct ConversationList: View {
                 ConversationListToolbar(session: session)
             }
             #else
+            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+                let bottomReached = value > UIScreen.main.bounds.height
+                hasUserScrolled = bottomReached
+            }
             .onTapGesture {
                 showingInspector = false
             }
@@ -116,7 +114,7 @@ struct ConversationList: View {
     }
     
     var navSubtitle: String {
-        "Tokens: " 
+        "Tokens: "
         + session.tokenCounter.formatToK()
         + " • " + session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45)
     }

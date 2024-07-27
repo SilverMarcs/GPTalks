@@ -81,9 +81,7 @@ final class ConversationGroup: NSCopying {
         if activeConversationIndex < conversations.count - 1 {
             activeConversationIndex += 1
         }
-        withAnimation {
-            session?.proxy?.scrollTo(self, anchor: .bottom)
-        }
+        session?.proxy?.scrollTo(self, anchor: .bottom)
     }
     
     var canGoLeft: Bool {
@@ -94,9 +92,7 @@ final class ConversationGroup: NSCopying {
         if activeConversationIndex > 0 {
             activeConversationIndex -= 1
         }
-        withAnimation {
-            session?.proxy?.scrollTo(self, anchor: .bottom)
-        }
+        session?.proxy?.scrollTo(self, anchor: .bottom)
     }
     
     func deleteSelf() {
@@ -105,16 +101,6 @@ final class ConversationGroup: NSCopying {
     
     func resetContext() {
         session?.resetContext(at: self)
-
-//        if let indexOfGroup = session?.groups.firstIndex(where: { $0.id == id }) {
-//            if let nextGroup = session?.groups[safe: indexOfGroup + 1] {
-//                DispatchQueue.main.async {
-//                    withAnimation {
-//                        self.session?.proxy?.scrollTo(nextGroup, anchor: .top)
-//                    }
-//                }
-//            }
-//        }
     }
     
     func setupEditing() {

@@ -71,7 +71,7 @@ extension Color {
     
     static func getRandomColor() -> Color {
         let chance = Int.random(in: 1...100)
-        if chance <= 50 {
+        if chance <= 65 {
             return generateRandomColor()
         } else {
             return Color(hex: randomColors.randomElement()!)

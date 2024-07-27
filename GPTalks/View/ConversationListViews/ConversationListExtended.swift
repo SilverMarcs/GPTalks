@@ -15,6 +15,11 @@ extension View {
                 scrollToBottom(proxy: proxy, delay: 0.2)
                 scrollToBottom(proxy: proxy, delay: 0.4)
             }
+            .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
+                if session.isReplying {
+                    hasUserScrolled.wrappedValue = true
+                }
+            }
         #endif
             .onChange(of: session.groups.last?.activeConversation.content) {
                 if !hasUserScrolled.wrappedValue && session.isStreaming {

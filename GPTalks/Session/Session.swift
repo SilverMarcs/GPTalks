@@ -14,7 +14,7 @@ final class Session {
     var id: UUID = UUID()
     var date: Date = Date()
     var order: Int = 0
-    var title: String = "New Session"
+    var title: String = "Chat Session"
     var isStarred: Bool = false
     var errorMessage: String = ""
     var resetMarker: Int?
@@ -86,11 +86,14 @@ final class Session {
         print("Error: \(error)")
         errorMessage = error.localizedDescription
         
-        if let lastGroup = groups.last, lastGroup.activeConversation.content.isEmpty {
-            lastGroup.deleteConversation(lastGroup.activeConversation)
-        }
-        if let proxy = proxy {
-            scrollToBottom(proxy: proxy)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            if let lastGroup = self.groups.last, lastGroup.activeConversation.content.isEmpty {
+                lastGroup.deleteConversation(lastGroup.activeConversation)
+            }
+            
+            if let proxy = self.proxy {
+                scrollToBottom(proxy: proxy)
+            }
         }
     }
     
@@ -245,7 +248,7 @@ final class Session {
     }
     
     func fork(from group: ConversationGroup) -> Session {
-        let newSession = Session(config: config.copy() as! SessionConfig)
+        let newSession = Session(config: config.copy())
         newSession.title = title
         
         let groupsToCopy = groups.prefix(through: groups.firstIndex(of: group)!)
