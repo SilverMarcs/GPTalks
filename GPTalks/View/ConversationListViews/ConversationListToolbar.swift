@@ -47,7 +47,8 @@ struct ConversationListToolbar: ToolbarContent {
                     }
 
                 } label: {
-                    Text("Export")
+                    Label("Export", systemImage: "square.and.arrow.up")
+                        .labelStyle(.titleOnly)
                 }
             }
         }

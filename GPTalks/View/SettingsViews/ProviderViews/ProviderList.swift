@@ -14,44 +14,55 @@ struct ProviderList: View {
     @ObservedObject var providerManager = ProviderManager.shared
     
     @State var selectedProvider: Provider?
-    @State private var isExporting = false
-    @State private var isImporting = false
-    @State private var exportURL: URL?
     
     var body: some View {
-        Group {
-        #if os(macOS)
-        NavigationStack {
-            Form {
-                content
-            }
-            .formStyle(.grouped)
-        }
-        #else
         NavigationStack {
             content
-        }
-        #endif
         }
         .toolbar {
             addButton
         }
     }
-    
+
     var content: some View {
-        List(selection: $selectedProvider) {
-            ForEach(providers, id: \.self) { provider in
-                NavigationLink(destination: ProviderDetail(provider: provider)) {
-                    ProviderRow(provider: provider)
-                }
+        Group {
+            #if os(macOS)
+            Form {
+                providerSection(isEnabled: true)
+                providerSection(isEnabled: false)
             }
-            .onDelete(perform: deleteProviders)
-            .onMove(perform: move)
+            .formStyle(.grouped)
+            #else
+            List(selection: $selectedProvider) {
+                providerSection(isEnabled: true)
+                providerSection(isEnabled: false)
+            }
+            #endif
         }
         .navigationTitle("Providers")
         .toolbarTitleDisplayMode(.inline)
-        .providerExporter(isExporting: $isExporting, providers: providers)
-        .providerImporter(isImporting: $isImporting, modelContext: modelContext, providers: providers)
+    }
+
+    func providerSection(isEnabled: Bool) -> some View {
+        Section(header: Text(isEnabled ? "Enabled" : "Disabled")) {
+            #if os(macOS)
+            List {
+                providerList(isEnabled: isEnabled)
+            }
+            #else
+            providerList(isEnabled: isEnabled)
+            #endif
+        }
+    }
+
+    func providerList(isEnabled: Bool) -> some View {
+        ForEach(providers.filter { $0.isEnabled == isEnabled }, id: \.self) { provider in
+            NavigationLink(destination: ProviderDetail(provider: provider)) {
+                ProviderRow(provider: provider)
+            }
+        }
+        .onDelete(perform: deleteProviders)
+        .onMove(perform: move)
     }
     
     private var addButton: some View {

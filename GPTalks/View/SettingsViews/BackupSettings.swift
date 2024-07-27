@@ -37,7 +37,7 @@ struct BackupSettings: View {
                 HStack {
                     Text("Session configuration is not backed up")
                         .font(.caption)
-                        .padding(.leading, 5)
+//                        .padding(.leading, 5)
                         .foregroundStyle(.secondary)
                     Spacer()
                 }
@@ -59,7 +59,7 @@ struct BackupSettings: View {
                 HStack {
                     Text("Your API Keys will be stored in plaintext")
                         .font(.caption)
-                        .padding(.leading, 5)
+//                        .padding(.leading, 5)
                         .foregroundStyle(.secondary)
                     Spacer()
                 }
