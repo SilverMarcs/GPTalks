@@ -76,21 +76,19 @@ struct BackupSettings: View {
     }
     
     private func exportButton(action: @escaping () -> Void) -> some View {
-        HStack {
+        Button {
+            action()
+        } label: {
             Label("Backup", systemImage: "square.and.arrow.up")
-            Spacer()
         }
-        .contentShape(Rectangle())
-        .onTapGesture(perform: action)
     }
 
     private func importButton(action: @escaping () -> Void) -> some View {
-        HStack {
+        Button {
+            action()
+        } label: {
             Label("Import", systemImage: "square.and.arrow.down")
-            Spacer()
         }
-        .contentShape(Rectangle())
-        .onTapGesture(perform: action)
     }
 }
 

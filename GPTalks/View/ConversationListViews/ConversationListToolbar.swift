@@ -10,7 +10,8 @@ import SwiftUI
 struct ConversationListToolbar: ToolbarContent {
     var session: Session
     
-    @State private var isExporting = false
+    @State private var isExportingJSON = false
+    @State private var isExportingMarkdown = false
     
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigation) {
@@ -23,10 +24,32 @@ struct ConversationListToolbar: ToolbarContent {
         }
         
         ToolbarItem {
-            Button("Export") {
-                
+            Color.clear
+            .sessionExporter(isExporting: $isExportingJSON, sessions: [session])
+            
+            Color.clear
+            .markdownSessionExporter(isExporting: $isExportingMarkdown, session: session)
+        }
+        
+        if !isIOS() {
+            ToolbarItem {
+                Menu {
+                    Button {
+                        isExportingJSON = true
+                    } label: {
+                        Label("JSON", systemImage: "ellipsis.curlybraces")
+                    }
+                    
+                    Button {
+                        isExportingMarkdown = true
+                    } label: {
+                        Label("Markdown", systemImage: "richtext.page")
+                    }
+
+                } label: {
+                    Text("Export")
+                }
             }
-            .sessionExporter(isExporting: $isExporting, sessions: [session])
         }
     }
 }
