@@ -30,7 +30,10 @@ struct ModelRow<T: AIModel>: View {
 #else
             Group {
                 if editMode?.wrappedValue == .active {
-                    Text(model.name)
+                    VStack(alignment: .leading) {
+                        Text(model.name)
+                        Text(model.code)
+                    }
                 } else {
                     DisclosureGroup {
                         TextField("Code", text: $model.code)

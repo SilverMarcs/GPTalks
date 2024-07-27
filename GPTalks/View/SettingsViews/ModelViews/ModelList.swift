@@ -36,137 +36,160 @@ struct ModelListView<T: AIModel>: View {
     var modelType: ModelType
     
     var body: some View {
-        content
-            .sheet(isPresented: $showAdder) {
-                ModelAdder(provider: provider, modelType: modelType)
-            }
-            .toolbar {
-                toolbarItem
-            }
-            #if os(macOS)
-            .searchable(text: $searchText, placement: .toolbar)
-            #else
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
-            #endif
-    }
+         content
+             .sheet(isPresented: $showAdder) {
+                 ModelAdder(provider: provider, modelType: modelType)
+             }
+             .toolbar {
+                 toolbarItem
+             }
+             #if os(macOS)
+             .searchable(text: $searchText, placement: .toolbar)
+             #else
+             .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+             #endif
+     }
 
-    #if os(macOS)
-    var content: some View {
-        Form {
-            List(selection: $selections) {
-                Section(header:
-                    HStack(spacing: 5) {
-                        Text("Show").frame(maxWidth: 30, alignment: .center)
-                        Text("Code").frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.leading, 15)
-                        Text("Name").frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                ) {
-                    ForEach(filteredModels, id: \.self) { model in
-                        ModelRow(model: model, selections: $selections)
-                        .contextMenu {
-                            Button(action: {
-                                toggleModelType(for: selections.isEmpty ? [model] : Array(selections))
-                            }) {
-                                Label("Toggle Chat/Image", systemImage: "arrow.triangle.2.circlepath")
-                            }
-                            
-                            Button(action: {
-                                toggleEnabled(for: selections.isEmpty ? [model] : Array(selections))
-                            }) {
-                                Label("Toggle Enabled", systemImage: "power")
-                            }
-                        }
-                    }
-                    .onDelete(perform: deleteItems)
-                    .onMove(perform: moveItems)
-                }
-            }
-            .alternatingRowBackgrounds()
-            .labelsHidden()
-        }
-        .formStyle(.grouped)
-    }
-    #else
-    @Environment(\.editMode) var editMode
-    var content: some View {
-        List(selection: $selections) {
-            ForEach(filteredModels, id: \.self) { model in
-                ModelRow(model: model, selections: $selections)
-            }
-            .onDelete(perform: deleteItems)
-            .onMove(perform: moveItems)
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .bottomBar) {
-                HStack {
-                    EditButton()
+     #if os(macOS)
+     var content: some View {
+         Form {
+             List(selection: $selections) {
+                 modelSection(isEnabled: true)
+                 modelSection(isEnabled: false)
+             }
+             .alternatingRowBackgrounds()
+             .labelsHidden()
+         }
+         .formStyle(.grouped)
+     }
 
-                    Spacer()
-                    
-                    if editMode?.wrappedValue == .active {
-                        Menu {
-                            Section {
-                                Button {
-                                    toggleModelType(for: Array(selections))
-                                } label: {
-                                    Label("Toggle Chat/Image", systemImage: "photo")
-                                }
-                                
-                                Button {
-                                    toggleEnabled(for: Array(selections))
-                                } label: {
-                                    Label("Toggle Enabled", systemImage: "power")
-                                }
-                            }
-                            
-                            
-                            Section {
-                                Button {
-                                    selections = Set(filteredModels)
-                                } label: {
-                                    Label("Select All", systemImage: "checkmark.circle")
-                                        .labelStyle(.iconOnly)
-                                }
-                                
-                                Button {
-                                    selections = []
-                                } label: {
-                                    Label("Deselect All", systemImage: "xmark.circle")
-                                        .labelStyle(.iconOnly)
-                                }
-                            }
-                            
-                            Section {
-                                Button(role: .destructive) {
-                                    for model in selections {
-                                        provider.models.removeAll { $0.id == model.id }
-                                    }
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                        .labelStyle(.iconOnly)
-                                        .foregroundStyle(.white, .red)
-                                }
-                            }
-                        } label: {
-                            Label("Actions", systemImage: "ellipsis.circle")
-                        }
-                    }
-                }
-            }
-        }
-    }
-    #endif
+     func modelSection(isEnabled: Bool) -> some View {
+         Section(header: sectionHeader(title: isEnabled ? "Enabled" : "Disabled")) {
+             ForEach(filteredModels(isEnabled: isEnabled), id: \.self) { model in
+                 ModelRow(model: model, selections: $selections)
+                     .contextMenu {
+                         Button(action: {
+                             toggleModelType(for: selections.isEmpty ? [model] : Array(selections))
+                         }) {
+                             Label("Toggle Chat/Image", systemImage: "arrow.triangle.2.circlepath")
+                         }
+                         
+                         Button(action: {
+                             toggleEnabled(for: selections.isEmpty ? [model] : Array(selections))
+                         }) {
+                             Label("Toggle Enabled", systemImage: "power")
+                         }
+                     }
+             }
+             .onDelete(perform: deleteItems)
+             .onMove(perform: moveItems)
+         }
+     }
+
+     func sectionHeader(title: String) -> some View {
+         HStack(spacing: 5) {
+             Text("Show").frame(maxWidth: 30, alignment: .center)
+             Text("Code").frame(maxWidth: .infinity, alignment: .leading)
+                 .padding(.leading, 15)
+             Text("Name").frame(maxWidth: .infinity, alignment: .leading)
+             Text(title).frame(maxWidth: .infinity, alignment: .trailing)
+         }
+     }
+     #else
+     @Environment(\.editMode) var editMode
+     var content: some View {
+         List(selection: $selections) {
+             modelSection(isEnabled: true)
+             modelSection(isEnabled: false)
+         }
+         .toolbar {
+             ToolbarItemGroup(placement: .bottomBar) {
+                 HStack {
+                     EditButton()
+                     Spacer()
+                     if editMode?.wrappedValue == .active {
+                         editMenu
+                     }
+                 }
+             }
+         }
+     }
+
+     func modelSection(isEnabled: Bool) -> some View {
+         Section(header: Text(isEnabled ? "Enabled" : "Disabled")) {
+             ForEach(filteredModels(isEnabled: isEnabled), id: \.self) { model in
+                 ModelRow(model: model, selections: $selections)
+             }
+             .onDelete(perform: deleteItems)
+             .onMove(perform: moveItems)
+         }
+     }
+     #endif
+
+     func filteredModels(isEnabled: Bool) -> [T] {
+         let filtered = models.filter { $0.isEnabled == isEnabled }
+         if searchText.isEmpty {
+             return filtered.sorted(by: { $0.order < $1.order })
+         } else {
+             return filtered.filter { $0.name.localizedCaseInsensitiveContains(searchText) || $0.code.localizedCaseInsensitiveContains(searchText) }
+                            .sorted(by: { $0.order < $1.order })
+         }
+     }
     
-    var filteredModels: [T] {
-        if searchText.isEmpty {
-            return models.sorted(by: { $0.order < $1.order })
-        } else {
-            return models.filter { $0.name.localizedCaseInsensitiveContains(searchText) || $0.name.localizedCaseInsensitiveContains(searchText) }
-                                  .sorted(by: { $0.order < $1.order })
+    var editMenu: some View {
+        Menu {
+            Section {
+                Button {
+                    toggleModelType(for: Array(selections))
+                } label: {
+                    Label("Toggle Chat/Image", systemImage: "arrow.triangle.2.circlepath")
+                }
+                
+                Button {
+                    toggleEnabled(for: Array(selections))
+                } label: {
+                    Label("Toggle Enabled", systemImage: "power")
+                }
+            }
+            
+            Section {
+                Button {
+                    selections = Set(filteredModels(isEnabled: true))
+                } label: {
+                    Label("Select All Enabled", systemImage: "checkmark.circle")
+                }
+                Button {
+                    selections = Set(filteredModels(isEnabled: false))
+                } label: {
+                    Label("Select All Disabled", systemImage: "circle")
+                }
+                Button {
+                    selections = Set(filteredModels(isEnabled: true) + filteredModels(isEnabled: false))
+                } label: {
+                    Label("Select All", systemImage: "checkmark.circle.fill")
+                }
+                
+                Button {
+                    selections = []
+                } label: {
+                    Label("Deselect All", systemImage: "xmark.circle")
+                }
+            }
+            
+            Section {
+                Button(role: .destructive) {
+                    for model in selections {
+                        provider.models.removeAll { $0.id == model.id }
+                    }
+                } label: {
+                    Label("Delete Selected", systemImage: "trash")
+                }
+            }
+        } label: {
+            Label("Actions", systemImage: "ellipsis.circle")
+                .labelStyle(.iconOnly)
         }
     }
-
     
     var toolbarItem: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
@@ -189,11 +212,11 @@ struct ModelListView<T: AIModel>: View {
             } label: {
                 Label("Add", systemImage: "plus")
             }
-//            .menuStyle(BorderlessButtonMenuStyle())
-//            .fixedSize()
         }
     }
-    
+}
+
+extension ModelListView {
     private func deleteItems(at offsets: IndexSet) {
         let sortedModels = models.sorted(by: { $0.order < $1.order })
         let sortedIndices = offsets.map { sortedModels[$0].id }
