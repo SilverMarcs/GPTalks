@@ -82,7 +82,6 @@ struct ConversationList: View {
             #if !os(macOS)
             .inspector(isPresented: $showingInspector) {
                 InspectorView(showingInspector: $showingInspector)
-                    .presentationBackground(.thinMaterial)
             }
             #endif
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
@@ -107,6 +106,7 @@ struct ConversationList: View {
         }
     }
     
+    #if !os(macOS)
     private var showInspector: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button {
@@ -116,6 +116,7 @@ struct ConversationList: View {
             }
         }
     }
+    #endif
     
     var spacerHeight: CGFloat {
         #if os(macOS)

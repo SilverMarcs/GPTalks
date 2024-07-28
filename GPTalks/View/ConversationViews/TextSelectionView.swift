@@ -28,9 +28,9 @@ struct TextSelectionView: View {
             }
             .edgesIgnoringSafeArea(.bottom)
             .navigationTitle("Select Text")
-            .navigationBarTitleDisplayMode(.inline)
+            .toolbarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button("Done") {
                         dismiss()
                     }
