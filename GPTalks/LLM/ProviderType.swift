@@ -16,6 +16,14 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     
     var id: ProviderType { self }
     
+    static var allTypes: [ProviderType] {
+        #if os(macOS)
+        return [.openai, .anthropic, .google, .local]
+        #else
+        return [.openai, .anthropic, .google]
+        #endif
+    }
+    
     var scheme: String {
         switch self {
         case .openai, .anthropic, .google: "https"

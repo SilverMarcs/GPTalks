@@ -30,25 +30,15 @@ extension SessionVM {
         }
     }
     
-    func addimageSession(imageSessions: [ImageSession], providers: [Provider], modelContext: ModelContext) {
-        let provider: Provider
-        if let defaultProvider = ProviderManager.shared.getDefault(providers: providers) {
-            provider = defaultProvider
-        } else if let firstProvider = providers.first {
-            provider = firstProvider
-        } else {
-            return
-        }
-        
+    func addImageSession(provider: Provider, imageSessions: [ImageSession], modelContext: ModelContext) {
         let newItem = ImageSession(config: ImageConfig(provider: provider, model: provider.imageModel))
         
         withAnimation {
-            // Increment the order of all existing items
             for session in imageSessions {
                 session.order += 1
             }
             
-            newItem.order = 0  // Set the new item's order to 0 (top of the list)
+            newItem.order = 0
             modelContext.insert(newItem)
             self.imageSelections = [newItem]
         }

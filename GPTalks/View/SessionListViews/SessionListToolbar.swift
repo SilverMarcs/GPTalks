@@ -15,7 +15,8 @@ struct SessionListToolbar: ToolbarContent {
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
-    @Query(sort: \Provider.date, order: .reverse) var providers: [Provider]
+    @Query var providers: [Provider]
+    
     @Query var sessions: [Session]
     @Query var imageSessions: [ImageSession]
     
@@ -105,19 +106,26 @@ struct SessionListToolbar: ToolbarContent {
         }
         
         ToolbarItem(placement: .automatic) {
-            Button(action: addItem) {
+            Menu {
+                ForEach(providers.filter { $0.isEnabled }.sorted { $0.order < $1.order }) { provider in
+                    Button(provider.name) {
+                        addItem(provider: provider)
+                    }
+                    .keyboardShortcut(.none)
+                }
+            } label: {
                 Label("Add Item", systemImage: "square.and.pencil")
+            } primaryAction: {
+                if let provider = getDefaultProvider(providers: providers) {
+                    addItem(provider: provider)
+                }
             }
-            .keyboardShortcut("n", modifiers: .command)
+            .keyboardShortcut("n", modifiers: [.command])
+            .menuIndicator(.hidden)
         }
     }
-    
-    private func addItem() {
-        if sessionVM.state == .chats {
-            sessionVM.addItem(sessions: sessions, providers: providers, modelContext: modelContext)
-        } else {
-            sessionVM.addimageSession(imageSessions: imageSessions, providers: providers, modelContext: modelContext)
-        }
+    private func addItem(provider: Provider) {
+        sessionVM.addItem(provider: provider, sessions: sessions, imageSessions: imageSessions, modelContext: modelContext)
     }
 }
 

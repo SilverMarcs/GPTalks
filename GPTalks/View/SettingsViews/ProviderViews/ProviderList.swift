@@ -67,7 +67,7 @@ struct ProviderList: View {
     
     private var addButton: some View {
         Menu {
-            ForEach(ProviderType.allCases, id: \.self) { type in
+            ForEach(ProviderType.allTypes, id: \.self) { type in
                 Button(action: { addProvider(type: type) }) {
                     Label(type.name, image: type.imageName)
                 }
