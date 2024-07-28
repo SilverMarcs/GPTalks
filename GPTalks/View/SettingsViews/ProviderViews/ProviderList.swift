@@ -90,8 +90,10 @@ extension ProviderList {
             newProvider.order = 0
             modelContext.insert(newProvider)
         } completion: {
-            selectedProvider = newProvider
             try? modelContext.save()
+            DispatchQueue.main.async {
+                selectedProvider = newProvider
+            }
         }
     }
     

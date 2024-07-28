@@ -53,48 +53,56 @@ struct ModelListView<T: AIModel>: View {
      #if os(macOS)
      var content: some View {
          Form {
-             List(selection: $selections) {
-                 modelSection(isEnabled: true)
-                 modelSection(isEnabled: false)
-             }
-             .alternatingRowBackgrounds()
-             .labelsHidden()
+             modelSection(isEnabled: true)
+             modelSection(isEnabled: false)
          }
+
          .formStyle(.grouped)
      }
 
+    @ViewBuilder
      func modelSection(isEnabled: Bool) -> some View {
-         Section(header: sectionHeader(title: isEnabled ? "Enabled" : "Disabled")) {
-             ForEach(filteredModels(isEnabled: isEnabled), id: \.self) { model in
-                 ModelRow(model: model, selections: $selections)
-                     .contextMenu {
-                         Button(action: {
-                             toggleModelType(for: selections.isEmpty ? [model] : Array(selections))
-                         }) {
-                             Label("Toggle Chat/Image", systemImage: "arrow.triangle.2.circlepath")
-                         }
-                         
-                         Button(action: {
-                             toggleEnabled(for: selections.isEmpty ? [model] : Array(selections))
-                         }) {
-                             Label("Toggle Enabled", systemImage: "power")
-                         }
+         if !filteredModels(isEnabled: isEnabled).isEmpty {
+             Section(header: Text(isEnabled ? "Enabled" : "Disabled")) {
+                 List(selection: $selections) {
+                     sectionHeader
+                     ForEach(filteredModels(isEnabled: isEnabled), id: \.self) { model in
+                         ModelRow(model: model, selections: $selections)
+                             .contextMenu {
+                                 Button(action: {
+                                     toggleModelType(for: selections.isEmpty ? [model] : Array(selections))
+                                 }) {
+                                     Label("Toggle Chat/Image", systemImage: "arrow.triangle.2.circlepath")
+                                 }
+                                 
+                                 Button(action: {
+                                     toggleEnabled(for: selections.isEmpty ? [model] : Array(selections))
+                                 }) {
+                                     Label("Toggle Enabled", systemImage: "power")
+                                 }
+                             }
                      }
+                     .onDelete(perform: deleteItems)
+                     .onMove(perform: moveItems)
+                 }
+                 .labelsHidden()
+                 .alternatingRowBackgrounds()
              }
-             .onDelete(perform: deleteItems)
-             .onMove(perform: moveItems)
          }
      }
 
-     func sectionHeader(title: String) -> some View {
-         HStack(spacing: 5) {
-             Text("Show").frame(maxWidth: 30, alignment: .center)
-             Text("Code").frame(maxWidth: .infinity, alignment: .leading)
-                 .padding(.leading, 15)
-             Text("Name").frame(maxWidth: .infinity, alignment: .leading)
-             Text(title).frame(maxWidth: .infinity, alignment: .trailing)
-         }
-     }
+        var sectionHeader: some View {
+            HStack(spacing: 5) {
+                Text("Show").frame(maxWidth: 28, alignment: .center)
+                Text("Code").frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 14)
+                Text("Name").frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, -3)
+            }
+            .font(.caption)
+            .fontWeight(.bold)
+            .foregroundStyle(.secondary)
+        }
      #else
      @Environment(\.editMode) var editMode
      var content: some View {
@@ -256,4 +264,8 @@ extension ModelListView {
             model.isEnabled.toggle()
         }
     }
+}
+
+#Preview {
+    ChatModelListView(provider: Provider.factory(type: .openai))
 }

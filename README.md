@@ -16,4 +16,4 @@ Supports iOS, iPadOS, MacOS and visionOS.
 ## Usage Instructions
 Open Settings Menu, choose or create desired API provider and paste your API key and start chatting.
 
-*The minimum targets are iOS 18 or above and macOS 15 or above due to the immaturity and unstability of SwiftData on lower platforms.*
+*The minimum targets are iOS 18 or above and macOS 15 or above due to the immaturity and instability of SwiftData on lower platforms.*
