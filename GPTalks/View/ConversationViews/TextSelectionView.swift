@@ -16,15 +16,9 @@ struct TextSelectionView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                #if os(visionOS)
-                Text(content)
-                    .padding(.horizontal)
-                    .padding(.bottom, 45)
-                #else
                 MarkdownWebView(content)
                     .padding(.horizontal)
                     .padding(.bottom, 45)
-                #endif
             }
             .edgesIgnoringSafeArea(.bottom)
             .navigationTitle("Select Text")

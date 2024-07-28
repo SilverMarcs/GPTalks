@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ChatCommands: Commands {
+    @ObservedObject var config = AppConfig.shared
     let sessionVM: SessionVM
     
     var body: some Commands {
@@ -39,6 +40,12 @@ struct ChatCommands: Commands {
                     sessionVM.resetLastContext()
                 }
                 .keyboardShortcut("k", modifiers: .command)
+            }
+            
+            Section {
+                Button("Toggle Markdown") {
+                    config.assistantMarkdown.toggle()
+                }
             }
         }
     }

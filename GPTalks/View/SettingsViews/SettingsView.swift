@@ -40,9 +40,9 @@ struct SettingsView: View {
             .toolbar(removing: .sidebarToggle)
             .toolbar{
                 Spacer()
-                #if !os(macOS)
-                DismissButton()
-                #endif
+                if isIOS() {
+                    DismissButton()
+                }
             }
         } detail: {
             switch selectedSidebarItem {

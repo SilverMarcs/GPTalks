@@ -19,24 +19,7 @@ struct GPTalksApp: App {
             ContentView()
                 .environment(sessionVM)
             #if os(macOS)
-                .onAppear {
-                    NSWindow.allowsAutomaticWindowTabbing = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        if let window = NSApplication.shared.windows.first {
-                            window.identifier = NSUserInterfaceItemIdentifier("main")
-                        }
-                    }
-                }
-                .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { notification in
-                    if let window = notification.object as? NSWindow, window.identifier == NSUserInterfaceItemIdentifier("main") {
-                        isMainWindowActive = true
-                    }
-                }
-                .onReceive(NotificationCenter.default.publisher(for: NSWindow.didResignKeyNotification)) { notification in
-                    if let window = notification.object as? NSWindow, window.identifier == NSUserInterfaceItemIdentifier("main") {
-                        isMainWindowActive = false
-                    }
-                }
+                .windowDetector(isMainWindowActive: $isMainWindowActive)
             #endif
         }
         .modelContainer(sharedModelContainer)
@@ -47,7 +30,10 @@ struct GPTalksApp: App {
                 MenuCommands(sessionVM: sessionVM)
             }
             
-            CommandGroup(after: .sidebar) {
+            CommandGroup(replacing: CommandGroupPlacement.newItem) {
+            }
+            
+            CommandGroup(before: .appSettings) {
                 Button("Settings") {
                     openWindow(id: "settings")
                 }
@@ -58,7 +44,6 @@ struct GPTalksApp: App {
         #if os(macOS)
         Window("Settings", id: "settings") {
             SettingsView()
-            
         }
 //        .restorationBehavior(.disabled)
         .modelContainer(sharedModelContainer)

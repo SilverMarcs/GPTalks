@@ -10,11 +10,13 @@ import SwiftUI
 extension View {
     func applyObservers(proxy: ScrollViewProxy, session: Session, hasUserScrolled: Binding<Bool>) -> some View {
         self
-        #if os(macOS)
             .onAppear {
-                scrollToBottom(proxy: proxy, delay: 0.2)
-                scrollToBottom(proxy: proxy, delay: 0.4)
+                if !isIOS() {
+                    scrollToBottom(proxy: proxy, delay: 0.2)
+                    scrollToBottom(proxy: proxy, delay: 0.4)
+                }
             }
+#if os(macOS)
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 if session.isReplying {
                     hasUserScrolled.wrappedValue = true
