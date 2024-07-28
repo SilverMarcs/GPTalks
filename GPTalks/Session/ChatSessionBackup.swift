@@ -12,6 +12,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct ChatSessionBackup: Codable {
+    var id: UUID
     var date: Date
     var order: Int
     var title: String
@@ -35,6 +36,7 @@ struct ChatSessionBackup: Codable {
 
 extension ChatSessionBackup {
     init(from session: Session) {
+        self.id = session.id
         self.date = session.date
         self.order = session.order
         self.title = session.title
@@ -63,6 +65,7 @@ extension ChatSessionBackup {
             session = Session(config: SessionConfig())
         }
         
+        session.id = self.id
         session.date = self.date
         session.order = self.order
         session.title = self.title
@@ -77,6 +80,7 @@ extension ChatSessionBackup {
         return session
     }
 }
+
 
 extension ChatSessionBackup.ConversationBackup {
     init(from conversation: Conversation) {

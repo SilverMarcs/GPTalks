@@ -35,9 +35,8 @@ struct BackupSettings: View {
                 Text("Sessions")
             } footer: {
                 HStack {
-                    Text("Session configuration is not backed up")
+                    Text("Session configuration and images are not backed up")
                         .font(.caption)
-//                        .padding(.leading, 5)
                         .foregroundStyle(.secondary)
                     Spacer()
                 }
@@ -57,9 +56,8 @@ struct BackupSettings: View {
                 Text("Providers")
             } footer: {
                 HStack {
-                    Text("Your API Keys will be stored in plaintext")
+                    Text("API Keys will be stored in plaintext")
                         .font(.caption)
-//                        .padding(.leading, 5)
                         .foregroundStyle(.secondary)
                     Spacer()
                 }

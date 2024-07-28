@@ -51,7 +51,7 @@ struct SessionFileImporterModifier: ViewModifier {
                     do {
                         let restoredSessions = try restoreSessions(from: url, providers: providers)
                         for session in restoredSessions {
-                            if !existingSessions.contains(where: { $0.date == session.date }) {
+                            if !existingSessions.contains(where: { $0.id == session.id }) {
                                 modelContext.insert(session)
                             }
                         }
