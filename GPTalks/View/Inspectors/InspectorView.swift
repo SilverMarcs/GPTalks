@@ -26,7 +26,9 @@ struct InspectorView: View {
                 }
             }
         }
+        #if !os(visionOS)
         .inspectorColumnWidth(min: 245, ideal: 265, max: 300)
+        #endif
         .toolbar {
             if showingInspector, sessionVM.state == .chats, sessionVM.selections.count == 1, let first = sessionVM.selections.first {
                 Text("Tokens: " + first.tokenCounter.formatToK()).foregroundStyle(.secondary)

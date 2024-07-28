@@ -1,5 +1,5 @@
 {
-  "originHash" : "efdef79bc93f3ba001199feac69c8a4f3ecfcd9a47615aa93eec1ade2df582cd",
+  "originHash" : "ca80b3c31ccd16c9365b711919c0a231a39bd07d44e49aa2b362ab436498631f",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -34,7 +34,7 @@
       "location" : "https://github.com/SilverMarcs/markdown-webview",
       "state" : {
         "branch" : "master",
-        "revision" : "dfe4e4bb67bf58735e641c4acea457683a0774e9"
+        "revision" : "18ec856280a6e35b2b0c94176be83296b5179631"
       }
     },
     {

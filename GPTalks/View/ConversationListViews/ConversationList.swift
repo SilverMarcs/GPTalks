@@ -53,10 +53,13 @@ struct ConversationList: View {
                 ConversationListToolbar(session: session)
             }
             #else
+            #if !os(visionOS)
             .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                 let bottomReached = value > UIScreen.main.bounds.height
                 hasUserScrolled = bottomReached
             }
+            .scrollDismissesKeyboard(.immediately)
+            #endif
             .onTapGesture {
                 showingInspector = false
             }
@@ -64,7 +67,6 @@ struct ConversationList: View {
                 showInspector
             }
             .toolbarTitleDisplayMode(.inline)
-            .scrollDismissesKeyboard(.immediately)
             .navigationTitle(session.config.model.name)
             .toolbarTitleMenu {
                 exportButtons
@@ -79,9 +81,21 @@ struct ConversationList: View {
                     EmptyView()
                 }
             }
-            #if !os(macOS)
+            #if os(iOS)
             .inspector(isPresented: $showingInspector) {
                 InspectorView(showingInspector: $showingInspector)
+            }
+            #elseif os(visionOS)
+            .sheet(isPresented: $showingInspector) {
+                NavigationStack {
+                    InspectorView(showingInspector: $showingInspector)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                DismissButton()
+                            }
+                        }
+                }
+
             }
             #endif
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in

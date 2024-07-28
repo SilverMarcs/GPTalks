@@ -23,6 +23,14 @@ func isIOS() -> Bool {
     #endif
 }
 
+func isVisionOS() -> Bool {
+    #if os(macOS)
+    return false
+    #else
+    return UIDevice.current.userInterfaceIdiom == .vision
+    #endif
+}
+
 #if !os(macOS)
 extension View {
     @ViewBuilder

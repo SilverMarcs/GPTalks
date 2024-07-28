@@ -30,7 +30,9 @@ struct ContentView: View {
         } detail: {
             ConversationListDetail()
         }
+        #if !os(visionOS)
         .background(.background)
+        #endif
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 if providers.isEmpty {

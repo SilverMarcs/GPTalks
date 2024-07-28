@@ -22,10 +22,10 @@ struct SettingsView: View {
                 Label("General", systemImage: "gear")
                     .tag(SidebarItem.general)
                 
-                #if os(macOS)
+#if os(macOS)
                 Label("Quick Panel", systemImage: "bolt.fill")
                     .tag(SidebarItem.quickPanel)
-                #endif
+#endif
                 
                 Label("Parameters", systemImage: "slider.horizontal.3")
                     .tag(SidebarItem.parameters)
@@ -40,7 +40,7 @@ struct SettingsView: View {
             .toolbar(removing: .sidebarToggle)
             .toolbar{
                 Spacer()
-                if isIOS() {
+                if isIOS() || isVisionOS() {
                     DismissButton()
                 }
             }

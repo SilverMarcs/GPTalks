@@ -28,6 +28,9 @@ struct CommonInputStyling: ViewModifier {
                 )
                 .ignoresSafeArea()
             )
+                #if os(visionOS)
+                .background(.regularMaterial)
+                #endif
             #endif
             .ignoresSafeArea()
         

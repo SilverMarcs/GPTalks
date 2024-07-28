@@ -41,6 +41,16 @@ struct ImageGenerationList: View {
                 ImageGenerationListToolbar(session: session)
             }
 #else
+            #if !os(visionOS)
+            .scrollDismissesKeyboard(.immediately)
+            .inspector(isPresented: $showingInspector) {
+                InspectorView(showingInspector: $showingInspector)
+            }
+            #else
+            .sheet(isPresented: $showingInspector) {
+                InspectorView(showingInspector: $showingInspector)
+            }
+            #endif
             .navigationTitle(session.config.model.name)
             .onTapGesture {
                 showingInspector = false
@@ -48,11 +58,7 @@ struct ImageGenerationList: View {
             .toolbar {
                 showInspector
             }
-            .inspector(isPresented: $showingInspector) {
-                InspectorView(showingInspector: $showingInspector)
-            }
             .toolbarTitleDisplayMode(.inline)
-            .scrollDismissesKeyboard(.immediately)
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) { _ in
                 scrollToBottom(proxy: proxy)
             }
