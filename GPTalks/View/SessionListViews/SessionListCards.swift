@@ -18,7 +18,7 @@ struct SessionListCards: View {
             HStack(spacing: spacing) {
                 ListCard(
                     icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
-                    count: String(sessions.filter { !$0.isQuick }.count)) {
+                    count: String(sessions.count)) {
                         toggleChatCount()
                     }
                 

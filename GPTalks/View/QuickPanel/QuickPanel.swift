@@ -7,33 +7,26 @@
 
 import SwiftUI
 import SwiftData
-import KeyboardShortcuts
 
 #if os(macOS)
 struct QuickPanel: View {
-    @Environment(\.modelContext) var modelContext
-    @Environment(SessionVM.self) var sessionVM
-    @ObservedObject var providerManager = ProviderManager.shared
+    @Environment(\.modelContext) private var modelContext
+    @Environment(SessionVM.self) private var sessionVM
     
-    @Query(sort: \Provider.date, order: .reverse) var providers: [Provider]
-    
-    @State var prompt: String = ""
+    @Bindable var session: Session
     @Binding var showAdditionalContent: Bool
-    
-    @State var session: Session = Session(config: SessionConfig(isQuick: true))
-    
+    @State var prompt: String = ""
     @FocusState private var isFocused: Bool
-    
     let dismiss: () -> Void
+    
+    @Query var providers: [Provider]
+    @Query var sessions: [Session]
     
     var body: some View {
         VStack(spacing: 0) {
             textfieldView
                 .padding(15)
                 .padding(.leading, 2)
-                .onAppear {
-                    session = sessionVM.addQuickItem(providerManager: providerManager, providers: providers, modelContext: modelContext)
-                }
             
             if showAdditionalContent {
                 Divider()
@@ -43,19 +36,24 @@ struct QuickPanel: View {
                 bottomView
             }
         }
+        .frame(width: 650)
+        .onAppear {
+            resetChat()
+        }
     }
     
-    private var textfieldView: some View {
+    @ViewBuilder
+    var textfieldView: some View {
         HStack(spacing: 12) {
             Menu {
                 ProviderPicker(
                     provider: $session.config.provider,
-                    providers: providers.sorted(by: { $0.order < $1.order }),
+                    providers: providers,
                     onChange: { newProvider in
                         session.config.model = newProvider.quickChatModel
                     }
                 )
-                                
+
                 ModelPicker(model: $session.config.model, models: session.config.provider.models, label: "Model")
                 
             } label: {
@@ -128,6 +126,7 @@ struct QuickPanel: View {
                     Image(systemName: "plus.square.on.square")
                         .imageScale(.medium)
                 }
+                .disabled(session.groups.isEmpty)
                 .keyboardShortcut("N", modifiers: [.command])
                 
             }
@@ -141,22 +140,21 @@ struct QuickPanel: View {
     private func resetChat() {
         showAdditionalContent = false
         session.deleteAllConversations()
-        session.config = .init(isQuick: true)
+        if let quickProvider = ProviderManager.shared.getQuickProvider(providers: providers) {
+            session.config = .init(provider: quickProvider, purpose: .quick)
+        }
     }
     
     private func addToDB() {
-        if session.groups.isEmpty {
-            return
-        }
-        
-        dismiss()
-        session.isQuick = false
-        
         NSApp.activate(ignoringOtherApps: true)
         NSApp.keyWindow?.makeKeyAndOrderFront(nil)
         
-        self.session = sessionVM.addQuickItem(providerManager: providerManager, providers: providers, modelContext: modelContext)
+        let newSession = session.copy(title: "Quick Session")
+        sessionVM.fork(session: newSession, sessions: sessions, modelContext: modelContext)
+        resetChat()
+        
         showAdditionalContent = false
+        dismiss()
     }
     
     private func send() {
@@ -180,6 +178,6 @@ struct QuickPanel: View {
     let showAdditionalContent = Binding.constant(true)
     let dismiss = {}
     
-    QuickPanel(showAdditionalContent: showAdditionalContent, dismiss: dismiss)
+    QuickPanel(session: Session(config: .init()), showAdditionalContent: showAdditionalContent, dismiss: dismiss)
 }
 #endif

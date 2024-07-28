@@ -101,7 +101,7 @@ struct ConversationMenu: View {
 
     var forkSession: some View {
         Button {
-            if let newSession = group.session?.fork(from: group) {
+            if let newSession = group.session?.copy(from: group, title: "Forked Session") {
                 sessionVM.fork(session: newSession, sessions: sessions, modelContext: modelContext)
             }
         } label: {

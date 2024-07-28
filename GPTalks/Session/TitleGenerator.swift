@@ -30,7 +30,7 @@ enum TitleGenerator {
         
         let user = Conversation(role: .user, content: wrappedConversation)
         
-        let titleConfig = SessionConfig(provider: config.provider, model: config.provider.titleModel)
+        let titleConfig = SessionConfig(provider: config.provider, purpose: .title)
         let streamHandler = StreamHandler(config: titleConfig, assistant: user)
         
         if let title = try? await streamHandler.returnStreamText(from: [user]) {
@@ -61,7 +61,7 @@ enum TitleGenerator {
         
         let user = Conversation(role: .user, content: wrappedPrompts)
         
-        let titleConfig = SessionConfig(provider: config.provider, model: config.provider.titleModel)
+        let titleConfig = SessionConfig(provider: config.provider, purpose: .title)
         let streamHandler = StreamHandler(config: titleConfig, assistant: user)
         
         if let title = try? await streamHandler.returnStreamText(from: [user]) {

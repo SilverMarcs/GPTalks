@@ -65,7 +65,7 @@ struct ContentView: View {
             }
         }
         .floatingPanel(isPresented: $showingPanel, showAdditionalContent: $showAdditionalContent) {
-            QuickPanel(showAdditionalContent: $showAdditionalContent) {
+            QuickPanelHelper(showAdditionalContent: $showAdditionalContent) {
                 showingPanel.toggle()
                 bringMainWindowToFront()
             }

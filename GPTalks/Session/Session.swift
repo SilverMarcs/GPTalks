@@ -247,12 +247,18 @@ final class Session {
         }
     }
     
-    func fork(from group: ConversationGroup) -> Session {
-        let newSession = Session(config: config.copy())
-        newSession.title = title
+    func copy(from group: ConversationGroup? = nil, title: String = "Chat Session", purpose: SessionConfigPurpose = .chat) -> Session {
+        let newSession = Session(config: config.copy(purpose: purpose))
+        newSession.title = purpose.title
         
-        let groupsToCopy = groups.prefix(through: groups.firstIndex(of: group)!)
-        newSession.groups = groupsToCopy.map { $0.copy() as! ConversationGroup }
+        if let group = group, let index = groups.firstIndex(of: group) {
+            // Scenario 1: Fork from a particular group
+            let groupsToCopy = groups.prefix(through: index)
+            newSession.groups = groupsToCopy.map { $0.copy()}
+        } else {
+            // Scenario 2: Fork all groups
+            newSession.groups = groups.map { $0.copy()}
+        }
         
         return newSession
     }

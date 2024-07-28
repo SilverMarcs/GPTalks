@@ -11,7 +11,7 @@ import OpenAI
 import SwiftUI
 
 @Model
-final class ConversationGroup: NSCopying {
+final class ConversationGroup {
     var id: UUID = UUID()
     var date: Date = Date()
     var session: Session?
@@ -105,8 +105,7 @@ final class ConversationGroup: NSCopying {
         }
     }
     
-    func copy(with zone: NSZone? = nil) -> Any {
-        let copy = ConversationGroup(conversation: activeConversation.copy() as! Conversation)
-        return copy
+    func copy() -> ConversationGroup{
+        return ConversationGroup(conversation: activeConversation.copy())
     }
 }

@@ -95,12 +95,11 @@ extension SessionVM {
     
     func fork(session: Session, sessions: [Session], modelContext: ModelContext) {
         withAnimation {
-            // Increment the order of all existing items
             for existingSession in sessions {
                 existingSession.order += 1
             }
             
-            session.order = 0  // Set the forked session's order to 0 (top of the list)
+            session.order = 0
             modelContext.insert(session)
             self.selections = [session]
         }
@@ -108,9 +107,9 @@ extension SessionVM {
         try? modelContext.save()
     }
     
-    func addQuickItem(providerManager: ProviderManager, providers: [Provider], modelContext: ModelContext) -> Session {
-        if let defaultQuickProvider = providerManager.getQuickProvider(providers: providers) {
-            let config = SessionConfig(provider: defaultQuickProvider, isQuick: true)
+    func addQuickItem(providers: [Provider], modelContext: ModelContext) -> Session {
+        if let defaultQuickProvider = ProviderManager.shared.getQuickProvider(providers: providers) {
+            let config = SessionConfig(provider: defaultQuickProvider, purpose: .quick)
             let session = Session(config: config)
             session.isQuick = true
             

@@ -14,7 +14,7 @@ import GoogleGenerativeAI
 import SwiftAnthropic
 
 @Model
-final class Conversation: NSCopying {
+final class Conversation {
     var id: UUID = UUID()
     var date: Date = Date()
     
@@ -34,7 +34,7 @@ final class Conversation: NSCopying {
         self.imagePaths = imagePaths
     }
     
-    init(role: ConversationRole, content: String, model: AIModel, imagePaths: [String] = []) {
+    init(role: ConversationRole, content: String, model: AIModel?, imagePaths: [String] = []) {
         self.role = role
         self.content = content
         self.model = model
@@ -152,11 +152,7 @@ final class Conversation: NSCopying {
         group?.deleteConversation(self)
     }
     
-    func copy(with zone: NSZone? = nil) -> Any {
-        let copy = Conversation(role: role, content: content)
-        copy.model = model
-        copy.imagePaths = imagePaths
-        
-        return copy
+    func copy() -> Conversation {
+        return Conversation(role: role, content: content, model: model, imagePaths: imagePaths)
     }
 }
