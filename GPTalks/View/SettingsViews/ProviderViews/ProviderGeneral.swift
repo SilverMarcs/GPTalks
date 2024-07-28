@@ -57,6 +57,7 @@ struct ProviderGeneral: View {
                     }
                     .buttonStyle(.plain)
                 }
+                .truncationMode(.middle)
                 .autocorrectionDisabled(true)
                 #if !os(macOS)
                 .textInputAutocapitalization(.never)

@@ -21,7 +21,7 @@ class StreamManager {
     -> AsyncThrowingStream<String, Error>
     {
         switch config.provider.type {
-        case .openai:
+        case .openai, .local:
             return streamOpenAIResponse(from: conversations)
         case .anthropic:
             return streamClaudeResponse(from: conversations)
@@ -32,7 +32,7 @@ class StreamManager {
     
     func nonStreamingResponse(from conversations: [Conversation]) async throws -> String {
         switch config.provider.type {
-        case .openai:
+        case .openai, .local:
             return try await nonStreamingOpenAIResponse(from: conversations)
         case .anthropic:
             return try await nonStreamingClaudeResponse(from: conversations)
@@ -42,7 +42,7 @@ class StreamManager {
     }
     
     private func nonStreamingOpenAIResponse(from conversations: [Conversation]) async throws -> String {
-        let service = OpenAI(configuration: OpenAI.Configuration(token: config.provider.apiKey, host: config.provider.host))
+        let service = OpenAI(configuration: OpenAI.Configuration(token: config.provider.apiKey, host: config.provider.host, scheme: config.provider.type.scheme))
         
         var messages = conversations.map { $0.toOpenAI() }
         let systemPrompt = Conversation(role: .system, content: config.systemPrompt)
@@ -76,7 +76,7 @@ class StreamManager {
     private func streamOpenAIResponse(from conversations: [Conversation]) -> AsyncThrowingStream<String, Error> {
         let service = OpenAI(
             configuration: OpenAI.Configuration(
-                token: config.provider.apiKey, host: config.provider.host))
+                token: config.provider.apiKey, host: config.provider.host, scheme: config.provider.type.scheme))
         
         var messages = conversations.map {
             $0.toOpenAI()

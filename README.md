@@ -6,8 +6,8 @@ Supports iOS, iPadOS, MacOS and visionOS.
 - OpenAI
 - Google Generative AI
 - Anthropic Claude
-- Any other OpenAI compatible provider (OpenRouter, Groq, Perplexity, etc.)
-- OpenAI compatible Local LLMs (untested)
+- Ollama and LMStudio (via their OpenAI Compatible API)
+- Any other OpenAI compatible provider (OpenRouter, Groq, Perplexity, MistralAI, TogetherAI, etc.)
 
 ## Features Supported:
 - Chat Completion (streaming)

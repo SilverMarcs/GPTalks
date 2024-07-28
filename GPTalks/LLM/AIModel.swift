@@ -85,4 +85,10 @@ extension AIModel {
             AIModel(code: "gemini-1.0-pro", name: "Gemini-1.0P", order: 2),
         ]
     }
+    
+    static func getLocalModels() -> [AIModel] {
+        return [
+            AIModel(code: "dummy-model", name: "Dummy", order: 0),
+        ]
+    }
 }
