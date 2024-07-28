@@ -23,7 +23,7 @@ final class SessionConfig {
     @Relationship(deleteRule: .nullify)
     var model: AIModel
     
-    init(provider: Provider, model: AIModel, temperature: Double?, frequencyPenalty: Double?, presencePenalty: Double?, topP: Double?, maxTokens: Int?, systemPrompt: String, purpose: SessionConfigPurpose = .chat) {
+    private init(provider: Provider, model: AIModel, temperature: Double?, frequencyPenalty: Double?, presencePenalty: Double?, topP: Double?, maxTokens: Int?, systemPrompt: String, purpose: SessionConfigPurpose = .chat) {
         self.provider = provider
         self.model = model
         self.temperature = temperature
@@ -35,20 +35,8 @@ final class SessionConfig {
         self.purpose = purpose
     }
     
-    init(provider: Provider = Provider.factory(type: .openai),
-         temperature: Double? = nil,
-         frequencyPenalty: Double? = nil,
-         presencePenalty: Double? = nil,
-         topP: Double? = nil,
-         maxTokens: Int? = nil,
-         purpose: SessionConfigPurpose = .chat) {
-        
+    init(provider: Provider, purpose: SessionConfigPurpose) {
         self.provider = provider
-        self.temperature = temperature
-        self.frequencyPenalty = frequencyPenalty
-        self.presencePenalty = presencePenalty
-        self.topP = topP
-        self.maxTokens = maxTokens
         
         switch purpose {
             case .chat:
@@ -62,6 +50,14 @@ final class SessionConfig {
                 self.model = provider.quickChatModel
         }
     }
+    
+    // for previews
+    init(provider: Provider = Provider.factory(type: .openai)) {
+        self.provider = provider
+        self.model = provider.chatModel
+        self.systemPrompt = ""
+    }
+    
 
     func copy(purpose: SessionConfigPurpose) -> SessionConfig {
         return SessionConfig(provider: self.provider, model: self.model, temperature: self.temperature, frequencyPenalty: self.frequencyPenalty, presencePenalty: self.presencePenalty, topP: self.topP, maxTokens: self.maxTokens, systemPrompt: self.systemPrompt, purpose: purpose)

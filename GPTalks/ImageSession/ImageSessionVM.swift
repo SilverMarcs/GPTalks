@@ -32,7 +32,7 @@ extension SessionVM {
     
     func addimageSession(imageSessions: [ImageSession], providers: [Provider], modelContext: ModelContext) {
         let provider: Provider
-        if let defaultProvider = providerManager.getDefault(providers: providers) {
+        if let defaultProvider = ProviderManager.shared.getDefault(providers: providers) {
             provider = defaultProvider
         } else if let firstProvider = providers.first {
             provider = firstProvider

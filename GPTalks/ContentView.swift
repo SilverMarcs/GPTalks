@@ -107,5 +107,5 @@ struct BackgroundView: NSViewRepresentable {
 #Preview {
     ContentView()
         .modelContainer(for: Session.self, inMemory: true)
-        .environment(SessionVM(providerManager: ProviderManager.shared))
+        .environment(SessionVM())
 }

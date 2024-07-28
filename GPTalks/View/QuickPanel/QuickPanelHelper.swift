@@ -7,6 +7,7 @@
 import SwiftUI
 import SwiftData
 
+#if os(macOS)
 struct QuickPanelHelper: View {
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) var sessionVM
@@ -34,3 +35,4 @@ struct QuickPanelHelper: View {
         }
     }
 }
+#endif

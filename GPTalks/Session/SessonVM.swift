@@ -15,12 +15,6 @@ enum ListState: String {
 }
 
 @Observable class SessionVM {
-    var providerManager: ProviderManager
-    
-    init(providerManager: ProviderManager = ProviderManager.shared) {
-        self.providerManager = providerManager
-    }
-    
     var selections: Set<Session> = []
     var imageSelections: Set<ImageSession> = []
     

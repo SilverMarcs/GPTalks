@@ -66,7 +66,7 @@ extension SessionVM {
     
     func addItem(sessions: [Session], providers: [Provider], modelContext: ModelContext) {
         let provider: Provider
-        if let defaultProvider = providerManager.getDefault(providers: providers) {
+        if let defaultProvider = ProviderManager.shared.getDefault(providers: providers) {
             provider = defaultProvider
         } else if let firstProvider = providers.first {
             provider = firstProvider
@@ -75,7 +75,7 @@ extension SessionVM {
         }
         
         let config = SessionConfig(
-            provider: provider)
+            provider: provider, purpose: .chat)
         
         let newItem = Session(config: config)
         
