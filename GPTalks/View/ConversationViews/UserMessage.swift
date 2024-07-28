@@ -16,6 +16,7 @@ struct UserMessage: View {
     @State var maxHeight: CGFloat = 400
     @State var labelSize: CGSize = CGSize()
     @State var isExpanded: Bool = false
+    @State var showingTextSelection = false
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 4) {
@@ -36,14 +37,6 @@ struct UserMessage: View {
                     #endif
                         .fill(conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
                 )
-                .contextMenu {
-                    if let group = conversation.group {
-                        ConversationMenu(group: group, labelSize: labelSize, toggleMaxHeight: toggleMaxHeight, isExpanded: isExpanded)
-                    }
-                } preview: {
-                    Text("User Message")
-                        .padding()
-                }
             
             #if os(macOS)
             if let group = conversation.group {
@@ -53,11 +46,25 @@ struct UserMessage: View {
             }
             #endif
         }
-        .frame(maxWidth: .infinity, maxHeight: maxHeight, alignment: .trailing)
-        .padding(.leading, leadingPadding)
+        #if !os(macOS)
+        .contextMenu {
+            if let group = conversation.group {
+                ConversationMenu(group: group, labelSize: labelSize, toggleMaxHeight: toggleMaxHeight, isExpanded: isExpanded, toggleTextSelection: toggleTextSelection)
+            }
+        } preview: {
+            Text("User Message")
+                .padding()
+        }
+        .sheet(isPresented: $showingTextSelection) {
+            TextSelectionView(content: conversation.content)
+        }
+        #else
         .onHover { isHovered in
             self.isHovered = isHovered
         }
+        #endif
+        .frame(maxWidth: .infinity, maxHeight: maxHeight, alignment: .trailing)
+        .padding(.leading, leadingPadding)
         .background {
             GeometryReader { geometry in
                 Color.clear
@@ -69,8 +76,10 @@ struct UserMessage: View {
                     }
             }
         }
-#if !os(macOS)
-#endif
+    }
+    
+    func toggleTextSelection() {
+        showingTextSelection.toggle()
     }
     
     var leadingPadding: CGFloat {

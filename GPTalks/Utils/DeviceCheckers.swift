@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-func isPadOS() -> Bool {
+func isIPadOS() -> Bool {
     #if os(macOS)
     return false
     #else
@@ -22,3 +22,20 @@ func isIOS() -> Bool {
     return UIDevice.current.userInterfaceIdiom == .phone
     #endif
 }
+
+#if !os(macOS)
+extension View {
+    @ViewBuilder
+    func ifIsPad<TrueContent: View, FalseContent: View>(
+        @ViewBuilder isTrueContent: (Self) -> TrueContent,
+        @ViewBuilder else isFalseContent: (Self) -> FalseContent
+    ) -> some View {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            isTrueContent(self)
+        } else {
+            isFalseContent(self)
+        }
+        
+    }
+}
+#endif

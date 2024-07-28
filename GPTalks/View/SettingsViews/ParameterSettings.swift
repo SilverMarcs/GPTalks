@@ -19,10 +19,7 @@ struct ParameterSettings: View {
             }
 
             Section("System Prompt") {
-                TextEditor(text: $config.systemPrompt)
-                    .font(.body)
-                    .frame(height: 80)
-                    .scrollContentBackground(.hidden)
+                sysPrompt
             }
             
             #if os(macOS)
@@ -36,6 +33,18 @@ struct ParameterSettings: View {
         .navigationTitle("Parameters")
         .toolbarTitleDisplayMode(.inline)
         .formStyle(.grouped)
+    }
+    
+    var sysPrompt: some View {
+        #if os(macOS)
+        TextEditor(text: $config.systemPrompt)
+            .font(.body)
+            .frame(height: 80)
+            .scrollContentBackground(.hidden)
+        #else
+        TextField("System Prompt", text: $config.systemPrompt, axis: .vertical)
+            .lineLimit(4, reservesSpace: true)
+        #endif
     }
 }
 

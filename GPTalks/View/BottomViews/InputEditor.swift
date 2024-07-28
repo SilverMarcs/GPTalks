@@ -20,7 +20,7 @@ struct InputEditor: View {
         inputView
         .font(.body)
         .onAppear {
-            if !isPadOS() && !AppConfig.shared.sidebarFocus {
+            if !isIPadOS() && !AppConfig.shared.sidebarFocus {
                 DispatchQueue.main.async { isFocused = true }
             }
         }
@@ -76,10 +76,10 @@ struct InputEditor: View {
                     .cornerRadius(radius)
                 )
             
-            if prompt.count > 25 {
+            if isIOS() && prompt.count > 25 {
                 ExpandButton(size: 25) { showPopover.toggle() }
                     .padding(5)
-                    .popover(isPresented: $showPopover) {
+                    .sheet(isPresented: $showPopover) {
                         ExpandedTextField(prompt: $prompt)
                     }
     

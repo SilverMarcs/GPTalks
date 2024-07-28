@@ -12,7 +12,9 @@ struct AssistantMessage: View {
     @ObservedObject var config = AppConfig.shared
     
     var conversation: Conversation
+    
     @State var isHovered: Bool = false
+    @State var showingTextSelection = false
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -48,20 +50,28 @@ struct AssistantMessage: View {
                 .padding(.top, 2)
             }
         }
-        .padding(.trailing, 30)
 #if !os(macOS)
         .contextMenu {
             if let group = conversation.group, !conversation.isReplying {
-                ConversationMenu(group: group)
+                ConversationMenu(group: group, toggleTextSelection: toggleTextSelection)
             }
         } preview: {
             Text("Assistant Message")
                 .padding()
         }
-#endif
+        .sheet(isPresented: $showingTextSelection) {
+            TextSelectionView(content: conversation.content)
+        }
+#else
         .onHover { isHovered in
             self.isHovered = isHovered
         }
+#endif
+        .padding(.trailing, 30)
+    }
+    
+    func toggleTextSelection() {
+        showingTextSelection.toggle()
     }
     
     var spacing: CGFloat {

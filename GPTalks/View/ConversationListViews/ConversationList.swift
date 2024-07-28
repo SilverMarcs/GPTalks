@@ -18,6 +18,9 @@ struct ConversationList: View {
     @State private var hasUserScrolled = false
     @State var showingInspector: Bool = false
     
+    @State private var isExportingJSON = false
+    @State private var isExportingMarkdown = false
+    
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
@@ -63,6 +66,9 @@ struct ConversationList: View {
             .toolbarTitleDisplayMode(.inline)
             .scrollDismissesKeyboard(.immediately)
             .navigationTitle(session.config.model.name)
+            .toolbarTitleMenu {
+                exportButtons
+            }
             #endif
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
             .scrollContentBackground(.visible)
@@ -76,6 +82,7 @@ struct ConversationList: View {
             #if !os(macOS)
             .inspector(isPresented: $showingInspector) {
                 InspectorView(showingInspector: $showingInspector)
+                    .presentationBackground(.thinMaterial)
             }
             #endif
             .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
@@ -85,7 +92,21 @@ struct ConversationList: View {
         }
     }
     
-    #if !os(macOS)
+    @ViewBuilder
+    var exportButtons: some View {
+        Button {
+            isExportingJSON = true
+        } label: {
+            Label("Export JSON", systemImage: "ellipsis.curlybraces")
+        }
+        
+        Button {
+            isExportingMarkdown = true
+        } label: {
+            Label("Export Markdown", systemImage: "richtext.page")
+        }
+    }
+    
     private var showInspector: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button {
@@ -95,7 +116,6 @@ struct ConversationList: View {
             }
         }
     }
-    #endif
     
     var spacerHeight: CGFloat {
         #if os(macOS)

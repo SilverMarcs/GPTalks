@@ -37,15 +37,13 @@ struct SessionList: View {
                     proxy.scrollTo(first, anchor: .top)
                 }
             }
-#if os(macOS)
             .onAppear {
-                if let first = sessions.first, sessionVM.selections.isEmpty {
+                if let first = sessions.first, sessionVM.selections.isEmpty, !isIOS() {
                     DispatchQueue.main.async {
                         sessionVM.selections = [first]
                     }
                 }
             }
-#endif
         }
     }
     

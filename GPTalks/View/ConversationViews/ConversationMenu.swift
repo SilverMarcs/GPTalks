@@ -12,14 +12,13 @@ struct ConversationMenu: View {
     var group: ConversationGroup
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) var sessionVM
-    @ObservedObject var providerManager = ProviderManager.shared
     
-    @Query var providers: [Provider]
     @Query var sessions: [Session]
     
     var labelSize: CGSize? = nil
     var toggleMaxHeight: (() -> Void)? = nil
     var isExpanded: Bool = false
+    var toggleTextSelection: (() -> Void)? = nil
 
     var body: some View {
         #if os(macOS)
@@ -36,17 +35,28 @@ struct ConversationMenu: View {
         Group {
             expandHeight
             
-            editGroup
-            
-            regenGroup
+            Section {
+                editGroup
+                
+                regenGroup
+            }
         
-            copyText
+            Section {
+                copyText
+                #if !os(macOS)
+                selectText
+                #endif
+            }
 
-            resetContext
-
-            forkSession
-
-            deleteGroup
+            Section {
+                resetContext
+                
+                forkSession
+            }
+            
+            Section {
+                deleteGroup
+            }
             
             navigate
         }
@@ -92,7 +102,7 @@ struct ConversationMenu: View {
     var forkSession: some View {
         Button {
             if let newSession = group.session?.fork(from: group) {
-                sessionVM.fork(session: newSession, sessions: sessions, providerManager: providerManager, providers: providers, modelContext: modelContext)
+                sessionVM.fork(session: newSession, sessions: sessions, modelContext: modelContext)
             }
         } label: {
             Label("Fork Session", systemImage: "arrow.branch")
@@ -108,9 +118,18 @@ struct ConversationMenu: View {
                 .help("Copy Text")
         }
     }
+    
+    var selectText: some View {
+        Button {
+            toggleTextSelection?()
+        } label: {
+            Label("Select Text", systemImage: "text.cursor")
+                .help("Select Text")
+        }
+    }
 
     var deleteGroup: some View {
-        Button {
+        Button(role: .destructive) {
             withAnimation {
                 group.deleteSelf()
             }

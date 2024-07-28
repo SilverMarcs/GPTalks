@@ -93,7 +93,7 @@ extension SessionVM {
         try? modelContext.save()
     }
     
-    func fork(session: Session, sessions: [Session], providerManager: ProviderManager, providers: [Provider], modelContext: ModelContext) {
+    func fork(session: Session, sessions: [Session], modelContext: ModelContext) {
         withAnimation {
             // Increment the order of all existing items
             for existingSession in sessions {

@@ -30,26 +30,24 @@ struct ConversationListToolbar: ToolbarContent {
             Color.clear
             .markdownSessionExporter(isExporting: $isExportingMarkdown, session: session)
         }
-        
-        if !isIOS() {
-            ToolbarItem {
-                Menu {
-                    Button {
-                        isExportingJSON = true
-                    } label: {
-                        Label("JSON", systemImage: "ellipsis.curlybraces")
-                    }
-                    
-                    Button {
-                        isExportingMarkdown = true
-                    } label: {
-                        Label("Markdown", systemImage: "richtext.page")
-                    }
-
+    
+        ToolbarItem {
+            Menu {
+                Button {
+                    isExportingJSON = true
                 } label: {
-                    Label("Export", systemImage: "square.and.arrow.up")
-                        .labelStyle(.titleOnly)
+                    Label("JSON", systemImage: "ellipsis.curlybraces")
                 }
+                
+                Button {
+                    isExportingMarkdown = true
+                } label: {
+                    Label("Markdown", systemImage: "richtext.page")
+                }
+
+            } label: {
+                Label("Export", systemImage: "square.and.arrow.up")
+                    .labelStyle(.titleOnly)
             }
         }
     }

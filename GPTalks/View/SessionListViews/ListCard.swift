@@ -44,7 +44,11 @@ struct ListCard: View {
             #if os(macOS)
             .background(.quaternary.opacity(0.8))
             #else
-            .background(colorScheme == .dark ? AnyShapeStyle(.background.secondary) : AnyShapeStyle(.background))
+            .background(colorScheme == .dark
+                        ? isIPadOS()
+                            ? AnyShapeStyle(.background.tertiary)
+                            : AnyShapeStyle(.background.secondary)
+                        : AnyShapeStyle(.background))
             #endif
             .cornerRadius(radius)
         }

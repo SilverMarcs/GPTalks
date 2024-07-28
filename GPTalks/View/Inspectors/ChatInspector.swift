@@ -90,11 +90,8 @@ struct ChatInspector: View {
                 session.resetContext(at: lastGroup)
             }
         } label: {
-            HStack {
-                Spacer()
-                Text("Reset Context")
-                Spacer()
-            }
+            Text("Reset Context")
+                .frame(maxWidth: .infinity, alignment: .center)
         }
         .foregroundStyle(.orange)
     }
@@ -105,11 +102,8 @@ struct ChatInspector: View {
             
             session.deleteAllConversations()
         } label: {
-            HStack {
-                Spacer()
-                Text("Delete All Messages")
-                Spacer()
-            }
+            Text("Delete All Messages")
+                .frame(maxWidth: .infinity, alignment: .center)
         }
         .foregroundStyle(.red)
     }

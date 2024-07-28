@@ -56,7 +56,7 @@ struct SessionListSidebar: View {
         #else
         .navigationTitle(sessionVM.state.rawValue.capitalized)
         .listSectionSeparator(.hidden)
-        .listStyle(.insetGrouped)
+        .listStyle(.sidebar)
         .searchable(text: $sessionVM.searchText)
         #endif
     }
