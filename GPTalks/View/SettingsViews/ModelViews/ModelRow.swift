@@ -18,7 +18,7 @@ struct ModelRow: View {
     @State private var testResult: Bool? = nil
     
     var body: some View {
-        HStack {
+        Group {
             #if os(macOS)
             HStack(spacing: 0) {
                 Toggle("Enabled", isOn: $model.isEnabled)
@@ -28,56 +28,34 @@ struct ModelRow: View {
                     .padding(.leading, 17)
                 
                 TextField("Name", text: $model.name)
+                
+                Spacer()
+                
+                modelTester
+                    .frame(width: 25)
             }
             #else
-            Group {
-                if editMode?.wrappedValue == .active {
-                    VStack(alignment: .leading) {
+            if editMode?.wrappedValue == .active {
+                VStack(alignment: .leading) {
+                    Text(model.name)
+                    Text(model.code)
+                }
+            } else {
+                DisclosureGroup {
+                    TextField("Code", text: $model.code)
+                    
+                    TextField("Name", text: $model.name)
+                } label: {
+                    HStack {
                         Text(model.name)
-                        Text(model.code)
-                    }
-                } else {
-                    DisclosureGroup {
-                        TextField("Code", text: $model.code)
-                        
-                        TextField("Name", text: $model.name)
-                        
-                    } label: {
-                        Text(model.name)
+                        Spacer()
+                        modelTester
                     }
                 }
             }
-            .opacity(model.isEnabled ? 1 : 0.5)
-            #endif
-        
-            Spacer()
-            
-            HStack {
-                if isTestingModel {
-                    ProgressView()
-                        .controlSize(.small)
-                } else if let result = testResult {
-                    Image(systemName: result ? "checkmark.circle" : "xmark.circle")
-                        .foregroundStyle(result ? .green : .red)
-//                    Button {
-//                        Task { await runModelTest() }
-//                    } label: {
-//                        Image(systemName: "play.circle")
-//                    }
-//                    .buttonStyle(.plain)
-                } else {
-                    Button {
-                        Task { await runModelTest() }
-                    } label: {
-                        Image(systemName: "play.circle")
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            #if os(macOS)
-            .frame(width: 35)
             #endif
         }
+        .opacity(model.isEnabled ? 1 : 0.5)
         .onChange(of: model.isEnabled) {
             reorderModels()
         }
@@ -100,16 +78,44 @@ struct ModelRow: View {
         #endif
     }
     
+    var modelTester: some View {
+        HStack {
+            if isTestingModel {
+                ProgressView()
+                #if os(macOS)
+                    .controlSize(.small)
+                #endif
+            } else if let result = testResult {
+                Image(systemName: result ? "checkmark.circle" : "xmark.circle")
+                    .foregroundStyle(result ? .green : .red)
+            } else {
+                Button {
+                    Task { await runModelTest() }
+                } label: {
+                    Image(systemName: "play.circle")
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(model.lastTestResult == nil ? .primary : model.lastTestResult! ? .green : .red)
+            }
+        }
+    }
+    
     func runModelTest() async {
         isTestingModel = true
         testResult = await testModel()
         isTestingModel = false
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            testResult = nil
+        }
     }
     
     func testModel() async -> Bool {
         if let provider = model.provider {
             let service = DefaultAIServiceFactory().createService(for: provider.type)
-            return await service.testModel(provider: provider, model: model)
+            let result = await service.testModel(provider: provider, model: model)
+            model.lastTestResult = result
+            return result
         }
         return false
     }
