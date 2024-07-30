@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct ModelRow<T: AIModel>: View {
+struct ModelRow: View {
     #if !os(macOS)
     @Environment(\.editMode) var editMode
     #endif
-    @Bindable var model: T
-    @Binding var selections: Set<T>
+    @Bindable var model: AIModel
+    var reorderModels: () -> Void
     
     var body: some View {
         Group {
@@ -48,6 +48,9 @@ struct ModelRow<T: AIModel>: View {
             .opacity(model.isEnabled ? 1 : 0.5)
 #endif
         }
+        .onChange(of: model.isEnabled) {
+            reorderModels()
+        }
         .swipeActions(edge: .leading) {
             #if !os(macOS)
             Button {
@@ -71,5 +74,5 @@ struct ModelRow<T: AIModel>: View {
 #Preview {
     let model = AIModel(code: "gpt-3.5-turbo", name: "GPT-3.5 Turbo")
     
-    ModelRow(model: model, selections: .constant([]))
+    ModelRow(model: model) {}
 }

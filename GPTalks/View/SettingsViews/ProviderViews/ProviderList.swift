@@ -16,53 +16,43 @@ struct ProviderList: View {
     @State var selectedProvider: Provider?
     
     var body: some View {
-        NavigationStack {
-            content
+        Group {
+            #if os(macOS)
+            NavigationStack {
+                Form {
+                    content
+                }
+                .formStyle(.grouped)
+            }
+            #else
+            NavigationStack {
+                content
+            }
+            #endif
         }
         .toolbar {
             addButton
         }
     }
-
+    
     var content: some View {
-        Group {
-            #if os(macOS)
-            Form {
-                providerSection(isEnabled: true)
-                providerSection(isEnabled: false)
+        List(selection: $selectedProvider) {
+            ForEach(reorderedProviders, id: \.self) { provider in
+                NavigationLink(destination: ProviderDetail(provider: provider, reorderProviders: { self.reorderProviders() })) {
+                    ProviderRow(provider: provider)
+                }
             }
-            .formStyle(.grouped)
-            #else
-            List(selection: $selectedProvider) {
-                providerSection(isEnabled: true)
-                providerSection(isEnabled: false)
-            }
-            #endif
+            .onDelete(perform: deleteProviders)
+            .onMove(perform: move)
         }
         .navigationTitle("Providers")
         .toolbarTitleDisplayMode(.inline)
     }
-
-    func providerSection(isEnabled: Bool) -> some View {
-        Section(header: Text(isEnabled ? "Enabled" : "Disabled")) {
-            #if os(macOS)
-            List {
-                providerList(isEnabled: isEnabled)
-            }
-            #else
-            providerList(isEnabled: isEnabled)
-            #endif
-        }
-    }
-
-    func providerList(isEnabled: Bool) -> some View {
-        ForEach(providers.filter { $0.isEnabled == isEnabled }, id: \.self) { provider in
-            NavigationLink(destination: ProviderDetail(provider: provider)) {
-                ProviderRow(provider: provider)
-            }
-        }
-        .onDelete(perform: deleteProviders)
-        .onMove(perform: move)
+    
+    private var reorderedProviders: [Provider] {
+        let enabled = providers.filter { $0.isEnabled }.sorted { $0.order < $1.order }
+        let disabled = providers.filter { !$0.isEnabled }.sorted { $0.order < $1.order }
+        return enabled + disabled
     }
     
     private var addButton: some View {
@@ -83,12 +73,8 @@ extension ProviderList {
         let newProvider = Provider.factory(type: type)
         
         withAnimation {
-            for provider in providers {
-                provider.order += 1
-            }
-            
-            newProvider.order = 0
             modelContext.insert(newProvider)
+            reorderProviders()
         } completion: {
             try? modelContext.save()
             DispatchQueue.main.async {
@@ -101,32 +87,33 @@ extension ProviderList {
         withAnimation {
             let defaultProviderID = providerManager.defaultProvider
             var providersToDelete = offsets
-            // Check if any of the selected providers is the default provider
             for index in offsets {
-                if providers[index].id.uuidString == defaultProviderID && providers[index].name == "OpenAI" {
-                    // Remove the default provider from the deletion set
+                if reorderedProviders[index].id.uuidString == defaultProviderID && reorderedProviders[index].name == "OpenAI" {
                     providersToDelete.remove(index)
                 }
             }
-            // Delete the remaining providers
             for index in providersToDelete {
-                modelContext.delete(providers[index])
+                modelContext.delete(reorderedProviders[index])
             }
+            reorderProviders()
         } completion: {
             try? modelContext.save()
         }
     }
     
     private func move(from source: IndexSet, to destination: Int) {
-        var updatedProviders = providers
+        var updatedProviders = reorderedProviders
         updatedProviders.move(fromOffsets: source, toOffset: destination)
-        
-        for (index, provider) in updatedProviders.enumerated() {
+        reorderProviders(updatedProviders)
+    }
+    
+    private func reorderProviders(_ customOrder: [Provider]? = nil) {
+        let providersToReorder = customOrder ?? reorderedProviders
+        for (index, provider) in providersToReorder.enumerated() {
             withAnimation {
                 provider.order = index
             }
         }
-        
         try? modelContext.save()
     }
 }

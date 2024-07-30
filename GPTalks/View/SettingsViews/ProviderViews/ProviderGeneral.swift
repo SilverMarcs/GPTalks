@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProviderGeneral: View {
     @Bindable var provider: Provider
+    var reorderProviders: () -> Void
+    
     @ObservedObject var providerManager = ProviderManager.shared
     @State var showKey: Bool = false
     @State var showPopover: Bool = false
@@ -101,9 +103,15 @@ struct ProviderGeneral: View {
         }
         .formStyle(.grouped)
         .toolbar {
-            Toggle("Enabled", isOn: $provider.isEnabled)
-                .toggleStyle(.switch)
-                .labelsHidden()
+            Toggle("Enabled", isOn: Binding(
+                get: { provider.isEnabled },
+                set: { newValue in
+                    provider.isEnabled = newValue
+                    reorderProviders()
+                }
+            ))
+            .toggleStyle(.switch)
+            .labelsHidden()
         }
     }
     
@@ -158,7 +166,7 @@ struct ProviderGeneral: View {
 #Preview {
     let provider = Provider.factory(type: .openai)
 
-    return ProviderGeneral(provider: provider)
+    return ProviderGeneral(provider: provider) {}
         .padding()
         .frame(width: 500, height: 600)
 }

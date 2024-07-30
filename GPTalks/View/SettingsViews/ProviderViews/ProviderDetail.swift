@@ -11,17 +11,19 @@ import SwiftUI
 
 struct ProviderDetail: View {
     var provider: Provider
+    var reorderProviders: () -> Void
+    
     @State private var selectedTab: ProviderDetailTab = .general
     
     var body: some View {
         Group {
             switch selectedTab {
             case .general:
-                ProviderGeneral(provider: provider)
+                ProviderGeneral(provider: provider, reorderProviders: reorderProviders)
             case .models:
-                ChatModelListView(provider: provider)
+                ModelListView(provider: provider, modelType: .chat)
             case .image:
-                ImageModelListView(provider: provider)
+                ModelListView(provider: provider, modelType: .image)
             }
         }
         .navigationTitle("Providers")
@@ -62,5 +64,5 @@ enum ProviderDetailTab: String, CaseIterable {
 #Preview {
     let provider = Provider.factory(type: .openai)
 
-    ProviderDetail(provider: provider)
+    ProviderDetail(provider: provider) {}
 }

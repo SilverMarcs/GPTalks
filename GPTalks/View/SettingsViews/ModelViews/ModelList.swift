@@ -8,188 +8,160 @@
 
 import SwiftUI
 
-struct ChatModelListView: View {
-    @Bindable var provider: Provider
-    
-    var body: some View {
-        ModelListView(provider: provider, models: $provider.chatModels, modelType: .chat)
-    }
-}
-
-struct ImageModelListView: View {
-    @Bindable var provider: Provider
-    
-    var body: some View {
-        ModelListView(provider: provider, models: $provider.imageModels, modelType: .image)
-    }
-}
-
-struct ModelListView<T: AIModel>: View {
+struct ModelListView: View {
     @Environment(\.modelContext) var modelContext
+    #if !os(macOS)
+    @Environment(\.editMode) private var editMode
+    #endif
     @Bindable var provider: Provider
-    @Binding var models: [T]
     
-    @State var showAdder: Bool = false
-    @State private var selections: Set<T> = []
-    @State var searchText: String = ""
+    @State private var showAdder = false
+    @State private var selections: Set<AIModel> = []
+    @State private var searchText = ""
     
-    var modelType: ModelType
+    let modelType: ModelType
+    
+    var models: [AIModel] {
+        switch modelType {
+        case .chat: return provider.chatModels
+        case .image: return provider.imageModels
+        }
+    }
     
     var body: some View {
-         content
-             .sheet(isPresented: $showAdder) {
-                 ModelAdder(provider: provider, modelType: modelType)
-             }
-             .toolbar {
-                 toolbarItem
-             }
-             #if os(macOS)
-             .searchable(text: $searchText, placement: .toolbar)
-             #else
-             .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
-             #endif
-     }
-
-     #if os(macOS)
-     var content: some View {
-         Form {
-             modelSection(isEnabled: true)
-             modelSection(isEnabled: false)
-         }
-
-         .formStyle(.grouped)
-     }
-
-    @ViewBuilder
-     func modelSection(isEnabled: Bool) -> some View {
-         if !filteredModels(isEnabled: isEnabled).isEmpty {
-             Section(header: Text(isEnabled ? "Enabled" : "Disabled")) {
-                 List(selection: $selections) {
-                     sectionHeader
-                     ForEach(filteredModels(isEnabled: isEnabled), id: \.self) { model in
-                         ModelRow(model: model, selections: $selections)
-                             .contextMenu {
-                                 Button(action: {
-                                     toggleModelType(for: selections.isEmpty ? [model] : Array(selections))
-                                 }) {
-                                     Label("Toggle Chat/Image", systemImage: "arrow.triangle.2.circlepath")
-                                 }
-                                 
-                                 Button(action: {
-                                     toggleEnabled(for: selections.isEmpty ? [model] : Array(selections))
-                                 }) {
-                                     Label("Toggle Enabled", systemImage: "power")
-                                 }
-                             }
-                     }
-                     .onDelete(perform: deleteItems)
-                     .onMove(perform: moveItems)
-                 }
-                 .labelsHidden()
-                 .alternatingRowBackgrounds()
-             }
-         }
-     }
-
-        var sectionHeader: some View {
-            HStack(spacing: 5) {
-                Text("Show").frame(maxWidth: 28, alignment: .center)
-                Text("Code").frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 14)
-                Text("Name").frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, -3)
-            }
-            .font(.caption)
-            .fontWeight(.bold)
-            .foregroundStyle(.secondary)
+        Group {
+            #if os(macOS)
+            macOSContent
+            #else
+            iOSContent
+            #endif
         }
-     #else
-     @Environment(\.editMode) var editMode
-     var content: some View {
-         List(selection: $selections) {
-             modelSection(isEnabled: true)
-             modelSection(isEnabled: false)
-         }
-         .toolbar {
-             ToolbarItemGroup(placement: .bottomBar) {
-                 HStack {
-                     EditButton()
-                     Spacer()
-                     if editMode?.wrappedValue == .active {
-                         editMenu
-                     }
-                 }
-             }
-         }
-     }
-
-     func modelSection(isEnabled: Bool) -> some View {
-         Section(header: Text(isEnabled ? "Enabled" : "Disabled")) {
-             ForEach(filteredModels(isEnabled: isEnabled), id: \.self) { model in
-                 ModelRow(model: model, selections: $selections)
-             }
-             .onDelete(perform: deleteItems)
-             .onMove(perform: moveItems)
-         }
-     }
-     #endif
-
-     func filteredModels(isEnabled: Bool) -> [T] {
-         let filtered = models.filter { $0.isEnabled == isEnabled }
-         if searchText.isEmpty {
-             return filtered.sorted(by: { $0.order < $1.order })
-         } else {
-             return filtered.filter { $0.name.localizedCaseInsensitiveContains(searchText) || $0.code.localizedCaseInsensitiveContains(searchText) }
-                            .sorted(by: { $0.order < $1.order })
-         }
-     }
+        .sheet(isPresented: $showAdder) {
+            ModelAdder(provider: provider, modelType: modelType)
+        }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                addButton
+            }
+        }
+        .searchable(text: $searchText, placement: searchPlacement)
+    }
     
-    var editMenu: some View {
+    private var searchPlacement: SearchFieldPlacement {
+        #if os(macOS)
+        return .toolbar
+        #else
+        return .navigationBarDrawer(displayMode: .always)
+        #endif
+    }
+    
+    private var filteredModels: [AIModel] {
+        let filtered = searchText.isEmpty ? models : models.filter { $0.name.localizedCaseInsensitiveContains(searchText) || $0.code.localizedCaseInsensitiveContains(searchText) }
+        return filtered.sorted { $0.order < $1.order }
+    }
+}
+
+// Mardk: - common foreach
+extension ModelListView {
+    private var collectiom: some View {
+        ForEach(filteredModels, id: \.self) { model in
+            ModelRow(model: model) {
+                reorderModels()
+            }
+            #if os(macOS)
+                .contextMenu { contextMenuItems(for: model) }
+            #endif
+        }
+        .onDelete(perform: deleteItems)
+        .onMove(perform: moveItems)
+        .moveDisabled(!searchText.isEmpty)
+    }
+}
+
+// MARK: - macOS Specific Views
+#if os(macOS)
+extension ModelListView {
+    private var macOSContent: some View {
+        Form {
+            List(selection: $selections) {
+                Section(header: sectionHeader) {
+                    collectiom
+                }
+            }
+            .labelsHidden()
+            .alternatingRowBackgrounds()
+        }
+        .formStyle(.grouped)
+    }
+    
+    private var sectionHeader: some View {
+        HStack(spacing: 5) {
+            Text("Show").frame(maxWidth: 30, alignment: .center)
+            Text("Code").frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 14)
+            Text("Name").frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, -3)
+        }
+    }
+}
+#endif
+
+// MARK: - iOS Specific Views
+#if !os(macOS)
+extension ModelListView {
+    private var iOSContent: some View {
+        List(selection: $selections) {
+            collectiom
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                HStack {
+                    EditButton()
+                    Spacer()
+                    if editMode?.wrappedValue == .active {
+                        editMenu
+                    }
+                }
+            }
+        }
+    }
+}
+#endif
+
+// MARK: - Shared Components
+extension ModelListView {
+    private var addButton: some View {
+        Menu {
+            Button(action: refreshModels) {
+                Label("Refresh Models", systemImage: "arrow.trianglehead.2.counterclockwise.rotate.90")
+            }
+            
+            Button(action: { showAdder = true }) {
+                Label("Add Custom Model", systemImage: "plus")
+            }
+        } label: {
+            Label("Add", systemImage: "plus")
+        }
+    }
+    
+    private var editMenu: some View {
         Menu {
             Section {
-                Button {
-                    toggleModelType(for: Array(selections))
-                } label: {
-                    Label("Toggle Chat/Image", systemImage: "arrow.triangle.2.circlepath")
-                }
-                
-                Button {
-                    toggleEnabled(for: Array(selections))
-                } label: {
-                    Label("Toggle Enabled", systemImage: "power")
-                }
+                commonMenuItems(for: Array(selections))
             }
             
             Section {
-                Button {
-                    selections = Set(filteredModels(isEnabled: true))
-                } label: {
-                    Label("Select All Enabled", systemImage: "checkmark.circle")
-                }
-                Button {
-                    selections = Set(filteredModels(isEnabled: false))
-                } label: {
-                    Label("Select All Disabled", systemImage: "circle")
-                }
-                Button {
-                    selections = Set(filteredModels(isEnabled: true) + filteredModels(isEnabled: false))
-                } label: {
+                Button(action: { selections = Set(filteredModels) }) {
                     Label("Select All", systemImage: "checkmark.circle.fill")
                 }
                 
-                Button {
-                    selections = []
-                } label: {
+                Button(action: { selections.removeAll() }) {
                     Label("Deselect All", systemImage: "xmark.circle")
                 }
             }
             
             Section {
-                Button(role: .destructive) {
-                    for model in selections {
-                        provider.models.removeAll { $0.id == model.id }
-                    }
-                } label: {
+                Button(role: .destructive, action: deleteSelectedModels) {
                     Label("Delete Selected", systemImage: "trash")
                 }
             }
@@ -199,57 +171,89 @@ struct ModelListView<T: AIModel>: View {
         }
     }
     
-    var toolbarItem: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
-            Menu {
-                Section {
-                    Button {
-                        Task { @MainActor in
-                            await provider.refreshModels()
-                        }
-                    } label: {
-                        Label("Refresh Models", systemImage: "arrow.trianglehead.2.counterclockwise.rotate.90")
-                    }
-                }
-                
-                Button {
-                    showAdder = true
-                } label: {
-                    Label("Add Custom Model", systemImage: "plus")
-                }
-            } label: {
-                Label("Add", systemImage: "plus")
+    private func contextMenuItems(for model: AIModel) -> some View {
+        commonMenuItems(for: selections.isEmpty ? [model] : Array(selections))
+    }
+    
+    private func commonMenuItems(for models: [AIModel]) -> some View {
+        Group {
+            Button(action: { toggleEnabled(for: models) }) {
+                Label("Toggle Enabled", systemImage: "power")
+            }
+            
+            Button(action: { toggleModelType(for: models) }) {
+                Label("Toggle Chat/Image", systemImage: "arrow.triangle.2.circlepath")
             }
         }
     }
 }
 
 extension ModelListView {
+    private func testModel(model: AIModel) {
+        print("Not Implemented Yet")
+    }
+    
+    private func refreshModels() {
+        Task { @MainActor in
+            await provider.refreshModels()
+        }
+    }
+    
     private func deleteItems(at offsets: IndexSet) {
         let sortedModels = models.sorted(by: { $0.order < $1.order })
         let sortedIndices = offsets.map { sortedModels[$0].id }
-        models.removeAll { sortedIndices.contains($0.id) }
         
-        // Update the order of remaining items
-        for (index, model) in models.enumerated() {
-            model.order = index
+        switch modelType {
+        case .chat:
+            provider.chatModels.removeAll { sortedIndices.contains($0.id) }
+        case .image:
+            provider.imageModels.removeAll { sortedIndices.contains($0.id) }
         }
+        
+        reorderModels()
+    }
+
+    private func deleteSelectedModels() {
+        switch modelType {
+        case .chat:
+            provider.chatModels.removeAll { selections.contains($0) }
+        case .image:
+            provider.imageModels.removeAll { selections.contains($0) }
+        }
+        
+        selections.removeAll()
+        reorderModels()
     }
 
     private func moveItems(from source: IndexSet, to destination: Int) {
         var sortedModels = models.sorted(by: { $0.order < $1.order })
         sortedModels.move(fromOffsets: source, toOffset: destination)
         
-        for (index, model) in sortedModels.enumerated() {
+        reorderModels(sortedModels)
+    }
+
+    private func reorderModels(_ customOrder: [AIModel]? = nil) {
+        let modelsToReorder = customOrder ?? models
+        let enabledModels = modelsToReorder.filter { $0.isEnabled }
+        let disabledModels = modelsToReorder.filter { !$0.isEnabled }
+        
+        let reorderedModels = enabledModels + disabledModels
+        
+        for (index, model) in reorderedModels.enumerated() {
             withAnimation {
                 model.order = index
             }
         }
         
-        models = sortedModels
+        switch modelType {
+        case .chat:
+            provider.chatModels = reorderedModels.compactMap { $0 }
+        case .image:
+            provider.imageModels = reorderedModels.compactMap { $0 }
+        }
     }
     
-    private func toggleModelType(for models: [T]) {
+    private func toggleModelType(for models: [AIModel]) {
         for model in models {
             if model.modelType == .chat {
                 model.modelType = .image
@@ -259,7 +263,7 @@ extension ModelListView {
         }
     }
     
-    private func toggleEnabled(for models: [T]) {
+    private func toggleEnabled(for models: [AIModel]) {
         for model in models {
             model.isEnabled.toggle()
         }
@@ -267,5 +271,5 @@ extension ModelListView {
 }
 
 #Preview {
-    ChatModelListView(provider: Provider.factory(type: .openai))
+    ModelListView(provider: Provider.factory(type: .openai), modelType: .chat)
 }

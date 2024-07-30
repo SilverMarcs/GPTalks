@@ -74,7 +74,11 @@ struct ModelAdder: View {
         }
 
         let model = AIModel(
-            code: newModelCode, name: newModelName, provider: provider, modelType: modelType)
+            code: newModelCode, name: newModelName, provider: provider, modelType: modelType, order: 0)
+        
+        for model in provider.models {
+            model.order += 1
+        }
         
         provider.models.append(model)
         
