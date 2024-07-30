@@ -103,7 +103,7 @@ final class Session {
         let assistant = prepareAssistantConversation(assistantGroup: assistantGroup)
         
         let streamHandler = StreamHandler(config: config, assistant: assistant)
-        try await streamHandler.handleStream(from: conversations)
+        try await streamHandler.handleRequest(from: conversations)
     }
 
     private func prepareAssistantConversation(assistantGroup: ConversationGroup?) -> Conversation {

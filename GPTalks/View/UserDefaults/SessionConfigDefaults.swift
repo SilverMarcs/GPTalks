@@ -15,7 +15,8 @@ class SessionConfigDefaults: ObservableObject {
     @AppStorage("frequencyPenalty") private var storedFrequencyPenalty: Double?
     @AppStorage("topP") private var storedTopP: Double?
     @AppStorage("maxTokens") private var storedMaxTokens: Int?
-    @AppStorage("configuration.systemPrompt") var systemPrompt: String = "You are a helpful assistant."
+    @AppStorage("stream") var stream: Bool = true
+    @AppStorage("systemPrompt") var systemPrompt: String = "You are a helpful assistant."
     
     var temperature: Double? {
         get { storedTemperature }
@@ -36,42 +37,5 @@ class SessionConfigDefaults: ObservableObject {
     var maxTokens: Int? {
         get { storedMaxTokens }
         set { storedMaxTokens = newValue }
-    }
-    
-    func clearTemperature() {
-        temperature = nil
-    }
-
-    func clearPresencePenalty() {
-        presencePenalty = nil
-    }
-
-    func clearFrequencyPenalty() {
-        frequencyPenalty = nil
-    }
-
-    func clearTopP() {
-        topP = nil
-    }
-
-    func clearMaxTokens() {
-        maxTokens = nil
-    }
-
-    // Existing methods
-    func resetToDefaults() {
-        temperature = 1.0
-        presencePenalty = 1.0
-        frequencyPenalty = 0.0
-        topP = 1.0
-        maxTokens = 4096
-    }
-
-    func clearAllValues() {
-        temperature = nil
-        presencePenalty = nil
-        frequencyPenalty = nil
-        topP = nil
-        maxTokens = nil
     }
 }

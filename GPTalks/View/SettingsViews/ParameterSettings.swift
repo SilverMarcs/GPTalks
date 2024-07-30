@@ -14,6 +14,7 @@ struct ParameterSettings: View {
     var body: some View {
         Form {
             Section("Basic") {
+                Toggle("Stream", isOn: $config.stream)
                 TemperatureSlider(temperature: $config.temperature)
                 MaxTokensPicker(value: $config.maxTokens)
             }

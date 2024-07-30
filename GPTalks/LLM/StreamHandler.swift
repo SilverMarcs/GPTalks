@@ -19,6 +19,16 @@ class StreamHandler {
     }
     
     @MainActor
+    func handleRequest(from conversations: [Conversation]) async throws {
+        if config.stream {
+            try await handleStream(from: conversations)
+        } else {
+            let response = try await handleNonStreamingResponse(from: conversations)
+            assistant.content = response
+        }
+    }
+    
+    @MainActor
     func handleStream(from conversations: [Conversation]) async throws {
         var streamText = ""
         var lastUIUpdateTime = Date()
@@ -41,17 +51,14 @@ class StreamHandler {
     }
     
     @MainActor
-    func returnStreamAsText(from conversations: [Conversation]) async throws -> String {
-        var streamText = ""
-        
+    func handleNonStreamingResponse(from conversations: [Conversation]) async throws -> String {
         let streamManager = StreamManager(config: config)
-        let stream = streamManager.streamResponse(from: conversations)
         
-        for try await content in stream {
-            streamText += content
-        }
+        assistant.isReplying = true
+        let response = try await streamManager.nonStreamingResponse(from: conversations)
+        assistant.isReplying = false
         
-        return streamText
+        return response
     }
     
     @MainActor
@@ -65,13 +72,5 @@ class StreamHandler {
         if let context = self.assistant.modelContext {
             try? context.save()
         }
-    }
-    
-    @MainActor
-    func handleNonStreamingResponse(from conversations: [Conversation]) async throws -> String {
-        let streamManager = StreamManager(config: config)
-        let response = try await streamManager.nonStreamingResponse(from: conversations)
-        
-        return response
     }
 }

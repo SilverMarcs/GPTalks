@@ -11,12 +11,12 @@ import OpenAI
 
 class OpenAIService: AIService {
     func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
-        let query = createQuery(from: conversations, config: config, stream: true)
+        let query = createQuery(from: conversations, config: config, stream: config.stream)
         return streamOpenAIResponse(query: query, config: config)
     }
     
     func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
-        let query = createQuery(from: conversations, config: config, stream: false)
+        let query = createQuery(from: conversations, config: config, stream: config.stream)
         return try await nonStreamingOpenAIResponse(query: query, config: config)
     }
     

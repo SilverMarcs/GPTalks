@@ -36,6 +36,7 @@ struct ChatInspector: View {
             }
             
             Section("Basic") {
+                Toggle("Stream", isOn: $session.config.stream)
                 TemperatureSlider(temperature: $session.config.temperature, shortLabel: true)
                 MaxTokensPicker(value: $session.config.maxTokens)
             }
