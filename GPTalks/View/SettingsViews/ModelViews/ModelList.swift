@@ -95,14 +95,15 @@ extension ModelListView {
     }
     
     var sectionHeader: some View {
-        HStack(spacing: 5) {
-            Text("Show").frame(maxWidth: 30, alignment: .center)
-            Text("Code").frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 14)
-            Text("Name").frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, -3)
-            Text("Test").frame(alignment: .trailing)
-                .frame(width: 35)
+        HStack(spacing: 0) {
+            Text("Show")
+                .frame(width: 42, alignment: .leading)
+            Text("Code")
+                .frame(width: 300, alignment: .leading)
+            Text("Name")
+                .frame(width: 205, alignment: .leading)
+            Text("Test")
+                .frame(width: 35, alignment: .center)
         }
     }
 }

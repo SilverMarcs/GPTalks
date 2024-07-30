@@ -22,17 +22,16 @@ struct ModelRow: View {
             #if os(macOS)
             HStack(spacing: 0) {
                 Toggle("Enabled", isOn: $model.isEnabled)
-                    .frame(width: 30, alignment: .center)
+                    .frame(width: 39, alignment: .leading)
 
                 TextField("Code", text: $model.code)
-                    .padding(.leading, 17)
+                    .frame(width: 300, alignment: .leading)
                 
                 TextField("Name", text: $model.name)
-                
-                Spacer()
-                
+                    .frame(width: 205, alignment: .leading)
+
                 modelTester
-                    .frame(width: 25)
+                    .frame(width: 35, alignment: .center)
             }
             #else
             if editMode?.wrappedValue == .active {

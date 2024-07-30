@@ -33,6 +33,7 @@ struct ProviderBackup: Codable {
         var code: String
         var name: String
         var isEnabled: Bool
+        var lastTestResult: Bool?
     }
 }
 
@@ -83,6 +84,7 @@ extension ProviderBackup.AIModelBackup {
         self.code = model.code
         self.name = model.name
         self.isEnabled = model.isEnabled
+        self.lastTestResult = model.lastTestResult
     }
 
     func toAIModel() -> AIModel {
@@ -91,7 +93,8 @@ extension ProviderBackup.AIModelBackup {
             name: self.name,
             modelType: self.modelType,
             order: self.order,
-            isEnabled: self.isEnabled
+            isEnabled: self.isEnabled,
+            lastTestResult: self.lastTestResult
         )
     }
 }

@@ -27,17 +27,14 @@ final class AIModel: Hashable, Identifiable {
         self.name = "Dummy"
     }
 
-    init(code: String, name: String, provider: Provider? = nil, modelType: ModelType = .chat, order: Int = .max, isEnabled: Bool = true) {
+    init(code: String, name: String, provider: Provider? = nil, modelType: ModelType = .chat, order: Int = .max, isEnabled: Bool = true, lastTestResult: Bool? = nil) {
         self.code = code
         self.name = name
         self.provider = provider
         self.modelType = modelType
         self.order = order
         self.isEnabled = isEnabled
-    }
-    
-    func removeSelf() {
-        provider?.models.removeAll(where: { $0.id == id })
+        self.lastTestResult = lastTestResult
     }
 }
 
