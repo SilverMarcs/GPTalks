@@ -62,39 +62,27 @@ struct ChatInputView: View {
 //        PlusButton(size: imageSize) {
 //            isPresented = true
 //        }
+        Group {
+#if os(macOS)
+            PlusButton(size: imageSize) {
+                isPresented = true
+            }
+#else
             
             Menu {
                 Button(action: resetContext) {
                     Label("Reset Context", systemImage: "eraser")
                 }
             } label: {
-//                PlusImage()
-                Image(systemName: "plus.circle.fill")
-                    .resizable()
-                    .frame(width: imageSize, height: imageSize)
+                PlusImage()
             } primaryAction: {
                 isPresented = true
             }
-//            .menuStyle(SimpleIconOnly())
             .menuStyle(.borderlessButton)
             .menuIndicator(.hidden)
-            .fixedSize()
-            
-//#else
-//        PlusImage()
-//            .gesture(
-//                TapGesture()
-//                    .onEnded {
-//                        isPresented = true
-//                    }
-//                    .simultaneously(with: LongPressGesture(minimumDuration: 0.3).onEnded { _ in
-//                        if let lastGroup = session.groups.last {
-//                            session.resetContext(at: lastGroup)
-//                        }
-//                    })
-//            )
-//#endif
-//        }
+            .accentColor(.primary)
+#endif
+        }
         .imageFileImporter(isPresented: $isPresented, onImageAppend: { image in
             if let path = image.save() {
                 session.inputManager.imagePaths.append(path)

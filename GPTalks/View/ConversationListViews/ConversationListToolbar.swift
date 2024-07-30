@@ -16,9 +16,9 @@ struct ConversationListToolbar: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigation) {
             Menu {
-
+                Button("Test") { }
             } label: {
-                Image(systemName: "slider.vertical.3")
+                Label("Actions", systemImage: "slider.vertical.3")
             }
             .menuIndicator(.hidden)
         }

@@ -26,6 +26,9 @@ struct InspectorView: View {
                 }
             }
         }
+        #if !os(macOS)
+        .scrollDismissesKeyboard(.interactively)
+        #endif
         #if !os(visionOS)
         .inspectorColumnWidth(min: 245, ideal: 265, max: 300)
         #endif

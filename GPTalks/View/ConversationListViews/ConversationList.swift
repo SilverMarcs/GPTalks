@@ -124,7 +124,9 @@ struct ConversationList: View {
     private var showInspector: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
             Button {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 showingInspector.toggle()
+                
             } label: {
                 Label("Show Inspector", systemImage: "info.circle")
             }
