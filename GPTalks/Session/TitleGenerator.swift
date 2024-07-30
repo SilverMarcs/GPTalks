@@ -33,7 +33,7 @@ enum TitleGenerator {
         let titleConfig = SessionConfig(provider: config.provider, purpose: .title)
         let streamHandler = StreamHandler(config: titleConfig, assistant: user)
         
-        if let title = try? await streamHandler.returnStreamText(from: [user]) {
+        if let title = try? await streamHandler.handleNonStreamingResponse(from: [user]) {
             return title.trimmingCharacters(in: .whitespacesAndNewlines)
         }
         
@@ -64,7 +64,7 @@ enum TitleGenerator {
         let titleConfig = SessionConfig(provider: config.provider, purpose: .title)
         let streamHandler = StreamHandler(config: titleConfig, assistant: user)
         
-        if let title = try? await streamHandler.returnStreamText(from: [user]) {
+        if let title = try? await streamHandler.handleNonStreamingResponse(from: [user]) {
             return title.trimmingCharacters(in: .whitespacesAndNewlines)
         }
         

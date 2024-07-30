@@ -61,7 +61,7 @@ struct ModelListView: View {
     }
 }
 
-// Mardk: - common foreach
+// MARK: - common foreach
 extension ModelListView {
     private var collectiom: some View {
         ForEach(filteredModels, id: \.self) { model in
@@ -188,6 +188,7 @@ extension ModelListView {
     }
 }
 
+// MARK: - ViewModel
 extension ModelListView {
     private func testModel(model: AIModel) {
         print("Not Implemented Yet")

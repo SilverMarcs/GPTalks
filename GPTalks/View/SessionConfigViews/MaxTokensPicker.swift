@@ -13,7 +13,7 @@ struct MaxTokensPicker: View {
     @State private var showPopover = false
     
     var body: some View {
-        if let value = value {
+        if let _ = value {
             Picker(selection: $value) {
                 ForEach(options, id: \.self) { option in
                     Text(String(option)).tag(option)

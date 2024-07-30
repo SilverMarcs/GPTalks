@@ -41,7 +41,7 @@ class StreamHandler {
     }
     
     @MainActor
-    func returnStreamText(from conversations: [Conversation]) async throws -> String {
+    func returnStreamAsText(from conversations: [Conversation]) async throws -> String {
         var streamText = ""
         
         let streamManager = StreamManager(config: config)
