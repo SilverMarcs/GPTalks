@@ -97,13 +97,13 @@ extension ModelListView {
     var sectionHeader: some View {
         HStack(spacing: 0) {
             Text("Show")
-                .frame(width: 42, alignment: .leading)
+                .frame(maxWidth: 42, alignment: .leading)
             Text("Code")
-                .frame(width: 300, alignment: .leading)
+                .frame(maxWidth: 300, alignment: .leading)
             Text("Name")
-                .frame(width: 205, alignment: .leading)
+                .frame(maxWidth: 205, alignment: .leading)
             Text("Test")
-                .frame(width: 35, alignment: .center)
+                .frame(maxWidth: 35, alignment: .center)
         }
     }
 }
