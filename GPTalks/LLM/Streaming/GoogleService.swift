@@ -64,4 +64,15 @@ class GoogleService: AIService {
         let response = try await model.generateContent(messages)
         return response.text ?? ""
     }
+    
+    func testModel(provider: Provider, model: AIModel) async -> Bool {
+        let model = GenerativeModel(name: model.code, apiKey: provider.apiKey)
+        
+        do {
+            let response = try await model.generateContent(String.testPrompt)
+            return response.text != nil
+        } catch {
+            return false
+        }
+    }
 }

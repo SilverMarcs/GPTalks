@@ -62,4 +62,17 @@ class OpenAIService: AIService {
         let result = try await service.chats(query: query)
         return result.choices.first?.message.content?.string ?? ""
     }
+    
+    func testModel(provider: Provider, model: AIModel) async -> Bool {
+        let messages = [Conversation(role: .user, content: String.testPrompt).toOpenAI()]
+        let query = ChatQuery(messages: messages, model: model.code)
+        let service = OpenAI(configuration: OpenAI.Configuration(token: provider.apiKey, host: provider.host, scheme: provider.type.scheme))
+        
+        do {
+            let result = try await service.chats(query: query)
+            return result.choices.first?.message.content?.string != nil
+        } catch {
+            return false
+        }
+    }
 }

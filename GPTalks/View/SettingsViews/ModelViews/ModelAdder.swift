@@ -39,8 +39,6 @@ struct ModelAdder: View {
             .formStyle(.grouped)
             
             #if os(macOS)
-            Divider()
-            
             HStack {
                 Spacer()
                 

@@ -10,6 +10,7 @@ import SwiftUI
 protocol AIService {
     func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error>
     func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String
+    func testModel(provider: Provider, model: AIModel) async -> Bool
 }
 
 protocol AIServiceFactory {

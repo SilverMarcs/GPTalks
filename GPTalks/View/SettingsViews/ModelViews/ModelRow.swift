@@ -14,9 +14,12 @@ struct ModelRow: View {
     @Bindable var model: AIModel
     var reorderModels: () -> Void
     
+    @State private var isTestingModel = false
+    @State private var testResult: Bool? = nil
+    
     var body: some View {
-        Group {
-#if os(macOS)
+        HStack {
+            #if os(macOS)
             HStack(spacing: 0) {
                 Toggle("Enabled", isOn: $model.isEnabled)
                     .frame(width: 30, alignment: .center)
@@ -25,9 +28,8 @@ struct ModelRow: View {
                     .padding(.leading, 17)
                 
                 TextField("Name", text: $model.name)
-                
             }
-#else
+            #else
             Group {
                 if editMode?.wrappedValue == .active {
                     VStack(alignment: .leading) {
@@ -46,20 +48,47 @@ struct ModelRow: View {
                 }
             }
             .opacity(model.isEnabled ? 1 : 0.5)
-#endif
+            #endif
+        
+            Spacer()
+            
+            HStack {
+                if isTestingModel {
+                    ProgressView()
+                        .controlSize(.small)
+                } else if let result = testResult {
+                    Image(systemName: result ? "checkmark.circle" : "xmark.circle")
+                        .foregroundStyle(result ? .green : .red)
+//                    Button {
+//                        Task { await runModelTest() }
+//                    } label: {
+//                        Image(systemName: "play.circle")
+//                    }
+//                    .buttonStyle(.plain)
+                } else {
+                    Button {
+                        Task { await runModelTest() }
+                    } label: {
+                        Image(systemName: "play.circle")
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            #if os(macOS)
+            .frame(width: 35)
+            #endif
         }
         .onChange(of: model.isEnabled) {
             reorderModels()
         }
+        #if !os(macOS)
         .swipeActions(edge: .leading) {
-            #if !os(macOS)
             Button {
                 model.isEnabled.toggle()
             } label: {
                 Image(systemName: model.isEnabled ? "xmark" : "checkmark")
             }
             .tint(model.isEnabled ? .gray.opacity(0.7) : .accentColor)
-            #endif
             
             Button {
                 model.modelType = model.modelType == .image ? .chat : .image
@@ -68,6 +97,21 @@ struct ModelRow: View {
             }
             .tint(model.modelType == .chat ? .pink : .green)
         }
+        #endif
+    }
+    
+    func runModelTest() async {
+        isTestingModel = true
+        testResult = await testModel()
+        isTestingModel = false
+    }
+    
+    func testModel() async -> Bool {
+        if let provider = model.provider {
+            let service = DefaultAIServiceFactory().createService(for: provider.type)
+            return await service.testModel(provider: provider, model: model)
+        }
+        return false
     }
 }
 

@@ -52,7 +52,7 @@ final class SessionConfig {
     }
     
     // for previews
-    init(provider: Provider = Provider.factory(type: .openai)) {
+    init(provider: Provider = Provider.factory(type: .openai), isDummy: Bool = true) {
         self.provider = provider
         self.model = provider.chatModel
         self.systemPrompt = ""

@@ -11,6 +11,7 @@
 		0805DEEF2C58CB1400A8354A /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEEE2C58CB1400A8354A /* OpenAIService.swift */; };
 		0805DEF12C58CB2A00A8354A /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEF02C58CB2A00A8354A /* ClaudeService.swift */; };
 		0805DEF32C58CB3D00A8354A /* GoogleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEF22C58CB3D00A8354A /* GoogleService.swift */; };
+		0805DEF52C58E69300A8354A /* ModelListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEF42C58E69300A8354A /* ModelListViewModel.swift */; };
 		080ED38D2C415B6200046424 /* PreferenceKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080ED38C2C415B6200046424 /* PreferenceKeys.swift */; };
 		080ED3902C423C4400046424 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 080ED38F2C423C4400046424 /* OpenAI */; };
 		08149A572C3E5E5B004485AC /* ConversationRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08149A562C3E5E5B004485AC /* ConversationRole.swift */; };
@@ -167,6 +168,7 @@
 		0805DEEE2C58CB1400A8354A /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		0805DEF02C58CB2A00A8354A /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
 		0805DEF22C58CB3D00A8354A /* GoogleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleService.swift; sourceTree = "<group>"; };
+		0805DEF42C58E69300A8354A /* ModelListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelListViewModel.swift; sourceTree = "<group>"; };
 		080ED38C2C415B6200046424 /* PreferenceKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceKeys.swift; sourceTree = "<group>"; };
 		08149A562C3E5E5B004485AC /* ConversationRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationRole.swift; sourceTree = "<group>"; };
 		0819479D2C48DCDB0061227B /* ImageSessionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSessionList.swift; sourceTree = "<group>"; };
@@ -333,9 +335,9 @@
 		0805DEEB2C58CAF900A8354A /* Streaming */ = {
 			isa = PBXGroup;
 			children = (
+				0805DEEE2C58CB1400A8354A /* OpenAIService.swift */,
 				0805DEF22C58CB3D00A8354A /* GoogleService.swift */,
 				0805DEF02C58CB2A00A8354A /* ClaudeService.swift */,
-				0805DEEE2C58CB1400A8354A /* OpenAIService.swift */,
 				0805DEEC2C58CB0300A8354A /* AIService.swift */,
 			);
 			path = Streaming;
@@ -360,6 +362,7 @@
 				08D8F4462C51C1C20051C916 /* ModelCollection.swift */,
 				082181572C3823A400171BF3 /* ModelRow.swift */,
 				085524E92C4EDEC400CBB827 /* ModelList.swift */,
+				0805DEF42C58E69300A8354A /* ModelListViewModel.swift */,
 				085524ED2C4EDF6600CBB827 /* PresetModelAdder.swift */,
 				08D8F44A2C51C4E50051C916 /* ModelAdder.swift */,
 			);
@@ -921,6 +924,7 @@
 				085361182C4A3071007DAB62 /* ChatInspector.swift in Sources */,
 				08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */,
 				08C800322C36AE1D009581C5 /* SessionList.swift in Sources */,
+				0805DEF52C58E69300A8354A /* ModelListViewModel.swift in Sources */,
 				08C8004B2C36E658009581C5 /* ConversationListDetail.swift in Sources */,
 				08D174C02C3D901A000257EF /* CrossButton.swift in Sources */,
 				0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */,

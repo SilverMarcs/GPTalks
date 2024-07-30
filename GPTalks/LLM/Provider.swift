@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import OpenAI
 
 @Model
 class Provider {
@@ -99,7 +100,7 @@ class Provider {
         self.type = .openai
     }
     
-    static func factory(type: ProviderType) -> Provider {
+    static func factory(type: ProviderType, isDummy: Bool = false) -> Provider {
         let provider = Provider()
         provider.type = type
         provider.name = type.name
@@ -117,19 +118,46 @@ class Provider {
             provider.imageModel = first
         }
         
+        if isDummy {
+            provider.isEnabled = false
+        }
+        
         return provider
     }
+}
 
+extension Provider {
     @MainActor
     func refreshModels() async {
-        let refreshModels = await type.refreshModels(provider: self)
-        
-        for model in refreshModels {
-            if !models.contains(where: { $0.code == model.code }) {
-                models.append(model)
-            }
-        }
-    }
+         let refreshedModels: [AIModel]
+
+         switch type {
+         case .openai, .local:
+             let config = OpenAI.Configuration(
+                 token: apiKey,
+                 host: host
+             )
+             
+             let service = OpenAI(configuration: config)
+             
+             if let models = try? await service.models() {
+                 refreshedModels = models.data.map {
+                     AIModel(code: $0.id, name: $0.name)
+                 }
+             } else {
+                 refreshedModels = []
+             }
+             
+         case .anthropic, .google:
+             refreshedModels = type.getDefaultModels()
+         }
+
+         for model in refreshedModels {
+             if !models.contains(where: { $0.code == model.code }) {
+                 models.append(model)
+             }
+         }
+     }
     
     func addOpenAIModels() {
         for model in AIModel.getOpenaiModels() {

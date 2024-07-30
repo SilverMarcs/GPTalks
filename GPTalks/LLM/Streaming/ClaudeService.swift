@@ -37,7 +37,7 @@ class ClaudeService: AIService {
     private func streamClaudeResponse(parameters: MessageParameter, config: SessionConfig) -> AsyncThrowingStream<String, Error> {
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
-            basePath: "https://" + config.provider.host)
+            basePath: config.provider.type.scheme + "://" + config.provider.host)
         
         return AsyncThrowingStream { continuation in
             Task {
@@ -59,7 +59,7 @@ class ClaudeService: AIService {
     private func nonStreamingClaudeResponse(parameters: MessageParameter, config: SessionConfig) async throws -> String {
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
-            basePath: "https://" + config.provider.host)
+            basePath: config.provider.type.scheme + "://" + config.provider.host)
         
         let message = try await service.createMessage(parameters)
         // Extract the text content from the message
@@ -68,10 +68,30 @@ class ClaudeService: AIService {
             case .text(let text):
                 return text
             case .toolUse:
-                return nil // or handle tool use if needed
+                return nil // TODO:
             }
         }.joined()
         
         return content
+    }
+    
+    func testModel(provider: Provider, model: AIModel) async -> Bool {
+        let service = AnthropicServiceFactory.service(
+            apiKey: provider.apiKey,
+            basePath: provider.type.scheme + "://" + provider.host)
+        
+        let messageParameter = MessageParameter(
+            model: .other(model.code),
+            messages: [MessageParameter.Message(role: .user, content: .text(String.testPrompt))],
+            maxTokens: 16,
+            stream: false
+        )
+        
+        do {
+            let response = try await service.createMessage(messageParameter)
+            return response.content.count > 0
+        } catch {
+            return false
+        }
     }
 }
