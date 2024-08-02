@@ -22,8 +22,10 @@ class OpenAIService: AIService {
     
     private func createQuery(from conversations: [Conversation], config: SessionConfig, stream: Bool) -> ChatQuery {
         var messages = conversations.map { $0.toOpenAI() }
-        let systemPrompt = Conversation(role: .system, content: config.systemPrompt)
-        messages.insert(systemPrompt.toOpenAI(), at: 0)
+        if !config.systemPrompt.isEmpty {
+            let systemPrompt = Conversation(role: .system, content: config.systemPrompt)
+            messages.insert(systemPrompt.toOpenAI(), at: 0)
+        }
         
         return ChatQuery(
             messages: messages,

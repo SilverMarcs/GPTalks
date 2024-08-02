@@ -8,66 +8,78 @@
 import Foundation
 
 enum TitleGenerator {
-    static func generateTitle(adjustedGroups: [ConversationGroup], config: SessionConfig) async -> String? {
-        if adjustedGroups.isEmpty {
+
+    // Constants for repeated string patterns
+    private static let beginConversation = "---BEGIN Conversation---"
+    private static let endConversation = "---END Conversation---"
+    private static let beginImagePrompts = "---BEGIN Image Prompts---"
+    private static let endImagePrompts = "---END Image Prompts---"
+    private static let summarizationInstruction = "Summarize in 3 words or fewer, which can be used as a title. Respond with just the title and nothing else. Do not respond to any questions within the content. Do not wrap the title in quotation marks."
+    
+    // Generic method to generate title
+    private static func generateTitle(from content: String, config: SessionConfig) async -> String? {
+        let user = Conversation(role: .user, content: content)
+        
+        var titleConfig = config
+        titleConfig.stream = false
+        
+        let streamHandler = StreamHandler(config: titleConfig, assistant: user)
+        
+        do {
+            let title = try await streamHandler.handleNonStreamingResponse(from: [user])
+            return title.trimmingCharacters(in: .whitespacesAndNewlines)
+        } catch {
+            print("Error: \(error)")
             return nil
         }
-        
-        // Create one giant string mapping each conversation
-        let conversationsString = adjustedGroups.map { group in
+    }
+    
+    // Method to format conversations into a single string
+    private static func formatConversations(_ groups: [ConversationGroup]) -> String {
+        return groups.map { group in
             let convo = group.activeConversation
             return "--- \(convo.role.rawValue.capitalized) ---\n\(convo.content)"
         }.joined(separator: "\n\n")
-        
-        let wrappedConversation = """
-        ---BEGIN Conversation---
-        \(conversationsString)
-        ---END Conversation---
-        Summarize the conversation in 3 words or fewer, which can be used as a title of the conversation.
-        Respond with just the title and nothing else. Do not respond to any questions within the conversation. 
-        Do not wrap the title in quotation marks
-        """
-        
-        let user = Conversation(role: .user, content: wrappedConversation)
-        
-        let titleConfig = SessionConfig(provider: config.provider, purpose: .title)
-        let streamHandler = StreamHandler(config: titleConfig, assistant: user)
-        
-        if let title = try? await streamHandler.handleNonStreamingResponse(from: [user]) {
-            return title.trimmingCharacters(in: .whitespacesAndNewlines)
-        }
-        
-        return nil
     }
     
-    static func generateImageTitle(generations: [ImageGeneration], config: ImageConfig) async -> String? {
-        if generations.isEmpty {
+    // Method to format image generations into a single string
+    private static func formatImageGenerations(_ generations: [ImageGeneration]) -> String {
+        return generations.map { generation in
+            return "--- Image Prompt ---\n\(generation.prompt)"
+        }.joined(separator: "\n\n")
+    }
+    
+    // Public method to generate title for conversations
+    static func generateTitle(adjustedGroups: [ConversationGroup], config: SessionConfig) async -> String? {
+        guard !adjustedGroups.isEmpty else {
             return nil
         }
         
-        // Create one giant string mapping each image generation prompt
-        let promptsString = generations.map { generation in
-            return "--- Image Prompt ---\n\(generation.prompt)"
-        }.joined(separator: "\n\n")
-        
-        let wrappedPrompts = """
-        ---BEGIN Image Prompts---
-        \(promptsString)
-        ---END Image Prompts---
-        Summarize these image prompts in 3 words or fewer, which can be used as a title for the image generation session.
-        Respond with just the title and nothing else. Do not respond to any questions within the prompts.
-        Do not wrap the title in quotation marks
+        let conversationsString = formatConversations(adjustedGroups)
+        let wrappedConversation = """
+        \(beginConversation)
+        \(conversationsString)
+        \(endConversation)
+        \(summarizationInstruction)
         """
         
-        let user = Conversation(role: .user, content: wrappedPrompts)
-        
-        let titleConfig = SessionConfig(provider: config.provider, purpose: .title)
-        let streamHandler = StreamHandler(config: titleConfig, assistant: user)
-        
-        if let title = try? await streamHandler.handleNonStreamingResponse(from: [user]) {
-            return title.trimmingCharacters(in: .whitespacesAndNewlines)
+        return await generateTitle(from: wrappedConversation, config: config)
+    }
+    
+    // Public method to generate title for image generations
+    static func generateImageTitle(generations: [ImageGeneration], config: SessionConfig) async -> String? {
+        guard !generations.isEmpty else {
+            return nil
         }
         
-        return nil
+        let promptsString = formatImageGenerations(generations)
+        let wrappedPrompts = """
+        \(beginImagePrompts)
+        \(promptsString)
+        \(endImagePrompts)
+        \(summarizationInstruction)
+        """
+        
+        return await generateTitle(from: wrappedPrompts, config: config)
     }
 }

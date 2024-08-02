@@ -52,7 +52,8 @@ class ImageSession {
     @MainActor
     func generateTitle(forced: Bool = false) async {
         if forced || imageGenerations.count == 1 {
-            if let newTitle = await TitleGenerator.generateImageTitle(generations: imageGenerations, config: config) {
+            let titleConfig = SessionConfig(provider: config.provider, purpose: .title)
+            if let newTitle = await TitleGenerator.generateImageTitle(generations: imageGenerations, config: titleConfig) {
                 self.title = newTitle
             }
         }

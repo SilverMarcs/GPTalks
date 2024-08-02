@@ -105,7 +105,7 @@ final class Session {
         let streamHandler = StreamHandler(config: config, assistant: assistant)
         try await streamHandler.handleRequest(from: conversations)
     }
-
+    
     private func prepareAssistantConversation(assistantGroup: ConversationGroup?) -> Conversation {
         if let assistantGroup = assistantGroup {
             return assistantGroup.conversations.last!
@@ -151,10 +151,10 @@ final class Session {
                 let user = Conversation(role: .user, content: content, imagePaths: imagePaths)
                 addConversationGroup(conversation: user)
                 
-//                #if DEBUG
-//                addConversationGroup(conversation: Conversation(role: .assistant, content: .assistantDemos.randomElement()!))
-//                return
-//                #endif
+                //                #if DEBUG
+                //                addConversationGroup(conversation: Conversation(role: .assistant, content: .assistantDemos.randomElement()!))
+                //                return
+                //                #endif
             }
         }
         
@@ -240,7 +240,7 @@ final class Session {
     func generateTitle(forced: Bool = false) async {
         if isQuick { return }
         
-        if forced || adjustedGroups.count == 1 {
+        if forced || adjustedGroups.count == 1 || adjustedGroups.count == 2 {
             if let newTitle = await TitleGenerator.generateTitle(adjustedGroups: adjustedGroups, config: config) {
                 self.title = newTitle
             }
