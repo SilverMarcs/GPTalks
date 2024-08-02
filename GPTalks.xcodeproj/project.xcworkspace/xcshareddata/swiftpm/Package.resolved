@@ -1,13 +1,13 @@
 {
-  "originHash" : "ca80b3c31ccd16c9365b711919c0a231a39bd07d44e49aa2b362ab436498631f",
+  "originHash" : "a140ca6df47b35cf113b19962f85c2dd80ea89a4fee1eac17c6b25874c511014",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/longseespace/generative-ai-swift",
+      "location" : "https://github.com/SilverMarcs/generative-ai-swift",
       "state" : {
         "branch" : "main",
-        "revision" : "dad49b6e47571dd9973d218d46d63ff7d6646437"
+        "revision" : "b73b2c2644e1969334639865fad793403f2d89d5"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
       "state" : {
-        "revision" : "0f3e8f411df81168bdae7d2c424268f35de742cb",
-        "version" : "1.8.0"
+        "revision" : "cea1929f50ae642ac1308e7776af51a792679a6b",
+        "version" : "1.8.1"
       }
     },
     {

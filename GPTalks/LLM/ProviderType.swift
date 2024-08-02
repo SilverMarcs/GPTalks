@@ -7,6 +7,7 @@
 
 import Foundation
 import OpenAI
+import GoogleGenerativeAI
 
 enum ProviderType: String, Codable, CaseIterable, Identifiable {
     case openai
@@ -81,28 +82,6 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .anthropic: return AIModel.getAnthropicModels()
         case .google: return AIModel.getGoogleModels()
         case .local: return AIModel.getLocalModels()
-        }
-    }
-    
-    // TODO: Separate class
-    func refreshModels(provider: Provider) async -> [AIModel] {
-        switch self {
-        case .openai, .local:
-            let config: OpenAI.Configuration = .init(
-                token: provider.apiKey,
-                host: provider.host
-            )
-            
-            let service = OpenAI(configuration: config)
-            
-            let models = try? await service.models()
-
-            return models?.data.map {
-                AIModel(code: $0.id, name: $0.name)
-            } ?? []
-            
-        case .anthropic, .google:
-            return self.getDefaultModels()
         }
     }
 }

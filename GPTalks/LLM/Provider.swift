@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 import OpenAI
+import GoogleGenerativeAI
 
 @Model
 class Provider {
@@ -147,8 +148,22 @@ extension Provider {
              } else {
                  refreshedModels = []
              }
+        case .google:
+             let service = GenerativeAIService(apiKey: apiKey, urlSession: .shared)
              
-         case .anthropic, .google:
+             do {
+                 let models = try await service.listModels()
+                 
+                 refreshedModels = models.models.map {
+                     AIModel(code: $0.name, name: $0.displayName ?? $0.name)
+                 }
+      
+             } catch {
+                 print(error.localizedDescription)
+                 refreshedModels = []
+             }
+        
+         case .anthropic:
              refreshedModels = type.getDefaultModels()
          }
 

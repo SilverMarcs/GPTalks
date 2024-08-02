@@ -17,12 +17,10 @@ enum TitleGenerator {
     private static let summarizationInstruction = "Summarize in 3 words or fewer, which can be used as a title. Respond with just the title and nothing else. Do not respond to any questions within the content. Do not wrap the title in quotation marks."
     
     // Generic method to generate title
-    private static func generateTitle(from content: String, config: SessionConfig) async -> String? {
+    private static func generateTitle(from content: String, provider: Provider) async -> String? {
         let user = Conversation(role: .user, content: content)
         
-        var titleConfig = config
-        titleConfig.stream = false
-        
+        let titleConfig = SessionConfig(provider: provider, purpose: .title)
         let streamHandler = StreamHandler(config: titleConfig, assistant: user)
         
         do {
@@ -50,7 +48,7 @@ enum TitleGenerator {
     }
     
     // Public method to generate title for conversations
-    static func generateTitle(adjustedGroups: [ConversationGroup], config: SessionConfig) async -> String? {
+    static func generateTitle(adjustedGroups: [ConversationGroup], provider: Provider) async -> String? {
         guard !adjustedGroups.isEmpty else {
             return nil
         }
@@ -63,11 +61,11 @@ enum TitleGenerator {
         \(summarizationInstruction)
         """
         
-        return await generateTitle(from: wrappedConversation, config: config)
+        return await generateTitle(from: wrappedConversation, provider: provider)
     }
     
     // Public method to generate title for image generations
-    static func generateImageTitle(generations: [ImageGeneration], config: SessionConfig) async -> String? {
+    static func generateImageTitle(generations: [ImageGeneration], provider: Provider) async -> String? {
         guard !generations.isEmpty else {
             return nil
         }
@@ -80,6 +78,6 @@ enum TitleGenerator {
         \(summarizationInstruction)
         """
         
-        return await generateTitle(from: wrappedPrompts, config: config)
+        return await generateTitle(from: wrappedPrompts, provider: provider)
     }
 }

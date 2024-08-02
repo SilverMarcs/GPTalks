@@ -241,7 +241,7 @@ final class Session {
         if isQuick { return }
         
         if forced || adjustedGroups.count == 1 || adjustedGroups.count == 2 {
-            if let newTitle = await TitleGenerator.generateTitle(adjustedGroups: adjustedGroups, config: config) {
+            if let newTitle = await TitleGenerator.generateTitle(adjustedGroups: adjustedGroups, provider: config.provider) {
                 self.title = newTitle
             }
         }
