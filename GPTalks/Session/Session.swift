@@ -86,7 +86,7 @@ final class Session {
         print("Error: \(error)")
         errorMessage = error.localizedDescription
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
             if let lastGroup = self.groups.last, lastGroup.activeConversation.content.isEmpty {
                 lastGroup.deleteConversation(lastGroup.activeConversation)
             }

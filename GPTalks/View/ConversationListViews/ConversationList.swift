@@ -31,14 +31,7 @@ struct ConversationList: View {
 
                     ErrorMessageView(session: session)
                     
-                    GeometryReader { geometry in
-                        Color.clear
-                            .frame(height: spacerHeight)
-                            .id(String.bottomID)
-                        #if !os(macOS)
-                            .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
-                        #endif
-                    }
+                    colorSpacer
                 }
                 .padding()
                 .padding(.top, -5)
@@ -103,6 +96,21 @@ struct ConversationList: View {
                 return true
             }
         }
+    }
+    
+    var colorSpacer: some View {
+        #if os(macOS)
+        Color.clear
+            .frame(height: spacerHeight)
+            .id(String.bottomID)
+        #else
+        GeometryReader { geometry in
+            Color.clear
+                .frame(height: spacerHeight)
+                .id(String.bottomID)
+                .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
+        }
+        #endif
     }
     
     @ViewBuilder

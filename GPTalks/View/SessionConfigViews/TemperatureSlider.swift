@@ -13,7 +13,7 @@ struct TemperatureSlider: View {
     
     var body: some View {
         GenericSlider(value: $temperature,
-                      steps: 0.2,
+                      steps: 0.1,
                       min: 0,
                       max: 2,
                       label: shortLabel ? "Temp" : "Temperature",

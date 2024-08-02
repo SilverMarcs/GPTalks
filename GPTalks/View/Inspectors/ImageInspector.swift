@@ -43,7 +43,7 @@ struct ImageInspector: View {
                 
                 Picker("Quality", selection: $session.config.quality) {
                     ForEach(ImagesQuery.Quality.allCases, id: \.self) { quality in
-                        Text(quality.rawValue.capitalized).tag(quality)
+                        Text(quality.rawValue.uppercased()).tag(quality)
                     }
                 }
                 

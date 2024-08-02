@@ -10,12 +10,11 @@ import Foundation
 class StreamHandler {
     private let config: SessionConfig
     private let assistant: Conversation
-    private let uiUpdateInterval: TimeInterval
+    private let uiUpdateInterval: TimeInterval = Float.UIIpdateInterval
     
-    init(config: SessionConfig, assistant: Conversation, uiUpdateInterval: TimeInterval = 0.1) {
+    init(config: SessionConfig, assistant: Conversation) {
         self.config = config
         self.assistant = assistant
-        self.uiUpdateInterval = uiUpdateInterval
     }
     
     @MainActor

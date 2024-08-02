@@ -13,3 +13,7 @@ extension Int {
         return String(format: "%.2fK", number / 1000)
     }
 }
+
+extension Float {
+    static let UIIpdateInterval = 0.4
+}

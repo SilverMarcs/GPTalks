@@ -43,13 +43,6 @@ struct ImageGenerationList: View {
 #else
             #if !os(visionOS)
             .scrollDismissesKeyboard(.immediately)
-            .inspector(isPresented: $showingInspector) {
-                InspectorView(showingInspector: $showingInspector)
-            }
-            #else
-            .sheet(isPresented: $showingInspector) {
-                InspectorView(showingInspector: $showingInspector)
-            }
             #endif
             .navigationTitle(session.config.model.name)
             .onTapGesture {
@@ -62,7 +55,24 @@ struct ImageGenerationList: View {
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) { _ in
                 scrollToBottom(proxy: proxy)
             }
-#endif
+            #endif
+            #if os(iOS)
+            .inspector(isPresented: $showingInspector) {
+                InspectorView(showingInspector: $showingInspector)
+            }
+            #elseif os(visionOS)
+            .sheet(isPresented: $showingInspector) {
+                NavigationStack {
+                    InspectorView(showingInspector: $showingInspector)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                DismissButton()
+                            }
+                        }
+                }
+
+            }
+            #endif
         }
     }
     
