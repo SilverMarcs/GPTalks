@@ -9,14 +9,16 @@ import SwiftUI
 
 extension View {
     func applyObservers(proxy: ScrollViewProxy, session: Session, hasUserScrolled: Binding<Bool>) -> some View {
-        self
+        @ObservedObject var config = AppConfig.shared
+        
+        return self
             .onAppear {
                 if !isIOS() {
                     scrollToBottom(proxy: proxy, delay: 0.2)
                     scrollToBottom(proxy: proxy, delay: 0.4)
                 }
             }
-#if os(macOS)
+        #if os(macOS)
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 if session.isReplying {
                     hasUserScrolled.wrappedValue = true
@@ -40,7 +42,11 @@ extension View {
             }
         #if canImport(UIKit)
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) { _ in
-                scrollToBottom(proxy: proxy)
+                if config.assistantMarkdown {
+                    scrollToBottom(proxy: proxy)
+                } else {
+                    scrollToBottom(proxy: proxy, delay: 0.3)
+                }
             }
         #endif
     }

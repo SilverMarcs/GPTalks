@@ -47,6 +47,7 @@ final class SessionConfig {
             case .title:
                 self.systemPrompt = ""
                 self.model = provider.titleModel
+                self.stream = false
             case .quick:
                 self.systemPrompt = AppConfig.shared.quickSystemPrompt
                 self.model = provider.quickChatModel

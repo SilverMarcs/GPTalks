@@ -139,27 +139,19 @@ struct ConversationMenu: View {
         }
     }
 
-    @ViewBuilder
     var regenGroup: some View {
-        Group {
-            // only show for assistant groups and if the group is the very last group
-            if group.role == .assistant || (group.role == .user && group == group.session?.groups.last) {
-                Button {
-                    if group.role == .assistant {
-                        group.session?.regenerate(group: group)
-                    } else if group.role == .user {
-                        group.setupEditing()
-                        Task {
-                            await group.session?.sendInput()
-                        }
-                    }
-                } label: {
-                    Label("Regenerate", systemImage: "arrow.2.circlepath")
-                        .help("Regenerate")
+        Button {
+            if group.role == .assistant {
+                group.session?.regenerate(group: group)
+            } else if group.role == .user {
+                group.setupEditing()
+                Task {
+                    await group.session?.sendInput()
                 }
-            } else {
-                EmptyView()
             }
+        } label: {
+            Label("Regenerate", systemImage: "arrow.2.circlepath")
+                .help("Regenerate")
         }
     }
 

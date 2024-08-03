@@ -13,7 +13,7 @@ struct GeneralSettings: View {
     var body: some View {
         Form {
             Section("Appearace") {
-                Toggle("Assistant Message Markdown", isOn: $config.assistantMarkdown)
+                Toggle("WebView Markdown", isOn: $config.assistantMarkdown)
                 Toggle("Compact List", isOn: $config.compactList)
             }
             

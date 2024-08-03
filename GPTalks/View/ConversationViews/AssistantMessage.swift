@@ -31,7 +31,7 @@ struct AssistantMessage: View {
                     if config.assistantMarkdown {
                         MarkdownWebView(conversation.content)
                     } else {
-                        Text(conversation.content)
+                        Text(LocalizedStringKey(conversation.content))
                             .textSelection(.enabled)
                     }
                     
@@ -67,6 +67,7 @@ struct AssistantMessage: View {
             self.isHovered = isHovered
         }
 #endif
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.trailing, 30)
     }
     

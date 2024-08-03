@@ -8,6 +8,7 @@
 import SwiftUI
 
 #if os(macOS)
+// not used atm
 struct BackgroundAccessor: NSViewRepresentable {
     func makeNSView(context: Context) -> NSView {
         let view = NSView()
