@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MarkdownWebView
+import Markdown
 
 struct AssistantMessage: View {
     @ObservedObject var config = AppConfig.shared
@@ -28,12 +29,8 @@ struct AssistantMessage: View {
                             .foregroundStyle(.secondary)
                     }
                     
-                    if config.assistantMarkdown {
-                        MarkdownWebView(conversation.content)
-                    } else {
-                        Text(LocalizedStringKey(conversation.content))
-                            .textSelection(.enabled)
-                    }
+                    MarkdownView(content: conversation.content)
+                        .textSelection(.enabled)
                     
                     if conversation.isReplying {
                         ProgressView()

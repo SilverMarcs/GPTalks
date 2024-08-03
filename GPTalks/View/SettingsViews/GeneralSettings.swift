@@ -6,14 +6,30 @@
 //
 
 import SwiftUI
+import Highlighter
 
 struct GeneralSettings: View {
     @ObservedObject var config = AppConfig.shared
 
     var body: some View {
         Form {
-            Section("Appearace") {
-                Toggle("WebView Markdown", isOn: $config.assistantMarkdown)
+            Section("Markdown") {
+                Picker("Markdown Provider", selection: $config.markdownProvider) {
+                    ForEach(MarkdownProvider.allCases, id: \.self) { provider in
+                        Text(provider.name)
+                    }
+                }
+                
+                if config.markdownProvider == .markdownosaur {
+                    Picker("Markdown Theme", selection: $config.markdownTheme) {
+                        ForEach(HighlightTheme.allCases, id: \.self) { provider in
+                            Text(provider.rawValue.capitalized)
+                        }
+                    }
+                }
+            }
+            
+            Section("Appearance") {
                 Toggle("Compact List", isOn: $config.compactList)
             }
             

@@ -42,7 +42,7 @@ extension View {
             }
         #if canImport(UIKit)
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) { _ in
-                if config.assistantMarkdown {
+                if config.markdownProvider == .webview {
                     scrollToBottom(proxy: proxy)
                 } else {
                     scrollToBottom(proxy: proxy, delay: 0.3)

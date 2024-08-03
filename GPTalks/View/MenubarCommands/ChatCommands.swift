@@ -41,12 +41,6 @@ struct ChatCommands: Commands {
                 }
                 .keyboardShortcut("k", modifiers: .command)
             }
-            
-            Section {
-                Button("Toggle Markdown") {
-                    config.assistantMarkdown.toggle()
-                }
-            }
         }
     }
 }

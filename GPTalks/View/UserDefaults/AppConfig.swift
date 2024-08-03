@@ -6,14 +6,18 @@
 //
 
 import SwiftUI
+import Highlighter
 
 class AppConfig: ObservableObject {
     static let shared = AppConfig()
     
     // General
-    @AppStorage("assistantMarkdown") var assistantMarkdown: Bool = true
-    @AppStorage("autogenTitle") var autogenTitle: Bool = true
+    @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
+    @AppStorage("markdownTheme") var markdownTheme: HighlightTheme = .xcode
+    
     @AppStorage("compactList") var compactList: Bool = false
+    
+    @AppStorage("autogenTitle") var autogenTitle: Bool = true
     
     // Quick
     @AppStorage("configuration.quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."
@@ -21,4 +25,21 @@ class AppConfig: ObservableObject {
     // Misc
     @AppStorage("sidebarFocus") var sidebarFocus: Bool = false
     
+}
+
+
+enum MarkdownProvider: String, Codable, CaseIterable {
+    case webview
+    case markdownosaur
+    case native
+    case disabled
+    
+    var name: String {
+        switch self {
+        case .webview: "WebView"
+        case .markdownosaur: "Markdownosaur"
+        case .native: "Native"
+        case .disabled: "Disabled"
+        }
+    }
 }

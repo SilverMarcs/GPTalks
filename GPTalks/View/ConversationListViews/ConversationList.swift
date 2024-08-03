@@ -12,6 +12,8 @@ struct ConversationList: View {
     var session: Session
     var isQuick: Bool = false
     
+    @ObservedObject var config: AppConfig = AppConfig.shared
+    
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) private var sessionVM
     
@@ -23,18 +25,12 @@ struct ConversationList: View {
     
     var body: some View {
         ScrollViewReader { proxy in
-            ScrollView {
-                VStack(spacing: spacing) {
-                    ForEach(session.groups, id: \.self) { group in
-                        ConversationGroupView(group: group)
-                    }
-
-                    ErrorMessageView(session: session)
-                    
-                    colorSpacer
+            Group {
+                if config.markdownProvider == .webview {
+                    vStackView
+                } else {
+                    listView
                 }
-                .padding()
-                .padding(.top, -5)
             }
             .onAppear {
                 session.proxy = proxy
@@ -98,6 +94,37 @@ struct ConversationList: View {
         }
     }
     
+    var listView : some View {
+        List {
+            commonCollection
+        }
+        .scrollContentBackground(.hidden)
+    }
+    
+    var vStackView: some View  {
+        ScrollView {
+            VStack(spacing: spacing) {
+                commonCollection
+            }
+            .padding()
+            .padding(.top, -5)
+        }
+    }
+    
+    @ViewBuilder
+    var commonCollection: some View {
+        ForEach(session.groups, id: \.self) { group in
+            ConversationGroupView(group: group)
+        }
+        .listRowSeparator(.hidden)
+
+        ErrorMessageView(session: session)
+            .listRowSeparator(.hidden)
+        
+        colorSpacer
+            .listRowSeparator(.hidden)
+    }
+    
     var colorSpacer: some View {
         #if os(macOS)
         Color.clear
@@ -144,7 +171,11 @@ struct ConversationList: View {
     
     var spacerHeight: CGFloat {
         #if os(macOS)
-        20
+        if config.markdownProvider == .webview {
+            20
+        } else {
+            1
+        }
         #else
         10
         #endif
