@@ -1,5 +1,5 @@
 {
-  "originHash" : "7de7da9aa0f394cfb0133fc8eaa5fad3f2531b006d441afb020b2e298edf20e5",
+  "originHash" : "cfec65fa00d25e77e76fd0587d9f3e973fd772fb90091cc35b9c206225c6eca7",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "a86968867ab4380e36b904a14c42215f71efe8b4",
         "version" : "1.0.4"
+      }
+    },
+    {
+      "identity" : "highlightr",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/Highlightr",
+      "state" : {
+        "branch" : "master",
+        "revision" : "00808fff9ceff9304c207362ce68901030f21707"
       }
     },
     {

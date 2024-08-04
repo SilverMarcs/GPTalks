@@ -98,6 +98,7 @@ struct ConversationList: View {
         List {
             commonCollection
         }
+        .listStyle(.plain)
         .scrollContentBackground(.hidden)
     }
     

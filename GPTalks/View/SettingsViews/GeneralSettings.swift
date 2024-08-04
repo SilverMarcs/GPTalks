@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Highlighter
+import Highlightr
 
 struct GeneralSettings: View {
     @ObservedObject var config = AppConfig.shared

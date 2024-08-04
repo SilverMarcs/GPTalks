@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Highlighter
+import Highlightr
 
 class AppConfig: ObservableObject {
     static let shared = AppConfig()
