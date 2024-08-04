@@ -1,5 +1,5 @@
 {
-  "originHash" : "cfec65fa00d25e77e76fd0587d9f3e973fd772fb90091cc35b9c206225c6eca7",
+  "originHash" : "49c9556dc29a022ed163559db6a8615d08582c11b375063a4ed83fe20ec4ee19",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -25,7 +25,7 @@
       "location" : "https://github.com/SilverMarcs/Highlightr",
       "state" : {
         "branch" : "master",
-        "revision" : "00808fff9ceff9304c207362ce68901030f21707"
+        "revision" : "33c4d3a2820ce324e2630fad34bc2b2af3c7ade2"
       }
     },
     {
