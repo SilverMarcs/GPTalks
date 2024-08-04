@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Highlightr
 
 struct GeneralSettings: View {
     @ObservedObject var config = AppConfig.shared
@@ -17,14 +16,6 @@ struct GeneralSettings: View {
                 Picker("Markdown Provider", selection: $config.markdownProvider) {
                     ForEach(MarkdownProvider.allCases, id: \.self) { provider in
                         Text(provider.name)
-                    }
-                }
-                
-                if config.markdownProvider == .markdownosaur {
-                    Picker("Markdown Theme", selection: $config.markdownTheme) {
-                        ForEach(HighlightTheme.allCases, id: \.self) { provider in
-                            Text(provider.rawValue.capitalized)
-                        }
                     }
                 }
             }

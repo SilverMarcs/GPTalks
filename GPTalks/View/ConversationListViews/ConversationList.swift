@@ -25,13 +25,7 @@ struct ConversationList: View {
     
     var body: some View {
         ScrollViewReader { proxy in
-            Group {
-                if config.markdownProvider == .webview {
-                    vStackView
-                } else {
-                    listView
-                }
-            }
+            vStackView
             .onAppear {
                 session.proxy = proxy
             }
@@ -94,36 +88,20 @@ struct ConversationList: View {
         }
     }
     
-    var listView : some View {
-        List {
-            commonCollection
-        }
-        .listStyle(.plain)
-        .scrollContentBackground(.hidden)
-    }
-    
     var vStackView: some View  {
         ScrollView {
             VStack(spacing: spacing) {
-                commonCollection
+                ForEach(session.groups, id: \.self) { group in
+                    ConversationGroupView(group: group)
+                }
+
+                ErrorMessageView(session: session)
+                
+                colorSpacer
             }
             .padding()
             .padding(.top, -5)
         }
-    }
-    
-    @ViewBuilder
-    var commonCollection: some View {
-        ForEach(session.groups, id: \.self) { group in
-            ConversationGroupView(group: group)
-        }
-        .listRowSeparator(.hidden)
-
-        ErrorMessageView(session: session)
-            .listRowSeparator(.hidden)
-        
-        colorSpacer
-            .listRowSeparator(.hidden)
     }
     
     var colorSpacer: some View {

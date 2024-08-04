@@ -6,14 +6,12 @@
 //
 
 import SwiftUI
-import Highlightr
 
 class AppConfig: ObservableObject {
     static let shared = AppConfig()
     
     // General
     @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
-    @AppStorage("markdownTheme") var markdownTheme: HighlightTheme = .xcode
     
     @AppStorage("compactList") var compactList: Bool = false
     
@@ -30,14 +28,12 @@ class AppConfig: ObservableObject {
 
 enum MarkdownProvider: String, Codable, CaseIterable {
     case webview
-    case markdownosaur
     case native
     case disabled
     
     var name: String {
         switch self {
         case .webview: "WebView"
-        case .markdownosaur: "Markdownosaur"
         case .native: "Native"
         case .disabled: "Disabled"
         }

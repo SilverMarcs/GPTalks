@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0805531F2C5F94CC003C1842 /* Highlightr in Frameworks */ = {isa = PBXBuildFile; productRef = 0805531E2C5F94CC003C1842 /* Highlightr */; };
-		080553242C5F9909003C1842 /* Highlightr in Frameworks */ = {isa = PBXBuildFile; productRef = 080553232C5F9909003C1842 /* Highlightr */; };
 		080553272C5F99BC003C1842 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 080553262C5F99BC003C1842 /* MarkdownWebView */; };
 		0805DEED2C58CB0300A8354A /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEEC2C58CB0300A8354A /* AIService.swift */; };
 		0805DEEF2C58CB1400A8354A /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEEE2C58CB1400A8354A /* OpenAIService.swift */; };
@@ -19,14 +17,12 @@
 		080ED3902C423C4400046424 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 080ED38F2C423C4400046424 /* OpenAI */; };
 		08149A572C3E5E5B004485AC /* ConversationRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08149A562C3E5E5B004485AC /* ConversationRole.swift */; };
 		0819479E2C48DCDB0061227B /* ImageSessionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819479D2C48DCDB0061227B /* ImageSessionList.swift */; };
-		081AD7762C5F67D9001CBDAD /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 081AD7752C5F67D9001CBDAD /* Markdown */; };
 		081C1D8D2C3B8F690078BB24 /* ConversationListExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D8C2C3B8F690078BB24 /* ConversationListExtended.swift */; };
 		081C1D922C3BD1970078BB24 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D912C3BD1970078BB24 /* AppConfig.swift */; };
 		081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D932C3BD33F0078BB24 /* ParameterSettings.swift */; };
 		081C1D982C3BD8A50078BB24 /* GeneralSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D972C3BD8A50078BB24 /* GeneralSettings.swift */; };
 		081C1D9A2C3BE91C0078BB24 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D992C3BE91C0078BB24 /* ColorExtensions.swift */; };
 		081D222D2C5C8C7700634F39 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 081D222C2C5C8C7700634F39 /* GoogleGenerativeAI */; };
-		082178A12C5F69A200C2A8E3 /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 082178A02C5F69A200C2A8E3 /* Markdown */; };
 		082178A42C5F6B3200C2A8E3 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 082178A32C5F6B3200C2A8E3 /* MarkdownWebView */; };
 		082181522C38046800171BF3 /* ProviderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181512C38046800171BF3 /* ProviderManager.swift */; };
 		082181582C3823A400171BF3 /* ModelRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181572C3823A400171BF3 /* ModelRow.swift */; };
@@ -72,9 +68,6 @@
 		085910C82C4F7A5A0086E493 /* ChatSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085910C72C4F7A5A0086E493 /* ChatSessionVM.swift */; };
 		085910CA2C4F7A720086E493 /* ImageSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085910C92C4F7A720086E493 /* ImageSessionVM.swift */; };
 		086783122C5CF16800BB768F /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 086783112C5CF16800BB768F /* GoogleGenerativeAI */; };
-		086923312C5DEFC600EE040B /* Markdownosaur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086923302C5DEFC600EE040B /* Markdownosaur.swift */; };
-		086923342C5DFE3D00EE040B /* CodeBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086923332C5DFE3D00EE040B /* CodeBlockView.swift */; };
-		086923382C5DFED000EE040B /* ParserResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086923372C5DFED000EE040B /* ParserResult.swift */; };
 		0869233F2C5E001100EE040B /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869233E2C5E001100EE040B /* MarkdownView.swift */; };
 		086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */; };
 		086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */; };
@@ -232,9 +225,6 @@
 		085645432C3F98DF00ED84DA /* TitleGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleGenerator.swift; sourceTree = "<group>"; };
 		085910C72C4F7A5A0086E493 /* ChatSessionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionVM.swift; sourceTree = "<group>"; };
 		085910C92C4F7A720086E493 /* ImageSessionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSessionVM.swift; sourceTree = "<group>"; };
-		086923302C5DEFC600EE040B /* Markdownosaur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Markdownosaur.swift; sourceTree = "<group>"; };
-		086923332C5DFE3D00EE040B /* CodeBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeBlockView.swift; sourceTree = "<group>"; };
-		086923372C5DFED000EE040B /* ParserResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserResult.swift; sourceTree = "<group>"; };
 		0869233E2C5E001100EE040B /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
 		086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextResetDivider.swift; sourceTree = "<group>"; };
@@ -316,11 +306,7 @@
 			files = (
 				08C1ACE92C54CA0C00B86D37 /* OpenAI in Frameworks */,
 				087B40BB2C55FF9B00EAFA0A /* MarkdownWebView in Frameworks */,
-				0805531F2C5F94CC003C1842 /* Highlightr in Frameworks */,
 				08F4EF192C5FA7FE00C9FE27 /* MarkdownWebView in Frameworks */,
-				080553242C5F9909003C1842 /* Highlightr in Frameworks */,
-				082178A12C5F69A200C2A8E3 /* Markdown in Frameworks */,
-				081AD7762C5F67D9001CBDAD /* Markdown in Frameworks */,
 				08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */,
 				08D040222C5C8A0B0075B754 /* GoogleGenerativeAI in Frameworks */,
 				084C74432C5231980015AE2F /* OpenAI in Frameworks */,
@@ -467,9 +453,6 @@
 		086923322C5DFE2800EE040B /* MarkdownViews */ = {
 			isa = PBXGroup;
 			children = (
-				086923372C5DFED000EE040B /* ParserResult.swift */,
-				086923332C5DFE3D00EE040B /* CodeBlockView.swift */,
-				086923302C5DEFC600EE040B /* Markdownosaur.swift */,
 				0869233E2C5E001100EE040B /* MarkdownView.swift */,
 			);
 			path = MarkdownViews;
@@ -752,11 +735,7 @@
 				08D040212C5C8A0B0075B754 /* GoogleGenerativeAI */,
 				081D222C2C5C8C7700634F39 /* GoogleGenerativeAI */,
 				086783112C5CF16800BB768F /* GoogleGenerativeAI */,
-				081AD7752C5F67D9001CBDAD /* Markdown */,
-				082178A02C5F69A200C2A8E3 /* Markdown */,
 				082178A32C5F6B3200C2A8E3 /* MarkdownWebView */,
-				0805531E2C5F94CC003C1842 /* Highlightr */,
-				080553232C5F9909003C1842 /* Highlightr */,
 				080553262C5F99BC003C1842 /* MarkdownWebView */,
 				08F4EF182C5FA7FE00C9FE27 /* MarkdownWebView */,
 			);
@@ -839,8 +818,6 @@
 				08C1ACE72C54CA0C00B86D37 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				087B40B62C55F9E900EAFA0A /* XCRemoteSwiftPackageReference "VisualEffectView" */,
 				086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
-				0821789F2C5F69A200C2A8E3 /* XCRemoteSwiftPackageReference "swift-markdown" */,
-				080553222C5F9909003C1842 /* XCRemoteSwiftPackageReference "Highlightr" */,
 				08F4EF172C5FA7FE00C9FE27 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
@@ -910,7 +887,6 @@
 				08C800372C36B8CC009581C5 /* SessionListItem.swift in Sources */,
 				082181582C3823A400171BF3 /* ModelRow.swift in Sources */,
 				085910C82C4F7A5A0086E493 /* ChatSessionVM.swift in Sources */,
-				086923382C5DFED000EE040B /* ParserResult.swift in Sources */,
 				082181522C38046800171BF3 /* ProviderManager.swift in Sources */,
 				082181662C38CBAE00171BF3 /* PlusButton.swift in Sources */,
 				085361072C492282007DAB62 /* ImageGeneration.swift in Sources */,
@@ -920,7 +896,6 @@
 				082A632E2C54EADF003996B7 /* ChatSessionBackup.swift in Sources */,
 				089B22432C394A4F00E248FE /* ButtonUtils.swift in Sources */,
 				08A3134D2C4AE7B800C3E578 /* CommonCompactRow.swift in Sources */,
-				086923312C5DEFC600EE040B /* Markdownosaur.swift in Sources */,
 				088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */,
 				08A222BE2C2ABDB400D76C8B /* InputManager.swift in Sources */,
 				08C49FD82C502EC90085792F /* FileHelper.swift in Sources */,
@@ -957,7 +932,6 @@
 				08C1ACDE2C54B89B00B86D37 /* SessionConfigDefaults.swift in Sources */,
 				08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */,
 				085910CA2C4F7A720086E493 /* ImageSessionVM.swift in Sources */,
-				086923342C5DFE3D00EE040B /* CodeBlockView.swift in Sources */,
 				08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */,
 				089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */,
 				080ED38D2C415B6200046424 /* PreferenceKeys.swift in Sources */,
@@ -1370,22 +1344,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		080553222C5F9909003C1842 /* XCRemoteSwiftPackageReference "Highlightr" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/Highlightr";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-		0821789F2C5F69A200C2A8E3 /* XCRemoteSwiftPackageReference "swift-markdown" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/swiftlang/swift-markdown";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.4.0;
-			};
-		};
 		086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/generative-ai-swift";
@@ -1445,15 +1403,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0805531E2C5F94CC003C1842 /* Highlightr */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Highlightr;
-		};
-		080553232C5F9909003C1842 /* Highlightr */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 080553222C5F9909003C1842 /* XCRemoteSwiftPackageReference "Highlightr" */;
-			productName = Highlightr;
-		};
 		080553262C5F99BC003C1842 /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MarkdownWebView;
@@ -1462,18 +1411,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
 		};
-		081AD7752C5F67D9001CBDAD /* Markdown */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Markdown;
-		};
 		081D222C2C5C8C7700634F39 /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GoogleGenerativeAI;
-		};
-		082178A02C5F69A200C2A8E3 /* Markdown */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0821789F2C5F69A200C2A8E3 /* XCRemoteSwiftPackageReference "swift-markdown" */;
-			productName = Markdown;
 		};
 		082178A32C5F6B3200C2A8E3 /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
