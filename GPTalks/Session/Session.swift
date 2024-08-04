@@ -23,6 +23,9 @@ final class Session {
     @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
     var unorderedGroups =  [ConversationGroup]()
     
+    @Relationship(deleteRule: .nullify)
+    var config: SessionConfig
+    
     @Transient
     var groups: [ConversationGroup] {
         get {return unorderedGroups.sorted(by: {$0.date < $1.date})}
@@ -63,9 +66,6 @@ final class Session {
     
     @Transient
     var inputManager = InputManager()
-    
-    @Relationship(deleteRule: .nullify)
-    var config: SessionConfig
     
     init(config: SessionConfig) {
         self.config = config
