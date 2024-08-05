@@ -27,7 +27,7 @@ struct ImageInspector: View {
             }
             
             Section("Models") {
-                ProviderPicker(provider: $session.config.provider, providers: providers) { provider in
+                ProviderPicker(provider: $session.config.provider, providers: providers.filter { !$0.imageModels.isEmpty }) { provider in
                     session.config.model = provider.imageModel
                 }
                 

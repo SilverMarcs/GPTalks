@@ -17,7 +17,7 @@ struct ProviderImage: View {
         ZStack {
             // Background rounded rectangle
             RoundedRectangle(cornerRadius: radius)
-                .fill(Color(hex: provider.color))
+                .fill(Color(hex: provider.color).gradient)
                 .frame(width: frame, height: frame)
             
             // Image

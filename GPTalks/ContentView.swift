@@ -54,7 +54,7 @@ struct ContentView: View {
             }
         }
         #if os(macOS)
-        .frame(minWidth: 600, minHeight: 400)
+        .frame(minWidth: 800, minHeight: 600)
         .background(BackgroundView(window: $mainWindow))
         .task {
             KeyboardShortcuts.onKeyDown(for: .togglePanel) {

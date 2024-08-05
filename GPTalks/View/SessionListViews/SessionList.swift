@@ -21,16 +21,24 @@ struct SessionList: View {
             List(selection: $sessionVM.selections) {
                 SessionListCards()
                 
-                ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
-                    SessionListItem(session: session)
-                        .listRowSeparator(.visible)
-                        .listRowSeparatorTint(Color.gray.opacity(0.2))
-                    #if !os(macOS)
-                        .listSectionSeparator(.hidden)
-                    #endif
+                if !sessionVM.searchText.isEmpty && sessions.isEmpty {
+                    ContentUnavailableView {
+                        Image(systemName: "magnifyingglass")
+                    } description: {
+                        Text("No Chat Sessions matching\n \(sessionVM.searchText)")
+                    }
+                } else {
+                    ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
+                        SessionListItem(session: session)
+                            .listRowSeparator(.visible)
+                            .listRowSeparatorTint(Color.gray.opacity(0.2))
+#if !os(macOS)
+                            .listSectionSeparator(.hidden)
+#endif
+                    }
+                    .onDelete(perform: deleteItems)
+                    .onMove(perform: move)
                 }
-                .onDelete(perform: deleteItems)
-                .onMove(perform: move)
             }
             .onChange(of: sessions.count) {
                 if let first = sessions.first {
@@ -53,7 +61,13 @@ struct SessionList: View {
                 if searchString.isEmpty {
                     return !$0.isQuick
                 } else {
-                    return !$0.isQuick && $0.title.localizedStandardContains(searchString)
+                    return !$0.isQuick &&
+                        ($0.title.localizedStandardContains(searchString) ||
+                         $0.unorderedGroups.contains { group in
+                            group.conversationsUnsorted.contains { conversation in
+                                conversation.content.localizedStandardContains(searchString)
+                            }
+                        })
                 }
             },
             sort: [

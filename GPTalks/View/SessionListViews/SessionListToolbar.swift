@@ -107,11 +107,16 @@ struct SessionListToolbar: ToolbarContent {
         
         ToolbarItem(placement: .automatic) {
             Menu {
-                ForEach(providers.filter { $0.isEnabled }.sorted { $0.order < $1.order }) { provider in
-                    Button(provider.name) {
-                        addItem(provider: provider)
+                ForEach(providers
+                    .filter {
+                        $0.isEnabled &&
+                        (sessionVM.state != .images || !$0.imageModels.isEmpty)
                     }
-                    .keyboardShortcut(.none)
+                    .sorted { $0.order < $1.order }) { provider in
+                        Button(provider.name) {
+                            addItem(provider: provider)
+                        }
+                        .keyboardShortcut(.none)
                 }
             } label: {
                 Label("Add Item", systemImage: "square.and.pencil")

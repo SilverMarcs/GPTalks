@@ -18,7 +18,7 @@ class AppConfig: ObservableObject {
     @AppStorage("autogenTitle") var autogenTitle: Bool = true
     
     // Quick
-    @AppStorage("configuration.quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."
+    @AppStorage("quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."
     
     // Misc
     @AppStorage("sidebarFocus") var sidebarFocus: Bool = false

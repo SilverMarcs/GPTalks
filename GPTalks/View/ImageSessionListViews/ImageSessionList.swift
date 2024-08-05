@@ -21,13 +21,21 @@ struct ImageSessionList: View {
             List(selection: $sessionVM.imageSelections) {
                 SessionListCards()
                 
-                ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
-                    ImageListRow(session: session)
-                        .listRowSeparator(.visible)
-                        .listRowSeparatorTint(Color.gray.opacity(0.2))
+                if !sessionVM.searchText.isEmpty && sessions.isEmpty {
+                    ContentUnavailableView {
+                        Image(systemName: "magnifyingglass")
+                    } description: {
+                        Text("No Image Sessions matching\n \(sessionVM.searchText)")
+                    }
+                } else {
+                    ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
+                        ImageListRow(session: session)
+                            .listRowSeparator(.visible)
+                            .listRowSeparatorTint(Color.gray.opacity(0.2))
+                    }
+                    .onDelete(perform: deleteItems)
+                    .onMove(perform: move)
                 }
-                .onDelete(perform: deleteItems)
-                .onMove(perform: move)
             }
             .onChange(of: sessions.count) {
                 if let first = sessions.first {
@@ -52,7 +60,10 @@ struct ImageSessionList: View {
                 if searchString.isEmpty {
                     return true
                 } else {
-                    return $0.title.localizedStandardContains(searchString)
+                    return $0.title.localizedStandardContains(searchString) ||
+                           $0.imageGenerations.contains { generation in
+                               generation.prompt.localizedStandardContains(searchString)
+                           }
                 }
             },
             sort: [
@@ -61,6 +72,7 @@ struct ImageSessionList: View {
             animation: .default
         )
     }
+
 
     private func deleteItems(offsets: IndexSet) {
         // if current selection is in the index, then set to nil

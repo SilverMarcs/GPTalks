@@ -21,6 +21,7 @@ struct SessionListCards: View {
                     count: String(sessions.count)) {
                         toggleChatCount()
                     }
+//                    .opacity(sessionVM.state == .chats ? 1 : 0.8)
                 
                 ListCard(
                     icon: "photo.circle.fill", iconColor: .cyan, title: "Images",
@@ -28,6 +29,7 @@ struct SessionListCards: View {
                 ) {
                     sessionVM.state = .images
                 }
+//                .opacity(sessionVM.state == .images ? 1 : 0.8)
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
