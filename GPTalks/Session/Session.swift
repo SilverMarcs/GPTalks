@@ -23,7 +23,7 @@ final class Session {
     @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
     var unorderedGroups =  [ConversationGroup]()
     
-    @Relationship(deleteRule: .nullify)
+    @Relationship(deleteRule: .nullify, inverse: \SessionConfig.session)
     var config: SessionConfig
     
     @Transient

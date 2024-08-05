@@ -67,6 +67,7 @@ extension SessionVM {
     func addChatSession(provider: Provider, sessions: [Session], modelContext: ModelContext) {
         let config = SessionConfig(provider: provider, purpose: .chat)
         let newItem = Session(config: config)
+        config.session = newItem
         
         withAnimation {
             for session in sessions {
@@ -81,53 +82,53 @@ extension SessionVM {
         try? modelContext.save()
     }
     
-    func addItem(provider: Provider, sessions: [Session], modelContext: ModelContext) {
-        let config = SessionConfig(provider: provider, purpose: .chat)
-        
-        let newItem = Session(config: config)
-        
-        withAnimation {
-            // Increment the order of all existing items
-            for session in sessions {
-                session.order += 1
-            }
-            
-            newItem.order = 0  // Set the new item's order to 0 (top of the list)
-            modelContext.insert(newItem)
-            self.selections = [newItem]
-        }
-        
-        try? modelContext.save()
-    }
+//    func addItem(provider: Provider, sessions: [Session], modelContext: ModelContext) {
+//        let config = SessionConfig(provider: provider, purpose: .chat)
+//        
+//        let newItem = Session(config: config)
+//        
+//        withAnimation {
+//            // Increment the order of all existing items
+//            for session in sessions {
+//                session.order += 1
+//            }
+//            
+//            newItem.order = 0  // Set the new item's order to 0 (top of the list)
+//            modelContext.insert(newItem)
+//            self.selections = [newItem]
+//        }
+//        
+//        try? modelContext.save()
+//    }
     
-    func addItem(sessions: [Session], providers: [Provider], modelContext: ModelContext) {
-        let provider: Provider
-        if let defaultProvider = ProviderManager.shared.getDefault(providers: providers) {
-            provider = defaultProvider
-        } else if let firstProvider = providers.first {
-            provider = firstProvider
-        } else {
-            return
-        }
-        
-        let config = SessionConfig(
-            provider: provider, purpose: .chat)
-        
-        let newItem = Session(config: config)
-        
-        withAnimation {
-            // Increment the order of all existing items
-            for session in sessions {
-                session.order += 1
-            }
-            
-            newItem.order = 0  // Set the new item's order to 0 (top of the list)
-            modelContext.insert(newItem)
-            self.selections = [newItem]
-        }
-        
-        try? modelContext.save()
-    }
+//    func addItem(sessions: [Session], providers: [Provider], modelContext: ModelContext) {
+//        let provider: Provider
+//        if let defaultProvider = ProviderManager.shared.getDefault(providers: providers) {
+//            provider = defaultProvider
+//        } else if let firstProvider = providers.first {
+//            provider = firstProvider
+//        } else {
+//            return
+//        }
+//        
+//        let config = SessionConfig(
+//            provider: provider, purpose: .chat)
+//        
+//        let newItem = Session(config: config)
+//        
+//        withAnimation {
+//            // Increment the order of all existing items
+//            for session in sessions {
+//                session.order += 1
+//            }
+//            
+//            newItem.order = 0  // Set the new item's order to 0 (top of the list)
+//            modelContext.insert(newItem)
+//            self.selections = [newItem]
+//        }
+//        
+//        try? modelContext.save()
+//    }
     
     func fork(session: Session, sessions: [Session], modelContext: ModelContext) {
         withAnimation {
