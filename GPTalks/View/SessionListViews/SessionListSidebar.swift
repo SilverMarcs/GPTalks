@@ -23,7 +23,7 @@ struct SessionListSidebar: View {
         
         Group {
             if sessionVM.state == .chats {
-                SessionList(searchString: sessionVM.searchText)
+                SessionList()
                     .focused($isSidebarFocused)
             } else {
                 ImageSessionList(searchString: sessionVM.searchText)

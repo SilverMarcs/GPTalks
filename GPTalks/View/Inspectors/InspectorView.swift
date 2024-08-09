@@ -15,12 +15,12 @@ struct InspectorView: View {
         Group {
             switch sessionVM.state {
             case .chats:
-                if sessionVM.selections.count == 1, let first = sessionVM.selections.first {
+                if let first = sessionVM.selections.first, sessionVM.selections.count == 1 {
                     ChatInspector(session: first)
                         .id(first.id)
                 }
             case .images:
-                if sessionVM.imageSelections.count == 1, let first = sessionVM.imageSelections.first {
+                if let first = sessionVM.imageSelections.first, sessionVM.imageSelections.count == 1 {
                     ImageInspector(session: first)
                         .id(first.id)
                 }
@@ -33,7 +33,7 @@ struct InspectorView: View {
         .inspectorColumnWidth(min: 245, ideal: 265, max: 300)
         #endif
         .toolbar {
-            if showingInspector, sessionVM.state == .chats, sessionVM.selections.count == 1, let first = sessionVM.selections.first {
+            if let first = sessionVM.selections.first, showingInspector, sessionVM.state == .chats, sessionVM.selections.count == 1 {
                 Text("Tokens: " + first.tokenCounter.formatToK()).foregroundStyle(.secondary)
                 
                 Spacer()

@@ -33,7 +33,8 @@ struct ContentView: View {
         #if !os(visionOS)
         .background(.background)
         #endif
-        .onAppear {
+        .onAppear {        
+            // TODO: all this should be done when creating model
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 if providers.isEmpty {
                     let openAI = Provider.factory(type: .openai)
@@ -65,7 +66,7 @@ struct ContentView: View {
             }
         }
         .floatingPanel(isPresented: $showingPanel, showAdditionalContent: $showAdditionalContent) {
-            QuickPanelHelper(showAdditionalContent: $showAdditionalContent) {
+            QuickPanelHelper(showAdditionalContent: $showAdditionalContent, showingPanel: $showingPanel) {
                 showingPanel.toggle()
                 bringMainWindowToFront()
             }

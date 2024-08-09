@@ -12,20 +12,20 @@ struct GeneralSettings: View {
 
     var body: some View {
         Form {
-            Section("Markdown") {
-                Picker("Markdown Provider", selection: $config.markdownProvider) {
-                    ForEach(MarkdownProvider.allCases, id: \.self) { provider in
-                        Text(provider.name)
-                    }
-                }
-            }
-            
-            Section("Appearance") {
-                Toggle("Compact List", isOn: $config.compactList)
-            }
-            
-            Section("Behaviour") {
+            Section {
                 Toggle("Autogen Title", isOn: $config.autogenTitle)
+            } header: {
+                Text("Title")
+            } footer: {
+                SectionFooterView(text: "Uses Title model in provider general settings")
+            }
+            
+            Section {
+                Toggle("Expensive Search", isOn: $config.expensiveSearch)
+            } header: {
+                Text("Search")
+            } footer: {
+                SectionFooterView(text: "Expensive method searches all messages but may cause UI responsiveness issues")
             }
         }
         .formStyle(.grouped)

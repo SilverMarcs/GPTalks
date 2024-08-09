@@ -12,7 +12,25 @@ struct SessionList: View {
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
-    @Query var sessions: [Session]
+    // predicate to filter out quick sessions
+    @Query(filter: #Predicate { !$0.isQuick }, sort: [SortDescriptor(\Session.order, order: .forward)], animation: .default)
+    var sessions: [Session]
+    
+    var filteredSessions: [Session] {
+        if sessionVM.searchText.isEmpty {
+            return sessions
+        } else {
+            return sessions.filter { session in
+                session.title.localizedStandardContains(sessionVM.searchText) ||
+                (AppConfig.shared.expensiveSearch &&
+                session.unorderedGroups.contains { group in
+                    group.conversationsUnsorted.contains { conversation in
+                        conversation.content.localizedStandardContains(sessionVM.searchText)
+                    }
+                })
+            }
+        }
+    }
     
     var body: some View {
         @Bindable var sessionVM = sessionVM
@@ -22,13 +40,9 @@ struct SessionList: View {
                 SessionListCards()
                 
                 if !sessionVM.searchText.isEmpty && sessions.isEmpty {
-                    ContentUnavailableView {
-                        Image(systemName: "magnifyingglass")
-                    } description: {
-                        Text("No Chat Sessions matching\n \(sessionVM.searchText)")
-                    }
+                    ContentUnavailableView.search(text: sessionVM.searchText)
                 } else {
-                    ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
+                    ForEach(filteredSessions.prefix(sessionVM.chatCount), id: \.self) { session in
                         SessionListItem(session: session)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))
@@ -55,27 +69,27 @@ struct SessionList: View {
         }
     }
     
-    init(searchString: String) {
-        _sessions = Query(
-            filter: #Predicate {
-                if searchString.isEmpty {
-                    return !$0.isQuick
-                } else {
-                    return !$0.isQuick &&
-                        ($0.title.localizedStandardContains(searchString) ||
-                         $0.unorderedGroups.contains { group in
-                            group.conversationsUnsorted.contains { conversation in
-                                conversation.content.localizedStandardContains(searchString)
-                            }
-                        })
-                }
-            },
-            sort: [
-                SortDescriptor(\Session.order, order: .forward),
-            ],
-            animation: .default
-        )
-    }
+//    init(searchString: String) {
+//        _sessions = Query(
+//            filter: #Predicate {
+//                if searchString.isEmpty {
+//                    return !$0.isQuick
+//                } else {
+//                    return !$0.isQuick &&
+//                        ($0.title.localizedStandardContains(searchString) ||
+//                         $0.unorderedGroups.contains { group in
+//                            group.conversationsUnsorted.contains { conversation in
+//                                conversation.content.localizedStandardContains(searchString)
+//                            }
+//                        })
+//                }
+//            },
+//            sort: [
+//                SortDescriptor(\Session.order, order: .forward),
+//            ],
+//            animation: .default
+//        )
+//    }
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
@@ -111,9 +125,7 @@ struct SessionList: View {
 }
 
 #Preview {
-    SessionList(
-        searchString: ""
-    )
+    SessionList()
     .frame(width: 400)
     .modelContainer(for: Session.self, inMemory: true)
     .environment(SessionVM())

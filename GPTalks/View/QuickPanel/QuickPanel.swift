@@ -15,6 +15,8 @@ struct QuickPanel: View {
     
     @Bindable var session: Session
     @Binding var showAdditionalContent: Bool
+    @Binding var showingPanel: Bool
+    
     @State var prompt: String = ""
     @FocusState private var isFocused: Bool
     let dismiss: () -> Void
@@ -37,6 +39,11 @@ struct QuickPanel: View {
             }
         }
         .frame(width: 650)
+        .onChange(of: showingPanel) {
+            if showingPanel {
+                showingPanel = true
+            }
+        }
         .onAppear {
             resetChat()
         }
@@ -149,7 +156,7 @@ struct QuickPanel: View {
         NSApp.activate(ignoringOtherApps: true)
         NSApp.keyWindow?.makeKeyAndOrderFront(nil)
         
-        let newSession = session.copy(title: "Quick Session")
+        let newSession = session.copy(purpose: .quick)
         sessionVM.fork(session: newSession, sessions: sessions, modelContext: modelContext)
         resetChat()
         
@@ -178,6 +185,6 @@ struct QuickPanel: View {
     let showAdditionalContent = Binding.constant(true)
     let dismiss = {}
     
-    QuickPanel(session: Session(config: .init()), showAdditionalContent: showAdditionalContent, dismiss: dismiss)
+    QuickPanel(session: Session(config: .init()), showAdditionalContent: showAdditionalContent, showingPanel: .constant(true), dismiss: dismiss)
 }
 #endif

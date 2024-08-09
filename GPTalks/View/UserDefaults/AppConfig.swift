@@ -10,12 +10,16 @@ import SwiftUI
 class AppConfig: ObservableObject {
     static let shared = AppConfig()
     
-    // General
+    // Appearance
     @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
-    
     @AppStorage("compactList") var compactList: Bool = false
     
+    @AppStorage("truncateList") var truncateList: Bool = false
+    @AppStorage("listCount") var listCount: Int = 12
+    
+    // General
     @AppStorage("autogenTitle") var autogenTitle: Bool = true
+    @AppStorage("expensiveSearch") var expensiveSearch: Bool = false
     
     // Quick
     @AppStorage("quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."

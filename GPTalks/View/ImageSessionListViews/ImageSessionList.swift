@@ -12,7 +12,22 @@ struct ImageSessionList: View {
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
-    @Query var sessions: [ImageSession]
+    @Query(sort: \ImageSession.order, order: .forward, animation: .default)
+    var sessions: [ImageSession]
+    
+    var filteredSessions: [ImageSession] {
+        if sessionVM.searchText.isEmpty {
+            return sessions
+        } else {
+            return sessions.filter { session in
+                session.title.localizedStandardContains(sessionVM.searchText) ||
+                (AppConfig.shared.expensiveSearch &&
+                session.imageGenerations.contains { generation in
+                    generation.prompt.localizedStandardContains(sessionVM.searchText)
+                })
+            }
+        }
+    }
     
     var body: some View {
         @Bindable var sessionVM = sessionVM
@@ -22,13 +37,9 @@ struct ImageSessionList: View {
                 SessionListCards()
                 
                 if !sessionVM.searchText.isEmpty && sessions.isEmpty {
-                    ContentUnavailableView {
-                        Image(systemName: "magnifyingglass")
-                    } description: {
-                        Text("No Image Sessions matching\n \(sessionVM.searchText)")
-                    }
+                    ContentUnavailableView.search(text: sessionVM.searchText)
                 } else {
-                    ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
+                    ForEach(filteredSessions.prefix(sessionVM.chatCount), id: \.self) { session in
                         ImageListRow(session: session)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))

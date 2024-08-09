@@ -19,12 +19,13 @@ struct QuickPanelHelper: View {
     
     @State private var session: Session?
     @Binding var showAdditionalContent: Bool
+    @Binding var showingPanel: Bool
     
     let dismiss: () -> Void
     
     var body: some View {
         if let session = session {
-            QuickPanel(session: session, showAdditionalContent: $showAdditionalContent, dismiss: dismiss)
+            QuickPanel(session: session, showAdditionalContent: $showAdditionalContent, showingPanel: $showingPanel, dismiss: dismiss)
         } else {
             Text("Loading...")
                 .onAppear {

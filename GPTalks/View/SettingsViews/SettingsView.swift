@@ -22,6 +22,9 @@ struct SettingsView: View {
                 Label("General", systemImage: "gear")
                     .tag(SidebarItem.general)
                 
+                Label("Appearance", systemImage: "paintbrush")
+                    .tag(SidebarItem.appearance)
+                
 #if os(macOS)
                 Label("Quick Panel", systemImage: "bolt.fill")
                     .tag(SidebarItem.quickPanel)
@@ -48,6 +51,8 @@ struct SettingsView: View {
             switch selectedSidebarItem {
             case .general:
                 GeneralSettings()
+            case .appearance:
+                AppearanceSettings()
             case .quickPanel:
                 #if os(macOS)
                 QuickPanelSettings()
@@ -69,6 +74,7 @@ struct SettingsView: View {
 
 enum SidebarItem {
     case general
+    case appearance
     case quickPanel
     case parameters
     case providers

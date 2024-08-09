@@ -70,6 +70,10 @@ struct ProviderGeneral: View {
             Section("Default Models") {
                 ModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
                 
+                #if os(macOS)
+                ModelPicker(model: $provider.quickChatModel, models: provider.chatModels, label: "Quick Model")
+                #endif
+                
                 ModelPicker(model: $provider.titleModel, models: provider.chatModels, label: "Title Model")
             }
 

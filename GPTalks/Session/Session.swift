@@ -247,7 +247,7 @@ final class Session {
         }
     }
     
-    func copy(from group: ConversationGroup? = nil, title: String = "Chat Session", purpose: SessionConfigPurpose = .chat) -> Session {
+    func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) -> Session {
         let newSession = Session(config: config.copy(purpose: purpose))
         newSession.title = purpose.title
         

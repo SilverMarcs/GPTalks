@@ -34,12 +34,7 @@ struct BackupSettings: View {
             } header: {
                 Text("Sessions")
             } footer: {
-                HStack {
-                    Text("Session configuration and images are not backed up")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                }
+                SectionFooterView(text: "Session configuration and images are not backed up")
             }
             
             Section {
@@ -55,12 +50,7 @@ struct BackupSettings: View {
             } header: {
                 Text("Providers")
             } footer: {
-                HStack {
-                    Text("API Keys will be stored in plaintext")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                }
+                SectionFooterView(text: "API Keys will be stored in plaintext")
             }
         }
 
