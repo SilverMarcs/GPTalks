@@ -21,6 +21,7 @@ struct SessionListToolbar: ToolbarContent {
     @Query var imageSessions: [ImageSession]
     
     @State var showSettings: Bool = false
+    @State var showDefaultProviderAlert: Bool = false
     
     var body: some ToolbarContent {
 #if !os(macOS)
@@ -123,12 +124,16 @@ struct SessionListToolbar: ToolbarContent {
             } primaryAction: {
                 if let provider = getDefaultProvider(providers: providers) {
                     addItem(provider: provider)
+                } else {
+                    showDefaultProviderAlert.toggle()
                 }
             }
             .keyboardShortcut("n", modifiers: [.command])
             .menuIndicator(.hidden)
+            .alert("Set Default Provider in Settings", isPresented: $showDefaultProviderAlert) { }
         }
     }
+    
     private func addItem(provider: Provider) {
         sessionVM.addItem(provider: provider, sessions: sessions, imageSessions: imageSessions, modelContext: modelContext)
     }

@@ -24,8 +24,22 @@ struct AppearanceSettings: View {
                 SectionFooterView(text: "WebView is recommended on MacOS and Native on iOS.")
             }
             
+            Section("List Row Count") {
+                Toggle("Show Less Sessions", isOn: $config.truncateList)
+                
+                Stepper(value: $config.listCount, in: 6...20) {
+                    HStack {
+                        Text("List Count")
+                        Spacer()
+                        Text("\(config.listCount)")
+                    }
+                }
+                .opacity(config.truncateList ? 1 : 0.5)
+                .disabled(!config.truncateList)
+            }
+            
             Section("Views") {
-                Toggle("Compact List", isOn: $config.compactList)
+                Toggle("Compact List Row", isOn: $config.compactList)
             }
         }
         .formStyle(.grouped)

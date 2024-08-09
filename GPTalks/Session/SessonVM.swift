@@ -22,12 +22,6 @@ enum ListState: String {
     
     var state: ListState = .chats
     
-    #if os(macOS)
-    var chatCount: Int = 12
-    #else
-    var chatCount: Int = .max
-    #endif
-    
     func addItem(provider: Provider, sessions: [Session]?, imageSessions: [ImageSession]?, modelContext: ModelContext) {
         if state == .chats {
             addChatSession(provider: provider, sessions: sessions ?? [], modelContext: modelContext)
@@ -35,13 +29,4 @@ enum ListState: String {
             addImageSession(provider: provider, imageSessions: imageSessions ?? [], modelContext: modelContext)
         }
     }
-}
-
-func getDefaultProvider(providers: [Provider]) -> Provider? {
-    if let defaultProvider = ProviderManager.shared.getDefault(providers: providers) {
-        return defaultProvider
-    } else if let firstProvider = providers.first {
-        return firstProvider
-    }
-    return nil
 }

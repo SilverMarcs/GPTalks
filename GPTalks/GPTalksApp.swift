@@ -13,6 +13,7 @@ struct GPTalksApp: App {
     @Environment(\.openWindow) private var openWindow
     @State private var sessionVM = SessionVM()
     @State private var isMainWindowActive = false
+    @State var container = PersistenceManager.create()
 
     var body: some Scene {
         WindowGroup {
@@ -22,7 +23,8 @@ struct GPTalksApp: App {
                 .windowDetector(isMainWindowActive: $isMainWindowActive)
             #endif
         }
-        .modelContainer(sharedModelContainer)
+//        .modelContainer(sharedModelContainer)
+        .modelContainer(container)
         .commands {
             InspectorCommands()
             
@@ -46,7 +48,8 @@ struct GPTalksApp: App {
             SettingsView()
         }
 //        .restorationBehavior(.disabled)
-        .modelContainer(sharedModelContainer)
+//        .modelContainer(sharedModelContainer)
+        .modelContainer(container)
         #endif
     }
     

@@ -11,16 +11,19 @@ import SwiftUI
 struct SessionList: View {
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
+    @ObservedObject var config = AppConfig.shared
     
     // predicate to filter out quick sessions
     @Query(filter: #Predicate { !$0.isQuick }, sort: [SortDescriptor(\Session.order, order: .forward)], animation: .default)
     var sessions: [Session]
     
     var filteredSessions: [Session] {
+        let filteredSessions: [Session]
+        
         if sessionVM.searchText.isEmpty {
-            return sessions
+            filteredSessions = sessions
         } else {
-            return sessions.filter { session in
+            filteredSessions = sessions.filter { session in
                 session.title.localizedStandardContains(sessionVM.searchText) ||
                 (AppConfig.shared.expensiveSearch &&
                 session.unorderedGroups.contains { group in
@@ -29,6 +32,12 @@ struct SessionList: View {
                     }
                 })
             }
+        }
+        
+        if config.truncateList {
+            return Array(filteredSessions.prefix(config.listCount))
+        } else {
+            return filteredSessions
         }
     }
     
@@ -42,7 +51,7 @@ struct SessionList: View {
                 if !sessionVM.searchText.isEmpty && sessions.isEmpty {
                     ContentUnavailableView.search(text: sessionVM.searchText)
                 } else {
-                    ForEach(filteredSessions.prefix(sessionVM.chatCount), id: \.self) { session in
+                    ForEach(filteredSessions, id: \.self) { session in
                         SessionListItem(session: session)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))

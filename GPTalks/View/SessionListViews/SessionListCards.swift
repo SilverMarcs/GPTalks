@@ -19,16 +19,15 @@ struct SessionListCards: View {
                 ListCard(
                     icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
                     count: String(sessions.count)) {
-                        toggleChatCount()
+                        sessionVM.state = .chats
                     }
 //                    .opacity(sessionVM.state == .chats ? 1 : 0.8)
                 
                 ListCard(
                     icon: "photo.circle.fill", iconColor: .cyan, title: "Images",
-                    count: String(imageSessions.count)
-                ) {
-                    sessionVM.state = .images
-                }
+                    count: String(imageSessions.count)) {
+                        sessionVM.state = .images
+                    }
 //                .opacity(sessionVM.state == .images ? 1 : 0.8)
             }
             .listRowSeparator(.hidden)
@@ -50,18 +49,6 @@ struct SessionListCards: View {
         #else
         return 13
         #endif
-    }
-    
-    func toggleChatCount() {
-        if sessionVM.state == .chats {
-            if sessionVM.chatCount == .max {
-                sessionVM.chatCount = 12
-            } else {
-                sessionVM.chatCount = .max
-            }
-        } else {
-            sessionVM.state = .chats
-        }
     }
 }
 

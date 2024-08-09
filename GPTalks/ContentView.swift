@@ -33,24 +33,16 @@ struct ContentView: View {
         #if !os(visionOS)
         .background(.background)
         #endif
-        .onAppear {        
-            // TODO: all this should be done when creating model
+        .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                if providers.isEmpty {
-                    let openAI = Provider.factory(type: .openai)
-                    let anthropic = Provider.factory(type: .anthropic)
-                    let google = Provider.factory(type: .google)
-                    modelContext.insert(openAI)
-                    modelContext.insert(anthropic)
-                    modelContext.insert(google)
-                    
-                    if providerManager.getDefault(providers: providers) == nil {
-                        providerManager.defaultProvider = openAI.id.uuidString
-                    }
-                    
-                    if providerManager.getQuickProvider(providers: providers) == nil {
-                        providerManager.quickProvider = openAI.id.uuidString
-                    }
+                guard providers.isEmpty else { return }
+                
+                if ProviderManager.shared.defaultProvider == nil {
+                    ProviderManager.shared.defaultProvider = providers.first!.id.uuidString
+                }
+                
+                if ProviderManager.shared.quickProvider == nil {
+                    ProviderManager.shared.quickProvider = providers.first!.id.uuidString
                 }
             }
         }

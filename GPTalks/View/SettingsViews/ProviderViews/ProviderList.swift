@@ -88,7 +88,7 @@ extension ProviderList {
             let defaultProviderID = providerManager.defaultProvider
             var providersToDelete = offsets
             for index in offsets {
-                if reorderedProviders[index].id.uuidString == defaultProviderID && reorderedProviders[index].name == "OpenAI" {
+                if reorderedProviders[index].id.uuidString == defaultProviderID || reorderedProviders[index].name == "OpenAI" {
                     providersToDelete.remove(index)
                 }
             }

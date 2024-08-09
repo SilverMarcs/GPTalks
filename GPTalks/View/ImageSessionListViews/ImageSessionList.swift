@@ -11,21 +11,30 @@ import SwiftData
 struct ImageSessionList: View {
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
+    @ObservedObject var config = AppConfig.shared
     
     @Query(sort: \ImageSession.order, order: .forward, animation: .default)
     var sessions: [ImageSession]
     
     var filteredSessions: [ImageSession] {
+        let filteredSessions: [ImageSession]
+        
         if sessionVM.searchText.isEmpty {
-            return sessions
+            filteredSessions = sessions
         } else {
-            return sessions.filter { session in
+            filteredSessions = sessions.filter { session in
                 session.title.localizedStandardContains(sessionVM.searchText) ||
                 (AppConfig.shared.expensiveSearch &&
                 session.imageGenerations.contains { generation in
                     generation.prompt.localizedStandardContains(sessionVM.searchText)
                 })
             }
+        }
+        
+        if config.truncateList {
+            return Array(filteredSessions.prefix(config.listCount))
+        } else {
+            return filteredSessions
         }
     }
     
@@ -39,7 +48,7 @@ struct ImageSessionList: View {
                 if !sessionVM.searchText.isEmpty && sessions.isEmpty {
                     ContentUnavailableView.search(text: sessionVM.searchText)
                 } else {
-                    ForEach(filteredSessions.prefix(sessionVM.chatCount), id: \.self) { session in
+                    ForEach(filteredSessions, id: \.self) { session in
                         ImageListRow(session: session)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))
