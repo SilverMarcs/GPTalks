@@ -12,7 +12,7 @@ import SwiftData
 struct GPTalksApp: App {
     @Environment(\.openWindow) private var openWindow
     @State private var sessionVM = SessionVM()
-    @State private var isMainWindowActive = false
+    @State private var isMainWindowActive = true
     @State var container = PersistenceManager.create()
 
     var body: some Scene {
@@ -23,7 +23,7 @@ struct GPTalksApp: App {
                 .windowDetector(isMainWindowActive: $isMainWindowActive)
             #endif
         }
-//        .modelContainer(sharedModelContainer)
+
         .modelContainer(container)
         .commands {
             InspectorCommands()
@@ -48,29 +48,7 @@ struct GPTalksApp: App {
             SettingsView()
         }
 //        .restorationBehavior(.disabled)
-//        .modelContainer(sharedModelContainer)
         .modelContainer(container)
         #endif
     }
-    
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Session.self,
-            Conversation.self,
-            Provider.self,
-            AIModel.self,
-            ConversationGroup.self,
-            SessionConfig.self,
-            ImageSession.self,
-            ImageGeneration.self,
-            ImageConfig.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-        
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
 }

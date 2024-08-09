@@ -45,30 +45,6 @@ actor PersistenceManager {
         container.mainContext.insert(anthropic)
         container.mainContext.insert(google)
         
-        // fetch provider named "OpenAI
-        //        var fetchOpenAI = FetchDescriptor<Provider>(
-        //            predicate: #Predicate { $0.name == "OpenAI" }
-        //        )
-        //        fetchOpenAI.fetchLimit = 1
-        //
-        //        do {
-        //            let fetch = try container.mainContext.fetch(fetchOpenAI)
-        //            let openAI = fetch.first!
-        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//            if ProviderManager.shared.defaultProvider == nil {
-//                ProviderManager.shared.defaultProvider = openAI.id.uuidString
-//            }
-//
-//            if ProviderManager.shared.quickProvider == nil {
-//                ProviderManager.shared.quickProvider = openAI.id.uuidString
-//            }
-//        }
-//
-//        } catch {
-//            print("Failed to fetch OpenAI provider: \(error)")
-//        }
-
         return container
     }
 }

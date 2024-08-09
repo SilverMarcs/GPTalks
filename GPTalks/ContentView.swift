@@ -30,22 +30,6 @@ struct ContentView: View {
         } detail: {
             ConversationListDetail()
         }
-        #if !os(visionOS)
-        .background(.background)
-        #endif
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                guard providers.isEmpty else { return }
-                
-                if ProviderManager.shared.defaultProvider == nil {
-                    ProviderManager.shared.defaultProvider = providers.first!.id.uuidString
-                }
-                
-                if ProviderManager.shared.quickProvider == nil {
-                    ProviderManager.shared.quickProvider = providers.first!.id.uuidString
-                }
-            }
-        }
         #if os(macOS)
         .frame(minWidth: 800, minHeight: 600)
         .background(BackgroundView(window: $mainWindow))
