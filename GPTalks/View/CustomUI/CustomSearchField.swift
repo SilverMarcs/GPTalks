@@ -12,10 +12,12 @@ struct CustomSearchField: NSViewRepresentable {
     @Binding var text: String
     let prompt: String
     let height: CGFloat
+    let showFocusRing: Bool
     
-    init(_ prompt: String, text: Binding<String>, height: CGFloat = 30) {
+    init(_ prompt: String, text: Binding<String>, height: CGFloat = 30, showFocusRing: Bool = false) {
         self.prompt = prompt
         self.height = height
+        self.showFocusRing = showFocusRing
         _text = text
     }
     
@@ -27,8 +29,10 @@ struct CustomSearchField: NSViewRepresentable {
         let textField = NSSearchField(string: text)
         textField.placeholderString = prompt
         textField.delegate = context.coordinator
-        textField.bezelStyle = .roundedBezel
-        textField.focusRingType = .none
+    textField.bezelStyle = .roundedBezel
+        if !showFocusRing {
+            textField.focusRingType = .none
+        }
         
         // Set the height constraint
         textField.translatesAutoresizingMaskIntoConstraints = false

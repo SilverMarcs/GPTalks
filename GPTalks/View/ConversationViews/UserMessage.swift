@@ -24,8 +24,7 @@ struct UserMessage: View {
                 imageList
             }
             
-            Text(conversation.content)
-                .textSelection(.enabled)
+            HighlightedText(text: conversation.content, highlightedText: conversation.group?.session?.searchText)
                 .padding(.vertical, 8)
                 .padding(.horizontal, 11)
                 .background(

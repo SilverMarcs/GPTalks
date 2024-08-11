@@ -24,23 +24,6 @@ struct ConversationListToolbar: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigation) {
             Menu {
-                Button("This does nothing") { }
-            } label: {
-                Label("Actions", systemImage: "slider.vertical.3")
-            }
-            .menuIndicator(.hidden)
-        }
-        
-        ToolbarItem {
-            Color.clear
-            .sessionExporter(isExporting: $isExportingJSON, sessions: [session])
-            
-            Color.clear
-            .markdownSessionExporter(isExporting: $isExportingMarkdown, session: session)
-        }
-    
-        ToolbarItem {
-            Menu {
                 Button {
                     isExportingJSON = true
                 } label: {
@@ -52,11 +35,20 @@ struct ConversationListToolbar: ToolbarContent {
                 } label: {
                     Label("Markdown", systemImage: "richtext.page")
                 }
-
             } label: {
-                Label("Export", systemImage: "square.and.arrow.up")
-                    .labelStyle(.titleOnly)
+                Label("Actions", systemImage: "slider.vertical.3")
             }
+            .menuIndicator(.hidden)
+        }
+        
+        ToolbarItem {
+            Color.clear
+            .sessionExporter(isExporting: $isExportingJSON, sessions: [session])
+        }
+        
+        ToolbarItem {
+            Color.clear
+            .markdownSessionExporter(isExporting: $isExportingMarkdown, session: session)
         }
         
         if !session.searchText.isEmpty && !filteredGroups.isEmpty {
@@ -66,7 +58,7 @@ struct ConversationListToolbar: ToolbarContent {
         }
         
         ToolbarItem {
-            CustomSearchField("Search", text: $session.searchText, height: 28)
+            CustomSearchField("Search", text: $session.searchText, height: 28, showFocusRing: true)
             .frame(width: 220)
         }
     }

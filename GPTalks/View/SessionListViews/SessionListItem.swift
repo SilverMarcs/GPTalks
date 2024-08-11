@@ -38,7 +38,8 @@ struct SessionListItem: View {
             
             VStack(alignment: .leading) {
                 HStack {
-                    Text(session.title)
+//                    Text(session.title)
+                    HighlightedText(text: session.title, highlightedText: sessionVM.searchText, shapeStyle: .yellow.opacity(0.5))
                         .lineLimit(1)
                         .font(.headline)
                         .fontWeight(.semibold)

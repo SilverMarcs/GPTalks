@@ -81,7 +81,7 @@ struct ChatInspector: View {
             Image(systemName: "sparkles")
         }
         .buttonStyle(.plain)
-        .foregroundStyle(.link)
+        .foregroundStyle(.mint)
     }
     
     private var resetContext: some View {
