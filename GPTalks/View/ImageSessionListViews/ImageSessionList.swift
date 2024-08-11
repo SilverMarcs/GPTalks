@@ -73,26 +73,6 @@ struct ImageSessionList: View {
 #endif
         }
     }
-    
-    init(searchString: String) {
-        _sessions = Query(
-            filter: #Predicate {
-                if searchString.isEmpty {
-                    return true
-                } else {
-                    return $0.title.localizedStandardContains(searchString) ||
-                           $0.imageGenerations.contains { generation in
-                               generation.prompt.localizedStandardContains(searchString)
-                           }
-                }
-            },
-            sort: [
-                SortDescriptor(\ImageSession.order, order: .forward),
-            ],
-            animation: .default
-        )
-    }
-
 
     private func deleteItems(offsets: IndexSet) {
         // if current selection is in the index, then set to nil
@@ -123,8 +103,6 @@ struct ImageSessionList: View {
                 session.order = index
             }
         }
-        
-//        try? modelContext.save()
     }
 }
 

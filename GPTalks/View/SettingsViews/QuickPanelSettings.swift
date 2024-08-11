@@ -9,7 +9,6 @@ import KeyboardShortcuts
 import SwiftUI
 import SwiftData
 
-#if os(macOS)
 struct QuickPanelSettings: View {
     @Query var providers: [Provider]
     @ObservedObject var providerManager: ProviderManager = .shared
@@ -29,12 +28,22 @@ struct QuickPanelSettings: View {
     }
     
     var body: some View {
+        #if os(macOS)
+        content
+        #else
+        EmptyView()
+        #endif
+    }
+    
+    var content: some View {
         Form {
             Section("Launch") {
                 HStack {
                     Text("Shortcut")
                     Spacer()
+                    #if os(macOS)
                     KeyboardShortcuts.Recorder(for: .togglePanel)
+                    #endif
                 }
             }
             
@@ -76,4 +85,3 @@ struct QuickPanelSettings: View {
 #Preview {
     QuickPanelSettings()
 }
-#endif

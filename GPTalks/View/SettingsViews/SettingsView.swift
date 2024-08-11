@@ -16,8 +16,10 @@ struct SettingsView: View {
     @State private var selectedSidebarItem: SidebarItem?
     #endif
     
+    @State private var columnVisibility = NavigationSplitViewVisibility.automatic
+    
     var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(columnVisibility: $columnVisibility) {
             List(selection: $selectedSidebarItem) {
                 Label("General", systemImage: "gear")
                     .tag(SidebarItem.general)
@@ -47,6 +49,7 @@ struct SettingsView: View {
                     DismissButton()
                 }
             }
+            .navigationSplitViewColumnWidth(min: 190, ideal: 190, max: 190)
         } detail: {
             Group {
                 switch selectedSidebarItem {
@@ -55,11 +58,7 @@ struct SettingsView: View {
                 case .appearance:
                     AppearanceSettings()
                 case .quickPanel:
-#if os(macOS)
                     QuickPanelSettings()
-#else
-                    EmptyView()
-#endif
                 case .parameters:
                     ParameterSettings()
                 case .providers:
@@ -71,6 +70,13 @@ struct SettingsView: View {
                 }
             }
             .scrollContentBackground(.visible)
+            .onChange(of: columnVisibility, initial: true) { oldVal, newVal in
+                if newVal == .detailOnly {
+                    DispatchQueue.main.asyncAfter(deadline: .now()) {
+                        columnVisibility = .all
+                    }
+                }
+            }
         }
     }
 }

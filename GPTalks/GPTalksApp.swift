@@ -10,47 +10,31 @@ import SwiftData
 
 @main
 struct GPTalksApp: App {
-    @Environment(\.openWindow) private var openWindow
     @State private var sessionVM = SessionVM()
     @State private var isMainWindowActive = true
-//    @State var container = PersistenceManager.create()
 
     var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environment(sessionVM)
+        Group {
+            WindowGroup {
+                ContentView()
+                #if os(macOS)
+                    .windowDetector(isMainWindowActive: $isMainWindowActive)
+                #endif
+            }
+            .commands {
+                MenuCommands(isMainWindowActive: $isMainWindowActive)
+            }
+            
             #if os(macOS)
-                .windowDetector(isMainWindowActive: $isMainWindowActive)
+            Window("Settings", id: "settings") {
+                SettingsView()
+                    .frame(minWidth: 820, maxWidth: 820, minHeight: 570, maxHeight: 570)
+            }
+            .windowResizability(.contentSize)
             #endif
         }
-
-//        .modelContainer(container)
+        .environment(sessionVM)
         .modelContainer(for: models, isUndoEnabled: true)
-        .commands {
-            InspectorCommands()
-            
-            if isMainWindowActive {
-                MenuCommands(sessionVM: sessionVM)
-            }
-            
-            CommandGroup(replacing: CommandGroupPlacement.newItem) {
-            }
-            
-            CommandGroup(before: .appSettings) {
-                Button("Settings") {
-                    openWindow(id: "settings")
-                }
-                .keyboardShortcut(",", modifiers: .command)
-            }
-        }
-
-        #if os(macOS)
-        Window("Settings", id: "settings") {
-            SettingsView()
-        }
-//        .restorationBehavior(.disabled)
-        .modelContainer(for: models, isUndoEnabled: true)
-        #endif
     }
     
     let models: [any PersistentModel.Type] =

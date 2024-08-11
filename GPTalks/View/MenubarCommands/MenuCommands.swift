@@ -8,14 +8,32 @@
 import SwiftUI
 
 struct MenuCommands: Commands {
-    var sessionVM: SessionVM
+    @Environment(\.openWindow) private var openWindow
+    @Environment(SessionVM.self) var sessionVM
+    @Binding var isMainWindowActive: Bool
 
     var body: some Commands {
-        switch sessionVM.state {
-        case .chats:
-            ChatCommands(sessionVM: sessionVM)
-        case .images:
-            ImageCommands(sessionVM: sessionVM)
+        SidebarCommands()
+        
+        InspectorCommands()
+        
+        if isMainWindowActive {
+            switch sessionVM.state {
+            case .chats:
+                ChatCommands(sessionVM: sessionVM)
+            case .images:
+                ImageCommands(sessionVM: sessionVM)
+            }
+        }
+        
+        CommandGroup(replacing: CommandGroupPlacement.newItem) {
+        }
+        
+        CommandGroup(before: .appSettings) {
+            Button("Settings") {
+                openWindow(id: "settings")
+            }
+            .keyboardShortcut(",", modifiers: .command)
         }
     }
 }

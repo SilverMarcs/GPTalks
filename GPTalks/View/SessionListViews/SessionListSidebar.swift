@@ -24,7 +24,7 @@ struct SessionListSidebar: View {
                 SessionList()
                     .focused($isSidebarFocused)
             } else {
-                ImageSessionList(searchString: sessionVM.searchText)
+                ImageSessionList()
                     .focused($isSidebarFocused)
             }
         }
