@@ -5,26 +5,22 @@
 //  Created by Zabir Raihan on 06/07/2024.
 //
 
-import SwiftUI
-
 #if os(macOS)
 import SwiftUI
 
-struct SessionSearch: NSViewRepresentable {
+struct CustomSearchField: NSViewRepresentable {
     @Binding var text: String
-    var onClear: () -> Void
     let prompt: String
     let height: CGFloat
     
-    init(_ prompt: String, text: Binding<String>, height: CGFloat = 30, onClear: @escaping () -> Void) {
-        self.onClear = onClear
+    init(_ prompt: String, text: Binding<String>, height: CGFloat = 30) {
         self.prompt = prompt
         self.height = height
         _text = text
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(binding: $text, onClear: onClear)
+        Coordinator(binding: $text)
     }
     
     func makeNSView(context: Context) -> NSSearchField {
@@ -41,7 +37,7 @@ struct SessionSearch: NSViewRepresentable {
         ])
         
         // Add keyboard shortcut listener
-        let shortcutListener = ShortcutListener(searchField: textField)
+        let shortcutListener = ShortcutListener(searchField: textField, binding: $text)
         context.coordinator.shortcutListener = shortcutListener
         shortcutListener.startListening()
         
@@ -54,48 +50,52 @@ struct SessionSearch: NSViewRepresentable {
     
     class Coordinator: NSObject, NSSearchFieldDelegate {
         let binding: Binding<String>
-        let onClear: () -> Void
         var shortcutListener: ShortcutListener?
         
-        init(binding: Binding<String>, onClear: @escaping () -> Void) {
+        init(binding: Binding<String>) {
             self.binding = binding
-            self.onClear = onClear
             super.init()
         }
         
         func controlTextDidChange(_ obj: Notification) {
             guard let field = obj.object as? NSTextField else { return }
             binding.wrappedValue = field.stringValue
-            
-            if field.stringValue.isEmpty {
-                onClear()
-            }
         }
     }
 }
 
 class ShortcutListener {
     weak var searchField: NSSearchField?
+    var binding: Binding<String>
     
-    init(searchField: NSSearchField) {
+    init(searchField: NSSearchField, binding: Binding<String>) {
         self.searchField = searchField
+        self.binding = binding
     }
     
     func startListening() {
         NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             guard let self = self else { return event }
+            
             if event.modifierFlags.contains(.command) && event.characters == "f" {
                 self.searchField?.becomeFirstResponder()
                 return nil
             }
+            
+            if event.keyCode == 53, self.searchField?.window?.firstResponder == self.searchField {
+                // 53 is the key code for the escape key
+                self.searchField?.window?.makeFirstResponder(nil) // Lose focus
+                self.binding.wrappedValue = "" // Clear the text
+                return nil
+            }
+            
             return event
         }
     }
 }
 
+
 #Preview {
-    SessionSearch("Hi", text: .constant(""), height: 30) {
-        print("Clear")
-    }
+    CustomSearchField("Hi", text: .constant(""), height: 30)
 }
 #endif

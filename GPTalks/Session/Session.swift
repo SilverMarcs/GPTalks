@@ -64,6 +64,9 @@ final class Session {
         groups.last?.activeConversation.isReplying ?? false
     }
     
+    @Attribute(.ephemeral)
+    var searchText: String = ""
+    
     @Transient
     var inputManager = InputManager()
     

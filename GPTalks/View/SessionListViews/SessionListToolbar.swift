@@ -15,6 +15,8 @@ struct SessionListToolbar: ToolbarContent {
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
+    @ObservedObject var config = AppConfig.shared
+    
     @Query var providers: [Provider]
     
     @Query var sessions: [Session]
@@ -31,7 +33,9 @@ struct SessionListToolbar: ToolbarContent {
                     Button {
                         withAnimation {
                             editMode?.wrappedValue = .active
-                            sessionVM.chatCount = .max
+                            config.truncateList = false
+//                            sessionVM.chatCount = .max
+                            
                         }
                     } label: {
                         Label("Edit", systemImage: "pencil")
@@ -57,7 +61,8 @@ struct SessionListToolbar: ToolbarContent {
                     Button {
                         withAnimation {
                             editMode?.wrappedValue = .inactive
-                            sessionVM.chatCount = 12
+                            config.truncateList = true
+//                            sessionVM.chatCount = 12
                         }
                     } label: {
                         Text("Done")

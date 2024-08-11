@@ -28,7 +28,7 @@ struct SessionList: View {
                 (AppConfig.shared.expensiveSearch &&
                 session.unorderedGroups.contains { group in
                     group.conversationsUnsorted.contains { conversation in
-                        conversation.content.localizedStandardContains(sessionVM.searchText)
+                        conversation.content.localizedCaseInsensitiveContains(sessionVM.searchText)
                     }
                 })
             }
@@ -77,28 +77,6 @@ struct SessionList: View {
             }
         }
     }
-    
-//    init(searchString: String) {
-//        _sessions = Query(
-//            filter: #Predicate {
-//                if searchString.isEmpty {
-//                    return !$0.isQuick
-//                } else {
-//                    return !$0.isQuick &&
-//                        ($0.title.localizedStandardContains(searchString) ||
-//                         $0.unorderedGroups.contains { group in
-//                            group.conversationsUnsorted.contains { conversation in
-//                                conversation.content.localizedStandardContains(searchString)
-//                            }
-//                        })
-//                }
-//            },
-//            sort: [
-//                SortDescriptor(\Session.order, order: .forward),
-//            ],
-//            animation: .default
-//        )
-//    }
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {

@@ -84,7 +84,7 @@
 		088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A09F22C55C7740055B567 /* TextSelectionView.swift */; };
 		08915D942C373340008ADE27 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D932C373340008ADE27 /* ProviderImage.swift */; };
 		08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D982C37C648008ADE27 /* ProviderDetail.swift */; };
-		0893B2022C3955CC00D4D501 /* SessionSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2012C3955CC00D4D501 /* SessionSearch.swift */; };
+		0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2012C3955CC00D4D501 /* CustomSearchField.swift */; };
 		0893B2062C39810900D4D501 /* SessionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2052C39810900D4D501 /* SessionConfig.swift */; };
 		089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089B22402C393BCB00E248FE /* ConversationGroup.swift */; };
 		089B22432C394A4F00E248FE /* ButtonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089B22422C394A4F00E248FE /* ButtonUtils.swift */; };
@@ -239,7 +239,7 @@
 		088A09F22C55C7740055B567 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
 		08915D932C373340008ADE27 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
 		08915D982C37C648008ADE27 /* ProviderDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetail.swift; sourceTree = "<group>"; };
-		0893B2012C3955CC00D4D501 /* SessionSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSearch.swift; sourceTree = "<group>"; };
+		0893B2012C3955CC00D4D501 /* CustomSearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchField.swift; sourceTree = "<group>"; };
 		0893B2052C39810900D4D501 /* SessionConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionConfig.swift; sourceTree = "<group>"; };
 		089B22402C393BCB00E248FE /* ConversationGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationGroup.swift; sourceTree = "<group>"; };
 		089B22422C394A4F00E248FE /* ButtonUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonUtils.swift; sourceTree = "<group>"; };
@@ -352,7 +352,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0805DEEB2C58CAF900A8354A /* Streaming */ = {
+		0805DEEB2C58CAF900A8354A /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				0805DEEE2C58CB1400A8354A /* OpenAIService.swift */,
@@ -360,7 +360,7 @@
 				0805DEF02C58CB2A00A8354A /* ClaudeService.swift */,
 				0805DEEC2C58CB0300A8354A /* AIService.swift */,
 			);
-			path = Streaming;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		0819479F2C48DCE50061227B /* ImageSessionListViews */ = {
@@ -477,6 +477,7 @@
 				08D174C92C3E3C78000257EF /* ImageViewer.swift */,
 				08A3134E2C4AF56200C3E578 /* AssistantImage.swift */,
 				08A77CC82C65A3AD0087D0F3 /* SectionFooterView.swift */,
+				0893B2012C3955CC00D4D501 /* CustomSearchField.swift */,
 			);
 			path = CustomUI;
 			sourceTree = "<group>";
@@ -673,7 +674,6 @@
 				08C800312C36AE1D009581C5 /* SessionList.swift */,
 				08505C9D2C3D5482001EBEEF /* SessionListToolbar.swift */,
 				08C800362C36B8CC009581C5 /* SessionListItem.swift */,
-				0893B2012C3955CC00D4D501 /* SessionSearch.swift */,
 				08AAFB992C3D0017002C04E0 /* ListCard.swift */,
 			);
 			path = SessionListViews;
@@ -694,7 +694,7 @@
 		08C8004E2C36F648009581C5 /* LLM */ = {
 			isa = PBXGroup;
 			children = (
-				0805DEEB2C58CAF900A8354A /* Streaming */,
+				0805DEEB2C58CAF900A8354A /* Services */,
 				08C8004F2C36F667009581C5 /* Provider.swift */,
 				08D174C12C3D96F8000257EF /* StreamHandler.swift */,
 				08D174C32C3D972D000257EF /* StreamManager.swift */,
@@ -942,7 +942,7 @@
 				085361132C4939C5007DAB62 /* ImageGenerationView.swift in Sources */,
 				0805DEF12C58CB2A00A8354A /* ClaudeService.swift in Sources */,
 				08C1ACE42C54BCA600B86D37 /* FrequencyPenaltySlider.swift in Sources */,
-				0893B2022C3955CC00D4D501 /* SessionSearch.swift in Sources */,
+				0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */,
 				085524EA2C4EDEC400CBB827 /* ModelList.swift in Sources */,
 				08A3134B2C4ADEA000C3E578 /* ImageListRow.swift in Sources */,
 				087928372C48CFFB008646CD /* ExpandedTextField.swift in Sources */,

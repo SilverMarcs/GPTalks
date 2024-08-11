@@ -15,9 +15,7 @@ struct SessionListSidebar: View {
         @Bindable var sessionVM = sessionVM
         
         #if os(macOS)
-        SessionSearch("Search", text: $sessionVM.searchText) {
-            sessionVM.searchText = ""
-        }
+        CustomSearchField("Search", text: $sessionVM.searchText)
         .padding(.horizontal, 10)
         #endif
         
