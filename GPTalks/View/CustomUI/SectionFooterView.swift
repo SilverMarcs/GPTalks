@@ -11,14 +11,16 @@ struct SectionFooterView: View {
     var text: String
     
     var body: some View {
+        #if os(macOS)
         HStack {
             Text(text)
                 .font(.caption)
                 .foregroundStyle(.secondary)
             Spacer()
         }
-        #if os(macOS)
         .padding(.leading, 5)
+        #else
+        Text(text)
         #endif
     }
 }

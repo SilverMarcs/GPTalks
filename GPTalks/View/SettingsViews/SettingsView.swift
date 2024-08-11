@@ -48,26 +48,29 @@ struct SettingsView: View {
                 }
             }
         } detail: {
-            switch selectedSidebarItem {
-            case .general:
-                GeneralSettings()
-            case .appearance:
-                AppearanceSettings()
-            case .quickPanel:
-                #if os(macOS)
-                QuickPanelSettings()
-                #else
-                EmptyView()
-                #endif
-            case .parameters:
-                ParameterSettings()
-            case .providers:
-                ProviderList()
-            case .backup:
-                BackupSettings()
-            case .none:
-                Text("Select an option from the sidebar")
+            Group {
+                switch selectedSidebarItem {
+                case .general:
+                    GeneralSettings()
+                case .appearance:
+                    AppearanceSettings()
+                case .quickPanel:
+#if os(macOS)
+                    QuickPanelSettings()
+#else
+                    EmptyView()
+#endif
+                case .parameters:
+                    ParameterSettings()
+                case .providers:
+                    ProviderList()
+                case .backup:
+                    BackupSettings()
+                case .none:
+                    Text("Select an option from the sidebar")
+                }
             }
+            .scrollContentBackground(.visible)
         }
     }
 }

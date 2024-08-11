@@ -13,7 +13,7 @@ struct GPTalksApp: App {
     @Environment(\.openWindow) private var openWindow
     @State private var sessionVM = SessionVM()
     @State private var isMainWindowActive = true
-    @State var container = PersistenceManager.create()
+//    @State var container = PersistenceManager.create()
 
     var body: some Scene {
         WindowGroup {
@@ -24,7 +24,8 @@ struct GPTalksApp: App {
             #endif
         }
 
-        .modelContainer(container)
+//        .modelContainer(container)
+        .modelContainer(for: models, isUndoEnabled: true)
         .commands {
             InspectorCommands()
             
@@ -48,7 +49,20 @@ struct GPTalksApp: App {
             SettingsView()
         }
 //        .restorationBehavior(.disabled)
-        .modelContainer(container)
+        .modelContainer(for: models, isUndoEnabled: true)
         #endif
     }
+    
+    let models: [any PersistentModel.Type] =
+        [
+           Session.self,
+           Conversation.self,
+           Provider.self,
+           AIModel.self,
+           ConversationGroup.self,
+           SessionConfig.self,
+           ImageSession.self,
+           ImageGeneration.self,
+           ImageConfig.self
+        ]
 }

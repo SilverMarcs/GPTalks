@@ -26,6 +26,7 @@ struct ProviderDetail: View {
                 ModelListView(provider: provider, modelType: .image)
             }
         }
+        .scrollContentBackground(.visible)
         .navigationTitle("Providers")
         .toolbarTitleDisplayMode(.inline)
         .toolbar {

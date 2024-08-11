@@ -94,7 +94,7 @@ struct SessionList: View {
             
         }
         
-        try? modelContext.save()
+//        try? modelContext.save()
     }
     
     private func move(from source: IndexSet, to destination: Int) {
@@ -107,7 +107,7 @@ struct SessionList: View {
             }
         }
         
-        try? modelContext.save()
+//        try? modelContext.save()
     }
 }
 

@@ -69,8 +69,8 @@ class StreamHandler {
                 self.assistant.isReplying = false
             }
         }
-        if let context = self.assistant.modelContext {
-            try? context.save()
-        }
+//        if let context = self.assistant.modelContext {
+//            try? context.save()
+//        }
     }
 }

@@ -25,6 +25,7 @@ actor PersistenceManager {
         ])
         
         let container = try! ModelContainer(for: schema)
+//        container.mainContext.undoManager = UndoManager()
         
         var fetchProviders = FetchDescriptor<Provider>()
         fetchProviders.fetchLimit = 1

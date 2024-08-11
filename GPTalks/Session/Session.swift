@@ -23,7 +23,7 @@ final class Session {
     @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
     var unorderedGroups =  [ConversationGroup]()
     
-    @Relationship(deleteRule: .nullify, inverse: \SessionConfig.session)
+    @Relationship(deleteRule: .cascade, inverse: \SessionConfig.session)
     var config: SessionConfig
     
     @Transient
@@ -72,6 +72,7 @@ final class Session {
     
     init(config: SessionConfig) {
         self.config = config
+        self.config.session = self
     }
     
     @MainActor
@@ -280,11 +281,17 @@ final class Session {
         }
         withAnimation {
             groups.removeAll(where: { $0 == conversationGroup })
+        } completion: {
+            self.modelContext?.delete(conversationGroup)
         }
     }
     
     func deleteAllConversations() {
-        groups.removeAll()
-        errorMessage = ""
+        withAnimation {
+            groups.removeAll()
+            errorMessage = ""
+        } completion: {
+            
+        }
     }
 }

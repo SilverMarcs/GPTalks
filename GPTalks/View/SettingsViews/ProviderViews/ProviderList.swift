@@ -76,7 +76,7 @@ extension ProviderList {
             modelContext.insert(newProvider)
             reorderProviders()
         } completion: {
-            try? modelContext.save()
+//            try? modelContext.save()
             DispatchQueue.main.async {
                 selectedProvider = newProvider
             }
@@ -97,7 +97,7 @@ extension ProviderList {
             }
             reorderProviders()
         } completion: {
-            try? modelContext.save()
+//            try? modelContext.save()
         }
     }
     
@@ -114,7 +114,7 @@ extension ProviderList {
                 provider.order = index
             }
         }
-        try? modelContext.save()
+//        try? modelContext.save()
     }
 }
 

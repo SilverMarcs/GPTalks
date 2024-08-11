@@ -26,21 +26,17 @@ class Provider {
     var color: String = "#00947A"
     var isEnabled: Bool = true
     
-    @Relationship(deleteRule: .noAction)
+    @Relationship(deleteRule: .nullify)
     var chatModel: AIModel
-    @Relationship(deleteRule: .noAction)
+    @Relationship(deleteRule: .nullify)
     var quickChatModel: AIModel
-    @Relationship(deleteRule: .noAction)
+    @Relationship(deleteRule: .nullify)
     var titleModel: AIModel
-    @Relationship(deleteRule: .noAction)
+    @Relationship(deleteRule: .nullify)
     var imageModel: AIModel
     
-    @Relationship(deleteRule: .noAction)
+    @Relationship(deleteRule: .nullify)
     var models =  [AIModel]()
-    
-    var sortedModels: [AIModel] {
-        models.sorted(by: { $0.order < $1.order })
-    }
     
     var chatModels: [AIModel] {
         get {

@@ -60,10 +60,12 @@ struct ConversationListToolbar: ToolbarContent {
             }
         }
         
+        #if os(macOS)
         ToolbarItem {
             CustomSearchField("Search", text: $session.searchText, height: 28, showFocusRing: true)
             .frame(width: 220)
         }
+        #endif
     }
     
     private var navigateButtons: some View {

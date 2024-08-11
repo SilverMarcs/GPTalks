@@ -34,6 +34,22 @@ struct ContentView: View {
         .frame(minWidth: 800, minHeight: 600)
         .background(BackgroundView(window: $mainWindow))
         .task {
+            if providers.isEmpty {
+                let openAI = Provider.factory(type: .openai)
+                openAI.order = 0
+                let anthropic = Provider.factory(type: .anthropic)
+                anthropic.order = 1
+                let google = Provider.factory(type: .google)
+                google.order = 2
+                
+                modelContext.insert(openAI)
+                modelContext.insert(anthropic)
+                modelContext.insert(google)
+                
+                ProviderManager.shared.defaultProvider = openAI.id.uuidString
+                ProviderManager.shared.quickProvider = google.id.uuidString
+            }
+            
             KeyboardShortcuts.onKeyDown(for: .togglePanel) {
                 if !NSApp.isActive {
                     NSApp.activate(ignoringOtherApps: true)

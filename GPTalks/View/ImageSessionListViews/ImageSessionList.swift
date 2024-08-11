@@ -124,7 +124,7 @@ struct ImageSessionList: View {
             }
         }
         
-        try? modelContext.save()
+//        try? modelContext.save()
     }
 }
 
