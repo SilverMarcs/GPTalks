@@ -24,7 +24,7 @@ struct ConversationListToolbar: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigation) {
             Menu {
-                Button("Test") { }
+                Button("This does nothing") { }
             } label: {
                 Label("Actions", systemImage: "slider.vertical.3")
             }
@@ -59,15 +59,15 @@ struct ConversationListToolbar: ToolbarContent {
             }
         }
         
-        ToolbarItem {
-            CustomSearchField("Search", text: $session.searchText, height: 28)
-            .frame(width: 220)
-        }
-        
-        if !session.searchText.isEmpty {
+        if !session.searchText.isEmpty && !filteredGroups.isEmpty {
             ToolbarItem {
                 navigateButtons
             }
+        }
+        
+        ToolbarItem {
+            CustomSearchField("Search", text: $session.searchText, height: 28)
+            .frame(width: 220)
         }
     }
     
@@ -101,11 +101,11 @@ struct ConversationListToolbar: ToolbarContent {
             }
         }
         
-        let group = filteredGroups[currentIndex]
-        withAnimation {
-            session.proxy?.scrollTo(group, anchor: .top)
+        if let group = filteredGroups[safe: currentIndex] {
+            withAnimation {
+                session.proxy?.scrollTo(group, anchor: .top)
+            }
         }
-        
     }
 }
 
