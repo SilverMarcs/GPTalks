@@ -29,7 +29,7 @@ struct CustomSearchField: NSViewRepresentable {
         let textField = NSSearchField(string: text)
         textField.placeholderString = prompt
         textField.delegate = context.coordinator
-    textField.bezelStyle = .roundedBezel
+        textField.bezelStyle = .roundedBezel
         if !showFocusRing {
             textField.focusRingType = .none
         }

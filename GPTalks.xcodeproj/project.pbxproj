@@ -42,6 +42,7 @@
 		082A63342C5511AB003996B7 /* ProviderBackupUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082A63332C5511AB003996B7 /* ProviderBackupUtils.swift */; };
 		082A63362C551749003996B7 /* DeviceCheckers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082A63352C551749003996B7 /* DeviceCheckers.swift */; };
 		082A63382C55175E003996B7 /* SwiftDataUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082A63372C55175E003996B7 /* SwiftDataUtils.swift */; };
+		08456F582C68A80000CBB015 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08456F572C68A80000CBB015 /* MarkdownWebView */; };
 		084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084C743F2C521A8A0015AE2F /* DismissButton.swift */; };
 		084C74432C5231980015AE2F /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 084C74422C5231980015AE2F /* OpenAI */; };
 		08505C9C2C3D3878001EBEEF /* IntegerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */; };
@@ -143,6 +144,7 @@
 		08C800572C36F843009581C5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800562C36F843009581C5 /* SettingsView.swift */; };
 		08C800592C370A30009581C5 /* AIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800582C370A30009581C5 /* AIModel.swift */; };
 		08CF5B892C68980B0079D5EE /* HighlightedTextViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF5B882C68980B0079D5EE /* HighlightedTextViews.swift */; };
+		08CF5B8C2C689BDF0079D5EE /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08CF5B8B2C689BDF0079D5EE /* MarkdownWebView */; };
 		08D040222C5C8A0B0075B754 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08D040212C5C8A0B0075B754 /* GoogleGenerativeAI */; };
 		08D174C02C3D901A000257EF /* CrossButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174BF2C3D901A000257EF /* CrossButton.swift */; };
 		08D174C22C3D96F8000257EF /* StreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C12C3D96F8000257EF /* StreamHandler.swift */; };
@@ -153,7 +155,6 @@
 		08D8F4472C51C1C20051C916 /* ModelCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8F4462C51C1C20051C916 /* ModelCollection.swift */; };
 		08D8F44B2C51C4E50051C916 /* ModelAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8F44A2C51C4E50051C916 /* ModelAdder.swift */; };
 		08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F369E22C3C278E002E4A35 /* ProviderType.swift */; };
-		08F4EF192C5FA7FE00C9FE27 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08F4EF182C5FA7FE00C9FE27 /* MarkdownWebView */; };
 		08F52EF42C52C3AB00E4482C /* ProviderBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F52EF32C52C3AB00E4482C /* ProviderBackup.swift */; };
 /* End PBXBuildFile section */
 
@@ -316,12 +317,12 @@
 			files = (
 				08C1ACE92C54CA0C00B86D37 /* OpenAI in Frameworks */,
 				087B40BB2C55FF9B00EAFA0A /* MarkdownWebView in Frameworks */,
-				08F4EF192C5FA7FE00C9FE27 /* MarkdownWebView in Frameworks */,
 				08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */,
 				08D040222C5C8A0B0075B754 /* GoogleGenerativeAI in Frameworks */,
 				084C74432C5231980015AE2F /* OpenAI in Frameworks */,
 				087B40B02C55F2B700EAFA0A /* MarkdownWebView in Frameworks */,
 				087B40B52C55F71700EAFA0A /* VisualEffectView in Frameworks */,
+				08CF5B8C2C689BDF0079D5EE /* MarkdownWebView in Frameworks */,
 				087B40B22C55F70F00EAFA0A /* VisualEffectView in Frameworks */,
 				08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */,
 				08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */,
@@ -329,6 +330,7 @@
 				087B40B82C55F9E900EAFA0A /* VisualEffectView in Frameworks */,
 				080ED3902C423C4400046424 /* OpenAI in Frameworks */,
 				082178A42C5F6B3200C2A8E3 /* MarkdownWebView in Frameworks */,
+				08456F582C68A80000CBB015 /* MarkdownWebView in Frameworks */,
 				087B40AD2C55F2AE00EAFA0A /* MarkdownWebView in Frameworks */,
 				081D222D2C5C8C7700634F39 /* GoogleGenerativeAI in Frameworks */,
 				086783122C5CF16800BB768F /* GoogleGenerativeAI in Frameworks */,
@@ -760,7 +762,8 @@
 				086783112C5CF16800BB768F /* GoogleGenerativeAI */,
 				082178A32C5F6B3200C2A8E3 /* MarkdownWebView */,
 				080553262C5F99BC003C1842 /* MarkdownWebView */,
-				08F4EF182C5FA7FE00C9FE27 /* MarkdownWebView */,
+				08CF5B8B2C689BDF0079D5EE /* MarkdownWebView */,
+				08456F572C68A80000CBB015 /* MarkdownWebView */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -841,7 +844,7 @@
 				08C1ACE72C54CA0C00B86D37 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				087B40B62C55F9E900EAFA0A /* XCRemoteSwiftPackageReference "VisualEffectView" */,
 				086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
-				08F4EF172C5FA7FE00C9FE27 /* XCRemoteSwiftPackageReference "markdown-webview" */,
+				08456F562C68A80000CBB015 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1372,6 +1375,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		08456F562C68A80000CBB015 /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/generative-ai-swift";
@@ -1420,14 +1431,6 @@
 				kind = branch;
 			};
 		};
-		08F4EF172C5FA7FE00C9FE27 /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1445,6 +1448,11 @@
 		};
 		082178A32C5F6B3200C2A8E3 /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = MarkdownWebView;
+		};
+		08456F572C68A80000CBB015 /* MarkdownWebView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08456F562C68A80000CBB015 /* XCRemoteSwiftPackageReference "markdown-webview" */;
 			productName = MarkdownWebView;
 		};
 		084C74422C5231980015AE2F /* OpenAI */ = {
@@ -1510,14 +1518,13 @@
 			package = 08C1ACE72C54CA0C00B86D37 /* XCRemoteSwiftPackageReference "OpenAI" */;
 			productName = OpenAI;
 		};
+		08CF5B8B2C689BDF0079D5EE /* MarkdownWebView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MarkdownWebView;
+		};
 		08D040212C5C8A0B0075B754 /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GoogleGenerativeAI;
-		};
-		08F4EF182C5FA7FE00C9FE27 /* MarkdownWebView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08F4EF172C5FA7FE00C9FE27 /* XCRemoteSwiftPackageReference "markdown-webview" */;
-			productName = MarkdownWebView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

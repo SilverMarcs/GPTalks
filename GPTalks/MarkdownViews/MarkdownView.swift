@@ -10,16 +10,22 @@ import MarkdownWebView
 
 struct MarkdownView: View {
     @ObservedObject var config = AppConfig.shared
-    var content: String
+    var conversation: Conversation
+    
+    var highlightString: String? {
+        conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil
+    }
     
     var body: some View {
         switch config.markdownProvider {
             case .webview:
-                MarkdownWebView(content)
+            MarkdownWebView(conversation.content,
+                            baseURL: "GPTalks Web Content",
+                            highlightString: highlightString)
             case .native:
-                Text(LocalizedStringKey(content))
+                Text(LocalizedStringKey(conversation.content))
             case .disabled:
-                Text(content)
+                Text(conversation.content)
         }
     }
 }

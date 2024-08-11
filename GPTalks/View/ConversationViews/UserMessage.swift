@@ -24,7 +24,7 @@ struct UserMessage: View {
                 imageList
             }
             
-            HighlightedText(text: conversation.content, highlightedText: conversation.group?.session?.searchText)
+            HighlightedText(text: conversation.content, highlightedText: conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil)
                 .padding(.vertical, 8)
                 .padding(.horizontal, 11)
                 .background(

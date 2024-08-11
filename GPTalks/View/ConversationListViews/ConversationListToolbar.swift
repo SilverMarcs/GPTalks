@@ -15,8 +15,11 @@ struct ConversationListToolbar: ToolbarContent {
     
     @State private var currentIndex: Int = 0
     var filteredGroups: [ConversationGroup] {
-        guard !session.searchText.isEmpty else { return [] }
+        if session.searchText.count < 4 {
+            return []
+        }
         return session.groups.filter { group in
+            group.role == .user &&
             group.activeConversation.content.localizedCaseInsensitiveContains(session.searchText)
         }
     }

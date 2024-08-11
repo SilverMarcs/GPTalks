@@ -28,7 +28,7 @@ struct AssistantMessage: View {
                             .foregroundStyle(.secondary)
                     }
                     
-                    MarkdownView(content: conversation.content)
+                    MarkdownView(conversation: conversation)
                         .textSelection(.enabled)
                     
                     if conversation.isReplying {
