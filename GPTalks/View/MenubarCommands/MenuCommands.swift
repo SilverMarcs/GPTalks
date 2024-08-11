@@ -26,9 +26,6 @@ struct MenuCommands: Commands {
             }
         }
         
-        CommandGroup(replacing: CommandGroupPlacement.newItem) {
-        }
-        
         CommandGroup(before: .appSettings) {
             Button("Settings") {
                 openWindow(id: "settings")

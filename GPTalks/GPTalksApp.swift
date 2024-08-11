@@ -30,6 +30,7 @@ struct GPTalksApp: App {
                 SettingsView()
                     .frame(minWidth: 820, maxWidth: 820, minHeight: 570, maxHeight: 570)
             }
+            .restorationBehavior(.disabled)
             .windowResizability(.contentSize)
             #endif
         }
