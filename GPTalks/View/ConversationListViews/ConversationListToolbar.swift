@@ -30,13 +30,13 @@ struct ConversationListToolbar: ToolbarContent {
                 Button {
                     isExportingJSON = true
                 } label: {
-                    Label("JSON", systemImage: "ellipsis.curlybraces")
+                    Label("Export JSON", systemImage: "ellipsis.curlybraces")
                 }
                 
                 Button {
                     isExportingMarkdown = true
                 } label: {
-                    Label("Markdown", systemImage: "richtext.page")
+                    Label("Export Markdown", systemImage: "richtext.page")
                 }
             } label: {
                 Label("Actions", systemImage: "slider.vertical.3")

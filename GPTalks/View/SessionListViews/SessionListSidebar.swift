@@ -47,7 +47,6 @@ struct SessionListSidebar: View {
             #endif
         }
         #if os(macOS)
-        .frame(minWidth: 240)
         .listStyle(.inset)
         .scrollContentBackground(.hidden)
         .padding(.top, -10)

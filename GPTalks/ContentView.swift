@@ -27,6 +27,7 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             SessionListSidebar()
+                .navigationSplitViewColumnWidth(min: 240, ideal: 250, max: 300)
         } detail: {
             ConversationListDetail()
         }
