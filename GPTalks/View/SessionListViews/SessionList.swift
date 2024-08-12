@@ -13,7 +13,6 @@ struct SessionList: View {
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
     
-    // predicate to filter out quick sessions
     @Query(filter: #Predicate { !$0.isQuick }, sort: [SortDescriptor(\Session.order, order: .forward)], animation: .default)
     var sessions: [Session]
     
@@ -93,8 +92,6 @@ struct SessionList: View {
             }
             
         }
-        
-//        try? modelContext.save()
     }
     
     private func move(from source: IndexSet, to destination: Int) {
@@ -106,8 +103,6 @@ struct SessionList: View {
                 session.order = index
             }
         }
-        
-//        try? modelContext.save()
     }
 }
 

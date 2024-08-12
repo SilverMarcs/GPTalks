@@ -74,11 +74,13 @@ struct HighlightedText: View {
     private let text: String
     private let highlightedText: String?
     private let shapeStyle: (any ShapeStyle)?
+    private let selectable: Bool
     
-    init(text: String, highlightedText: String? = nil, shapeStyle: (any ShapeStyle)? = nil) {
+    init(text: String, highlightedText: String? = nil, shapeStyle: (any ShapeStyle)? = nil, selectable: Bool = true) {
         self.text = text
         self.highlightedText = highlightedText
         self.shapeStyle = shapeStyle
+        self.selectable = selectable
     }
     
     var body: some View {
@@ -88,8 +90,12 @@ struct HighlightedText: View {
             }
             text.textRenderer(HighlightTextRenderer(style: shapeStyle ?? .yellow.opacity(0.4)))
         } else {
-            Text(text)
-                .textSelection(.enabled)
+            if selectable {
+                Text(text)
+                    .textSelection(.enabled)
+            } else {
+                Text(text)
+            }   
         }
     }
     

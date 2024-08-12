@@ -27,6 +27,14 @@ struct GeneralSettings: View {
             } footer: {
                 SectionFooterView(text: "Expensive method searches all messages but may cause UI responsiveness issues")
             }
+            
+            Section {
+                Toggle("Folder View", isOn: $config.folderView)
+            } header: {
+                Text("Experimental")
+            } footer: {
+                SectionFooterView(text: "Use Folders in SessionList. Extremeley buggy at the moment")
+            }
         }
         .formStyle(.grouped)
         .navigationTitle("General")

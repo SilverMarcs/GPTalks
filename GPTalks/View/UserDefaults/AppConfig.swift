@@ -18,6 +18,7 @@ class AppConfig: ObservableObject {
     @AppStorage("listCount") var listCount: Int = 12
     
     // General
+    @AppStorage("folderView") var folderView: Bool = false
     @AppStorage("autogenTitle") var autogenTitle: Bool = true
     @AppStorage("expensiveSearch") var expensiveSearch: Bool = false
     

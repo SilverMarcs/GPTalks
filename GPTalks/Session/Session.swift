@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-final class Session {
+final class Session: TreeItem {
     var id: UUID = UUID()
     var date: Date = Date()
     var order: Int = 0
@@ -19,6 +19,7 @@ final class Session {
     var errorMessage: String = ""
     var resetMarker: Int?
     var isQuick: Bool = false
+    var folder: Folder?
     
     @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
     var unorderedGroups =  [ConversationGroup]()

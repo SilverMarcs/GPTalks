@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 import SwiftUI
+import Observation
 
 enum ListState: String {
     case chats
@@ -16,6 +17,7 @@ enum ListState: String {
 
 @Observable class SessionVM {
     var selections: Set<Session> = []
+//    var selections: Set<AnyTreeItem> = []
     var imageSelections: Set<ImageSession> = []
     
     var searchText: String = ""

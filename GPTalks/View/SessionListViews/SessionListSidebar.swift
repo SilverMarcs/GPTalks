@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SessionListSidebar: View {
     @Environment(SessionVM.self) private var sessionVM
+    @ObservedObject var config = AppConfig.shared
     
     @FocusState private var isSidebarFocused: Bool
     var body: some View {
@@ -21,8 +22,14 @@ struct SessionListSidebar: View {
         
         Group {
             if sessionVM.state == .chats {
-                SessionList()
-                    .focused($isSidebarFocused)
+                Group {
+                    if config.folderView {
+                        ChatSessionList()
+                    } else {
+                        SessionList()
+                    }
+                }
+                .focused($isSidebarFocused)
             } else {
                 ImageSessionList()
                     .focused($isSidebarFocused)
@@ -47,9 +54,9 @@ struct SessionListSidebar: View {
             #endif
         }
         #if os(macOS)
-        .listStyle(.inset)
+        .listStyle(.sidebar)
         .scrollContentBackground(.hidden)
-        .padding(.top, -10)
+//        .padding(.top, -10)
         #else
         .navigationTitle(sessionVM.state.rawValue.capitalized)
         .listSectionSeparator(.hidden)
