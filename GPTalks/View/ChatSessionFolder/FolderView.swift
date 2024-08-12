@@ -12,41 +12,44 @@ struct FolderView: View {
     let folder: Folder
     @Environment(\.modelContext) var modelContext
     
+    @State var isEditing = false
+    @State var newName = ""
+    
     var body: some View {
         HStack {
             Image(systemName: "folder")
-                .foregroundStyle(.accent)
+                .foregroundStyle(.cyan)
+            
             Text(folder.title)
+            
             Spacer()
             Text("\(folder.sessions.count)")
+                .foregroundStyle(.secondary)
         }
-//        .dropDestination(for: String.self) { items, location in
-//            handleDrop(items)
-//        } isTargeted: { isTargeted in
-//            // You can use this to provide visual feedback when dragging over
-//        }
-    }
-    
-    private func handleDrop(_ items: [String]) -> Bool {
-        guard let item = items.first else { return false }
-
-        let uuid = item
-        moveSessionToFolder(uuid: UUID(uuidString: uuid)!)
-        return true
-    }
-    
-    private func moveSessionToFolder(uuid: UUID) {
-        if let session = try? modelContext.fetch(FetchDescriptor<Session>(predicate: #Predicate<Session> { $0.id == uuid })).first {
-            // Remove the session from its current folder (if any)
-            session.folder?.sessions.removeAll(where: { $0.id == session.id })
+        .padding(2)
+        .lineLimit(1)
+        .font(.headline)
+        .fontWeight(.semibold)
+        .opacity(0.9)
+        .contextMenu {
+            Button {
+                isEditing = true
+                newName = folder.title
+            } label: {
+                Label("Rename", systemImage: "pencil")
+            }
+        }
+        .alert("Rename Folder", isPresented: $isEditing) {
+            TextField("Rename Folder", text: $newName)
             
-            // Add the session to the new folder
-            session.folder = folder
-            folder.sessions.append(session)
-            session.order = folder.sessions.count - 1
+            Button("Cancel", role: .cancel) {
+                isEditing = false
+            }
             
-            // Save changes
-            try? modelContext.save()
+            Button("Save") {
+                folder.title = newName
+                isEditing = false
+            }
         }
     }
 }

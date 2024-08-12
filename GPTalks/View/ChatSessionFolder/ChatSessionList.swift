@@ -26,28 +26,31 @@ struct ChatSessionList: View {
         @Bindable var sessionVM = sessionVM
         
         ScrollViewReader { proxy in
-            List(selection: $sessionVM.selections) {
-                SessionListCards()
-                
-                if sessionVM.searchText.isEmpty == false && sessions.isEmpty && folders.isEmpty {
-                    ContentUnavailableView.search(text: sessionVM.searchText)
-                } else {
-                    treeContent
-                        .listRowSeparatorTint(Color.gray.opacity(0.2))
+            VStack {
+                List(selection: $sessionVM.selections) {
+                    SessionListCards()
+                        .padding(.leading, -paddingOffset)
+                    
+                    if sessionVM.searchText.isEmpty == false && sessions.isEmpty && folders.isEmpty {
+                        ContentUnavailableView.search(text: sessionVM.searchText)
+                    } else {
+                        treeContent
+                            .listRowSeparatorTint(Color.gray.opacity(0.2))
 #if !os(macOS)
-                        .listSectionSeparator(.hidden)
+                            .listSectionSeparator(.hidden)
 #endif
+                    }
                 }
-            }
-            .onChange(of: sessions.count) {
-                if let first = sessions.first {
-                    proxy.scrollTo(first, anchor: .top)
+                .onChange(of: sessions.count) {
+                    if let first = sessions.first {
+                        proxy.scrollTo(first, anchor: .top)
+                    }
                 }
-            }
-            .onAppear {
-                if let first = sessions.first, sessionVM.selections.isEmpty, !isIOS() {
-                    DispatchQueue.main.async {
-                        sessionVM.selections = [first]
+                .onAppear {
+                    if let first = sessions.first, sessionVM.selections.isEmpty, !isIOS() {
+                        DispatchQueue.main.async {
+                            sessionVM.selections = [first]
+                        }
                     }
                 }
             }
@@ -59,7 +62,7 @@ struct ChatSessionList: View {
     
     @ViewBuilder
     private var treeContent: some View {
-        ForEach(folders, id: \.self) { folder in
+        ForEach(folders.sorted(by: { $0.order < $1.order }), id: \.self) { folder in
             DisclosureGroup(
                 content: {
                     if folder.sessions.isEmpty {
@@ -68,13 +71,20 @@ struct ChatSessionList: View {
                     } else {
                         ForEach(folder.sessions.sorted(by: { $0.order < $1.order }), id: \.self) { session in
                             SessionListItem(session: session)
-                            //                            .draggable(session.id.uuidString)
-                                .onDrag {
-                                    NSItemProvider(object: session.id.uuidString as NSString)
-                                }
+                                .draggable(session.id.uuidString)
+//                                .onDrag {
+//                                    NSItemProvider(object: session.id.uuidString as NSString)
+//                                }
                                 .listRowSeparator(.visible)
+                                .contextMenu {
+                                    Button("Ungroup") {
+                                        session.folder = nil
+                                    }
+                                }
                         }
-                        .onDelete(perform: deleteItems)
+                        .onDelete { offsets in
+                            deleteItemsInFolder(folder: folder, offsets: offsets)
+                        }
                         .onMove(perform: { source, destination in
                             moveSessionsWithinFolder(folder: folder, from: source, to: destination)
                         })
@@ -92,6 +102,7 @@ struct ChatSessionList: View {
                 // You can use this to provide visual feedback when dragging over
             }
         }
+        .onDelete(perform: deleteFolders)
         .onMove(perform: moveFolders)
         
         ForEach(filteredSessions.filter { $0.folder == nil }, id: \.self) { session in
@@ -99,14 +110,26 @@ struct ChatSessionList: View {
                 .draggable(session.id.uuidString)
                 .listRowSeparator(.visible)
         }
-        .onDelete(perform: deleteItems)
+        .onDelete(perform: deleteItemsInRoot)
         .onMove(perform: moveSessionsInRoot)
-        .onInsert(of: [.text], perform: insertToRoot)
-            
+//        .onInsert(of: [.text], perform: insertToRoot)
+        .padding(.leading, -paddingOffset)
+        
+        Color.clear
+            .dropDestination(for: String.self) { items, location in
+                // Iterate over all items in the drop
+                for item in items {
+                    if let uuid = UUID(uuidString: item) {
+                        // Move each session to the root
+                        moveSessionToRoot(uuid: uuid, insertAt: filteredSessions.filter { $0.folder == nil }.count)
+                    }
+                }
+                return true
+            }
     }
     
     private var filteredSessions: [Session] {
-        let filtered = sessions.filter { session in
+        return sessions.filter { session in
             sessionVM.searchText.isEmpty ||
             session.title.localizedStandardContains(sessionVM.searchText) ||
             (AppConfig.shared.expensiveSearch &&
@@ -116,8 +139,6 @@ struct ChatSessionList: View {
                 }
              })
         }
-        
-        return config.truncateList ? Array(filtered.prefix(config.listCount)) : filtered
     }
     
     func createFolder(title: String) {
@@ -140,24 +161,28 @@ struct ChatSessionList: View {
         }
         .padding(10)
     }
+    
+    var paddingOffset: CGFloat {
+        8
+    }
 }
 
 extension ChatSessionList {
-    func insertToRoot(at offset: Int, itemProvider: [NSItemProvider]) {
-        for provider in itemProvider {
-            provider.loadObject(ofClass: NSString.self) { (item, error) in
-                guard let itemString = item as? String,
-                      let uuid = UUID(uuidString: itemString) else {
-                    print("Failed to parse UUID from string: \(String(describing: item))")
-                    return
-                }
-
-                DispatchQueue.main.async {
-                    self.moveSessionToRoot(uuid: uuid, insertAt: offset)
-                }
-            }
-        }
-    }
+//    func insertToRoot(at offset: Int, itemProvider: [NSItemProvider]) {
+//        for provider in itemProvider {
+//            provider.loadObject(ofClass: NSString.self) { (item, error) in
+//                guard let itemString = item as? String,
+//                      let uuid = UUID(uuidString: itemString) else {
+//                    print("Failed to parse UUID from string: \(String(describing: item))")
+//                    return
+//                }
+//
+//                DispatchQueue.main.async {
+//                    self.moveSessionToRoot(uuid: uuid, insertAt: offset)
+//                }
+//            }
+//        }
+//    }
     
     func moveSessionToRoot(uuid: UUID, insertAt index: Int) {
         if let session = try? modelContext.fetch(FetchDescriptor<Session>(predicate: #Predicate<Session> { $0.id == uuid })).first {
@@ -207,27 +232,76 @@ extension ChatSessionList {
         }
     }
     
-    private func deleteItems(offsets: IndexSet) {
+    func deleteFolders(at offsets: IndexSet) {
         withAnimation {
+            // Sort folders by order before deleting
+            let sortedFolders = folders.sorted(by: { $0.order < $1.order })
+            
             for index in offsets.sorted().reversed() {
-                if !sessions[index].isStarred {
-                    // TODO: check if part of sessionVM.selections
-                    modelContext.delete(sessions[index])
-                }
+                let folder = sortedFolders[index]
+                modelContext.delete(folder)
             }
             
-            let remainingSessions = sessions.filter { !$0.isDeleted }
-            for (newIndex, session) in remainingSessions.enumerated() {
+            // Save changes
+            try? modelContext.save()
+        }
+    }
+    
+    func deleteItemsInFolder(folder: Folder, offsets: IndexSet) {
+        withAnimation {
+            // Get the sessions within the specified folder
+            let sessionsInFolder = folder.sessions.sorted(by: { $0.order < $1.order })
+
+            // Delete the sessions at the specified offsets
+            for index in offsets.sorted().reversed() {
+                let session = sessionsInFolder[index]
+                if !session.isStarred { // Assuming you don't want to delete starred items
+                    // Remove the session from the folder's list
+                    folder.sessions.removeAll(where: { $0.id == session.id })
+                    
+                    // Delete the session from the modelContext
+                    modelContext.delete(session)
+                }
+            }
+
+            // Update the order of the remaining sessions in the folder
+            for (newIndex, session) in folder.sessions.enumerated() {
                 session.order = newIndex
             }
+
+            try? modelContext.save()
+        }
+    }
+    
+    func deleteItemsInRoot(offsets: IndexSet) {
+        withAnimation {
+            // Get the sessions in the root (i.e., not in any folder)
+            let rootSessions = filteredSessions.filter { $0.folder == nil }
+
+            // Delete the sessions at the specified offsets
+            for index in offsets.sorted().reversed() {
+                let session = rootSessions[index]
+                if !session.isStarred { // Assuming you don't want to delete starred items
+                    modelContext.delete(session)
+                }
+            }
+
+            // Update the order of the remaining sessions in the root
+            let remainingRootSessions = filteredSessions.filter { $0.folder == nil && !$0.isDeleted }
+            for (newIndex, session) in remainingRootSessions.enumerated() {
+                session.order = newIndex
+            }
+
+            try? modelContext.save()
         }
     }
     
     private func handleDrop(_ items: [String], folder: Folder) -> Bool {
-        guard let item = items.first else { return false }
-
-        let uuid = item
-        moveSessionToFolder(uuid: UUID(uuidString: uuid)!, folder: folder)
+        for item in items {
+            if let uuid = UUID(uuidString: item) {
+                moveSessionToFolder(uuid: uuid, folder: folder)
+            }
+        }
         return true
     }
     

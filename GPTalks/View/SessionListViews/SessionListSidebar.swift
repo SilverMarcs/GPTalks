@@ -54,9 +54,9 @@ struct SessionListSidebar: View {
             #endif
         }
         #if os(macOS)
-        .listStyle(.sidebar)
+        .listStyle(.inset)
         .scrollContentBackground(.hidden)
-//        .padding(.top, -10)
+        .padding(.top, -10)
         #else
         .navigationTitle(sessionVM.state.rawValue.capitalized)
         .listSectionSeparator(.hidden)

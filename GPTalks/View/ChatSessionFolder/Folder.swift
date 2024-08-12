@@ -10,10 +10,6 @@ import SwiftData
 
 @Model
 class Folder: Identifiable, TreeItem {
-//    var children: [any TreeItem]? {
-//        nil
-//    }
-    
     var id: UUID
     var title: String
     var order: Int

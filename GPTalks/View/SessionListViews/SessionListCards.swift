@@ -24,7 +24,7 @@ struct SessionListCards: View {
 //                    .opacity(sessionVM.state == .chats ? 1 : 0.8)
                 
                 ListCard(
-                    icon: "photo.circle.fill", iconColor: .cyan, title: "Images",
+                    icon: "photo.circle.fill", iconColor: .indigo, title: "Images",
                     count: String(imageSessions.count)) {
                         sessionVM.state = .images
                     }
