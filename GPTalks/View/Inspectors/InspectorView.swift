@@ -37,15 +37,6 @@ struct InspectorView: View {
                 Text("Tokens: \(first.tokenCount.formatToK())")
                     .foregroundStyle(.secondary)
                 
-//                Button {
-//                    animate.toggle()
-//                    first.refreshTokens()
-//                } label: {
-//                    Label("Refresh", systemImage: "arrow.2.circlepath")
-//                        
-//                }
-//                .symbolEffect(.rotate, options: .repeat(1), value: animate)
-                
                 Spacer()
             }
             

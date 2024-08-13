@@ -64,7 +64,10 @@ struct ImageSessionToolbar: ToolbarContent {
     }
     
     #if !os(macOS)
-    var iosParts: some View {
+    @State private var showSettings = false
+    
+    @ToolbarContentBuilder
+    var iosParts: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             Menu {
                 if editMode?.wrappedValue == .inactive {
@@ -116,7 +119,7 @@ struct ImageSessionToolbar: ToolbarContent {
                         
                         Section {
                             Button {
-                                sessionVM.selections = Set(sessions)
+                                sessionVM.imageSelections = Set(imageSessions)
                             } label: {
                                 Label("Select All", systemImage: "checkmark.circle")
                             }

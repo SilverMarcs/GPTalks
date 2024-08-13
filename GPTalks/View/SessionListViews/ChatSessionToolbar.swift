@@ -68,7 +68,10 @@ struct ChatSessionToolbar: ToolbarContent {
     }
     
     #if !os(macOS)
-    var iosParts: some View {
+    @State private var showSettings = false
+    
+    @ToolbarContentBuilder
+    var iosParts: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             Menu {
                 if editMode?.wrappedValue == .inactive {

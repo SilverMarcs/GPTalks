@@ -38,8 +38,13 @@ struct AppearanceSettings: View {
                 .disabled(!config.truncateList)
             }
             
-            Section("Views") {
+            Section {
                 Toggle("Compact List Row", isOn: $config.compactList)
+                Toggle("Folder View", isOn: $config.folderView)
+            } header: {
+                Text("Views")
+            } footer: {
+                SectionFooterView(text: "Folder View is Experimental and extremely buggy")
             }
         }
         .formStyle(.grouped)
