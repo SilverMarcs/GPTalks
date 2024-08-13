@@ -63,24 +63,6 @@ extension SessionVM {
             lastUserGroup.setupEditing()
         }
     }
-
-    func addChatSession(provider: Provider, sessions: [Session], modelContext: ModelContext) {
-        let config = SessionConfig(provider: provider, purpose: .chat)
-        let newItem = Session(config: config)
-        config.session = newItem
-        
-        withAnimation {
-            for session in sessions {
-                session.order += 1
-            }
-            
-            newItem.order = 0
-            modelContext.insert(newItem)
-            self.selections = [newItem]
-        }
-        
-//        try? modelContext.save()
-    }
     
     func fork(session: Session, sessions: [Session], modelContext: ModelContext) {
         withAnimation {
@@ -100,6 +82,7 @@ extension SessionVM {
         if let defaultQuickProvider = ProviderManager.shared.getQuickProvider(providers: providers) {
             let config = SessionConfig(provider: defaultQuickProvider, purpose: .quick)
             let session = Session(config: config)
+            config.session = session
             session.isQuick = true
             
             return session

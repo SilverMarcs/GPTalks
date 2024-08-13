@@ -10,7 +10,8 @@ import SwiftUI
 import SwiftData
 
 struct QuickPanelSettings: View {
-    @Query var providers: [Provider]
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
+    var providers: [Provider]
     @ObservedObject var providerManager: ProviderManager = .shared
     @ObservedObject var config = AppConfig.shared
 
@@ -49,7 +50,7 @@ struct QuickPanelSettings: View {
             
             Section("LLM") {
                 Picker("Provider", selection: providerBinding) {
-                    ForEach(providers.filter { $0.isEnabled }, id: \.self) { provider in
+                    ForEach(providers, id: \.self) { provider in
                         Text(provider.name).tag(provider as Provider?)
                     }
                 }

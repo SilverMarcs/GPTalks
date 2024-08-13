@@ -24,6 +24,7 @@ struct ConversationList: View {
             vStackView
             .onAppear {
                 session.proxy = proxy
+                session.refreshTokens()
             }
             .modifier(PlatformSpecificModifiers(session: session, showingInspector: $showingInspector, hasUserScrolled: $hasUserScrolled))
             .modifier(InspectorModifier(showingInspector: $showingInspector))

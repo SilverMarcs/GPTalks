@@ -24,6 +24,8 @@ struct ConversationListToolbar: ToolbarContent {
         }
     }
     
+    @State var showConfig: Bool = false
+    
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigation) {
             Menu {
@@ -66,6 +68,17 @@ struct ConversationListToolbar: ToolbarContent {
             .frame(width: 220)
         }
         #endif
+        
+//        ToolbarItem {
+//            Button(action: {
+//                showConfig.toggle()
+//            }) {
+//                Label("Config", systemImage: "info.circle")
+//            }
+//            .sheet(isPresented: $showConfig) {
+//                ChatInspector(session: session)
+//            }
+//        }
     }
     
     private var navigateButtons: some View {

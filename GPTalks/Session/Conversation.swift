@@ -143,7 +143,7 @@ final class Conversation {
     }
     
     func countTokens() -> Int {
-        let textToken = tokenCount(text: content)
+        let textToken = countTokensFromText(text: content)
         // TODO: Count image tokens
         return textToken
     }

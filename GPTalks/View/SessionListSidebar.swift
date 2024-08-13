@@ -17,7 +17,8 @@ struct SessionListSidebar: View {
         
         #if os(macOS)
         CustomSearchField("Search", text: $sessionVM.searchText)
-        .padding(.horizontal, 10)
+            .id(String.topID)
+            .padding(.horizontal, 10)
         #endif
         
         Group {
@@ -36,7 +37,12 @@ struct SessionListSidebar: View {
             }
         }
         .toolbar {
-            SessionListToolbar()
+//            SessionListToolbar()
+            if sessionVM.state == .chats {
+                ChatSessionToolbar()
+            } else {
+                ImageSessionToolbar()
+            }
             
             #if os(macOS)
             ToolbarItemGroup(placement: .keyboard) {

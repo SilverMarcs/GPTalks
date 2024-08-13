@@ -19,6 +19,8 @@ struct ConversationMenu: View {
     var toggleMaxHeight: (() -> Void)? = nil
     var isExpanded: Bool = false
     var toggleTextSelection: (() -> Void)? = nil
+    
+    @State var isCopied = false
 
     var body: some View {
         #if os(macOS)
@@ -97,6 +99,7 @@ struct ConversationMenu: View {
             Label("Reset Context", systemImage: "eraser")
                 .help("Reset Context")
         }
+        .symbolEffect(.bounce, value: group.session?.resetMarker)
     }
 
     var forkSession: some View {
@@ -112,11 +115,16 @@ struct ConversationMenu: View {
 
     var copyText: some View {
         Button {
+            isCopied = true
             group.activeConversation.content.copyToPasteboard()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                isCopied = false
+            }
         } label: {
-            Label("Copy Text", systemImage: "paperclip")
+            Label("Copy Text", systemImage: isCopied ? "checkmark" : "paperclip")
                 .help("Copy Text")
         }
+        .contentTransition(.symbolEffect(.replace))
     }
     
     var selectText: some View {

@@ -11,7 +11,8 @@ import OpenAI
 
 struct ImageInspector: View {
     @Bindable var session: ImageSession
-    @Query var providers: [Provider]
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
+    var providers: [Provider]
     
     var body: some View {
         Form {
@@ -27,7 +28,14 @@ struct ImageInspector: View {
             }
             
             Section("Models") {
-                ProviderPicker(provider: $session.config.provider, providers: providers.filter { !$0.imageModels.isEmpty }) { provider in
+//                ProviderPicker(provider: $session.config.provider, providers: providers.filter { !$0.imageModels.isEmpty }) { provider in
+//                    session.config.model = provider.imageModel
+//                }
+                
+//                ModelPicker(model: $session.config.model, models: session.config.provider.imageModels, label: "Model")
+                
+                ProviderPicker(provider: $session.config.provider,
+                               providers: providers) { provider in
                     session.config.model = provider.imageModel
                 }
                 

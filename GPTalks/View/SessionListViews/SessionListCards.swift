@@ -21,14 +21,12 @@ struct SessionListCards: View {
                     count: String(sessions.count)) {
                         sessionVM.state = .chats
                     }
-//                    .opacity(sessionVM.state == .chats ? 1 : 0.8)
                 
                 ListCard(
                     icon: "photo.circle.fill", iconColor: .indigo, title: "Images",
                     count: String(imageSessions.count)) {
                         sessionVM.state = .images
                     }
-//                .opacity(sessionVM.state == .images ? 1 : 0.8)
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)

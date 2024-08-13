@@ -10,7 +10,8 @@ import SwiftData
 
 struct ChatInspector: View {
     @Bindable var session: Session
-    @Query var providers: [Provider]
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
+    var providers: [Provider]
     @State var expandAdvanced: Bool = false
     
     var body: some View {
@@ -27,7 +28,7 @@ struct ChatInspector: View {
             Section("Models") {
                 ProviderPicker(
                     provider: $session.config.provider,
-                    providers: providers.sorted(by: { $0.order < $1.order }),
+                    providers: providers,
                     onChange: { newProvider in
                         session.config.model = newProvider.chatModel
                     }
@@ -59,6 +60,7 @@ struct ChatInspector: View {
             }
             .buttonStyle(.plain)
         }
+        .formStyle(.grouped)
     }
     
     private var title: some View {

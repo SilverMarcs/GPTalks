@@ -41,9 +41,9 @@ struct CustomSearchField: NSViewRepresentable {
         ])
         
         // Add keyboard shortcut listener
-        let shortcutListener = ShortcutListener(searchField: textField, binding: $text)
-        context.coordinator.shortcutListener = shortcutListener
-        shortcutListener.startListening()
+//        let shortcutListener = ShortcutListener(searchField: textField, binding: $text)
+//        context.coordinator.shortcutListener = shortcutListener
+//        shortcutListener.startListening()
         
         return textField
     }
@@ -54,7 +54,7 @@ struct CustomSearchField: NSViewRepresentable {
     
     class Coordinator: NSObject, NSSearchFieldDelegate {
         let binding: Binding<String>
-        var shortcutListener: ShortcutListener?
+//        var shortcutListener: ShortcutListener?
         
         init(binding: Binding<String>) {
             self.binding = binding
@@ -68,35 +68,35 @@ struct CustomSearchField: NSViewRepresentable {
     }
 }
 
-class ShortcutListener {
-    weak var searchField: NSSearchField?
-    var binding: Binding<String>
-    
-    init(searchField: NSSearchField, binding: Binding<String>) {
-        self.searchField = searchField
-        self.binding = binding
-    }
-    
-    func startListening() {
-        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            guard let self = self else { return event }
-            
-            if event.modifierFlags.contains(.command) && event.characters == "f" {
-                self.searchField?.becomeFirstResponder()
-                return nil
-            }
-            
-            if event.keyCode == 53, self.searchField?.window?.firstResponder == self.searchField {
-                // 53 is the key code for the escape key
-                self.searchField?.window?.makeFirstResponder(nil) // Lose focus
-                self.binding.wrappedValue = "" // Clear the text
-                return nil
-            }
-            
-            return event
-        }
-    }
-}
+//class ShortcutListener {
+//    weak var searchField: NSSearchField?
+//    var binding: Binding<String>
+//    
+//    init(searchField: NSSearchField, binding: Binding<String>) {
+//        self.searchField = searchField
+//        self.binding = binding
+//    }
+//    
+//    func startListening() {
+//        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+//            guard let self = self else { return event }
+//            
+//            if event.modifierFlags.contains(.command) && event.characters == "f" {
+//                self.searchField?.becomeFirstResponder()
+//                return nil
+//            }
+//            
+//            if event.keyCode == 53, self.searchField?.window?.firstResponder == self.searchField {
+//                // 53 is the key code for the escape key
+//                self.searchField?.window?.makeFirstResponder(nil) // Lose focus
+//                self.binding.wrappedValue = "" // Clear the text
+//                return nil
+//            }
+//            
+//            return event
+//        }
+//    }
+//}
 
 
 #Preview {

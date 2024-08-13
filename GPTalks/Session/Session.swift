@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-final class Session: TreeItem {
+final class Session {
     var id: UUID = UUID()
     var date: Date = Date()
     var order: Int = 0
@@ -19,6 +19,8 @@ final class Session: TreeItem {
     var errorMessage: String = ""
     var resetMarker: Int?
     var isQuick: Bool = false
+    var tokenCount: Int = 0
+    
     var folder: Folder?
     
     @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
@@ -39,14 +41,6 @@ final class Session: TreeItem {
         } else {
             return groups
         }
-    }
-    
-    var tokenCounter: Int {
-        let messageTokens = adjustedGroups.reduce(0) { $0 + $1.activeConversation.countTokens() }
-        let sysPromptTokens = tokenCount(text: config.systemPrompt)
-        let inputTokens = tokenCount(text: inputManager.prompt)
-        
-        return messageTokens + sysPromptTokens + inputTokens
     }
     
     @Transient
@@ -73,7 +67,6 @@ final class Session: TreeItem {
     
     init(config: SessionConfig) {
         self.config = config
-        self.config.session = self
     }
     
     @MainActor
@@ -156,10 +149,10 @@ final class Session: TreeItem {
                 let user = Conversation(role: .user, content: content, imagePaths: imagePaths)
                 addConversationGroup(conversation: user)
                 
-                //                #if DEBUG
-                //                addConversationGroup(conversation: Conversation(role: .assistant, content: .assistantDemos.randomElement()!))
-                //                return
-                //                #endif
+//                #if DEBUG
+//                addConversationGroup(conversation: Conversation(role: .assistant, content: .assistantDemos.randomElement()!))
+//                return
+//                #endif
             }
         }
         
@@ -169,6 +162,7 @@ final class Session: TreeItem {
         
         streamingTask = Task(priority: .userInitiated) {
             await handleStreamingTask(regenContent: regenContent, assistantGroup: assistantGroup)
+            self.refreshTokens()
         }
     }
     
@@ -252,6 +246,14 @@ final class Session: TreeItem {
         }
     }
     
+    func refreshTokens() {
+        let messageTokens = adjustedGroups.reduce(0) { $0 + $1.activeConversation.countTokens() }
+        let sysPromptTokens = countTokensFromText(text: config.systemPrompt)
+        let inputTokens = countTokensFromText(text: inputManager.prompt)
+        
+        self.tokenCount = (messageTokens + sysPromptTokens + inputTokens)
+    }
+    
     func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) -> Session {
         let newSession = Session(config: config.copy(purpose: purpose))
         newSession.title = purpose.title
@@ -284,6 +286,7 @@ final class Session: TreeItem {
             groups.removeAll(where: { $0 == conversationGroup })
         } completion: {
             self.modelContext?.delete(conversationGroup)
+            self.refreshTokens()
         }
     }
     
@@ -292,7 +295,7 @@ final class Session: TreeItem {
             groups.removeAll()
             errorMessage = ""
         } completion: {
-            
+            self.refreshTokens()
         }
     }
 }

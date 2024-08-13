@@ -39,7 +39,7 @@ final class AIModel: Hashable, Identifiable {
 }
 
 
-enum ModelType: String, CaseIterable, Codable {
+enum ModelType: String, CaseIterable, Codable, Hashable {
     case chat
     case image
 }

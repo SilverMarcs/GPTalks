@@ -108,9 +108,11 @@ struct PlatformSpecificModifiers: ViewModifier {
     
     @ViewBuilder
     func body(content: Content) -> some View {
+//        var subtitle: String = "Tokens: \(session.tokenCounter.formatToK()) - \(session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))"
+        
         content
             #if os(macOS)
-            .navigationSubtitle(session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))
+            .navigationSubtitle("\(session.groups.count) messages • \(session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))")
             .navigationTitle(session.title)
             .toolbar { ConversationListToolbar(session: session) }
             #else

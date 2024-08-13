@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct FolderView: View {
+struct FolderLabel: View {
     let folder: Folder
     @Environment(\.modelContext) var modelContext
     

@@ -21,17 +21,33 @@ struct QuickPanel: View {
     @FocusState private var isFocused: Bool
     let dismiss: () -> Void
     
-    @Query var providers: [Provider]
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
+    var providers: [Provider]
     @Query var sessions: [Session]
     
     var body: some View {
         VStack(spacing: 0) {
-            textfieldView
-                .padding(15)
-                .padding(.leading, 2)
+            ZStack {
+                Button("Paste Image") {
+                    session.inputManager.handlePaste()
+                }
+                .hidden()
+                .keyboardShortcut("b")
+                
+                textfieldView
+                    .padding(15)
+                    .padding(.leading, 2)
+            }
             
             if showAdditionalContent {
                 Divider()
+                
+                if !session.inputManager.imagePaths.isEmpty {
+                    InputImageView(session: session, maxHeight: 70)
+                        .padding(.horizontal)
+                        .padding(.top)
+                }
+
                 
                 ConversationList(session: session, isQuick: true)
                 
@@ -90,23 +106,6 @@ struct QuickPanel: View {
         }
     }
     
-    private var conversationView: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                VStack(spacing: 0) {
-                    ForEach(session.groups) { group in
-                        ConversationGroupView(group: group)
-                    }
-                }
-                .onChange(of: session.groups.count) {
-                    withAnimation {
-                        proxy.scrollTo(session.groups.last, anchor: .bottom)
-                    }
-                }
-            }
-        }
-    }
-    
     private var bottomView: some View {
         HStack {
             Group {
@@ -147,6 +146,7 @@ struct QuickPanel: View {
     private func resetChat() {
         showAdditionalContent = false
         session.deleteAllConversations()
+        session.inputManager.imagePaths.removeAll()
         if let quickProvider = ProviderManager.shared.getQuickProvider(providers: providers) {
             session.config = .init(provider: quickProvider, purpose: .quick)
         }

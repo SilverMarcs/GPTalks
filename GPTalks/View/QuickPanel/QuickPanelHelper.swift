@@ -12,7 +12,8 @@ struct QuickPanelHelper: View {
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) var sessionVM
     
-    @Query var providers: [Provider]
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
+    var providers: [Provider]
     @Query(filter: #Predicate<Session> { session in
             session.isQuick == true
     }) var sessions: [Session]
