@@ -15,7 +15,6 @@ struct AssistantImage: View {
             .resizable()
             .frame(width: size, height: size)
             .padding(5)
-//            .foregroundStyle(.accent.gradient)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(.background)

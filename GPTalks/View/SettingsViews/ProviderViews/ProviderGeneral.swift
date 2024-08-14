@@ -121,7 +121,7 @@ struct ProviderGeneral: View {
     
     private var header: some View {
         HStack {
-            ProviderImage(provider: provider, frame: 33)
+            ProviderImage(provider: provider, frame: 33, scale: .large)
             
             Group {
 #if os(macOS)

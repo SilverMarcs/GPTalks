@@ -18,7 +18,7 @@ struct ConversationListDetail: View {
             }
         } else if sessionVM.state == .chats && sessionVM.selections.count == 1 {
             if let chatSession = sessionVM.selections.first {
-                ConversationList(session: sessionVM.selections.first!)
+                ConversationList(session: chatSession)
 //                    .id(chatSession.id)
             }
         } else {

@@ -43,18 +43,10 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     
     var imageName: String {
         switch self {
-        case .openai: "openai"
-        case .anthropic: "anthropic"
-        case .google: "google"
+        case .openai: "openaiSVG"
+        case .anthropic: "anthropicSVG"
+        case .google: "googleSVG"
         case .local: "ollama"
-        }
-    }
-    
-    var imageOffset: CGFloat {
-        switch self {
-        case .openai, .local: 4
-        case .anthropic: 6
-        case .google: 12
         }
     }
     

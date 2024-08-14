@@ -56,7 +56,7 @@ struct UserMessage: View {
     }
     
     var content: some View {
-        VStack(alignment: .trailing, spacing: 4) {
+        VStack(alignment: .trailing, spacing: 7) {
             if !conversation.imagePaths.isEmpty {
                 imageList
             }
@@ -77,8 +77,7 @@ struct UserMessage: View {
             #if os(macOS)
             if let group = conversation.group {
                 ConversationMenu(group: group, labelSize: labelSize, toggleMaxHeight: toggleMaxHeight, isExpanded: isExpanded)
-                    .opacity(isHovered ? 1 : 0)
-                    .animation(.easeInOut(duration: 0.2), value: isHovered)
+                    .symbolEffect(.appear, isActive: !isHovered)
             }
             #endif
         }

@@ -13,6 +13,7 @@ struct ChatInspector: View {
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
     var providers: [Provider]
     @State var expandAdvanced: Bool = false
+    @State var isGeneratingTtile: Bool = false
     
     var body: some View {
         Form {
@@ -78,12 +79,17 @@ struct ChatInspector: View {
     private var generateTitle: some View {
         Button {
             if session.isStreaming { return }
+            isGeneratingTtile.toggle()
             Task { await session.generateTitle(forced: true) }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                isGeneratingTtile.toggle()
+            }
         } label: {
             Image(systemName: "sparkles")
+                .symbolEffect(.pulse, isActive: isGeneratingTtile)
         }
         .buttonStyle(.plain)
-        .foregroundStyle(.mint)
+        .foregroundStyle(.mint.gradient)
     }
     
     private var resetContext: some View {

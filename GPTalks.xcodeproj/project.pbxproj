@@ -24,6 +24,7 @@
 		081C1D982C3BD8A50078BB24 /* GeneralSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D972C3BD8A50078BB24 /* GeneralSettings.swift */; };
 		081C1D9A2C3BE91C0078BB24 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D992C3BE91C0078BB24 /* ColorExtensions.swift */; };
 		081D222D2C5C8C7700634F39 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 081D222C2C5C8C7700634F39 /* GoogleGenerativeAI */; };
+		081F58B82C6C8FFE00565F20 /* HoverScaleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */; };
 		082178A42C5F6B3200C2A8E3 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 082178A32C5F6B3200C2A8E3 /* MarkdownWebView */; };
 		082181522C38046800171BF3 /* ProviderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181512C38046800171BF3 /* ProviderManager.swift */; };
 		082181582C3823A400171BF3 /* ModelRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181572C3823A400171BF3 /* ModelRow.swift */; };
@@ -196,6 +197,7 @@
 		081C1D932C3BD33F0078BB24 /* ParameterSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterSettings.swift; sourceTree = "<group>"; };
 		081C1D972C3BD8A50078BB24 /* GeneralSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettings.swift; sourceTree = "<group>"; };
 		081C1D992C3BE91C0078BB24 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
+		081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverScaleButton.swift; sourceTree = "<group>"; };
 		082181512C38046800171BF3 /* ProviderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderManager.swift; sourceTree = "<group>"; };
 		082181572C3823A400171BF3 /* ModelRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelRow.swift; sourceTree = "<group>"; };
 		082181592C382B9B00171BF3 /* ProviderGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderGeneral.swift; sourceTree = "<group>"; };
@@ -653,6 +655,7 @@
 		08AAFB912C3C88CA002C04E0 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */,
 				08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */,
 				082181632C38C92E00171BF3 /* SendButton.swift */,
 				082181652C38CBAE00171BF3 /* PlusButton.swift */,
@@ -958,6 +961,7 @@
 				08C49FD82C502EC90085792F /* FileHelper.swift in Sources */,
 				08E0FDA12C6A720700FAB766 /* ChatSessionToolbar.swift in Sources */,
 				08A222852C2AB4FD00D76C8B /* ContentView.swift in Sources */,
+				081F58B82C6C8FFE00565F20 /* HoverScaleButton.swift in Sources */,
 				08C800572C36F843009581C5 /* SettingsView.swift in Sources */,
 				082181752C39258500171BF3 /* ImageUtils.swift in Sources */,
 				08C1ACE02C54BC8A00B86D37 /* TemperatureSlider.swift in Sources */,

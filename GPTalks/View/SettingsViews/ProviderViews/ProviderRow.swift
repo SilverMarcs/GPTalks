@@ -13,7 +13,7 @@ struct ProviderRow: View {
     
     var body: some View {
         HStack {
-            ProviderImage(provider: provider, radius: 6, frame: 20)
+            ProviderImage(provider: provider, radius: 6, frame: 18, scale: .small)
             Text(provider.name)
             Spacer()
             if selectionManager.defaultProvider == provider.id.uuidString {

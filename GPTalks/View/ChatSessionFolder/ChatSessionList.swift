@@ -25,7 +25,7 @@ struct ChatSessionList: View {
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
-                SessionListCards(sessionCount: sessions.count, imageSessionsCount: -1)
+                SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "?")
                     .padding(.leading, -paddingOffset)
                 
                 if sessionVM.searchText.isEmpty == false && sessions.isEmpty && folders.isEmpty {
@@ -121,9 +121,7 @@ struct ChatSessionList: View {
             session.title.localizedStandardContains(sessionVM.searchText) ||
             (AppConfig.shared.expensiveSearch &&
              session.unorderedGroups.contains { group in
-                group.conversationsUnsorted.contains { conversation in
-                    conversation.content.localizedCaseInsensitiveContains(sessionVM.searchText)
-                }
+                 group.activeConversation.content.localizedCaseInsensitiveContains(sessionVM.searchText)
              })
         }
     }

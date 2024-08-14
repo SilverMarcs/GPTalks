@@ -50,6 +50,7 @@ struct QuickPanel: View {
 
                 
                 ConversationList(session: session, isQuick: true)
+                    .scrollContentBackground(.hidden)
                 
                 bottomView
             }

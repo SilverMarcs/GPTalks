@@ -16,9 +16,9 @@ struct ContextResetDivider: View {
                 Text("Context Cleared")
                 
                 Button(role: .destructive) {
-                    withAnimation {
+//                    withAnimation {
                         reset()
-                    }
+//                    }
                 } label: {
                     Image(systemName: "delete.backward")
                 }

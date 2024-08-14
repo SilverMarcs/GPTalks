@@ -47,7 +47,6 @@ struct ConversationList: View {
             }
             .modifier(PlatformSpecificModifiers(session: session, showingInspector: $showingInspector, hasUserScrolled: $hasUserScrolled))
             .modifier(InspectorModifier(showingInspector: $showingInspector))
-            .scrollContentBackground(.visible)
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
@@ -71,11 +70,12 @@ struct ConversationList: View {
             .padding()
             .padding(.top, -5)
         }
+        .scrollContentBackground(.visible)
     }
     
     var listView: some View {
         List {
-            VStack(spacing: 0) {
+            VStack(spacing: 3) {
                 ForEach(session.groups, id: \.self) { group in
                     ConversationGroupView(group: group)
                 }

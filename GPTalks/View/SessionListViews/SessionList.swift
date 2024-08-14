@@ -17,20 +17,13 @@ struct SessionList: View {
     var sessions: [Session]
     
     var filteredSessions: [Session] {
-        let filteredSessions: [Session]
-        
-        if sessionVM.searchText.isEmpty {
-            filteredSessions = sessions
-        } else {
-            filteredSessions = sessions.filter { session in
-                session.title.localizedStandardContains(sessionVM.searchText) ||
-                (AppConfig.shared.expensiveSearch &&
-                session.unorderedGroups.contains { group in
-                    group.conversationsUnsorted.contains { conversation in
-                        conversation.content.localizedCaseInsensitiveContains(sessionVM.searchText)
-                    }
-                })
-            }
+        let filteredSessions: [Session] = sessions.filter { session in
+            sessionVM.searchText.isEmpty ||
+            session.title.localizedStandardContains(sessionVM.searchText) ||
+            (AppConfig.shared.expensiveSearch &&
+             session.unorderedGroups.contains { group in
+                 group.activeConversation.content.localizedCaseInsensitiveContains(sessionVM.searchText)
+             })
         }
         
         if config.truncateList {
@@ -45,7 +38,7 @@ struct SessionList: View {
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
-                SessionListCards(sessionCount: sessions.count, imageSessionsCount: -1)
+                SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "?")
                 
                 if !sessionVM.searchText.isEmpty && sessions.isEmpty {
                     ContentUnavailableView.search(text: sessionVM.searchText)

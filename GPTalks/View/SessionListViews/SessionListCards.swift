@@ -10,21 +10,21 @@ import SwiftData
 
 struct SessionListCards: View {
     @Environment(SessionVM.self) private var sessionVM
-    var sessionCount: Int
-    var imageSessionsCount: Int
+    var sessionCount: String
+    var imageSessionsCount: String
     
     var body: some View {
         Section {
             HStack(spacing: spacing) {
                 ListCard(
                     icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
-                    count: String(sessionCount)) {
+                    count: sessionCount) {
                         sessionVM.state = .chats
                     }
                 
                 ListCard(
                     icon: "photo.circle.fill", iconColor: .indigo, title: "Images",
-                    count: String(imageSessionsCount)) {
+                    count: imageSessionsCount) {
                         sessionVM.state = .images
                     }
             }
@@ -51,6 +51,6 @@ struct SessionListCards: View {
 }
 
 #Preview {
-    SessionListCards(sessionCount: 5, imageSessionsCount: 3)
+    SessionListCards(sessionCount: "5", imageSessionsCount: "3")
         .environment(SessionVM())
 }

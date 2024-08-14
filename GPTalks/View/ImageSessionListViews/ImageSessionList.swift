@@ -43,7 +43,7 @@ struct ImageSessionList: View {
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.imageSelections) {
-                SessionListCards(sessionCount: -1, imageSessionsCount: sessions.count)
+                SessionListCards(sessionCount: "?", imageSessionsCount: String(sessions.count))
                 
                 if !sessionVM.searchText.isEmpty && sessions.isEmpty {
                     ContentUnavailableView.search(text: sessionVM.searchText)
