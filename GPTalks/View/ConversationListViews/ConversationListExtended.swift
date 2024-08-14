@@ -13,12 +13,12 @@ extension View {
         @ObservedObject var config = AppConfig.shared
         
         return self
-            .onAppear {
-                if !isIOS() {
-                    scrollToBottom(proxy: proxy, delay: 0.2)
-                    scrollToBottom(proxy: proxy, delay: 0.4)
-                }
-            }
+//            .onAppear {
+//                if !isIOS() {
+//                    scrollToBottom(proxy: proxy, delay: 0.2)
+//                    scrollToBottom(proxy: proxy, delay: 0.4)
+//                }
+//            }
         #if os(macOS)
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 if session.isReplying {

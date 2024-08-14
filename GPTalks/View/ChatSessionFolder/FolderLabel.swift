@@ -19,6 +19,7 @@ struct FolderLabel: View {
         HStack {
             Image(systemName: "folder")
                 .foregroundStyle(.cyan)
+                .symbolEffect(.bounce, value: folder.sessions.count)
             
             Text(folder.title)
             

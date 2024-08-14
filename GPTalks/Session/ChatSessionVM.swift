@@ -23,6 +23,11 @@ extension SessionVM {
         }
     }
     
+    func stopStreaming() {
+        guard let session = activeSession, session.isStreaming else { return }
+        session.stopStreaming()
+    }
+    
     func regenLastMessage() {
         guard let session = activeSession, !session.isStreaming else { return }
         

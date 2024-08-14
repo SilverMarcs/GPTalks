@@ -25,7 +25,7 @@ struct ChatSessionList: View {
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
-                SessionListCards()
+                SessionListCards(sessionCount: sessions.count, imageSessionsCount: -1)
                     .padding(.leading, -paddingOffset)
                 
                 if sessionVM.searchText.isEmpty == false && sessions.isEmpty && folders.isEmpty {
@@ -57,7 +57,7 @@ struct ChatSessionList: View {
     
     @ViewBuilder
     private var treeContent: some View {
-        ForEach(folders.sorted(by: { $0.order < $1.order }), id: \.self) { folder in
+        ForEach(folders, id: \.self) { folder in
             DisclosureGroup(
                 content: {
                     if folder.sessions.isEmpty {

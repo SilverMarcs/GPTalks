@@ -18,6 +18,12 @@ struct ChatCommands: Commands {
             }
             .keyboardShortcut(.return, modifiers: .command)
             
+            Button("Stop Streaming") {
+                sessionVM.stopStreaming()
+            }
+            .keyboardShortcut("d", modifiers: .command)
+            .disabled(!(sessionVM.activeSession?.isReplying ?? true))
+            
             Section {
                 Button("Regen Last Message") {
                     sessionVM.regenLastMessage()

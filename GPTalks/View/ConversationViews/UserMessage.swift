@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UserMessage: View {
     @Environment(\.colorScheme) var colorScheme
+    @ObservedObject var config = AppConfig.shared
     
     var conversation: Conversation
     @State var isHovered: Bool = false
@@ -19,6 +20,42 @@ struct UserMessage: View {
     @State var showingTextSelection = false
     
     var body: some View {
+        if config.listView {
+            content
+                .frame(maxWidth: .infinity, alignment: .trailing)
+        } else {
+            content
+                .frame(maxWidth: .infinity, maxHeight: maxHeight, alignment: .trailing)
+                .background {
+                    GeometryReader { geometry in
+                        Color.clear
+                            .onAppear {
+                                updateLabelSize(geometry.size)
+                            }
+                            .onChange(of: geometry.size) {
+                                updateLabelSize(geometry.size)
+                            }
+                    }
+                }
+        }
+        
+
+//        .frame(maxWidth: .infinity, maxHeight: maxHeight, alignment: .trailing)
+//        .padding(.leading, leadingPadding)
+//        .background {
+//            GeometryReader { geometry in
+//                Color.clear
+//                    .onAppear {
+//                        updateLabelSize(geometry.size)
+//                    }
+//                    .onChange(of: geometry.size) {
+//                        updateLabelSize(geometry.size)
+//                    }
+//            }
+//        }
+    }
+    
+    var content: some View {
         VStack(alignment: .trailing, spacing: 4) {
             if !conversation.imagePaths.isEmpty {
                 imageList
@@ -45,6 +82,7 @@ struct UserMessage: View {
             }
             #endif
         }
+        .padding(.leading, leadingPadding)
         #if !os(macOS)
         .contextMenu {
             if let group = conversation.group {
@@ -62,19 +100,6 @@ struct UserMessage: View {
             self.isHovered = isHovered
         }
         #endif
-        .frame(maxWidth: .infinity, maxHeight: maxHeight, alignment: .trailing)
-        .padding(.leading, leadingPadding)
-        .background {
-            GeometryReader { geometry in
-                Color.clear
-                    .onAppear {
-                        updateLabelSize(geometry.size)
-                    }
-                    .onChange(of: geometry.size) {
-                        updateLabelSize(geometry.size)
-                    }
-            }
-        }
     }
     
     func toggleTextSelection() {

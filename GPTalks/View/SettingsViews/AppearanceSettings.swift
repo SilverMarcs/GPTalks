@@ -24,7 +24,17 @@ struct AppearanceSettings: View {
                 SectionFooterView(text: "WebView is recommended on MacOS and Native on iOS.")
             }
             
-            Section("List Row Count") {
+            Section {
+                Toggle("Compact List Row", isOn: $config.compactList)
+                Toggle("List View", isOn: $config.listView)
+                Toggle("Folder View", isOn: $config.folderView)
+            } header: {
+                Text("View Customisation")
+            } footer: {
+                SectionFooterView(text: "Scrolling within the view does not working in List View\nFolder View is Experimental and extremely buggy")
+            }
+            
+            Section {
                 Toggle("Show Less Sessions", isOn: $config.truncateList)
                 
                 Stepper(value: $config.listCount, in: 6...20) {
@@ -36,15 +46,10 @@ struct AppearanceSettings: View {
                 }
                 .opacity(config.truncateList ? 1 : 0.5)
                 .disabled(!config.truncateList)
-            }
-            
-            Section {
-                Toggle("Compact List Row", isOn: $config.compactList)
-                Toggle("Folder View", isOn: $config.folderView)
             } header: {
-                Text("Views")
+                Text("List Row Count")
             } footer: {
-                SectionFooterView(text: "Folder View is Experimental and extremely buggy")
+                SectionFooterView(text: "Only applicable when not using folder view")
             }
         }
         .formStyle(.grouped)

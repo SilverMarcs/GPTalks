@@ -36,13 +36,24 @@ struct ChatInputView: View {
                             isFocused: _isFocused)
             }
             
-            if session.isReplying {
-                StopButton(size: imageSize, stop: session.stopStreaming)
-                    .offset(y: -2.4)
-            } else {
-                SendButton(size: imageSize, send: sendInput)
-                    .offset(y: -2.4)
+//            if session.isReplying {
+//                StopButton(size: imageSize, stop: session.stopStreaming)
+//                    .contentTransition(.symbolEffect(.replace))
+//                    .offset(y: -2.4)
+//            } else {
+//                SendButton(size: imageSize, send: sendInput)
+//                    .contentTransition(.symbolEffect(.replace))
+//                    .offset(y: -2.4)
+//            }
+            
+            ActionButton(size: imageSize, isStop: session.isReplying) {
+                if session.isReplying {
+                    session.stopStreaming()
+                } else {
+                    sendInput()
+                }
             }
+            .offset(y: -2.4)
         }
         .modifier(CommonInputStyling())
         #if os(macOS)

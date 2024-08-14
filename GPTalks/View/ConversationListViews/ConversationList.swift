@@ -21,10 +21,29 @@ struct ConversationList: View {
     
     var body: some View {
         ScrollViewReader { proxy in
-            vStackView
+            Group {
+                if config.listView {
+                    listView
+                } else {
+                    vStackView
+                }
+            }
             .onAppear {
-                session.proxy = proxy
-                session.refreshTokens()
+                if !config.listView {
+                    session.proxy = proxy
+                }
+            }
+            .onChange(of: sessionVM.selections) {
+                if !isIOS() {
+                    scrollToBottom(proxy: proxy, delay: 0.2)
+                    scrollToBottom(proxy: proxy, delay: 0.4)
+                    if session.groups.count >= 7 {
+                        scrollToBottom(proxy: proxy, delay: 0.8)
+                    }
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    sessionVM.selections.first?.refreshTokens()
+                }
             }
             .modifier(PlatformSpecificModifiers(session: session, showingInspector: $showingInspector, hasUserScrolled: $hasUserScrolled))
             .modifier(InspectorModifier(showingInspector: $showingInspector))
@@ -51,6 +70,22 @@ struct ConversationList: View {
             }
             .padding()
             .padding(.top, -5)
+        }
+    }
+    
+    var listView: some View {
+        List {
+            VStack(spacing: 0) {
+                ForEach(session.groups, id: \.self) { group in
+                    ConversationGroupView(group: group)
+                }
+
+                ErrorMessageView(session: session)
+            }
+            .listRowSeparator(.hidden)
+            
+            Color.clear
+                .id(String.bottomID)
         }
     }
     

@@ -10,6 +10,7 @@ import VisualEffectView
 
 struct InputEditor: View {
     @Environment(\.colorScheme) var colorScheme
+    @Environment(SessionVM.self) var sessionVM
     
     @Binding var prompt: String
     @FocusState var isFocused: Bool
@@ -45,6 +46,11 @@ struct InputEditor: View {
                 .scrollContentBackground(.hidden)
                 .padding(padding)
                 .padding(.leading, leadingPadding)
+        }
+        .onChange(of: sessionVM.selections) {
+            if !isIPadOS() && !AppConfig.shared.sidebarFocus {
+                isFocused = true 
+            }
         }
         .modifier(RoundedRectangleOverlayModifier(radius: radius))
         .toolbar {

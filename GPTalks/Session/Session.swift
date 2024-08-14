@@ -228,9 +228,9 @@ final class Session {
                     scrollToBottom(proxy: proxy)
                 }
             } else {
-                withAnimation {
+//                withAnimation {
                     resetMarker = newResetMarker
-                }
+//                }
             }
         }
     }
@@ -282,20 +282,20 @@ final class Session {
         if groups.count == 0 {
             errorMessage = ""
         }
-        withAnimation {
+//        withAnimation {
             groups.removeAll(where: { $0 == conversationGroup })
-        } completion: {
+//        } completion: {
             self.modelContext?.delete(conversationGroup)
             self.refreshTokens()
-        }
+//        }
     }
     
     func deleteAllConversations() {
-        withAnimation {
+//        withAnimation {
             groups.removeAll()
             errorMessage = ""
-        } completion: {
+//        } completion: {
             self.refreshTokens()
-        }
+//        }
     }
 }

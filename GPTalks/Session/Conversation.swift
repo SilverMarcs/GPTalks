@@ -18,7 +18,10 @@ final class Conversation {
     var id: UUID = UUID()
     var date: Date = Date()
     
+    @Relationship(deleteRule: .nullify)
     var group: ConversationGroup?
+    
+    @Relationship(deleteRule: .nullify)
     var model: AIModel?
     
     var content: String

@@ -16,9 +16,10 @@ class AppConfig: ObservableObject {
     
     @AppStorage("truncateList") var truncateList: Bool = false
     @AppStorage("listCount") var listCount: Int = 12
+    @AppStorage("listView") var listView: Bool = false
+    @AppStorage("folderView") var folderView: Bool = false
     
     // General
-    @AppStorage("folderView") var folderView: Bool = false
     @AppStorage("autogenTitle") var autogenTitle: Bool = true
     @AppStorage("expensiveSearch") var expensiveSearch: Bool = false
     
