@@ -49,7 +49,7 @@ struct ContentView: View {
                 modelContext.insert(google)
                 
                 ProviderManager.shared.defaultProvider = openAI.id.uuidString
-                ProviderManager.shared.quickProvider = google.id.uuidString
+                ProviderManager.shared.quickProvider = openAI.id.uuidString
             }
             
             KeyboardShortcuts.onKeyDown(for: .togglePanel) {

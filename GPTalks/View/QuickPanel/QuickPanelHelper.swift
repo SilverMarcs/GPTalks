@@ -28,13 +28,13 @@ struct QuickPanelHelper: View {
         if let session = session {
             QuickPanel(session: session, showAdditionalContent: $showAdditionalContent, showingPanel: $showingPanel, dismiss: dismiss)
         } else {
-            Text("Loading...")
-                .onAppear {
-                    if session == nil {
-                        session = sessions.first ?? sessionVM.addQuickItem(providers: providers, modelContext: modelContext)
-                        // TODO: on launch it craeets new provider which it should not
-                    }
-                }
+            Button("Add Quick Session. Restart app to use it.") {
+                sessionVM.addQuickItem(providers: providers, modelContext: modelContext)
+            }
+            .padding()
+            .onAppear {
+                session = sessions.first
+            }
         }
     }
 }

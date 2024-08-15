@@ -99,16 +99,15 @@ extension SessionVM {
         try? modelContext.save()
     }
     
-    func addQuickItem(providers: [Provider], modelContext: ModelContext) -> Session {
+    func addQuickItem(providers: [Provider], modelContext: ModelContext) {
         if let defaultQuickProvider = ProviderManager.shared.getQuickProvider(providers: providers) {
             let config = SessionConfig(provider: defaultQuickProvider, purpose: .quick)
             let session = Session(config: config)
             config.session = session
             session.isQuick = true
             
-            return session
+//            return session
+            modelContext.insert(session)
         }
-        
-        return Session(config: SessionConfig())
     }
 }
