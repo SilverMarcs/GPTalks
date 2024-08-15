@@ -13,55 +13,17 @@ struct UserMessage: View {
     
     var conversation: Conversation
     @State var isHovered: Bool = false
-    
-    @State var maxHeight: CGFloat = 400
-    @State var labelSize: CGSize = CGSize()
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
     
     var body: some View {
-        if config.listView {
-            content
-                .frame(maxWidth: .infinity, alignment: .trailing)
-        } else {
-            content
-                .frame(maxWidth: .infinity, maxHeight: maxHeight, alignment: .trailing)
-                .background {
-                    GeometryReader { geometry in
-                        Color.clear
-                            .onAppear {
-                                updateLabelSize(geometry.size)
-                            }
-                            .onChange(of: geometry.size) {
-                                updateLabelSize(geometry.size)
-                            }
-                    }
-                }
-        }
-        
-
-//        .frame(maxWidth: .infinity, maxHeight: maxHeight, alignment: .trailing)
-//        .padding(.leading, leadingPadding)
-//        .background {
-//            GeometryReader { geometry in
-//                Color.clear
-//                    .onAppear {
-//                        updateLabelSize(geometry.size)
-//                    }
-//                    .onChange(of: geometry.size) {
-//                        updateLabelSize(geometry.size)
-//                    }
-//            }
-//        }
-    }
-    
-    var content: some View {
         VStack(alignment: .trailing, spacing: 7) {
             if !conversation.imagePaths.isEmpty {
                 imageList
             }
             
             HighlightedText(text: conversation.content, highlightedText: conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil)
+                .lineLimit(!isExpanded ? lineLimit : nil)
                 .padding(.vertical, 8)
                 .padding(.horizontal, 11)
                 .background(
@@ -76,7 +38,7 @@ struct UserMessage: View {
             
             #if os(macOS)
             if let group = conversation.group {
-                ConversationMenu(group: group, labelSize: labelSize, toggleMaxHeight: toggleMaxHeight, isExpanded: isExpanded)
+                ConversationMenu(group: group, isExpanded: $isExpanded)
                     .symbolEffect(.appear, isActive: !isHovered)
             }
             #endif
@@ -99,6 +61,7 @@ struct UserMessage: View {
             self.isHovered = isHovered
         }
         #endif
+                .frame(maxWidth: .infinity, alignment: .trailing)
     }
     
     func toggleTextSelection() {
@@ -113,6 +76,14 @@ struct UserMessage: View {
         #endif
     }
     
+    var lineLimit: Int {
+        #if os(macOS)
+        15
+        #else
+        6
+        #endif
+    }
+    
     var indexOfConversationGroup: Int {
         conversation.group?.session?.groups.firstIndex(where: { $0 == conversation.group }) ?? 0
     }
@@ -123,6 +94,7 @@ struct UserMessage: View {
                 ForEach(conversation.imagePaths, id: \.self) { imagePath in
                     ImageViewer(imagePath: imagePath, maxWidth: maxImageSize, maxHeight: maxImageSize, radius: 9, isCrossable: false) {
                             print("Should not be removed from here")
+                        // TODO: make optional func var
                     }
                 }
             }
@@ -131,26 +103,6 @@ struct UserMessage: View {
     
     private var maxImageSize: CGFloat {
         300
-    }
-    
-    func updateLabelSize(_ size: CGSize) {
-        DispatchQueue.main.async {
-            if self.labelSize != size {
-                self.labelSize = size
-            }
-        }
-    }
-    
-    func toggleMaxHeight() {
-        withAnimation {
-            if maxHeight == 400 {
-                maxHeight = .infinity
-                isExpanded = true
-            } else {
-                maxHeight = 400
-                isExpanded = false
-            }
-        }
     }
 }
 

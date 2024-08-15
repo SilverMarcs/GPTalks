@@ -80,8 +80,8 @@ struct ChatInspector: View {
         Button {
             if session.isStreaming { return }
             isGeneratingTtile.toggle()
-            Task { await session.generateTitle(forced: true) }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            Task {
+                await session.generateTitle(forced: true)
                 isGeneratingTtile.toggle()
             }
         } label: {

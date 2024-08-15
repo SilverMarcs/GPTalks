@@ -12,6 +12,7 @@ import KeyboardShortcuts
 struct ContentView: View {
     @Environment(SessionVM.self) private var sessionVM
     @Environment(\.modelContext) private var modelContext
+    // TODO: Maybe just use modelfconetxt to fetch since one time only
     @Query private var providers: [Provider]
 
     @ObservedObject var providerManager = ProviderManager.shared

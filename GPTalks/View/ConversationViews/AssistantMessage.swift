@@ -37,7 +37,7 @@ struct AssistantMessage: View {
                     }
                     #if os(macOS)
                     if let group = conversation.group, !conversation.isReplying {
-                        ConversationMenu(group: group)
+                        ConversationMenu(group: group, isExpanded: .constant(true))
                             .symbolEffect(.appear, isActive: !isHovered)
                     }
                     #endif

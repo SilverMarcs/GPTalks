@@ -37,7 +37,6 @@ struct SessionListSidebar: View {
             }
         }
         .toolbar {
-//            SessionListToolbar()
             if sessionVM.state == .chats {
                 ChatSessionToolbar()
             } else {

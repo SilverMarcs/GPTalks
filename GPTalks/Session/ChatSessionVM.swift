@@ -69,15 +69,31 @@ extension SessionVM {
         }
     }
     
-    func fork(session: Session, sessions: [Session], modelContext: ModelContext) {
+    func fork(session: Session, modelContext: ModelContext) {
         withAnimation {
-            for existingSession in sessions {
-                existingSession.order += 1
+            // Create a predicate to filter out sessions where isQuick is true
+            let predicate = #Predicate<Session> { session in
+                session.isQuick == false
             }
             
-            session.order = 0
-            modelContext.insert(session)
-            self.selections = [session]
+            // Create a FetchDescriptor with the predicate and sort descriptor
+            let descriptor = FetchDescriptor<Session>(
+                predicate: predicate,
+                sortBy: [SortDescriptor(\.order)]
+            )
+            
+            // Fetch the sessions
+            if let sessions = try? modelContext.fetch(descriptor) {
+                // Update the order of existing sessions
+                for existingSession in sessions {
+                    existingSession.order += 1
+                }
+                
+                // Insert the new session
+                session.order = 0
+                modelContext.insert(session)
+                self.selections = [session]
+            }
         }
         
         try? modelContext.save()

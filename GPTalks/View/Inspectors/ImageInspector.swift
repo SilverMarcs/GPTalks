@@ -77,7 +77,7 @@ struct ImageInspector: View {
             Image(systemName: "sparkles")
         }
         .buttonStyle(.plain)
-        .foregroundStyle(.link)
+        .foregroundStyle(.mint.gradient)
     }
     
     private var deleteAllMessages: some View {

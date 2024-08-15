@@ -23,7 +23,6 @@ struct QuickPanel: View {
     
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
     var providers: [Provider]
-    @Query var sessions: [Session]
     
     var body: some View {
         VStack(spacing: 0) {
@@ -47,7 +46,6 @@ struct QuickPanel: View {
                         .padding(.horizontal)
                         .padding(.top)
                 }
-
                 
                 ConversationList(session: session, isQuick: true)
                     .scrollContentBackground(.hidden)
@@ -148,9 +146,11 @@ struct QuickPanel: View {
         showAdditionalContent = false
         session.deleteAllConversations()
         session.inputManager.imagePaths.removeAll()
+        let oldConfig = session.config
         if let quickProvider = ProviderManager.shared.getQuickProvider(providers: providers) {
             session.config = .init(provider: quickProvider, purpose: .quick)
         }
+        modelContext.delete(oldConfig)
     }
     
     private func addToDB() {
@@ -158,7 +158,7 @@ struct QuickPanel: View {
         NSApp.keyWindow?.makeKeyAndOrderFront(nil)
         
         let newSession = session.copy(purpose: .quick)
-        sessionVM.fork(session: newSession, sessions: sessions, modelContext: modelContext)
+        sessionVM.fork(session: newSession, modelContext: modelContext)
         resetChat()
         
         showAdditionalContent = false

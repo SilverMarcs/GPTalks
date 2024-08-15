@@ -12,12 +12,8 @@ struct ConversationMenu: View {
     var group: ConversationGroup
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) var sessionVM
-    
-    @Query var sessions: [Session]
-    
-    var labelSize: CGSize? = nil
-    var toggleMaxHeight: (() -> Void)? = nil
-    var isExpanded: Bool = false
+
+    @Binding var isExpanded: Bool
     var toggleTextSelection: (() -> Void)? = nil
     
     @State var isCopied = false
@@ -76,17 +72,17 @@ struct ConversationMenu: View {
     
     @ViewBuilder
     var expandHeight: some View {
-        if let labelSize = labelSize, labelSize.height >= 400 {
-            Button {
-                toggleMaxHeight?()
+//        if let labelSize = labelSize, labelSize.height >= 400 {
+        if group.role == .user {
+            HoverScaleButton(icon: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right", label: isExpanded ? "Collapse" : "Expand") {
+                //                toggleMaxHeight?()
                 withAnimation {
+                    isExpanded.toggle()
                     group.session?.proxy?.scrollTo(group, anchor: .top)
                 }
-            } label: {
-                Label(isExpanded ? "Collapse" : "Expand",
-                      systemImage: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right")
-                .help("Expand")
             }
+            .contentTransition(.symbolEffect(.replace))
+            .help("Expand")
         }
     }
 
@@ -99,7 +95,7 @@ struct ConversationMenu: View {
     var forkSession: some View {
         HoverScaleButton(icon: "arrow.branch", label: "Fork Session") {
             if let newSession = group.session?.copy(from: group, purpose: .chat) {
-                sessionVM.fork(session: newSession, sessions: sessions, modelContext: modelContext)
+                sessionVM.fork(session: newSession, modelContext: modelContext)
             }
         }
     }

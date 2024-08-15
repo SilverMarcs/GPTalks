@@ -32,6 +32,7 @@ struct QuickPanelHelper: View {
                 .onAppear {
                     if session == nil {
                         session = sessions.first ?? sessionVM.addQuickItem(providers: providers, modelContext: modelContext)
+                        // TODO: on launch it craeets new provider which it should not
                     }
                 }
         }
