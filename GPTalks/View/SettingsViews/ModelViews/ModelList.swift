@@ -20,6 +20,7 @@ struct ModelListView: View {
     @State var showAdder = false
     @State var selections: Set<AIModel> = []
     @State var searchText = ""
+    @State var isRefreshing = false
     
     var models: [AIModel] {
         switch modelType {
@@ -133,19 +134,28 @@ extension ModelListView {
 
 // MARK: - Shared Components
 extension ModelListView {
+    @ViewBuilder
     var addButton: some View {
-        Menu {
-            Button(action: refreshModels) {
-                Label("Refresh Models", systemImage: "arrow.trianglehead.2.counterclockwise.rotate.90")
+        if isRefreshing {
+            Button(action: {}) {
+                Label("Refreshing", systemImage: "arrow.trianglehead.2.counterclockwise.rotate.90")
             }
-            
-            Section {
-                Button(action: { showAdder = true }) {
-                    Label("Add Custom Model", systemImage: "plus")
+            .symbolEffect(.rotate, isActive: isRefreshing)
+            .disabled(true)
+        } else {
+            Menu {
+                Button(action: refreshModels) {
+                    Label("Refresh Models", systemImage: "arrow.trianglehead.2.counterclockwise.rotate.90")
                 }
+                
+                Section {
+                    Button(action: { showAdder = true }) {
+                        Label("Add Custom Model", systemImage: "plus")
+                    }
+                }
+            } label: {
+                Label("Add", systemImage: "plus")
             }
-        } label: {
-            Label("Add", systemImage: "plus")
         }
     }
     

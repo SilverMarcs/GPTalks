@@ -11,8 +11,10 @@ import SwiftData
 // MARK: - ViewModel
 extension ModelListView {    
     func refreshModels() {
+        isRefreshing = true
         Task { @MainActor in
             await provider.refreshModels()
+            isRefreshing = false
         }
     }
     
