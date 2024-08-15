@@ -139,8 +139,10 @@ extension ModelListView {
                 Label("Refresh Models", systemImage: "arrow.trianglehead.2.counterclockwise.rotate.90")
             }
             
-            Button(action: { showAdder = true }) {
-                Label("Add Custom Model", systemImage: "plus")
+            Section {
+                Button(action: { showAdder = true }) {
+                    Label("Add Custom Model", systemImage: "plus")
+                }
             }
         } label: {
             Label("Add", systemImage: "plus")

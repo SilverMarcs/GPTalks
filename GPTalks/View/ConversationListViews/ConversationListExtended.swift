@@ -13,12 +13,12 @@ extension View {
         @ObservedObject var config = AppConfig.shared
         
         return self
-//            .onAppear {
-//                if !isIOS() {
-//                    scrollToBottom(proxy: proxy, delay: 0.2)
-//                    scrollToBottom(proxy: proxy, delay: 0.4)
-//                }
-//            }
+            .onAppear {
+                if !isIOS() {
+                    scrollToBottom(proxy: proxy, delay: 0.2)
+                    scrollToBottom(proxy: proxy, delay: 0.4)
+                }
+            }
         #if os(macOS)
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 if session.isReplying {
@@ -57,46 +57,49 @@ extension View {
     }
 }
 
-struct InspectorModifier: ViewModifier {
-    @Binding var showingInspector: Bool
-    
-    @ViewBuilder
-    func body(content: Content) -> some View {
-        content
-            #if os(iOS)
-            .toolbar { showInspector }
-            .inspector(isPresented: $showingInspector) {
-                InspectorView(showingInspector: $showingInspector)
-            }
-            #elseif os(visionOS)
-            .toolbar { showInspector }
-            .sheet(isPresented: $$showingInspector) {
-                NavigationStack {
-                    InspectorView(showingInspector: $$showingInspector)
-                        .toolbar {
-                            ToolbarItem(placement: .topBarLeading) {
-                                DismissButton()
-                            }
-                        }
-                }
-            }
-            #endif
-    }
-    
-#if !os(macOS)
-private var showInspector: some ToolbarContent {
-    ToolbarItem(placement: .topBarTrailing) {
-        Button {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-            showingInspector.toggle()
-            
-        } label: {
-            Label("Show Inspector", systemImage: "info.circle")
-        }
-    }
-}
-#endif
-}
+//struct InspectorModifier: ViewModifier {
+//    @Binding var showingInspector: Bool
+//    
+//    @ViewBuilder
+//    func body(content: Content) -> some View {
+//        content
+////            #if os(iOS)
+////            .toolbar { showInspector }
+////            .inspector(isPresented: $showingInspector) {
+////                InspectorView(showingInspector: $showingInspector)
+////            }
+////            #elseif os(visionOS)
+//            .toolbar { showInspector }
+//            .sheet(isPresented: $showingInspector) {
+//                NavigationStack {
+//                    InspectorView(showingInspector: $showingInspector)
+////                        .toolbar {
+////                            ToolbarItem(placement: .confirmationAction) {
+////                                DismissButton()
+////                            }
+////                        }
+//                }
+//            }
+////            #endif
+//    }
+//    
+////#if !os(macOS)
+//private var showInspector: some ToolbarContent {
+//    ToolbarItem(placement: .cancellationAction) {
+//        Button {
+//            #if !os(macOS)
+//            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+//            #endif
+//            showingInspector.toggle()
+//            
+//        } label: {
+//            Label("Show Inspector", systemImage: "info.circle")
+//        }
+////        .buttonStyle(.plain)
+//    }
+//}
+////#endif
+//}
 
 struct PlatformSpecificModifiers: ViewModifier {
     let session: Session
@@ -108,13 +111,11 @@ struct PlatformSpecificModifiers: ViewModifier {
     
     @ViewBuilder
     func body(content: Content) -> some View {
-//        var subtitle: String = "Tokens: \(session.tokenCounter.formatToK()) - \(session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))"
-        
         content
+            .toolbar { ConversationListToolbar(session: session) }
             #if os(macOS)
             .navigationSubtitle("\(session.groups.count) messages • \(session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))")
             .navigationTitle(session.title)
-            .toolbar { ConversationListToolbar(session: session) }
             #else
             .onTapGesture { showingInspector = false }
             .toolbarTitleDisplayMode(.inline)

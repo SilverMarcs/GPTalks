@@ -27,7 +27,7 @@ struct ProviderDetail: View {
             }
         }
         .scrollContentBackground(.visible)
-        .navigationTitle("Providers")
+        .navigationTitle(provider.name)
         .toolbarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {

@@ -12,6 +12,8 @@ struct ConversationListToolbar: ToolbarContent {
     
     @State private var isExportingJSON = false
     @State private var isExportingMarkdown = false
+    @State var showConfig: Bool = false
+    @State var showingInspector: Bool = false
     
     @State private var currentIndex: Int = 0
     var filteredGroups: [ConversationGroup] {
@@ -24,9 +26,8 @@ struct ConversationListToolbar: ToolbarContent {
         }
     }
     
-    @State var showConfig: Bool = false
-    
     var body: some ToolbarContent {
+        #if os(macOS)
         ToolbarItem(placement: .navigation) {
             Menu {
                 Button {
@@ -62,12 +63,13 @@ struct ConversationListToolbar: ToolbarContent {
             }
         }
         
-        #if os(macOS)
         ToolbarItem {
             CustomSearchField("Search", text: $session.searchText, height: 28, showFocusRing: true)
             .frame(width: 220)
         }
         #endif
+        
+        showInspector
         
 //        ToolbarItem {
 //            Button(action: {
@@ -79,6 +81,28 @@ struct ConversationListToolbar: ToolbarContent {
 //                ChatInspector(session: session)
 //            }
 //        }
+    }
+    
+    private var showInspector: some ToolbarContent {
+        ToolbarItem {
+            Button {
+                #if !os(macOS)
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                #endif
+                showingInspector.toggle()
+                
+            } label: {
+                Label("Show Inspector", systemImage: "info.circle")
+            }
+            .sheet(isPresented: $showingInspector) {
+                NavigationStack {
+//                    InspectorView(showingInspector: $showingInspector)
+                    NavigationStack {
+                        ChatInspector(session: session)
+                    }
+                }
+            }
+        }
     }
     
     private var navigateButtons: some View {

@@ -14,12 +14,12 @@ struct ConversationListDetail: View {
         if sessionVM.state == .images && sessionVM.imageSelections.count == 1{
             if let imageSession = sessionVM.imageSelections.first {
                 ImageGenerationList(session: imageSession)
-//                    .id(imageSession.id)
+                .id(imageSession.id)
             }
         } else if sessionVM.state == .chats && sessionVM.selections.count == 1 {
             if let chatSession = sessionVM.selections.first {
                 ConversationList(session: chatSession)
-//                    .id(chatSession.id)
+                    .id(chatSession.id)
             }
         } else {
             Group {

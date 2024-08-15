@@ -67,9 +67,9 @@ struct ContentView: View {
             .modelContainer(modelContext.container)
             .environment(sessionVM)
         }
-        .inspector(isPresented: $showingInspector) {
-            InspectorView(showingInspector: $showingInspector)
-        }
+//        .inspector(isPresented: $showingInspector) {
+//            InspectorView(showingInspector: $showingInspector)
+//        }
         #endif
     }
     
