@@ -23,6 +23,7 @@ struct UserMessage: View {
             }
             
             HighlightedText(text: conversation.content, highlightedText: conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil)
+                .font(.system(size: config.fontSize))
                 .lineLimit(!isExpanded ? lineLimit : nil)
                 .padding(.vertical, 8)
                 .padding(.horizontal, 11)

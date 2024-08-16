@@ -11,6 +11,8 @@ class AppConfig: ObservableObject {
     static let shared = AppConfig()
     
     // Appearance
+    @AppStorage("fontSize") var fontSize: Double = 13
+    
     @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
     @AppStorage("compactList") var compactList: Bool = false
     

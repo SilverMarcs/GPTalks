@@ -12,6 +12,14 @@ struct AppearanceSettings: View {
     
     var body: some View {
         Form {
+            Slider(value: $config.fontSize, in: 8...25, step: 1) {
+                Text("Font Size: \(Int(config.fontSize))")
+            } minimumValueLabel: {
+                Text("8")
+            } maximumValueLabel: {
+                Text("25")
+            }
+            
             Section {
                 Picker("Markdown Provider", selection: $config.markdownProvider) {
                     ForEach(MarkdownProvider.allCases, id: \.self) { provider in
