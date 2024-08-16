@@ -28,7 +28,7 @@ struct ConversationList: View {
                     vStackView
                 }
             }
-            .onAppear {
+            .task {
                 sessionVM.selections.first?.refreshTokens()
 //                if !config.listView {
                     session.proxy = proxy

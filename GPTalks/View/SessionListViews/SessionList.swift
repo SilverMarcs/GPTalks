@@ -60,7 +60,7 @@ struct SessionList: View {
                     proxy.scrollTo(first, anchor: .top)
                 }
             }
-            .onAppear {
+            .task {
                 if let first = sessions.first, sessionVM.selections.isEmpty, !isIOS() {
                     DispatchQueue.main.async {
                         sessionVM.selections = [first]

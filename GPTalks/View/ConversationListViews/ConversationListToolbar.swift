@@ -70,17 +70,6 @@ struct ConversationListToolbar: ToolbarContent {
         #endif
         
         showInspector
-        
-//        ToolbarItem {
-//            Button(action: {
-//                showConfig.toggle()
-//            }) {
-//                Label("Config", systemImage: "info.circle")
-//            }
-//            .sheet(isPresented: $showConfig) {
-//                ChatInspector(session: session)
-//            }
-//        }
     }
     
     private var showInspector: some ToolbarContent {
@@ -94,12 +83,16 @@ struct ConversationListToolbar: ToolbarContent {
             } label: {
                 Label("Show Inspector", systemImage: "info.circle")
             }
+            .keyboardShortcut("i", modifiers: [.command, .shift])
             .sheet(isPresented: $showingInspector) {
                 NavigationStack {
-//                    InspectorView(showingInspector: $showingInspector)
-                    NavigationStack {
-                        ChatInspector(session: session)
-                    }
+                    ChatInspector(session: session)
+                    #if os(visionOS)
+                        .toolbar {
+                            DismissButton()
+                                .buttonStyle(.plain)
+                        }
+                    #endif
                 }
             }
         }

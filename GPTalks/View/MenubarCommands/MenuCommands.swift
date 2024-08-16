@@ -15,7 +15,7 @@ struct MenuCommands: Commands {
     var body: some Commands {
         SidebarCommands()
         
-        InspectorCommands()
+//        InspectorCommands()
         
         if isMainWindowActive {
             switch sessionVM.state {

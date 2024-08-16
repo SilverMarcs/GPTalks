@@ -42,7 +42,7 @@ struct ChatSessionList: View {
             .onChange(of: sessions.count) {
                 proxy.scrollTo(String.topID, anchor: .top)
             }
-            .onAppear {
+            .task {
                 if let first = sessions.first, sessionVM.selections.isEmpty, !isIOS() {
                     DispatchQueue.main.async {
                         sessionVM.selections = [first]

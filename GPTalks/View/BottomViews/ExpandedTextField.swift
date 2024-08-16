@@ -15,7 +15,7 @@ struct ExpandedTextField: View {
         Form {
             TextField("Send a message", text: $prompt, axis: .vertical)
                 .focused($isFocused)
-                .onAppear {
+                .task {
                     isFocused = true
                 }
         }

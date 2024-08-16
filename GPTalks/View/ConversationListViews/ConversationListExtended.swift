@@ -57,50 +57,6 @@ extension View {
     }
 }
 
-//struct InspectorModifier: ViewModifier {
-//    @Binding var showingInspector: Bool
-//    
-//    @ViewBuilder
-//    func body(content: Content) -> some View {
-//        content
-////            #if os(iOS)
-////            .toolbar { showInspector }
-////            .inspector(isPresented: $showingInspector) {
-////                InspectorView(showingInspector: $showingInspector)
-////            }
-////            #elseif os(visionOS)
-//            .toolbar { showInspector }
-//            .sheet(isPresented: $showingInspector) {
-//                NavigationStack {
-//                    InspectorView(showingInspector: $showingInspector)
-////                        .toolbar {
-////                            ToolbarItem(placement: .confirmationAction) {
-////                                DismissButton()
-////                            }
-////                        }
-//                }
-//            }
-////            #endif
-//    }
-//    
-////#if !os(macOS)
-//private var showInspector: some ToolbarContent {
-//    ToolbarItem(placement: .cancellationAction) {
-//        Button {
-//            #if !os(macOS)
-//            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-//            #endif
-//            showingInspector.toggle()
-//            
-//        } label: {
-//            Label("Show Inspector", systemImage: "info.circle")
-//        }
-////        .buttonStyle(.plain)
-//    }
-//}
-////#endif
-//}
-
 struct PlatformSpecificModifiers: ViewModifier {
     let session: Session
     @Binding var showingInspector: Bool

@@ -63,7 +63,7 @@ struct ImageSessionList: View {
                 }
             }
 #if os(macOS)
-            .onAppear {
+            .task {
                 if sessionVM.imageSelections.isEmpty, let first = sessions.first {
                     DispatchQueue.main.async {
                         sessionVM.imageSelections = [first]

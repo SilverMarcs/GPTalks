@@ -20,7 +20,7 @@ struct InputEditor: View {
     var body: some View {
         inputView
         .font(.body)
-        .onAppear {
+        .task {
             if !isIPadOS() && !AppConfig.shared.sidebarFocus {
                 DispatchQueue.main.async { isFocused = true }
             }

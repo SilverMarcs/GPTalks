@@ -80,7 +80,7 @@ struct ProviderGeneral: View {
             Section("Customisation") {
                 HStack {
                     ColorPicker("Accent Color", selection: $color)
-                        .onAppear {
+                        .task {
                             color = Color(hex: provider.color)
                         }
                         .onChange(of: color) {

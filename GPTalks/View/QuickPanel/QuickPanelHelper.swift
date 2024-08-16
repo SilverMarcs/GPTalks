@@ -22,14 +22,23 @@ struct QuickPanelHelper: View {
     @Binding var showAdditionalContent: Bool
     @Binding var showingPanel: Bool
     
+    @State var clicked: Bool = false
+    
     let dismiss: () -> Void
     
     var body: some View {
         if let session = session {
             QuickPanel(session: session, showAdditionalContent: $showAdditionalContent, showingPanel: $showingPanel, dismiss: dismiss)
         } else {
-            Button("Add Quick Session. Restart app to use it.") {
-                sessionVM.addQuickItem(providers: providers, modelContext: modelContext)
+            Group {
+                if !clicked {
+                    Button("Add Quick Session. Restart app to use it.") {
+                        sessionVM.addQuickItem(providers: providers, modelContext: modelContext)
+                        clicked = true
+                    }
+                } else {
+                    Text("Restart manually")
+                }
             }
             .padding()
             .onAppear {
