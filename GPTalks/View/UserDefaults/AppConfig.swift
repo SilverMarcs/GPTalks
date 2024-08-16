@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MarkdownWebView
 
 class AppConfig: ObservableObject {
     static let shared = AppConfig()
@@ -15,11 +16,13 @@ class AppConfig: ObservableObject {
     
     @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
     @AppStorage("compactList") var compactList: Bool = false
-    
     @AppStorage("truncateList") var truncateList: Bool = false
     @AppStorage("listCount") var listCount: Int = 12
     @AppStorage("listView") var listView: Bool = false
     @AppStorage("folderView") var folderView: Bool = false
+    
+    // Markdown
+    @AppStorage("markdownTheme") var markdownTheme: MarkdownTheme = .github
     
     // General
     @AppStorage("autogenTitle") var autogenTitle: Bool = true

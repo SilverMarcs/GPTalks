@@ -22,6 +22,7 @@ struct MarkdownView: View {
             MarkdownWebView(conversation.content,
                             baseURL: "GPTalks Web Content",
                             highlightString: highlightString,
+                            customStylesheet: config.markdownTheme,
                             fontSize: CGFloat(config.fontSize))
             case .native:
                 Text(LocalizedStringKey(conversation.content))

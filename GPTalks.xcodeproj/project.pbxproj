@@ -13,6 +13,8 @@
 		0805DEF12C58CB2A00A8354A /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEF02C58CB2A00A8354A /* ClaudeService.swift */; };
 		0805DEF32C58CB3D00A8354A /* GoogleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEF22C58CB3D00A8354A /* GoogleService.swift */; };
 		0805DEF52C58E69300A8354A /* ModelListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEF42C58E69300A8354A /* ModelListViewModel.swift */; };
+		080988972C6F140600A73A71 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 080988962C6F140600A73A71 /* MarkdownWebView */; };
+		0809889D2C6F500000A73A71 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 0809889C2C6F500000A73A71 /* MarkdownWebView */; };
 		080ED38D2C415B6200046424 /* PreferenceKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080ED38C2C415B6200046424 /* PreferenceKeys.swift */; };
 		080ED3902C423C4400046424 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 080ED38F2C423C4400046424 /* OpenAI */; };
 		08134E0C2C6B99DA00589991 /* ChatSessionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08134E0B2C6B99DA00589991 /* ChatSessionListViewModel.swift */; };
@@ -80,7 +82,6 @@
 		087928372C48CFFB008646CD /* ExpandedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087928362C48CFFB008646CD /* ExpandedTextField.swift */; };
 		087B40AB2C55E7D600EAFA0A /* WindowUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087B40AA2C55E7D600EAFA0A /* WindowUtils.swift */; };
 		087B40AD2C55F2AE00EAFA0A /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 087B40AC2C55F2AE00EAFA0A /* MarkdownWebView */; };
-		087B40B02C55F2B700EAFA0A /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 087B40AF2C55F2B700EAFA0A /* MarkdownWebView */; };
 		087B40B22C55F70F00EAFA0A /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 087B40B12C55F70F00EAFA0A /* VisualEffectView */; };
 		087B40B52C55F71700EAFA0A /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 087B40B42C55F71700EAFA0A /* VisualEffectView */; };
 		087B40B82C55F9E900EAFA0A /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 087B40B72C55F9E900EAFA0A /* VisualEffectView */; };
@@ -332,7 +333,6 @@
 				08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */,
 				08D040222C5C8A0B0075B754 /* GoogleGenerativeAI in Frameworks */,
 				084C74432C5231980015AE2F /* OpenAI in Frameworks */,
-				087B40B02C55F2B700EAFA0A /* MarkdownWebView in Frameworks */,
 				087B40B52C55F71700EAFA0A /* VisualEffectView in Frameworks */,
 				08CF5B8C2C689BDF0079D5EE /* MarkdownWebView in Frameworks */,
 				0846B9FA2C6EFF0800AC3FD4 /* MarkdownWebView in Frameworks */,
@@ -341,8 +341,10 @@
 				08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */,
 				080553272C5F99BC003C1842 /* MarkdownWebView in Frameworks */,
 				087B40B82C55F9E900EAFA0A /* VisualEffectView in Frameworks */,
+				0809889D2C6F500000A73A71 /* MarkdownWebView in Frameworks */,
 				080ED3902C423C4400046424 /* OpenAI in Frameworks */,
 				082178A42C5F6B3200C2A8E3 /* MarkdownWebView in Frameworks */,
+				080988972C6F140600A73A71 /* MarkdownWebView in Frameworks */,
 				087B40AD2C55F2AE00EAFA0A /* MarkdownWebView in Frameworks */,
 				081D222D2C5C8C7700634F39 /* GoogleGenerativeAI in Frameworks */,
 				086783122C5CF16800BB768F /* GoogleGenerativeAI in Frameworks */,
@@ -779,7 +781,6 @@
 				08C1ACDA2C54A8F600B86D37 /* OpenAI */,
 				08C1ACE82C54CA0C00B86D37 /* OpenAI */,
 				087B40AC2C55F2AE00EAFA0A /* MarkdownWebView */,
-				087B40AF2C55F2B700EAFA0A /* MarkdownWebView */,
 				087B40B12C55F70F00EAFA0A /* VisualEffectView */,
 				087B40B42C55F71700EAFA0A /* VisualEffectView */,
 				087B40B72C55F9E900EAFA0A /* VisualEffectView */,
@@ -790,6 +791,8 @@
 				080553262C5F99BC003C1842 /* MarkdownWebView */,
 				08CF5B8B2C689BDF0079D5EE /* MarkdownWebView */,
 				0846B9F92C6EFF0800AC3FD4 /* MarkdownWebView */,
+				080988962C6F140600A73A71 /* MarkdownWebView */,
+				0809889C2C6F500000A73A71 /* MarkdownWebView */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -870,7 +873,7 @@
 				08C1ACE72C54CA0C00B86D37 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				087B40B62C55F9E900EAFA0A /* XCRemoteSwiftPackageReference "VisualEffectView" */,
 				086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
-				0846B9F82C6EFF0800AC3FD4 /* XCLocalSwiftPackageReference "../markdown-webview" */,
+				087C1E392C6F53FA00A9C4F3 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1407,13 +1410,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		0846B9F82C6EFF0800AC3FD4 /* XCLocalSwiftPackageReference "../markdown-webview" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "../markdown-webview";
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1426,6 +1422,14 @@
 		087B40B62C55F9E900EAFA0A /* XCRemoteSwiftPackageReference "VisualEffectView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/VisualEffectView";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		087C1E392C6F53FA00A9C4F3 /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
 			requirement = {
 				branch = master;
 				kind = branch;
@@ -1470,6 +1474,14 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MarkdownWebView;
 		};
+		080988962C6F140600A73A71 /* MarkdownWebView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MarkdownWebView;
+		};
+		0809889C2C6F500000A73A71 /* MarkdownWebView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MarkdownWebView;
+		};
 		080ED38F2C423C4400046424 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
@@ -1498,10 +1510,6 @@
 		087B40AC2C55F2AE00EAFA0A /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 08C1ACE72C54CA0C00B86D37 /* XCRemoteSwiftPackageReference "OpenAI" */;
-			productName = MarkdownWebView;
-		};
-		087B40AF2C55F2B700EAFA0A /* MarkdownWebView */ = {
-			isa = XCSwiftPackageProductDependency;
 			productName = MarkdownWebView;
 		};
 		087B40B12C55F70F00EAFA0A /* VisualEffectView */ = {

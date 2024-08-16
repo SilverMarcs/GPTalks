@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MarkdownWebView
 
 struct AppearanceSettings: View {
     @ObservedObject var config = AppConfig.shared
@@ -26,6 +27,13 @@ struct AppearanceSettings: View {
                         Text(provider.name)
                     }
                 }
+                
+                Picker("Codeblock Theme", selection: $config.markdownTheme) {
+                    ForEach(MarkdownTheme.allCases, id: \.self) { theme in
+                        Text(theme.name)
+                    }
+                }
+                
             } header: {
                 Text("Markdown")
             } footer: {
