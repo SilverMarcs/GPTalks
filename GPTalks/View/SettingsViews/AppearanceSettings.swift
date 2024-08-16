@@ -14,30 +14,17 @@ struct AppearanceSettings: View {
     var body: some View {
         Form {
             Slider(value: $config.fontSize, in: 8...25, step: 1) {
-                Text("Font Size: \(Int(config.fontSize))")
+                HStack {
+                    Text("Font Size: \(Int(config.fontSize))")
+                    
+                    Button("Reset") {
+                        config.fontSize = 13
+                    }
+                }
             } minimumValueLabel: {
                 Text("8")
             } maximumValueLabel: {
                 Text("25")
-            }
-            
-            Section {
-                Picker("Markdown Provider", selection: $config.markdownProvider) {
-                    ForEach(MarkdownProvider.allCases, id: \.self) { provider in
-                        Text(provider.name)
-                    }
-                }
-                
-                Picker("Codeblock Theme", selection: $config.markdownTheme) {
-                    ForEach(MarkdownTheme.allCases, id: \.self) { theme in
-                        Text(theme.name)
-                    }
-                }
-                
-            } header: {
-                Text("Markdown")
-            } footer: {
-                SectionFooterView(text: "WebView is recommended on MacOS and Native on iOS.")
             }
             
             Section {

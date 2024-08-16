@@ -30,24 +30,9 @@ struct ConversationList: View {
             }
             .task {
                 sessionVM.selections.first?.refreshTokens()
-//                if !config.listView {
-                    session.proxy = proxy
-//                }
+                session.proxy = proxy
             }
-//            .onChange(of: sessionVM.selections) {
-//                if !isIOS() {
-//                    scrollToBottom(proxy: proxy, delay: 0.2)
-//                    scrollToBottom(proxy: proxy, delay: 0.4)
-//                    if session.groups.count >= 7 {
-//                        scrollToBottom(proxy: proxy, delay: 0.8)
-//                    }
-//                }
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-//                    sessionVM.selections.first?.refreshTokens()
-//                }
-//            }
             .modifier(PlatformSpecificModifiers(session: session, showingInspector: $showingInspector, hasUserScrolled: $hasUserScrolled))
-//            .modifier(InspectorModifier(showingInspector: $showingInspector))
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {

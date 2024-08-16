@@ -27,6 +27,9 @@ struct SettingsView: View {
                 Label("Appearance", systemImage: "paintbrush")
                     .tag(SidebarItem.appearance)
                 
+                Label("Markdown", systemImage: "ellipsis.curlybraces")
+                    .tag(SidebarItem.markdown)
+                
 #if os(macOS)
                 Label("Quick Panel", systemImage: "bolt.fill")
                     .tag(SidebarItem.quickPanel)
@@ -57,6 +60,8 @@ struct SettingsView: View {
                     GeneralSettings()
                 case .appearance:
                     AppearanceSettings()
+                case .markdown:
+                    MarkdownSettings()
                 case .quickPanel:
                     QuickPanelSettings()
                 case .parameters:
@@ -73,7 +78,9 @@ struct SettingsView: View {
             .onChange(of: columnVisibility, initial: true) { oldVal, newVal in
                 if newVal == .detailOnly {
                     DispatchQueue.main.asyncAfter(deadline: .now()) {
-                        columnVisibility = .all
+                        withAnimation {
+                            columnVisibility = .all
+                        }
                     }
                 }
             }
@@ -84,6 +91,7 @@ struct SettingsView: View {
 enum SidebarItem {
     case general
     case appearance
+    case markdown
     case quickPanel
     case parameters
     case providers
