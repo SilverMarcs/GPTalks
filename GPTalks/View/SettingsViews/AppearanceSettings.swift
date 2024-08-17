@@ -34,7 +34,7 @@ struct AppearanceSettings: View {
             } header: {
                 Text("View Customisation")
             } footer: {
-                SectionFooterView(text: "Scrolling within the view does not working in List View. Folder View is Experimental and extremely buggy")
+                SectionFooterView(text: "Folder View is Experimental and extremely buggy")
             }
             
             Section {

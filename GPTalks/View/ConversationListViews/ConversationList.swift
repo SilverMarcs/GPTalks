@@ -73,13 +73,17 @@ struct ConversationList: View {
                 ForEach(session.groups, id: \.self) { group in
                     ConversationGroupView(group: group)
                 }
+                .transaction { $0.animation = nil }
 
                 ErrorMessageView(session: session)
             }
             .listRowSeparator(.hidden)
+            .transaction { $0.animation = nil }
             
             Color.clear
                 .id(String.bottomID)
+                .listRowSeparator(.hidden)
+                .transaction { $0.animation = nil }
         }
     }
     
