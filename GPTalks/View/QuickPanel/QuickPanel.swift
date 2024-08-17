@@ -39,11 +39,11 @@ struct QuickPanel: View {
                 .hidden()
                 .keyboardShortcut("l")
                 
-                Button("Hide Window") {
-                    dismissWindow(id: "quick")
-                }
-                .hidden()
-                .keyboardShortcut(.cancelAction)
+//                Button("Hide Window") {
+//                    dismissWindow(id: "quick")
+//                }
+//                .hidden()
+//                .keyboardShortcut(.cancelAction)
                 
                 textfieldView
                     .padding(15)
