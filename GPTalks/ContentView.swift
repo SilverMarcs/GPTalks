@@ -27,6 +27,7 @@ struct ContentView: View {
             ConversationListDetail()
         }
         .task {
+            setupShortcut()
             initialSetup()
         }
         #if os(macOS)
@@ -53,7 +54,9 @@ struct ContentView: View {
         
         ProviderManager.shared.defaultProvider = openAI.id.uuidString
         ProviderManager.shared.quickProvider = openAI.id.uuidString
-        
+    }
+    
+    private func setupShortcut() {
         #if os(macOS)
         KeyboardShortcuts.onKeyDown(for: .togglePanel) {
             if let window = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "quick" }) {

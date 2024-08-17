@@ -13,18 +13,10 @@ struct QuickPanelWindow: Scene {
 
     @State private var showAdditionalContent = false
     @State var maxHeight: CGFloat = Self.height
-    @FocusState private var isWindowFocused: Bool
 
     var body: some Scene {
         Window("Quick Panel", id: "quick") {
             QuickPanelHelper(showAdditionalContent: $showAdditionalContent)
-                .focusable()
-                .focused($isWindowFocused)
-                .onChange(of: isWindowFocused) {
-                    if !isWindowFocused {
-                        dismissWindow(id: "quick")
-                    }
-                }
                 .ignoresSafeArea()
                 .onChange(of: showAdditionalContent) {
                     toggleMaxHeight()
@@ -35,6 +27,9 @@ struct QuickPanelWindow: Scene {
                     maxHeight: maxHeight
                 )
                 .toolbarVisibility(.hidden, for: .windowToolbar)
+                .onAppear {
+                    setupFocusMonitoring()
+                }
         }
         .restorationBehavior(.disabled)
         .windowResizability(.contentSize)
@@ -58,5 +53,15 @@ struct QuickPanelWindow: Scene {
         }
     }
 
+    private func setupFocusMonitoring() {
+        guard let window = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "quick" }) else {
+            return
+        }
+        
+        NotificationCenter.default.addObserver(forName: NSWindow.didResignMainNotification, object: window, queue: .main) { _ in
+            dismissWindow(id: "quick")
+        }
+    }
+    
     static var height: CGFloat = 29
 }
