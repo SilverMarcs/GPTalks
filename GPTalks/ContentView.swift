@@ -64,12 +64,18 @@ struct ContentView: View {
                     dismissWindow(id: "quick")
                 } else {
                     openWindow(id: "quick")
+                    window.makeKeyAndOrderFront(nil)
+                    NSApplication.shared.activate(ignoringOtherApps: true)
                 }
             } else {
                 openWindow(id: "quick")
+                if let newWindow = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "quick" }) {
+                    newWindow.makeKeyAndOrderFront(nil)
+                    NSApplication.shared.activate(ignoringOtherApps: true)
+                }
             }
-            
         }
+
         #endif
     }
 }
