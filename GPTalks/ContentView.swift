@@ -32,33 +32,12 @@ struct ContentView: View {
         } detail: {
             ConversationListDetail()
         }
+        .task {
+            initialSetup()
+        }
         #if os(macOS)
         .frame(minWidth: 800, minHeight: 600)
         .background(BackgroundView(window: $mainWindow))
-        .task {
-            if providers.isEmpty {
-                let openAI = Provider.factory(type: .openai)
-                openAI.order = 0
-                let anthropic = Provider.factory(type: .anthropic)
-                anthropic.order = 1
-                let google = Provider.factory(type: .google)
-                google.order = 2
-                
-                modelContext.insert(openAI)
-                modelContext.insert(anthropic)
-                modelContext.insert(google)
-                
-                ProviderManager.shared.defaultProvider = openAI.id.uuidString
-                ProviderManager.shared.quickProvider = openAI.id.uuidString
-            }
-            
-            KeyboardShortcuts.onKeyDown(for: .togglePanel) {
-                if !NSApp.isActive {
-                    NSApp.activate(ignoringOtherApps: true)
-                }
-                showingPanel.toggle()
-            }
-        }
         .floatingPanel(isPresented: $showingPanel, showAdditionalContent: $showAdditionalContent) {
             QuickPanelHelper(showAdditionalContent: $showAdditionalContent, showingPanel: $showingPanel) {
                 showingPanel.toggle()
@@ -67,9 +46,33 @@ struct ContentView: View {
             .modelContainer(modelContext.container)
             .environment(sessionVM)
         }
-//        .inspector(isPresented: $showingInspector) {
-//            InspectorView(showingInspector: $showingInspector)
-//        }
+        #endif
+    }
+    
+    private func initialSetup() {
+        if providers.isEmpty {
+            let openAI = Provider.factory(type: .openai)
+            openAI.order = 0
+            let anthropic = Provider.factory(type: .anthropic)
+            anthropic.order = 1
+            let google = Provider.factory(type: .google)
+            google.order = 2
+            
+            modelContext.insert(openAI)
+            modelContext.insert(anthropic)
+            modelContext.insert(google)
+            
+            ProviderManager.shared.defaultProvider = openAI.id.uuidString
+            ProviderManager.shared.quickProvider = openAI.id.uuidString
+        }
+        
+        #if os(macOS)
+        KeyboardShortcuts.onKeyDown(for: .togglePanel) {
+            if !NSApp.isActive {
+                NSApp.activate(ignoringOtherApps: true)
+            }
+            showingPanel.toggle()
+        }
         #endif
     }
     

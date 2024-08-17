@@ -117,10 +117,19 @@ extension ChatSessionList {
         }
     }
     
-    func handleDrop(_ items: [String], folder: Folder) -> Bool {
+    func handleDropToFolder(_ items: [String], folder: Folder) -> Bool {
         for item in items {
             if let uuid = UUID(uuidString: item) {
                 moveSessionToFolder(uuid: uuid, folder: folder)
+            }
+        }
+        return true
+    }
+    
+    func handleDropToRoot(_ items: [String]) -> Bool{
+        for item in items {
+            if let uuid = UUID(uuidString: item) {
+                moveSessionToRoot(uuid: uuid, insertAt: filteredSessions.filter { $0.folder == nil }.count)
             }
         }
         return true

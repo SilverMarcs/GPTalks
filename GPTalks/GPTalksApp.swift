@@ -41,6 +41,7 @@ struct GPTalksApp: App {
     let models: [any PersistentModel.Type] =
         [
            Session.self,
+           Folder.self,
            Conversation.self,
            Provider.self,
            AIModel.self,

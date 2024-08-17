@@ -26,6 +26,9 @@ struct ChatSessionList: View {
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
                 SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "?")
+                    .dropDestination(for: String.self) { items, location in
+                        handleDropToRoot(items)
+                    }
                     .padding(.leading, -paddingOffset)
                 
                 if sessionVM.searchText.isEmpty == false && sessions.isEmpty && folders.isEmpty {
@@ -58,35 +61,32 @@ struct ChatSessionList: View {
     @ViewBuilder
     private var treeContent: some View {
         ForEach(folders, id: \.self) { folder in
-            DisclosureGroup(
-                content: {
-                    if folder.sessions.isEmpty {
-                        Text("Empty folder")
-                            .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(folder.sessions.sorted(by: { $0.order < $1.order }), id: \.self) { session in
-                            SessionListItem(session: session)
-                                .draggable(session.id.uuidString)
-                                .contextMenu {
-                                    Button("Ungroup") {
-                                        session.folder = nil
-                                    }
+            DisclosureGroup {
+                if folder.sessions.isEmpty {
+                    Text("Empty folder")
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(folder.sessions.sorted(by: { $0.order < $1.order }), id: \.self) { session in
+                        SessionListItem(session: session)
+                            .draggable(session.id.uuidString)
+                            .contextMenu {
+                                Button("Ungroup") {
+                                    session.folder = nil
                                 }
-                        }
-                        .onDelete { offsets in
-                            deleteItemsInFolder(folder: folder, offsets: offsets)
-                        }
-                        .onMove(perform: { source, destination in
-                            moveSessionsWithinFolder(folder: folder, from: source, to: destination)
-                        })
+                            }
                     }
-                },
-                label: {
-                    FolderLabel(folder: folder)
+                    .onDelete { offsets in
+                        deleteItemsInFolder(folder: folder, offsets: offsets)
+                    }
+                    .onMove(perform: { source, destination in
+                        moveSessionsWithinFolder(folder: folder, from: source, to: destination)
+                    })
                 }
-            )
+            } label: {
+                FolderLabel(folder: folder)
+            }
             .dropDestination(for: String.self) { items, location in
-                handleDrop(items, folder: folder)
+                handleDropToFolder(items, folder: folder)
             } isTargeted: { isTargeted in
                 // can use this to provide visual feedback when dragging over
             }
@@ -104,14 +104,7 @@ struct ChatSessionList: View {
         
         Color.clear
             .dropDestination(for: String.self) { items, location in
-                // Iterate over all items in the drop
-                for item in items {
-                    if let uuid = UUID(uuidString: item) {
-                        // Move each session to the root
-                        moveSessionToRoot(uuid: uuid, insertAt: filteredSessions.filter { $0.folder == nil }.count)
-                    }
-                }
-                return true
+                handleDropToRoot(items)
             }
     }
     
@@ -148,6 +141,6 @@ struct ChatSessionList: View {
     }
     
     var paddingOffset: CGFloat {
-        8
+        7.5
     }
 }
