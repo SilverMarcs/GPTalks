@@ -132,7 +132,8 @@ extension Provider {
          case .openai, .local:
              let config = OpenAI.Configuration(
                  token: apiKey,
-                 host: host
+                 host: host,
+                 scheme: type.scheme
              )
              
              let service = OpenAI(configuration: config)

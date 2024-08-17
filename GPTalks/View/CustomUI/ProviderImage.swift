@@ -22,7 +22,7 @@ struct ProviderImage: View {
                 .frame(width: frame, height: frame)
 
             Image(provider.type.imageName)
-                .foregroundStyle(.white)
+                .foregroundStyle(provider.type == .local ? .black : .white)
                 .imageScale(scale)
 //                .frame(width: frame - 4,
 //                       height: frame - 4)

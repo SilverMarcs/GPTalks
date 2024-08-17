@@ -43,11 +43,10 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     
     var imageName: String {
         switch self {
-//        case .openai: "openaiSVG"
         case .openai: "brain.SFSymbol"
-        case .anthropic: "anthropicSVG"
+        case .anthropic: "anthropic.SFSymbol"
         case .google: "google.SFSymbol"
-        case .local: "ollama"
+        case .local: "ollama.SFSymbol"
         }
     }
     
