@@ -12,12 +12,6 @@ struct QuickPanelHelper: View {
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) var sessionVM
     
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
-    var providers: [Provider]
-    @Query(filter: #Predicate<Session> { session in
-            session.isQuick == true
-    }) var sessions: [Session]
-    
     @State private var session: Session?
     @Binding var showAdditionalContent: Bool
     
@@ -25,25 +19,26 @@ struct QuickPanelHelper: View {
         if let session = session {
             QuickPanel(session: session, showAdditionalContent: $showAdditionalContent)
         } else {
-//            Group {
-//                if sessions.isEmpty {
-//                    Button("Add Quick Session. Restart app to use it.") {
-//                        sessionVM.addQuickItem(providers: providers, modelContext: modelContext)
-//                        clicked = true
-//                    }
-//                } else {
-//                    Text("Restart manually")
-//                }
-//            }
-            Button("Add Quick Session. This will quit the app. Pleaase Restart it manually") {
-                sessionVM.addQuickItem(providers: providers, modelContext: modelContext)
-                // quit the app
-                NSApplication.shared.terminate(self)
-            }
+            Text("Something went wrong")
             .padding()
             .onAppear {
-                session = sessions.first
+                fetchQuickSession()
             }
+        }
+    }
+    
+    private func fetchQuickSession() {
+        var descriptor = FetchDescriptor<Session>(
+            predicate: #Predicate { $0.isQuick == true }
+        )
+        
+        descriptor.fetchLimit = 1
+        
+        do {
+            let quickSessions = try modelContext.fetch(descriptor)
+            session = quickSessions.first
+        } catch {
+            print("Error fetching quick session: \(error)")
         }
     }
 }

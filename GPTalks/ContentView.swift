@@ -52,6 +52,13 @@ struct ContentView: View {
         modelContext.insert(anthropic)
         modelContext.insert(google)
         
+        let config = SessionConfig(provider: openAI, purpose: .quick)
+        let session = Session(config: config)
+        config.session = session
+        session.isQuick = true
+
+        modelContext.insert(session)
+        
         ProviderManager.shared.defaultProvider = openAI.id.uuidString
         ProviderManager.shared.quickProvider = openAI.id.uuidString
     }
