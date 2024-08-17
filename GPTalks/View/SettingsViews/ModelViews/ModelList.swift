@@ -46,6 +46,7 @@ struct ModelListView: View {
             }
         }
         .searchable(text: $searchText, placement: searchPlacement)
+//        .searchPresentationToolbarBehavior(.avoidHidingContent) // only does sth on ios
     }
     
     var searchPlacement: SearchFieldPlacement {

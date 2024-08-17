@@ -78,9 +78,7 @@ struct SettingsView: View {
             .onChange(of: columnVisibility, initial: true) { oldVal, newVal in
                 if newVal == .detailOnly {
                     DispatchQueue.main.asyncAfter(deadline: .now()) {
-                        withAnimation {
-                            columnVisibility = .all
-                        }
+                        columnVisibility = .all
                     }
                 }
             }

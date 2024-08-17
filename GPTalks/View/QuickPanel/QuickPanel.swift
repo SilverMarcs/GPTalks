@@ -11,15 +11,15 @@ import SwiftData
 #if os(macOS)
 struct QuickPanel: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismissWindow) var dismissWindow
+    @Environment(\.openWindow) var openWindow
     @Environment(SessionVM.self) private var sessionVM
     
     @Bindable var session: Session
     @Binding var showAdditionalContent: Bool
-    @Binding var showingPanel: Bool
     
     @State var prompt: String = ""
     @FocusState private var isFocused: Bool
-    let dismiss: () -> Void
     
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
     var providers: [Provider]
@@ -33,9 +33,21 @@ struct QuickPanel: View {
                 .hidden()
                 .keyboardShortcut("b")
                 
+                Button("Focus Field") {
+                    isFocused = true
+                }
+                .hidden()
+                .keyboardShortcut("l")
+                
+                Button("Hide Window") {
+                    dismissWindow(id: "quick")
+                }
+                .hidden()
+                .keyboardShortcut(.cancelAction)
+                
                 textfieldView
                     .padding(15)
-                    .padding(.leading, 2)
+                    .padding(.leading, 1)
             }
             
             if showAdditionalContent {
@@ -48,19 +60,20 @@ struct QuickPanel: View {
                 }
                 
                 ConversationList(session: session, isQuick: true)
+                    .navigationTitle("Quick Panel")
                     .scrollContentBackground(.hidden)
                 
                 bottomView
             }
         }
-        .frame(width: 650)
-        .onChange(of: showingPanel) {
-            if showingPanel {
-                showingPanel = true
+        .onAppear {
+            isFocused = true
+            if !session.groups.isEmpty {
+                showAdditionalContent = true
             }
         }
-        .onAppear {
-            resetChat()
+        .onChange(of: isFocused) {
+            isFocused = true
         }
     }
     
@@ -87,10 +100,11 @@ struct QuickPanel: View {
             }
             .buttonStyle(.plain)
             
-            TextField("Ask Anything...", text: $prompt)
+            TextField("Ask Anything...", text: $prompt, axis: .vertical)
                 .focused($isFocused)
                 .font(.system(size: 25))
                 .textFieldStyle(.plain)
+                .allowsHitTesting(false)
             
             if session.isReplying {
                 StopButton(size: 28) {
@@ -162,7 +176,8 @@ struct QuickPanel: View {
         resetChat()
         
         showAdditionalContent = false
-        dismiss()
+        dismissWindow(id: "quick")
+        openMainWindow()
     }
     
     private func send() {
@@ -180,12 +195,23 @@ struct QuickPanel: View {
         
         prompt = ""
     }
+    
+    func openMainWindow() {
+        if let existingWindow = NSApp.windows.first(where: { $0.identifier?.rawValue == "main" }) {
+            // Window already exists, bring it to front
+            existingWindow.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+        } else {
+            // Window doesn't exist, create a new one
+            openWindow(id: "main")
+        }
+    }
 }
 
 #Preview {
     let showAdditionalContent = Binding.constant(true)
     let dismiss = {}
     
-    QuickPanel(session: Session(config: .init()), showAdditionalContent: showAdditionalContent, showingPanel: .constant(true), dismiss: dismiss)
+    QuickPanel(session: Session(config: .init()), showAdditionalContent: showAdditionalContent)
 }
 #endif

@@ -20,6 +20,15 @@ struct ConversationList: View {
     @State var showingInspector: Bool = false
     
     var body: some View {
+        if isQuick {
+            content
+        } else {
+            content
+                .modifier(PlatformSpecificModifiers(session: session, showingInspector: $showingInspector, hasUserScrolled: $hasUserScrolled))
+        }
+    }
+    
+    var content: some View {
         ScrollViewReader { proxy in
             Group {
                 if config.listView {
@@ -32,7 +41,6 @@ struct ConversationList: View {
                 sessionVM.selections.first?.refreshTokens()
                 session.proxy = proxy
             }
-            .modifier(PlatformSpecificModifiers(session: session, showingInspector: $showingInspector, hasUserScrolled: $hasUserScrolled))
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {

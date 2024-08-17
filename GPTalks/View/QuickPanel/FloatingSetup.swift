@@ -8,7 +8,7 @@
 #if os(macOS)
 import SwiftUI
 
-class QuickPanelWindow<Content: View>: NSPanel {
+class QuickPanelWindow2<Content: View>: NSPanel {
     @Binding var isPresented: Bool
     private var heightConstraint: NSLayoutConstraint?
     
@@ -119,12 +119,12 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
     @Binding var showAdditionalContent: Bool
     var contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 57)
     @ViewBuilder let view: () -> PanelContent
-    @State var panel: QuickPanelWindow<PanelContent>?
+    @State var panel: QuickPanelWindow2<PanelContent>?
     
     func body(content: Content) -> some View {
         content
             .onAppear {
-                panel = QuickPanelWindow(view: view, contentRect: contentRect, isPresented: $isPresented)
+                panel = QuickPanelWindow2(view: view, contentRect: contentRect, isPresented: $isPresented)
                 panel?.center()
                 if isPresented {
                     present()

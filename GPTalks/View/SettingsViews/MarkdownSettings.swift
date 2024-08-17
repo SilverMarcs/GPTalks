@@ -27,7 +27,7 @@ struct MarkdownSettings: View {
             
             Section("Demo") {
                 MarkdownView(conversation: Conversation(role: .assistant, content: codeBlock))
-                    .padding(.bottom, -10)
+//                    .padding(.bottom, -11)
             }
         }
         .formStyle(.grouped)
@@ -36,6 +36,9 @@ struct MarkdownSettings: View {
     }
     
     let codeBlock = """
+    - Sorts a list and prints the sorted list
+    - Profit
+    
     ```python
     def quick_sort(arr):
         if len(arr) <= 1:
@@ -51,6 +54,8 @@ struct MarkdownSettings: View {
     sorted_list = quick_sort(my_list)
     print(sorted_list)
     ```
+    1. Sort a list and print the sorted list
+    2. Profit
     """
 }
 

@@ -15,7 +15,7 @@ struct GPTalksApp: App {
 
     var body: some Scene {
         Group {
-            WindowGroup {
+            WindowGroup(id: "main") {
                 ContentView()
                 #if os(macOS)
                     .windowDetector(isMainWindowActive: $isMainWindowActive)
@@ -26,12 +26,9 @@ struct GPTalksApp: App {
             }
             
             #if os(macOS)
-            Window("Settings", id: "settings") {
-                SettingsView()
-                    .frame(minWidth: 820, maxWidth: 820, minHeight: 570, maxHeight: 570)
-            }
-            .restorationBehavior(.disabled)
-            .windowResizability(.contentSize)
+            SettingsWindow()
+            
+            QuickPanelWindow()
             #endif
         }
         .environment(sessionVM)

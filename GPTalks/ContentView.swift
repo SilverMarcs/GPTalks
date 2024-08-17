@@ -12,16 +12,10 @@ import KeyboardShortcuts
 struct ContentView: View {
     @Environment(SessionVM.self) private var sessionVM
     @Environment(\.modelContext) private var modelContext
-    // TODO: Maybe just use modelfconetxt to fetch since one time only
-    @Query private var providers: [Provider]
+    @Environment(\.openWindow) var openWindow
+    @Environment(\.dismissWindow) var dismissWindow
 
     @ObservedObject var providerManager = ProviderManager.shared
-    
-#if os(macOS)
-    @State var showingPanel = false
-    @State private var mainWindow: NSWindow?
-    @State var showAdditionalContent = false
-#endif
     
     @State var showingInspector: Bool = true
     
@@ -37,70 +31,45 @@ struct ContentView: View {
         }
         #if os(macOS)
         .frame(minWidth: 800, minHeight: 600)
-        .background(BackgroundView(window: $mainWindow))
-        .floatingPanel(isPresented: $showingPanel, showAdditionalContent: $showAdditionalContent) {
-            QuickPanelHelper(showAdditionalContent: $showAdditionalContent, showingPanel: $showingPanel) {
-                showingPanel.toggle()
-                bringMainWindowToFront()
-            }
-            .modelContainer(modelContext.container)
-            .environment(sessionVM)
-        }
         #endif
     }
     
     private func initialSetup() {
-        if providers.isEmpty {
-            let openAI = Provider.factory(type: .openai)
-            openAI.order = 0
-            let anthropic = Provider.factory(type: .anthropic)
-            anthropic.order = 1
-            let google = Provider.factory(type: .google)
-            google.order = 2
-            
-            modelContext.insert(openAI)
-            modelContext.insert(anthropic)
-            modelContext.insert(google)
-            
-            ProviderManager.shared.defaultProvider = openAI.id.uuidString
-            ProviderManager.shared.quickProvider = openAI.id.uuidString
-        }
+        var fetchProviders = FetchDescriptor<Provider>()
+        fetchProviders.fetchLimit = 1
+        
+        guard try! modelContext.fetch(fetchProviders).count == 0 else { return }
+        
+        let openAI = Provider.factory(type: .openai)
+        openAI.order = 0
+        let anthropic = Provider.factory(type: .anthropic)
+        anthropic.order = 1
+        let google = Provider.factory(type: .google)
+        google.order = 2
+        
+        modelContext.insert(openAI)
+        modelContext.insert(anthropic)
+        modelContext.insert(google)
+        
+        ProviderManager.shared.defaultProvider = openAI.id.uuidString
+        ProviderManager.shared.quickProvider = openAI.id.uuidString
         
         #if os(macOS)
         KeyboardShortcuts.onKeyDown(for: .togglePanel) {
-            if !NSApp.isActive {
-                NSApp.activate(ignoringOtherApps: true)
+            if let window = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "quick" }) {
+                if window.isVisible {
+                    dismissWindow(id: "quick")
+                } else {
+                    openWindow(id: "quick")
+                }
+            } else {
+                openWindow(id: "quick")
             }
-            showingPanel.toggle()
+            
         }
         #endif
     }
-    
-#if os(macOS)
-    private func bringMainWindowToFront() {
-        if let window = mainWindow, !window.isKeyWindow {
-            window.makeKeyAndOrderFront(nil)
-            NSApp.activate(ignoringOtherApps: true)
-        }
-    }
-#endif
 }
-
-#if os(macOS)
-struct BackgroundView: NSViewRepresentable {
-    @Binding var window: NSWindow?
-    
-    func makeNSView(context: Context) -> NSView {
-        let nsView = NSView()
-        DispatchQueue.main.async {
-            self.window = nsView.window
-        }
-        return nsView
-    }
-    
-    func updateNSView(_ nsView: NSView, context: Context) {}
-}
-#endif
 
 #Preview {
     ContentView()

@@ -20,25 +20,25 @@ struct QuickPanelHelper: View {
     
     @State private var session: Session?
     @Binding var showAdditionalContent: Bool
-    @Binding var showingPanel: Bool
-    
-    @State var clicked: Bool = false
-    
-    let dismiss: () -> Void
     
     var body: some View {
         if let session = session {
-            QuickPanel(session: session, showAdditionalContent: $showAdditionalContent, showingPanel: $showingPanel, dismiss: dismiss)
+            QuickPanel(session: session, showAdditionalContent: $showAdditionalContent)
         } else {
-            Group {
-                if !clicked {
-                    Button("Add Quick Session. Restart app to use it.") {
-                        sessionVM.addQuickItem(providers: providers, modelContext: modelContext)
-                        clicked = true
-                    }
-                } else {
-                    Text("Restart manually")
-                }
+//            Group {
+//                if sessions.isEmpty {
+//                    Button("Add Quick Session. Restart app to use it.") {
+//                        sessionVM.addQuickItem(providers: providers, modelContext: modelContext)
+//                        clicked = true
+//                    }
+//                } else {
+//                    Text("Restart manually")
+//                }
+//            }
+            Button("Add Quick Session. This will quit the app. Pleaase Restart it manually") {
+                sessionVM.addQuickItem(providers: providers, modelContext: modelContext)
+                // quit the app
+                NSApplication.shared.terminate(self)
             }
             .padding()
             .onAppear {
