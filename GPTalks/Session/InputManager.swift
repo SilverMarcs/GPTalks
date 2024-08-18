@@ -18,16 +18,18 @@ enum InputState {
     
     var normalPrompt: String = ""
     var tempNormalPrompt: String? = ""
-    var normalImagePaths: [String] = []
-    var tempNormalImagePaths: [String] = []
+//    var normalImagePaths: [String] = []
+//    var tempNormalImagePaths: [String] = []
     
     var editingPrompt: String = ""
-    var editingIndex: Int?
-    var editingImagePaths: [String] = []
+//    var editingImagePaths: [String] = []
+    var editingDataFiles: [TypedData] = []
     
-    #if os(macOS)
-    private var localEventMonitor: Any?
-    #endif
+    var editingIndex: Int?
+    
+    // simpler inputs
+    var normalDataFiles: [TypedData] = []
+    var tempNormalDataFiles: [TypedData] = []
     
     init() { }
     
@@ -50,32 +52,53 @@ enum InputState {
         }
     }
     
-    var imagePaths: [String] {
+//    var imagePaths: [String] {
+//        get {
+//            switch state {
+//            case .normal:
+//                normalImagePaths
+//            case .editing:
+//                editingImagePaths
+//            }
+//        }
+//        set {
+//            switch state {
+//            case .normal:
+//                normalImagePaths = newValue
+//            case .editing:
+//                editingImagePaths = newValue
+//            }
+//        }
+//    }
+    
+    var dataFiles: [TypedData] {
         get {
             switch state {
             case .normal:
-                normalImagePaths
+                normalDataFiles
             case .editing:
-                editingImagePaths
+                editingDataFiles
             }
         }
         set {
             switch state {
             case .normal:
-                normalImagePaths = newValue
+                normalDataFiles = newValue
             case .editing:
-                editingImagePaths = newValue
+                editingDataFiles = newValue
             }
         }
     }
     
     func setupEditing(for group: ConversationGroup) {
         tempNormalPrompt = normalPrompt
-        tempNormalImagePaths = normalImagePaths
+//        tempNormalImagePaths = normalImagePaths
+        tempNormalDataFiles = normalDataFiles
         
         state = .editing
         prompt = group.activeConversation.content
-        imagePaths = group.activeConversation.imagePaths
+//        imagePaths = group.activeConversation.imagePaths
+        dataFiles = group.activeConversation.dataFiles
         editingIndex = group.session?.groups.firstIndex(of: group)
     }
     
@@ -87,7 +110,8 @@ enum InputState {
     
     func reset() {
         prompt = ""
-        imagePaths = []
+        dataFiles = []
+//        imagePaths = []
     }
 }
 
@@ -95,43 +119,115 @@ enum InputState {
 // MARK: Pasting
 extension InputManager {
     func handlePaste() {
-        #if os(macOS)
-        let pasteboard = NSPasteboard.general
-        if let image = NSImage(pasteboard: pasteboard) {
-            if let savedPath = image.save() {
-                imagePaths.append(savedPath)
-            }
-        }
-        #else
-        let pasteboard = UIPasteboard.general
-        if let image = pasteboard.image {
-            if let savedPath = image.save() {
-                imagePaths.append(savedPath)
-            }
-        }
-        #endif
+//        #if os(macOS)
+//        let pasteboard = NSPasteboard.general
+//        if let image = NSImage(pasteboard: pasteboard) {
+//            if let savedPath = image.save() {
+//                imagePaths.append(savedPath)
+//            }
+//        }
+//        #else
+//        let pasteboard = UIPasteboard.general
+//        if let image = pasteboard.image {
+//            if let savedPath = image.save() {
+//                imagePaths.append(savedPath)
+//            }
+//        }
+//        #endif
     }
+//
+//    func handleImageDrop(_ providers: [NSItemProvider]) {
+//        for provider in providers {
+//            if provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
+//                provider.loadObject(ofClass: PlatformImage.self) { [weak self] image, error in
+//                    guard let self = self, let image = image as? PlatformImage else {
+//                        print("Could not load image: \(String(describing: error))")
+//                        return
+//                    }
+//
+//                    DispatchQueue.main.async {
+//                        if let savedPath = image.save() {
+//                            if !self.imagePaths.contains(savedPath) {
+//                                self.imagePaths.append(savedPath)
+//                            }
+//                        } else {
+//                            print("Failed to save image to disk")
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
     
-    func handleImageDrop(_ providers: [NSItemProvider]) {
+//    func handlePaste() {
+//        #if os(macOS)
+//        let pasteboard = NSPasteboard.general
+//        if let data = pasteboard.data(forType: .tiff),
+//           let image = NSImage(data: data) {
+//            let typedData = TypedData(data: data, fileType: .image)
+//            dataFiles.append(typedData)
+//        } else if let data = pasteboard.string(forType: .string)?.data(using: .utf8) {
+//            let typedData = TypedData(data: data, fileType: .plainText)
+//            dataFiles.append(typedData)
+//        }
+//        #else
+//        let pasteboard = UIPasteboard.general
+//        if let image = pasteboard.image,
+//           let data = image.pngData() {
+//            let typedData = TypedData(data: data, fileType: .image)
+//            dataFiles.append(typedData)
+//        } else if let data = pasteboard.string?.data(using: .utf8) {
+//            let typedData = TypedData(data: data, fileType: .plainText)
+//            dataFiles.append(typedData)
+//        }
+//        #endif
+//    }
+    
+    func handleDrop(_ providers: [NSItemProvider]) -> Bool {
+        var didDrop = false
+        
+        let supportedTypes: [UTType] = [.image, .pdf, .audio, .text, .plainText]
+        
         for provider in providers {
-            if provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
-                provider.loadObject(ofClass: PlatformImage.self) { [weak self] image, error in
-                    guard let self = self, let image = image as? PlatformImage else {
-                        print("Could not load image: \(String(describing: error))")
-                        return
-                    }
-                    
-                    DispatchQueue.main.async {
-                        if let savedPath = image.save() {
-                            if !self.imagePaths.contains(savedPath) {
-                                self.imagePaths.append(savedPath)
+            for type in supportedTypes {
+                if provider.hasItemConformingToTypeIdentifier(type.identifier) {
+                    didDrop = true
+                    provider.loadFileRepresentation(forTypeIdentifier: type.identifier) { [weak self] url, error in
+                        guard let self = self, let url = url else {
+                            print("Could not load file: \(String(describing: error))")
+                            return
+                        }
+                        
+                        DispatchQueue.main.async {
+                            if let data = try? Data(contentsOf: url) {
+                                let fileName = url.lastPathComponent
+                                let fileSize = ((try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0).formatFileSize()
+                                let fileExtension = url.pathExtension.lowercased()
+                                
+                                let typedData = TypedData(
+                                    data: data,
+                                    fileType: type,
+                                    fileName: fileName,
+                                    fileSize: fileSize,
+                                    fileExtension: fileExtension
+                                )
+                                self.normalDataFiles.append(typedData)
                             }
-                        } else {
-                            print("Failed to save image to disk")
                         }
                     }
+                    break // Move to the next provider after finding a match
                 }
             }
         }
+        
+        return didDrop
     }
 }
+
+//struct TypedData {
+//    let data: Data
+//    let fileType: UTType
+//    let fileName: String
+//    let fileSize: Int64
+//    let fileExtension: String
+//}

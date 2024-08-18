@@ -35,7 +35,16 @@ final class ConversationGroup {
         if let conversation = conversations[safe: activeConversationIndex] {
             return conversation
         }
-        return Conversation(role: .user, content: "", group: self)
+        
+        // return any other random conversation
+        if let conversation = conversations.first {
+            return conversation
+        }
+        
+//        fatalError("No active conversation found")
+        print("Should not go beyond this ideally")
+        
+        return Conversation(role: .user, content: "", group: self, model: AIModel.getDemoModel())
     }
     
     init(role: ConversationRole) {

@@ -14,14 +14,14 @@ struct InputImageView: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ForEach(session.inputManager.imagePaths, id: \.self) { imagePath in
-                    ImageViewer(imagePath: imagePath, maxWidth: .infinity, maxHeight: maxHeight, isCrossable: true) {
-                        if let index = session.inputManager.imagePaths.firstIndex(of: imagePath) {
-                            session.inputManager.imagePaths.remove(at: index)
-                            FileHelper.deleteFile(at: imagePath)
-                        }
-                    }
-                }
+//                ForEach(session.inputManager.imagePaths, id: \.self) { imagePath in
+//                    ImageViewer(imagePath: imagePath, maxWidth: .infinity, maxHeight: maxHeight, isCrossable: true) {
+//                        if let index = session.inputManager.imagePaths.firstIndex(of: imagePath) {
+//                            session.inputManager.imagePaths.remove(at: index)
+//                            FileHelper.deleteFile(at: imagePath)
+//                        }
+//                    }
+//                }
             }
         }
     }

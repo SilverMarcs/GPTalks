@@ -18,8 +18,9 @@ struct UserMessage: View {
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 7) {
-            if !conversation.imagePaths.isEmpty {
-                imageList
+            if !conversation.dataFiles.isEmpty {
+//                imageList
+                DataFileView(dataFiles: conversation.dataFiles)
             }
             
             HighlightedText(text: conversation.content, highlightedText: conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil)
@@ -62,7 +63,7 @@ struct UserMessage: View {
             self.isHovered = isHovered
         }
         #endif
-                .frame(maxWidth: .infinity, alignment: .trailing)
+        .frame(maxWidth: .infinity, alignment: .trailing)
     }
     
     func toggleTextSelection() {
@@ -89,18 +90,18 @@ struct UserMessage: View {
         conversation.group?.session?.groups.firstIndex(where: { $0 == conversation.group }) ?? 0
     }
     
-    var imageList: some View {
-        ScrollView {
-            HStack {
-                ForEach(conversation.imagePaths, id: \.self) { imagePath in
-                    ImageViewer(imagePath: imagePath, maxWidth: maxImageSize, maxHeight: maxImageSize, radius: 9, isCrossable: false) {
-                            print("Should not be removed from here")
-                        // TODO: make optional func var
-                    }
-                }
-            }
-        }
-    }
+//    var imageList: some View {
+//        ScrollView {
+//            HStack {
+//                ForEach(conversation.imagePaths, id: \.self) { imagePath in
+//                    ImageViewer(imagePath: imagePath, maxWidth: maxImageSize, maxHeight: maxImageSize, radius: 9, isCrossable: false) {
+//                            print("Should not be removed from here")
+//                        // TODO: make optional func var
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     private var maxImageSize: CGFloat {
         300

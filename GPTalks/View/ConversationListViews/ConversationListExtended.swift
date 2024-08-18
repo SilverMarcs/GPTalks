@@ -50,10 +50,14 @@ extension View {
                 }
             }
         #endif
-            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
-                session.inputManager.handleImageDrop(providers)
-                return true
+//            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
+//                session.inputManager.handleImageDrop(providers)
+//                return true
+//            }
+            .onDrop(of: [UTType.image.identifier, UTType.pdf.identifier, UTType.audio.identifier, UTType.text.identifier, UTType.plainText.identifier], isTargeted: nil) { providers -> Bool in
+                session.inputManager.handleDrop(providers)
             }
+
     }
 }
 
@@ -70,7 +74,7 @@ struct PlatformSpecificModifiers: ViewModifier {
         content
             .toolbar { ConversationListToolbar(session: session) }
             #if os(macOS)
-            .navigationSubtitle("\(session.groups.count) messages • \(session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))")
+            .navigationSubtitle("\(session.tokenCount.formatToK()) tokens • \(session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))")
             .navigationTitle(session.title)
             #else
             .onTapGesture { showingInspector = false }

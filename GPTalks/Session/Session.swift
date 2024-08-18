@@ -108,7 +108,7 @@ final class Session {
         if let assistantGroup = assistantGroup {
             return assistantGroup.conversations.last!
         } else {
-            let assistant = Conversation(role: .assistant, content: "", model: config.model, imagePaths: [])
+            let assistant = Conversation(role: .assistant, content: "", model: config.model)
             addConversationGroup(conversation: assistant)
             return assistant
         }
@@ -119,8 +119,10 @@ final class Session {
         
         if let regenContent = regenContent {
             if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
-                let existingImagePaths = conversations[lastUserIndex].imagePaths
-                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, imagePaths: existingImagePaths)
+//                let existingImagePaths = conversations[lastUserIndex].imagePaths
+//                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, imagePaths: existingImagePaths)
+                let existingDataFiles = conversations[lastUserIndex].dataFiles
+                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, dataFiles: existingDataFiles)
             }
             if let lastAssistantIndex = conversations.lastIndex(where: { $0.role == .assistant }) {
                 conversations.remove(at: lastAssistantIndex)
@@ -143,10 +145,10 @@ final class Session {
                 guard !inputManager.prompt.isEmpty else { return }
                 
                 let content = inputManager.prompt
-                let imagePaths = inputManager.imagePaths
+                let dataFiles = inputManager.dataFiles
                 inputManager.reset()
                 
-                let user = Conversation(role: .user, content: content, imagePaths: imagePaths)
+                let user = Conversation(role: .user, content: content, dataFiles: dataFiles)
                 addConversationGroup(conversation: user)
                 
 //                #if DEBUG
@@ -172,7 +174,7 @@ final class Session {
            groups[editingIndex].activeConversation.role == .user {
             
             groups[editingIndex].activeConversation.content = inputManager.prompt
-            groups[editingIndex].activeConversation.imagePaths = inputManager.imagePaths
+            groups[editingIndex].activeConversation.dataFiles = inputManager.dataFiles
             
             groups.removeSubrange((editingIndex + 1)...)
             
@@ -195,7 +197,7 @@ final class Session {
         let userGroup = groups[index - 1]
         let userContent = userGroup.activeConversation.content
         
-        let newAssistantConversation = Conversation(role: .assistant, content: "", model: config.model, imagePaths: [])
+        let newAssistantConversation = Conversation(role: .assistant, content: "", model: config.model)
         group.addConversation(newAssistantConversation)
         
         groups.removeSubrange((index + 1)...)

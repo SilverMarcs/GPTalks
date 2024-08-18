@@ -28,24 +28,19 @@ struct ChatInputView: View {
             #endif
             
             VStack(alignment: .leading) {
-                if !session.inputManager.imagePaths.isEmpty {
-                    InputImageView(session: session)
+//                if !session.inputManager.imagePaths.isEmpty {
+//                    InputImageView(session: session)
+//                }
+                
+                if !session.inputManager.normalDataFiles.isEmpty {
+//                    InputDataView(session: session)
+                    DataFileView(dataFiles: session.inputManager.dataFiles)
                 }
                 
                 InputEditor(prompt: $session.inputManager.prompt,
                             isFocused: _isFocused)
             }
-            
-//            if session.isReplying {
-//                StopButton(size: imageSize, stop: session.stopStreaming)
-//                    .contentTransition(.symbolEffect(.replace))
-//                    .offset(y: -2.4)
-//            } else {
-//                SendButton(size: imageSize, send: sendInput)
-//                    .contentTransition(.symbolEffect(.replace))
-//                    .offset(y: -2.4)
-//            }
-            
+
             ActionButton(size: imageSize, isStop: session.isReplying) {
                 if session.isReplying {
                     session.stopStreaming()
@@ -94,11 +89,14 @@ struct ChatInputView: View {
             .accentColor(.primary)
 #endif
         }
-        .imageFileImporter(isPresented: $isPresented, onImageAppend: { image in
-            if let path = image.save() {
-                session.inputManager.imagePaths.append(path)
-            }
-        })
+//        .imageFileImporter(isPresented: $isPresented, onImageAppend: { image in
+//            if let path = image.save() {
+//                session.inputManager.imagePaths.append(path)
+//            }
+//        })
+        .multipleFileImporter(isPresented: $isPresented) { typedData in
+            session.inputManager.normalDataFiles.append(typedData)
+        }
     }
     
     func resetContext() {

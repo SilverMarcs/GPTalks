@@ -27,11 +27,11 @@ struct QuickPanel: View {
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
-                Button("Paste Image") {
-                    session.inputManager.handlePaste()
-                }
-                .hidden()
-                .keyboardShortcut("b")
+//                Button("Paste Image") {
+//                    session.inputManager.handlePaste()
+//                }
+//                .hidden()
+//                .keyboardShortcut("b")
                 
                 Button("Focus Field") {
                     isFocused = true
@@ -47,11 +47,11 @@ struct QuickPanel: View {
             if showAdditionalContent {
                 Divider()
                 
-                if !session.inputManager.imagePaths.isEmpty {
-                    InputImageView(session: session, maxHeight: 70)
-                        .padding(.horizontal)
-                        .padding(.top)
-                }
+//                if !session.inputManager.imagePaths.isEmpty {
+//                    InputImageView(session: session, maxHeight: 70)
+//                        .padding(.horizontal)
+//                        .padding(.top)
+//                }
                 
                 ConversationList(session: session, isQuick: true)
                     .navigationTitle("Quick Panel")
@@ -153,7 +153,7 @@ struct QuickPanel: View {
     private func resetChat() {
         showAdditionalContent = false
         session.deleteAllConversations()
-        session.inputManager.imagePaths.removeAll()
+        session.inputManager.dataFiles.removeAll()
         let oldConfig = session.config
         if let quickProvider = ProviderManager.shared.getQuickProvider(providers: providers) {
             session.config = .init(provider: quickProvider, purpose: .quick)

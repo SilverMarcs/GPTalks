@@ -49,6 +49,10 @@
 		082D70082C69DBA700DE56A2 /* ChatSessionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082D70072C69DBA700DE56A2 /* ChatSessionList.swift */; };
 		082D700A2C69DBD900DE56A2 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082D70092C69DBD900DE56A2 /* Folder.swift */; };
 		082D700C2C69DBFE00DE56A2 /* FolderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082D700B2C69DBFE00DE56A2 /* FolderLabel.swift */; };
+		0834E7772C7195CE007CB294 /* ConversationConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E7762C7195CE007CB294 /* ConversationConverter.swift */; };
+		0834E7792C719C00007CB294 /* DataFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E7782C719C00007CB294 /* DataFileView.swift */; };
+		0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E77A2C71A42F007CB294 /* TypedData.swift */; };
+		084139202C7169D50049E3B2 /* SessionListTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0841391F2C7169D50049E3B2 /* SessionListTips.swift */; };
 		0846B9FA2C6EFF0800AC3FD4 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 0846B9F92C6EFF0800AC3FD4 /* MarkdownWebView */; };
 		084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084C743F2C521A8A0015AE2F /* DismissButton.swift */; };
 		084C74432C5231980015AE2F /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 084C74422C5231980015AE2F /* OpenAI */; };
@@ -224,6 +228,10 @@
 		082D70072C69DBA700DE56A2 /* ChatSessionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionList.swift; sourceTree = "<group>"; };
 		082D70092C69DBD900DE56A2 /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		082D700B2C69DBFE00DE56A2 /* FolderLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderLabel.swift; sourceTree = "<group>"; };
+		0834E7762C7195CE007CB294 /* ConversationConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationConverter.swift; sourceTree = "<group>"; };
+		0834E7782C719C00007CB294 /* DataFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFileView.swift; sourceTree = "<group>"; };
+		0834E77A2C71A42F007CB294 /* TypedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedData.swift; sourceTree = "<group>"; };
+		0841391F2C7169D50049E3B2 /* SessionListTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListTips.swift; sourceTree = "<group>"; };
 		084C743F2C521A8A0015AE2F /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
 		08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerExtensions.swift; sourceTree = "<group>"; };
 		085361042C491BF0007DAB62 /* ImageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSession.swift; sourceTree = "<group>"; };
@@ -452,6 +460,14 @@
 			path = ChatSessionFolder;
 			sourceTree = "<group>";
 		};
+		0841391E2C7169B90049E3B2 /* Tips */ = {
+			isa = PBXGroup;
+			children = (
+				0841391F2C7169D50049E3B2 /* SessionListTips.swift */,
+			);
+			path = Tips;
+			sourceTree = "<group>";
+		};
 		085361032C491BE5007DAB62 /* ImageSession */ = {
 			isa = PBXGroup;
 			children = (
@@ -566,6 +582,7 @@
 		08A222812C2AB4FD00D76C8B /* GPTalks */ = {
 			isa = PBXGroup;
 			children = (
+				0841391E2C7169B90049E3B2 /* Tips */,
 				086923322C5DFE2800EE040B /* MarkdownViews */,
 				08C8004E2C36F648009581C5 /* LLM */,
 				08A222C22C2AC6A800D76C8B /* View */,
@@ -626,6 +643,8 @@
 		08A222BF2C2ABE4300D76C8B /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
+				0834E77A2C71A42F007CB294 /* TypedData.swift */,
+				0834E7762C7195CE007CB294 /* ConversationConverter.swift */,
 				08A222C02C2ABE5C00D76C8B /* Conversation.swift */,
 				089B22402C393BCB00E248FE /* ConversationGroup.swift */,
 				08149A562C3E5E5B004485AC /* ConversationRole.swift */,
@@ -690,6 +709,7 @@
 		08C800382C36BA1E009581C5 /* BottomViews */ = {
 			isa = PBXGroup;
 			children = (
+				0834E7782C719C00007CB294 /* DataFileView.swift */,
 				08A313462C4AD03300C3E578 /* ImageInputView.swift */,
 				087928362C48CFFB008646CD /* ExpandedTextField.swift */,
 				08C800392C36BA30009581C5 /* ChatInputView.swift */,
@@ -1010,6 +1030,7 @@
 				0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */,
 				085524EA2C4EDEC400CBB827 /* ModelList.swift in Sources */,
 				08A3134B2C4ADEA000C3E578 /* ImageListRow.swift in Sources */,
+				0834E7772C7195CE007CB294 /* ConversationConverter.swift in Sources */,
 				087928372C48CFFB008646CD /* ExpandedTextField.swift in Sources */,
 				085361112C4938C4007DAB62 /* ImageGenerationList.swift in Sources */,
 				08C800492C36C521009581C5 /* AssistantMessage.swift in Sources */,
@@ -1024,6 +1045,7 @@
 				08A77CC92C65A3AD0087D0F3 /* SectionFooterView.swift in Sources */,
 				08CF5B892C68980B0079D5EE /* HighlightedTextViews.swift in Sources */,
 				089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */,
+				084139202C7169D50049E3B2 /* SessionListTips.swift in Sources */,
 				080ED38D2C415B6200046424 /* PreferenceKeys.swift in Sources */,
 				082181622C38C76E00171BF3 /* InputEditor.swift in Sources */,
 				0853611A2C4A3087007DAB62 /* InspectorView.swift in Sources */,
@@ -1060,6 +1082,7 @@
 				087B40AB2C55E7D600EAFA0A /* WindowUtils.swift in Sources */,
 				081C1D982C3BD8A50078BB24 /* GeneralSettings.swift in Sources */,
 				086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */,
+				0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */,
 				089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */,
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,
 				08149A572C3E5E5B004485AC /* ConversationRole.swift in Sources */,
@@ -1068,6 +1091,7 @@
 				08A3134F2C4AF56200C3E578 /* AssistantImage.swift in Sources */,
 				08F52EF42C52C3AB00E4482C /* ProviderBackup.swift in Sources */,
 				086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */,
+				0834E7792C719C00007CB294 /* DataFileView.swift in Sources */,
 				08C800432C36C045009581C5 /* SessonVM.swift in Sources */,
 				081C1D9A2C3BE91C0078BB24 /* ColorExtensions.swift in Sources */,
 				082A63322C551108003996B7 /* ChatSessionBackupUtils.swift in Sources */,
