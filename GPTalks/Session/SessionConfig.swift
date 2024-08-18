@@ -76,7 +76,7 @@ enum SessionConfigPurpose: Codable {
     
     var title: String {
         switch self {
-            case .chat: return "(Forked) Chat Session"
+            case .chat: return "(Forked)"
             case .title: return "Title"
             case .quick: return "Quick Session"
         }

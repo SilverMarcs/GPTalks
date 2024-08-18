@@ -74,17 +74,24 @@ struct SessionList: View {
         withAnimation {
             for index in offsets.sorted().reversed() {
                 if !sessions[index].isStarred {
-                    // TODO: check if part of sessionVM.selections
-                    modelContext.delete(sessions[index])
-                    try? modelContext.save()
+                    // Check if the session is part of sessionVM.selections
+                    if sessionVM.selections.contains(where: { $0.id == sessions[index].id }) {
+                        sessionVM.selections.remove(sessions[index])
+                    }
+                    
+                    // Delay the deletion and saving
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        self.modelContext.delete(self.sessions[index])
+                        try? self.modelContext.save()
+                        
+                        // Update order of remaining sessions
+                        let remainingSessions = self.sessions.filter { !$0.isDeleted }
+                        for (newIndex, session) in remainingSessions.enumerated() {
+                            session.order = newIndex
+                        }
+                    }
                 }
             }
-            
-            let remainingSessions = sessions.filter { !$0.isDeleted }
-            for (newIndex, session) in remainingSessions.enumerated() {
-                session.order = newIndex
-            }
-            
         }
     }
     
