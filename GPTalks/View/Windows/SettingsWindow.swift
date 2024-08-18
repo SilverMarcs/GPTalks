@@ -11,7 +11,7 @@ struct SettingsWindow: Scene {
     var body: some Scene {
         Window("Settings", id: "settings") {
             SettingsView()
-                .frame(minWidth: 820, maxWidth: 820, minHeight: 570, maxHeight: 570)
+                .frame(minWidth: 850, maxWidth: 850, minHeight: 600, maxHeight: 600)
         }
         .restorationBehavior(.disabled)
         .windowResizability(.contentSize)
