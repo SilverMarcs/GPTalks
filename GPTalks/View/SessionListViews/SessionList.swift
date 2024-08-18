@@ -76,6 +76,7 @@ struct SessionList: View {
                 if !sessions[index].isStarred {
                     // TODO: check if part of sessionVM.selections
                     modelContext.delete(sessions[index])
+                    try? modelContext.save()
                 }
             }
             

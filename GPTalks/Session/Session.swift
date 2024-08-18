@@ -158,6 +158,8 @@ final class Session {
             }
         }
         
+        self.refreshTokens()
+        
         if AppConfig.shared.autogenTitle {
             Task { await generateTitle() }
         }

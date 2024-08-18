@@ -18,16 +18,12 @@ enum InputState {
     
     var normalPrompt: String = ""
     var tempNormalPrompt: String? = ""
-//    var normalImagePaths: [String] = []
-//    var tempNormalImagePaths: [String] = []
     
     var editingPrompt: String = ""
-//    var editingImagePaths: [String] = []
     var editingDataFiles: [TypedData] = []
     
     var editingIndex: Int?
     
-    // simpler inputs
     var normalDataFiles: [TypedData] = []
     var tempNormalDataFiles: [TypedData] = []
     
@@ -52,25 +48,6 @@ enum InputState {
         }
     }
     
-//    var imagePaths: [String] {
-//        get {
-//            switch state {
-//            case .normal:
-//                normalImagePaths
-//            case .editing:
-//                editingImagePaths
-//            }
-//        }
-//        set {
-//            switch state {
-//            case .normal:
-//                normalImagePaths = newValue
-//            case .editing:
-//                editingImagePaths = newValue
-//            }
-//        }
-//    }
-    
     var dataFiles: [TypedData] {
         get {
             switch state {
@@ -92,12 +69,11 @@ enum InputState {
     
     func setupEditing(for group: ConversationGroup) {
         tempNormalPrompt = normalPrompt
-//        tempNormalImagePaths = normalImagePaths
         tempNormalDataFiles = normalDataFiles
         
         state = .editing
         prompt = group.activeConversation.content
-//        imagePaths = group.activeConversation.imagePaths
+
         dataFiles = group.activeConversation.dataFiles
         editingIndex = group.session?.groups.firstIndex(of: group)
     }
@@ -111,94 +87,126 @@ enum InputState {
     func reset() {
         prompt = ""
         dataFiles = []
-//        imagePaths = []
     }
 }
 
 
-// MARK: Pasting
+// MARK: - Pasting
 extension InputManager {
-    func handlePaste() {
-//        #if os(macOS)
-//        let pasteboard = NSPasteboard.general
-//        if let image = NSImage(pasteboard: pasteboard) {
-//            if let savedPath = image.save() {
-//                imagePaths.append(savedPath)
-//            }
-//        }
-//        #else
-//        let pasteboard = UIPasteboard.general
-//        if let image = pasteboard.image {
-//            if let savedPath = image.save() {
-//                imagePaths.append(savedPath)
-//            }
-//        }
-//        #endif
+    func handlePaste(supportedFileTypes: [UTType]) {
+        let pasteboard = NSPasteboard.general
+
+        guard let pasteboardItems = pasteboard.pasteboardItems else {
+            return
+        }
+
+        for item in pasteboardItems {
+            if let fileURLData = item.data(forType: .fileURL),
+               let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
+                processFile(at: fileURL, supportedFileTypes: supportedFileTypes)
+            } else if let imageData = item.data(forType: .png) {
+                processImageData(imageData, supportedFileTypes: supportedFileTypes)
+            }
+        }
     }
-    
-//    func handleImageDrop(_ providers: [NSItemProvider]) {
-//        for provider in providers {
-//            if provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
-//                provider.loadObject(ofClass: PlatformImage.self) { [weak self] image, error in
-//                    guard let self = self, let image = image as? PlatformImage else {
-//                        print("Could not load image: \(String(describing: error))")
-//                        return
-//                    }
-//                    
-//                    DispatchQueue.main.async {
-//                        if let savedPath = image.save() {
-//                            if !self.imagePaths.contains(savedPath) {
-//                                self.imagePaths.append(savedPath)
-//                            }
-//                        } else {
-//                            print("Failed to save image to disk")
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
+
+    private func processFile(at url: URL, supportedFileTypes: [UTType]) {
+        guard let fileUTType = try? url.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier,
+              let fileType = UTType(fileUTType),
+              supportedFileTypes.contains(where: { fileType.conforms(to: $0) }) else {
+            return
+        }
+
+        do {
+            let data = try Data(contentsOf: url)
+            appendTypedData(data: data, url: url, fileType: fileType)
+        } catch {
+            print("Failed to read file data: \(error)")
+        }
+    }
+
+    private func processImageData(_ imageData: Data, supportedFileTypes: [UTType]) {
+        let tempDirectory = FileManager.default.temporaryDirectory
+        let tempFileURL = tempDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("png")
+
+        do {
+            try imageData.write(to: tempFileURL)
+            processFile(at: tempFileURL, supportedFileTypes: supportedFileTypes)
+        } catch {
+            print("Failed to write image data to temporary file: \(error)")
+        }
+    }
+
+    private func appendTypedData(data: Data, url: URL, fileType: UTType) {
+        let fileName = url.lastPathComponent
+        let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
+        let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
+        let fileExtension = url.pathExtension.lowercased()
+
+        let typedData = TypedData(
+            data: data,
+            fileType: fileType,
+            fileName: fileName,
+            fileSize: fileSize,
+            fileExtension: fileExtension
+        )
+
+        dataFiles.append(typedData)
+    }
+}
+
+// MARK: - Drag and Drop
+extension InputManager {
     func handleDrop(_ providers: [NSItemProvider], supportedTypes: [UTType]) -> Bool {
-//        let group = DispatchGroup()
-//        var didDrop = false
-//        
-//        for provider in providers {
-//            for type in supportedTypes {
-//                if provider.hasItemConformingToTypeIdentifier(type.identifier) {
-//                    group.enter()
-//                    provider.loadFileRepresentation(forTypeIdentifier: type.identifier) { [weak self] url, error in
-//                        defer { group.leave() }
-//                        guard let self = self, let url = url else {
-//                            print("Could not load file: \(String(describing: error))")
-//                            return
-//                        }
-//                        
-//                        if let data = try? Data(contentsOf: url) {
-//                            let fileName = url.lastPathComponent
-//                            let fileSize = ((try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0).formatFileSize()
-//                            let fileExtension = url.pathExtension.lowercased()
-//                            
-//                            let typedData = TypedData(
-//                                data: data,
-//                                fileType: type,
-//                                fileName: fileName,
-//                                fileSize: fileSize,
-//                                fileExtension: fileExtension
-//                            )
-//                            DispatchQueue.main.async {
-//                                self.normalDataFiles.append(typedData)
-//                                didDrop = true
-//                            }
-//                        }
-//                    }
-//                    break // Move to the next provider after finding a match
-//                }
-//            }
-//        }
-//        
-//        group.wait()
-//        return didDrop
-        return true
+        print("Handling drop with supported types: \(supportedTypes)")
+        
+        for provider in providers {
+            for type in supportedTypes {
+                if provider.hasItemConformingToTypeIdentifier(type.identifier) {
+                    provider.loadFileRepresentation(forTypeIdentifier: type.identifier) { url, error in
+                        guard let url = url else {
+                            if let error = error {
+                                print("Error loading file representation: \(error.localizedDescription)")
+                            }
+                            return
+                        }
+                        
+                        print("Processing dropped file: \(url.lastPathComponent)")
+                        
+                        DispatchQueue.main.async {
+                            if let data = try? Data(contentsOf: url) {
+                                let fileType = UTType(filenameExtension: url.pathExtension) ?? .data
+                                let fileName = url.lastPathComponent
+                                let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
+                                let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
+                                let fileExtension = url.pathExtension.lowercased()
+                                
+                                print("File type: \(fileType.description)")
+                                print("File name: \(fileName)")
+                                print("File size: \(fileSize)")
+                                print("File extension: \(fileExtension)")
+                                
+                                let typedData = TypedData(
+                                    data: data,
+                                    fileType: fileType,
+                                    fileName: fileName,
+                                    fileSize: fileSize,
+                                    fileExtension: fileExtension
+                                )
+                                
+                                self.dataFiles.append(typedData)
+                                print("Added file to dataFiles array. Current count: \(self.dataFiles.count)")
+                            } else {
+                                print("Failed to read data from file: \(url.lastPathComponent)")
+                            }
+                        }
+                    }
+                    return true
+                }
+            }
+        }
+        
+        print("No compatible files found in the drop")
+        return false
     }
 }

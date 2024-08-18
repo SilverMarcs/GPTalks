@@ -7,6 +7,7 @@
 
 import SwiftUI
 import VisualEffectView
+import UniformTypeIdentifiers
 
 struct ChatInputView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -50,7 +51,7 @@ struct ChatInputView: View {
         .toolbar {
             ToolbarItem(placement: .keyboard) {
                 Button("Paste Image") {
-                    session.inputManager.handlePaste()
+                    session.inputManager.handlePaste(supportedFileTypes: session.config.provider.type.supportedFileTypes)
                 }
                 .keyboardShortcut("b")
             }

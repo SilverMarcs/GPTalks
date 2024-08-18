@@ -71,7 +71,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .openai: return [.image]
         case .anthropic: return [.image]
-        case .google: return [.pdf, .text, .commaSeparatedText, .image, .audio]
+        case .google: return [.image, .pdf, .commaSeparatedText, .audio, .delimitedText]
         case .local: return []
         }
     }

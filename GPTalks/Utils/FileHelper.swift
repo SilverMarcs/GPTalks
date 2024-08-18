@@ -30,9 +30,10 @@ struct FileHelper {
     
     static func createTemporaryURL(for typedData: TypedData) -> URL? {
         let tempDirectoryURL = FileManager.default.temporaryDirectory
-        let fileName = UUID().uuidString
+        let fileName = typedData.fileName
         let fileExtension = typedData.fileType.preferredFilenameExtension ?? typedData.fileExtension
-        let fileURL = tempDirectoryURL.appendingPathComponent(fileName).appendingPathExtension(fileExtension)
+//        let fileURL = tempDirectoryURL.appendingPathComponent(fileName).appendingPathExtension(fileExtension)
+        let fileURL = tempDirectoryURL.appendingPathComponent(fileName)
 
         do {
             try typedData.data.write(to: fileURL)
