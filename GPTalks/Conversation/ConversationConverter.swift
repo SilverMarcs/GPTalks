@@ -11,40 +11,31 @@ import GoogleGenerativeAI
 import SwiftAnthropic
 
 extension Conversation {
-//    func toOpenAI() -> ChatQuery.ChatCompletionMessageParam {
-//        if self.imagePaths.isEmpty {
-//            return ChatQuery.ChatCompletionMessageParam(
-//                role: self.role.toOpenAIRole(),
-//                content: self.content
-//            )!
-//        } else {
-//            let visionContent: [ChatQuery.ChatCompletionMessageParam.ChatCompletionUserMessageParam.Content.VisionContent] = [
-//                .chatCompletionContentPartTextParam(.init(text: self.content))
-//            ] + self.imagePaths.map { imagePath in
-//                if let imageData = loadImageData(from: imagePath) {
-//                    return .chatCompletionContentPartImageParam(
-//                        .init(imageUrl: .init(
-//                            url: imageData,
-//                            detail: .auto
-//                        ))
-//                    )
-//                } else {
-//                    return .chatCompletionContentPartTextParam(.init(text: "Failed to load image. Notify the user."))
-//                }
-//            }
-//
-//            return ChatQuery.ChatCompletionMessageParam(
-//                role: self.role.toOpenAIRole(),
-//                content: visionContent
-//            )!
-//        }
-//    }
-    
     func toOpenAI() -> ChatQuery.ChatCompletionMessageParam {
-        return ChatQuery.ChatCompletionMessageParam(
-            role: self.role.toOpenAIRole(),
-            content: self.content
-        )!
+        if self.dataFiles.isEmpty {
+            return ChatQuery.ChatCompletionMessageParam(
+                role: self.role.toOpenAIRole(),
+                content: self.content
+            )!
+        } else {
+            var visionContent: [ChatQuery.ChatCompletionMessageParam.ChatCompletionUserMessageParam.Content.VisionContent] = []
+            
+            for dataFile in self.dataFiles {
+                if dataFile.fileType.conforms(to: .image) {
+                    visionContent.append(.init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: dataFile.data, detail: .auto))))
+                } else {
+                    // TODO: do RAG conversion here
+                    visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: "\(dataFile.fileExtension.uppercased()) files are not supported yet. Notify the user.")))
+                }
+            }
+            
+            visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: self.content)))
+
+            return ChatQuery.ChatCompletionMessageParam(
+                role: self.role.toOpenAIRole(),
+                content: visionContent
+            )!
+        }
     }
 
     func toGoogle() -> ModelContent {
@@ -73,7 +64,7 @@ extension Conversation {
                 )
                 contentObjects.append(.image(imageSource))
             } else {
-                // TODO: do RAG conversion here
+                // TODO: do RAG conversion here. shouldnt reach here atm
                 contentObjects.append(.text("\(dataFile.fileExtension.uppercased()) files are not supported yet. Notify the user."))
             }
         }
