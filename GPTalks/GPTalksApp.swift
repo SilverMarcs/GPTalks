@@ -12,21 +12,20 @@ import TipKit
 @main
 struct GPTalksApp: App {
     @State private var sessionVM = SessionVM()
-    @State private var isMainWindowActive = true
+    @FocusState var isMainWindowFocused
 
     var body: some Scene {
         Group {
             WindowGroup(id: "main") {
                 ContentView()
-                    #if os(macOS)
-                        .windowDetector(isMainWindowActive: $isMainWindowActive)
-                    #endif
+                    .focusable()
+                    .focused($isMainWindowFocused)
                     .task {
-                        try? Tips.configure([.datastoreLocation(.applicationDefault)])
+                        try? Tips.configure()
                     }
             }
             .commands {
-                MenuCommands(isMainWindowActive: $isMainWindowActive)
+                MenuCommands(isMainWindowFocused: _isMainWindowFocused)
             }
             
             #if os(macOS)
