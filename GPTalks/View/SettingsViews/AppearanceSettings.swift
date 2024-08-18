@@ -13,18 +13,24 @@ struct AppearanceSettings: View {
     
     var body: some View {
         Form {
-            Slider(value: $config.fontSize, in: 8...25, step: 1) {
-                HStack {
-                    Text("Font Size: \(Int(config.fontSize))")
-                    
-                    Button("Reset") {
-                        config.fontSize = 13
+            Section("Font Size") {
+                Slider(value: $config.fontSize, in: 8...25, step: 1) {
+                    HStack {
+                        Button("Reset") {
+#if os(macOS)
+                            config.fontSize = 13
+#else
+                            config.fontSize = 18
+#endif
+                        }
                     }
+                } minimumValueLabel: {
+                    Text("")
+                        .monospacedDigit()
+                } maximumValueLabel: {
+                    Text(String(config.fontSize))
+                        .monospacedDigit()
                 }
-            } minimumValueLabel: {
-                Text("8")
-            } maximumValueLabel: {
-                Text("25")
             }
             
             Section {

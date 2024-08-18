@@ -82,7 +82,6 @@ struct ContentView: View {
                 }
             }
         }
-
         #endif
     }
 }

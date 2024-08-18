@@ -31,7 +31,7 @@ struct FileHelper {
     static func createTemporaryURL(for typedData: TypedData) -> URL? {
         let tempDirectoryURL = FileManager.default.temporaryDirectory
         let fileName = typedData.fileName
-        let fileExtension = typedData.fileType.preferredFilenameExtension ?? typedData.fileExtension
+//        let fileExtension = typedData.fileType.preferredFilenameExtension ?? typedData.fileExtension
 //        let fileURL = tempDirectoryURL.appendingPathComponent(fileName).appendingPathExtension(fileExtension)
         let fileURL = tempDirectoryURL.appendingPathComponent(fileName)
 

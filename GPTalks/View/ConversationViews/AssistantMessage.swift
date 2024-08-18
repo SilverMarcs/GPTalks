@@ -48,7 +48,7 @@ struct AssistantMessage: View {
 #if !os(macOS)
         .contextMenu {
             if let group = conversation.group, !conversation.isReplying {
-                ConversationMenu(group: group, toggleTextSelection: toggleTextSelection)
+                ConversationMenu(group: group, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
             }
         } preview: {
             Text("Assistant Message")

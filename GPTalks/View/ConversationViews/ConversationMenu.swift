@@ -195,12 +195,12 @@ struct ConversationMenu: View {
             #else
             if group.conversations.count > 1 && group.role == .assistant {
                 Section("Iterations: \(group.activeConversationIndex + 1)/\(group.conversations.count)") {
-                    BouncyIconButton(icon: "chevron.left", label: "Previous") {
+                    HoverScaleButton(icon: "chevron.left", label: "Previous") {
                         group.setActiveToLeft()
                     }
                     .disabled(!shouldShowButtons || !canNavigateLeft)
                     
-                    BouncyIconButton(icon: "chevron.right", label: "Next") {
+                    HoverScaleButton(icon: "chevron.right", label: "Next") {
                         group.setActiveToRight()
                     }
                     .disabled(!shouldShowButtons || !canNavigateRight)

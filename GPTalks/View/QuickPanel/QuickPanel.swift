@@ -204,7 +204,6 @@ struct QuickPanel: View {
 
 #Preview {
     let showAdditionalContent = Binding.constant(true)
-    let dismiss = {}
     
     QuickPanel(session: Session(config: .init()), showAdditionalContent: showAdditionalContent)
 }

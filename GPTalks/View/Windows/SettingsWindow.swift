@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(macOS)
 struct SettingsWindow: Scene {
     var body: some Scene {
         Window("Settings", id: "settings") {
@@ -20,3 +21,4 @@ struct SettingsWindow: Scene {
         .windowResizability(.contentSize)
     }
 }
+#endif

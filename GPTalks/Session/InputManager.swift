@@ -94,6 +94,7 @@ enum InputState {
 // MARK: - Pasting
 extension InputManager {
     func handlePaste(supportedFileTypes: [UTType]) {
+        #if os(macOS)
         let pasteboard = NSPasteboard.general
 
         guard let pasteboardItems = pasteboard.pasteboardItems else {
@@ -108,6 +109,7 @@ extension InputManager {
                 processImageData(imageData, supportedFileTypes: supportedFileTypes)
             }
         }
+        #endif
     }
 
     private func processFile(at url: URL, supportedFileTypes: [UTType]) {
@@ -180,12 +182,6 @@ extension InputManager {
                                 let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
                                 let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
                                 let fileExtension = url.pathExtension.lowercased()
-                                
-                                print("File type: \(fileType.description)")
-                                print("File name: \(fileName)")
-                                print("File size: \(fileSize)")
-                                print("File extension: \(fileExtension)")
-                                
                                 let typedData = TypedData(
                                     data: data,
                                     fileType: fileType,

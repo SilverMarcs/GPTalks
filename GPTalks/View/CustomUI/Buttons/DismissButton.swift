@@ -9,10 +9,15 @@ import SwiftUI
 
 struct DismissButton: View {
     @Environment(\.dismiss) var dismiss
+    var action: (() -> Void)?
     
     var body: some View {
         Button {
-            dismiss()
+            if let action = action {
+                action()
+            } else {
+                dismiss()
+            }
         } label: {
             #if os(visionOS)
             Image(systemName: "xmark")
@@ -25,5 +30,5 @@ struct DismissButton: View {
 }
 
 #Preview {
-    DismissButton()
+    DismissButton() {}
 }

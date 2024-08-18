@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(macOS)
 struct QuickPanelWindow: Scene {
     @Environment(\.openWindow) var openWindow
     @Environment(\.dismissWindow) var dismissWindow
@@ -65,3 +66,4 @@ struct QuickPanelWindow: Scene {
     
     static var height: CGFloat = 29
 }
+#endif

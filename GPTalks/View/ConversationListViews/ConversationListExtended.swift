@@ -52,7 +52,6 @@ extension View {
         #endif
             .onDrop(of: session.config.provider.type.supportedFileTypes, isTargeted: nil) { providers in
                 session.inputManager.handleDrop(providers, supportedTypes: session.config.provider.type.supportedFileTypes)
-                return true
             }
     }
 }

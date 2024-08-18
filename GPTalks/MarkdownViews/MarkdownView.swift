@@ -26,8 +26,10 @@ struct MarkdownView: View {
                             fontSize: CGFloat(config.fontSize))
             case .native:
                 Text(LocalizedStringKey(conversation.content))
+                .font(.system(size: config.fontSize))
             case .disabled:
                 Text(conversation.content)
+                .font(.system(size: config.fontSize))
         }
     }
 }
