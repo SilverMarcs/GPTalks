@@ -99,15 +99,31 @@ extension SessionVM {
         try? modelContext.save()
     }
     
-    func addQuickItem(providers: [Provider], modelContext: ModelContext) {
-        if let defaultQuickProvider = ProviderManager.shared.getQuickProvider(providers: providers) {
-            let config = SessionConfig(provider: defaultQuickProvider, purpose: .quick)
-            let session = Session(config: config)
-            config.session = session
-            session.isQuick = true
+    @discardableResult
+    func createNewSession(modelContext: ModelContext) -> Session? {
+        let fetchProviders = FetchDescriptor<Provider>()
+        
+        let fetchedProviders = try! modelContext.fetch(fetchProviders)
+        
+        if let provider = ProviderManager.shared.getDefault(providers: fetchedProviders) {
+            let config = SessionConfig(provider: provider, purpose: .chat)
+            let newItem = Session(config: config)
+            config.session = newItem
             
-//            return session
-            modelContext.insert(session)
+            var fetchSessions = FetchDescriptor<Session>()
+            fetchSessions.sortBy = [SortDescriptor(\.order)]
+            let fetchedSessions = try! modelContext.fetch(fetchSessions)
+            
+            for session in fetchedSessions {
+                session.order += 1
+            }
+            
+            newItem.order = 0
+            modelContext.insert(newItem)
+            
+            return newItem
         }
+        
+        return nil
     }
 }

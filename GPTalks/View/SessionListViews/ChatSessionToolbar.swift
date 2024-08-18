@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import TipKit
 
 struct ChatSessionToolbar: ToolbarContent {
     #if !os(macOS)
@@ -46,6 +47,7 @@ struct ChatSessionToolbar: ToolbarContent {
             }
             .keyboardShortcut("n")
             .menuIndicator(.hidden)
+            .popoverTip(NewSessionTip())
         }
     }
 

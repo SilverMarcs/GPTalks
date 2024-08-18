@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import TipKit
 
 @main
 struct GPTalksApp: App {
@@ -17,9 +18,12 @@ struct GPTalksApp: App {
         Group {
             WindowGroup(id: "main") {
                 ContentView()
-                #if os(macOS)
-                    .windowDetector(isMainWindowActive: $isMainWindowActive)
-                #endif
+                    #if os(macOS)
+                        .windowDetector(isMainWindowActive: $isMainWindowActive)
+                    #endif
+                    .task {
+                        try? Tips.configure([.datastoreLocation(.applicationDefault)])
+                    }
             }
             .commands {
                 MenuCommands(isMainWindowActive: $isMainWindowActive)

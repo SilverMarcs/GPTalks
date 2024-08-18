@@ -228,9 +228,7 @@ final class Session {
                     scrollToBottom(proxy: proxy)
                 }
             } else {
-//                withAnimation {
-                    resetMarker = newResetMarker
-//                }
+                resetMarker = newResetMarker
             }
         }
     }
