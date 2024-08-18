@@ -62,33 +62,29 @@ extension Conversation {
     }
     
     func toClaude() -> MessageParameter.Message {
-        // Initialize an array to hold ContentObject instances
         var contentObjects: [MessageParameter.Message.Content.ContentObject] = []
         
-        // Add the text content
+        for dataFile in dataFiles {
+            if dataFile.fileType.conforms(to: .image) {
+                let imageSource = MessageParameter.Message.Content.ImageSource(
+                    type: .base64,
+                    mediaType: .init(rawValue: dataFile.mimeType) ?? .jpeg,
+                    data: dataFile.data.base64EncodedString()
+                )
+                contentObjects.append(.image(imageSource))
+            } else {
+                // TODO: do RAG conversion here
+                contentObjects.append(.text("\(dataFile.fileExtension.uppercased()) files are not supported yet. Notify the user."))
+            }
+        }
+        
         contentObjects.append(.text(self.content))
         
-        // Iterate over each image path, load the image, convert to base64, and append to contentObjects
-//        for imagePath in imagePaths {
-//            if let imageData = loadImageData(from: imagePath) {
-//                let base64String = imageData.base64EncodedString()
-//                let imageSource = MessageParameter.Message.Content.ImageSource(
-//                    type: .base64,
-//                    mediaType: .jpeg,
-//                    data: base64String
-//                )
-//                contentObjects.append(.image(imageSource))
-//            } else {
-//                print("Could not load image from path: \(imagePath)")
-//            }
-//        }
-        
-        // Create the visionContent with the collected contentObjects
-        let visionContent: MessageParameter.Message = .init(
+        let finalContent: MessageParameter.Message = .init(
             role: self.role.toClaudeRole(),
             content: .list(contentObjects)
         )
         
-        return visionContent
+        return finalContent
     }
 }

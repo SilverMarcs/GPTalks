@@ -6,8 +6,7 @@
 //
 
 import Foundation
-import OpenAI
-import GoogleGenerativeAI
+import UniformTypeIdentifiers
 
 enum ProviderType: String, Codable, CaseIterable, Identifiable {
     case openai
@@ -65,6 +64,15 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .anthropic: "#E6784B"
         case .google: "#E64335"
         case .local: "#EFEFEF"
+        }
+    }
+    
+    var supportedFileTypes: [UTType] {
+        switch self {
+        case .openai: return [.text, .image]
+        case .anthropic: return [.text, .image]
+        case .google: return [.pdf, .text, .plainText, .image, .audio]
+        case .local: return [.text]
         }
     }
     

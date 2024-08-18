@@ -94,7 +94,7 @@ struct ChatInputView: View {
 //                session.inputManager.imagePaths.append(path)
 //            }
 //        })
-        .multipleFileImporter(isPresented: $isPresented) { typedData in
+        .multipleFileImporter(isPresented: $isPresented, supportedFileTypes: session.config.provider.type.supportedFileTypes) { typedData in
             session.inputManager.normalDataFiles.append(typedData)
         }
     }

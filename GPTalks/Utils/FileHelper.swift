@@ -47,11 +47,12 @@ struct FileHelper {
 
 
 extension View {
+    // TODO: pass providertype here and only add supported ones.
     @ViewBuilder
-    func multipleFileImporter(isPresented: Binding<Bool>, onDataAppend: @escaping (TypedData) -> Void) -> some View {
+    func multipleFileImporter(isPresented: Binding<Bool>, supportedFileTypes: [UTType],onDataAppend: @escaping (TypedData) -> Void) -> some View {
         self.fileImporter(
             isPresented: isPresented,
-            allowedContentTypes: [.pdf, .text, .plainText, .image, .audio],
+            allowedContentTypes: supportedFileTypes,
             allowsMultipleSelection: true
         ) { result in
             switch result {
