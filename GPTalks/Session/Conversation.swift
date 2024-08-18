@@ -22,8 +22,8 @@ final class Conversation {
     var model: AIModel?
     
     var content: String
-//    var imagePaths: [String] = []
-    @Attribute(.externalStorage)
+
+    @Relationship(deleteRule: .cascade)
     var dataFiles: [TypedData] = []
     var role: ConversationRole
     
@@ -35,7 +35,6 @@ final class Conversation {
         self.content = content
         self.group = group
         self.model = model
-//        self.imagePaths = imagePaths
         self.dataFiles = dataFiles
         self.isReplying = isReplying
     }

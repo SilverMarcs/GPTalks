@@ -135,7 +135,7 @@ extension InputManager {
 //        }
 //        #endif
     }
-//
+    
 //    func handleImageDrop(_ providers: [NSItemProvider]) {
 //        for provider in providers {
 //            if provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
@@ -144,7 +144,7 @@ extension InputManager {
 //                        print("Could not load image: \(String(describing: error))")
 //                        return
 //                    }
-//
+//                    
 //                    DispatchQueue.main.async {
 //                        if let savedPath = image.save() {
 //                            if !self.imagePaths.contains(savedPath) {
@@ -159,75 +159,46 @@ extension InputManager {
 //        }
 //    }
     
-//    func handlePaste() {
-//        #if os(macOS)
-//        let pasteboard = NSPasteboard.general
-//        if let data = pasteboard.data(forType: .tiff),
-//           let image = NSImage(data: data) {
-//            let typedData = TypedData(data: data, fileType: .image)
-//            dataFiles.append(typedData)
-//        } else if let data = pasteboard.string(forType: .string)?.data(using: .utf8) {
-//            let typedData = TypedData(data: data, fileType: .plainText)
-//            dataFiles.append(typedData)
+    func handleDrop(_ providers: [NSItemProvider], supportedTypes: [UTType]) -> Bool {
+//        let group = DispatchGroup()
+//        var didDrop = false
+//        
+//        for provider in providers {
+//            for type in supportedTypes {
+//                if provider.hasItemConformingToTypeIdentifier(type.identifier) {
+//                    group.enter()
+//                    provider.loadFileRepresentation(forTypeIdentifier: type.identifier) { [weak self] url, error in
+//                        defer { group.leave() }
+//                        guard let self = self, let url = url else {
+//                            print("Could not load file: \(String(describing: error))")
+//                            return
+//                        }
+//                        
+//                        if let data = try? Data(contentsOf: url) {
+//                            let fileName = url.lastPathComponent
+//                            let fileSize = ((try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0).formatFileSize()
+//                            let fileExtension = url.pathExtension.lowercased()
+//                            
+//                            let typedData = TypedData(
+//                                data: data,
+//                                fileType: type,
+//                                fileName: fileName,
+//                                fileSize: fileSize,
+//                                fileExtension: fileExtension
+//                            )
+//                            DispatchQueue.main.async {
+//                                self.normalDataFiles.append(typedData)
+//                                didDrop = true
+//                            }
+//                        }
+//                    }
+//                    break // Move to the next provider after finding a match
+//                }
+//            }
 //        }
-//        #else
-//        let pasteboard = UIPasteboard.general
-//        if let image = pasteboard.image,
-//           let data = image.pngData() {
-//            let typedData = TypedData(data: data, fileType: .image)
-//            dataFiles.append(typedData)
-//        } else if let data = pasteboard.string?.data(using: .utf8) {
-//            let typedData = TypedData(data: data, fileType: .plainText)
-//            dataFiles.append(typedData)
-//        }
-//        #endif
-//    }
-    
-    func handleDrop(_ providers: [NSItemProvider]) -> Bool {
-        var didDrop = false
-        
-        let supportedTypes: [UTType] = [.image, .pdf, .audio, .text, .plainText]
-        
-        for provider in providers {
-            for type in supportedTypes {
-                if provider.hasItemConformingToTypeIdentifier(type.identifier) {
-                    didDrop = true
-                    provider.loadFileRepresentation(forTypeIdentifier: type.identifier) { [weak self] url, error in
-                        guard let self = self, let url = url else {
-                            print("Could not load file: \(String(describing: error))")
-                            return
-                        }
-                        
-                        DispatchQueue.main.async {
-                            if let data = try? Data(contentsOf: url) {
-                                let fileName = url.lastPathComponent
-                                let fileSize = ((try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0).formatFileSize()
-                                let fileExtension = url.pathExtension.lowercased()
-                                
-                                let typedData = TypedData(
-                                    data: data,
-                                    fileType: type,
-                                    fileName: fileName,
-                                    fileSize: fileSize,
-                                    fileExtension: fileExtension
-                                )
-                                self.normalDataFiles.append(typedData)
-                            }
-                        }
-                    }
-                    break // Move to the next provider after finding a match
-                }
-            }
-        }
-        
-        return didDrop
+//        
+//        group.wait()
+//        return didDrop
+        return true
     }
 }
-
-//struct TypedData {
-//    let data: Data
-//    let fileType: UTType
-//    let fileName: String
-//    let fileSize: Int64
-//    let fileExtension: String
-//}

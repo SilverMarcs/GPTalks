@@ -50,14 +50,13 @@ extension View {
                 }
             }
         #endif
-//            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
-//                session.inputManager.handleImageDrop(providers)
-//                return true
+//            .onDrop(of: session.config.provider.type.supportedFileTypes, isTargeted: nil) { providers -> Bool in
+//                session.inputManager.handleDrop(providers, supportedTypes: session.config.provider.type.supportedFileTypes)
 //            }
-            .onDrop(of: [UTType.image.identifier, UTType.pdf.identifier, UTType.audio.identifier, UTType.text.identifier, UTType.plainText.identifier], isTargeted: nil) { providers -> Bool in
-                session.inputManager.handleDrop(providers)
+            .onDrop(of: session.config.provider.type.supportedFileTypes, isTargeted: nil) { providers in
+                session.inputManager.handleDrop(providers, supportedTypes: session.config.provider.type.supportedFileTypes)
+//                return true
             }
-
     }
 }
 

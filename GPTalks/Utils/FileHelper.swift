@@ -31,9 +31,9 @@ struct FileHelper {
     static func createTemporaryURL(for typedData: TypedData) -> URL? {
         let tempDirectoryURL = FileManager.default.temporaryDirectory
         let fileName = UUID().uuidString
-        let fileExtension = typedData.fileType.preferredFilenameExtension ?? "dat"
+        let fileExtension = typedData.fileType.preferredFilenameExtension ?? typedData.fileExtension
         let fileURL = tempDirectoryURL.appendingPathComponent(fileName).appendingPathExtension(fileExtension)
-        
+
         do {
             try typedData.data.write(to: fileURL)
             return fileURL
@@ -42,14 +42,13 @@ struct FileHelper {
             return nil
         }
     }
-
 }
 
 
 extension View {
     // TODO: pass providertype here and only add supported ones.
     @ViewBuilder
-    func multipleFileImporter(isPresented: Binding<Bool>, supportedFileTypes: [UTType],onDataAppend: @escaping (TypedData) -> Void) -> some View {
+    func multipleFileImporter(isPresented: Binding<Bool>, supportedFileTypes: [UTType], onDataAppend: @escaping (TypedData) -> Void) -> some View {
         self.fileImporter(
             isPresented: isPresented,
             allowedContentTypes: supportedFileTypes,

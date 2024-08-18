@@ -11,7 +11,7 @@ struct UserMessage: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var config = AppConfig.shared
     
-    var conversation: Conversation
+    @Bindable var conversation: Conversation
     @State var isHovered: Bool = false
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
@@ -19,8 +19,7 @@ struct UserMessage: View {
     var body: some View {
         VStack(alignment: .trailing, spacing: 7) {
             if !conversation.dataFiles.isEmpty {
-//                imageList
-                DataFileView(dataFiles: conversation.dataFiles)
+                DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false)
             }
             
             HighlightedText(text: conversation.content, highlightedText: conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil)
@@ -89,19 +88,6 @@ struct UserMessage: View {
     var indexOfConversationGroup: Int {
         conversation.group?.session?.groups.firstIndex(where: { $0 == conversation.group }) ?? 0
     }
-    
-//    var imageList: some View {
-//        ScrollView {
-//            HStack {
-//                ForEach(conversation.imagePaths, id: \.self) { imagePath in
-//                    ImageViewer(imagePath: imagePath, maxWidth: maxImageSize, maxHeight: maxImageSize, radius: 9, isCrossable: false) {
-//                            print("Should not be removed from here")
-//                        // TODO: make optional func var
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     private var maxImageSize: CGFloat {
         300

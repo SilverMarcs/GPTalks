@@ -28,13 +28,8 @@ struct ChatInputView: View {
             #endif
             
             VStack(alignment: .leading) {
-//                if !session.inputManager.imagePaths.isEmpty {
-//                    InputImageView(session: session)
-//                }
-                
-                if !session.inputManager.normalDataFiles.isEmpty {
-//                    InputDataView(session: session)
-                    DataFileView(dataFiles: session.inputManager.dataFiles)
+                if !session.inputManager.dataFiles.isEmpty {
+                    DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
                 }
                 
                 InputEditor(prompt: $session.inputManager.prompt,
@@ -64,10 +59,6 @@ struct ChatInputView: View {
     }
 
     var plusButton: some View {
-//#if os(macOS)
-//        PlusButton(size: imageSize) {
-//            isPresented = true
-//        }
         Group {
 #if os(macOS)
             PlusButton(size: imageSize) {
@@ -89,13 +80,8 @@ struct ChatInputView: View {
             .accentColor(.primary)
 #endif
         }
-//        .imageFileImporter(isPresented: $isPresented, onImageAppend: { image in
-//            if let path = image.save() {
-//                session.inputManager.imagePaths.append(path)
-//            }
-//        })
         .multipleFileImporter(isPresented: $isPresented, supportedFileTypes: session.config.provider.type.supportedFileTypes) { typedData in
-            session.inputManager.normalDataFiles.append(typedData)
+            session.inputManager.dataFiles.append(typedData)
         }
     }
     

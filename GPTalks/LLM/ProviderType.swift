@@ -69,10 +69,10 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     
     var supportedFileTypes: [UTType] {
         switch self {
-        case .openai: return [.text, .image]
-        case .anthropic: return [.text, .image]
-        case .google: return [.pdf, .text, .plainText, .image, .audio]
-        case .local: return [.text]
+        case .openai: return [.image]
+        case .anthropic: return [.image]
+        case .google: return [.pdf, .text, .commaSeparatedText, .image, .audio]
+        case .local: return []
         }
     }
     
