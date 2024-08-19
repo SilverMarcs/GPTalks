@@ -36,6 +36,7 @@ struct ChatInputView: View {
                 
                 InputEditor(prompt: $session.inputManager.prompt,
                             isFocused: _isFocused)
+                .popoverTip(FocusTip())
             }
 
             ActionButton(size: imageSize, isStop: session.isReplying) {

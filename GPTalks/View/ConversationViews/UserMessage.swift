@@ -15,34 +15,44 @@ struct UserMessage: View {
     @State var isHovered: Bool = false
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
+    @State var isRendered = false
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 7) {
-            if !conversation.dataFiles.isEmpty {
-                DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false)
+            if !isRendered {
+                ProgressView()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            isRendered = true
+                        }
+                    }
+            } else {
+                if !conversation.dataFiles.isEmpty {
+                    DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false)
+                }
+                
+                HighlightedText(text: conversation.content, highlightedText: conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil)
+                    .font(.system(size: config.fontSize))
+                    .lineLimit(!isExpanded ? lineLimit : nil)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 11)
+                    .background(
+                        RoundedRectangle(cornerRadius: 15)
+                        #if os(macOS)
+                            .fill(.background.quinary)
+                        #else
+                            .fill(.background.secondary)
+                        #endif
+                            .fill(conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
+                    )
+                
+        #if os(macOS)
+                if let group = conversation.group {
+                    ConversationMenu(group: group, isExpanded: $isExpanded)
+                        .symbolEffect(.appear, isActive: !isHovered)
+                }
+        #endif
             }
-            
-            HighlightedText(text: conversation.content, highlightedText: conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil)
-                .font(.system(size: config.fontSize))
-                .lineLimit(!isExpanded ? lineLimit : nil)
-                .padding(.vertical, 8)
-                .padding(.horizontal, 11)
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                    #if os(macOS)
-                        .fill(.background.quinary)
-                    #else
-                        .fill(.background.secondary)
-                    #endif
-                        .fill(conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
-                )
-            
-            #if os(macOS)
-            if let group = conversation.group {
-                ConversationMenu(group: group, isExpanded: $isExpanded)
-                    .symbolEffect(.appear, isActive: !isHovered)
-            }
-            #endif
         }
         .padding(.leading, leadingPadding)
         #if !os(macOS)

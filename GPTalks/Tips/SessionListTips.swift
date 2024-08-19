@@ -31,3 +31,15 @@ struct NewSessionTip: Tip {
 //        ]
 //    }
 }
+
+struct FavouriteTip: Tip {
+    var title: Text {
+        Text("Swipe left or right on list row to favourite or delete a session")
+    }
+}
+
+struct DragSessionTip: Tip {
+    var title: Text {
+        Text("Drag and drop sessions to reorder them")
+    }
+}

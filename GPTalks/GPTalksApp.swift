@@ -21,7 +21,7 @@ struct GPTalksApp: App {
                     .focusable()
                     .focused($isMainWindowFocused)
                     .task {
-                        try? Tips.configure()
+                        try? Tips.configure([.datastoreLocation(.applicationDefault)])
                     }
             }
             .commands {

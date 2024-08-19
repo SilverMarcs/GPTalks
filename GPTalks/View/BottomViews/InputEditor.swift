@@ -21,7 +21,7 @@ struct InputEditor: View {
         .font(.body)
         .task {
             if !isIPadOS() && !AppConfig.shared.sidebarFocus {
-                DispatchQueue.main.async { isFocused = true }
+                isFocused = true 
             }
         }
     }

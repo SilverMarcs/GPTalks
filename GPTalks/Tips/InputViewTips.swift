@@ -13,4 +13,10 @@ struct PasteTip: Tip {
         Text("Press Command + B to paste files from your clipboard to the chat")
     }
 }
+
+struct FocusTip: Tip {
+    var title: Text {
+        Text("Press Command + L to focus cursor on the textfield")
+    }
+}
     

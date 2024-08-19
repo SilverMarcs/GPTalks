@@ -39,6 +39,8 @@ struct SessionList: View {
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
                 SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "?")
+                    .popoverTip(FavouriteTip())
+                    .popoverTip(DragSessionTip())
                 
                 if !sessionVM.searchText.isEmpty && sessions.isEmpty {
                     ContentUnavailableView.search(text: sessionVM.searchText)

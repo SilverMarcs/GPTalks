@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct GeneralSettings: View {
     @ObservedObject var config = AppConfig.shared
@@ -26,6 +27,15 @@ struct GeneralSettings: View {
                 Text("Search")
             } footer: {
                 SectionFooterView(text: "Expensive method searches all messages but may cause UI responsiveness issues")
+            }
+            
+            Section {
+                Button {
+                    try? Tips.resetDatastore()
+                } label: {
+                    Label("Reset Tips", systemImage: "exclamationmark.triangle")
+                }
+                .foregroundStyle(.cyan)
             }
         }
         .formStyle(.grouped)

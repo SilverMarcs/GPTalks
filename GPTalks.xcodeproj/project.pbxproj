@@ -131,6 +131,7 @@
 		08AAFB9E2C3D02C0002C04E0 /* SessionListSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9D2C3D02C0002C04E0 /* SessionListSidebar.swift */; };
 		08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFBA02C3D1086002C04E0 /* GPTEncoder */; };
 		08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */; };
+		08BDFE2E2C734DAE0054B36A /* ConversationListTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BDFE2D2C734DAE0054B36A /* ConversationListTips.swift */; };
 		08C1ACDB2C54A8F600B86D37 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08C1ACDA2C54A8F600B86D37 /* OpenAI */; };
 		08C1ACDE2C54B89B00B86D37 /* SessionConfigDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACDD2C54B89B00B86D37 /* SessionConfigDefaults.swift */; };
 		08C1ACE02C54BC8A00B86D37 /* TemperatureSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACDF2C54BC8A00B86D37 /* TemperatureSlider.swift */; };
@@ -162,7 +163,7 @@
 		08D174CA2C3E3C78000257EF /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C92C3E3C78000257EF /* ImageViewer.swift */; };
 		08D8F4472C51C1C20051C916 /* ModelCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8F4462C51C1C20051C916 /* ModelCollection.swift */; };
 		08D8F44B2C51C4E50051C916 /* ModelAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8F44A2C51C4E50051C916 /* ModelAdder.swift */; };
-		08DA5B0D2C72CE7700A7FE82 /* PasteTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DA5B0C2C72CE7100A7FE82 /* PasteTip.swift */; };
+		08DA5B0D2C72CE7700A7FE82 /* InputViewTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DA5B0C2C72CE7100A7FE82 /* InputViewTips.swift */; };
 		08E0FDA12C6A720700FAB766 /* ChatSessionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E0FDA02C6A720700FAB766 /* ChatSessionToolbar.swift */; };
 		08E0FDA32C6A742D00FAB766 /* ImageSessionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E0FDA22C6A742D00FAB766 /* ImageSessionToolbar.swift */; };
 		08E195692C6FB36900BA9506 /* MarkdownSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E195682C6FB36900BA9506 /* MarkdownSettings.swift */; };
@@ -304,6 +305,7 @@
 		08AAFB9B2C3D01A6002C04E0 /* SessionListCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListCards.swift; sourceTree = "<group>"; };
 		08AAFB9D2C3D02C0002C04E0 /* SessionListSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListSidebar.swift; sourceTree = "<group>"; };
 		08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTEncoder.swift; sourceTree = "<group>"; };
+		08BDFE2D2C734DAE0054B36A /* ConversationListTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListTips.swift; sourceTree = "<group>"; };
 		08C1ACDD2C54B89B00B86D37 /* SessionConfigDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionConfigDefaults.swift; sourceTree = "<group>"; };
 		08C1ACDF2C54BC8A00B86D37 /* TemperatureSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureSlider.swift; sourceTree = "<group>"; };
 		08C1ACE12C54BC9C00B86D37 /* PresencePenaltySlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresencePenaltySlider.swift; sourceTree = "<group>"; };
@@ -331,7 +333,7 @@
 		08D174C92C3E3C78000257EF /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		08D8F4462C51C1C20051C916 /* ModelCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelCollection.swift; sourceTree = "<group>"; };
 		08D8F44A2C51C4E50051C916 /* ModelAdder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelAdder.swift; sourceTree = "<group>"; };
-		08DA5B0C2C72CE7100A7FE82 /* PasteTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteTip.swift; sourceTree = "<group>"; };
+		08DA5B0C2C72CE7100A7FE82 /* InputViewTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputViewTips.swift; sourceTree = "<group>"; };
 		08E0FDA02C6A720700FAB766 /* ChatSessionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionToolbar.swift; sourceTree = "<group>"; };
 		08E0FDA22C6A742D00FAB766 /* ImageSessionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSessionToolbar.swift; sourceTree = "<group>"; };
 		08E195682C6FB36900BA9506 /* MarkdownSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownSettings.swift; sourceTree = "<group>"; };
@@ -465,8 +467,9 @@
 		0841391E2C7169B90049E3B2 /* Tips */ = {
 			isa = PBXGroup;
 			children = (
-				08DA5B0C2C72CE7100A7FE82 /* PasteTip.swift */,
+				08DA5B0C2C72CE7100A7FE82 /* InputViewTips.swift */,
 				0841391F2C7169D50049E3B2 /* SessionListTips.swift */,
+				08BDFE2D2C734DAE0054B36A /* ConversationListTips.swift */,
 			);
 			path = Tips;
 			sourceTree = "<group>";
@@ -964,6 +967,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				082181602C3880F700171BF3 /* CustomViewModifiers.swift in Sources */,
+				08BDFE2E2C734DAE0054B36A /* ConversationListTips.swift in Sources */,
 				08AAFB932C3C88D9002C04E0 /* StopButton.swift in Sources */,
 				08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */,
 				08D174CA2C3E3C78000257EF /* ImageViewer.swift in Sources */,
@@ -992,7 +996,7 @@
 				084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */,
 				08C800372C36B8CC009581C5 /* SessionListItem.swift in Sources */,
 				08E195692C6FB36900BA9506 /* MarkdownSettings.swift in Sources */,
-				08DA5B0D2C72CE7700A7FE82 /* PasteTip.swift in Sources */,
+				08DA5B0D2C72CE7700A7FE82 /* InputViewTips.swift in Sources */,
 				082181582C3823A400171BF3 /* ModelRow.swift in Sources */,
 				085910C82C4F7A5A0086E493 /* ChatSessionVM.swift in Sources */,
 				082181522C38046800171BF3 /* ProviderManager.swift in Sources */,

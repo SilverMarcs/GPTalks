@@ -126,6 +126,7 @@ struct ChatInspector: View {
         }
         .buttonStyle(.plain)
         .foregroundStyle(.mint.gradient)
+        .popoverTip(GenerateTitleTip())
     }
     
     private var resetContext: some View {
