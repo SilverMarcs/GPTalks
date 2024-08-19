@@ -20,7 +20,13 @@ struct ChatInspector: View {
         NavigationStack {
             #if os(macOS) || os(visionOS)
             HStack {
-                Text("Config")
+//                Text("Config")
+                Button("Refresh Tokens") {
+                    session.refreshTokens()
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(.link)
+                
                 Spacer()
                 DismissButton() {
                     dismiss()

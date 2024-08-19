@@ -24,6 +24,7 @@ struct ChatInputView: View {
             }
             
             plusButton
+                .popoverTip(PasteTip())
             #if os(macOS)
                 .offset(y: -2.4)
             #endif
