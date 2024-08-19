@@ -10,8 +10,6 @@ import SwiftUI
 struct ConversationListToolbar: ToolbarContent {
     @Bindable var session: Session
     
-    @State private var isExportingJSON = false
-    @State private var isExportingMarkdown = false
     @State var showConfig: Bool = false
     @State var showingInspector: Bool = false
     
@@ -21,40 +19,33 @@ struct ConversationListToolbar: ToolbarContent {
             return []
         }
         return session.groups.filter { group in
-            group.role == .user &&
             group.activeConversation.content.localizedCaseInsensitiveContains(session.searchText)
         }
     }
     
     var body: some ToolbarContent {
+        ToolbarItem {
+            Color.clear
+                .sheet(isPresented: $showingInspector) {
+                    NavigationStack {
+                        ChatInspector(session: session)
+                        #if os(visionOS)
+                            .toolbar {
+                                DismissButton()
+                                    .buttonStyle(.plain)
+                            }
+                        #endif
+                    }
+                }
+        }
+        
         #if os(macOS)
         ToolbarItem(placement: .navigation) {
-            Menu {
-                Button {
-                    isExportingJSON = true
-                } label: {
-                    Label("Export JSON", systemImage: "ellipsis.curlybraces")
-                }
-                
-                Button {
-                    isExportingMarkdown = true
-                } label: {
-                    Label("Export Markdown", systemImage: "richtext.page")
-                }
+            Button {
+                toggleInspector()
             } label: {
                 Label("Actions", systemImage: "slider.vertical.3")
             }
-            .menuIndicator(.hidden)
-        }
-        
-        ToolbarItem {
-            Color.clear
-            .sessionExporter(isExporting: $isExportingJSON, sessions: [session])
-        }
-        
-        ToolbarItem {
-            Color.clear
-            .markdownSessionExporter(isExporting: $isExportingMarkdown, session: session)
         }
         
         if !session.searchText.isEmpty && !filteredGroups.isEmpty {
@@ -62,39 +53,19 @@ struct ConversationListToolbar: ToolbarContent {
                 navigateButtons
             }
         }
-        
-        ToolbarItem {
-            CustomSearchField("Search", text: $session.searchText, height: 28, showFocusRing: true)
-            .frame(width: 220)
-        }
-        #endif
-        
+        #else
         showInspector
+        #endif
     }
     
     private var showInspector: some ToolbarContent {
         ToolbarItem {
             Button {
-                #if !os(macOS)
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                #endif
-                showingInspector.toggle()
-                
+                toggleInspector()
             } label: {
                 Label("Show Inspector", systemImage: "info.circle")
             }
             .keyboardShortcut("i", modifiers: [.command, .shift])
-            .sheet(isPresented: $showingInspector) {
-                NavigationStack {
-                    ChatInspector(session: session)
-                    #if os(visionOS)
-                        .toolbar {
-                            DismissButton()
-                                .buttonStyle(.plain)
-                        }
-                    #endif
-                }
-            }
         }
     }
     
@@ -133,6 +104,13 @@ struct ConversationListToolbar: ToolbarContent {
                 session.proxy?.scrollTo(group, anchor: .top)
             }
         }
+    }
+    
+    private func toggleInspector() {
+        #if !os(macOS)
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        #endif
+        showingInspector.toggle()
     }
 }
 

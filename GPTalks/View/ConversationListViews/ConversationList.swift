@@ -48,6 +48,9 @@ struct ConversationList: View {
                     ChatInputView(session: session)
                 }
             }
+            #if os(macOS)
+            .searchable(text: $session.searchText)
+            #endif
         }
     }
     

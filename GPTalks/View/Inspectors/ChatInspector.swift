@@ -12,20 +12,21 @@ struct ChatInspector: View {
     @Bindable var session: Session
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
     var providers: [Provider]
+    
     @State var expandAdvanced: Bool = false
     @State var isGeneratingTtile: Bool = false
+    
+    @State private var isExportingJSON = false
+    @State private var isExportingMarkdown = false
     
     @Environment(\.dismiss) var dismiss
     var body: some View {
         NavigationStack {
-            #if os(macOS) || os(visionOS)
+            #if os(macOS)
             HStack {
-//                Text("Config")
-                Button("Refresh Tokens") {
-                    session.refreshTokens()
-                }
-                .buttonStyle(.plain)
-                .foregroundStyle(.link)
+                #if os(macOS)
+                export
+                #endif
                 
                 Spacer()
                 DismissButton() {
@@ -46,6 +47,7 @@ struct ChatInspector: View {
                     }
                     
                 }
+                .sessionExporter(isExporting: $isExportingJSON, sessions: [session])
                 
                 Section("Models") {
                     ProviderPicker(
@@ -57,6 +59,7 @@ struct ChatInspector: View {
                     )
                     ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
                 }
+                .markdownSessionExporter(isExporting: $isExportingMarkdown, session: session)
                 
                 Section("Basic") {
                     Toggle("Stream", isOn: $session.config.stream)
@@ -78,6 +81,7 @@ struct ChatInspector: View {
                 
                 Section("") {
                     resetContext
+                    
                     deleteAllMessages
                 }
                 .buttonStyle(.plain)
@@ -147,6 +151,28 @@ struct ChatInspector: View {
                 .frame(maxWidth: .infinity, alignment: .center)
         }
         .foregroundStyle(.red)
+    }
+    
+    private var export: some View {
+        Menu {
+            Button {
+                isExportingJSON = true
+            } label: {
+                Label("JSON", systemImage: "ellipsis.curlybraces")
+            }
+            
+            Button {
+                isExportingMarkdown = true
+            } label: {
+                Label("Markdown", systemImage: "richtext.page")
+            }
+        } label: {
+            Label("Export", systemImage: "square.and.arrow.up")
+        }
+        .fixedSize()
+        .buttonStyle(.plain)
+        .menuIndicator(.hidden)
+        .foregroundStyle(.link)
     }
 }
 
