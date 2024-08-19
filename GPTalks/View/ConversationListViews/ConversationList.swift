@@ -57,7 +57,7 @@ struct ConversationList: View {
     var vStackView: some View  {
         ScrollView {
             VStack(spacing: spacing) {
-                ForEach(session.groups, id: \.self) { group in
+                ForEach(session.groups) { group in
                     ConversationGroupView(group: group)
                 }
 
@@ -74,7 +74,7 @@ struct ConversationList: View {
     var listView: some View {
         List {
             VStack(spacing: 3) {
-                ForEach(session.groups, id: \.self) { group in
+                ForEach(session.groups) { group in
                     ConversationGroupView(group: group)
                 }
                 .transaction { $0.animation = nil }

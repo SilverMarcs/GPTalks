@@ -66,10 +66,11 @@ struct ModelListView: View {
 // MARK: - common foreach
 extension ModelListView {
     var collectiom: some View {
-        ForEach(filteredModels, id: \.self) { model in
+        ForEach(filteredModels) { model in
             ModelRow(model: model) {
                 reorderModels()
             }
+            .tag(model)
             #if os(macOS)
                 .contextMenu { contextMenuItems(for: model) }
             #endif

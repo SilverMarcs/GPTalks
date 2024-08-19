@@ -14,8 +14,9 @@ struct ModelPicker: View {
     
     var body: some View {
         Picker(label, selection: $model) {
-            ForEach(filteredModels, id: \.self) { model in
+            ForEach(filteredModels) { model in
                 Text(model.name)
+                    .tag(model)
             }
         }
     }

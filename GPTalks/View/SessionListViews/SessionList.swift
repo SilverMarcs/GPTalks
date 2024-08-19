@@ -39,14 +39,16 @@ struct SessionList: View {
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
                 SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "?")
+                    .id(String.topID)
                     .popoverTip(FavouriteTip())
                     .popoverTip(DragSessionTip())
                 
                 if !sessionVM.searchText.isEmpty && sessions.isEmpty {
                     ContentUnavailableView.search(text: sessionVM.searchText)
                 } else {
-                    ForEach(filteredSessions, id: \.self) { session in
+                    ForEach(filteredSessions) { session in
                         SessionListItem(session: session)
+                            .tag(session)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))
 #if !os(macOS)
@@ -59,7 +61,8 @@ struct SessionList: View {
             }
             .onChange(of: sessions.count) {
                 if let first = sessions.first {
-                    proxy.scrollTo(first, anchor: .top)
+//                    proxy.scrollTo(first, anchor: .top)
+                    proxy.scrollTo(String.topID, anchor: .top)
                 }
             }
             .task {

@@ -14,7 +14,7 @@ struct ProviderPicker: View {
     
     var body: some View {
         Picker("Provider", selection: $provider) {
-            ForEach(providers, id: \.self) { provider in
+            ForEach(providers) { provider in
                 Text(provider.name)
                     .tag(provider)
             }
