@@ -17,7 +17,7 @@ struct ImageSessionToolbar: ToolbarContent {
     
     @ObservedObject var config = AppConfig.shared
     
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     @Query var imageSessions: [ImageSession]
     

@@ -38,6 +38,10 @@ struct GPTalksApp: App {
         .modelContainer(for: models, isUndoEnabled: true)
     }
     
+    init() {
+        NSWindow.allowsAutomaticWindowTabbing = false
+    }
+    
     let models: [any PersistentModel.Type] =
         [
            Session.self,

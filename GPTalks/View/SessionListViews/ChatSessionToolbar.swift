@@ -17,8 +17,7 @@ struct ChatSessionToolbar: ToolbarContent {
     
     @ObservedObject var config = AppConfig.shared
     
-    @Query var sessions: [Session]
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
     var body: some ToolbarContent {
@@ -44,28 +43,13 @@ struct ChatSessionToolbar: ToolbarContent {
                     addItem(provider: provider)
                 }
             }
-            .keyboardShortcut("n")
             .menuIndicator(.hidden)
             .popoverTip(NewSessionTip())
         }
     }
 
     private func addItem(provider: Provider) {
-        let config = SessionConfig(provider: provider, purpose: .chat)
-        let newItem = Session(config: config)
-        config.session = newItem
-        
-        try? modelContext.save()
-        
-        withAnimation {
-            for session in sessions {
-                session.order += 1
-            }
-            
-            newItem.order = 0
-            modelContext.insert(newItem)
-            sessionVM.selections = [newItem]
-        }
+        sessionVM.createNewSession(modelContext: modelContext, provider: provider)
     }
     
     #if !os(macOS)
@@ -124,7 +108,10 @@ struct ChatSessionToolbar: ToolbarContent {
                         
                         Section {
                             Button {
-                                sessionVM.selections = Set(sessions)
+                                var fetchSessions = FetchDescriptor<Session>()
+                                if let fetchedSessions = try? modelContext.fetch(fetchSessions) {
+                                    sessionVM.selections = Set(fetchedSessions)
+                                }
                             } label: {
                                 Label("Select All", systemImage: "checkmark.circle")
                             }

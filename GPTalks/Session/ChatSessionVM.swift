@@ -100,30 +100,40 @@ extension SessionVM {
     }
     
     @discardableResult
-    func createNewSession(modelContext: ModelContext) -> Session? {
-        let fetchProviders = FetchDescriptor<Provider>()
+    func createNewSession(modelContext: ModelContext, provider: Provider? = nil) -> Session? {
+        let config: SessionConfig
         
-        let fetchedProviders = try! modelContext.fetch(fetchProviders)
-        
-        if let provider = ProviderManager.shared.getDefault(providers: fetchedProviders) {
-            let config = SessionConfig(provider: provider, purpose: .chat)
-            let newItem = Session(config: config)
-            config.session = newItem
+        if let providedProvider = provider {
+            // Use the provided provider
+            config = SessionConfig(provider: providedProvider, purpose: .chat)
+        } else {
+            // Use the default provider
+            let fetchProviders = FetchDescriptor<Provider>()
+            let fetchedProviders = try! modelContext.fetch(fetchProviders)
             
-            var fetchSessions = FetchDescriptor<Session>()
-            fetchSessions.sortBy = [SortDescriptor(\.order)]
-            let fetchedSessions = try! modelContext.fetch(fetchSessions)
-            
-            for session in fetchedSessions {
-                session.order += 1
+            guard let defaultProvider = ProviderManager.shared.getDefault(providers: fetchedProviders) else {
+                return nil
             }
             
-            newItem.order = 0
-            modelContext.insert(newItem)
-            
-            return newItem
+            config = SessionConfig(provider: defaultProvider, purpose: .chat)
         }
         
-        return nil
+        let newItem = Session(config: config)
+        config.session = newItem
+        
+        var fetchSessions = FetchDescriptor<Session>()
+        fetchSessions.sortBy = [SortDescriptor(\.order)]
+        let fetchedSessions = try! modelContext.fetch(fetchSessions)
+        
+        for session in fetchedSessions {
+            session.order += 1
+        }
+        
+        newItem.order = 0
+        modelContext.insert(newItem)
+        
+        selections = [newItem]
+        
+        return newItem
     }
 }

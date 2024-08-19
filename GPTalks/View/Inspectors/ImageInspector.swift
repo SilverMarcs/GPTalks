@@ -11,7 +11,7 @@ import OpenAI
 
 struct ImageInspector: View {
     @Bindable var session: ImageSession
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
     var body: some View {

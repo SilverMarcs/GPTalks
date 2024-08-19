@@ -21,7 +21,7 @@ struct QuickPanel: View {
     @State var prompt: String = ""
     @FocusState private var isFocused: Bool
     
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
     var body: some View {
