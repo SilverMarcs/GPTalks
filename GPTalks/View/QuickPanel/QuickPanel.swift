@@ -27,11 +27,12 @@ struct QuickPanel: View {
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
-//                Button("Paste Image") {
-//                    session.inputManager.handlePaste()
-//                }
-//                .hidden()
-//                .keyboardShortcut("b")
+                Button("Paste Image") {
+                    session.inputManager.handlePaste(supportedFileTypes: session.config.provider.type.supportedFileTypes)
+                    showAdditionalContent = true
+                }
+                .hidden()
+                .keyboardShortcut("b")
                 
                 Button("Focus Field") {
                     isFocused = true
@@ -47,11 +48,10 @@ struct QuickPanel: View {
             if showAdditionalContent {
                 Divider()
                 
-//                if !session.inputManager.imagePaths.isEmpty {
-//                    InputImageView(session: session, maxHeight: 70)
-//                        .padding(.horizontal)
-//                        .padding(.top)
-//                }
+                if !session.inputManager.dataFiles.isEmpty {
+                    DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
+                        .safeAreaPadding(.horizontal)
+                }
                 
                 ConversationList(session: session, isQuick: true)
                     .navigationTitle("Quick Panel")

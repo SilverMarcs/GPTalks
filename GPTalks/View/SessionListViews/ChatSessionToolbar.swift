@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-import TipKit
 
 struct ChatSessionToolbar: ToolbarContent {
     #if !os(macOS)

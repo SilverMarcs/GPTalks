@@ -162,6 +162,7 @@
 		08D174CA2C3E3C78000257EF /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C92C3E3C78000257EF /* ImageViewer.swift */; };
 		08D8F4472C51C1C20051C916 /* ModelCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8F4462C51C1C20051C916 /* ModelCollection.swift */; };
 		08D8F44B2C51C4E50051C916 /* ModelAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8F44A2C51C4E50051C916 /* ModelAdder.swift */; };
+		08DA5B0D2C72CE7700A7FE82 /* PasteTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DA5B0C2C72CE7100A7FE82 /* PasteTip.swift */; };
 		08E0FDA12C6A720700FAB766 /* ChatSessionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E0FDA02C6A720700FAB766 /* ChatSessionToolbar.swift */; };
 		08E0FDA32C6A742D00FAB766 /* ImageSessionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E0FDA22C6A742D00FAB766 /* ImageSessionToolbar.swift */; };
 		08E195692C6FB36900BA9506 /* MarkdownSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E195682C6FB36900BA9506 /* MarkdownSettings.swift */; };
@@ -330,6 +331,7 @@
 		08D174C92C3E3C78000257EF /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		08D8F4462C51C1C20051C916 /* ModelCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelCollection.swift; sourceTree = "<group>"; };
 		08D8F44A2C51C4E50051C916 /* ModelAdder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelAdder.swift; sourceTree = "<group>"; };
+		08DA5B0C2C72CE7100A7FE82 /* PasteTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteTip.swift; sourceTree = "<group>"; };
 		08E0FDA02C6A720700FAB766 /* ChatSessionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionToolbar.swift; sourceTree = "<group>"; };
 		08E0FDA22C6A742D00FAB766 /* ImageSessionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSessionToolbar.swift; sourceTree = "<group>"; };
 		08E195682C6FB36900BA9506 /* MarkdownSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownSettings.swift; sourceTree = "<group>"; };
@@ -463,6 +465,7 @@
 		0841391E2C7169B90049E3B2 /* Tips */ = {
 			isa = PBXGroup;
 			children = (
+				08DA5B0C2C72CE7100A7FE82 /* PasteTip.swift */,
 				0841391F2C7169D50049E3B2 /* SessionListTips.swift */,
 			);
 			path = Tips;
@@ -885,7 +888,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 1610;
 				TargetAttributes = {
 					08A2227E2C2AB4FD00D76C8B = {
 						CreatedOnToolsVersion = 16.0;
@@ -989,6 +992,7 @@
 				084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */,
 				08C800372C36B8CC009581C5 /* SessionListItem.swift in Sources */,
 				08E195692C6FB36900BA9506 /* MarkdownSettings.swift in Sources */,
+				08DA5B0D2C72CE7700A7FE82 /* PasteTip.swift in Sources */,
 				082181582C3823A400171BF3 /* ModelRow.swift in Sources */,
 				085910C82C4F7A5A0086E493 /* ChatSessionVM.swift in Sources */,
 				082181522C38046800171BF3 /* ProviderManager.swift in Sources */,
@@ -1167,6 +1171,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1228,6 +1233,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1256,6 +1262,7 @@
 				CODE_SIGN_ENTITLEMENTS = GPTalks/GPTalks.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"GPTalks/Preview Content\"";
 				DEVELOPMENT_TEAM = J52QUTREBS;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1297,6 +1304,7 @@
 				CODE_SIGN_ENTITLEMENTS = GPTalks/GPTalks.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"GPTalks/Preview Content\"";
 				DEVELOPMENT_TEAM = J52QUTREBS;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1335,6 +1343,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = J52QUTREBS;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
@@ -1358,6 +1367,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = J52QUTREBS;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
@@ -1380,6 +1390,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = J52QUTREBS;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
@@ -1402,6 +1413,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = J52QUTREBS;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;

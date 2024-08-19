@@ -235,6 +235,8 @@ final class Session {
                 resetMarker = newResetMarker
             }
         }
+        
+        self.refreshTokens()
     }
     
     @MainActor
