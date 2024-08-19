@@ -18,11 +18,7 @@ struct SessionListItem: View {
     var body: some View {
         Group {
             if config.compactList {
-                CommonCompactRow(provider: session.config.provider,
-                                 model: session.config.model,
-                                 title: session.title,
-                                 isStarred: session.isStarred)
-                .symbolEffect(.bounce, options: .speed(0.5), isActive: session.isReplying)
+                small
             } else {
                 large
             }
@@ -65,11 +61,7 @@ struct SessionListItem: View {
                     
                     Spacer()
                     
-                    if session.isStarred {
-                        Image(systemName: "star.fill")
-                            .foregroundStyle(.orange)
-                            .imageScale(.small)
-                    }
+                    star
                 }
             }
         }
@@ -78,6 +70,40 @@ struct SessionListItem: View {
         #else
         .padding(3)
         #endif
+    }
+    
+    var small: some View {
+        HStack {
+            ProviderImage(provider: session.config.provider, radius: 8, frame: 23, scale: .medium)
+                .symbolEffect(.bounce, options: .speed(0.5), isActive: session.isReplying)
+            
+            Text(session.title)
+                .lineLimit(1)
+                .font(.headline)
+                .fontWeight(.regular)
+                .opacity(0.9)
+            
+            Spacer()
+            
+            Text(session.config.model.name)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .fontWidth(.compressed)
+            
+            star
+        }
+        .padding(3)
+        .symbolEffect(.bounce, options: .speed(0.5), isActive: session.isReplying)
+    }
+    
+    @ViewBuilder
+    var star: some View {
+        if session.isStarred {
+            Image(systemName: "star.fill")
+                .foregroundStyle(.orange)
+                .imageScale(.small)
+                .symbolEffect(.appear, isActive: !session.isStarred)
+        }
     }
     
     var subText: String {
@@ -89,14 +115,12 @@ struct SessionListItem: View {
     }
 
     var swipeActionsLeading: some View {
-        Group {
-            Button {
-                session.isStarred.toggle()
-            } label: {
-                Label("Star", systemImage: "star")
-            }
-            .tint(.orange)
+        Button {
+            session.isStarred.toggle()
+        } label: {
+            Label("Star", systemImage: "star")
         }
+        .tint(.orange)
     }
 }
 

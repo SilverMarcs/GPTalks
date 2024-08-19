@@ -19,6 +19,7 @@ struct GPTalksApp: App {
             WindowGroup(id: "main") {
                 ContentView()
                     .focusable()
+                    .focusEffectDisabled()
                     .focused($isMainWindowFocused)
                     .task {
                         try? Tips.configure([.datastoreLocation(.applicationDefault)])
