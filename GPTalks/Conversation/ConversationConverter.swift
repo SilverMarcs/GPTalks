@@ -24,8 +24,13 @@ extension Conversation {
                 if dataFile.fileType.conforms(to: .image) {
                     visionContent.append(.init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: dataFile.data, detail: .auto))))
                 } else {
-                    // TODO: do RAG conversion here
-                    visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: "\(dataFile.fileExtension.uppercased()) files are not supported yet. Notify the user.")))
+                    if dataFile.fileType.conforms(to: .pdf) {
+                        if let url = FileHelper.createTemporaryURL(for: dataFile) {
+                            let contents = readPDF(from: url)
+//                            print(contents)
+                            visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: "PDF File contents: \n\(contents)\n Respond to the user based on their query.")))
+                        }
+                    }
                 }
             }
             
@@ -65,7 +70,14 @@ extension Conversation {
                 contentObjects.append(.image(imageSource))
             } else {
                 // TODO: do RAG conversion here. shouldnt reach here atm
-                contentObjects.append(.text("\(dataFile.fileExtension.uppercased()) files are not supported yet. Notify the user."))
+                
+                if dataFile.fileType.conforms(to: .pdf) {
+                    if let url = FileHelper.createTemporaryURL(for: dataFile) {
+                        let contents = readPDF(from: url)
+//                        print(contents)
+                        contentObjects.append(.text("PDF File contents: \n\(contents)\n Respond to the user based on their query."))
+                    }
+                }
             }
         }
         
