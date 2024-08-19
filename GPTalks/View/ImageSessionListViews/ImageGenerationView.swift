@@ -37,10 +37,15 @@ struct ImageGenerationView: View {
             
             VStack(alignment: .leading) {
                 Text(generation.config.model.name)
-                    .foregroundStyle(.accent)
+//                    .foregroundStyle(.accent)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+//                    .foregroundStyle(.secondary)
                     .padding(.leading, 5)
+                    .foregroundStyle(LinearGradient(
+                        colors: [.purple, .pink],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    ))
                 
                 if generation.state == .error {
                     Text(generation.errorMessage)

@@ -22,12 +22,13 @@ class ClaudeService: AIService {
     
     private func createParameters(from conversations: [Conversation], config: SessionConfig, stream: Bool) -> MessageParameter {
         let messages = conversations.map { $0.toClaude() }
+        let systemPrompt = MessageParameter.System.text(config.systemPrompt)
         
         return MessageParameter(
             model: .other(config.model.code),
             messages: messages,
             maxTokens: config.maxTokens ?? 4096,
-            system: config.systemPrompt,
+            system: systemPrompt,
             stream: stream,
             temperature: config.temperature,
             topP: config.topP
@@ -35,9 +36,10 @@ class ClaudeService: AIService {
     }
     
     private func streamClaudeResponse(parameters: MessageParameter, config: SessionConfig) -> AsyncThrowingStream<String, Error> {
+        let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
-            basePath: config.provider.type.scheme + "://" + config.provider.host)
+            basePath: config.provider.type.scheme + "://" + config.provider.host, betaHeaders: betaHeaders)
         
         return AsyncThrowingStream { continuation in
             Task {
@@ -57,9 +59,10 @@ class ClaudeService: AIService {
     }
     
     private func nonStreamingClaudeResponse(parameters: MessageParameter, config: SessionConfig) async throws -> String {
+        let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
-            basePath: config.provider.type.scheme + "://" + config.provider.host)
+            basePath: config.provider.type.scheme + "://" + config.provider.host, betaHeaders: betaHeaders)
         
         let message = try await service.createMessage(parameters)
         // Extract the text content from the message
@@ -76,9 +79,10 @@ class ClaudeService: AIService {
     }
     
     func testModel(provider: Provider, model: AIModel) async -> Bool {
+        let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]  
         let service = AnthropicServiceFactory.service(
             apiKey: provider.apiKey,
-            basePath: provider.type.scheme + "://" + provider.host)
+            basePath: provider.type.scheme + "://" + provider.host, betaHeaders: betaHeaders)
         
         let messageParameter = MessageParameter(
             model: .other(model.code),

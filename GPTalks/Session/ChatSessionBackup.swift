@@ -29,7 +29,6 @@ struct ChatSessionBackup: Codable {
     struct ConversationBackup: Codable {
         var date: Date
         var content: String
-        var imagePaths: [String]
         var role: ConversationRole
     }
 }
@@ -86,14 +85,12 @@ extension ChatSessionBackup.ConversationBackup {
     init(from conversation: Conversation) {
         self.date = conversation.date
         self.content = conversation.content
-        self.imagePaths = conversation.imagePaths
         self.role = conversation.role
     }
     
     func toConversation() -> Conversation {
         let conversation = Conversation(role: self.role, content: self.content)
         conversation.date = self.date
-        conversation.imagePaths = self.imagePaths
         return conversation
     }
 }

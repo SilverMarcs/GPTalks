@@ -25,4 +25,5 @@ struct AssistantImage: View {
 
 #Preview {
     AssistantImage(size: 10)
+        .padding()
 }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import VisualEffectView
+import UniformTypeIdentifiers
 
 struct ChatInputView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -28,28 +29,29 @@ struct ChatInputView: View {
             #endif
             
             VStack(alignment: .leading) {
-                if !session.inputManager.imagePaths.isEmpty {
-                    InputImageView(session: session)
+                if !session.inputManager.dataFiles.isEmpty {
+                    DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
                 }
                 
                 InputEditor(prompt: $session.inputManager.prompt,
                             isFocused: _isFocused)
             }
-            
-            if session.isReplying {
-                StopButton(size: imageSize, stop: session.stopStreaming)
-                    .offset(y: -2.4)
-            } else {
-                SendButton(size: imageSize, send: sendInput)
-                    .offset(y: -2.4)
+
+            ActionButton(size: imageSize, isStop: session.isReplying) {
+                if session.isReplying {
+                    session.stopStreaming()
+                } else {
+                    sendInput()
+                }
             }
+            .offset(y: -2.4)
         }
         .modifier(CommonInputStyling())
         #if os(macOS)
         .toolbar {
             ToolbarItem(placement: .keyboard) {
                 Button("Paste Image") {
-                    session.inputManager.handlePaste()
+                    session.inputManager.handlePaste(supportedFileTypes: session.config.provider.type.supportedFileTypes)
                 }
                 .keyboardShortcut("b")
             }
@@ -58,10 +60,6 @@ struct ChatInputView: View {
     }
 
     var plusButton: some View {
-//#if os(macOS)
-//        PlusButton(size: imageSize) {
-//            isPresented = true
-//        }
         Group {
 #if os(macOS)
             PlusButton(size: imageSize) {
@@ -83,11 +81,9 @@ struct ChatInputView: View {
             .accentColor(.primary)
 #endif
         }
-        .imageFileImporter(isPresented: $isPresented, onImageAppend: { image in
-            if let path = image.save() {
-                session.inputManager.imagePaths.append(path)
-            }
-        })
+        .multipleFileImporter(isPresented: $isPresented, supportedFileTypes: session.config.provider.type.supportedFileTypes) { typedData in
+            session.inputManager.dataFiles.append(typedData)
+        }
     }
     
     func resetContext() {

@@ -9,29 +9,39 @@ import SwiftUI
 
 struct SessionListSidebar: View {
     @Environment(SessionVM.self) private var sessionVM
+    @ObservedObject var config = AppConfig.shared
     
     @FocusState private var isSidebarFocused: Bool
     var body: some View {
         @Bindable var sessionVM = sessionVM
         
         #if os(macOS)
-        SessionSearch("Search", text: $sessionVM.searchText) {
-            sessionVM.searchText = ""
-        }
-        .padding(.horizontal, 10)
+        CustomSearchField("Search", text: $sessionVM.searchText)
+            .id(String.topID)
+            .padding(.horizontal, 10)
         #endif
         
         Group {
             if sessionVM.state == .chats {
-                SessionList(searchString: sessionVM.searchText)
-                    .focused($isSidebarFocused)
+                Group {
+                    if config.folderView {
+                        ChatSessionList()
+                    } else {
+                        SessionList()
+                    }
+                }
+                .focused($isSidebarFocused)
             } else {
-                ImageSessionList(searchString: sessionVM.searchText)
+                ImageSessionList()
                     .focused($isSidebarFocused)
             }
         }
         .toolbar {
-            SessionListToolbar()
+            if sessionVM.state == .chats {
+                ChatSessionToolbar()
+            } else {
+                ImageSessionToolbar()
+            }
             
             #if os(macOS)
             ToolbarItemGroup(placement: .keyboard) {
@@ -49,7 +59,6 @@ struct SessionListSidebar: View {
             #endif
         }
         #if os(macOS)
-        .frame(minWidth: 240)
         .listStyle(.inset)
         .scrollContentBackground(.hidden)
         .padding(.top, -10)

@@ -11,33 +11,56 @@ import SwiftUI
 struct SessionList: View {
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
+    @ObservedObject var config = AppConfig.shared
     
-    @Query var sessions: [Session]
+    @Query(filter: #Predicate { !$0.isQuick }, sort: [SortDescriptor(\Session.order, order: .forward)], animation: .default)
+    var sessions: [Session]
+    
+    var filteredSessions: [Session] {
+        let filteredSessions: [Session] = sessions.filter { session in
+            sessionVM.searchText.isEmpty ||
+            session.title.localizedStandardContains(sessionVM.searchText) ||
+            (AppConfig.shared.expensiveSearch &&
+             session.unorderedGroups.contains { group in
+                 group.activeConversation.content.localizedCaseInsensitiveContains(sessionVM.searchText)
+             })
+        }
+        
+        if config.truncateList {
+            return Array(filteredSessions.prefix(config.listCount))
+        } else {
+            return filteredSessions
+        }
+    }
     
     var body: some View {
         @Bindable var sessionVM = sessionVM
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.selections) {
-                SessionListCards()
+                SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "?")
                 
-                ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
-                    SessionListItem(session: session)
-                        .listRowSeparator(.visible)
-                        .listRowSeparatorTint(Color.gray.opacity(0.2))
-                    #if !os(macOS)
-                        .listSectionSeparator(.hidden)
-                    #endif
+                if !sessionVM.searchText.isEmpty && sessions.isEmpty {
+                    ContentUnavailableView.search(text: sessionVM.searchText)
+                } else {
+                    ForEach(filteredSessions, id: \.self) { session in
+                        SessionListItem(session: session)
+                            .listRowSeparator(.visible)
+                            .listRowSeparatorTint(Color.gray.opacity(0.2))
+#if !os(macOS)
+                            .listSectionSeparator(.hidden)
+#endif
+                    }
+                    .onDelete(perform: deleteItems)
+                    .onMove(perform: move)
                 }
-                .onDelete(perform: deleteItems)
-                .onMove(perform: move)
             }
             .onChange(of: sessions.count) {
                 if let first = sessions.first {
                     proxy.scrollTo(first, anchor: .top)
                 }
             }
-            .onAppear {
+            .task {
                 if let first = sessions.first, sessionVM.selections.isEmpty, !isIOS() {
                     DispatchQueue.main.async {
                         sessionVM.selections = [first]
@@ -46,40 +69,30 @@ struct SessionList: View {
             }
         }
     }
-    
-    init(searchString: String) {
-        _sessions = Query(
-            filter: #Predicate {
-                if searchString.isEmpty {
-                    return !$0.isQuick
-                } else {
-                    return !$0.isQuick && $0.title.localizedStandardContains(searchString)
-                }
-            },
-            sort: [
-                SortDescriptor(\Session.order, order: .forward),
-            ],
-            animation: .default
-        )
-    }
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets.sorted().reversed() {
                 if !sessions[index].isStarred {
-                    // TODO: check if part of sessionVM.selections
-                    modelContext.delete(sessions[index])
+                    // Check if the session is part of sessionVM.selections
+                    if sessionVM.selections.contains(where: { $0.id == sessions[index].id }) {
+                        sessionVM.selections.remove(sessions[index])
+                    }
+                    
+                    // Delay the deletion and saving
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        self.modelContext.delete(self.sessions[index])
+                        try? self.modelContext.save()
+                        
+                        // Update order of remaining sessions
+                        let remainingSessions = self.sessions.filter { !$0.isDeleted }
+                        for (newIndex, session) in remainingSessions.enumerated() {
+                            session.order = newIndex
+                        }
+                    }
                 }
             }
-            
-            let remainingSessions = sessions.filter { !$0.isDeleted }
-            for (newIndex, session) in remainingSessions.enumerated() {
-                session.order = newIndex
-            }
-            
         }
-        
-        try? modelContext.save()
     }
     
     private func move(from source: IndexSet, to destination: Int) {
@@ -91,15 +104,11 @@ struct SessionList: View {
                 session.order = index
             }
         }
-        
-        try? modelContext.save()
     }
 }
 
 #Preview {
-    SessionList(
-        searchString: ""
-    )
+    SessionList()
     .frame(width: 400)
     .modelContainer(for: Session.self, inMemory: true)
     .environment(SessionVM())

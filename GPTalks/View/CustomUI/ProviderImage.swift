@@ -11,25 +11,25 @@ struct ProviderImage: View {
     var provider: Provider
     
     var radius: CGFloat = 9
-    var frame: CGFloat = 29
+    var frame: CGFloat = 25
+    
+    var scale: Image.Scale
     
     var body: some View {
         ZStack {
-            // Background rounded rectangle
             RoundedRectangle(cornerRadius: radius)
-                .fill(Color(hex: provider.color))
+                .fill(Color(hex: provider.color).gradient)
                 .frame(width: frame, height: frame)
-            
-            // Image
+
             Image(provider.type.imageName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: frame - provider.type.imageOffset,
-                       height: frame - provider.type.imageOffset)
+                .foregroundStyle(provider.type == .local ? .black : .white)
+                .imageScale(scale)
+//                .frame(width: frame - 4,
+//                       height: frame - 4)
         }
     }
 }
 
 #Preview {
-    ProviderImage(provider: Provider.factory(type: .openai))
+    ProviderImage(provider: Provider.factory(type: .openai), scale: .small)
 }

@@ -11,23 +11,51 @@ import SwiftData
 struct ImageSessionList: View {
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
+    @ObservedObject var config = AppConfig.shared
     
-    @Query var sessions: [ImageSession]
+    @Query(sort: \ImageSession.order, order: .forward, animation: .default)
+    var sessions: [ImageSession]
+    
+    var filteredSessions: [ImageSession] {
+        let filteredSessions: [ImageSession]
+        
+        if sessionVM.searchText.isEmpty {
+            filteredSessions = sessions
+        } else {
+            filteredSessions = sessions.filter { session in
+                session.title.localizedStandardContains(sessionVM.searchText) ||
+                (AppConfig.shared.expensiveSearch &&
+                session.imageGenerations.contains { generation in
+                    generation.prompt.localizedStandardContains(sessionVM.searchText)
+                })
+            }
+        }
+        
+        if config.truncateList {
+            return Array(filteredSessions.prefix(config.listCount))
+        } else {
+            return filteredSessions
+        }
+    }
     
     var body: some View {
         @Bindable var sessionVM = sessionVM
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.imageSelections) {
-                SessionListCards()
+                SessionListCards(sessionCount: "?", imageSessionsCount: String(sessions.count))
                 
-                ForEach(sessions.prefix(sessionVM.chatCount), id: \.self) { session in
-                    ImageListRow(session: session)
-                        .listRowSeparator(.visible)
-                        .listRowSeparatorTint(Color.gray.opacity(0.2))
+                if !sessionVM.searchText.isEmpty && sessions.isEmpty {
+                    ContentUnavailableView.search(text: sessionVM.searchText)
+                } else {
+                    ForEach(filteredSessions, id: \.self) { session in
+                        ImageListRow(session: session)
+                            .listRowSeparator(.visible)
+                            .listRowSeparatorTint(Color.gray.opacity(0.2))
+                    }
+                    .onDelete(perform: deleteItems)
+                    .onMove(perform: move)
                 }
-                .onDelete(perform: deleteItems)
-                .onMove(perform: move)
             }
             .onChange(of: sessions.count) {
                 if let first = sessions.first {
@@ -35,7 +63,7 @@ struct ImageSessionList: View {
                 }
             }
 #if os(macOS)
-            .onAppear {
+            .task {
                 if sessionVM.imageSelections.isEmpty, let first = sessions.first {
                     DispatchQueue.main.async {
                         sessionVM.imageSelections = [first]
@@ -44,22 +72,6 @@ struct ImageSessionList: View {
             }
 #endif
         }
-    }
-    
-    init(searchString: String) {
-        _sessions = Query(
-            filter: #Predicate {
-                if searchString.isEmpty {
-                    return true
-                } else {
-                    return $0.title.localizedStandardContains(searchString)
-                }
-            },
-            sort: [
-                SortDescriptor(\ImageSession.order, order: .forward),
-            ],
-            animation: .default
-        )
     }
 
     private func deleteItems(offsets: IndexSet) {
@@ -91,8 +103,6 @@ struct ImageSessionList: View {
                 session.order = index
             }
         }
-        
-        try? modelContext.save()
     }
 }
 

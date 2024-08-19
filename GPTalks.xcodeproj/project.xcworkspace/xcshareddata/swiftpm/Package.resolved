@@ -34,7 +34,7 @@
       "location" : "https://github.com/SilverMarcs/markdown-webview",
       "state" : {
         "branch" : "master",
-        "revision" : "18ec856280a6e35b2b0c94176be83296b5179631"
+        "revision" : "79402795483c97300799e5227fdf3e6a4c6d48d3"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
       "state" : {
-        "revision" : "cea1929f50ae642ac1308e7776af51a792679a6b",
-        "version" : "1.8.1"
+        "revision" : "a624abcf464117a0c113043d0b94f294b4bed4d1",
+        "version" : "1.8.2"
       }
     },
     {

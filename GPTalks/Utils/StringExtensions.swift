@@ -19,6 +19,7 @@ extension String {
     }
     
     static let bottomID = "bottomID"
+    static let topID = "topID"
     static let testPrompt = "Respond with just the word Test"
     
     func truncated(to length: Int, trailing: String = "...") -> String {

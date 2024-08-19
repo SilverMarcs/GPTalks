@@ -19,6 +19,8 @@ class ImageConfig {
     @Relationship(deleteRule: .nullify)
     var model: AIModel
     
+    var session: ImageSession?
+    
     var numImages: Int = 1
     var size: ImagesQuery.Size = ImagesQuery.Size._256
     var quality: ImagesQuery.Quality = ImagesQuery.Quality.standard

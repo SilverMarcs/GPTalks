@@ -22,7 +22,7 @@ class ImageSession {
     @Relationship(deleteRule: .cascade, inverse: \ImageGeneration.session)
     var imageGenerations = [ImageGeneration]()
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .cascade, inverse: \ImageConfig.session)
     var config: ImageConfig
     
     @Transient

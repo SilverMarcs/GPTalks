@@ -34,6 +34,7 @@ class OpenAIService: AIService {
             maxTokens: config.maxTokens,
             presencePenalty: config.presencePenalty,
             temperature: config.temperature,
+//            tools: [],
             topP: config.topP,
             stream: stream
         )

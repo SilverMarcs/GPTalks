@@ -15,7 +15,7 @@ struct CommonCompactRow: View {
     
     var body: some View {
         HStack {
-            ProviderImage(provider: provider, radius: 8, frame: 23)
+            ProviderImage(provider: provider, radius: 8, frame: 23, scale: .medium)
             
             Text(title)
                 .lineLimit(1)
@@ -34,6 +34,7 @@ struct CommonCompactRow: View {
                 Image(systemName: "star.fill")
                     .foregroundStyle(.orange)
                     .imageScale(.small)
+                    .symbolEffect(.appear, isActive: !isStarred)
             }
         }
         .padding(3)

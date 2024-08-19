@@ -76,7 +76,7 @@ extension ProviderList {
             modelContext.insert(newProvider)
             reorderProviders()
         } completion: {
-            try? modelContext.save()
+//            try? modelContext.save()
             DispatchQueue.main.async {
                 selectedProvider = newProvider
             }
@@ -88,7 +88,7 @@ extension ProviderList {
             let defaultProviderID = providerManager.defaultProvider
             var providersToDelete = offsets
             for index in offsets {
-                if reorderedProviders[index].id.uuidString == defaultProviderID && reorderedProviders[index].name == "OpenAI" {
+                if reorderedProviders[index].id.uuidString == defaultProviderID || reorderedProviders[index].name == "OpenAI" {
                     providersToDelete.remove(index)
                 }
             }
@@ -97,7 +97,7 @@ extension ProviderList {
             }
             reorderProviders()
         } completion: {
-            try? modelContext.save()
+//            try? modelContext.save()
         }
     }
     
@@ -114,7 +114,7 @@ extension ProviderList {
                 provider.order = index
             }
         }
-        try? modelContext.save()
+//        try? modelContext.save()
     }
 }
 

@@ -21,19 +21,15 @@ struct AssistantMessage: View {
             HStack(alignment: .top, spacing: spacing) {
                 AssistantImage(size: size)
                 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 7) {
                     if let model = conversation.model {
                         Text(model.name)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                     
-                    if config.assistantMarkdown {
-                        MarkdownWebView(conversation.content)
-                    } else {
-                        Text(LocalizedStringKey(conversation.content))
-                            .textSelection(.enabled)
-                    }
+                    MarkdownView(conversation: conversation)
+                        .textSelection(.enabled)
                     
                     if conversation.isReplying {
                         ProgressView()
@@ -41,9 +37,8 @@ struct AssistantMessage: View {
                     }
                     #if os(macOS)
                     if let group = conversation.group, !conversation.isReplying {
-                        ConversationMenu(group: group)
-                            .opacity(isHovered ? 1 : 0)
-                            .animation(.easeInOut(duration: 0.2), value: isHovered)
+                        ConversationMenu(group: group, isExpanded: .constant(true))
+                            .symbolEffect(.appear, isActive: !isHovered)
                     }
                     #endif
                 }
@@ -53,7 +48,7 @@ struct AssistantMessage: View {
 #if !os(macOS)
         .contextMenu {
             if let group = conversation.group, !conversation.isReplying {
-                ConversationMenu(group: group, toggleTextSelection: toggleTextSelection)
+                ConversationMenu(group: group, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
             }
         } preview: {
             Text("Assistant Message")

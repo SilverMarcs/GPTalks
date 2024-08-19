@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 extension View {
     func applyObservers(proxy: ScrollViewProxy, session: Session, hasUserScrolled: Binding<Bool>) -> some View {
@@ -41,14 +42,62 @@ extension View {
                 }
             }
         #if canImport(UIKit)
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) { _ in
-                if config.assistantMarkdown {
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)) { _ in
+                if config.markdownProvider == .webview {
                     scrollToBottom(proxy: proxy)
                 } else {
                     scrollToBottom(proxy: proxy, delay: 0.3)
                 }
             }
         #endif
+            .onDrop(of: session.config.provider.type.supportedFileTypes, isTargeted: nil) { providers in
+                session.inputManager.handleDrop(providers, supportedTypes: session.config.provider.type.supportedFileTypes)
+            }
+    }
+}
+
+struct PlatformSpecificModifiers: ViewModifier {
+    let session: Session
+    @Binding var showingInspector: Bool
+    @Binding var hasUserScrolled: Bool
+    
+    @State private var isExportingJSON = false
+    @State private var isExportingMarkdown = false
+    
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        content
+            .toolbar { ConversationListToolbar(session: session) }
+            #if os(macOS)
+            .navigationSubtitle("\(session.tokenCount.formatToK()) tokens • \(session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))")
+            .navigationTitle(session.title)
+            #else
+            .onTapGesture { showingInspector = false }
+            .toolbarTitleDisplayMode(.inline)
+            .navigationTitle(session.config.model.name)
+            .toolbarTitleMenu { exportButtons }
+            #if !os(visionOS)
+            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+                hasUserScrolled = value > UIScreen.main.bounds.height
+            }
+            .scrollDismissesKeyboard(.immediately)
+            #endif
+            #endif
+    }
+    
+    @ViewBuilder
+    var exportButtons: some View {
+        Button {
+            isExportingJSON = true
+        } label: {
+            Label("Export JSON", systemImage: "ellipsis.curlybraces")
+        }
+        
+        Button {
+            isExportingMarkdown = true
+        } label: {
+            Label("Export Markdown", systemImage: "richtext.page")
+        }
     }
 }
 

@@ -11,20 +11,27 @@ import SwiftData
 // MARK: - ViewModel
 extension ModelListView {    
     func refreshModels() {
+        isRefreshing = true
         Task { @MainActor in
             await provider.refreshModels()
+            isRefreshing = false
         }
     }
     
     func deleteItems(at offsets: IndexSet) {
         let sortedModels = models.sorted(by: { $0.order < $1.order })
-        let sortedIndices = offsets.map { sortedModels[$0].id }
+        let modelsToDelete = offsets.map { sortedModels[$0] }
+        let sortedIndices = modelsToDelete.map { $0.id }
         
         switch modelType {
         case .chat:
             provider.chatModels.removeAll { sortedIndices.contains($0.id) }
         case .image:
             provider.imageModels.removeAll { sortedIndices.contains($0.id) }
+        }
+        
+        for model in modelsToDelete {
+            model.modelContext?.delete(model)
         }
         
         reorderModels()
@@ -36,6 +43,10 @@ extension ModelListView {
             provider.chatModels.removeAll { selections.contains($0) }
         case .image:
             provider.imageModels.removeAll { selections.contains($0) }
+        }
+        
+        for model in selections {
+            model.modelContext?.delete(model)
         }
         
         selections.removeAll()

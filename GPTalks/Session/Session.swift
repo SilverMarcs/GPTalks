@@ -19,9 +19,15 @@ final class Session {
     var errorMessage: String = ""
     var resetMarker: Int?
     var isQuick: Bool = false
+    var tokenCount: Int = 0
+    
+    var folder: Folder?
     
     @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
     var unorderedGroups =  [ConversationGroup]()
+    
+    @Relationship(deleteRule: .nullify, inverse: \SessionConfig.session)
+    var config: SessionConfig
     
     @Transient
     var groups: [ConversationGroup] {
@@ -35,14 +41,6 @@ final class Session {
         } else {
             return groups
         }
-    }
-    
-    var tokenCounter: Int {
-        let messageTokens = adjustedGroups.reduce(0) { $0 + $1.activeConversation.countTokens() }
-        let sysPromptTokens = tokenCount(text: config.systemPrompt)
-        let inputTokens = tokenCount(text: inputManager.prompt)
-        
-        return messageTokens + sysPromptTokens + inputTokens
     }
     
     @Transient
@@ -61,11 +59,11 @@ final class Session {
         groups.last?.activeConversation.isReplying ?? false
     }
     
+    @Attribute(.ephemeral)
+    var searchText: String = ""
+    
     @Transient
     var inputManager = InputManager()
-    
-    @Relationship(deleteRule: .nullify)
-    var config: SessionConfig
     
     init(config: SessionConfig) {
         self.config = config
@@ -110,7 +108,7 @@ final class Session {
         if let assistantGroup = assistantGroup {
             return assistantGroup.conversations.last!
         } else {
-            let assistant = Conversation(role: .assistant, content: "", model: config.model, imagePaths: [])
+            let assistant = Conversation(role: .assistant, content: "", model: config.model)
             addConversationGroup(conversation: assistant)
             return assistant
         }
@@ -121,8 +119,10 @@ final class Session {
         
         if let regenContent = regenContent {
             if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
-                let existingImagePaths = conversations[lastUserIndex].imagePaths
-                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, imagePaths: existingImagePaths)
+//                let existingImagePaths = conversations[lastUserIndex].imagePaths
+//                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, imagePaths: existingImagePaths)
+                let existingDataFiles = conversations[lastUserIndex].dataFiles
+                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, dataFiles: existingDataFiles)
             }
             if let lastAssistantIndex = conversations.lastIndex(where: { $0.role == .assistant }) {
                 conversations.remove(at: lastAssistantIndex)
@@ -145,18 +145,20 @@ final class Session {
                 guard !inputManager.prompt.isEmpty else { return }
                 
                 let content = inputManager.prompt
-                let imagePaths = inputManager.imagePaths
+                let dataFiles = inputManager.dataFiles
                 inputManager.reset()
                 
-                let user = Conversation(role: .user, content: content, imagePaths: imagePaths)
+                let user = Conversation(role: .user, content: content, dataFiles: dataFiles)
                 addConversationGroup(conversation: user)
                 
-                //                #if DEBUG
-                //                addConversationGroup(conversation: Conversation(role: .assistant, content: .assistantDemos.randomElement()!))
-                //                return
-                //                #endif
+//                #if DEBUG
+//                addConversationGroup(conversation: Conversation(role: .assistant, content: .assistantDemos.randomElement()!))
+//                return
+//                #endif
             }
         }
+        
+        self.refreshTokens()
         
         if AppConfig.shared.autogenTitle {
             Task { await generateTitle() }
@@ -164,6 +166,7 @@ final class Session {
         
         streamingTask = Task(priority: .userInitiated) {
             await handleStreamingTask(regenContent: regenContent, assistantGroup: assistantGroup)
+            self.refreshTokens()
         }
     }
     
@@ -173,7 +176,7 @@ final class Session {
            groups[editingIndex].activeConversation.role == .user {
             
             groups[editingIndex].activeConversation.content = inputManager.prompt
-            groups[editingIndex].activeConversation.imagePaths = inputManager.imagePaths
+            groups[editingIndex].activeConversation.dataFiles = inputManager.dataFiles
             
             groups.removeSubrange((editingIndex + 1)...)
             
@@ -196,7 +199,7 @@ final class Session {
         let userGroup = groups[index - 1]
         let userContent = userGroup.activeConversation.content
         
-        let newAssistantConversation = Conversation(role: .assistant, content: "", model: config.model, imagePaths: [])
+        let newAssistantConversation = Conversation(role: .assistant, content: "", model: config.model)
         group.addConversation(newAssistantConversation)
         
         groups.removeSubrange((index + 1)...)
@@ -229,9 +232,7 @@ final class Session {
                     scrollToBottom(proxy: proxy)
                 }
             } else {
-                withAnimation {
-                    resetMarker = newResetMarker
-                }
+                resetMarker = newResetMarker
             }
         }
     }
@@ -247,9 +248,17 @@ final class Session {
         }
     }
     
-    func copy(from group: ConversationGroup? = nil, title: String = "Chat Session", purpose: SessionConfigPurpose = .chat) -> Session {
+    func refreshTokens() {
+        let messageTokens = adjustedGroups.reduce(0) { $0 + $1.activeConversation.countTokens() }
+        let sysPromptTokens = countTokensFromText(text: config.systemPrompt)
+        let inputTokens = countTokensFromText(text: inputManager.prompt)
+        
+        self.tokenCount = (messageTokens + sysPromptTokens + inputTokens)
+    }
+    
+    func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) -> Session {
         let newSession = Session(config: config.copy(purpose: purpose))
-        newSession.title = purpose.title
+        newSession.title = "(Forked) " + self.title
         
         if let group = group, let index = groups.firstIndex(of: group) {
             // Scenario 1: Fork from a particular group
@@ -275,13 +284,20 @@ final class Session {
         if groups.count == 0 {
             errorMessage = ""
         }
-        withAnimation {
+//        withAnimation {
             groups.removeAll(where: { $0 == conversationGroup })
-        }
+//        } completion: {
+            self.modelContext?.delete(conversationGroup)
+            self.refreshTokens()
+//        }
     }
     
     func deleteAllConversations() {
-        groups.removeAll()
-        errorMessage = ""
+//        withAnimation {
+            groups.removeAll()
+            errorMessage = ""
+//        } completion: {
+            self.refreshTokens()
+//        }
     }
 }

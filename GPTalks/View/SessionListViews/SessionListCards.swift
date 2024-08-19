@@ -10,24 +10,23 @@ import SwiftData
 
 struct SessionListCards: View {
     @Environment(SessionVM.self) private var sessionVM
-    @Query var sessions: [Session]
-    @Query var imageSessions: [ImageSession]
+    var sessionCount: String
+    var imageSessionsCount: String
     
     var body: some View {
         Section {
             HStack(spacing: spacing) {
                 ListCard(
                     icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
-                    count: String(sessions.count)) {
-                        toggleChatCount()
+                    count: sessionCount) {
+                        sessionVM.state = .chats
                     }
                 
                 ListCard(
-                    icon: "photo.circle.fill", iconColor: .cyan, title: "Images",
-                    count: String(imageSessions.count)
-                ) {
-                    sessionVM.state = .images
-                }
+                    icon: "photo.circle.fill", iconColor: .indigo, title: "Images",
+                    count: imageSessionsCount) {
+                        sessionVM.state = .images
+                    }
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
@@ -49,21 +48,9 @@ struct SessionListCards: View {
         return 13
         #endif
     }
-    
-    func toggleChatCount() {
-        if sessionVM.state == .chats {
-            if sessionVM.chatCount == .max {
-                sessionVM.chatCount = 12
-            } else {
-                sessionVM.chatCount = .max
-            }
-        } else {
-            sessionVM.state = .chats
-        }
-    }
 }
 
 #Preview {
-    SessionListCards()
+    SessionListCards(sessionCount: "5", imageSessionsCount: "3")
         .environment(SessionVM())
 }

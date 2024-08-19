@@ -10,8 +10,6 @@ import SwiftData
 
 struct ImageGenerationList: View {
     @Bindable var session: ImageSession
-    
-    @Query var providers: [Provider]
     @State private var showingInspector: Bool = false
     
     var body: some View {

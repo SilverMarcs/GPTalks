@@ -18,16 +18,14 @@ enum InputState {
     
     var normalPrompt: String = ""
     var tempNormalPrompt: String? = ""
-    var normalImagePaths: [String] = []
-    var tempNormalImagePaths: [String] = []
     
     var editingPrompt: String = ""
-    var editingIndex: Int?
-    var editingImagePaths: [String] = []
+    var editingDataFiles: [TypedData] = []
     
-    #if os(macOS)
-    private var localEventMonitor: Any?
-    #endif
+    var editingIndex: Int?
+    
+    var normalDataFiles: [TypedData] = []
+    var tempNormalDataFiles: [TypedData] = []
     
     init() { }
     
@@ -50,32 +48,33 @@ enum InputState {
         }
     }
     
-    var imagePaths: [String] {
+    var dataFiles: [TypedData] {
         get {
             switch state {
             case .normal:
-                normalImagePaths
+                normalDataFiles
             case .editing:
-                editingImagePaths
+                editingDataFiles
             }
         }
         set {
             switch state {
             case .normal:
-                normalImagePaths = newValue
+                normalDataFiles = newValue
             case .editing:
-                editingImagePaths = newValue
+                editingDataFiles = newValue
             }
         }
     }
     
     func setupEditing(for group: ConversationGroup) {
         tempNormalPrompt = normalPrompt
-        tempNormalImagePaths = normalImagePaths
+        tempNormalDataFiles = normalDataFiles
         
         state = .editing
         prompt = group.activeConversation.content
-        imagePaths = group.activeConversation.imagePaths
+
+        dataFiles = group.activeConversation.dataFiles
         editingIndex = group.session?.groups.firstIndex(of: group)
     }
     
@@ -87,51 +86,123 @@ enum InputState {
     
     func reset() {
         prompt = ""
-        imagePaths = []
+        dataFiles = []
     }
 }
 
 
-// MARK: Pasting
+// MARK: - Pasting
 extension InputManager {
-    func handlePaste() {
+    func handlePaste(supportedFileTypes: [UTType]) {
         #if os(macOS)
         let pasteboard = NSPasteboard.general
-        if let image = NSImage(pasteboard: pasteboard) {
-            if let savedPath = image.save() {
-                imagePaths.append(savedPath)
-            }
+
+        guard let pasteboardItems = pasteboard.pasteboardItems else {
+            return
         }
-        #else
-        let pasteboard = UIPasteboard.general
-        if let image = pasteboard.image {
-            if let savedPath = image.save() {
-                imagePaths.append(savedPath)
+
+        for item in pasteboardItems {
+            if let fileURLData = item.data(forType: .fileURL),
+               let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
+                processFile(at: fileURL, supportedFileTypes: supportedFileTypes)
+            } else if let imageData = item.data(forType: .png) {
+                processImageData(imageData, supportedFileTypes: supportedFileTypes)
             }
         }
         #endif
     }
-    
-    func handleImageDrop(_ providers: [NSItemProvider]) {
+
+    private func processFile(at url: URL, supportedFileTypes: [UTType]) {
+        guard let fileUTType = try? url.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier,
+              let fileType = UTType(fileUTType),
+              supportedFileTypes.contains(where: { fileType.conforms(to: $0) }) else {
+            return
+        }
+
+        do {
+            let data = try Data(contentsOf: url)
+            appendTypedData(data: data, url: url, fileType: fileType)
+        } catch {
+            print("Failed to read file data: \(error)")
+        }
+    }
+
+    private func processImageData(_ imageData: Data, supportedFileTypes: [UTType]) {
+        let tempDirectory = FileManager.default.temporaryDirectory
+        let tempFileURL = tempDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("png")
+
+        do {
+            try imageData.write(to: tempFileURL)
+            processFile(at: tempFileURL, supportedFileTypes: supportedFileTypes)
+        } catch {
+            print("Failed to write image data to temporary file: \(error)")
+        }
+    }
+
+    private func appendTypedData(data: Data, url: URL, fileType: UTType) {
+        let fileName = url.lastPathComponent
+        let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
+        let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
+        let fileExtension = url.pathExtension.lowercased()
+
+        let typedData = TypedData(
+            data: data,
+            fileType: fileType,
+            fileName: fileName,
+            fileSize: fileSize,
+            fileExtension: fileExtension
+        )
+
+        dataFiles.append(typedData)
+    }
+}
+
+// MARK: - Drag and Drop
+extension InputManager {
+    func handleDrop(_ providers: [NSItemProvider], supportedTypes: [UTType]) -> Bool {
+        print("Handling drop with supported types: \(supportedTypes)")
+        
         for provider in providers {
-            if provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
-                provider.loadObject(ofClass: PlatformImage.self) { [weak self] image, error in
-                    guard let self = self, let image = image as? PlatformImage else {
-                        print("Could not load image: \(String(describing: error))")
-                        return
-                    }
-                    
-                    DispatchQueue.main.async {
-                        if let savedPath = image.save() {
-                            if !self.imagePaths.contains(savedPath) {
-                                self.imagePaths.append(savedPath)
+            for type in supportedTypes {
+                if provider.hasItemConformingToTypeIdentifier(type.identifier) {
+                    provider.loadFileRepresentation(forTypeIdentifier: type.identifier) { url, error in
+                        guard let url = url else {
+                            if let error = error {
+                                print("Error loading file representation: \(error.localizedDescription)")
                             }
-                        } else {
-                            print("Failed to save image to disk")
+                            return
+                        }
+                        
+                        print("Processing dropped file: \(url.lastPathComponent)")
+                        
+                        DispatchQueue.main.async {
+                            if let data = try? Data(contentsOf: url) {
+                                let fileType = UTType(filenameExtension: url.pathExtension) ?? .data
+                                let fileName = url.lastPathComponent
+                                let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
+                                let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
+                                let fileExtension = url.pathExtension.lowercased()
+                                let typedData = TypedData(
+                                    data: data,
+                                    fileType: fileType,
+                                    fileName: fileName,
+                                    fileSize: fileSize,
+                                    fileExtension: fileExtension
+                                )
+                                
+                                self.dataFiles.append(typedData)
+                                print("Added file to dataFiles array. Current count: \(self.dataFiles.count)")
+                            } else {
+                                print("Failed to read data from file: \(url.lastPathComponent)")
+                            }
                         }
                     }
+                    return true
                 }
             }
         }
+        
+        print("No compatible files found in the drop")
+        return false
     }
 }

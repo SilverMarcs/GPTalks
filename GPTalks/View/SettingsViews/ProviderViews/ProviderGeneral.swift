@@ -70,13 +70,17 @@ struct ProviderGeneral: View {
             Section("Default Models") {
                 ModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
                 
+                #if os(macOS)
+                ModelPicker(model: $provider.quickChatModel, models: provider.chatModels, label: "Quick Model")
+                #endif
+                
                 ModelPicker(model: $provider.titleModel, models: provider.chatModels, label: "Title Model")
             }
 
             Section("Customisation") {
                 HStack {
                     ColorPicker("Accent Color", selection: $color)
-                        .onAppear {
+                        .task {
                             color = Color(hex: provider.color)
                         }
                         .onChange(of: color) {
@@ -117,7 +121,7 @@ struct ProviderGeneral: View {
     
     private var header: some View {
         HStack {
-            ProviderImage(provider: provider, frame: 33)
+            ProviderImage(provider: provider, frame: 33, scale: .large)
             
             Group {
 #if os(macOS)

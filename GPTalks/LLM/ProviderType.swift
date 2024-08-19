@@ -6,8 +6,7 @@
 //
 
 import Foundation
-import OpenAI
-import GoogleGenerativeAI
+import UniformTypeIdentifiers
 
 enum ProviderType: String, Codable, CaseIterable, Identifiable {
     case openai
@@ -43,18 +42,10 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     
     var imageName: String {
         switch self {
-        case .openai: "openai"
-        case .anthropic: "anthropic"
-        case .google: "google"
-        case .local: "ollama"
-        }
-    }
-    
-    var imageOffset: CGFloat {
-        switch self {
-        case .openai, .local: 4
-        case .anthropic: 6
-        case .google: 12
+        case .openai: "brain.SFSymbol"
+        case .anthropic: "anthropic.SFSymbol"
+        case .google: "google.SFSymbol"
+        case .local: "ollama.SFSymbol"
         }
     }
     
@@ -73,6 +64,15 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .anthropic: "#E6784B"
         case .google: "#E64335"
         case .local: "#EFEFEF"
+        }
+    }
+    
+    var supportedFileTypes: [UTType] {
+        switch self {
+        case .openai: return [.image]
+        case .anthropic: return [.image]
+        case .google: return [.image, .pdf, .commaSeparatedText, .audio, .delimitedText]
+        case .local: return []
         }
     }
     

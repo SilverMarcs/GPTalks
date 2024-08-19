@@ -12,13 +12,20 @@ struct GeneralSettings: View {
 
     var body: some View {
         Form {
-            Section("Appearace") {
-                Toggle("WebView Markdown", isOn: $config.assistantMarkdown)
-                Toggle("Compact List", isOn: $config.compactList)
+            Section {
+                Toggle("Autogen Title", isOn: $config.autogenTitle)
+            } header: {
+                Text("Title")
+            } footer: {
+                SectionFooterView(text: "Uses Title model in provider general settings")
             }
             
-            Section("Behaviour") {
-                Toggle("Autogen Title", isOn: $config.autogenTitle)
+            Section {
+                Toggle("Expensive Search", isOn: $config.expensiveSearch)
+            } header: {
+                Text("Search")
+            } footer: {
+                SectionFooterView(text: "Expensive method searches all messages but may cause UI responsiveness issues")
             }
         }
         .formStyle(.grouped)

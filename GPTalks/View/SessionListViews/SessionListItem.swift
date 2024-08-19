@@ -22,11 +22,11 @@ struct SessionListItem: View {
                                  model: session.config.model,
                                  title: session.title,
                                  isStarred: session.isStarred)
+                .symbolEffect(.bounce, options: .speed(0.5), isActive: session.isReplying)
             } else {
                 large
             }
         }
-//        .animation(.default, value: config.compactList)
         .swipeActions(edge: .leading) {
             swipeActionsLeading
         }
@@ -34,11 +34,12 @@ struct SessionListItem: View {
     
     var large: some View {
         HStack {
-            ProviderImage(provider: session.config.provider, radius: 9, frame: 29)
+            ProviderImage(provider: session.config.provider, radius: 9, frame: 29, scale: .large)
+                .symbolEffect(.pulse, isActive: session.isReplying)
             
             VStack(alignment: .leading) {
                 HStack {
-                    Text(session.title)
+                    HighlightedText(text: session.title, highlightedText: sessionVM.searchText, shapeStyle: .yellow.opacity(0.5), selectable: false)
                         .lineLimit(1)
                         .font(.headline)
                         .fontWeight(.semibold)
@@ -48,7 +49,6 @@ struct SessionListItem: View {
                     
                     Text(session.config.model.name)
                         .font(.caption)
-//                        .opacity(0.9)
                         .foregroundStyle(.secondary)
                         .fontWidth(.compressed)
                 }

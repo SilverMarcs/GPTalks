@@ -16,11 +16,19 @@ struct SettingsView: View {
     @State private var selectedSidebarItem: SidebarItem?
     #endif
     
+    @State private var columnVisibility = NavigationSplitViewVisibility.automatic
+    
     var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(columnVisibility: $columnVisibility) {
             List(selection: $selectedSidebarItem) {
                 Label("General", systemImage: "gear")
                     .tag(SidebarItem.general)
+                
+                Label("Appearance", systemImage: "paintbrush")
+                    .tag(SidebarItem.appearance)
+                
+                Label("Markdown", systemImage: "ellipsis.curlybraces")
+                    .tag(SidebarItem.markdown)
                 
 #if os(macOS)
                 Label("Quick Panel", systemImage: "bolt.fill")
@@ -44,24 +52,35 @@ struct SettingsView: View {
                     DismissButton()
                 }
             }
+            .navigationSplitViewColumnWidth(min: 190, ideal: 190, max: 190)
         } detail: {
-            switch selectedSidebarItem {
-            case .general:
-                GeneralSettings()
-            case .quickPanel:
-                #if os(macOS)
-                QuickPanelSettings()
-                #else
-                EmptyView()
-                #endif
-            case .parameters:
-                ParameterSettings()
-            case .providers:
-                ProviderList()
-            case .backup:
-                BackupSettings()
-            case .none:
-                Text("Select an option from the sidebar")
+            Group {
+                switch selectedSidebarItem {
+                case .general:
+                    GeneralSettings()
+                case .appearance:
+                    AppearanceSettings()
+                case .markdown:
+                    MarkdownSettings()
+                case .quickPanel:
+                    QuickPanelSettings()
+                case .parameters:
+                    ParameterSettings()
+                case .providers:
+                    ProviderList()
+                case .backup:
+                    BackupSettings()
+                case .none:
+                    Text("Select an option from the sidebar")
+                }
+            }
+            .scrollContentBackground(.visible)
+            .onChange(of: columnVisibility, initial: true) { oldVal, newVal in
+                if newVal == .detailOnly {
+                    DispatchQueue.main.asyncAfter(deadline: .now()) {
+                        columnVisibility = .all
+                    }
+                }
             }
         }
     }
@@ -69,6 +88,8 @@ struct SettingsView: View {
 
 enum SidebarItem {
     case general
+    case appearance
+    case markdown
     case quickPanel
     case parameters
     case providers

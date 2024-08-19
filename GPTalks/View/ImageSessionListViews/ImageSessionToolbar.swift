@@ -1,36 +1,80 @@
 //
-//  SessionListToolbar.swift
+//  ImageSessionToolbar.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 09/07/2024.
+//  Created by Zabir Raihan on 8/13/24.
 //
 
 import SwiftUI
 import SwiftData
 
-struct SessionListToolbar: ToolbarContent {
+struct ImageSessionToolbar: ToolbarContent {
     #if !os(macOS)
     @Environment(\.editMode) var editMode
     #endif
     @Environment(SessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
-    @Query var providers: [Provider]
+    @ObservedObject var config = AppConfig.shared
     
-    @Query var sessions: [Session]
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
+    var providers: [Provider]
     @Query var imageSessions: [ImageSession]
-    
-    @State var showSettings: Bool = false
     
     var body: some ToolbarContent {
 #if !os(macOS)
+        iosParts
+#endif
+        ToolbarItem {
+            Spacer()
+        }
+        
+        ToolbarItem(placement: .automatic) {
+            Menu {
+                ForEach(providers) { provider in
+                        Button(provider.name) {
+                            addItem(provider: provider)
+                        }
+                        .keyboardShortcut(.none)
+                }
+            } label: {
+                Label("Add Item", systemImage: "square.and.pencil")
+            } primaryAction: {
+                if let provider = getDefaultProvider(providers: providers) {
+                    addItem(provider: provider)
+                }
+            }
+            .keyboardShortcut("n", modifiers: [.command])
+            .menuIndicator(.hidden)
+        }
+    }
+
+    private func addItem(provider: Provider) {
+        let newItem = ImageSession(config: ImageConfig(provider: provider, model: provider.imageModel))
+        
+        withAnimation {
+            for session in imageSessions {
+                session.order += 1
+            }
+            
+            newItem.order = 0
+            modelContext.insert(newItem)
+            sessionVM.imageSelections = [newItem]
+        }
+    }
+    
+    #if !os(macOS)
+    @State private var showSettings = false
+    
+    @ToolbarContentBuilder
+    var iosParts: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             Menu {
                 if editMode?.wrappedValue == .inactive {
                     Button {
                         withAnimation {
                             editMode?.wrappedValue = .active
-                            sessionVM.chatCount = .max
+                            config.truncateList = false
                         }
                     } label: {
                         Label("Edit", systemImage: "pencil")
@@ -56,7 +100,7 @@ struct SessionListToolbar: ToolbarContent {
                     Button {
                         withAnimation {
                             editMode?.wrappedValue = .inactive
-                            sessionVM.chatCount = 12
+                            config.truncateList = true
                         }
                     } label: {
                         Text("Done")
@@ -75,7 +119,7 @@ struct SessionListToolbar: ToolbarContent {
                         
                         Section {
                             Button {
-                                sessionVM.selections = Set(sessions)
+                                sessionVM.imageSelections = Set(imageSessions)
                             } label: {
                                 Label("Select All", systemImage: "checkmark.circle")
                             }
@@ -100,39 +144,14 @@ struct SessionListToolbar: ToolbarContent {
                 }
             }
         }
-#endif
-        ToolbarItem {
-            Spacer()
-        }
-        
-        ToolbarItem(placement: .automatic) {
-            Menu {
-                ForEach(providers.filter { $0.isEnabled }.sorted { $0.order < $1.order }) { provider in
-                    Button(provider.name) {
-                        addItem(provider: provider)
-                    }
-                    .keyboardShortcut(.none)
-                }
-            } label: {
-                Label("Add Item", systemImage: "square.and.pencil")
-            } primaryAction: {
-                if let provider = getDefaultProvider(providers: providers) {
-                    addItem(provider: provider)
-                }
-            }
-            .keyboardShortcut("n", modifiers: [.command])
-            .menuIndicator(.hidden)
-        }
     }
-    private func addItem(provider: Provider) {
-        sessionVM.addItem(provider: provider, sessions: sessions, imageSessions: imageSessions, modelContext: modelContext)
-    }
+    #endif
 }
 
 #Preview {
     VStack {
         Text("Hi")
     }.toolbar  {
-        SessionListToolbar()
+//        SessionListToolbar()
     }
 }

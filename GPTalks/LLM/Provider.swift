@@ -26,21 +26,17 @@ class Provider {
     var color: String = "#00947A"
     var isEnabled: Bool = true
     
-    @Relationship(deleteRule: .noAction)
+    @Relationship(deleteRule: .cascade)
     var chatModel: AIModel
-    @Relationship(deleteRule: .noAction)
+    @Relationship(deleteRule: .cascade)
     var quickChatModel: AIModel
-    @Relationship(deleteRule: .noAction)
+    @Relationship(deleteRule: .cascade)
     var titleModel: AIModel
-    @Relationship(deleteRule: .noAction)
+    @Relationship(deleteRule: .cascade)
     var imageModel: AIModel
     
-    @Relationship(deleteRule: .noAction)
+    @Relationship(deleteRule: .cascade)
     var models =  [AIModel]()
-    
-    var sortedModels: [AIModel] {
-        models.sorted(by: { $0.order < $1.order })
-    }
     
     var chatModels: [AIModel] {
         get {
@@ -136,7 +132,8 @@ extension Provider {
          case .openai, .local:
              let config = OpenAI.Configuration(
                  token: apiKey,
-                 host: host
+                 host: host,
+                 scheme: type.scheme
              )
              
              let service = OpenAI(configuration: config)

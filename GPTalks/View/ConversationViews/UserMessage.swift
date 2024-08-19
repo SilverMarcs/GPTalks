@@ -9,23 +9,22 @@ import SwiftUI
 
 struct UserMessage: View {
     @Environment(\.colorScheme) var colorScheme
+    @ObservedObject var config = AppConfig.shared
     
-    var conversation: Conversation
+    @Bindable var conversation: Conversation
     @State var isHovered: Bool = false
-    
-    @State var maxHeight: CGFloat = 400
-    @State var labelSize: CGSize = CGSize()
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
     
     var body: some View {
-        VStack(alignment: .trailing, spacing: 4) {
-            if !conversation.imagePaths.isEmpty {
-                imageList
+        VStack(alignment: .trailing, spacing: 7) {
+            if !conversation.dataFiles.isEmpty {
+                DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false)
             }
             
-            Text(conversation.content)
-                .textSelection(.enabled)
+            HighlightedText(text: conversation.content, highlightedText: conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil)
+                .font(.system(size: config.fontSize))
+                .lineLimit(!isExpanded ? lineLimit : nil)
                 .padding(.vertical, 8)
                 .padding(.horizontal, 11)
                 .background(
@@ -40,16 +39,16 @@ struct UserMessage: View {
             
             #if os(macOS)
             if let group = conversation.group {
-                ConversationMenu(group: group, labelSize: labelSize, toggleMaxHeight: toggleMaxHeight, isExpanded: isExpanded)
-                    .opacity(isHovered ? 1 : 0)
-                    .animation(.easeInOut(duration: 0.2), value: isHovered)
+                ConversationMenu(group: group, isExpanded: $isExpanded)
+                    .symbolEffect(.appear, isActive: !isHovered)
             }
             #endif
         }
+        .padding(.leading, leadingPadding)
         #if !os(macOS)
         .contextMenu {
             if let group = conversation.group {
-                ConversationMenu(group: group, labelSize: labelSize, toggleMaxHeight: toggleMaxHeight, isExpanded: isExpanded, toggleTextSelection: toggleTextSelection)
+                ConversationMenu(group: group, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
             }
         } preview: {
             Text("User Message")
@@ -63,19 +62,7 @@ struct UserMessage: View {
             self.isHovered = isHovered
         }
         #endif
-        .frame(maxWidth: .infinity, maxHeight: maxHeight, alignment: .trailing)
-        .padding(.leading, leadingPadding)
-        .background {
-            GeometryReader { geometry in
-                Color.clear
-                    .onAppear {
-                        updateLabelSize(geometry.size)
-                    }
-                    .onChange(of: geometry.size) {
-                        updateLabelSize(geometry.size)
-                    }
-            }
-        }
+        .frame(maxWidth: .infinity, alignment: .trailing)
     }
     
     func toggleTextSelection() {
@@ -90,44 +77,20 @@ struct UserMessage: View {
         #endif
     }
     
+    var lineLimit: Int {
+        #if os(macOS)
+        15
+        #else
+        6
+        #endif
+    }
+    
     var indexOfConversationGroup: Int {
         conversation.group?.session?.groups.firstIndex(where: { $0 == conversation.group }) ?? 0
     }
     
-    var imageList: some View {
-        ScrollView {
-            HStack {
-                ForEach(conversation.imagePaths, id: \.self) { imagePath in
-                    ImageViewer(imagePath: imagePath, maxWidth: maxImageSize, maxHeight: maxImageSize, radius: 9, isCrossable: false) {
-                            print("Should not be removed from here")
-                    }
-                }
-            }
-        }
-    }
-    
     private var maxImageSize: CGFloat {
         300
-    }
-    
-    func updateLabelSize(_ size: CGSize) {
-        DispatchQueue.main.async {
-            if self.labelSize != size {
-                self.labelSize = size
-            }
-        }
-    }
-    
-    func toggleMaxHeight() {
-        withAnimation {
-            if maxHeight == 400 {
-                maxHeight = .infinity
-                isExpanded = true
-            } else {
-                maxHeight = 400
-                isExpanded = false
-            }
-        }
     }
 }
 

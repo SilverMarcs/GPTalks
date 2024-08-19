@@ -9,9 +9,9 @@ import KeyboardShortcuts
 import SwiftUI
 import SwiftData
 
-#if os(macOS)
 struct QuickPanelSettings: View {
-    @Query var providers: [Provider]
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
+    var providers: [Provider]
     @ObservedObject var providerManager: ProviderManager = .shared
     @ObservedObject var config = AppConfig.shared
 
@@ -29,18 +29,28 @@ struct QuickPanelSettings: View {
     }
     
     var body: some View {
+        #if os(macOS)
+        content
+        #else
+        EmptyView()
+        #endif
+    }
+    
+    var content: some View {
         Form {
             Section("Launch") {
                 HStack {
                     Text("Shortcut")
                     Spacer()
+                    #if os(macOS)
                     KeyboardShortcuts.Recorder(for: .togglePanel)
+                    #endif
                 }
             }
             
             Section("LLM") {
                 Picker("Provider", selection: providerBinding) {
-                    ForEach(providers.filter { $0.isEnabled }, id: \.self) { provider in
+                    ForEach(providers, id: \.self) { provider in
                         Text(provider.name).tag(provider as Provider?)
                     }
                 }
@@ -76,4 +86,3 @@ struct QuickPanelSettings: View {
 #Preview {
     QuickPanelSettings()
 }
-#endif

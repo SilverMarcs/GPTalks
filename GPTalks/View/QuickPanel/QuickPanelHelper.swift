@@ -12,26 +12,33 @@ struct QuickPanelHelper: View {
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) var sessionVM
     
-    @Query var providers: [Provider]
-    @Query(filter: #Predicate<Session> { session in
-            session.isQuick == true
-    }) var sessions: [Session]
-    
     @State private var session: Session?
     @Binding var showAdditionalContent: Bool
     
-    let dismiss: () -> Void
-    
     var body: some View {
         if let session = session {
-            QuickPanel(session: session, showAdditionalContent: $showAdditionalContent, dismiss: dismiss)
+            QuickPanel(session: session, showAdditionalContent: $showAdditionalContent)
         } else {
-            Text("Loading...")
-                .onAppear {
-                    if session == nil {
-                        session = sessions.first ?? sessionVM.addQuickItem(providers: providers, modelContext: modelContext)
-                    }
-                }
+            Text("Something went wrong")
+            .padding()
+            .onAppear {
+                fetchQuickSession()
+            }
+        }
+    }
+    
+    private func fetchQuickSession() {
+        var descriptor = FetchDescriptor<Session>(
+            predicate: #Predicate { $0.isQuick == true }
+        )
+        
+        descriptor.fetchLimit = 1
+        
+        do {
+            let quickSessions = try modelContext.fetch(descriptor)
+            session = quickSessions.first
+        } catch {
+            print("Error fetching quick session: \(error)")
         }
     }
 }

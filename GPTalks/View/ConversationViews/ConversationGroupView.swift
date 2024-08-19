@@ -14,16 +14,21 @@ struct ConversationGroupView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            switch group.role {
-            case .user:
-                UserMessage(conversation: group.activeConversation)
-                    .padding(.top, 5)
-            case .assistant:
-                AssistantMessage(conversation: group.activeConversation)
-                    .padding(.top, 5)
-            default:
-                Text("Unknown role")
+            Group {
+                switch group.role {
+                case .user:
+                    UserMessage(conversation: group.activeConversation)
+                        .padding(.top, 5)
+                case .assistant:
+                    AssistantMessage(conversation: group.activeConversation)
+                        .padding(.top, 5)
+                default:
+                    Text("Unknown role")
+                }
             }
+            #if os(iOS)
+            .opacity(0.9)
+            #endif
             
             if group.session?.groups.firstIndex(where: { $0 == group }) == group.session?.resetMarker {
                 ContextResetDivider() {

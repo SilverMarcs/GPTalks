@@ -10,55 +10,84 @@ import SwiftData
 
 struct ChatInspector: View {
     @Bindable var session: Session
-    @Query var providers: [Provider]
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)], animation: .default)
+    var providers: [Provider]
     @State var expandAdvanced: Bool = false
+    @State var isGeneratingTtile: Bool = false
     
+    @Environment(\.dismiss) var dismiss
     var body: some View {
-        Form {
-            Section("Title") {
-                HStack(spacing: 0) {
-                    title
-                    Spacer()
-                    generateTitle
+        NavigationStack {
+            #if os(macOS) || os(visionOS)
+            HStack {
+                Text("Config")
+                Spacer()
+                DismissButton() {
+                    dismiss()
                 }
-
+                .imageScale(.large)
+                .buttonStyle(.plain)
             }
-            
-            Section("Models") {
-                ProviderPicker(
-                    provider: $session.config.provider,
-                    providers: providers.sorted(by: { $0.order < $1.order }),
-                    onChange: { newProvider in
-                        session.config.model = newProvider.chatModel
-                    }
-                )
-                ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
-            }
-            
-            Section("Basic") {
-                Toggle("Stream", isOn: $session.config.stream)
-                TemperatureSlider(temperature: $session.config.temperature, shortLabel: true)
-                MaxTokensPicker(value: $session.config.maxTokens)
-            }
-            
-            Section("System Prompt") {
-                sysPrompt
-            }
-            
-            #if os(macOS)
-            Section("Advanced", isExpanded: $expandAdvanced) {
-                TopPSlider(topP: $session.config.topP, shortLabel: true)
-                FrequencyPenaltySlider(penalty: $session.config.frequencyPenalty, shortLabel: true)
-                PresencePenaltySlider(penalty: $session.config.presencePenalty, shortLabel: true)
-            }
+            .padding([.top, .horizontal])
             #endif
             
-            Section("") {
-                resetContext
-                deleteAllMessages
+            Form {
+                Section("Title") {
+                    HStack(spacing: 0) {
+                        title
+                        Spacer()
+                        generateTitle
+                    }
+                    
+                }
+                
+                Section("Models") {
+                    ProviderPicker(
+                        provider: $session.config.provider,
+                        providers: providers,
+                        onChange: { newProvider in
+                            session.config.model = newProvider.chatModel
+                        }
+                    )
+                    ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
+                }
+                
+                Section("Basic") {
+                    Toggle("Stream", isOn: $session.config.stream)
+                    TemperatureSlider(temperature: $session.config.temperature, shortLabel: true)
+                    MaxTokensPicker(value: $session.config.maxTokens)
+                }
+                
+                Section("System Prompt") {
+                    sysPrompt
+                }
+                
+#if os(macOS)
+                Section("Advanced", isExpanded: $expandAdvanced) {
+                    TopPSlider(topP: $session.config.topP, shortLabel: true)
+                    FrequencyPenaltySlider(penalty: $session.config.frequencyPenalty, shortLabel: true)
+                    PresencePenaltySlider(penalty: $session.config.presencePenalty, shortLabel: true)
+                }
+#endif
+                
+                Section("") {
+                    resetContext
+                    deleteAllMessages
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
+            .formStyle(.grouped)
         }
+        #if !os(macOS)
+        .navigationTitle("Tokens: " + String(session.tokenCount))
+        .toolbarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                DismissButton()
+                    .buttonStyle(.plain)
+            }
+        }
+        #endif
     }
     
     private var title: some View {
@@ -76,12 +105,17 @@ struct ChatInspector: View {
     private var generateTitle: some View {
         Button {
             if session.isStreaming { return }
-            Task { await session.generateTitle(forced: true) }
+            isGeneratingTtile.toggle()
+            Task {
+                await session.generateTitle(forced: true)
+                isGeneratingTtile.toggle()
+            }
         } label: {
             Image(systemName: "sparkles")
+                .symbolEffect(.pulse, isActive: isGeneratingTtile)
         }
         .buttonStyle(.plain)
-        .foregroundStyle(.link)
+        .foregroundStyle(.mint.gradient)
     }
     
     private var resetContext: some View {

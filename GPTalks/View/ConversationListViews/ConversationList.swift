@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
-import UniformTypeIdentifiers
+
 
 struct ConversationList: View {
-    var session: Session
+    @Bindable var session: Session
     var isQuick: Bool = false
+    
+    @ObservedObject var config: AppConfig = AppConfig.shared
     
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) private var sessionVM
@@ -18,83 +20,71 @@ struct ConversationList: View {
     @State private var hasUserScrolled = false
     @State var showingInspector: Bool = false
     
-    @State private var isExportingJSON = false
-    @State private var isExportingMarkdown = false
-    
     var body: some View {
+        if isQuick {
+            content
+        } else {
+            content
+                .modifier(PlatformSpecificModifiers(session: session, showingInspector: $showingInspector, hasUserScrolled: $hasUserScrolled))
+        }
+    }
+    
+    var content: some View {
         ScrollViewReader { proxy in
-            ScrollView {
-                VStack(spacing: spacing) {
-                    ForEach(session.groups, id: \.self) { group in
-                        ConversationGroupView(group: group)
-                    }
-
-                    ErrorMessageView(session: session)
-                    
-                    colorSpacer
+            Group {
+                if config.listView {
+                    listView
+                } else {
+                    vStackView
                 }
-                .padding()
-                .padding(.top, -5)
             }
-            .onAppear {
+            .task {
+                sessionVM.selections.first?.refreshTokens()
                 session.proxy = proxy
             }
-            #if os(macOS)
-            .navigationSubtitle( session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))
-            .navigationTitle(session.title)
-            .toolbar {
-                ConversationListToolbar(session: session)
-            }
-            #else
-            #if !os(visionOS)
-            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                let bottomReached = value > UIScreen.main.bounds.height
-                hasUserScrolled = bottomReached
-            }
-            .scrollDismissesKeyboard(.immediately)
-            #endif
-            .onTapGesture {
-                showingInspector = false
-            }
-            .toolbar {
-                showInspector
-            }
-            .toolbarTitleDisplayMode(.inline)
-            .navigationTitle(session.config.model.name)
-            .toolbarTitleMenu {
-                exportButtons
-            }
-            #endif
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
-            .scrollContentBackground(.visible)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
                     ChatInputView(session: session)
-                } else {
-                    EmptyView()
                 }
             }
-            #if os(iOS)
-            .inspector(isPresented: $showingInspector) {
-                InspectorView(showingInspector: $showingInspector)
-            }
-            #elseif os(visionOS)
-            .sheet(isPresented: $showingInspector) {
-                NavigationStack {
-                    InspectorView(showingInspector: $showingInspector)
-                        .toolbar {
-                            ToolbarItem(placement: .topBarLeading) {
-                                DismissButton()
-                            }
-                        }
+        }
+    }
+    
+    var vStackView: some View  {
+        ScrollView {
+            VStack(spacing: spacing) {
+                ForEach(session.groups, id: \.self) { group in
+                    ConversationGroupView(group: group)
                 }
 
+                ErrorMessageView(session: session)
+                
+                colorSpacer
             }
-            #endif
-            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
-                session.inputManager.handleImageDrop(providers)
-                return true
+            .padding()
+            .padding(.top, -5)
+        }
+        .scrollContentBackground(.visible)
+    }
+    
+    var listView: some View {
+        List {
+            VStack(spacing: 3) {
+                ForEach(session.groups, id: \.self) { group in
+                    ConversationGroupView(group: group)
+                }
+                .transaction { $0.animation = nil }
+
+                ErrorMessageView(session: session)
             }
+            .listRowSeparator(.hidden)
+            .transaction { $0.animation = nil }
+            
+            Color.clear
+                .id(String.bottomID)
+                .listRowSeparator(.hidden)
+                .transaction { $0.animation = nil }
         }
     }
     
@@ -113,38 +103,13 @@ struct ConversationList: View {
         #endif
     }
     
-    @ViewBuilder
-    var exportButtons: some View {
-        Button {
-            isExportingJSON = true
-        } label: {
-            Label("Export JSON", systemImage: "ellipsis.curlybraces")
-        }
-        
-        Button {
-            isExportingMarkdown = true
-        } label: {
-            Label("Export Markdown", systemImage: "richtext.page")
-        }
-    }
-    
-    #if !os(macOS)
-    private var showInspector: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                showingInspector.toggle()
-                
-            } label: {
-                Label("Show Inspector", systemImage: "info.circle")
-            }
-        }
-    }
-    #endif
-    
     var spacerHeight: CGFloat {
         #if os(macOS)
-        20
+        if config.markdownProvider == .webview {
+            20
+        } else {
+            1
+        }
         #else
         10
         #endif
@@ -156,12 +121,6 @@ struct ConversationList: View {
         #else
         15
         #endif
-    }
-    
-    var navSubtitle: String {
-        "Tokens: "
-        + session.tokenCounter.formatToK()
-        + " • " + session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45)
     }
 }
 

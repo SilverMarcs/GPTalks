@@ -23,6 +23,11 @@ extension SessionVM {
         }
     }
     
+    func stopStreaming() {
+        guard let session = activeSession, session.isStreaming else { return }
+        session.stopStreaming()
+    }
+    
     func regenLastMessage() {
         guard let session = activeSession, !session.isStreaming else { return }
         
@@ -63,95 +68,62 @@ extension SessionVM {
             lastUserGroup.setupEditing()
         }
     }
-
-    func addChatSession(provider: Provider, sessions: [Session], modelContext: ModelContext) {
-        let config = SessionConfig(provider: provider, purpose: .chat)
-        let newItem = Session(config: config)
-        
+    
+    func fork(session: Session, modelContext: ModelContext) {
         withAnimation {
-            for session in sessions {
+            // Create a predicate to filter out sessions where isQuick is true
+            let predicate = #Predicate<Session> { session in
+                session.isQuick == false
+            }
+            
+            // Create a FetchDescriptor with the predicate and sort descriptor
+            let descriptor = FetchDescriptor<Session>(
+                predicate: predicate,
+                sortBy: [SortDescriptor(\.order)]
+            )
+            
+            // Fetch the sessions
+            if let sessions = try? modelContext.fetch(descriptor) {
+                // Update the order of existing sessions
+                for existingSession in sessions {
+                    existingSession.order += 1
+                }
+                
+                // Insert the new session
+                session.order = 0
+                modelContext.insert(session)
+                self.selections = [session]
+            }
+        }
+        
+        try? modelContext.save()
+    }
+    
+    @discardableResult
+    func createNewSession(modelContext: ModelContext) -> Session? {
+        let fetchProviders = FetchDescriptor<Provider>()
+        
+        let fetchedProviders = try! modelContext.fetch(fetchProviders)
+        
+        if let provider = ProviderManager.shared.getDefault(providers: fetchedProviders) {
+            let config = SessionConfig(provider: provider, purpose: .chat)
+            let newItem = Session(config: config)
+            config.session = newItem
+            
+            var fetchSessions = FetchDescriptor<Session>()
+            fetchSessions.sortBy = [SortDescriptor(\.order)]
+            let fetchedSessions = try! modelContext.fetch(fetchSessions)
+            
+            for session in fetchedSessions {
                 session.order += 1
             }
             
             newItem.order = 0
             modelContext.insert(newItem)
-            self.selections = [newItem]
-        }
-        
-        try? modelContext.save()
-    }
-    
-    func addItem(provider: Provider, sessions: [Session], modelContext: ModelContext) {
-        let config = SessionConfig(provider: provider, purpose: .chat)
-        
-        let newItem = Session(config: config)
-        
-        withAnimation {
-            // Increment the order of all existing items
-            for session in sessions {
-                session.order += 1
-            }
             
-            newItem.order = 0  // Set the new item's order to 0 (top of the list)
-            modelContext.insert(newItem)
-            self.selections = [newItem]
+            return newItem
         }
         
-        try? modelContext.save()
-    }
-    
-    func addItem(sessions: [Session], providers: [Provider], modelContext: ModelContext) {
-        let provider: Provider
-        if let defaultProvider = ProviderManager.shared.getDefault(providers: providers) {
-            provider = defaultProvider
-        } else if let firstProvider = providers.first {
-            provider = firstProvider
-        } else {
-            return
-        }
-        
-        let config = SessionConfig(
-            provider: provider, purpose: .chat)
-        
-        let newItem = Session(config: config)
-        
-        withAnimation {
-            // Increment the order of all existing items
-            for session in sessions {
-                session.order += 1
-            }
-            
-            newItem.order = 0  // Set the new item's order to 0 (top of the list)
-            modelContext.insert(newItem)
-            self.selections = [newItem]
-        }
-        
-        try? modelContext.save()
-    }
-    
-    func fork(session: Session, sessions: [Session], modelContext: ModelContext) {
-        withAnimation {
-            for existingSession in sessions {
-                existingSession.order += 1
-            }
-            
-            session.order = 0
-            modelContext.insert(session)
-            self.selections = [session]
-        }
-        
-        try? modelContext.save()
-    }
-    
-    func addQuickItem(providers: [Provider], modelContext: ModelContext) -> Session {
-        if let defaultQuickProvider = ProviderManager.shared.getQuickProvider(providers: providers) {
-            let config = SessionConfig(provider: defaultQuickProvider, purpose: .quick)
-            let session = Session(config: config)
-            session.isQuick = true
-            
-            return session
-        }
-        
-        return Session(config: SessionConfig())
+        return nil
     }
 }

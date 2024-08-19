@@ -12,97 +12,79 @@ import KeyboardShortcuts
 struct ContentView: View {
     @Environment(SessionVM.self) private var sessionVM
     @Environment(\.modelContext) private var modelContext
-    @Query private var providers: [Provider]
+    @Environment(\.openWindow) var openWindow
+    @Environment(\.dismissWindow) var dismissWindow
 
     @ObservedObject var providerManager = ProviderManager.shared
-    
-#if os(macOS)
-    @State var showingPanel = false
-    @State private var mainWindow: NSWindow?
-    @State var showAdditionalContent = false
-#endif
     
     @State var showingInspector: Bool = true
     
     var body: some View {
         NavigationSplitView {
             SessionListSidebar()
+                .navigationSplitViewColumnWidth(min: 240, ideal: 250, max: 300)
         } detail: {
             ConversationListDetail()
         }
-        #if !os(visionOS)
-        .background(.background)
-        #endif
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                if providers.isEmpty {
-                    let openAI = Provider.factory(type: .openai)
-                    let anthropic = Provider.factory(type: .anthropic)
-                    let google = Provider.factory(type: .google)
-                    modelContext.insert(openAI)
-                    modelContext.insert(anthropic)
-                    modelContext.insert(google)
-                    
-                    if providerManager.getDefault(providers: providers) == nil {
-                        providerManager.defaultProvider = openAI.id.uuidString
-                    }
-                    
-                    if providerManager.getQuickProvider(providers: providers) == nil {
-                        providerManager.quickProvider = openAI.id.uuidString
-                    }
-                }
-            }
+        .task {
+            setupShortcut()
+            initialSetup()
         }
         #if os(macOS)
-        .frame(minWidth: 600, minHeight: 400)
-        .background(BackgroundView(window: $mainWindow))
-        .task {
-            KeyboardShortcuts.onKeyDown(for: .togglePanel) {
-                if !NSApp.isActive {
-                    NSApp.activate(ignoringOtherApps: true)
-                }
-                showingPanel.toggle()
-            }
-        }
-        .floatingPanel(isPresented: $showingPanel, showAdditionalContent: $showAdditionalContent) {
-            QuickPanelHelper(showAdditionalContent: $showAdditionalContent) {
-                showingPanel.toggle()
-                bringMainWindowToFront()
-            }
-            .modelContainer(modelContext.container)
-            .environment(sessionVM)
-        }
-        .inspector(isPresented: $showingInspector) {
-            InspectorView(showingInspector: $showingInspector)
-        }
+        .frame(minWidth: 800, minHeight: 600)
         #endif
     }
     
-#if os(macOS)
-    private func bringMainWindowToFront() {
-        if let window = mainWindow, !window.isKeyWindow {
-            window.makeKeyAndOrderFront(nil)
-            NSApp.activate(ignoringOtherApps: true)
-        }
-    }
-#endif
-}
+    private func initialSetup() {
+        var fetchProviders = FetchDescriptor<Provider>()
+        fetchProviders.fetchLimit = 1
+        
+        guard try! modelContext.fetch(fetchProviders).count == 0 else { return }
+        
+        let openAI = Provider.factory(type: .openai)
+        openAI.order = 0
+        let anthropic = Provider.factory(type: .anthropic)
+        anthropic.order = 1
+        let google = Provider.factory(type: .google)
+        google.order = 2
+        
+        modelContext.insert(openAI)
+        modelContext.insert(anthropic)
+        modelContext.insert(google)
+        
+        let config = SessionConfig(provider: openAI, purpose: .quick)
+        let session = Session(config: config)
+        config.session = session
+        session.isQuick = true
 
-#if os(macOS)
-struct BackgroundView: NSViewRepresentable {
-    @Binding var window: NSWindow?
-    
-    func makeNSView(context: Context) -> NSView {
-        let nsView = NSView()
-        DispatchQueue.main.async {
-            self.window = nsView.window
-        }
-        return nsView
+        modelContext.insert(session)
+        
+        ProviderManager.shared.defaultProvider = openAI.id.uuidString
+        ProviderManager.shared.quickProvider = openAI.id.uuidString
     }
     
-    func updateNSView(_ nsView: NSView, context: Context) {}
+    private func setupShortcut() {
+        #if os(macOS)
+        KeyboardShortcuts.onKeyDown(for: .togglePanel) {
+            if let window = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "quick" }) {
+                if window.isVisible {
+                    dismissWindow(id: "quick")
+                } else {
+                    openWindow(id: "quick")
+                    window.makeKeyAndOrderFront(nil)
+                    NSApplication.shared.activate(ignoringOtherApps: true)
+                }
+            } else {
+                openWindow(id: "quick")
+                if let newWindow = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "quick" }) {
+                    newWindow.makeKeyAndOrderFront(nil)
+                    NSApplication.shared.activate(ignoringOtherApps: true)
+                }
+            }
+        }
+        #endif
+    }
 }
-#endif
 
 #Preview {
     ContentView()
