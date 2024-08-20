@@ -33,12 +33,14 @@ struct ImageGenerationList: View {
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 ImageInputView(session: session)
             }
-#if os(macOS)
+            #if os(macOS)
             .navigationTitle(session.title)
             .toolbar {
-                ImageGenerationListToolbar(session: session)
+//                ImageGenerationListToolbar(session: session)
+                
+                showInspector
             }
-#else
+            #else
             #if !os(visionOS)
             .scrollDismissesKeyboard(.immediately)
             #endif
@@ -54,29 +56,15 @@ struct ImageGenerationList: View {
                 scrollToBottom(proxy: proxy)
             }
             #endif
-            #if os(iOS)
             .inspector(isPresented: $showingInspector) {
-                InspectorView(showingInspector: $showingInspector)
+                ImageInspector(session: session)
             }
-            #elseif os(visionOS)
-            .sheet(isPresented: $showingInspector) {
-                NavigationStack {
-                    InspectorView(showingInspector: $showingInspector)
-                        .toolbar {
-                            ToolbarItem(placement: .topBarLeading) {
-                                DismissButton()
-                            }
-                        }
-                }
-
-            }
-            #endif
         }
     }
     
-    #if !os(macOS)
+//    #if !os(macOS)
     private var showInspector: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
+        ToolbarItem {
             Button {
                 showingInspector.toggle()
             } label: {
@@ -84,7 +72,7 @@ struct ImageGenerationList: View {
             }
         }
     }
-    #endif
+//    #endif
 }
 
 

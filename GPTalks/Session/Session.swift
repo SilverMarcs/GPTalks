@@ -279,6 +279,9 @@ final class Session {
         let group = ConversationGroup(conversation: conversation, session: self)
         
         groups.append(group)
+        
+        try? group.modelContext?.save()
+        
         return group
     }
     

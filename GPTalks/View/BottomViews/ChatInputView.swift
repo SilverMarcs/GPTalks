@@ -29,7 +29,7 @@ struct ChatInputView: View {
                 .offset(y: -2.4)
             #endif
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 5) {
                 if !session.inputManager.dataFiles.isEmpty {
                     DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
                 }

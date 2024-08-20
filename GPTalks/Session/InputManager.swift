@@ -140,7 +140,7 @@ extension InputManager {
     }
 
     private func appendTypedData(data: Data, url: URL, fileType: UTType) {
-        let fileName = url.lastPathComponent
+        let fileName = url.deletingPathExtension().lastPathComponent
         let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
         let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
         let fileExtension = url.pathExtension.lowercased()
@@ -178,7 +178,7 @@ extension InputManager {
                         DispatchQueue.main.async {
                             if let data = try? Data(contentsOf: url) {
                                 let fileType = UTType(filenameExtension: url.pathExtension) ?? .data
-                                let fileName = url.lastPathComponent
+                                let fileName = url.deletingPathExtension().lastPathComponent
                                 let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
                                 let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
                                 let fileExtension = url.pathExtension.lowercased()

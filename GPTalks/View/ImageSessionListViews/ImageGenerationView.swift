@@ -69,7 +69,7 @@ struct ImageGenerationView: View {
                                         )}
                             } else if generation.state == .success {
                                 ForEach(generation.imagePaths, id: \.self) { path in
-                                    ImageViewer(imagePath: path, maxWidth: 250, maxHeight: 250, isCrossable: false) { }
+                                    ImageViewerOld(imagePath: path, maxWidth: 250, maxHeight: 250, isCrossable: false) { }
                                 }
                             }
                         }

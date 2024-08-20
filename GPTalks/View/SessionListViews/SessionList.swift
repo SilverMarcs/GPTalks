@@ -60,10 +60,7 @@ struct SessionList: View {
                 }
             }
             .onChange(of: sessions.count) {
-                if let first = sessions.first {
-//                    proxy.scrollTo(first, anchor: .top)
-                    proxy.scrollTo(String.topID, anchor: .top)
-                }
+                proxy.scrollTo(String.topID, anchor: .top)
             }
             .task {
                 if let first = sessions.first, sessionVM.selections.isEmpty, !isIOS() {

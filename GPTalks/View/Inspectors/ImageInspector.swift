@@ -14,59 +14,60 @@ struct ImageInspector: View {
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
+    var openaiProviders: [Provider] {
+        providers.filter { $0.type == .openai }
+    }
+    
     var body: some View {
-        Form {
-            Section("Title") {
-                HStack(spacing: 0) {
-                    TextField("Title", text: $session.title)
-                        .labelsHidden()
+        NavigationStack {
+            Form {
+                Section("Title") {
+                    HStack(spacing: 0) {
+                        TextField("Title", text: $session.title)
+                            .labelsHidden()
+                        
+                        Spacer()
+                        
+                        generateTitle
+                    }
+                }
+                
+                Section("Models") {
+                    ProviderPicker(provider: $session.config.provider,
+                                   providers: openaiProviders) { provider in
+                        session.config.model = provider.imageModel
+                    }
                     
-                    Spacer()
+                    ModelPicker(model: $session.config.model, models: session.config.provider.imageModels, label: "Model")
+                }
+                
+                Section("Parameters") {
+                    Picker("N", selection: $session.config.numImages) {
+                        ForEach(1 ... 4, id: \.self) { num in
+                            Text(String(num)).tag(num)
+                        }
+                    }
                     
-                    generateTitle
-                }
-            }
-            
-            Section("Models") {
-//                ProviderPicker(provider: $session.config.provider, providers: providers.filter { !$0.imageModels.isEmpty }) { provider in
-//                    session.config.model = provider.imageModel
-//                }
-                
-//                ModelPicker(model: $session.config.model, models: session.config.provider.imageModels, label: "Model")
-                
-                ProviderPicker(provider: $session.config.provider,
-                               providers: providers) { provider in
-                    session.config.model = provider.imageModel
-                }
-                
-                ModelPicker(model: $session.config.model, models: session.config.provider.imageModels, label: "Model")
-            }
-            
-            Section("Parameters") {
-                Picker("N", selection: $session.config.numImages) {
-                    ForEach(1 ... 4, id: \.self) { num in
-                        Text(String(num)).tag(num)
+                    Picker("Quality", selection: $session.config.quality) {
+                        ForEach(ImagesQuery.Quality.allCases, id: \.self) { quality in
+                            Text(quality.rawValue.uppercased()).tag(quality)
+                        }
                     }
-                }
-                
-                Picker("Quality", selection: $session.config.quality) {
-                    ForEach(ImagesQuery.Quality.allCases, id: \.self) { quality in
-                        Text(quality.rawValue.uppercased()).tag(quality)
+                    
+                    Picker("Size", selection: $session.config.size) {
+                        ForEach(ImagesQuery.Size.allCases, id: \.self) { size in
+                            Text(size.rawValue.capitalized).tag(size)
+                        }
                     }
-                }
-                
-                Picker("Size", selection: $session.config.size) {
-                    ForEach(ImagesQuery.Size.allCases, id: \.self) { size in
-                        Text(size.rawValue.capitalized).tag(size)
-                    }
-                }
-                
-                Picker("Style", selection: $session.config.style) {
-                    ForEach(ImagesQuery.Style.allCases, id: \.self) { style in
-                        Text(style.rawValue.capitalized).tag(style)
+                    
+                    Picker("Style", selection: $session.config.style) {
+                        ForEach(ImagesQuery.Style.allCases, id: \.self) { style in
+                            Text(style.rawValue.capitalized).tag(style)
+                        }
                     }
                 }
             }
+            .formStyle(.grouped)
         }
     }
     

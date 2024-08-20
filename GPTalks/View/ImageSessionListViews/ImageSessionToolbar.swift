@@ -21,6 +21,10 @@ struct ImageSessionToolbar: ToolbarContent {
     var providers: [Provider]
     @Query var imageSessions: [ImageSession]
     
+    var openaiProviders: [Provider] {
+        providers.filter { $0.type == .openai }
+    }
+    
     var body: some ToolbarContent {
 #if !os(macOS)
         iosParts
@@ -40,8 +44,10 @@ struct ImageSessionToolbar: ToolbarContent {
             } label: {
                 Label("Add Item", systemImage: "square.and.pencil")
             } primaryAction: {
-                if let provider = getDefaultProvider(providers: providers) {
+                if let provider = getDefaultProvider(providers: openaiProviders) {
                     addItem(provider: provider)
+                } else if let first = providers.first {
+                    addItem(provider: first)
                 }
             }
             .keyboardShortcut("n", modifiers: [.command])

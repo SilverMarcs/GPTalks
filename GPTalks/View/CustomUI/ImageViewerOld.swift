@@ -8,7 +8,7 @@
 import SwiftUI
 import QuickLook
 
-struct ImageViewer: View {
+struct ImageViewerOld: View {
     let imagePath: String
     let onRemove: () -> Void
     
@@ -70,5 +70,5 @@ struct ImageViewer: View {
     let path = "file:///Users/Zabir/Pictures/Screenshots/zdontdelete.png"
     
 //    ImageViewer(imagePath: path, maxWidth: .infinity) {}
-    ImageViewer(imagePath: path, maxWidth: .infinity) {}
+    ImageViewerOld(imagePath: path, maxWidth: .infinity) {}
 }

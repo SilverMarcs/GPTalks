@@ -35,7 +35,9 @@ struct AppearanceSettings: View {
             
             Section {
                 Toggle("Compact List Row", isOn: $config.compactList)
+                #if os(macOS)
                 Toggle("List View", isOn: $config.listView)
+                #endif
                 Toggle("Folder View", isOn: $config.folderView)
             } header: {
                 Text("View Customisation")

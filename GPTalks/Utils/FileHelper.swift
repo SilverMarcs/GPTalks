@@ -30,7 +30,7 @@ struct FileHelper {
     
     static func createTemporaryURL(for typedData: TypedData) -> URL? {
         let tempDirectoryURL = FileManager.default.temporaryDirectory
-        let fileName = typedData.fileName
+        let fileName = typedData.fileName + "." + typedData.fileExtension
 //        let fileExtension = typedData.fileType.preferredFilenameExtension ?? typedData.fileExtension
 //        let fileURL = tempDirectoryURL.appendingPathComponent(fileName).appendingPathExtension(fileExtension)
         let fileURL = tempDirectoryURL.appendingPathComponent(fileName)
@@ -47,7 +47,6 @@ struct FileHelper {
 
 
 extension View {
-    // TODO: pass providertype here and only add supported ones.
     @ViewBuilder
     func multipleFileImporter(isPresented: Binding<Bool>, supportedFileTypes: [UTType], onDataAppend: @escaping (TypedData) -> Void) -> some View {
         self.fileImporter(
@@ -60,7 +59,7 @@ extension View {
                 for url in urls {
                     if let data = try? Data(contentsOf: url) {
                         let fileType = UTType(filenameExtension: url.pathExtension) ?? .data
-                        let fileName = url.lastPathComponent
+                        let fileName = url.deletingPathExtension().lastPathComponent
                         let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
                         let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
                         let fileExtension = url.pathExtension.lowercased()
@@ -81,3 +80,4 @@ extension View {
         }
     }
 }
+

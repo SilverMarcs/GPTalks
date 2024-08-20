@@ -108,7 +108,7 @@ struct ChatSessionToolbar: ToolbarContent {
                         
                         Section {
                             Button {
-                                var fetchSessions = FetchDescriptor<Session>()
+                                let fetchSessions = FetchDescriptor<Session>()
                                 if let fetchedSessions = try? modelContext.fetch(fetchSessions) {
                                     sessionVM.selections = Set(fetchedSessions)
                                 }
