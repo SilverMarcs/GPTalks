@@ -47,7 +47,7 @@ struct SessionList: View {
                     ContentUnavailableView.search(text: sessionVM.searchText)
                 } else {
                     ForEach(filteredSessions) { session in
-                        SessionListItem(session: session)
+                        SessionListRow(session: session)
                             .tag(session)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))

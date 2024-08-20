@@ -19,11 +19,13 @@ struct InputEditor: View {
     var body: some View {
         inputView
         .font(.body)
+        #if os(macOS)
         .task {
-            if !isIPadOS() && !AppConfig.shared.sidebarFocus {
-                isFocused = true 
+            if !AppConfig.shared.sidebarFocus {
+                isFocused = true
             }
         }
+        #endif
     }
     
     #if os(macOS)

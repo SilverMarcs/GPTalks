@@ -1,5 +1,5 @@
 //
-//  SessionListItem.swift
+//  SessionListRow.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 04/07/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SessionListItem: View {
+struct SessionListRow: View {
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) private var sessionVM
     
@@ -79,8 +79,13 @@ struct SessionListItem: View {
             
             Text(session.title)
                 .lineLimit(1)
+            #if os(macOS)
                 .font(.headline)
                 .fontWeight(.regular)
+            #else
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            #endif
                 .opacity(0.9)
             
             Spacer()
@@ -129,7 +134,7 @@ struct SessionListItem: View {
     let session = Session(config: config)
     
     List {
-        SessionListItem(session: session)
+        SessionListRow(session: session)
             .environment(SessionVM())
     }
     .frame(width: 250)

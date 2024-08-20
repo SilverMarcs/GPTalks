@@ -67,7 +67,7 @@ struct ChatSessionList: View {
                         .foregroundStyle(.secondary)
                 } else {
                     ForEach(folder.sessions.sorted(by: { $0.order < $1.order }), id: \.self) { session in
-                        SessionListItem(session: session)
+                        SessionListRow(session: session)
                             .draggable(session.id.uuidString)
                             .contextMenu {
                                 Button("Ungroup") {
@@ -95,7 +95,7 @@ struct ChatSessionList: View {
         .onMove(perform: moveFolders)
         
         ForEach(filteredSessions.filter { $0.folder == nil }, id: \.self) { session in
-            SessionListItem(session: session)
+            SessionListRow(session: session)
                 .draggable(session.id.uuidString)
         }
         .onDelete(perform: deleteItemsInRoot)

@@ -15,7 +15,11 @@ struct UserMessage: View {
     @State var isHovered: Bool = false
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
+    #if os(macOS)
     @State var isRendered = false
+    #else
+    @State var isRendered = true
+    #endif
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 7) {

@@ -14,18 +14,8 @@ extension View {
         
         return self
             .onAppear {
-                if !isIOS() {
-                    scrollToBottom(proxy: proxy, delay: 0.2)
-                    scrollToBottom(proxy: proxy, delay: 0.4)
-                }
+                scrollToBottom(proxy: proxy, delay: 0.4)
             }
-        #if os(macOS)
-            .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-                if session.isReplying {
-                    hasUserScrolled.wrappedValue = true
-                }
-            }
-        #endif
             .onChange(of: session.groups.last?.activeConversation.content) {
                 if !hasUserScrolled.wrappedValue && session.isStreaming {
                     scrollToBottom(proxy: proxy)
@@ -41,14 +31,20 @@ extension View {
                     scrollToBottom(proxy: proxy)
                 }
             }
-        #if canImport(UIKit)
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)) { _ in
-                scrollToBottom(proxy: proxy, delay: 0.3)
-            }
-        #endif
             .onDrop(of: session.config.provider.type.supportedFileTypes, isTargeted: nil) { providers in
                 session.inputManager.handleDrop(providers, supportedTypes: session.config.provider.type.supportedFileTypes)
             }
+        #if os(macOS)
+            .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
+                if session.isReplying {
+                    hasUserScrolled.wrappedValue = true
+                }
+            }
+        #else
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)) { _ in
+                scrollToBottom(proxy: proxy, delay: 0.1)
+            }
+        #endif
     }
 }
 
@@ -71,7 +67,15 @@ struct PlatformSpecificModifiers: ViewModifier {
             .onTapGesture { showingInspector = false }
             .toolbarTitleDisplayMode(.inline)
             .navigationTitle(session.config.model.name)
-            .toolbarTitleMenu { exportButtons }
+            .toolbarTitleMenu {
+                Section("\(session.tokenCount.formatToK()) tokens") {
+                    Button {
+                        session.refreshTokens()
+                    } label: {
+                        Label("Refresh Tokens", systemImage: "arrow.clockwise")
+                    }
+                }
+            }
             #if !os(visionOS)
             .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                 hasUserScrolled = value > UIScreen.main.bounds.height
@@ -79,21 +83,6 @@ struct PlatformSpecificModifiers: ViewModifier {
             .scrollDismissesKeyboard(.immediately)
             #endif
             #endif
-    }
-    
-    @ViewBuilder
-    var exportButtons: some View {
-        Button {
-            isExportingJSON = true
-        } label: {
-            Label("Export JSON", systemImage: "ellipsis.curlybraces")
-        }
-        
-        Button {
-            isExportingMarkdown = true
-        } label: {
-            Label("Export Markdown", systemImage: "richtext.page")
-        }
     }
 }
 

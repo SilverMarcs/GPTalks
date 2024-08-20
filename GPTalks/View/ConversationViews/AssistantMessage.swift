@@ -20,8 +20,7 @@ struct AssistantMessage: View {
         VStack(alignment: .leading) {
             HStack(alignment: .top, spacing: spacing) {
                 AssistantImage(size: size)
-                    .symbolEffect(.bounce, isActive: conversation.group?.session?.isReplying ?? false)
-
+//                    .symbolEffect(.bounce, isActive: conversation.group?.session?.isReplying ?? false)
                 
                 VStack(alignment: .leading, spacing: 7) {
                     if let model = conversation.model {
@@ -33,10 +32,11 @@ struct AssistantMessage: View {
                     MarkdownView(conversation: conversation)
                         .textSelection(.enabled)
                     
-//                    if conversation.isReplying {
-//                        ProgressView()
-//                            .controlSize(.small)
-//                    }
+                    if conversation.isReplying {
+                        ProgressView()
+                            .controlSize(.small)
+                    }
+                    
                     #if os(macOS)
                     if let group = conversation.group, !conversation.isReplying {
                         ConversationMenu(group: group, isExpanded: .constant(true))

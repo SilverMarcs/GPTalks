@@ -14,28 +14,22 @@ struct MarkdownView: View {
     @ObservedObject var config = AppConfig.shared
     var conversation: Conversation
     
+    #if os(macOS)
     var highlightString: String? {
         conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil
     }
-    
-    @State var isRendered = false
+    #endif
     
     var body: some View {
         switch config.markdownProvider {
             #if os(macOS)
             case .webview:
-            if !isRendered {
-                ProgressView()
-            }
-            
             MarkdownWebView(conversation.content,
                             baseURL: "GPTalks Web Content",
                             highlightString: highlightString,
                             customStylesheet: config.markdownTheme,
                             fontSize: CGFloat(config.fontSize))
-            .onRendered { content in
-                isRendered = true
-            }
+
             #endif
             case .native:
                 Text(LocalizedStringKey(conversation.content))
