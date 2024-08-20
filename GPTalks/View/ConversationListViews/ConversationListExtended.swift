@@ -43,11 +43,7 @@ extension View {
             }
         #if canImport(UIKit)
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)) { _ in
-                if config.markdownProvider == .webview {
-                    scrollToBottom(proxy: proxy)
-                } else {
-                    scrollToBottom(proxy: proxy, delay: 0.3)
-                }
+                scrollToBottom(proxy: proxy, delay: 0.3)
             }
         #endif
             .onDrop(of: session.config.provider.type.supportedFileTypes, isTargeted: nil) { providers in

@@ -27,15 +27,7 @@ struct ConversationListToolbar: ToolbarContent {
         ToolbarItem {
             Color.clear
                 .sheet(isPresented: $showingInspector) {
-                    NavigationStack {
-                        ChatInspector(session: session)
-                        #if os(visionOS)
-                            .toolbar {
-                                DismissButton()
-                                    .buttonStyle(.plain)
-                            }
-                        #endif
-                    }
+                    ChatInspector(session: session)
                 }
         }
         

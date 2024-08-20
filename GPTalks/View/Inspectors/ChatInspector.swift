@@ -24,9 +24,7 @@ struct ChatInspector: View {
         NavigationStack {
             #if os(macOS)
             HStack {
-                #if os(macOS)
                 export
-                #endif
                 
                 Spacer()
                 DismissButton() {

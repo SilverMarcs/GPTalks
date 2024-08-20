@@ -24,8 +24,8 @@ struct ChatInputView: View {
             }
             
             plusButton
-                .popoverTip(PasteTip())
             #if os(macOS)
+                .popoverTip(PasteTip())
                 .offset(y: -2.4)
             #endif
             
@@ -36,7 +36,9 @@ struct ChatInputView: View {
                 
                 InputEditor(prompt: $session.inputManager.prompt,
                             isFocused: _isFocused)
+                #if os(macOS)
                 .popoverTip(FocusTip())
+                #endif
             }
 
             ActionButton(size: imageSize, isStop: session.isReplying) {

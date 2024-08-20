@@ -39,9 +39,11 @@ struct GPTalksApp: App {
         .modelContainer(for: models, isUndoEnabled: true)
     }
     
+    #if os(macOS)
     init() {
         NSWindow.allowsAutomaticWindowTabbing = false
     }
+    #endif
     
     let models: [any PersistentModel.Type] =
         [

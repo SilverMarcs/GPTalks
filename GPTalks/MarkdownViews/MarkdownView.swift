@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
+#if os(macOS)
 import MarkdownWebView
+#endif
 
 struct MarkdownView: View {
     @ObservedObject var config = AppConfig.shared
@@ -20,6 +22,7 @@ struct MarkdownView: View {
     
     var body: some View {
         switch config.markdownProvider {
+            #if os(macOS)
             case .webview:
             if !isRendered {
                 ProgressView()
@@ -33,6 +36,7 @@ struct MarkdownView: View {
             .onRendered { content in
                 isRendered = true
             }
+            #endif
             case .native:
                 Text(LocalizedStringKey(conversation.content))
                 .font(.system(size: config.fontSize))

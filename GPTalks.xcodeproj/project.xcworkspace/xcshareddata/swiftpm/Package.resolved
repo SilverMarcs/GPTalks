@@ -1,5 +1,5 @@
 {
-  "originHash" : "a140ca6df47b35cf113b19962f85c2dd80ea89a4fee1eac17c6b25874c511014",
+  "originHash" : "819f63232544f61632aebe9cd50b49d5a832047995f0e367ab1f1f1c2c442ca6",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -44,6 +44,15 @@
       "state" : {
         "branch" : "cancellable",
         "revision" : "98371ceb9505fbc7c4c0457ea6076f5f454c5caf"
+      }
+    },
+    {
+      "identity" : "selectabletext",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kevinhermawan/SelectableText",
+      "state" : {
+        "revision" : "b55f8c56458b93c46bce08fd048138b749885bf6",
+        "version" : "1.0.0"
       }
     },
     {

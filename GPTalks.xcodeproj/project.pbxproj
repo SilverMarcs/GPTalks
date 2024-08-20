@@ -131,6 +131,7 @@
 		08AAFB9E2C3D02C0002C04E0 /* SessionListSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9D2C3D02C0002C04E0 /* SessionListSidebar.swift */; };
 		08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFBA02C3D1086002C04E0 /* GPTEncoder */; };
 		08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */; };
+		08B4E9612C74AEBB00C53BF6 /* SelectableText in Frameworks */ = {isa = PBXBuildFile; productRef = 08B4E9602C74AEBB00C53BF6 /* SelectableText */; };
 		08BDFE2E2C734DAE0054B36A /* ConversationListTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BDFE2D2C734DAE0054B36A /* ConversationListTips.swift */; };
 		08C1ACDB2C54A8F600B86D37 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08C1ACDA2C54A8F600B86D37 /* OpenAI */; };
 		08C1ACDE2C54B89B00B86D37 /* SessionConfigDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACDD2C54B89B00B86D37 /* SessionConfigDefaults.swift */; };
@@ -168,7 +169,7 @@
 		08E0FDA12C6A720700FAB766 /* ChatSessionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E0FDA02C6A720700FAB766 /* ChatSessionToolbar.swift */; };
 		08E0FDA32C6A742D00FAB766 /* ImageSessionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E0FDA22C6A742D00FAB766 /* ImageSessionToolbar.swift */; };
 		08E195692C6FB36900BA9506 /* MarkdownSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E195682C6FB36900BA9506 /* MarkdownSettings.swift */; };
-		08E1956C2C6FB66600BA9506 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08E1956B2C6FB66600BA9506 /* MarkdownWebView */; };
+		08E1956C2C6FB66600BA9506 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = 08E1956B2C6FB66600BA9506 /* MarkdownWebView */; };
 		08E1956F2C6FBFF400BA9506 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08E1956E2C6FBFF400BA9506 /* MarkdownWebView */; };
 		08F0EF1E2C6C2DFD00900ED0 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */; };
 		08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F369E22C3C278E002E4A35 /* ProviderType.swift */; };
@@ -374,6 +375,7 @@
 				086783122C5CF16800BB768F /* GoogleGenerativeAI in Frameworks */,
 				08C1ACDB2C54A8F600B86D37 /* OpenAI in Frameworks */,
 				08AAFB962C3CF0DD002C04E0 /* KeyboardShortcuts in Frameworks */,
+				08B4E9612C74AEBB00C53BF6 /* SelectableText in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -845,6 +847,7 @@
 				0809889C2C6F500000A73A71 /* MarkdownWebView */,
 				08E1956B2C6FB66600BA9506 /* MarkdownWebView */,
 				08E1956E2C6FBFF400BA9506 /* MarkdownWebView */,
+				08B4E9602C74AEBB00C53BF6 /* SelectableText */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -926,6 +929,7 @@
 				087B40B62C55F9E900EAFA0A /* XCRemoteSwiftPackageReference "VisualEffectView" */,
 				086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 				08E195702C6FC00C00BA9506 /* XCRemoteSwiftPackageReference "markdown-webview" */,
+				08B4E95F2C74AEBB00C53BF6 /* XCRemoteSwiftPackageReference "SelectableText" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1521,6 +1525,14 @@
 				minimumVersion = 1.0.4;
 			};
 		};
+		08B4E95F2C74AEBB00C53BF6 /* XCRemoteSwiftPackageReference "SelectableText" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kevinhermawan/SelectableText";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		08C1ACE72C54CA0C00B86D37 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/OpenAI";
@@ -1613,6 +1625,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 08AAFB9F2C3D1086002C04E0 /* XCRemoteSwiftPackageReference "GPTEncoder" */;
 			productName = GPTEncoder;
+		};
+		08B4E9602C74AEBB00C53BF6 /* SelectableText */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08B4E95F2C74AEBB00C53BF6 /* XCRemoteSwiftPackageReference "SelectableText" */;
+			productName = SelectableText;
 		};
 		08C1ACDA2C54A8F600B86D37 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;

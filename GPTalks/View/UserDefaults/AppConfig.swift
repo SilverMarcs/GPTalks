@@ -18,7 +18,12 @@ class AppConfig: ObservableObject {
     @AppStorage("fontSize") var fontSize: Double = 18
     #endif
     
+    #if os(macOS)
     @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
+    #else
+    @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .native
+    #endif
+    
     @AppStorage("compactList") var compactList: Bool = false
     @AppStorage("truncateList") var truncateList: Bool = false
     @AppStorage("listCount") var listCount: Int = 12
@@ -42,13 +47,17 @@ class AppConfig: ObservableObject {
 
 
 enum MarkdownProvider: String, Codable, CaseIterable {
+    #if os(macOS)
     case webview
+    #endif
     case native
     case disabled
     
     var name: String {
         switch self {
+        #if os(macOS)
         case .webview: "WebView"
+        #endif
         case .native: "Native"
         case .disabled: "Disabled"
         }

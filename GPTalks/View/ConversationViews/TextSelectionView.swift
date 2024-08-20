@@ -6,21 +6,17 @@
 //
 
 import SwiftUI
-
-import MarkdownWebView
+import SelectableText
 
 struct TextSelectionView: View {
     @Environment(\.dismiss) var dismiss
     var content: String
-
+    
     var body: some View {
         NavigationStack {
-            ScrollView {
-                MarkdownWebView(content, baseURL: "GPTalks Web Content")
-                    .padding(.horizontal)
-                    .padding(.bottom, 45)
+            Form {
+                SelectableText(content)
             }
-            .edgesIgnoringSafeArea(.bottom)
             .navigationTitle("Select Text")
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
