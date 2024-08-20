@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import VisualEffectView
+//import VisualEffectView
 
 struct CommonInputStyling: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
@@ -20,13 +20,15 @@ struct CommonInputStyling: ViewModifier {
             .background(.bar)
             #else
             .background(
-                VisualEffect(
-                    colorTint: colorScheme == .dark ? .black : .white,
-                    colorTintAlpha: 0.7,
-                    blurRadius: 15,
-                    scale: 1
-                )
-                .ignoresSafeArea()
+//                VisualEffect(
+//                    colorTint: colorScheme == .dark ? .black : .white,
+//                    colorTintAlpha: 0.7,
+//                    blurRadius: 15,
+//                    scale: 1
+//                )
+//                BlurView(style: .systemUltraThinMaterial, tintColor: colorScheme == .dark ? .black : .white, tintAlpha: 0.8)
+//                .ignoresSafeArea()
+                .background
             )
                 #if os(visionOS)
                 .background(.regularMaterial)

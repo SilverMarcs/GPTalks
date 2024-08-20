@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import VisualEffectView
+//import VisualEffectView
 
 struct InputEditor: View {
     @Environment(\.colorScheme) var colorScheme
@@ -70,13 +70,13 @@ struct InputEditor: View {
                 .padding(.leading, 5)
                 .lineLimit(10)
                 .modifier(RoundedRectangleOverlayModifier(radius: radius))
-                .background(
-                    VisualEffect(colorTint: colorScheme == .dark
-                                 ? Color(hex: "050505")
-                                 : Color(hex: "FAFAFE"),
-                                 colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
-                    .cornerRadius(radius)
-                )
+//                .background(
+//                    VisualEffect(colorTint: colorScheme == .dark
+//                                 ? Color(hex: "050505")
+//                                 : Color(hex: "FAFAFE"),
+//                                 colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
+//                    .cornerRadius(radius)
+//                )
             
             if isIOS() && prompt.count > 25 {
                 ExpandButton(size: 25) { showPopover.toggle() }

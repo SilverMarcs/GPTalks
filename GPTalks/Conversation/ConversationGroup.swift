@@ -37,9 +37,9 @@ final class ConversationGroup {
         }
         
         // return any other random conversation
-        if let conversation = conversations.first {
-            return conversation
-        }
+//        if let conversation = conversations.first {
+//            return conversation
+//        }
         
 //        fatalError("No active conversation found")
         print("Should not go beyond this ideally")

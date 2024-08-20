@@ -11,11 +11,13 @@ import SelectableText
 struct TextSelectionView: View {
     @Environment(\.dismiss) var dismiss
     var content: String
-    
+
     var body: some View {
         NavigationStack {
-            Form {
-                SelectableText(content)
+            ScrollView {
+                TextEditor(text: .constant(content))
+                    .scrollDisabled(true)
+                    .padding(.horizontal)
             }
             .navigationTitle("Select Text")
             .toolbarTitleDisplayMode(.inline)

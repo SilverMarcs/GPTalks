@@ -86,9 +86,6 @@
 		087928372C48CFFB008646CD /* ExpandedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087928362C48CFFB008646CD /* ExpandedTextField.swift */; };
 		087B40AB2C55E7D600EAFA0A /* WindowUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087B40AA2C55E7D600EAFA0A /* WindowUtils.swift */; };
 		087B40AD2C55F2AE00EAFA0A /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 087B40AC2C55F2AE00EAFA0A /* MarkdownWebView */; };
-		087B40B22C55F70F00EAFA0A /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 087B40B12C55F70F00EAFA0A /* VisualEffectView */; };
-		087B40B52C55F71700EAFA0A /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 087B40B42C55F71700EAFA0A /* VisualEffectView */; };
-		087B40B82C55F9E900EAFA0A /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 087B40B72C55F9E900EAFA0A /* VisualEffectView */; };
 		087B40C02C561DDF00EAFA0A /* QuickPanelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087B40BF2C561DDF00EAFA0A /* QuickPanelHelper.swift */; };
 		088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A09F22C55C7740055B567 /* TextSelectionView.swift */; };
 		08915D942C373340008ADE27 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D932C373340008ADE27 /* ProviderImage.swift */; };
@@ -131,7 +128,6 @@
 		08AAFB9E2C3D02C0002C04E0 /* SessionListSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9D2C3D02C0002C04E0 /* SessionListSidebar.swift */; };
 		08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFBA02C3D1086002C04E0 /* GPTEncoder */; };
 		08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */; };
-		08B4E9612C74AEBB00C53BF6 /* SelectableText in Frameworks */ = {isa = PBXBuildFile; productRef = 08B4E9602C74AEBB00C53BF6 /* SelectableText */; };
 		08B82C1D2C74EA9400DC0183 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B82C1C2C74EA9400DC0183 /* ImageViewer.swift */; };
 		08B82C1F2C74EAFD00DC0183 /* FileViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B82C1E2C74EAFD00DC0183 /* FileViewer.swift */; };
 		08BDFE2E2C734DAE0054B36A /* ConversationListTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BDFE2D2C734DAE0054B36A /* ConversationListTips.swift */; };
@@ -361,14 +357,11 @@
 				08D040222C5C8A0B0075B754 /* GoogleGenerativeAI in Frameworks */,
 				08E1956C2C6FB66600BA9506 /* MarkdownWebView in Frameworks */,
 				084C74432C5231980015AE2F /* OpenAI in Frameworks */,
-				087B40B52C55F71700EAFA0A /* VisualEffectView in Frameworks */,
 				08CF5B8C2C689BDF0079D5EE /* MarkdownWebView in Frameworks */,
 				0846B9FA2C6EFF0800AC3FD4 /* MarkdownWebView in Frameworks */,
-				087B40B22C55F70F00EAFA0A /* VisualEffectView in Frameworks */,
 				08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */,
 				08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */,
 				080553272C5F99BC003C1842 /* MarkdownWebView in Frameworks */,
-				087B40B82C55F9E900EAFA0A /* VisualEffectView in Frameworks */,
 				0809889D2C6F500000A73A71 /* MarkdownWebView in Frameworks */,
 				08E1956F2C6FBFF400BA9506 /* MarkdownWebView in Frameworks */,
 				080ED3902C423C4400046424 /* OpenAI in Frameworks */,
@@ -379,7 +372,6 @@
 				086783122C5CF16800BB768F /* GoogleGenerativeAI in Frameworks */,
 				08C1ACDB2C54A8F600B86D37 /* OpenAI in Frameworks */,
 				08AAFB962C3CF0DD002C04E0 /* KeyboardShortcuts in Frameworks */,
-				08B4E9612C74AEBB00C53BF6 /* SelectableText in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -847,9 +839,6 @@
 				08C1ACDA2C54A8F600B86D37 /* OpenAI */,
 				08C1ACE82C54CA0C00B86D37 /* OpenAI */,
 				087B40AC2C55F2AE00EAFA0A /* MarkdownWebView */,
-				087B40B12C55F70F00EAFA0A /* VisualEffectView */,
-				087B40B42C55F71700EAFA0A /* VisualEffectView */,
-				087B40B72C55F9E900EAFA0A /* VisualEffectView */,
 				08D040212C5C8A0B0075B754 /* GoogleGenerativeAI */,
 				081D222C2C5C8C7700634F39 /* GoogleGenerativeAI */,
 				086783112C5CF16800BB768F /* GoogleGenerativeAI */,
@@ -861,7 +850,6 @@
 				0809889C2C6F500000A73A71 /* MarkdownWebView */,
 				08E1956B2C6FB66600BA9506 /* MarkdownWebView */,
 				08E1956E2C6FBFF400BA9506 /* MarkdownWebView */,
-				08B4E9602C74AEBB00C53BF6 /* SelectableText */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -940,10 +928,8 @@
 				08AAFB942C3CF0DD002C04E0 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				08AAFB9F2C3D1086002C04E0 /* XCRemoteSwiftPackageReference "GPTEncoder" */,
 				08C1ACE72C54CA0C00B86D37 /* XCRemoteSwiftPackageReference "OpenAI" */,
-				087B40B62C55F9E900EAFA0A /* XCRemoteSwiftPackageReference "VisualEffectView" */,
 				086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 				08E195702C6FC00C00BA9506 /* XCRemoteSwiftPackageReference "markdown-webview" */,
-				08B4E95F2C74AEBB00C53BF6 /* XCRemoteSwiftPackageReference "SelectableText" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1509,14 +1495,6 @@
 				kind = branch;
 			};
 		};
-		087B40B62C55F9E900EAFA0A /* XCRemoteSwiftPackageReference "VisualEffectView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/VisualEffectView";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jamesrochabrun/SwiftAnthropic";
@@ -1539,14 +1517,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.4;
-			};
-		};
-		08B4E95F2C74AEBB00C53BF6 /* XCRemoteSwiftPackageReference "SelectableText" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kevinhermawan/SelectableText";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
 			};
 		};
 		08C1ACE72C54CA0C00B86D37 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
@@ -1610,19 +1580,6 @@
 			package = 08C1ACE72C54CA0C00B86D37 /* XCRemoteSwiftPackageReference "OpenAI" */;
 			productName = MarkdownWebView;
 		};
-		087B40B12C55F70F00EAFA0A /* VisualEffectView */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = VisualEffectView;
-		};
-		087B40B42C55F71700EAFA0A /* VisualEffectView */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = VisualEffectView;
-		};
-		087B40B72C55F9E900EAFA0A /* VisualEffectView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 087B40B62C55F9E900EAFA0A /* XCRemoteSwiftPackageReference "VisualEffectView" */;
-			productName = VisualEffectView;
-		};
 		08AAFB8C2C3C3F0B002C04E0 /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GoogleGenerativeAI;
@@ -1641,11 +1598,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 08AAFB9F2C3D1086002C04E0 /* XCRemoteSwiftPackageReference "GPTEncoder" */;
 			productName = GPTEncoder;
-		};
-		08B4E9602C74AEBB00C53BF6 /* SelectableText */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08B4E95F2C74AEBB00C53BF6 /* XCRemoteSwiftPackageReference "SelectableText" */;
-			productName = SelectableText;
 		};
 		08C1ACDA2C54A8F600B86D37 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;

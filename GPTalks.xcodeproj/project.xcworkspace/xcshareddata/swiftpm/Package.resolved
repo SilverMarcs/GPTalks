@@ -1,5 +1,5 @@
 {
-  "originHash" : "819f63232544f61632aebe9cd50b49d5a832047995f0e367ab1f1f1c2c442ca6",
+  "originHash" : "fa13da83b2289bb58d2edb043cf4d776a8955f62c867af3865c7bb262f44439a",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -47,30 +47,12 @@
       }
     },
     {
-      "identity" : "selectabletext",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kevinhermawan/SelectableText",
-      "state" : {
-        "revision" : "b55f8c56458b93c46bce08fd048138b749885bf6",
-        "version" : "1.0.0"
-      }
-    },
-    {
       "identity" : "swiftanthropic",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
       "state" : {
         "revision" : "a624abcf464117a0c113043d0b94f294b4bed4d1",
         "version" : "1.8.2"
-      }
-    },
-    {
-      "identity" : "visualeffectview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/VisualEffectView",
-      "state" : {
-        "branch" : "master",
-        "revision" : "dc8c4f1c5c381a7833bd05158b2956fcdfe9d292"
       }
     }
   ],
