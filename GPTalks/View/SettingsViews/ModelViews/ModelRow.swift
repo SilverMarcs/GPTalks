@@ -111,7 +111,7 @@ struct ModelRow: View {
     
     func testModel() async -> Bool {
         if let provider = model.provider {
-            let service = DefaultAIServiceFactory().createService(for: provider.type)
+            let service = AIServiceFactory.createService(for: provider.type)
             let result = await service.testModel(provider: provider, model: model)
             model.lastTestResult = result
             return result

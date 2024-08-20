@@ -21,10 +21,11 @@ enum TitleGenerator {
         let user = Conversation(role: .user, content: content)
         
         let titleConfig = SessionConfig(provider: provider, purpose: .title)
-        let streamHandler = StreamHandler(config: titleConfig, assistant: user)
+//        let streamHandler = StreamHandler(config: titleConfig, assistant: user)
         
         do {
-            let title = try await streamHandler.handleNonStreamingResponse(from: [user])
+//            let title = try await streamHandler.handleNonStreamingResponse(from: [user])
+            let title = try await StreamHandler.handleTitleGeneration(from: [user], config: titleConfig)
             return title.trimmingCharacters(in: .whitespacesAndNewlines)
         } catch {
             print("Error: \(error)")

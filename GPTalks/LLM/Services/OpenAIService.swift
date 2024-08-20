@@ -9,18 +9,18 @@ import Foundation
 import SwiftUI
 import OpenAI
 
-class OpenAIService: AIService {
-    func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
+struct OpenAIService: AIService {
+    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
         let query = createQuery(from: conversations, config: config, stream: config.stream)
         return streamOpenAIResponse(query: query, config: config)
     }
     
-    func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
+    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
         let query = createQuery(from: conversations, config: config, stream: config.stream)
         return try await nonStreamingOpenAIResponse(query: query, config: config)
     }
     
-    private func createQuery(from conversations: [Conversation], config: SessionConfig, stream: Bool) -> ChatQuery {
+    static func createQuery(from conversations: [Conversation], config: SessionConfig, stream: Bool) -> ChatQuery {
         var messages = conversations.map { $0.toOpenAI() }
         if !config.systemPrompt.isEmpty {
             let systemPrompt = Conversation(role: .system, content: config.systemPrompt)
@@ -40,7 +40,7 @@ class OpenAIService: AIService {
         )
     }
     
-    private func streamOpenAIResponse(query: ChatQuery, config: SessionConfig) -> AsyncThrowingStream<String, Error> {
+    static func streamOpenAIResponse(query: ChatQuery, config: SessionConfig) -> AsyncThrowingStream<String, Error> {
         let service = OpenAI(configuration: OpenAI.Configuration(token: config.provider.apiKey, host: config.provider.host, scheme: config.provider.type.scheme))
         
         return AsyncThrowingStream { continuation in
@@ -59,14 +59,14 @@ class OpenAIService: AIService {
         }
     }
     
-    private func nonStreamingOpenAIResponse(query: ChatQuery, config: SessionConfig) async throws -> String {
+    static func nonStreamingOpenAIResponse(query: ChatQuery, config: SessionConfig) async throws -> String {
         let service = OpenAI(configuration: OpenAI.Configuration(token: config.provider.apiKey, host: config.provider.host, scheme: config.provider.type.scheme))
         
         let result = try await service.chats(query: query)
         return result.choices.first?.message.content?.string ?? ""
     }
     
-    func testModel(provider: Provider, model: AIModel) async -> Bool {
+    static func testModel(provider: Provider, model: AIModel) async -> Bool {
         let messages = [Conversation(role: .user, content: String.testPrompt).toOpenAI()]
         let query = ChatQuery(messages: messages, model: model.code)
         let service = OpenAI(configuration: OpenAI.Configuration(token: provider.apiKey, host: provider.host, scheme: provider.type.scheme))

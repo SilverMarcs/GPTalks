@@ -8,24 +8,20 @@
 import SwiftUI
 
 protocol AIService {
-    func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error>
-    func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String
-    func testModel(provider: Provider, model: AIModel) async -> Bool
+    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error>
+    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String
+    static func testModel(provider: Provider, model: AIModel) async -> Bool
 }
 
-protocol AIServiceFactory {
-    func createService(for providerType: ProviderType) -> AIService
-}
-
-class DefaultAIServiceFactory: AIServiceFactory {
-    func createService(for providerType: ProviderType) -> AIService {
+struct AIServiceFactory {
+    static func createService(for providerType: ProviderType) -> AIService.Type {
         switch providerType {
         case .openai, .local:
-            return OpenAIService()
+            return OpenAIService.self
         case .anthropic:
-            return ClaudeService()
+            return ClaudeService.self
         case .google:
-            return GoogleService()
+            return GoogleService.self
         }
     }
 }

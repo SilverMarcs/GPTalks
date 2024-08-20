@@ -11,22 +11,14 @@ import SwiftAnthropic
 import OpenAI
 
 
-class StreamManager {
-    private let config: SessionConfig
-    private let serviceFactory: AIServiceFactory
-    
-    init(config: SessionConfig, serviceFactory: AIServiceFactory = DefaultAIServiceFactory()) {
-        self.config = config
-        self.serviceFactory = serviceFactory
+struct StreamManager {
+    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
+        let serviceType = AIServiceFactory.createService(for: config.provider.type)
+        return serviceType.streamResponse(from: conversations, config: config)
     }
-    
-    func streamResponse(from conversations: [Conversation]) -> AsyncThrowingStream<String, Error> {
-        let service = serviceFactory.createService(for: config.provider.type)
-        return service.streamResponse(from: conversations, config: config)
-    }
-    
-    func nonStreamingResponse(from conversations: [Conversation]) async throws -> String {
-        let service = serviceFactory.createService(for: config.provider.type)
-        return try await service.nonStreamingResponse(from: conversations, config: config)
+
+    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
+        let serviceType = AIServiceFactory.createService(for: config.provider.type)
+        return try await serviceType.nonStreamingResponse(from: conversations, config: config)
     }
 }

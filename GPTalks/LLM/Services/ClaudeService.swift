@@ -9,18 +9,18 @@ import Foundation
 import SwiftUI
 import SwiftAnthropic
 
-class ClaudeService: AIService {
-    func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
+struct ClaudeService: AIService {
+    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
         let parameters = createParameters(from: conversations, config: config, stream: true)
         return streamClaudeResponse(parameters: parameters, config: config)
     }
     
-    func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
+    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
         let parameters = createParameters(from: conversations, config: config, stream: false)
         return try await nonStreamingClaudeResponse(parameters: parameters, config: config)
     }
     
-    private func createParameters(from conversations: [Conversation], config: SessionConfig, stream: Bool) -> MessageParameter {
+    static private func createParameters(from conversations: [Conversation], config: SessionConfig, stream: Bool) -> MessageParameter {
         let messages = conversations.map { $0.toClaude() }
         let systemPrompt = MessageParameter.System.text(config.systemPrompt)
         
@@ -35,7 +35,7 @@ class ClaudeService: AIService {
         )
     }
     
-    private func streamClaudeResponse(parameters: MessageParameter, config: SessionConfig) -> AsyncThrowingStream<String, Error> {
+    static private func streamClaudeResponse(parameters: MessageParameter, config: SessionConfig) -> AsyncThrowingStream<String, Error> {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
@@ -58,7 +58,7 @@ class ClaudeService: AIService {
         }
     }
     
-    private func nonStreamingClaudeResponse(parameters: MessageParameter, config: SessionConfig) async throws -> String {
+    static private func nonStreamingClaudeResponse(parameters: MessageParameter, config: SessionConfig) async throws -> String {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
@@ -78,7 +78,7 @@ class ClaudeService: AIService {
         return content
     }
     
-    func testModel(provider: Provider, model: AIModel) async -> Bool {
+    static func testModel(provider: Provider, model: AIModel) async -> Bool {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]  
         let service = AnthropicServiceFactory.service(
             apiKey: provider.apiKey,

@@ -9,18 +9,18 @@ import Foundation
 import SwiftUI
 import GoogleGenerativeAI
 
-class GoogleService: AIService {
-    func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
+struct GoogleService: AIService {
+    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
         let (model, messages) = createModelAndMessages(from: conversations, config: config)
         return streamGoogleResponse(model: model, messages: messages)
     }
     
-    func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
+    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
         let (model, messages) = createModelAndMessages(from: conversations, config: config)
         return try await nonStreamingGoogleResponse(model: model, messages: messages)
     }
     
-    private func createModelAndMessages(from conversations: [Conversation], config: SessionConfig) -> (GenerativeModel, [ModelContent]) {
+    static private func createModelAndMessages(from conversations: [Conversation], config: SessionConfig) -> (GenerativeModel, [ModelContent]) {
         let systemPrompt = ModelContent(role: "system", parts: [.text(config.systemPrompt)])
         
         let genConfig = GenerationConfig(
@@ -40,7 +40,7 @@ class GoogleService: AIService {
         return (model, messages)
     }
     
-    private func streamGoogleResponse(model: GenerativeModel, messages: [ModelContent]) -> AsyncThrowingStream<String, Error> {
+    static private func streamGoogleResponse(model: GenerativeModel, messages: [ModelContent]) -> AsyncThrowingStream<String, Error> {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
@@ -60,12 +60,12 @@ class GoogleService: AIService {
         }
     }
     
-    private func nonStreamingGoogleResponse(model: GenerativeModel, messages: [ModelContent]) async throws -> String {
+    static private func nonStreamingGoogleResponse(model: GenerativeModel, messages: [ModelContent]) async throws -> String {
         let response = try await model.generateContent(messages)
         return response.text ?? ""
     }
     
-    func testModel(provider: Provider, model: AIModel) async -> Bool {
+    static func testModel(provider: Provider, model: AIModel) async -> Bool {
         let model = GenerativeModel(name: model.code, apiKey: provider.apiKey)
         
         do {
