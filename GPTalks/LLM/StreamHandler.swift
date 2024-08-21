@@ -25,10 +25,8 @@ struct StreamHandler {
     private static func handleStream(from conversations: [Conversation], config: SessionConfig, assistant: Conversation) async throws {
         var streamText = ""
         var lastUIUpdateTime = Date()
-
-//        let stream = StreamManager.streamResponse(from: conversations, config: config)
         
-        let serviceType = AIServiceFactory.createService(for: config.provider.type)
+        let serviceType = config.provider.type.getService()
 
         assistant.isReplying = true
 
@@ -47,8 +45,7 @@ struct StreamHandler {
     @MainActor
     private static func handleNonStreamingResponse(from conversations: [Conversation], config: SessionConfig, assistant: Conversation) async throws -> String {
         assistant.isReplying = true
-//        let response = try await StreamManager.nonStreamingResponse(from: conversations, config: config)
-        let serviceType = AIServiceFactory.createService(for: config.provider.type)
+        let serviceType = config.provider.type.getService()
         let response = try await serviceType.nonStreamingResponse(from: conversations, config: config)
         
         assistant.isReplying = false
@@ -57,7 +54,8 @@ struct StreamHandler {
     }
     
     static func handleTitleGeneration(from conversations: [Conversation], config: SessionConfig) async throws -> String {
-        let serviceType = AIServiceFactory.createService(for: config.provider.type)
+        let serviceType = config.provider.type.getService()
+        config.stream = false // should not be necessary here
         return try await serviceType.nonStreamingResponse(from: conversations, config: config)
     }
 

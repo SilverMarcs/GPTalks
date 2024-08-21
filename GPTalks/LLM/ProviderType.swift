@@ -84,4 +84,15 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .local: return AIModel.getLocalModels()
         }
     }
+    
+    func getService() -> AIService.Type {
+        switch self {
+        case .openai, .local:
+            return OpenAIService.self
+        case .anthropic:
+            return ClaudeService.self
+        case .google:
+            return GoogleService.self
+        }
+    }
 }

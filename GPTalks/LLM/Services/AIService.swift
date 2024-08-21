@@ -13,15 +13,15 @@ protocol AIService {
     static func testModel(provider: Provider, model: AIModel) async -> Bool
 }
 
-struct AIServiceFactory {
-    static func createService(for providerType: ProviderType) -> AIService.Type {
-        switch providerType {
-        case .openai, .local:
-            return OpenAIService.self
-        case .anthropic:
-            return ClaudeService.self
-        case .google:
-            return GoogleService.self
-        }
-    }
-}
+//struct AIServiceFactory {
+//    static func createService(for providerType: ProviderType) -> AIService.Type {
+//        switch providerType {
+//        case .openai, .local:
+//            return OpenAIService.self
+//        case .anthropic:
+//            return ClaudeService.self
+//        case .google:
+//            return GoogleService.self
+//        }
+//    }
+//}

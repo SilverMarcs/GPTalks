@@ -157,7 +157,6 @@
 		08D142CC2C73CEC5000A5646 /* PDFUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D142CB2C73CEC5000A5646 /* PDFUtils.swift */; };
 		08D174C02C3D901A000257EF /* CrossButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174BF2C3D901A000257EF /* CrossButton.swift */; };
 		08D174C22C3D96F8000257EF /* StreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C12C3D96F8000257EF /* StreamHandler.swift */; };
-		08D174C42C3D972D000257EF /* StreamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C32C3D972D000257EF /* StreamManager.swift */; };
 		08D174C62C3DC2A8000257EF /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C52C3DC2A8000257EF /* DateUtils.swift */; };
 		08D174C82C3DD729000257EF /* InputImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C72C3DD729000257EF /* InputImageView.swift */; };
 		08D174CA2C3E3C78000257EF /* ImageViewerOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C92C3E3C78000257EF /* ImageViewerOld.swift */; };
@@ -330,7 +329,6 @@
 		08D142CB2C73CEC5000A5646 /* PDFUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFUtils.swift; sourceTree = "<group>"; };
 		08D174BF2C3D901A000257EF /* CrossButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossButton.swift; sourceTree = "<group>"; };
 		08D174C12C3D96F8000257EF /* StreamHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamHandler.swift; sourceTree = "<group>"; };
-		08D174C32C3D972D000257EF /* StreamManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamManager.swift; sourceTree = "<group>"; };
 		08D174C52C3DC2A8000257EF /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		08D174C72C3DD729000257EF /* InputImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputImageView.swift; sourceTree = "<group>"; };
 		08D174C92C3E3C78000257EF /* ImageViewerOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewerOld.swift; sourceTree = "<group>"; };
@@ -779,7 +777,6 @@
 				0805DEEB2C58CAF900A8354A /* Services */,
 				08C8004F2C36F667009581C5 /* Provider.swift */,
 				08D174C12C3D96F8000257EF /* StreamHandler.swift */,
-				08D174C32C3D972D000257EF /* StreamManager.swift */,
 				08C800582C370A30009581C5 /* AIModel.swift */,
 				082181512C38046800171BF3 /* ProviderManager.swift */,
 				08F52EF32C52C3AB00E4482C /* ProviderBackup.swift */,
@@ -1096,7 +1093,6 @@
 				082A63382C55175E003996B7 /* SwiftDataUtils.swift in Sources */,
 				085361232C4A390D007DAB62 /* ProviderPicker.swift in Sources */,
 				085361252C4A5ECC007DAB62 /* MaxTokensPicker.swift in Sources */,
-				08D174C42C3D972D000257EF /* StreamManager.swift in Sources */,
 				087B40AB2C55E7D600EAFA0A /* WindowUtils.swift in Sources */,
 				081C1D982C3BD8A50078BB24 /* GeneralSettings.swift in Sources */,
 				086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */,
