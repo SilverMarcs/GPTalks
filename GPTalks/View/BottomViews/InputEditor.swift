@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-//import VisualEffectView
 
 struct InputEditor: View {
     @Environment(\.colorScheme) var colorScheme

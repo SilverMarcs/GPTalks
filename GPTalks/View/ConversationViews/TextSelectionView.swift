@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SelectableText
 
 struct TextSelectionView: View {
     @Environment(\.dismiss) var dismiss

@@ -10,14 +10,8 @@ import SwiftData
 import SwiftUI
 import Observation
 
-enum ListState: String {
-    case chats
-    case images
-}
-
 @Observable class SessionVM {
     var selections: Set<Session> = []
-//    var selections: Set<AnyTreeItem> = []
     var imageSelections: Set<ImageSession> = []
     
     var searchText: String = ""
@@ -29,6 +23,20 @@ enum ListState: String {
 //            addChatSession(provider: provider, sessions: sessions ?? [], modelContext: modelContext)
         } else {
             addImageSession(provider: provider, imageSessions: imageSessions ?? [], modelContext: modelContext)
+        }
+    }
+    
+    enum ListState: String, CaseIterable {
+        case chats
+        case images
+        
+        var shortcut: KeyEquivalent {
+            switch self {
+            case .chats:
+                return "c"
+            case .images:
+                return "i"
+            }
         }
     }
 }

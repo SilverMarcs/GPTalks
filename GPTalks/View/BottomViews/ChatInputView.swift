@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import VisualEffectView
 import UniformTypeIdentifiers
 
 struct ChatInputView: View {

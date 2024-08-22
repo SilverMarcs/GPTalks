@@ -36,13 +36,9 @@ final class ConversationGroup {
             return conversation
         }
         
-        // return any other random conversation
-//        if let conversation = conversations.first {
-//            return conversation
-//        }
-        
-//        fatalError("No active conversation found")
-        print("Should not go beyond this ideally")
+//        print("Should not go beyond this ideally")
+        #warning("should not create new conversation instances")
+//        #error("should not create new conversation instances")
         
         return Conversation(role: .user, content: "", group: self, model: AIModel.getDemoModel())
     }
