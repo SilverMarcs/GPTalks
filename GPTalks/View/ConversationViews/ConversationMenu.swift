@@ -129,7 +129,9 @@ struct ConversationMenu: View {
     var regenGroup: some View {
         HoverScaleButton(icon: "arrow.2.circlepath", label: "Regenerate") {
             if group.role == .assistant {
-                group.session?.regenerate(group: group)
+                Task { @MainActor in
+                    await group.session?.regenerate(group: group)
+                }
             } else if group.role == .user {
                 group.setupEditing()
                 Task {

@@ -26,7 +26,9 @@ struct ChatCommands: Commands {
             
             Section {
                 Button("Regen Last Message") {
-                    sessionVM.regenLastMessage()
+                    Task { @MainActor in
+                        await sessionVM.regenLastMessage()
+                    }
                 }
                 .keyboardShortcut("r", modifiers: .command)
                 

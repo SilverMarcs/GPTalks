@@ -28,19 +28,15 @@ extension SessionVM {
         session.stopStreaming()
     }
     
-    func regenLastMessage() {
+    func regenLastMessage() async {
         guard let session = activeSession, !session.isStreaming else { return }
         
         if let lastGroup = session.groups.last {
             if lastGroup.role == .user {
                 lastGroup.setupEditing()
-                Task { @MainActor in
-                    await lastGroup.session?.sendInput()
-                }
+                await lastGroup.session?.sendInput()
             } else if lastGroup.role == .assistant {
-                Task { @MainActor in
-                    session.regenerate(group: lastGroup)
-                }
+                await session.regenerate(group: lastGroup)
             }
         }
     }

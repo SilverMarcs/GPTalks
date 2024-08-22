@@ -171,7 +171,7 @@ struct QuickPanel: View {
         
         showAdditionalContent = false
         dismissWindow(id: "quick")
-        openMainWindow()
+        openWindow(id: "main")
     }
     
     private func send() {
@@ -188,17 +188,6 @@ struct QuickPanel: View {
         }
         
         prompt = ""
-    }
-    
-    func openMainWindow() {
-        if let existingWindow = NSApp.windows.first(where: { $0.identifier?.rawValue == "main" }) {
-            // Window already exists, bring it to front
-            existingWindow.makeKeyAndOrderFront(nil)
-            NSApp.activate(ignoringOtherApps: true)
-        } else {
-            // Window doesn't exist, create a new one
-            openWindow(id: "main")
-        }
     }
 }
 

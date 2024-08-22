@@ -192,7 +192,7 @@ final class Session {
     }
     
     @MainActor
-    func regenerate(group: ConversationGroup) {
+    func regenerate(group: ConversationGroup) async {
         guard group.role == .assistant else { return }
         
         guard let index = groups.firstIndex(where: { $0.id == group.id }),
@@ -206,9 +206,7 @@ final class Session {
         
         groups.removeSubrange((index + 1)...)
         
-        Task {
-            await sendInput(isRegen: true, regenContent: userContent, assistantGroup: group)
-        }
+        await sendInput(isRegen: true, regenContent: userContent, assistantGroup: group)
     }
     
     func stopStreaming() {
@@ -262,7 +260,15 @@ final class Session {
     
     func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) -> Session {
         let newSession = Session(config: config.copy(purpose: purpose))
-        newSession.title = "(Ψ) " + self.title
+        let leading: String
+        
+        switch purpose {
+            case .chat: leading = "(Ψ)"
+            case .quick: leading = "↯"
+            case .title: leading = "T"
+        }
+        
+        newSession.title = leading + " " + self.title
         
         if let group = group, let index = groups.firstIndex(of: group) {
             // Scenario 1: Fork from a particular group

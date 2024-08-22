@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import KeyboardShortcuts
 
 #if os(macOS)
 struct QuickPanelWindow: Scene {
@@ -13,7 +14,8 @@ struct QuickPanelWindow: Scene {
     @Environment(\.dismissWindow) var dismissWindow
 
     @State private var showAdditionalContent = false
-    @State var maxHeight: CGFloat = Self.height
+    @State var maxHeight: CGFloat = QuickPanelWindow.height
+    @State private var isQuickPanelVisible = false
     @FocusState private var isFocused: Bool
 
     var body: some Scene {
@@ -65,5 +67,31 @@ struct QuickPanelWindow: Scene {
     }
     
     static var height: CGFloat = 29
+    
+    func setupShortcut() {
+        KeyboardShortcuts.onKeyDown(for: .togglePanel) {
+            if let window = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "quick" }) {
+                if window.isVisible {
+                    dismissWindow(id: "quick")
+                } else {
+                    openWindow(id: "quick")
+                    window.makeKeyAndOrderFront(nil)
+                    NSApplication.shared.activate(ignoringOtherApps: true)
+                }
+            } else {
+                openWindow(id: "quick")
+                if let newWindow = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "quick" }) {
+                    newWindow.makeKeyAndOrderFront(nil)
+                    NSApplication.shared.activate(ignoringOtherApps: true)
+                }
+            }
+        }
+    }
+
+
+    init() {
+        setupShortcut()
+    }
+
 }
 #endif
