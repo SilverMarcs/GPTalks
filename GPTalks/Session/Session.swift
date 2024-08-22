@@ -262,7 +262,7 @@ final class Session {
     
     func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) -> Session {
         let newSession = Session(config: config.copy(purpose: purpose))
-        newSession.title = "(Forked) " + self.title
+        newSession.title = "(Ψ) " + self.title
         
         if let group = group, let index = groups.firstIndex(of: group) {
             // Scenario 1: Fork from a particular group

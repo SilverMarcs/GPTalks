@@ -8,26 +8,17 @@
 import SwiftUI
 import SwiftData
 import TipKit
+import KeyboardShortcuts
 
 @main
 struct GPTalksApp: App {
     @State private var sessionVM = SessionVM()
-    @FocusState var isMainWindowFocused
+    @Environment(\.openWindow) var openWindow
+    @Environment(\.dismissWindow) var dismissWindow
 
     var body: some Scene {
         Group {
-            WindowGroup(id: "main") {
-                ContentView()
-                    .focusable()
-                    .focusEffectDisabled()
-                    .focused($isMainWindowFocused)
-                    .task {
-                        try? Tips.configure([.datastoreLocation(.applicationDefault)])
-                    }
-            }
-            .commands {
-                MenuCommands(isMainWindowFocused: _isMainWindowFocused)
-            }
+            MainWindow()
             
             #if os(macOS)
             SettingsWindow()
@@ -42,11 +33,31 @@ struct GPTalksApp: App {
     #if os(macOS)
     init() {
         NSWindow.allowsAutomaticWindowTabbing = false
+        setupShortcut()
+    }
+    
+    private func setupShortcut() {
+        KeyboardShortcuts.onKeyDown(for: .togglePanel) {
+            if let window = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "quick" }) {
+                if window.isVisible {
+                    dismissWindow(id: "quick")
+                } else {
+                    openWindow(id: "quick")
+                    window.makeKeyAndOrderFront(nil)
+                    NSApplication.shared.activate(ignoringOtherApps: true)
+                }
+            } else {
+                openWindow(id: "quick")
+                if let newWindow = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "quick" }) {
+                    newWindow.makeKeyAndOrderFront(nil)
+                    NSApplication.shared.activate(ignoringOtherApps: true)
+                }
+            }
+        }
     }
     #endif
     
-    let models: [any PersistentModel.Type] =
-        [
+    let models: [any PersistentModel.Type] = [
            Session.self,
            Folder.self,
            Conversation.self,
@@ -57,5 +68,5 @@ struct GPTalksApp: App {
            ImageSession.self,
            ImageGeneration.self,
            ImageConfig.self
-        ]
+    ]
 }

@@ -57,7 +57,7 @@ struct ConversationList: View {
     var vStackView: some View  {
         ScrollView {
             VStack(spacing: spacing) {
-                ForEach(session.groups) { group in
+                ForEach(session.groups, id: \.self) { group in
                     ConversationGroupView(group: group)
                 }
 
