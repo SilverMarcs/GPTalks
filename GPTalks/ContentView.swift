@@ -10,14 +10,9 @@ import SwiftData
 import KeyboardShortcuts
 
 struct ContentView: View {
-    @Environment(SessionVM.self) private var sessionVM
     @Environment(\.modelContext) private var modelContext
     @Environment(\.openWindow) var openWindow
     @Environment(\.dismissWindow) var dismissWindow
-
-    @ObservedObject var providerManager = ProviderManager.shared
-    
-    @State var showingInspector: Bool = true
     
     var body: some View {
         NavigationSplitView {
@@ -31,7 +26,7 @@ struct ContentView: View {
             initialSetup()
         }
         #if os(macOS)
-        .frame(minWidth: 800, minHeight: 600)
+        .frame(minWidth: 900, minHeight: 700)
         #endif
     }
     

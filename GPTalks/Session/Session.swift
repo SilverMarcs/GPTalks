@@ -87,6 +87,9 @@ final class Session {
         DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
             if let lastGroup = self.groups.last, lastGroup.activeConversation.content.isEmpty {
                 lastGroup.deleteConversation(lastGroup.activeConversation)
+                if !lastGroup.conversations.isEmpty {
+                    lastGroup.activeConversationIndex -= 1
+                }
             }
             
             if let proxy = self.proxy {

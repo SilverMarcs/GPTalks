@@ -20,9 +20,16 @@ struct MenuCommands: Commands {
         
         SidebarCommands()
         
-//        InspectorCommands()
+        InspectorCommands()
         
         if isMainWindowFocused {
+            CommandGroup(replacing: .newItem) {
+                Button("New Session") {
+                    sessionVM.createNewSession(modelContext: modelContext)
+                }
+                .keyboardShortcut("n")
+            }
+            
             CommandGroup(before: .toolbar) {
                 Section {
                     Picker("Sidebar State", selection: $sessionVM.state) {
@@ -68,13 +75,6 @@ struct MenuCommands: Commands {
                 openWindow(id: "settings")
             }
             .keyboardShortcut(",", modifiers: .command)
-        }
-        
-        CommandGroup(replacing: .newItem) {
-            Button("New Session") {
-                sessionVM.createNewSession(modelContext: modelContext)
-            }
-            .keyboardShortcut("n")
         }
     }
     

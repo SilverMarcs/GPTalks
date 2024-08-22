@@ -37,14 +37,16 @@ struct ParameterSettings: View {
     }
     
     var sysPrompt: some View {
-        #if os(macOS)
-        TextEditor(text: $config.systemPrompt)
-            .font(.body)
-            .frame(height: 80)
-            .scrollContentBackground(.hidden)
-        #else
         TextField("System Prompt", text: $config.systemPrompt, axis: .vertical)
-            .lineLimit(4, reservesSpace: true)
+            .lineLimit(lineLimit, reservesSpace: true)
+            .labelsHidden()
+    }
+    
+    var lineLimit: Int {
+        #if os(macOS)
+        8
+        #else
+        5
         #endif
     }
 }
