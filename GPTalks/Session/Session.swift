@@ -291,20 +291,17 @@ final class Session {
         if groups.count == 0 {
             errorMessage = ""
         }
-//        withAnimation {
-            groups.removeAll(where: { $0 == conversationGroup })
-//        } completion: {
-            self.modelContext?.delete(conversationGroup)
-            self.refreshTokens()
-//        }
+     
+        groups.removeAll(where: { $0 == conversationGroup })
+        
+        self.modelContext?.delete(conversationGroup)
+        self.refreshTokens()
     }
     
     func deleteAllConversations() {
-//        withAnimation {
-            groups.removeAll()
-            errorMessage = ""
-//        } completion: {
-            self.refreshTokens()
-//        }
+        resetMarker = nil
+        groups.removeAll()
+        errorMessage = ""
+        self.refreshTokens()
     }
 }

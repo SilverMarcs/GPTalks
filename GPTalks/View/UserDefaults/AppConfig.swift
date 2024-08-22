@@ -36,6 +36,7 @@ class AppConfig: ObservableObject {
     // General
     @AppStorage("autogenTitle") var autogenTitle: Bool = true
     @AppStorage("expensiveSearch") var expensiveSearch: Bool = false
+    @AppStorage("hideDock") var hideDock = false
     
     // Quick
     @AppStorage("quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."

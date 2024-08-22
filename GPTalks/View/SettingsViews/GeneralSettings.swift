@@ -29,6 +29,19 @@ struct GeneralSettings: View {
                 SectionFooterView(text: "Expensive method searches all messages but may cause UI responsiveness issues")
             }
             
+            #if os(macOS)
+            Section {
+                Toggle("Hide Dock Icon", isOn: $config.hideDock)
+                    .onChange(of: config.hideDock) {
+                        if config.hideDock {
+                            NSApp.setActivationPolicy(.accessory)
+                        } else {
+                            NSApp.setActivationPolicy(.regular)
+                        }
+                    }
+            }
+            #endif
+            
             Section {
                 Button {
                     try? Tips.resetDatastore()

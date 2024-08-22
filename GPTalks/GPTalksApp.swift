@@ -34,6 +34,7 @@ struct GPTalksApp: App {
     init() {
         NSWindow.allowsAutomaticWindowTabbing = false
         setupShortcut()
+        AppConfig.shared.hideDock = false
     }
     
     private func setupShortcut() {
