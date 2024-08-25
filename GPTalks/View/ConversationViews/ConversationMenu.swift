@@ -39,8 +39,6 @@ struct ConversationMenu: View {
             editGroup
             
             regenGroup
-            
-            changeModel
         }
     
         Section {
@@ -61,37 +59,6 @@ struct ConversationMenu: View {
         }
         
         navigate
-    }
-    
-    @ViewBuilder
-    var changeModel: some View {
-        if group.role == .assistant {
-            Menu {
-                ForEach(providers) { provider in
-                    Menu {
-                        ForEach(provider.chatModels) { model in
-                            Button {
-                                group.session?.config.provider = provider
-                                group.session?.config.model = model
-                                Task { @MainActor in
-                                    await group.session?.regenerate(group: group)
-                                }
-                            } label: {
-                                Text(model.name)
-                            }
-                        }
-                    } label: {
-                        Text(provider.name)
-                    }
-                }
-            } label: {
-                Label("Change Model", systemImage: "sparkle")
-            }
-            .labelStyle(.iconOnly)
-            .buttonStyle(.plain)
-            .menuIndicator(.hidden)
-            .fixedSize()
-        }
     }
     
     @ViewBuilder
