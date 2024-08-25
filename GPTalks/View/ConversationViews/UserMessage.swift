@@ -12,6 +12,7 @@ struct UserMessage: View {
     @ObservedObject var config = AppConfig.shared
     
     @Bindable var conversation: Conversation
+    var providers: [Provider]
     @State var isHovered: Bool = false
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
@@ -39,7 +40,7 @@ struct UserMessage: View {
             
     #if os(macOS)
             if let group = conversation.group {
-                ConversationMenu(group: group, isExpanded: $isExpanded)
+                ConversationMenu(group: group, providers: providers, isExpanded: $isExpanded)
                     .symbolEffect(.appear, isActive: !isHovered)
             }
     #endif
@@ -95,9 +96,10 @@ struct UserMessage: View {
 }
 
 #Preview {
+    let providers: [Provider] = []
     let conversation = Conversation(
         role: .user, content: "Hello, World! who are you and how are you")
 
-    UserMessage(conversation: conversation)
+    UserMessage(conversation: conversation, providers: providers)
         .frame(width: 500, height: 300)
 }

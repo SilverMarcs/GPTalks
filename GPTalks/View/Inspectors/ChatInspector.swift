@@ -10,7 +10,6 @@ import SwiftData
 
 struct ChatInspector: View {
     @Bindable var session: Session
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
     @State var expandAdvanced: Bool = false
@@ -175,9 +174,9 @@ struct ChatInspector: View {
     }
 }
 
-#Preview {
-    ChatInspector(session: Session(config: SessionConfig()))
-        .modelContainer(for: Provider.self, inMemory: true)
-        .formStyle(.grouped)
-        .frame(width: 300, height: 700)
-}
+//#Preview {
+//    ChatInspector(session: Session(config: SessionConfig()))
+//        .modelContainer(for: Provider.self, inMemory: true)
+//        .formStyle(.grouped)
+//        .frame(width: 300, height: 700)
+//}

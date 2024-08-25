@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ConversationGroupView: View {
     var group: ConversationGroup
+    var providers: [Provider]
     
     @State var isHovered: Bool = false
     
@@ -17,10 +18,10 @@ struct ConversationGroupView: View {
             Group {
                 switch group.role {
                 case .user:
-                    UserMessage(conversation: group.activeConversation)
+                    UserMessage(conversation: group.activeConversation, providers: providers)
                         .padding(.top, 5)
                 case .assistant:
-                    AssistantMessage(conversation: group.activeConversation)
+                    AssistantMessage(conversation: group.activeConversation, providers: providers)
                         .padding(.top, 5)
                 default:
                     Text("Unknown role")
@@ -44,7 +45,8 @@ struct ConversationGroupView: View {
 #Preview {
     let config = SessionConfig()
     let session = Session(config: config)
-
+    let providers: [Provider] = []
+    
     let userConversation = Conversation(role: .user, content: "Hello, World!")
     let assistantConversation = Conversation(
         role: .assistant, content: """
@@ -58,8 +60,8 @@ struct ConversationGroupView: View {
         conversation: assistantConversation, session: session)
 
     VStack {
-        ConversationGroupView(group: group)
-        ConversationGroupView(group: group2)
+        ConversationGroupView(group: group, providers: providers)
+        ConversationGroupView(group: group2, providers: providers)
     }
     .frame(width: 400)
     .padding()

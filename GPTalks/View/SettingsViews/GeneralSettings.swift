@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import TipKit
 
 struct GeneralSettings: View {
     @ObservedObject var config = AppConfig.shared
@@ -41,15 +40,6 @@ struct GeneralSettings: View {
                     }
             }
             #endif
-            
-            Section {
-                Button {
-                    try? Tips.resetDatastore()
-                } label: {
-                    Label("Reset Tips", systemImage: "exclamationmark.triangle")
-                }
-                .foregroundStyle(.cyan)
-            }
         }
         .formStyle(.grouped)
         .navigationTitle("General")

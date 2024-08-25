@@ -10,14 +10,17 @@ import SwiftData
 import KeyboardShortcuts
 
 struct ContentView: View {
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    var providers: [Provider]
+    
     var body: some View {
         NavigationSplitView {
-            SessionListSidebar()
+            SessionListSidebar(providers: providers)
             #if os(macOS)
                 .navigationSplitViewColumnWidth(min: 240, ideal: 250, max: 300)
             #endif
         } detail: {
-            ConversationListDetail()
+            ConversationListDetail(providers: providers)
         }
         #if os(macOS)
         .frame(minWidth: 900, minHeight: 700)

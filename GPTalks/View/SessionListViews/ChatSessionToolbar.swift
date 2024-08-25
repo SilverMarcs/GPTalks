@@ -17,7 +17,6 @@ struct ChatSessionToolbar: ToolbarContent {
     
     @ObservedObject var config = AppConfig.shared
     
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
     var body: some ToolbarContent {
@@ -140,10 +139,10 @@ struct ChatSessionToolbar: ToolbarContent {
     #endif
 }
 
-#Preview {
-    VStack {
-        Text("Hi")
-    }.toolbar  {
-        ChatSessionToolbar()
-    }
-}
+//#Preview {
+//    VStack {
+//        Text("Hi")
+//    }.toolbar  {
+//        ChatSessionToolbar()
+//    }
+//}

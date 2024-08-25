@@ -10,6 +10,8 @@ import SwiftUI
 struct SessionListSidebar: View {
     @Environment(SessionVM.self) private var sessionVM
     @ObservedObject var config = AppConfig.shared
+    var providers: [Provider]
+    
     
     @FocusState private var isSidebarFocused: Bool
     var body: some View {
@@ -38,7 +40,7 @@ struct SessionListSidebar: View {
         }
         .toolbar {
             if sessionVM.state == .chats {
-                ChatSessionToolbar()
+                ChatSessionToolbar(providers: providers)
             } else {
                 ImageSessionToolbar()
             }
@@ -71,6 +73,6 @@ struct SessionListSidebar: View {
     }
 }
 
-#Preview {
-    SessionListSidebar()
-}
+//#Preview {
+//    SessionListSidebar()
+//}

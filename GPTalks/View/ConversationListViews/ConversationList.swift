@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
-
+import SwiftData
 
 struct ConversationList: View {
     @Bindable var session: Session
     var isQuick: Bool = false
+    var providers: [Provider]
     
     @ObservedObject var config: AppConfig = AppConfig.shared
     
@@ -38,6 +39,7 @@ struct ConversationList: View {
                     vStackView
                 }
             }
+            .toolbar { ConversationListToolbar(session: session, providers: providers) }
             .task {
                 sessionVM.selections.first?.refreshTokens()
                 session.proxy = proxy
@@ -58,7 +60,7 @@ struct ConversationList: View {
         ScrollView {
             VStack(spacing: spacing) {
                 ForEach(session.groups, id: \.self) { group in
-                    ConversationGroupView(group: group)
+                    ConversationGroupView(group: group, providers: providers)
                 }
 
                 ErrorMessageView(session: session)
@@ -75,7 +77,7 @@ struct ConversationList: View {
         List {
             VStack(spacing: 3) {
                 ForEach(session.groups) { group in
-                    ConversationGroupView(group: group)
+                    ConversationGroupView(group: group, providers: providers)
                 }
                 .transaction { $0.animation = nil }
 
@@ -127,10 +129,10 @@ struct ConversationList: View {
     }
 }
 
-#Preview {
-    let config = SessionConfig()
-    let session = Session(config: config)
-    
-    ConversationList(session: session)
-        .environment(SessionVM())
-}
+//#Preview {
+//    let config = SessionConfig()
+//    let session = Session(config: config)
+//    
+//    ConversationList(session: session)
+//        .environment(SessionVM())
+//}

@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ConversationListDetail: View {
     @Environment(SessionVM.self) private var sessionVM
+    
+    var providers: [Provider]
     
     var body: some View {
         if sessionVM.state == .images && sessionVM.imageSelections.count == 1{
@@ -18,7 +21,7 @@ struct ConversationListDetail: View {
             }
         } else if sessionVM.state == .chats && sessionVM.selections.count == 1 {
             if let chatSession = sessionVM.selections.first {
-                ConversationList(session: chatSession)
+                ConversationList(session: chatSession, providers: providers)
                     .id(chatSession.id)
             }
         } else {
@@ -36,6 +39,6 @@ struct ConversationListDetail: View {
     }
 }
 
-#Preview {
-    ConversationListDetail()
-}
+//#Preview {
+//    ConversationListDetail()
+//}

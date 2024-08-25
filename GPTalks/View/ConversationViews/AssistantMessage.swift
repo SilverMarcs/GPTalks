@@ -12,6 +12,7 @@ struct AssistantMessage: View {
     @ObservedObject var config = AppConfig.shared
     
     var conversation: Conversation
+    var providers: [Provider]
     
     @State var isHovered: Bool = false
     @State var showingTextSelection = false
@@ -39,7 +40,7 @@ struct AssistantMessage: View {
                     
                     #if os(macOS)
                     if let group = conversation.group, !conversation.isReplying {
-                        ConversationMenu(group: group, isExpanded: .constant(true))
+                        ConversationMenu(group: group, providers: providers, isExpanded: .constant(true))
                             .symbolEffect(.appear, isActive: !isHovered)
                     }
                     #endif
@@ -104,12 +105,12 @@ struct AssistantMessage: View {
     Thank you for using me.
     
     """
-    
+    let providers: [Provider] = []
     let conversation = Conversation(role: .user,
                                     content: codeBlock)
     conversation.isReplying = true
     
-    return AssistantMessage(conversation: conversation)
+    return AssistantMessage(conversation: conversation, providers: providers)
         .frame(width: 500, height: 300)
 }
 

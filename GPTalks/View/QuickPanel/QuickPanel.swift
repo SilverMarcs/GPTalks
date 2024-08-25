@@ -53,7 +53,7 @@ struct QuickPanel: View {
                         .safeAreaPadding(.horizontal)
                 }
                 
-                ConversationList(session: session, isQuick: true)
+                ConversationList(session: session, isQuick: true, providers: providers)
                     .navigationTitle("Quick Panel")
                     .scrollContentBackground(.hidden)
                 

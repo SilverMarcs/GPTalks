@@ -22,14 +22,14 @@ struct MenuCommands: Commands {
         
         InspectorCommands()
         
-        if isMainWindowFocused {
-            CommandGroup(replacing: .newItem) {
-                Button("New Session") {
-                    sessionVM.createNewSession(modelContext: modelContext)
-                }
-                .keyboardShortcut("n")
+        CommandGroup(replacing: .newItem) {
+            Button("New Session") {
+                sessionVM.createNewSession(modelContext: modelContext)
             }
-            
+            .keyboardShortcut("n")
+        }
+        
+        if isMainWindowFocused {
             CommandGroup(before: .toolbar) {
                 Section {
                     Picker("Sidebar State", selection: $sessionVM.state) {

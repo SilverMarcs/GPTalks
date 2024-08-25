@@ -13,6 +13,8 @@ struct ConversationMenu: View {
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) var sessionVM
 
+    var providers: [Provider]
+    
     @Binding var isExpanded: Bool
     var toggleTextSelection: (() -> Void)? = nil
     
@@ -29,34 +31,66 @@ struct ConversationMenu: View {
         #endif
     }
 
+    @ViewBuilder
     var buttons: some View {
-        Group {
-            expandHeight
-            
-            Section {
-                editGroup
-                
-                regenGroup
-            }
+        expandHeight
         
-            Section {
-                copyText
-                #if !os(macOS)
-                selectText
-                #endif
-            }
+        Section {
+            editGroup
+            
+            regenGroup
+            
+            changeModel
+        }
+    
+        Section {
+            copyText
+            #if !os(macOS)
+            selectText
+            #endif
+        }
 
-            Section {
-                resetContext
-                
-                forkSession
-            }
+        Section {
+            resetContext
             
-            Section {
-                deleteGroup
+            forkSession
+        }
+        
+        Section {
+            deleteGroup
+        }
+        
+        navigate
+    }
+    
+    @ViewBuilder
+    var changeModel: some View {
+        if group.role == .assistant {
+            Menu {
+                ForEach(providers) { provider in
+                    Menu {
+                        ForEach(provider.chatModels) { model in
+                            Button {
+                                group.session?.config.provider = provider
+                                group.session?.config.model = model
+                                Task { @MainActor in
+                                    await group.session?.regenerate(group: group)
+                                }
+                            } label: {
+                                Text(model.name)
+                            }
+                        }
+                    } label: {
+                        Text(provider.name)
+                    }
+                }
+            } label: {
+                Label("Change Model", systemImage: "sparkle")
             }
-            
-            navigate
+            .labelStyle(.iconOnly)
+            .buttonStyle(.plain)
+            .menuIndicator(.hidden)
+            .fixedSize()
         }
     }
     
@@ -72,10 +106,8 @@ struct ConversationMenu: View {
     
     @ViewBuilder
     var expandHeight: some View {
-//        if let labelSize = labelSize, labelSize.height >= 400 {
         if group.role == .user {
             HoverScaleButton(icon: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right", label: isExpanded ? "Collapse" : "Expand") {
-                //                toggleMaxHeight?()
                 withAnimation {
                     isExpanded.toggle()
                     group.session?.proxy?.scrollTo(group, anchor: .top)
@@ -127,7 +159,27 @@ struct ConversationMenu: View {
     }
 
     var regenGroup: some View {
-        HoverScaleButton(icon: "arrow.2.circlepath", label: "Regenerate") {
+        Menu {
+            ForEach(providers) { provider in
+                Menu {
+                    ForEach(provider.chatModels.filter { $0.isEnabled }.sorted(by: { $0.order < $1.order })) { model in
+                        Button {
+                            group.session?.config.provider = provider
+                            group.session?.config.model = model
+                            Task { @MainActor in
+                                await group.session?.regenerate(group: group)
+                            }
+                        } label: {
+                            Text(model.name)
+                        }
+                    }
+                } label: {
+                    Text(provider.name)
+                }
+            }
+        } label: {
+            Label("Change Model", systemImage: "arrow.2.circlepath")
+        } primaryAction: {
             if group.role == .assistant {
                 Task { @MainActor in
                     await group.session?.regenerate(group: group)
@@ -139,6 +191,10 @@ struct ConversationMenu: View {
                 }
             }
         }
+        .labelStyle(.iconOnly)
+        .buttonStyle(.plain)
+        .menuIndicator(.hidden)
+        .fixedSize()
     }
 
     var navigate: some View {
@@ -213,28 +269,28 @@ struct ConversationMenu: View {
     }
 }
 
-#Preview {
-    let config = SessionConfig()
-    let session = Session(config: config)
-
-    let userConversation = Conversation(role: .user, content: "Hello, World!")
-    let assistantConversation = Conversation(
-        role: .assistant, content: "Hello, World!")
-
-    let group = ConversationGroup(
-        conversation: userConversation, session: session)
-    group.addConversation(
-        Conversation(role: .user, content: "This is second."))
-    group.addConversation(
-        Conversation(role: .user, content: "This is third message."))
-    let group2 = ConversationGroup(
-        conversation: assistantConversation, session: session)
-
-    return VStack {
-        ConversationGroupView(group: group)
-        ConversationGroupView(group: group2)
-    }
-    .environment(SessionVM())
-    .frame(width: 500)
-    .padding()
-}
+//#Preview {
+//    let config = SessionConfig()
+//    let session = Session(config: config)
+//
+//    let userConversation = Conversation(role: .user, content: "Hello, World!")
+//    let assistantConversation = Conversation(
+//        role: .assistant, content: "Hello, World!")
+//
+//    let group = ConversationGroup(
+//        conversation: userConversation, session: session)
+//    group.addConversation(
+//        Conversation(role: .user, content: "This is second."))
+//    group.addConversation(
+//        Conversation(role: .user, content: "This is third message."))
+//    let group2 = ConversationGroup(
+//        conversation: assistantConversation, session: session)
+//
+//    return VStack {
+//        ConversationGroupView(group: group)
+//        ConversationGroupView(group: group2)
+//    }
+//    .environment(SessionVM())
+//    .frame(width: 500)
+//    .padding()
+//}

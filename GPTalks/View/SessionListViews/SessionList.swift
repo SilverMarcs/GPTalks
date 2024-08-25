@@ -40,8 +40,6 @@ struct SessionList: View {
             List(selection: $sessionVM.selections) {
                 SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "?")
                     .id(String.topID)
-//                    .popoverTip(FavouriteTip())
-//                    .popoverTip(DragSessionTip())
                 
                 if !sessionVM.searchText.isEmpty && sessions.isEmpty {
                     ContentUnavailableView.search(text: sessionVM.searchText)

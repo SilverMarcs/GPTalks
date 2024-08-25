@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ConversationListToolbar: ToolbarContent {
     @Bindable var session: Session
+    var providers: [Provider]
     
     @State var showConfig: Bool = false
     @State var showingInspector: Bool = false
@@ -27,7 +28,7 @@ struct ConversationListToolbar: ToolbarContent {
         ToolbarItem {
             Color.clear
                 .sheet(isPresented: $showingInspector) {
-                    ChatInspector(session: session)
+                    ChatInspector(session: session, providers: providers)
                 }
         }
         
@@ -111,15 +112,15 @@ enum NavigationDirection {
     case backward
 }
 
-#Preview {
-    @Previewable @State var showingSearchField = false
-    let session = Session(config: SessionConfig())
-    
-    VStack {
-        Text("Hello, World!")
-    }
-    .frame(width: 700, height: 300)
-    .toolbar {
-        ConversationListToolbar(session: session)
-    }
-}
+//#Preview {
+//    @Previewable @State var showingSearchField = false
+//    let session = Session(config: SessionConfig())
+//    
+//    VStack {
+//        Text("Hello, World!")
+//    }
+//    .frame(width: 700, height: 300)
+//    .toolbar {
+//        ConversationListToolbar(session: session)
+//    }
+//}

@@ -59,7 +59,7 @@ struct PlatformSpecificModifiers: ViewModifier {
     @ViewBuilder
     func body(content: Content) -> some View {
         content
-            .toolbar { ConversationListToolbar(session: session) }
+//            .toolbar { ConversationListToolbar(session: session, providers: providers) }
             #if os(macOS)
             .navigationSubtitle("\(session.tokenCount.formatToK()) tokens • \(session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))")
             .navigationTitle(session.title)
