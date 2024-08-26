@@ -10,18 +10,14 @@ import MarkdownWebView
 
 struct AppearanceSettings: View {
     @ObservedObject var config = AppConfig.shared
-    
+
     var body: some View {
         Form {
             Section("Font Size") {
                 Slider(value: $config.fontSize, in: 8...25, step: 1) {
                     HStack {
                         Button("Reset") {
-#if os(macOS)
-                            config.fontSize = 13
-#else
-                            config.fontSize = 18
-#endif
+                            config.resetFontSize()
                         }
                     }
                 } minimumValueLabel: {
@@ -32,7 +28,7 @@ struct AppearanceSettings: View {
                         .monospacedDigit()
                 }
             }
-            
+
             Section {
                 Toggle("Compact List Row", isOn: $config.compactList)
                 #if os(macOS)
@@ -44,16 +40,21 @@ struct AppearanceSettings: View {
             } footer: {
                 SectionFooterView(text: "Folder View is Experimental and extremely buggy")
             }
-            
+
             Section {
                 Toggle("Show Less Sessions", isOn: $config.truncateList)
-                
-                Stepper(value: $config.listCount, in: 6...20) {
-                    HStack {
-                        Text("List Count")
-                        Spacer()
-                        Text("\(config.listCount)")
-                    }
+
+                HStack {
+                    Stepper(
+                        "List Count",
+                        value: Binding<Double>(
+                            get: { Double(config.listCount) },
+                            set: { config.listCount = Int($0) }
+                        ),
+                        in: 6...20,
+                        step: 1,
+                        format: .number
+                    )
                 }
                 .opacity(config.truncateList ? 1 : 0.5)
                 .disabled(!config.truncateList)

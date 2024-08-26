@@ -44,6 +44,13 @@ class AppConfig: ObservableObject {
     // Misc
     @AppStorage("sidebarFocus") var sidebarFocus: Bool = false
     
+    func resetFontSize() {
+        #if os(macOS)
+        fontSize = 13
+        #else
+        fontSize = 18
+        #endif
+    }
 }
 
 

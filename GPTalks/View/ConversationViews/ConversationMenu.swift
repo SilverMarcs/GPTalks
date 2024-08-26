@@ -145,7 +145,7 @@ struct ConversationMenu: View {
                 }
             }
         } label: {
-            Label("Change Model", systemImage: "arrow.2.circlepath")
+            Label("Regenerate", systemImage: "arrow.2.circlepath")
         } primaryAction: {
             if group.role == .assistant {
                 Task { @MainActor in
