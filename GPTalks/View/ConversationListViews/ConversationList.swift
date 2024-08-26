@@ -9,8 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct ConversationList: View {
+    @Environment(\.isQuick) var isQuick
+    
     @Bindable var session: Session
-    var isQuick: Bool = false
     var providers: [Provider]
     
     @ObservedObject var config: AppConfig = AppConfig.shared
@@ -33,9 +34,10 @@ struct ConversationList: View {
     var content: some View {
         ScrollViewReader { proxy in
             Group {
-                if config.listView {
+                switch config.conversationListStyle {
+                case .list:
                     listView
-                } else {
+                case .scrollview:
                     vStackView
                 }
             }

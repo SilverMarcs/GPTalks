@@ -27,7 +27,7 @@ class AppConfig: ObservableObject {
     @AppStorage("compactList") var compactList: Bool = false
     @AppStorage("truncateList") var truncateList: Bool = false
     @AppStorage("listCount") var listCount: Int = 12
-    @AppStorage("listView") var listView: Bool = false
+    @AppStorage("conversationListStyle") var conversationListStyle: ConversationListStyle = .scrollview
     @AppStorage("folderView") var folderView: Bool = false
     
     // Markdown
@@ -53,6 +53,10 @@ class AppConfig: ObservableObject {
     }
 }
 
+enum ConversationListStyle: String, Codable, CaseIterable {
+    case scrollview = "ScrollView"
+    case list = "List"
+}
 
 enum MarkdownProvider: String, Codable, CaseIterable {
     #if os(macOS)

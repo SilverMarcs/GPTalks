@@ -12,6 +12,7 @@ import SwiftData
 struct MainWindow: Scene {
     @Environment(\.modelContext) private var modelContext
     @FocusState var isMainWindowFocused
+    @State private var isQuick = false
     
     var body: some Scene {
         #if os(macOS)
@@ -34,6 +35,7 @@ struct MainWindow: Scene {
     
     var commonContent: some View {
         ContentView()
+            .environment(\.isQuick, isQuick)
             .task {
                 try? Tips.configure([.datastoreLocation(.applicationDefault)])
                 initialSetup()

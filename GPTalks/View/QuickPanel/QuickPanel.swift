@@ -25,7 +25,7 @@ struct QuickPanel: View {
     var providers: [Provider]
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             ZStack {
                 Button("Paste Image") {
                     session.inputManager.handlePaste(supportedFileTypes: session.config.provider.type.supportedFileTypes)
@@ -51,9 +51,12 @@ struct QuickPanel: View {
                 if !session.inputManager.dataFiles.isEmpty {
                     DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
                         .safeAreaPadding(.horizontal)
+                        .safeAreaPadding(.vertical, 10)
+                } else {
+                    EmptyView()
                 }
                 
-                ConversationList(session: session, isQuick: true, providers: providers)
+                ConversationList(session: session, providers: providers)
                     .navigationTitle("Quick Panel")
                     .scrollContentBackground(.hidden)
                 

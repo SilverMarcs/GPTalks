@@ -12,6 +12,7 @@ import KeyboardShortcuts
 struct QuickPanelWindow: Scene {
     @Environment(\.openWindow) var openWindow
     @Environment(\.dismissWindow) var dismissWindow
+    @State private var isQuick = true
 
     @State private var showAdditionalContent = false
     @State var maxHeight: CGFloat = QuickPanelWindow.height
@@ -21,6 +22,7 @@ struct QuickPanelWindow: Scene {
     var body: some Scene {
         Window("Quick Panel", id: "quick") {
             QuickPanelHelper(showAdditionalContent: $showAdditionalContent)
+                .environment(\.isQuick, isQuick)
                 .ignoresSafeArea()
                 .onChange(of: showAdditionalContent) {
                     toggleMaxHeight()
