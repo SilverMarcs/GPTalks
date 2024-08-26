@@ -70,6 +70,14 @@ struct QuickPanelSettings: View {
                     }
                 }
             }
+            
+            Section("View") {
+                Picker("Markdown Provider", selection: $config.quickMarkdownProvider) {
+                    ForEach(MarkdownProvider.allCases, id: \.self) { provider in
+                        Text(provider.name)
+                    }
+                }
+            }
                 
             Section("System Prompt") {
                 TextEditor(text: $config.quickSystemPrompt)

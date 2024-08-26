@@ -18,7 +18,6 @@ struct MainWindow: Scene {
         #if os(macOS)
         Window("GPTalks", id: "main") {
             commonContent
-//                .windowToolbarFullScreenVisibility(.onHover)
                 .focusable()
                 .focusEffectDisabled()
                 .focused($isMainWindowFocused)
@@ -43,9 +42,19 @@ struct MainWindow: Scene {
     }
     
     private func initialSetup() {
+        // Fetch the quick session from the modelContext
+        var fetchQuickSession = FetchDescriptor<Session>()
+        fetchQuickSession.predicate = #Predicate { $0.isQuick == true }
+        fetchQuickSession.fetchLimit = 1
+        
+        if let quickSession = try? modelContext.fetch(fetchQuickSession).first {
+            quickSession.deleteAllConversations()
+        }
+        
         var fetchProviders = FetchDescriptor<Provider>()
         fetchProviders.fetchLimit = 1
         
+        // If there are already providers in the modelContext, return since the setup has already been done
         guard try! modelContext.fetch(fetchProviders).count == 0 else { return }
         
         let openAI = Provider.factory(type: .openai)
@@ -69,4 +78,5 @@ struct MainWindow: Scene {
         ProviderManager.shared.defaultProvider = openAI.id.uuidString
         ProviderManager.shared.quickProvider = openAI.id.uuidString
     }
+
 }

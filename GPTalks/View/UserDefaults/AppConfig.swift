@@ -40,6 +40,7 @@ class AppConfig: ObservableObject {
     
     // Quick
     @AppStorage("quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."
+    @AppStorage("quickMarkdownProvider") var quickMarkdownProvider: MarkdownProvider = .native
     
     // Misc
     @AppStorage("sidebarFocus") var sidebarFocus: Bool = false

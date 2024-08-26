@@ -306,8 +306,14 @@ final class Session {
     
     func deleteAllConversations() {
         resetMarker = nil
-        groups.removeAll()
+        
+        // Remove all conversation groups from the groups array and modelContext
+        while let conversationGroup = groups.popLast() {
+            self.modelContext?.delete(conversationGroup)
+        }
+        
         errorMessage = ""
         self.refreshTokens()
     }
+
 }

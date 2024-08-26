@@ -11,6 +11,7 @@ import MarkdownWebView
 #endif
 
 struct MarkdownView: View {
+    @Environment(\.isQuick) var isQuick
     @ObservedObject var config = AppConfig.shared
     var conversation: Conversation
     
@@ -21,25 +22,27 @@ struct MarkdownView: View {
     #endif
     
     var body: some View {
-        switch config.markdownProvider {
+        let provider = isQuick ? config.quickMarkdownProvider : config.markdownProvider
+        
+        switch provider {
             #if os(macOS)
             case .webview:
-            MarkdownWebView(conversation.content,
-                            baseURL: "GPTalks Web Content",
-                            highlightString: highlightString,
-                            customStylesheet: config.markdownTheme,
-                            fontSize: CGFloat(config.fontSize))
-
+                MarkdownWebView(conversation.content,
+                                baseURL: "GPTalks Web Content",
+                                highlightString: highlightString,
+                                customStylesheet: config.markdownTheme,
+                                fontSize: CGFloat(config.fontSize))
             #endif
             case .native:
                 Text(LocalizedStringKey(conversation.content))
-                .font(.system(size: config.fontSize))
+                    .font(.system(size: config.fontSize))
             case .disabled:
                 Text(conversation.content)
-                .font(.system(size: config.fontSize))
+                    .font(.system(size: config.fontSize))
         }
     }
 }
+
 
 
 #Preview {
