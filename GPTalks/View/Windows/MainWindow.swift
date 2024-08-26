@@ -15,8 +15,9 @@ struct MainWindow: Scene {
     
     var body: some Scene {
         #if os(macOS)
-        Window("Main", id: "main") {
+        Window("GPTalks", id: "main") {
             commonContent
+//                .windowToolbarFullScreenVisibility(.onHover)
                 .focusable()
                 .focusEffectDisabled()
                 .focused($isMainWindowFocused)

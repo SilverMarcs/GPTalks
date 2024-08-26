@@ -84,17 +84,17 @@ struct ChatInspector: View {
                 .buttonStyle(.plain)
             }
             .formStyle(.grouped)
-        }
-        #if !os(macOS)
-        .navigationTitle("Tokens: " + String(session.tokenCount))
-        .toolbarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                DismissButton()
-                    .buttonStyle(.plain)
+#if !os(macOS)
+            .navigationTitle("Tokens: " + String(session.tokenCount))
+            .toolbarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    DismissButton()
+                        .buttonStyle(.plain)
+                }
             }
+#endif
         }
-        #endif
     }
     
     private var title: some View {

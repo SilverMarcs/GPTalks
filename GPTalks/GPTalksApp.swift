@@ -13,8 +13,6 @@ import KeyboardShortcuts
 @main
 struct GPTalksApp: App {
     @State private var sessionVM = SessionVM()
-    @Environment(\.openWindow) var openWindow
-    @Environment(\.dismissWindow) var dismissWindow
 
     var body: some Scene {
         Group {

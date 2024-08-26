@@ -29,16 +29,22 @@ struct AppearanceSettings: View {
                 }
             }
 
-            Section {
+            Section("View Customisation") {
                 Toggle("Compact List Row", isOn: $config.compactList)
+                
                 #if os(macOS)
-                Toggle("List View", isOn: $config.listView)
+                ToggleWithDescription(
+                    title: "List View",
+                    isOn: $config.listView,
+                    description: "Applies to conversation list"
+                )
                 #endif
-                Toggle("Folder View", isOn: $config.folderView)
-            } header: {
-                Text("View Customisation")
-            } footer: {
-                SectionFooterView(text: "Folder View is Experimental and extremely buggy")
+
+                ToggleWithDescription(
+                    title: "Folder View",
+                    isOn: $config.folderView,
+                    description: "Folder View is Experimental and extremely buggy"
+                )
             }
 
             Section {
@@ -61,7 +67,7 @@ struct AppearanceSettings: View {
             } header: {
                 Text("List Row Count")
             } footer: {
-                SectionFooterView(text: "Only applicable when not using folder view")
+                SectionFooterView(text: "Only applicable when NOT using folder view")
             }
         }
         .formStyle(.grouped)
@@ -73,3 +79,4 @@ struct AppearanceSettings: View {
 #Preview {
     AppearanceSettings()
 }
+
