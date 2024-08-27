@@ -31,7 +31,6 @@ struct AssistantMessage: View {
                     }
                     
                     MarkdownView(conversation: conversation)
-                        .textSelection(.enabled)
                     
                     if conversation.isReplying {
                         ProgressView()

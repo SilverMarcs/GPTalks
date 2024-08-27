@@ -72,6 +72,11 @@ struct ConversationList: View {
             .padding()
             .padding(.top, -5)
         }
+        .onScrollPhaseChange { oldPhase, newPhase in
+            if newPhase == .interacting {
+                hasUserScrolled = true
+            }
+        }
         .scrollContentBackground(.visible)
     }
     
@@ -96,18 +101,9 @@ struct ConversationList: View {
     }
     
     var colorSpacer: some View {
-        #if os(macOS)
         Color.clear
             .frame(height: spacerHeight)
             .id(String.bottomID)
-        #else
-        GeometryReader { geometry in
-            Color.clear
-                .frame(height: spacerHeight)
-                .id(String.bottomID)
-                .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .global).minY)
-        }
-        #endif
     }
     
     var spacerHeight: CGFloat {
@@ -131,10 +127,11 @@ struct ConversationList: View {
     }
 }
 
-//#Preview {
-//    let config = SessionConfig()
-//    let session = Session(config: config)
-//    
-//    ConversationList(session: session)
-//        .environment(SessionVM())
-//}
+#Preview {
+    let config = SessionConfig()
+    let session = Session(config: config)
+    let providers: [Provider] = []
+    
+    ConversationList(session: session, providers: providers)
+        .environment(SessionVM())
+}

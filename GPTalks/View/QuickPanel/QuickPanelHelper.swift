@@ -42,6 +42,7 @@ struct QuickPanelHelper: View {
         }
     }
 }
+#endif
 
 private struct IsQuickKey: EnvironmentKey {
     static let defaultValue: Bool = false
@@ -53,6 +54,3 @@ extension EnvironmentValues {
         set { self[IsQuickKey.self] = newValue }
     }
 }
-
-
-#endif

@@ -36,7 +36,7 @@ extension View {
             }
         #if os(macOS)
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-                if session.isReplying {
+                if config.conversationListStyle == .list && session.isReplying {
                     hasUserScrolled.wrappedValue = true
                 }
             }
@@ -77,9 +77,6 @@ struct PlatformSpecificModifiers: ViewModifier {
                 }
             }
             #if !os(visionOS)
-            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                hasUserScrolled = value > UIScreen.main.bounds.height
-            }
             .scrollDismissesKeyboard(.immediately)
             #endif
             #endif

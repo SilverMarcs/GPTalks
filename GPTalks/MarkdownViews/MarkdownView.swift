@@ -36,9 +36,11 @@ struct MarkdownView: View {
             case .native:
                 Text(LocalizedStringKey(conversation.content))
                     .font(.system(size: config.fontSize))
+                    .textSelection(.enabled)
             case .disabled:
                 Text(conversation.content)
                     .font(.system(size: config.fontSize))
+                    .textSelection(.enabled)
         }
     }
 }
