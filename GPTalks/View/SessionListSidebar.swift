@@ -21,6 +21,7 @@ struct SessionListSidebar: View {
         CustomSearchField("Search", text: $sessionVM.searchText)
             .id(String.topID)
             .padding(.horizontal, 10)
+            .padding(.leading, 3)
         #endif
         
         Group {

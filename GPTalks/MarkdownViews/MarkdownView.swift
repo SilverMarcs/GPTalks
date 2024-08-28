@@ -6,33 +6,27 @@
 //
 
 import SwiftUI
-#if os(macOS)
 import MarkdownWebView
-#endif
 
 struct MarkdownView: View {
     @Environment(\.isQuick) var isQuick
     @ObservedObject var config = AppConfig.shared
     var conversation: Conversation
     
-    #if os(macOS)
     var highlightString: String? {
         conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil
     }
-    #endif
     
     var body: some View {
         let provider = isQuick ? config.quickMarkdownProvider : config.markdownProvider
         
         switch provider {
-            #if os(macOS)
             case .webview:
                 MarkdownWebView(conversation.content,
                                 baseURL: "GPTalks Web Content",
                                 highlightString: highlightString,
                                 customStylesheet: config.markdownTheme,
                                 fontSize: CGFloat(config.fontSize))
-            #endif
             case .native:
                 Text(LocalizedStringKey(conversation.content))
                     .font(.system(size: config.fontSize))

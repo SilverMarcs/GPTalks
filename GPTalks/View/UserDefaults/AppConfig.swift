@@ -60,17 +60,13 @@ enum ConversationListStyle: String, Codable, CaseIterable {
 }
 
 enum MarkdownProvider: String, Codable, CaseIterable {
-    #if os(macOS)
     case webview
-    #endif
     case native
     case disabled
     
     var name: String {
         switch self {
-        #if os(macOS)
         case .webview: "WebView"
-        #endif
         case .native: "Native"
         case .disabled: "Disabled"
         }
