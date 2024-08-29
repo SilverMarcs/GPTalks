@@ -21,7 +21,7 @@ struct ChatInspector: View {
     @Environment(\.dismiss) var dismiss
     var body: some View {
         NavigationStack {
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             HStack {
                 export
                 
@@ -68,7 +68,7 @@ struct ChatInspector: View {
                     sysPrompt
                 }
                 
-#if os(macOS)
+#if os(macOS) || targetEnvironment(macCatalyst)
                 Section("Advanced", isExpanded: $expandAdvanced) {
                     TopPSlider(topP: $session.config.topP, shortLabel: true)
                     FrequencyPenaltySlider(penalty: $session.config.frequencyPenalty, shortLabel: true)

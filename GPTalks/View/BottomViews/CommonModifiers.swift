@@ -16,7 +16,7 @@ struct CommonInputStyling: ViewModifier {
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal)
             .padding(.vertical, verticalPadding)
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             .background(.bar)
             #else
             .background(
@@ -39,7 +39,7 @@ struct CommonInputStyling: ViewModifier {
     }
     
     private var verticalPadding: CGFloat {
-#if os(macOS)
+#if os(macOS) || targetEnvironment(macCatalyst)
         14
 #else
         9

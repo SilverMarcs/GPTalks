@@ -30,7 +30,7 @@ struct UserMessage: View {
                 .padding(.horizontal, 11)
                 .background(
                     RoundedRectangle(cornerRadius: 15)
-                    #if os(macOS)
+                    #if os(macOS) || targetEnvironment(macCatalyst)
                         .fill(.background.quinary)
                     #else
                         .fill(.background.secondary)
@@ -38,7 +38,7 @@ struct UserMessage: View {
                         .fill(conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
                 )
             
-    #if os(macOS)
+    #if os(macOS) || targetEnvironment(macCatalyst)
             if let group = conversation.group, let session = group.session {
                 ConversationMenu(group: group, providers: providers, isExpanded: $isExpanded)
                     .symbolEffect(.appear, isActive: !isHovered)
@@ -72,7 +72,7 @@ struct UserMessage: View {
     }
     
     var leadingPadding: CGFloat {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         160
         #else
         60
@@ -80,7 +80,7 @@ struct UserMessage: View {
     }
     
     var lineLimit: Int {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         15
         #else
         6

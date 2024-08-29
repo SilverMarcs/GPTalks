@@ -52,7 +52,7 @@ struct ConversationList: View {
                     ChatInputView(session: session)
                 }
             }
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             .searchable(text: $session.searchText)
             #endif
         }
@@ -107,7 +107,7 @@ struct ConversationList: View {
     }
     
     var spacerHeight: CGFloat {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         if config.markdownProvider == .webview {
             20
         } else {
@@ -119,7 +119,7 @@ struct ConversationList: View {
     }
     
     var spacing: CGFloat {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         0
         #else
         15

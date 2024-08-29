@@ -99,7 +99,7 @@ struct CustomSearchField: NSViewRepresentable {
 //}
 
 
-#Preview {
-    CustomSearchField("Hi", text: .constant(""), height: 30)
-}
+//#Preview {
+//    CustomSearchField("Hi", text: .constant(""), height: 30)
+//}
 #endif

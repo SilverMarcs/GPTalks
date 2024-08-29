@@ -21,7 +21,7 @@ struct SessionListSidebar: View {
         CustomSearchField("Search", text: $sessionVM.searchText)
             .id(String.topID)
             .padding(.horizontal, 10)
-            .padding(.leading, 3)
+            .padding(.leading, 2)
         #endif
         
         Group {
@@ -46,7 +46,7 @@ struct SessionListSidebar: View {
                 ImageSessionToolbar()
             }
             
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             ToolbarItemGroup(placement: .keyboard) {
                 Button("Focus sidebar") {
                     AppConfig.shared.sidebarFocus = true
@@ -61,7 +61,7 @@ struct SessionListSidebar: View {
             }
             #endif
         }
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         .listStyle(.inset)
         .scrollContentBackground(.hidden)
         .padding(.top, -10)

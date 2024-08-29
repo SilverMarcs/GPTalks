@@ -30,7 +30,7 @@ struct SessionListCards: View {
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
                 .listRowInsets(EdgeInsets(top: 0, leading: -5, bottom: 8, trailing: -5))
             #else
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -42,7 +42,7 @@ struct SessionListCards: View {
     }
     
     private var spacing: CGFloat {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         return 9
         #else
         return 13

@@ -32,7 +32,7 @@ struct ImageInputView: View {
     }
     
     var imageSize: CGFloat {
-      #if os(macOS)
+      #if os(macOS) || targetEnvironment(macCatalyst)
         23
         #else
         30

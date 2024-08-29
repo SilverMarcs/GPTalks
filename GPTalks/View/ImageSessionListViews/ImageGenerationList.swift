@@ -33,7 +33,7 @@ struct ImageGenerationList: View {
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 ImageInputView(session: session)
             }
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             .navigationTitle(session.title)
             .toolbar {
 //                ImageGenerationListToolbar(session: session)

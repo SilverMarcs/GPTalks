@@ -38,7 +38,7 @@ struct ModelAdder: View {
             #endif
             .formStyle(.grouped)
             
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             HStack {
                 Spacer()
                 

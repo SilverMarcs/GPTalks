@@ -26,7 +26,7 @@ struct ImageGenerationView: View {
                     .padding(.horizontal, 11)
                     .background(
                         RoundedRectangle(cornerRadius: 15)
-                        #if os(macOS)
+                        #if os(macOS) || targetEnvironment(macCatalyst)
                             .fill(.background.quinary)
                         #else
                             .fill(.background.secondary)
@@ -61,7 +61,7 @@ struct ImageGenerationView: View {
                                         .frame(width: 250, height: 250)
                                         .background(
                                             RoundedRectangle(cornerRadius: 15)
-                                            #if os(macOS)
+                                            #if os(macOS) || targetEnvironment(macCatalyst)
                                                 .fill(.background.quinary)
                                             #else
                                                 .fill(.background.secondary)
@@ -89,7 +89,7 @@ struct ImageGenerationView: View {
     }
     
     var size: CGFloat {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         10
         #else
         10

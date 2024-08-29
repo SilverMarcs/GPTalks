@@ -60,7 +60,7 @@ struct PlatformSpecificModifiers: ViewModifier {
     func body(content: Content) -> some View {
         content
 //            .toolbar { ConversationListToolbar(session: session, providers: providers) }
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             .navigationSubtitle("\(session.tokenCount.formatToK()) tokens • \(session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))")
             .navigationTitle(session.title)
             #else

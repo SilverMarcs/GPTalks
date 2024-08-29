@@ -70,7 +70,7 @@ struct ProviderGeneral: View {
             Section("Default Models") {
                 ModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
                 
-                #if os(macOS)
+                #if os(macOS) || targetEnvironment(macCatalyst)
                 ModelPicker(model: $provider.quickChatModel, models: provider.chatModels, label: "Quick Model")
                 #endif
                 
@@ -124,14 +124,14 @@ struct ProviderGeneral: View {
             ProviderImage(provider: provider, frame: 33, scale: .large)
             
             Group {
-#if os(macOS)
+#if os(macOS) || targetEnvironment(macCatalyst)
                 TextEditor(text: $provider.name)
 #else
                 TextField("Name", text: $provider.name)
 #endif
             }
                 .textEditorStyle(.plain)
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
                 .font(.title)
             #else
                 .font(.title2)

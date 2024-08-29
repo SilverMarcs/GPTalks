@@ -14,7 +14,7 @@ import QuickLook
 struct FileHelper {
     static func deleteFile(at path: String) {
         do {
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             if let fileURL = URL(string: path) {
                 try Foundation.FileManager.default.removeItem(at: fileURL)
             }

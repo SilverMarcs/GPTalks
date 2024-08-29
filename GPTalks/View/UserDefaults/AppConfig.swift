@@ -12,13 +12,13 @@ class AppConfig: ObservableObject {
     static let shared = AppConfig()
     
     // Appearance
-    #if os(macOS)
+    #if os(macOS) || targetEnvironment(macCatalyst)
     @AppStorage("fontSize") var fontSize: Double = 13
     #else
     @AppStorage("fontSize") var fontSize: Double = 18
     #endif
     
-    #if os(macOS)
+    #if os(macOS) || targetEnvironment(macCatalyst)
     @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
     #else
     @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .native
@@ -46,7 +46,7 @@ class AppConfig: ObservableObject {
     @AppStorage("sidebarFocus") var sidebarFocus: Bool = false
     
     func resetFontSize() {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         fontSize = 13
         #else
         fontSize = 18

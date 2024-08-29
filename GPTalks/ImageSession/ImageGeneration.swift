@@ -100,7 +100,7 @@ class ImageGeneration {
 
 
         do {
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             try await generatingTask?.value
             #else
             let application = UIApplication.shared

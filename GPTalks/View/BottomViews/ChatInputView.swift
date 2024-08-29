@@ -23,7 +23,7 @@ struct ChatInputView: View {
             }
             
             plusButton
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
                 .popoverTip(PasteTip())
                 .offset(y: -2.4)
             #endif
@@ -35,7 +35,7 @@ struct ChatInputView: View {
                 
                 InputEditor(prompt: $session.inputManager.prompt,
                             isFocused: _isFocused)
-                #if os(macOS)
+                #if os(macOS) || targetEnvironment(macCatalyst)
                 .popoverTip(FocusTip())
                 #endif
             }
@@ -50,7 +50,7 @@ struct ChatInputView: View {
             .offset(y: -2.4)
         }
         .modifier(CommonInputStyling())
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         .toolbar {
             ToolbarItem(placement: .keyboard) {
                 Button("Paste Image") {
@@ -64,7 +64,7 @@ struct ChatInputView: View {
 
     var plusButton: some View {
         Group {
-#if os(macOS)
+#if os(macOS) || targetEnvironment(macCatalyst)
             PlusButton(size: imageSize) {
                 isPresented = true
             }
@@ -96,7 +96,7 @@ struct ChatInputView: View {
     }
     
     var verticalPadding: CGFloat {
-#if os(macOS)
+#if os(macOS) || targetEnvironment(macCatalyst)
         14
 #else
         9
@@ -104,7 +104,7 @@ struct ChatInputView: View {
     }
     
     var imageSize: CGFloat {
-      #if os(macOS)
+      #if os(macOS) || targetEnvironment(macCatalyst)
         23
         #else
         30

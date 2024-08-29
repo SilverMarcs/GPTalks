@@ -62,7 +62,7 @@ struct ImageSessionList: View {
                     proxy.scrollTo(first, anchor: .top)
                 }
             }
-#if os(macOS)
+#if os(macOS) || targetEnvironment(macCatalyst)
             .task {
                 if sessionVM.imageSelections.isEmpty, let first = sessions.first {
                     DispatchQueue.main.async {

@@ -48,7 +48,7 @@ import SwiftUI
 //                Spacer()
 //            }
 //                
-//            #if os(macOS)
+//            #if os(macOS) || targetEnvironment(macCatalyst)
 //            Spacer()
 //            
 //            Button {

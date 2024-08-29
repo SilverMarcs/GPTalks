@@ -37,7 +37,7 @@ struct AssistantMessage: View {
                             .controlSize(.small)
                     }
                     
-                    #if os(macOS)
+                    #if os(macOS) || targetEnvironment(macCatalyst)
                     if let group = conversation.group, let session = group.session {
                         ConversationMenu(group: group, providers: providers, isExpanded: .constant(true))
                             .symbolEffect(.appear, isActive: !isHovered)
@@ -74,7 +74,7 @@ struct AssistantMessage: View {
     }
     
     var spacing: CGFloat {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         10
         #else
         7
@@ -82,7 +82,7 @@ struct AssistantMessage: View {
     }
     
     var size: CGFloat {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         12
         #else
         10

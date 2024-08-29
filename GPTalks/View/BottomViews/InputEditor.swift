@@ -18,7 +18,7 @@ struct InputEditor: View {
     var body: some View {
         inputView
         .font(.body)
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         .task {
             if !AppConfig.shared.sidebarFocus {
                 isFocused = true
@@ -27,7 +27,7 @@ struct InputEditor: View {
         #endif
     }
     
-    #if os(macOS) || targetEnvironment(macCatalyst)
+    #if os(macOS) || targetEnvironment(macCatalyst) || targetEnvironment(macCatalyst)
     @ViewBuilder
     var inputView: some View {
         ZStack(alignment: .leading) {
@@ -94,7 +94,7 @@ struct InputEditor: View {
     }
     
     var padding: CGFloat {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         return 6
         #else
         return 6
@@ -102,7 +102,7 @@ struct InputEditor: View {
     }
     
     var leadingPadding: CGFloat {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         return 0
         #else
         return 10

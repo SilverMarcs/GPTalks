@@ -34,7 +34,7 @@ struct PlusImage: View {
             .resizable()
             .frame(width: size, height: size)
             .fontWeight(.light)
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
             .foregroundStyle(.secondary, .quinary)
         #else
             .foregroundStyle(.secondary, Color.gray.opacity(0.2))

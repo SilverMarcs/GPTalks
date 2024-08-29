@@ -18,7 +18,7 @@ struct GenericSlider: View {
     @State private var showPopover = false
     
     var body: some View {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         content
         #else
         HStack {
@@ -40,7 +40,7 @@ struct GenericSlider: View {
                     .frame(width: 0)
             } maximumValueLabel: {
                 Text(String(format: "%.1f", bindingValue))
-                #if os(macOS)
+                #if os(macOS) || targetEnvironment(macCatalyst)
                     .frame(width: 17)
                 #else
                     .frame(width: 25)
@@ -73,7 +73,7 @@ struct GenericSlider: View {
                 .buttonStyle(.plain)
                 .foregroundStyle(.secondary)
                 .popover(isPresented: $showPopover) {
-#if os(macOS)
+#if os(macOS) || targetEnvironment(macCatalyst)
                     HStack {
                         popoverContent
                     }

@@ -21,12 +21,12 @@ struct ProviderRow: View {
                     .imageScale(.small)
                     .foregroundStyle(.orange)
             }
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             Image(systemName: "chevron.right")
                 .foregroundStyle(.secondary)
             #endif
         }
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         .padding(5)
         .contentShape(Rectangle())
         #endif
@@ -34,7 +34,7 @@ struct ProviderRow: View {
     }
     
     private var size: CGFloat {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         return 16
         #else
         return 25

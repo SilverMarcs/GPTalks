@@ -23,7 +23,7 @@ struct ParameterSettings: View {
                 sysPrompt
             }
             
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             Section("Advanced", isExpanded: $expandAdvanced) {
                 TopPSlider(topP: $config.topP)
                 FrequencyPenaltySlider(penalty: $config.frequencyPenalty)
@@ -43,7 +43,7 @@ struct ParameterSettings: View {
     }
     
     var lineLimit: Int {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         8
         #else
         5

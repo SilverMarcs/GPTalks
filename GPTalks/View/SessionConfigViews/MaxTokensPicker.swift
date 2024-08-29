@@ -47,7 +47,7 @@ struct MaxTokensPicker: View {
             .buttonStyle(.plain)
             .foregroundStyle(.secondary)
             .popover(isPresented: $showPopover) {
-                #if os(macOS)
+                #if os(macOS) || targetEnvironment(macCatalyst)
                 HStack {
                     popoverContent
                 }

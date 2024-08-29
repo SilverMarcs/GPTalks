@@ -17,7 +17,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     var id: ProviderType { self }
     
     static var allTypes: [ProviderType] {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         return [.openai, .anthropic, .google, .local]
         #else
         return [.openai, .anthropic, .google]

@@ -50,7 +50,7 @@ struct ModelListView: View {
     }
     
     var searchPlacement: SearchFieldPlacement {
-        #if os(macOS)
+        #if os(macOS) || targetEnvironment(macCatalyst)
         return .toolbar
         #else
         return .navigationBarDrawer(displayMode: .always)
@@ -71,7 +71,7 @@ extension ModelListView {
                 reorderModels()
             }
             .tag(model)
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
                 .contextMenu { contextMenuItems(for: model) }
             #endif
         }

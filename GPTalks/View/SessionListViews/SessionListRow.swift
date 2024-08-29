@@ -51,7 +51,7 @@ struct SessionListRow: View {
                 
                 HStack {
                     Text(subText)
-                    #if os(macOS)
+                    #if os(macOS) || targetEnvironment(macCatalyst)
                         .font(.callout)
                     #else
                         .font(.footnote)
@@ -79,7 +79,7 @@ struct SessionListRow: View {
             
             Text(session.title)
                 .lineLimit(1)
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
                 .font(.headline)
                 .fontWeight(.regular)
             #else

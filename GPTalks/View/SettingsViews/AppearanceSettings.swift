@@ -32,14 +32,14 @@ struct AppearanceSettings: View {
             Section("View Customisation") {
                 Toggle("Compact List Row", isOn: $config.compactList)
                 
-                #if os(macOS)
+                #if os(macOS) || targetEnvironment(macCatalyst)
                 VStack(alignment: .leading) {
                     Picker("ConversationList Style", selection: $config.conversationListStyle) {
                         ForEach(ConversationListStyle.allCases, id: \.self) { style in
                             Text(style.rawValue)
                         }
                     }
-                    .pickerStyle(.radioGroup)
+//                    .pickerStyle(.radioGroup)
                     
                     Text("ListView is smoother but some features may not function.")
                         .font(.caption)

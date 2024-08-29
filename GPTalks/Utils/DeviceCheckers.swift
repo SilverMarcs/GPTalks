@@ -8,7 +8,7 @@
 import SwiftUI
 
 func isIPadOS() -> Bool {
-    #if os(macOS)
+    #if os(macOS) || targetEnvironment(macCatalyst)
     return false
     #else
     return UIDevice.current.userInterfaceIdiom == .pad
@@ -16,7 +16,7 @@ func isIPadOS() -> Bool {
 }
 
 func isIOS() -> Bool {
-    #if os(macOS)
+    #if os(macOS) || targetEnvironment(macCatalyst)
     return false
     #else
     return UIDevice.current.userInterfaceIdiom == .phone
@@ -24,7 +24,7 @@ func isIOS() -> Bool {
 }
 
 func isVisionOS() -> Bool {
-    #if os(macOS)
+    #if os(macOS) || targetEnvironment(macCatalyst)
     return false
     #else
     return UIDevice.current.userInterfaceIdiom == .vision
