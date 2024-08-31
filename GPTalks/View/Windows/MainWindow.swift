@@ -11,34 +11,20 @@ import SwiftData
 
 struct MainWindow: Scene {
     @Environment(\.modelContext) private var modelContext
-    @FocusState var isMainWindowFocused
     @State private var isQuick = false
     
     var body: some Scene {
-        #if os(macOS)
-        Window("GPTalks", id: "main") {
-            commonContent
-                .focusable()
-                .focusEffectDisabled()
-                .focused($isMainWindowFocused)
+        WindowGroup("GPTalks", id: "main") {
+            ContentView()
+                .environment(\.isQuick, isQuick)
+                .task {
+                    try? Tips.configure([.datastoreLocation(.applicationDefault)])
+                    initialSetup()
+                }
         }
         .commands {
-            MenuCommands(isMainWindowFocused: _isMainWindowFocused)
+            MenuCommands()
         }
-        #else
-        WindowGroup(id: "main") {
-            commonContent
-        }
-        #endif
-    }
-    
-    var commonContent: some View {
-        ContentView()
-            .environment(\.isQuick, isQuick)
-            .task {
-                try? Tips.configure([.datastoreLocation(.applicationDefault)])
-                initialSetup()
-            }
     }
     
     private func initialSetup() {

@@ -38,5 +38,19 @@ import Observation
                 return "i"
             }
         }
+        
+        var label: String {
+            switch self {
+            case .chats:
+                return "Chat Sessions"
+            case .images:
+                return "Image Generations"
+            }
+        }
+    }
+    
+    func performCustomAction() {
+        print("Custom action performed!")
+        // Perform your custom action here
     }
 }

@@ -1,5 +1,5 @@
 {
-  "originHash" : "b08550205b726d502928c9a016dfbbc8b5740b2e43fdf5c5e9f4f9fa75ec7ed2",
+  "originHash" : "2cc762f8b280ae192575d64db38607889a334aa7bf1dbe7c1a4b882248b87260",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -34,7 +34,7 @@
       "location" : "https://github.com/SilverMarcs/OpenAI",
       "state" : {
         "branch" : "cancellable",
-        "revision" : "98371ceb9505fbc7c4c0457ea6076f5f454c5caf"
+        "revision" : "b00b7b607be73db06a4dc7a18fd50e5ac5d2c828"
       }
     },
     {

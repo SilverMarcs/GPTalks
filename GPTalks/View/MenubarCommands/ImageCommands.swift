@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ImageCommands: Commands {
-    let sessionVM: SessionVM
+    @Environment(SessionVM.self) var sessionVM
     
     var body: some Commands {
         CommandMenu("Image") {

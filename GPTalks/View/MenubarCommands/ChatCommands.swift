@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ChatCommands: Commands {
     @ObservedObject var config = AppConfig.shared
-    let sessionVM: SessionVM
+    @Environment(SessionVM.self) var sessionVM
     
     var body: some Commands {
         CommandMenu("Chat") {
