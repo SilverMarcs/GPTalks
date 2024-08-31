@@ -1,5 +1,5 @@
 {
-  "originHash" : "2cc762f8b280ae192575d64db38607889a334aa7bf1dbe7c1a4b882248b87260",
+  "originHash" : "f8847fcac1b479e737bf66de29101dccee20450a63c4d428ff745c183891d6dc",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -26,6 +26,15 @@
       "state" : {
         "revision" : "2e5f15581fefb821d4b366e57d817be8bf12aa58",
         "version" : "2.0.1"
+      }
+    },
+    {
+      "identity" : "markdown-webview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/markdown-webview",
+      "state" : {
+        "branch" : "master",
+        "revision" : "0fbe37eb86e1c925c4986d797a1384287003d88e"
       }
     },
     {

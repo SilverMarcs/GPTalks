@@ -14,13 +14,26 @@ struct MainWindow: Scene {
     @State private var isQuick = false
     
     var body: some Scene {
-        WindowGroup("GPTalks", id: "main") {
-            ContentView()
-                .environment(\.isQuick, isQuick)
-                .task {
-                    try? Tips.configure([.datastoreLocation(.applicationDefault)])
-                    initialSetup()
-                }
+        Group {
+        #if os(macOS)
+            Window("GPTalks", id: "main") {
+                ContentView()
+                    .environment(\.isQuick, isQuick)
+                    .task {
+                        try? Tips.configure([.datastoreLocation(.applicationDefault)])
+                        initialSetup()
+                    }
+            }
+        #else
+            WindowGroup("GPTalks", id: "main") {
+                ContentView()
+                    .environment(\.isQuick, isQuick)
+                    .task {
+                        try? Tips.configure([.datastoreLocation(.applicationDefault)])
+                        initialSetup()
+                    }
+            }
+        #endif
         }
         .commands {
             MenuCommands()
