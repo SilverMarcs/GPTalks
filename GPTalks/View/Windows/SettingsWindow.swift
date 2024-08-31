@@ -7,18 +7,24 @@
 
 import SwiftUI
 
-#if os(macOS)
 struct SettingsWindow: Scene {
     var body: some Scene {
+        #if os(macOS)
         Window("Settings", id: "settings") {
             SettingsView()
                 .frame(minWidth: 850, maxWidth: 850, minHeight: 600, maxHeight: 600)
         }
+        .restorationBehavior(.disabled)
         .commands {
             CommandGroup(replacing: .sidebar) {}
         }
-        .restorationBehavior(.disabled)
         .windowResizability(.contentSize)
+        #else
+        WindowGroup("Settings", id: "settings") {
+            SettingsView()
+                .frame(minWidth: 850, maxWidth: 850, minHeight: 600, maxHeight: 600)
+        }
+        .windowResizability(.contentSize)
+        #endif
     }
 }
-#endif

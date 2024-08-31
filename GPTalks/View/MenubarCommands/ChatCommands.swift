@@ -16,12 +16,12 @@ struct ChatCommands: Commands {
             Button("Send Prompt") {
                 sessionVM.sendMessage()
             }
-            .keyboardShortcut(.return, modifiers: .command)
+            .keyboardShortcut(.return, modifiers: commandModifier)
             
             Button("Stop Streaming") {
                 sessionVM.stopStreaming()
             }
-            .keyboardShortcut("d", modifiers: .command)
+            .keyboardShortcut("d", modifiers: commandModifier)
             .disabled(!(sessionVM.activeSession?.isReplying ?? true))
             
             Section {
@@ -30,25 +30,33 @@ struct ChatCommands: Commands {
                         await sessionVM.regenLastMessage()
                     }
                 }
-                .keyboardShortcut("r", modifiers: .command)
+                .keyboardShortcut("r", modifiers: commandModifier)
                 
                 Button("Edit Last Message") {
                     sessionVM.editLastMessage()
                 }
-                .keyboardShortcut("e", modifiers: .command)
+                .keyboardShortcut("e", modifiers: commandModifier)
             }
             
             Section {
                 Button("Delete Last Message") {
                     sessionVM.deleteLastMessage()
                 }
-                .keyboardShortcut(.delete, modifiers: .command)
+                .keyboardShortcut(.delete, modifiers: commandModifier)
                 
                 Button("Reset Context") {
                     sessionVM.resetLastContext()
                 }
-                .keyboardShortcut("k", modifiers: .command)
+                .keyboardShortcut("k", modifiers: commandModifier)
             }
         }
+    }
+    
+    private var commandModifier: EventModifiers {
+        #if targetEnvironment(macCatalyst)
+        return [.command, .shift]
+        #else
+        return .command
+        #endif
     }
 }

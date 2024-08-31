@@ -22,14 +22,16 @@ struct GPTalksApp: App {
         Group {
             MainWindow()
             
-            #if os(macOS)
+            #if os(macOS) || targetEnvironment(macCatalyst)
             SettingsWindow()
+            #endif
             
+            #if os(macOS)
             QuickPanelWindow()
             #endif
         }
         .environment(sessionVM)
-        .modelContainer(for: models, isUndoEnabled: true)
+        .modelContainer(DatabaseService.shared.container)
     }
     
     #if os(macOS)
@@ -39,18 +41,6 @@ struct GPTalksApp: App {
     }
     #endif
     
-    let models: [any PersistentModel.Type] = [
-           Session.self,
-           Folder.self,
-           Conversation.self,
-           Provider.self,
-           AIModel.self,
-           ConversationGroup.self,
-           SessionConfig.self,
-           ImageSession.self,
-           ImageGeneration.self,
-           ImageConfig.self
-    ]
 }
 
 #if targetEnvironment(macCatalyst)
@@ -67,9 +57,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
-        
-        // Get reference to SessionVM
-        
         
         windowScene.titlebar?.titleVisibility = .hidden
         
@@ -94,23 +81,15 @@ extension SceneDelegate: NSToolbarDelegate {
             return NSToolbarItem(itemIdentifier: .print)
         case .primarySidebarTrackingSeparatorItemIdentifier:
             return NSToolbarItem(itemIdentifier: .primarySidebarTrackingSeparatorItemIdentifier)
-        case NSToolbarItem.Identifier("customButton1"):
-            let item = NSToolbarItem(itemIdentifier: itemIdentifier)
-            item.label = "Custom 1"
-            item.paletteLabel = "Custom Button 1"
-            item.toolTip = "Perform Custom Action 1"
-            item.image = UIImage(systemName: "square.and.pencil")
+        case .newSession:
+            let item = NSToolbarItem(itemIdentifier: .newSession)
+            let originalImage = UIImage(systemName: "square.and.pencil")
+            let resizedImage = originalImage?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 18, weight: .regular))
+            item.image = resizedImage
+            item.label = "Custom Action"
+            item.toolTip = "Perform Custom Action"
             item.target = self
-//            item.action = {}
-            return item
-        case NSToolbarItem.Identifier("customButton2"):
-            let item = NSToolbarItem(itemIdentifier: itemIdentifier)
-            item.label = "Custom 2"
-            item.paletteLabel = "Custom Button 2"
-            item.toolTip = "Perform Custom Action 2"
-            item.image = UIImage(systemName: "square.and.pencil")
-            item.target = self
-//            item.action = ??
+            item.action = #selector(addNewSession)
             return item
         default:
             return nil
@@ -118,11 +97,29 @@ extension SceneDelegate: NSToolbarDelegate {
     }
     
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        return [.toggleSidebar, .flexibleSpace, NSToolbarItem.Identifier("customButton1"), .primarySidebarTrackingSeparatorItemIdentifier, .flexibleSpace, NSToolbarItem.Identifier("customButton2")]
+        return [.toggleSidebar, .flexibleSpace, .newSession, .primarySidebarTrackingSeparatorItemIdentifier, .flexibleSpace]
     }
     
     func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        return [.toggleSidebar, .flexibleSpace, NSToolbarItem.Identifier("customButton1"), .primarySidebarTrackingSeparatorItemIdentifier, .flexibleSpace, NSToolbarItem.Identifier("customButton2")]
+        return [.toggleSidebar, .flexibleSpace, .newSession, .primarySidebarTrackingSeparatorItemIdentifier, .flexibleSpace]
+    }
+    
+    @objc func addNewSession() {
+        DatabaseService.shared.createNewSession()
+    }
+}
+
+extension NSToolbarItem.Identifier {
+    static let newSession = NSToolbarItem.Identifier("newSession")
+}
+
+extension UIImage {
+    func resize(to size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        self.draw(in: CGRect(origin: .zero, size: size))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return resizedImage
     }
 }
 #endif

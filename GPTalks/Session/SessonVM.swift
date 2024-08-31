@@ -48,9 +48,4 @@ import Observation
             }
         }
     }
-    
-    func performCustomAction() {
-        print("Custom action performed!")
-        // Perform your custom action here
-    }
 }

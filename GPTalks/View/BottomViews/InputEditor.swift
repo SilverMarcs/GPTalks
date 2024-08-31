@@ -27,7 +27,7 @@ struct InputEditor: View {
         #endif
     }
     
-    #if os(macOS) || targetEnvironment(macCatalyst) || targetEnvironment(macCatalyst)
+    #if os(macOS) || targetEnvironment(macCatalyst)
     @ViewBuilder
     var inputView: some View {
         ZStack(alignment: .leading) {

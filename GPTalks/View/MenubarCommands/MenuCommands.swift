@@ -20,8 +20,6 @@ struct MenuCommands: Commands {
         
         SidebarCommands()
         
-        InspectorCommands()
-        
         CommandGroup(replacing: .newItem) {
             Button("New Session") {
                 sessionVM.createNewSession(modelContext: modelContext)
@@ -45,17 +43,17 @@ struct MenuCommands: Commands {
                 Button("Actual Size") {
                     resetFontSize()
                 }
-                .keyboardShortcut("o", modifiers: .command)
+                .keyboardShortcut("o", modifiers: commandModifier)
                 
                 Button("Zoom In") {
                     increaseFontSize()
                 }
-                .keyboardShortcut("+", modifiers: .command)
+                .keyboardShortcut("+", modifiers: commandModifier)
                 
                 Button("Zoom Out") {
                     decreaseFontSize()
                 }
-                .keyboardShortcut("-", modifiers: .command)
+                .keyboardShortcut("-", modifiers: commandModifier)
             }
         }
         
@@ -84,5 +82,13 @@ struct MenuCommands: Commands {
     
     private func resetFontSize() {
         config.fontSize = 13
+    }
+    
+    private var commandModifier: EventModifiers {
+        #if targetEnvironment(macCatalyst)
+        return [.command, .shift]
+        #else
+        return .command
+        #endif
     }
 }
