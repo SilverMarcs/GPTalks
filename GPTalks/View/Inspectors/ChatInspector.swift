@@ -21,20 +21,6 @@ struct ChatInspector: View {
     @Environment(\.dismiss) var dismiss
     var body: some View {
         NavigationStack {
-            #if os(macOS) || targetEnvironment(macCatalyst)
-            HStack {
-                export
-                
-                Spacer()
-                DismissButton() {
-                    dismiss()
-                }
-                .imageScale(.large)
-                .buttonStyle(.plain)
-            }
-            .padding([.top, .horizontal])
-            #endif
-            
             Form {
                 Section("Title") {
                     HStack(spacing: 0) {
@@ -84,7 +70,23 @@ struct ChatInspector: View {
                 .buttonStyle(.plain)
             }
             .formStyle(.grouped)
-#if !os(macOS)
+#if os(macOS) || targetEnvironment(macCatalyst)
+            .safeAreaInset(edge: .top, spacing: 0) {
+                HStack {
+                    export
+                    
+                    Spacer()
+                    DismissButton() {
+                        dismiss()
+                    }
+                    .imageScale(.large)
+                    .buttonStyle(.plain)
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 10)
+                .background(.bar)
+            }
+#else
             .navigationTitle("Tokens: " + String(session.tokenCount))
             .toolbarTitleDisplayMode(.inline)
             .toolbar {

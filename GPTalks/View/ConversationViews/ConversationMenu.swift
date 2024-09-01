@@ -153,7 +153,7 @@ struct ConversationMenu: View {
                 }
             } else if group.role == .user {
                 group.setupEditing()
-                Task {
+                Task { @MainActor in
                     await group.session?.sendInput()
                 }
             }
@@ -236,28 +236,30 @@ struct ConversationMenu: View {
     }
 }
 
-//#Preview {
-//    let config = SessionConfig()
-//    let session = Session(config: config)
-//
-//    let userConversation = Conversation(role: .user, content: "Hello, World!")
-//    let assistantConversation = Conversation(
-//        role: .assistant, content: "Hello, World!")
-//
-//    let group = ConversationGroup(
-//        conversation: userConversation, session: session)
-//    group.addConversation(
-//        Conversation(role: .user, content: "This is second."))
-//    group.addConversation(
-//        Conversation(role: .user, content: "This is third message."))
-//    let group2 = ConversationGroup(
-//        conversation: assistantConversation, session: session)
-//
-//    return VStack {
-//        ConversationGroupView(group: group)
-//        ConversationGroupView(group: group2)
-//    }
-//    .environment(SessionVM())
-//    .frame(width: 500)
-//    .padding()
-//}
+#Preview {
+    let config = SessionConfig()
+    let session = Session(config: config)
+
+    let userConversation = Conversation(role: .user, content: "Hello, World!")
+    let assistantConversation = Conversation(
+        role: .assistant, content: "Hello, World!")
+
+    let group = ConversationGroup(
+        conversation: userConversation, session: session)
+    group.addConversation(
+        Conversation(role: .user, content: "This is second."))
+    group.addConversation(
+        Conversation(role: .user, content: "This is third message."))
+    let group2 = ConversationGroup(
+        conversation: assistantConversation, session: session)
+
+    let providers: [Provider] = []
+    
+    return VStack {
+        ConversationGroupView(group: group, providers: providers)
+        ConversationGroupView(group: group2, providers: providers)
+    }
+    .environment(SessionVM())
+    .frame(width: 500)
+    .padding()
+}

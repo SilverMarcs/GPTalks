@@ -33,7 +33,9 @@ struct ChatCommands: Commands {
                 .keyboardShortcut("r", modifiers: commandModifier)
                 
                 Button("Edit Last Message") {
-                    sessionVM.editLastMessage()
+                    withAnimation {
+                        sessionVM.editLastMessage()
+                    }
                 }
                 .keyboardShortcut("e", modifiers: commandModifier)
             }
