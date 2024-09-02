@@ -90,6 +90,8 @@
 		088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A09F22C55C7740055B567 /* TextSelectionView.swift */; };
 		08915D942C373340008ADE27 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D932C373340008ADE27 /* ProviderImage.swift */; };
 		08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D982C37C648008ADE27 /* ProviderDetail.swift */; };
+		0891AC0A2C846AA2001379C0 /* WebScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0891AC092C846AA2001379C0 /* WebScraper.swift */; };
+		0891AC0D2C846B2B001379C0 /* Reeeed in Frameworks */ = {isa = PBXBuildFile; productRef = 0891AC0C2C846B2B001379C0 /* Reeeed */; };
 		08922EB32C81613F00521937 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08922EB22C81613F00521937 /* OpenAI */; };
 		0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2012C3955CC00D4D501 /* CustomSearchField.swift */; };
 		0893B2062C39810900D4D501 /* SessionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2052C39810900D4D501 /* SessionConfig.swift */; };
@@ -271,6 +273,7 @@
 		088A09F22C55C7740055B567 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
 		08915D932C373340008ADE27 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
 		08915D982C37C648008ADE27 /* ProviderDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetail.swift; sourceTree = "<group>"; };
+		0891AC092C846AA2001379C0 /* WebScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebScraper.swift; sourceTree = "<group>"; };
 		0893B2012C3955CC00D4D501 /* CustomSearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchField.swift; sourceTree = "<group>"; };
 		0893B2052C39810900D4D501 /* SessionConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionConfig.swift; sourceTree = "<group>"; };
 		089B22402C393BCB00E248FE /* ConversationGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationGroup.swift; sourceTree = "<group>"; };
@@ -357,6 +360,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0891AC0D2C846B2B001379C0 /* Reeeed in Frameworks */,
 				08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */,
 				08D040222C5C8A0B0075B754 /* GoogleGenerativeAI in Frameworks */,
 				08E1956C2C6FB66600BA9506 /* MarkdownWebView in Frameworks */,
@@ -459,6 +463,7 @@
 				087B40AA2C55E7D600EAFA0A /* WindowUtils.swift */,
 				08A77CC62C65A3680087D0F3 /* TextUtils.swift */,
 				08D142CB2C73CEC5000A5646 /* PDFUtils.swift */,
+				0891AC092C846AA2001379C0 /* WebScraper.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -862,6 +867,7 @@
 				08156F732C8317600069806B /* OpenAI */,
 				089791FD2C835306003C95CD /* MarkdownWebView */,
 				089792002C835885003C95CD /* MarkdownWebView */,
+				0891AC0C2C846B2B001379C0 /* Reeeed */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -942,6 +948,7 @@
 				086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 				08156F722C8317600069806B /* XCRemoteSwiftPackageReference "OpenAI" */,
 				089791FF2C835885003C95CD /* XCRemoteSwiftPackageReference "markdown-webview" */,
+				0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1122,6 +1129,7 @@
 				08A3134F2C4AF56200C3E578 /* AssistantImage.swift in Sources */,
 				08F52EF42C52C3AB00E4482C /* ProviderBackup.swift in Sources */,
 				086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */,
+				0891AC0A2C846AA2001379C0 /* WebScraper.swift in Sources */,
 				0834E7792C719C00007CB294 /* DataFileView.swift in Sources */,
 				08C800432C36C045009581C5 /* SessonVM.swift in Sources */,
 				081C1D9A2C3BE91C0078BB24 /* ColorExtensions.swift in Sources */,
@@ -1522,6 +1530,14 @@
 				kind = branch;
 			};
 		};
+		0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nate-parrott/reeeed";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
 		089791FF2C835885003C95CD /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
@@ -1598,6 +1614,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
 			productName = GoogleGenerativeAI;
+		};
+		0891AC0C2C846B2B001379C0 /* Reeeed */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */;
+			productName = Reeeed;
 		};
 		08922EB22C81613F00521937 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;

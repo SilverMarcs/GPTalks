@@ -90,7 +90,6 @@ struct QuickPanelWindow: Scene {
         }
     }
 
-
     init() {
         setupShortcut()
     }

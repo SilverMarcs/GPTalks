@@ -23,13 +23,14 @@ extension Conversation {
             for dataFile in self.dataFiles {
                 if dataFile.fileType.conforms(to: .image) {
                     visionContent.append(.init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: dataFile.data, detail: .auto))))
-                } else {
-                    if dataFile.fileType.conforms(to: .pdf) {
-                        if let url = FileHelper.createTemporaryURL(for: dataFile) {
-                            let contents = readPDF(from: url)
-//                            print(contents)
-                            visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: "PDF File contents: \n\(contents)\n Respond to the user based on their query.")))
-                        }
+                } else if dataFile.fileType.conforms(to: .pdf) {
+                    if let url = FileHelper.createTemporaryURL(for: dataFile) {
+                        let contents = readPDF(from: url)
+                        visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: "PDF File contents: \n\(contents)\n Respond to the user based on their query.")))
+                    }
+                } else if dataFile.fileType.conforms(to: .text) {
+                    if let textContent = String(data: dataFile.data, encoding: .utf8) {
+                        visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: "Text File contents: \n\(textContent)\n Respond to the user based on their query.")))
                     }
                 }
             }
@@ -44,11 +45,14 @@ extension Conversation {
     }
 
     func toGoogle() -> ModelContent {
-        // TODO: add video support
         var parts: [ModelContent.Part] = [.text(content)]
         
         for dataFile in self.dataFiles {
-            parts.insert(.data(mimetype: dataFile.mimeType, dataFile.data), at: 0)
+            if dataFile.fileType.conforms(to: .text) {
+                parts.insert(.text(String(data: dataFile.data, encoding: .utf8) ?? ""), at: 0)
+            } else {
+                parts.insert(.data(mimetype: dataFile.mimeType, dataFile.data), at: 0)
+            }
         }
         
         return ModelContent(
@@ -68,15 +72,14 @@ extension Conversation {
                     data: dataFile.data.base64EncodedString()
                 )
                 contentObjects.append(.image(imageSource))
-            } else {
-                // TODO: do RAG conversion here. shouldnt reach here atm
-                
-                if dataFile.fileType.conforms(to: .pdf) {
-                    if let url = FileHelper.createTemporaryURL(for: dataFile) {
-                        let contents = readPDF(from: url)
-//                        print(contents)
-                        contentObjects.append(.text("PDF File contents: \n\(contents)\n Respond to the user based on their query."))
-                    }
+            } else if dataFile.fileType.conforms(to: .pdf) {
+                if let url = FileHelper.createTemporaryURL(for: dataFile) {
+                    let contents = readPDF(from: url)
+                    contentObjects.append(.text("PDF File contents: \n\(contents)\n Respond to the user based on their query."))
+                }
+            } else if dataFile.fileType.conforms(to: .text) {
+                if let textContent = String(data: dataFile.data, encoding: .utf8) {
+                    contentObjects.append(.text("Text File contents: \n\(textContent)\n Respond to the user based on their query."))
                 }
             }
         }

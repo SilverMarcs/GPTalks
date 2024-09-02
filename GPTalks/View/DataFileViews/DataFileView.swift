@@ -37,7 +37,7 @@ struct DataFileView: View {
                 }
             }
         }
-//        .padding(.vertical, 5)
+        .frame(maxWidth: 150)
         .quickLookPreview($selectedFileURL)
     }
     

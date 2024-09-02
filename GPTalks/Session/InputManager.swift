@@ -107,6 +107,9 @@ extension InputManager {
                 processFile(at: fileURL, supportedFileTypes: supportedFileTypes)
             } else if let imageData = item.data(forType: .png) {
                 processImageData(imageData, supportedFileTypes: supportedFileTypes)
+            } else if let urlData = item.data(forType: .URL),
+                      let url = URL(dataRepresentation: urlData, relativeTo: nil) {
+                processURL(url)
             }
         }
         #endif
@@ -139,10 +142,33 @@ extension InputManager {
         }
     }
 
+    private func processURL(_ url: URL) {
+        Task {
+            do {
+                let webContent = await WebScraper.retrieveWebContent(from: url)
+                
+                // Extract the first line from the webContent
+                let firstLine = webContent.components(separatedBy: .newlines).first ?? "defaultFilename"
+                
+                // Sanitize the first line to create a valid filename
+                let sanitizedFirstLine = firstLine.replacingOccurrences(of: "[^a-zA-Z0-9]", with: "_", options: .regularExpression)
+                
+                let tempDirectory = FileManager.default.temporaryDirectory
+                let tempFileURL = tempDirectory.appendingPathComponent(sanitizedFirstLine).appendingPathExtension("txt")
+                
+                try webContent.write(to: tempFileURL, atomically: true, encoding: .utf8)
+                
+                processFile(at: tempFileURL, supportedFileTypes: [.plainText])
+            } catch {
+                print("Failed to fetch and process URL content: \(error)")
+            }
+        }
+    }
+
     private func appendTypedData(data: Data, url: URL, fileType: UTType) {
         let fileName = url.deletingPathExtension().lastPathComponent
         let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
-        let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
+        let fileSize = (attributes?[.size] as? Int ?? data.count).formatFileSize()
         let fileExtension = url.pathExtension.lowercased()
 
         let typedData = TypedData(
