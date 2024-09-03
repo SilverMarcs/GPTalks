@@ -133,8 +133,15 @@ struct ConversationMenu: View {
                         Button {
                             group.session?.config.provider = provider
                             group.session?.config.model = model
-                            Task { @MainActor in
-                                await group.session?.regenerate(group: group)
+                            if group.role == .assistant {
+                                Task { @MainActor in
+                                    await group.session?.regenerate(group: group)
+                                }
+                            } else if group.role == .user {
+                                group.setupEditing()
+                                Task { @MainActor in
+                                    await group.session?.sendInput()
+                                }
                             }
                         } label: {
                             Text(model.name)
