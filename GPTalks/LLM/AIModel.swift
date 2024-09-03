@@ -84,6 +84,12 @@ extension AIModel {
         ]
     }
     
+    static func getVertexModels() -> [AIModel] {
+        return [
+            AIModel(code: "vertex-1.0", name: "Vertex-1.0", order: 0),
+        ]
+    }
+    
     static func getLocalModels() -> [AIModel] {
         return [
             AIModel(code: "dummy-model", name: "Dummy", order: 0),

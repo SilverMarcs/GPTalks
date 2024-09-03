@@ -145,7 +145,7 @@ extension Provider {
              } else {
                  refreshedModels = []
              }
-        case .google:
+         case .google:
              let service = GenerativeAIService(apiKey: apiKey, urlSession: .shared)
              
              do {
@@ -161,6 +161,8 @@ extension Provider {
              }
         
          case .anthropic:
+             refreshedModels = type.getDefaultModels()
+         case .vertex:
              refreshedModels = type.getDefaultModels()
          }
 

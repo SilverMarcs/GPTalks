@@ -12,21 +12,22 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     case openai
     case anthropic
     case google
+    case vertex
     case local
     
     var id: ProviderType { self }
     
     static var allTypes: [ProviderType] {
         #if os(macOS) || targetEnvironment(macCatalyst)
-        return [.openai, .anthropic, .google, .local]
+        [.openai, .anthropic, .google, .vertex, .local]
         #else
-        return [.openai, .anthropic, .google]
+        [.openai, .anthropic, .google]
         #endif
     }
     
     var scheme: String {
         switch self {
-        case .openai, .anthropic, .google: "https"
+        case .openai, .anthropic, .google, .vertex: "https"
         case .local: "http"
         }
     }
@@ -36,6 +37,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "OpenAI"
         case .anthropic: "Anthropic"
         case .google: "Google"
+        case .vertex: "Vertex"
         case .local: "Local AI"
         }
     }
@@ -45,6 +47,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "brain.SFSymbol"
         case .anthropic: "anthropic.SFSymbol"
         case .google: "google.SFSymbol"
+        case .vertex: "storm.SFSymbol"
         case .local: "ollama.SFSymbol"
         }
     }
@@ -54,6 +57,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "api.openai.com"
         case .anthropic: "api.anthropic.com"
         case .google: "generativelanguage.googleapis.com"
+        case .vertex: "Enter your project ID here"
         case .local: "localhost:11434"
         }
     }
@@ -63,36 +67,41 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "#00947A"
         case .anthropic: "#E6784B"
         case .google: "#E64335"
+        case .vertex: "#4B62CA"
         case .local: "#EFEFEF"
         }
     }
     
     var supportedFileTypes: [UTType] {
         switch self {
-        case .openai: return [.image, .pdf, .text, .url]
-        case .anthropic: return [.image, .pdf, .text, .url]
-        case .google: return [.image, .pdf, .commaSeparatedText, .audio, .text, .url]
-        case .local: return []
+        case .openai: [.image, .pdf, .text, .url]
+        case .anthropic:  [.image, .pdf, .text, .url]
+        case .google: [.image, .pdf, .commaSeparatedText, .audio, .text, .url]
+        case .vertex: [.image, .pdf, .commaSeparatedText, .audio, .text, .url]
+        case .local: []
         }
     }
     
     func getDefaultModels() -> [AIModel] {
         switch self {
-        case .openai: return AIModel.getOpenaiModels()
-        case .anthropic: return AIModel.getAnthropicModels()
-        case .google: return AIModel.getGoogleModels()
-        case .local: return AIModel.getLocalModels()
+        case .openai: AIModel.getOpenaiModels()
+        case .anthropic: AIModel.getAnthropicModels()
+        case .google: AIModel.getGoogleModels()
+        case .vertex: AIModel.getVertexModels()
+        case .local: AIModel.getLocalModels()
         }
     }
     
     func getService() -> AIService.Type {
         switch self {
         case .openai, .local:
-            return OpenAIService.self
+            OpenAIService.self
         case .anthropic:
-            return ClaudeService.self
+            ClaudeService.self
         case .google:
-            return GoogleService.self
+            GoogleService.self
+        case .vertex:
+            VertexService.self
         }
     }
 }

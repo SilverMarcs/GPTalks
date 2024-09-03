@@ -10,6 +10,7 @@ import SwiftData
 
 struct SessionListCards: View {
     @Environment(SessionVM.self) private var sessionVM
+    @ObservedObject var config = AppConfig.shared
     var sessionCount: String
     var imageSessionsCount: String
     
@@ -19,7 +20,11 @@ struct SessionListCards: View {
                 ListCard(
                     icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
                     count: sessionCount) {
-                        sessionVM.state = .chats
+                        if sessionVM.state == .chats {
+                            config.truncateList.toggle()
+                        } else {
+                            sessionVM.state = .chats
+                        }
                     }
                 
                 ListCard(

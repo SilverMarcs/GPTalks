@@ -37,7 +37,7 @@ struct ProviderGeneral: View {
                     }
                     .buttonStyle(.plain)
                     .popover(isPresented: $showPopover) {
-                        Text("Omit https:// and /v1/ from the URL.\nFor example: api.openai.com")
+                        Text(popoverText)
                             .padding()
                             .presentationCompactAdaptation(.popover)
                     }
@@ -163,6 +163,15 @@ struct ProviderGeneral: View {
                 .buttonStyle(.plain)
                 .foregroundStyle(.blue)
             }
+        }
+    }
+    
+    private var popoverText: String {
+        switch provider.type {
+        case .vertex:
+            "Put in your Google Cloud Project ID.\nOnly anthropic models are supported."
+        case .openai, .google, .anthropic, .local:
+            "Omit https:// and /v1/ from the URL.\nFor example: api.openai.com"
         }
     }
 }
