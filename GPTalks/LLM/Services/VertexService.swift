@@ -6,25 +6,16 @@
 //
 
 import Foundation
-
-import Foundation
+import GoogleSignIn
 
 struct VertexService: AIService {
     static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, any Error> {
         return AsyncThrowingStream { continuation in
-            do {
-                let request = try createRequest(from: conversations, config: config)
-                
-                let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                    if let error = error {
-                        continuation.finish(throwing: error)
-                        return
-                    }
+            Task { @MainActor in
+                do {
+                    let request = try await createRequest(from: conversations, config: config)
                     
-                    guard let data = data else {
-                        continuation.finish(throwing: URLError(.badServerResponse))
-                        return
-                    }
+                    let (data, _) = try await URLSession.shared.data(for: request)
                     
                     if let responseString = String(data: data, encoding: .utf8) {
                         let lines = responseString.split(separator: "\n")
@@ -49,22 +40,19 @@ struct VertexService: AIService {
                             }
                         }
                     } else {
-                        continuation.finish(throwing: URLError(.cannotParseResponse))
-                        return
+                        throw URLError(.cannotParseResponse)
                     }
                     
                     continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
                 }
-                
-                task.resume()
-            } catch {
-                continuation.finish(throwing: error)
             }
         }
     }
 
     static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
-        let request = try createRequest(from: conversations, config: config)
+        let request = try await createRequest(from: conversations, config: config)
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
@@ -81,7 +69,7 @@ struct VertexService: AIService {
         return text
     }
 
-    private static func createRequest(from conversations: [Conversation], config: SessionConfig) throws -> URLRequest {
+    static func createRequest(from conversations: [Conversation], config: SessionConfig) async throws -> URLRequest {
         let modelID = config.model.code
         let location = "us-east5"
         let projectID = config.provider.host
@@ -94,7 +82,26 @@ struct VertexService: AIService {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(config.provider.apiKey)", forHTTPHeaderField: "Authorization")
+        
+        guard let currentUser = GIDSignIn.sharedInstance.currentUser else {
+            throw URLError(.userAuthenticationRequired)
+        }
+        
+        let token = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<String, Error>) in
+            currentUser.refreshTokensIfNeeded { user, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                guard let user = user else {
+                    continuation.resume(throwing: URLError(.userAuthenticationRequired))
+                    return
+                }
+                continuation.resume(returning: user.accessToken.tokenString)
+            }
+        }
+        
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let messages: [[String: Any]] = conversations.map { conversation in
             return [
@@ -106,8 +113,8 @@ struct VertexService: AIService {
         let body: [String: Any] = [
             "anthropic_version": "vertex-2023-10-16",
             "messages": messages,
-            "max_tokens": config.maxTokens,
-            "temperature": config.temperature,
+            "max_tokens": config.maxTokens as Any,
+            "temperature": config.temperature as Any,
             "stream": config.stream
         ]
         

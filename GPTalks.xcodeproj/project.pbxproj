@@ -80,6 +80,9 @@
 		085910CA2C4F7A720086E493 /* ImageSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085910C92C4F7A720086E493 /* ImageSessionVM.swift */; };
 		086783122C5CF16800BB768F /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 086783112C5CF16800BB768F /* GoogleGenerativeAI */; };
 		0869233F2C5E001100EE040B /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869233E2C5E001100EE040B /* MarkdownView.swift */; };
+		086CCFDB2C8A7743008F12E7 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 086CCFDA2C8A7743008F12E7 /* GoogleSignIn */; };
+		086CCFDD2C8A7743008F12E7 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 086CCFDC2C8A7743008F12E7 /* GoogleSignInSwift */; };
+		086CCFE02C8A7AA4008F12E7 /* GoogleAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086CCFDF2C8A7AA4008F12E7 /* GoogleAuth.swift */; };
 		086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */; };
 		086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */; };
 		087928352C48CF6F008646CD /* ExpandButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087928342C48CF6F008646CD /* ExpandButton.swift */; };
@@ -266,6 +269,7 @@
 		085910C72C4F7A5A0086E493 /* ChatSessionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionVM.swift; sourceTree = "<group>"; };
 		085910C92C4F7A720086E493 /* ImageSessionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSessionVM.swift; sourceTree = "<group>"; };
 		0869233E2C5E001100EE040B /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
+		086CCFDF2C8A7AA4008F12E7 /* GoogleAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuth.swift; sourceTree = "<group>"; };
 		086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextResetDivider.swift; sourceTree = "<group>"; };
 		087928342C48CF6F008646CD /* ExpandButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandButton.swift; sourceTree = "<group>"; };
@@ -366,11 +370,13 @@
 				08ECED2C2C870BE0009FCA9D /* OpenAI in Frameworks */,
 				0891AC0D2C846B2B001379C0 /* Reeeed in Frameworks */,
 				08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */,
+				086CCFDB2C8A7743008F12E7 /* GoogleSignIn in Frameworks */,
 				08D040222C5C8A0B0075B754 /* GoogleGenerativeAI in Frameworks */,
 				08E1956C2C6FB66600BA9506 /* MarkdownWebView in Frameworks */,
 				089791FE2C835306003C95CD /* MarkdownWebView in Frameworks */,
 				08922EB32C81613F00521937 /* OpenAI in Frameworks */,
 				084C74432C5231980015AE2F /* OpenAI in Frameworks */,
+				086CCFDD2C8A7743008F12E7 /* GoogleSignInSwift in Frameworks */,
 				08CF5B8C2C689BDF0079D5EE /* MarkdownWebView in Frameworks */,
 				0846B9FA2C6EFF0800AC3FD4 /* MarkdownWebView in Frameworks */,
 				08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */,
@@ -547,6 +553,14 @@
 			path = MarkdownViews;
 			sourceTree = "<group>";
 		};
+		086CCFDE2C8A7A9D008F12E7 /* Google */ = {
+			isa = PBXGroup;
+			children = (
+				086CCFDF2C8A7AA4008F12E7 /* GoogleAuth.swift */,
+			);
+			path = Google;
+			sourceTree = "<group>";
+		};
 		08915D922C373332008ADE27 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -607,6 +621,7 @@
 		08A222812C2AB4FD00D76C8B /* GPTalks */ = {
 			isa = PBXGroup;
 			children = (
+				086CCFDE2C8A7A9D008F12E7 /* Google */,
 				0841391E2C7169B90049E3B2 /* Tips */,
 				086923322C5DFE2800EE040B /* MarkdownViews */,
 				08C8004E2C36F648009581C5 /* LLM */,
@@ -874,6 +889,8 @@
 				0891AC0C2C846B2B001379C0 /* Reeeed */,
 				0886D81D2C8705680058700F /* OpenAI */,
 				08ECED2B2C870BE0009FCA9D /* OpenAI */,
+				086CCFDA2C8A7743008F12E7 /* GoogleSignIn */,
+				086CCFDC2C8A7743008F12E7 /* GoogleSignInSwift */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -955,6 +972,7 @@
 				089791FF2C835885003C95CD /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */,
 				08ECED2A2C870BE0009FCA9D /* XCRemoteSwiftPackageReference "OpenAI" */,
+				086CCFD92C8A7743008F12E7 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1042,6 +1060,7 @@
 				08134E0C2C6B99DA00589991 /* ChatSessionListViewModel.swift in Sources */,
 				089B22432C394A4F00E248FE /* ButtonUtils.swift in Sources */,
 				08A3134D2C4AE7B800C3E578 /* CommonCompactRow.swift in Sources */,
+				086CCFE02C8A7AA4008F12E7 /* GoogleAuth.swift in Sources */,
 				088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */,
 				08A222BE2C2ABDB400D76C8B /* InputManager.swift in Sources */,
 				08C49FD82C502EC90085792F /* FileHelper.swift in Sources */,
@@ -1322,7 +1341,6 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -1367,7 +1385,6 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -1529,6 +1546,14 @@
 				kind = branch;
 			};
 		};
+		086CCFD92C8A7743008F12E7 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 		0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nate-parrott/reeeed";
@@ -1616,6 +1641,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
 			productName = GoogleGenerativeAI;
+		};
+		086CCFDA2C8A7743008F12E7 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 086CCFD92C8A7743008F12E7 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		086CCFDC2C8A7743008F12E7 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 086CCFD92C8A7743008F12E7 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 		0886D81D2C8705680058700F /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;

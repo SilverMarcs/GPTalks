@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import GoogleSignInSwift
 
 struct ProviderGeneral: View {
+    @ObservedObject var providerManager = ProviderManager.shared
+    @Environment(GoogleAuth.self) var googleAuth
+    
     @Bindable var provider: Provider
     var reorderProviders: () -> Void
     
-    @ObservedObject var providerManager = ProviderManager.shared
     @State var showKey: Bool = false
     @State var showPopover: Bool = false
 
@@ -25,9 +28,8 @@ struct ProviderGeneral: View {
             }
             
             Section("Host Settings") {
-
                 HStack {
-                    TextField("Host URL", text: $provider.host)
+                    TextField(provider.type == .vertex ? "Project ID" : "Host URL", text: $provider.host)
                     
                     Button {
                         showPopover.toggle()
@@ -43,28 +45,56 @@ struct ProviderGeneral: View {
                     }
                 }
                 
-                HStack {
-                    if showKey {
-                        TextField("API Key", text: $provider.apiKey)
+                if provider.type == .vertex {
+                    if googleAuth.isLoggedIn {
+                        HStack {
+                            AsyncImage(url: URL(string: googleAuth.profilePicUrl)) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 25, height: 25)
+                                    .clipShape(Circle())
+                            } placeholder: {
+                                Circle()
+                                    .fill(Color.gray.opacity(0.3))
+                                    .frame(width: 25, height: 25)
+                            }
+                            
+                            Text(googleAuth.name)
+                                .lineLimit(1)
+                            
+                            Spacer()
+                            
+                            Button("Sign Out", role: .destructive) {
+                                googleAuth.signOut()
+                            }
+                        }
                     } else {
-                        SecureField("API Key", text: $provider.apiKey)
+                        GoogleSignInButton(scheme: .dark, style: .wide, action: googleAuth.signIn)
                     }
-                    
-                    Button {
-                        showKey.toggle()
-                    } label: {
-                        Image(systemName: !showKey ? "eye.slash" : "eye" )
-                            .imageScale(.medium)
-                            .foregroundStyle(.secondary)
+                } else {
+                    HStack {
+                        if showKey {
+                            TextField("API Key", text: $provider.apiKey)
+                        } else {
+                            SecureField("API Key", text: $provider.apiKey)
+                        }
+                        
+                        Button {
+                            showKey.toggle()
+                        } label: {
+                            Image(systemName: !showKey ? "eye.slash" : "eye" )
+                                .imageScale(.medium)
+                                .foregroundStyle(.secondary)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
-                }
-                .truncationMode(.middle)
-                .autocorrectionDisabled(true)
+                    .truncationMode(.middle)
+                    .autocorrectionDisabled(true)
                 #if !os(macOS)
-                .textInputAutocapitalization(.never)
+                    .textInputAutocapitalization(.never)
                 #endif
-                
+                }
             }
     
             Section("Default Models") {
@@ -124,11 +154,11 @@ struct ProviderGeneral: View {
             ProviderImage(provider: provider, frame: 33, scale: .large)
             
             Group {
-#if os(macOS) || targetEnvironment(macCatalyst)
+            #if os(macOS) || targetEnvironment(macCatalyst)
                 TextEditor(text: $provider.name)
-#else
+            #else
                 TextField("Name", text: $provider.name)
-#endif
+            #endif
             }
                 .textEditorStyle(.plain)
             #if os(macOS) || targetEnvironment(macCatalyst)
@@ -169,7 +199,7 @@ struct ProviderGeneral: View {
     private var popoverText: String {
         switch provider.type {
         case .vertex:
-            "Put in your Google Cloud Project ID.\nOnly anthropic models are supported."
+            "Put in your Google Cloud Project ID.\nOnly anthropic models are supported.\nMake sure to enable Vertex AI Api in GCloud Console and enable Anthropic models."
         case .openai, .google, .anthropic, .local:
             "Omit https:// and /v1/ from the URL.\nFor example: api.openai.com"
         }
