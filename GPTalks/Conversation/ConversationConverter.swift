@@ -93,4 +93,53 @@ extension Conversation {
         
         return finalContent
     }
+    
+    func toVertex() -> Any {
+        var contentObjects: [[String: Any]] = []
+        
+        for dataFile in dataFiles {
+            if dataFile.fileType.conforms(to: .image) {
+                let imageSource: [String: Any] = [
+                    "type": "base64",
+                    "media_type": dataFile.mimeType,
+                    "data": dataFile.data.base64EncodedString()
+                ]
+                let imageContent: [String: Any] = [
+                    "type": "image",
+                    "source": imageSource
+                ]
+                contentObjects.append(imageContent)
+            } else if dataFile.fileType.conforms(to: .pdf) {
+                if let url = FileHelper.createTemporaryURL(for: dataFile) {
+                    let contents = readPDF(from: url)
+                    contentObjects.append([
+                        "type": "text",
+                        "text": "PDF File contents: \n\(contents)\n Respond to the user based on their query."
+                    ])
+                }
+            } else if dataFile.fileType.conforms(to: .text) {
+                if let textContent = String(data: dataFile.data, encoding: .utf8) {
+                    contentObjects.append([
+                        "type": "text",
+                        "text": "Text File contents: \n\(textContent)\n Respond to the user based on their query."
+                    ])
+                }
+            }
+        }
+        
+        // Add the main conversation content
+        contentObjects.append([
+            "type": "text",
+            "text": self.content
+        ])
+        
+        // Construct the final dictionary
+        let finalContent: [String: Any] = [
+            "role": self.role.rawValue,
+            "content": contentObjects
+        ]
+        
+        return finalContent
+    }
+
 }

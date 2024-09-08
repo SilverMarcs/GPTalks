@@ -42,7 +42,6 @@ struct UserMessage: View {
             if let group = conversation.group, let session = group.session {
                 ConversationMenu(group: group, providers: providers, isExpanded: $isExpanded)
                     .symbolEffect(.appear, isActive: !isHovered)
-                    .opacity(session.isReplying ? 0 : 1)
             }
     #endif
         }

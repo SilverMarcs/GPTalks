@@ -71,8 +71,8 @@ struct VertexService: AIService {
 
     static func createRequest(from conversations: [Conversation], config: SessionConfig) async throws -> URLRequest {
         let modelID = config.model.code
-        let location = "us-east5"
         let projectID = config.provider.host
+        let location = "us-east5"
         let apiUrl = "https://\(location)-aiplatform.googleapis.com/v1/projects/\(projectID)/locations/\(location)/publishers/anthropic/models/\(modelID):streamRawPredict"
         
         guard let url = URL(string: apiUrl) else {
@@ -104,10 +104,7 @@ struct VertexService: AIService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let messages: [[String: Any]] = conversations.map { conversation in
-            return [
-                "role": conversation.role.rawValue,
-                "content": conversation.content
-            ]
+            return conversation.toVertex() as! [String: Any]
         }
         
         let body: [String: Any] = [

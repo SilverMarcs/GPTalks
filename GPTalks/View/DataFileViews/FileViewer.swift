@@ -32,6 +32,7 @@ struct FileViewer: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .contentShape(Rectangle())
         }
         .padding(5)
         .background(RoundedRectangle(cornerRadius: 10).fill(.background.tertiary))

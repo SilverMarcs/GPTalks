@@ -15,7 +15,6 @@ struct DataFileView: View {
     var isCrossable: Bool
     
     @State private var selectedFileURL: URL?
-    @State private var isQuickLookPresented = false
     
     var body: some View {
         HStack(alignment: .bottom, spacing: 10) {
@@ -37,7 +36,6 @@ struct DataFileView: View {
                 }
             }
         }
-        .frame(maxWidth: 150)
         .quickLookPreview($selectedFileURL)
     }
     
@@ -53,7 +51,6 @@ struct DataFileView: View {
     func presentQuickLook(for typedData: TypedData) {
         if let url = FileHelper.createTemporaryURL(for: typedData) {
             selectedFileURL = url
-            isQuickLookPresented = true
         }
     }
 }
