@@ -92,7 +92,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         }
     }
     
-    func getService() -> AIService.Type {
+    func getService() -> any AIService.Type {
         switch self {
         case .openai, .local:
             OpenAIService.self

@@ -10,6 +10,41 @@ import SwiftUI
 import SwiftAnthropic
 
 struct ClaudeService: AIService {
+    typealias ConvertedType = MessageParameter.Message
+    
+    static func convert(conversation: Conversation) -> MessageParameter.Message {
+        var contentObjects: [MessageParameter.Message.Content.ContentObject] = []
+        
+        for dataFile in conversation.dataFiles {
+            if dataFile.fileType.conforms(to: .image) {
+                let imageSource = MessageParameter.Message.Content.ImageSource(
+                    type: .base64,
+                    mediaType: .init(rawValue: dataFile.mimeType) ?? .jpeg,
+                    data: dataFile.data.base64EncodedString()
+                )
+                contentObjects.append(.image(imageSource))
+            } else if dataFile.fileType.conforms(to: .pdf) {
+                if let url = FileHelper.createTemporaryURL(for: dataFile) {
+                    let contents = readPDF(from: url)
+                    contentObjects.append(.text("PDF File contents: \n\(contents)\n Respond to the user based on their query."))
+                }
+            } else if dataFile.fileType.conforms(to: .text) {
+                if let textContent = String(data: dataFile.data, encoding: .utf8) {
+                    contentObjects.append(.text("Text File contents: \n\(textContent)\n Respond to the user based on their query."))
+                }
+            }
+        }
+        
+        contentObjects.append(.text(conversation.content))
+        
+        let finalContent: MessageParameter.Message = .init(
+            role: conversation.role.toClaudeRole(),
+            content: .list(contentObjects)
+        )
+        
+        return finalContent
+    }
+    
     static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
         let parameters = createParameters(from: conversations, config: config, stream: true)
         return streamClaudeResponse(parameters: parameters, config: config)

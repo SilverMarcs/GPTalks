@@ -8,7 +8,10 @@
 import SwiftUI
 
 protocol AIService {
+    associatedtype ConvertedType
+    
     static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error>
     static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String
     static func testModel(provider: Provider, model: AIModel) async -> Bool
+    static func convert(conversation: Conversation) -> ConvertedType
 }

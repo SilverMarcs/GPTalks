@@ -58,7 +58,7 @@ import GoogleSignIn
           hint: "Accessing VertexAI",
           additionalScopes: ["https://www.googleapis.com/auth/cloud-platform"]
         ) { signInResult, error in
-          guard let signInResult = signInResult else {
+          guard let _ = signInResult else {
             print("Error! \(String(describing: error))")
             return
           }

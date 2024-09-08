@@ -10,6 +10,25 @@ import SwiftUI
 import GoogleGenerativeAI
 
 struct GoogleService: AIService {
+    typealias ConvertedType = ModelContent
+    
+    static func convert(conversation: Conversation) -> GoogleGenerativeAI.ModelContent {
+        var parts: [ModelContent.Part] = [.text(conversation.content)]
+        
+        for dataFile in conversation.dataFiles {
+            if dataFile.fileType.conforms(to: .text) {
+                parts.insert(.text(String(data: dataFile.data, encoding: .utf8) ?? ""), at: 0)
+            } else {
+                parts.insert(.data(mimetype: dataFile.mimeType, dataFile.data), at: 0)
+            }
+        }
+        
+        return ModelContent(
+            role: conversation.role.toGoogleRole(),
+            parts: parts
+        )
+    }
+    
     static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
         let (model, messages) = createModelAndMessages(from: conversations, config: config)
         return streamGoogleResponse(model: model, messages: messages)
@@ -35,7 +54,7 @@ struct GoogleService: AIService {
             generationConfig: genConfig,
             systemInstruction: systemPrompt)
         
-        let messages = conversations.map { $0.toGoogle() }
+        let messages = conversations.map { convert(conversation: $0) }
         
         return (model, messages)
     }
