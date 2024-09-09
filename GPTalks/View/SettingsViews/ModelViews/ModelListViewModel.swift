@@ -19,18 +19,12 @@ extension ModelListView {
     }
     
     func deleteItems(at offsets: IndexSet) {
+        let models = provider.models(for: type)
         let sortedModels = models.sorted(by: { $0.order < $1.order })
         let modelsToDelete = offsets.map { sortedModels[$0] }
-        let sortedIndices = modelsToDelete.map { $0.id }
-        
-        switch modelType {
-        case .chat:
-            provider.chatModels.removeAll { sortedIndices.contains($0.id) }
-        case .image:
-            provider.imageModels.removeAll { sortedIndices.contains($0.id) }
-        }
         
         for model in modelsToDelete {
+            provider.removeModel(model, for: type)
             model.modelContext?.delete(model)
         }
         
@@ -38,14 +32,8 @@ extension ModelListView {
     }
 
     func deleteSelectedModels() {
-        switch modelType {
-        case .chat:
-            provider.chatModels.removeAll { selections.contains($0) }
-        case .image:
-            provider.imageModels.removeAll { selections.contains($0) }
-        }
-        
         for model in selections {
+            provider.removeModel(model, for: type)
             model.modelContext?.delete(model)
         }
         
@@ -54,6 +42,7 @@ extension ModelListView {
     }
 
     func moveItems(from source: IndexSet, to destination: Int) {
+        let models = provider.models(for: type)
         var sortedModels = models.sorted(by: { $0.order < $1.order })
         sortedModels.move(fromOffsets: source, toOffset: destination)
         
@@ -61,6 +50,7 @@ extension ModelListView {
     }
 
     func reorderModels(_ customOrder: [AIModel]? = nil) {
+        let models = provider.models(for: type)
         let modelsToReorder = customOrder ?? models
         let enabledModels = modelsToReorder.filter { $0.isEnabled }
         let disabledModels = modelsToReorder.filter { !$0.isEnabled }
@@ -73,24 +63,17 @@ extension ModelListView {
             }
         }
         
-        switch modelType {
-        case .chat:
-            provider.chatModels = reorderedModels.compactMap { $0 }
-        case .image:
-            provider.imageModels = reorderedModels.compactMap { $0 }
-        }
+        provider.setModels(reorderedModels, for: type)
     }
-    
+
     func toggleModelType(for models: [AIModel]) {
         for model in models {
-            if model.modelType == .chat {
-                model.modelType = .image
-            } else {
-                model.modelType = .chat
-            }
+            let newType: ModelType = model.type == .chat ? .image : .chat
+            provider.removeModel(model, for: type)
+            model.type = newType
+            provider.addModel(model, for: newType)
         }
     }
-    
     func toggleEnabled(for models: [AIModel]) {
         for model in models {
             model.isEnabled.toggle()

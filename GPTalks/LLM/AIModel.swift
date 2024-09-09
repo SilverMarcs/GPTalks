@@ -13,7 +13,7 @@ final class AIModel: Hashable, Identifiable {
     var id: UUID = UUID()
     var order: Int = 0
     // TODO: rename to just type
-    var modelType: ModelType = ModelType.chat
+    var type: ModelType = ModelType.chat
 
     var code: String
     var name: String
@@ -27,11 +27,11 @@ final class AIModel: Hashable, Identifiable {
         self.name = "Dummy"
     }
 
-    init(code: String, name: String, provider: Provider? = nil, modelType: ModelType = .chat, order: Int = .max, isEnabled: Bool = true, lastTestResult: Bool? = nil) {
+    init(code: String, name: String, provider: Provider? = nil, type: ModelType = .chat, order: Int = .max, isEnabled: Bool = true, lastTestResult: Bool? = nil) {
         self.code = code
         self.name = name
         self.provider = provider
-        self.modelType = modelType
+        self.type = type
         self.order = order
         self.isEnabled = isEnabled
         self.lastTestResult = lastTestResult
@@ -50,13 +50,13 @@ extension AIModel {
     }
     
     static func getDemoImageModel() -> AIModel {
-        return AIModel(code: "dall-e-3", name: "DALL-E-3", modelType: .image)
+        return AIModel(code: "dall-e-3", name: "DALL-E-3", type: .image)
     }
     
     static func getOpenaiModels() -> [AIModel] {
         return [
-            AIModel(code: "dall-e-2", name: "DALL-E-2", modelType: .image, order: 0),
-            AIModel(code: "dall-e-3", name: "DALL-E-3", modelType: .image, order: 1),
+            AIModel(code: "dall-e-2", name: "DALL-E-2", type: .image, order: 0),
+            AIModel(code: "dall-e-3", name: "DALL-E-3", type: .image, order: 1),
             
             AIModel(code: "chatgpt-4o-latest", name: "GPT-4o", order: 2),
             AIModel(code: "gpt-4o-mini", name: "GPT-4om", order: 3),

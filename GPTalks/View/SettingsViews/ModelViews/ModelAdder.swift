@@ -10,7 +10,7 @@ import SwiftUI
 struct ModelAdder: View {
     @Environment(\.dismiss) var dismiss
     var provider: Provider
-    var modelType: ModelType
+    var type: ModelType
     
     @State var newModelCode: String = ""
     @State var newModelName: String = ""
@@ -18,7 +18,7 @@ struct ModelAdder: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text(modelType.rawValue.capitalized)) {
+                Section(header: Text(type.rawValue.capitalized)) {
                     TextField("Code", text: $newModelCode)
                     TextField("Name", text: $newModelName)
                 }
@@ -72,18 +72,24 @@ struct ModelAdder: View {
         }
 
         let model = AIModel(
-            code: newModelCode, name: newModelName, provider: provider, modelType: modelType, order: 0)
+            code: newModelCode, name: newModelName, provider: provider, type: type, order: 0)
         
-        for model in provider.models {
-            model.order += 1
+        if type == .chat {
+            for model in provider.chatModels {
+                model.order += 1
+            }
+            provider.chatModels.insert(model, at: 0)
+        } else if type == .image {
+            for model in provider.imageModels {
+                model.order += 1
+            }
+            provider.imageModels.insert(model, at: 0)
         }
-        
-        provider.models.append(model)
         
         dismiss()
     }
 }
 
 #Preview {
-    ModelAdder(provider: Provider.factory(type: .openai), modelType: .chat)
+    ModelAdder(provider: Provider.factory(type: .openai), type: .chat)
 }

@@ -14,20 +14,12 @@ struct ModelListView: View {
     @Environment(\.editMode) var editMode
     #endif
     @Bindable var provider: Provider
-    
-    let modelType: ModelType
-    
+    let type: ModelType
+
     @State var showAdder = false
     @State var selections: Set<AIModel> = []
     @State var searchText = ""
     @State var isRefreshing = false
-    
-    var models: [AIModel] {
-        switch modelType {
-        case .chat: return provider.chatModels
-        case .image: return provider.imageModels
-        }
-    }
     
     var body: some View {
         Group {
@@ -38,7 +30,7 @@ struct ModelListView: View {
             #endif
         }
         .sheet(isPresented: $showAdder) {
-            ModelAdder(provider: provider, modelType: modelType)
+            ModelAdder(provider: provider, type: type)
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -58,6 +50,8 @@ struct ModelListView: View {
     }
     
     var filteredModels: [AIModel] {
+        let models = provider.models(for: type)
+        
         let filtered = searchText.isEmpty ? models : models.filter { $0.name.localizedCaseInsensitiveContains(searchText) || $0.code.localizedCaseInsensitiveContains(searchText) }
         return filtered.sorted { $0.order < $1.order }
     }
@@ -207,5 +201,7 @@ extension ModelListView {
 
 
 #Preview {
-    ModelListView(provider: Provider.factory(type: .openai), modelType: .chat)
+    let provider = Provider.factory(type: .openai)
+    
+    ModelListView(provider: provider, type: .chat)
 }

@@ -24,12 +24,13 @@ struct ProviderBackup: Codable {
     var quickChatModelCode: String
     var titleModelCode: String
     var imageModelCode: String
-    var models: [AIModelBackup]
+    var chatModels: [AIModelBackup]
+    var imageModels: [AIModelBackup]
     
     struct AIModelBackup: Codable {
         var id: UUID
         var order: Int
-        var modelType: ModelType
+        var type: ModelType
         var code: String
         var name: String
         var isEnabled: Bool
@@ -52,11 +53,13 @@ extension ProviderBackup {
         self.quickChatModelCode = provider.quickChatModel.code
         self.titleModelCode = provider.titleModel.code
         self.imageModelCode = provider.imageModel.code
-        self.models = provider.models.map { AIModelBackup(from: $0) }
+        self.chatModels = provider.chatModels.map { AIModelBackup(from: $0) }
+        self.imageModels = provider.imageModels.map { AIModelBackup(from: $0) }
     }
 
     func toProvider() -> Provider {
-        let models = self.models.map { $0.toAIModel() }
+        let chatModels = self.chatModels.map { $0.toAIModel() }
+        let imageModels = self.imageModels.map { $0.toAIModel() }
         return Provider(
             id: UUID(),
             date: Date(),
@@ -67,11 +70,12 @@ extension ProviderBackup {
             type: self.type,
             color: self.color,
             isEnabled: self.isEnabled,
-            chatModel: models.first(where: { $0.code == self.chatModelCode }) ?? AIModel(code: self.chatModelCode, name: ""),
-            quickChatModel: models.first(where: { $0.code == self.quickChatModelCode }) ?? AIModel(code: self.quickChatModelCode, name: ""),
-            titleModel: models.first(where: { $0.code == self.titleModelCode }) ?? AIModel(code: self.titleModelCode, name: ""),
-            imageModel: models.first(where: { $0.code == self.imageModelCode }) ?? AIModel(code: self.imageModelCode, name: ""),
-            models: models
+            chatModel: chatModels.first(where: { $0.code == self.chatModelCode }) ?? AIModel(code: self.chatModelCode, name: ""),
+            quickChatModel: chatModels.first(where: { $0.code == self.quickChatModelCode }) ?? AIModel(code: self.quickChatModelCode, name: ""),
+            titleModel: chatModels.first(where: { $0.code == self.titleModelCode }) ?? AIModel(code: self.titleModelCode, name: ""),
+            imageModel: imageModels.first(where: { $0.code == self.imageModelCode }) ?? AIModel(code: self.imageModelCode, name: ""),
+            chatModels: chatModels,
+            imageModels: imageModels
         )
     }
 }
@@ -80,7 +84,7 @@ extension ProviderBackup.AIModelBackup {
     init(from model: AIModel) {
         self.id = model.id
         self.order = model.order
-        self.modelType = model.modelType
+        self.type = model.type
         self.code = model.code
         self.name = model.name
         self.isEnabled = model.isEnabled
@@ -91,7 +95,7 @@ extension ProviderBackup.AIModelBackup {
         AIModel(
             code: self.code,
             name: self.name,
-            modelType: self.modelType,
+            type: self.type,
             order: self.order,
             isEnabled: self.isEnabled,
             lastTestResult: self.lastTestResult

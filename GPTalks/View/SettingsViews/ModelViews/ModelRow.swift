@@ -68,11 +68,11 @@ struct ModelRow: View {
             .tint(model.isEnabled ? .gray.opacity(0.7) : .accentColor)
             
             Button {
-                model.modelType = model.modelType == .image ? .chat : .image
+                model.type = model.type == .image ? .chat : .image
             } label: {
-                Image(systemName: model.modelType == .chat ? "photo" : "bubble.left")
+                Image(systemName: model.type == .chat ? "photo" : "bubble.left")
             }
-            .tint(model.modelType == .chat ? .pink : .green)
+            .tint(model.type == .chat ? .pink : .green)
         }
         #endif
     }
