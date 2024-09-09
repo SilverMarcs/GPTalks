@@ -72,7 +72,7 @@ struct MainWindow: Scene {
         
         let config = SessionConfig(provider: openAI, purpose: .quick)
         let session = Session(config: config)
-        config.session = session
+//        config.session = session
         session.isQuick = true
 
         modelContext.insert(session)

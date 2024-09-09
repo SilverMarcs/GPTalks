@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 import Foundation
 
-//MARK: Chat Session
 extension SessionVM {
     public var activeSession: Session? {
         guard selections.count == 1 else { return nil }
@@ -115,7 +114,8 @@ extension SessionVM {
         }
         
         let newItem = Session(config: config)
-        config.session = newItem
+//        config.session = newItem
+        try? modelContext.save()
         
         var fetchSessions = FetchDescriptor<Session>()
         fetchSessions.sortBy = [SortDescriptor(\.order)]

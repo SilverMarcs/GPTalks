@@ -81,7 +81,8 @@ extension AIModel {
     
     static func getVertexModels() -> [AIModel] {
         return [
-            AIModel(code: "vertex-1.0", name: "Vertex-1.0", order: 0),
+            AIModel(code: "claude-3-haiku@20240307", name: "Claude-3H", order: 0),
+            AIModel(code: "claude-3-5-sonnet@20240620", name: "Claude-3.5S", order: 1),
         ]
     }
     

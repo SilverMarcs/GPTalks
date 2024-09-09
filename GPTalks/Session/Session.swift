@@ -26,7 +26,8 @@ final class Session {
     @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
     var unorderedGroups =  [ConversationGroup]()
     
-    @Relationship(deleteRule: .cascade, inverse: \SessionConfig.session)
+//    @Relationship(deleteRule: .cascade, inverse: \SessionConfig.session)
+    @Relationship(deleteRule: .cascade)
     var config: SessionConfig
     
     @Transient
@@ -121,8 +122,6 @@ final class Session {
         
         if let regenContent = regenContent {
             if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
-//                let existingImagePaths = conversations[lastUserIndex].imagePaths
-//                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, imagePaths: existingImagePaths)
                 let existingDataFiles = conversations[lastUserIndex].dataFiles
                 conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, dataFiles: existingDataFiles)
             }

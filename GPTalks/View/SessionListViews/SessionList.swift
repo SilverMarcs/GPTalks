@@ -71,26 +71,14 @@ struct SessionList: View {
     }
 
     private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets.sorted().reversed() {
-                if !sessions[index].isStarred {
-                    // Check if the session is part of sessionVM.selections
-                    if sessionVM.selections.contains(where: { $0.id == sessions[index].id }) {
-                        sessionVM.selections.remove(sessions[index])
-                    }
-                    
-                    // Delay the deletion and saving
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.modelContext.delete(self.sessions[index])
-                        try? self.modelContext.save()
-                        
-                        // Update order of remaining sessions
-                        let remainingSessions = self.sessions.filter { !$0.isDeleted }
-                        for (newIndex, session) in remainingSessions.enumerated() {
-                            session.order = newIndex
-                        }
-                    }
+        for index in offsets.sorted().reversed() {
+            if !sessions[index].isStarred {
+                modelContext.delete(sessions[index])
+                let remainingSessions = sessions.filter { !$0.isDeleted }
+                for (newIndex, session) in remainingSessions.enumerated() {
+                    session.order = newIndex
                 }
+//                try? modelContext.save()
             }
         }
     }

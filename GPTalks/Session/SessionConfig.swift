@@ -24,7 +24,7 @@ final class SessionConfig {
     @Relationship(deleteRule: .nullify)
     var model: AIModel
     
-    var session: Session?
+//    var session: Session?
     
     private init(provider: Provider, model: AIModel, temperature: Double?, frequencyPenalty: Double?, presencePenalty: Double?, topP: Double?, maxTokens: Int?, stream: Bool, systemPrompt: String, purpose: SessionConfigPurpose = .chat) {
         self.provider = provider

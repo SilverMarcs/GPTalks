@@ -94,11 +94,9 @@ extension ProviderList {
         }
         
         let defaultProvider = ProviderManager.shared.getDefault(providers: providers)
-        print(defaultProvider?.name)
         
         for index in offsets {
             let providerToDelete = reorderedProviders[index]
-            print("Deleting provider: \(providerToDelete.name)")
             
             if providerToDelete.isPersistent || providerToDelete == defaultProvider {
                 providersToDelete.remove(index)

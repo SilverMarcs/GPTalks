@@ -70,7 +70,7 @@ struct ProviderGeneral: View {
                             }
                         }
                     } else {
-                        GoogleSignInButton(scheme: .dark, style: .wide, action: googleAuth.signIn)
+                        GoogleSignInButton(action: googleAuth.signIn)
                     }
                 } else {
                     HStack {

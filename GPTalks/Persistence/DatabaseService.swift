@@ -61,7 +61,7 @@ class DatabaseService {
         }
         
         let newItem = Session(config: config)
-        config.session = newItem
+//        config.session = newItem
         
         var fetchSessions = FetchDescriptor<Session>()
         fetchSessions.sortBy = [SortDescriptor(\.order)]
