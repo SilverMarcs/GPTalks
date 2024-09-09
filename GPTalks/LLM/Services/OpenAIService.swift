@@ -12,6 +12,17 @@ import OpenAI
 struct OpenAIService: AIService {
     typealias ConvertedType = ChatQuery.ChatCompletionMessageParam
     
+    static func refreshModels(provider: Provider) async -> [AIModel] {
+        let service = OpenAI(configuration: OpenAI.Configuration(token: provider.apiKey, host: provider.host, scheme: provider.type.scheme))
+        
+        do {
+            let result = try await service.models()
+            return result.data.map { AIModel(code: $0.id, name: $0.name) }
+        } catch {
+            return []
+        }
+    }
+    
     static func convert(conversation: Conversation) -> ConvertedType {
         if conversation.dataFiles.isEmpty {
             return ChatQuery.ChatCompletionMessageParam(

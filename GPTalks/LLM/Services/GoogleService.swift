@@ -12,6 +12,18 @@ import GoogleGenerativeAI
 struct GoogleService: AIService {
     typealias ConvertedType = ModelContent
     
+    static func refreshModels(provider: Provider) async -> [AIModel] {
+        let service = GenerativeAIService(apiKey: provider.apiKey, urlSession: .shared)
+        
+        do {
+            let models = try await service.listModels()
+            return models.models.map { AIModel(code: $0.name, name: $0.displayName ?? $0.name) }
+        } catch {
+            print(error.localizedDescription)
+            return []
+        }
+    }
+    
     static func convert(conversation: Conversation) -> GoogleGenerativeAI.ModelContent {
         var parts: [ModelContent.Part] = [.text(conversation.content)]
         

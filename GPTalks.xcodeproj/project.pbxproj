@@ -73,7 +73,6 @@
 		085524E62C4ED2DA00CBB827 /* ImageCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E52C4ED2DA00CBB827 /* ImageCommands.swift */; };
 		085524E82C4ED61F00CBB827 /* ConversationListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E72C4ED61F00CBB827 /* ConversationListToolbar.swift */; };
 		085524EA2C4EDEC400CBB827 /* ModelList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E92C4EDEC400CBB827 /* ModelList.swift */; };
-		085524EE2C4EDF6600CBB827 /* PresetModelAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524ED2C4EDF6600CBB827 /* PresetModelAdder.swift */; };
 		085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085645432C3F98DF00ED84DA /* TitleGenerator.swift */; };
 		085910C82C4F7A5A0086E493 /* ChatSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085910C72C4F7A5A0086E493 /* ChatSessionVM.swift */; };
 		085910CA2C4F7A720086E493 /* ImageSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085910C92C4F7A720086E493 /* ImageSessionVM.swift */; };
@@ -262,7 +261,6 @@
 		085524E52C4ED2DA00CBB827 /* ImageCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCommands.swift; sourceTree = "<group>"; };
 		085524E72C4ED61F00CBB827 /* ConversationListToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListToolbar.swift; sourceTree = "<group>"; };
 		085524E92C4EDEC400CBB827 /* ModelList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelList.swift; sourceTree = "<group>"; };
-		085524ED2C4EDF6600CBB827 /* PresetModelAdder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetModelAdder.swift; sourceTree = "<group>"; };
 		085645432C3F98DF00ED84DA /* TitleGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleGenerator.swift; sourceTree = "<group>"; };
 		085910C72C4F7A5A0086E493 /* ChatSessionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionVM.swift; sourceTree = "<group>"; };
 		085910C92C4F7A720086E493 /* ImageSessionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSessionVM.swift; sourceTree = "<group>"; };
@@ -445,7 +443,6 @@
 				082181572C3823A400171BF3 /* ModelRow.swift */,
 				085524E92C4EDEC400CBB827 /* ModelList.swift */,
 				0805DEF42C58E69300A8354A /* ModelListViewModel.swift */,
-				085524ED2C4EDF6600CBB827 /* PresetModelAdder.swift */,
 				08D8F44A2C51C4E50051C916 /* ModelAdder.swift */,
 			);
 			path = ModelViews;
@@ -1110,7 +1107,6 @@
 				08D174C22C3D96F8000257EF /* StreamHandler.swift in Sources */,
 				08B82C1D2C74EA9400DC0183 /* ImageViewer.swift in Sources */,
 				085361052C491BF0007DAB62 /* ImageSession.swift in Sources */,
-				085524EE2C4EDF6600CBB827 /* PresetModelAdder.swift in Sources */,
 				08A222C12C2ABE5C00D76C8B /* Conversation.swift in Sources */,
 				08D174C62C3DC2A8000257EF /* DateUtils.swift in Sources */,
 				08A222832C2AB4FD00D76C8B /* GPTalksApp.swift in Sources */,

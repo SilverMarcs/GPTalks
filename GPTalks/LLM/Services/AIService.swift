@@ -12,6 +12,7 @@ protocol AIService {
     
     static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error>
     static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String
-    static func testModel(provider: Provider, model: AIModel) async -> Bool
+    static func testModel(provider: Provider, model: AIModel) async -> Bool // TODO: separate model tester for images and audio
     static func convert(conversation: Conversation) -> ConvertedType
+    static func refreshModels(provider: Provider) async -> [AIModel]
 }

@@ -55,11 +55,11 @@ extension AIModel {
     
     static func getOpenaiModels() -> [AIModel] {
         return [
-            AIModel(code: "dall-e-2", name: "DALL-E-2", type: .image, order: 0),
-            AIModel(code: "dall-e-3", name: "DALL-E-3", type: .image, order: 1),
+            AIModel(code: "chatgpt-4o-latest", name: "GPT-4o", order: 0),
+            AIModel(code: "gpt-4o-mini", name: "GPT-4om", order: 1),
             
-            AIModel(code: "chatgpt-4o-latest", name: "GPT-4o", order: 2),
-            AIModel(code: "gpt-4o-mini", name: "GPT-4om", order: 3),
+            AIModel(code: "dall-e-2", name: "DALL-E-2", type: .image, order: 2),
+            AIModel(code: "dall-e-3", name: "DALL-E-3", type: .image, order: 3),
         ]
     }
     
@@ -76,7 +76,6 @@ extension AIModel {
         return [
             AIModel(code: "gemini-1.5-pro", name: "Gemini-1.5P", order: 0),
             AIModel(code: "gemini-1.5-flash", name: "Gemini-1.5F", order: 1),
-            AIModel(code: "gemini-1.0-pro", name: "Gemini-1.0P", order: 2),
         ]
     }
     

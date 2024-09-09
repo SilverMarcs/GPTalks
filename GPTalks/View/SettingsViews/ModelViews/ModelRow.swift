@@ -101,22 +101,12 @@ struct ModelRow: View {
     
     func runModelTest() async {
         isTestingModel = true
-        testResult = await testModel()
+        testResult = await model.provider?.testModel(model: model)
         isTestingModel = false
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             testResult = nil
         }
-    }
-    
-    func testModel() async -> Bool {
-        if let provider = model.provider {
-            let service = provider.type.getService()
-            let result = await service.testModel(provider: provider, model: model)
-            model.lastTestResult = result
-            return result
-        }
-        return false
     }
 }
 

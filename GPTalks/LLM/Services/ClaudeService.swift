@@ -45,6 +45,10 @@ struct ClaudeService: AIService {
         return finalContent
     }
     
+    static func refreshModels(provider: Provider) async -> [AIModel] {
+        return provider.type.getDefaultModels()
+    }
+    
     static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
         let parameters = createParameters(from: conversations, config: config, stream: true)
         return streamClaudeResponse(parameters: parameters, config: config)

@@ -90,7 +90,6 @@ class Provider {
         provider.name = type.name
         provider.host = type.defaultHost
         provider.chatModels = type.getDefaultModels()
-        provider.imageModels = type.getDefaultModels()
         provider.color = type.defaultColor
         
         if let first = provider.chatModels.first {
@@ -114,75 +113,21 @@ class Provider {
 extension Provider {
     @MainActor
     func refreshModels() async {
-         let refreshedModels: [AIModel]
-
-         switch type {
-         case .openai, .local:
-             let config = OpenAI.Configuration(
-                 token: apiKey,
-                 host: host,
-                 scheme: type.scheme
-             )
-             
-             let service = OpenAI(configuration: config)
-             
-             if let models = try? await service.models() {
-                 refreshedModels = models.data.map {
-                     AIModel(code: $0.id, name: $0.name)
-                 }
-             } else {
-                 refreshedModels = []
-             }
-         case .google:
-             let service = GenerativeAIService(apiKey: apiKey, urlSession: .shared)
-             
-             do {
-                 let models = try await service.listModels()
-                 
-                 refreshedModels = models.models.map {
-                     AIModel(code: $0.name, name: $0.displayName ?? $0.name)
-                 }
-      
-             } catch {
-                 print(error.localizedDescription)
-                 refreshedModels = []
-             }
+        let refreshedModels: [AIModel] = await type.getService().refreshModels(provider: self)
         
-         case .anthropic:
-             refreshedModels = type.getDefaultModels()
-         case .vertex:
-             refreshedModels = type.getDefaultModels()
-         }
-
-         for model in refreshedModels {
-             if !chatModels.contains(where: { $0.code == model.code }) {
-                 chatModels.append(model)
-             }
-         }
-     }
-    
-    func addOpenAIModels() {
-        for model in AIModel.getOpenaiModels() {
+        for model in refreshedModels {
             if !chatModels.contains(where: { $0.code == model.code }) {
                 chatModels.append(model)
             }
         }
     }
     
-    func addClaudeModels() {
-        for model in AIModel.getAnthropicModels() {
-            if !chatModels.contains(where: { $0.code == model.code }) {
-                chatModels.append(model)
-            }
-        }
-    }
-    
-    func addGoogleModels() {
-        for model in AIModel.getGoogleModels() {
-            if !chatModels.contains(where: { $0.code == model.code }) {
-                chatModels.append(model)
-            }
-        }
+    @MainActor
+    func testModel(model: AIModel) async -> Bool {
+        let service = type.getService()
+        let result = await service.testModel(provider: self, model: model)
+        model.lastTestResult = result
+        return result
     }
 }
 

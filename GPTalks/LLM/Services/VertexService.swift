@@ -11,6 +11,10 @@ import GoogleSignIn
 struct VertexService: AIService {
     typealias ConvertedType = [String: Any]
     
+    static func refreshModels(provider: Provider) async -> [AIModel] {
+        return provider.type.getDefaultModels()
+    }
+    
     static func convert(conversation: Conversation) -> [String: Any] {
         var contentObjects: [[String: Any]] = []
         
