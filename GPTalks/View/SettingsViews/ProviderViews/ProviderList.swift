@@ -41,6 +41,7 @@ struct ProviderList: View {
                 NavigationLink(destination: ProviderDetail(provider: provider, reorderProviders: { self.reorderProviders() })) {
                     ProviderRow(provider: provider)
                 }
+                .deleteDisabled(provider.isPersistent)
             }
             .onDelete(perform: deleteProviders)
             .onMove(perform: move)
@@ -84,21 +85,38 @@ extension ProviderList {
     }
     
     private func deleteProviders(offsets: IndexSet) {
-        withAnimation {
-            let defaultProviderID = providerManager.defaultProvider
-            var providersToDelete = offsets
-            for index in offsets {
-                if reorderedProviders[index].id.uuidString == defaultProviderID || reorderedProviders[index].name == "OpenAI" {
-                    providersToDelete.remove(index)
+        var providersToDelete = offsets
+        
+        let fetchDescriptor = FetchDescriptor<SessionConfig>()
+        guard let allSessionConfigs = try? modelContext.fetch(fetchDescriptor) else {
+            print("Failed to fetch SessionConfigs")
+            return
+        }
+        
+        let defaultProvider = ProviderManager.shared.getDefault(providers: providers)
+        print(defaultProvider?.name)
+        
+        for index in offsets {
+            let providerToDelete = reorderedProviders[index]
+            print("Deleting provider: \(providerToDelete.name)")
+            
+            if providerToDelete.isPersistent || providerToDelete == defaultProvider {
+                providersToDelete.remove(index)
+            } else {
+                for sessionConfig in allSessionConfigs where sessionConfig.provider == providerToDelete {
+                    if let defaultProvider = defaultProvider {
+                        sessionConfig.provider = defaultProvider
+                        sessionConfig.model = sessionConfig.provider.chatModel
+                    }
                 }
             }
-            for index in providersToDelete {
-                modelContext.delete(reorderedProviders[index])
-            }
-            reorderProviders()
-        } completion: {
-//            try? modelContext.save()
         }
+        
+        for index in providersToDelete {
+            modelContext.delete(reorderedProviders[index])
+        }
+        
+        reorderProviders()
     }
     
     private func move(from source: IndexSet, to destination: Int) {
@@ -114,7 +132,6 @@ extension ProviderList {
                 provider.order = index
             }
         }
-//        try? modelContext.save()
     }
 }
 

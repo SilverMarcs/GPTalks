@@ -10,7 +10,6 @@ import SwiftData
 import KeyboardShortcuts
 
 struct ContentView: View {
-//    @Environment(GoogleAuth.self) var googleAuth
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
@@ -29,15 +28,10 @@ struct ContentView: View {
     .toolbar(.hidden, for: .navigationBar)
 #endif
         }
-//        .onAppear {
-//            googleAuth.checkStatus()
-//        }
         #if os(macOS) || targetEnvironment(macCatalyst)
         .frame(minWidth: 900, minHeight: 700)
         #endif
     }
-    
-
 }
 
 #Preview {

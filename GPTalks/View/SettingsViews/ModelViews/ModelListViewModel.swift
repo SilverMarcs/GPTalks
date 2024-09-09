@@ -25,7 +25,6 @@ extension ModelListView {
         
         for model in modelsToDelete {
             provider.removeModel(model, for: type)
-            model.modelContext?.delete(model)
         }
         
         reorderModels()
@@ -34,7 +33,6 @@ extension ModelListView {
     func deleteSelectedModels() {
         for model in selections {
             provider.removeModel(model, for: type)
-            model.modelContext?.delete(model)
         }
         
         selections.removeAll()

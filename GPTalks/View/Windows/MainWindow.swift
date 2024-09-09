@@ -58,10 +58,13 @@ struct MainWindow: Scene {
         
         let openAI = Provider.factory(type: .openai)
         openAI.order = 0
+        openAI.isPersistent = true
         let anthropic = Provider.factory(type: .anthropic)
         anthropic.order = 1
+        anthropic.isPersistent = true
         let google = Provider.factory(type: .google)
         google.order = 2
+        google.isPersistent = true
         
         modelContext.insert(openAI)
         modelContext.insert(anthropic)
@@ -77,5 +80,4 @@ struct MainWindow: Scene {
         ProviderManager.shared.defaultProvider = openAI.id.uuidString
         ProviderManager.shared.quickProvider = openAI.id.uuidString
     }
-
 }

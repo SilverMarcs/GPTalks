@@ -22,6 +22,8 @@ class Provider {
     var apiKey: String = ""
     
     var type: ProviderType
+    var isPersistent: Bool = false  // added by the app by default and are not deletable
+    var extraInfo: String = ""
     
     var color: String = "#00947A"
     var isEnabled: Bool = true
@@ -170,5 +172,6 @@ extension Provider {
             imageModels.removeAll { $0.id == model.id }
         // Add more cases here as you add more model types
         }
+        model.modelContext?.delete(model)
     }
 }
