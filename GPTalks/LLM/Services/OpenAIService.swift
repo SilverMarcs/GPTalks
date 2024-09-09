@@ -59,7 +59,7 @@ struct OpenAIService: AIService {
         var messages = conversations.map { convert(conversation: $0) }
         if !config.systemPrompt.isEmpty {
             let systemPrompt = Conversation(role: .system, content: config.systemPrompt)
-            messages.insert(systemPrompt.toOpenAI(), at: 0)
+            messages.insert(convert(conversation: systemPrompt), at: 0)
         }
         
         return ChatQuery(

@@ -38,7 +38,7 @@ struct ChatSessionToolbar: ToolbarContent {
             } label: {
                 Label("Add Item", systemImage: "square.and.pencil")
             } primaryAction: {
-                if let provider = ProviderManager.getDefaultProvider(providers: providers) {
+                if let provider = ProviderManager.shared.getDefault(providers: providers) {
                     addItem(provider: provider)
                 }
             }

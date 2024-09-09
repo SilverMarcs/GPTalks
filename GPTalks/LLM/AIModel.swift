@@ -58,12 +58,8 @@ extension AIModel {
             AIModel(code: "dall-e-2", name: "DALL-E-2", modelType: .image, order: 0),
             AIModel(code: "dall-e-3", name: "DALL-E-3", modelType: .image, order: 1),
             
-            AIModel(code: "gpt-4o", name: "GPT-4o", order: 2),
+            AIModel(code: "chatgpt-4o-latest", name: "GPT-4o", order: 2),
             AIModel(code: "gpt-4o-mini", name: "GPT-4om", order: 3),
-            AIModel(code: "gpt-4-turbo", name: "GPT-4T", order: 4),
-            AIModel(code: "gpt-4-turbo-preview", name: "GPT-4TP", order: 5),
-            AIModel(code: "gpt-4", name: "GPT-4", order: 6),
-            AIModel(code: "gpt-3.5-turbo", name: "GPT-3.5T", order: 7),
         ]
     }
     

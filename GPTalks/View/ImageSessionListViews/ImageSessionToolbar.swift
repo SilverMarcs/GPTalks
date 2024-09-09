@@ -44,7 +44,7 @@ struct ImageSessionToolbar: ToolbarContent {
             } label: {
                 Label("Add Item", systemImage: "square.and.pencil")
             } primaryAction: {
-                if let provider = ProviderManager.getDefaultProvider(providers: openaiProviders) {
+                if let provider = ProviderManager.shared.getDefault(providers: openaiProviders) {
                     addItem(provider: provider)
                 } else if let first = providers.first {
                     addItem(provider: first)

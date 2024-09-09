@@ -74,11 +74,11 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     
     var supportedFileTypes: [UTType] {
         switch self {
-        case .openai: [.image, .pdf, .text, .url]
-        case .anthropic:  [.image, .pdf, .text, .url]
-        case .google: [.image, .pdf, .commaSeparatedText, .audio, .text, .url]
-        case .vertex: [.image, .pdf, .commaSeparatedText, .audio, .text, .url]
-        case .local: []
+        case .openai: [.image, .pdf, .commaSeparatedText, .text, .url]
+        case .anthropic:  [.image, .pdf, .commaSeparatedText, .text, .url]
+        case .google: [.audio, .image, .pdf, .commaSeparatedText, .text, .url]
+        case .vertex: [.image, .pdf, .commaSeparatedText, .text, .url]
+        case .local: [.pdf, .commaSeparatedText, .text, .url]
         }
     }
     

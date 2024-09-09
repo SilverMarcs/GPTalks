@@ -24,15 +24,4 @@ class ProviderManager: ObservableObject {
             providers.first { $0.id.uuidString == id }
         }
     }
-    
-    static func getDefaultProvider(providers: [Provider]) -> Provider? {
-        if let defaultProvider = ProviderManager.shared.getDefault(providers: providers) {
-            return defaultProvider
-        } else if let openAIProvider = providers.first(where: { $0.name == "OpenAI" }) {
-            return openAIProvider
-        } else if let firstProvider = providers.first {
-            return firstProvider
-        }
-        return nil
-    }
 }

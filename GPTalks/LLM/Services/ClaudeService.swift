@@ -56,7 +56,7 @@ struct ClaudeService: AIService {
     }
     
     static private func createParameters(from conversations: [Conversation], config: SessionConfig, stream: Bool) -> MessageParameter {
-        let messages = conversations.map { $0.toClaude() }
+        let messages = conversations.map { convert(conversation: $0) }
         let systemPrompt = MessageParameter.System.text(config.systemPrompt)
         
         return MessageParameter(

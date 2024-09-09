@@ -154,7 +154,7 @@ struct VertexService: AIService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let messages: [[String: Any]] = conversations.map { conversation in
-            return conversation.toVertex() as! [String: Any]
+            return convert(conversation: conversation)
         }
         
         let body: [String: Any] = [
