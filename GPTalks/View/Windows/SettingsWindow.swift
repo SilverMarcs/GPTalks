@@ -15,9 +15,6 @@ struct SettingsWindow: Scene {
                 .frame(minWidth: 850, maxWidth: 850, minHeight: 600, maxHeight: 600)
         }
         .restorationBehavior(.disabled)
-        .commands {
-            CommandGroup(replacing: .sidebar) {}
-        }
         .windowResizability(.contentSize)
         #else
         WindowGroup("Settings", id: "settings") {

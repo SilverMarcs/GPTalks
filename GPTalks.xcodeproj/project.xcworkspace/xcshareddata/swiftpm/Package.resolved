@@ -1,5 +1,5 @@
 {
-  "originHash" : "7a3230db51147795496aaba0e5adf0cb5c0cf80c67c92075cf73990dfaeb776f",
+  "originHash" : "a636aae8216856a9695036029f579112ee6e707d924a0c05caefd8a9cef62f68",
   "pins" : [
     {
       "identity" : "app-check",
@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
       "state" : {
-        "revision" : "2e5f15581fefb821d4b366e57d817be8bf12aa58",
-        "version" : "2.0.1"
+        "revision" : "e6b60117ec266e1e5d059f7f34815144f9762b36",
+        "version" : "2.0.2"
       }
     },
     {
@@ -97,7 +97,7 @@
       "location" : "https://github.com/SilverMarcs/markdown-webview",
       "state" : {
         "branch" : "master",
-        "revision" : "0fbe37eb86e1c925c4986d797a1384287003d88e"
+        "revision" : "4402b8a34d123e2cfe4a7fc0a3761b9a562e0f11"
       }
     },
     {
