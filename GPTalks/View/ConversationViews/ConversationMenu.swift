@@ -126,6 +126,7 @@ struct ConversationMenu: View {
     }
 
     var regenGroup: some View {
+        #if os(macOS)
         Menu {
             ForEach(providers) { provider in
                 Menu {
@@ -154,22 +155,35 @@ struct ConversationMenu: View {
         } label: {
             Label("Regenerate", systemImage: "arrow.2.circlepath")
         } primaryAction: {
-            if group.role == .assistant {
-                Task { @MainActor in
-                    await group.session?.regenerate(group: group)
-                }
-            } else if group.role == .user {
-                group.setupEditing()
-                Task { @MainActor in
-                    await group.session?.sendInput()
-                }
-            }
+            performPrimaryAction()
         }
         .labelStyle(.iconOnly)
         .buttonStyle(.plain)
         .menuIndicator(.hidden)
         .fixedSize()
+        #else
+        Button(action: performPrimaryAction) {
+            Label("Regenerate", systemImage: "arrow.2.circlepath")
+        }
+        .labelStyle(.iconOnly)
+        .buttonStyle(.plain)
+        .fixedSize()
+        #endif
     }
+
+    private func performPrimaryAction() {
+        if group.role == .assistant {
+            Task { @MainActor in
+                await group.session?.regenerate(group: group)
+            }
+        } else if group.role == .user {
+            group.setupEditing()
+            Task { @MainActor in
+                await group.session?.sendInput()
+            }
+        }
+    }
+
 
     var navigate: some View {
         var canNavigateLeft: Bool {

@@ -76,7 +76,6 @@ import GoogleSignIn
             print("Error! \(String(describing: error))")
             return
           }
-          self.authViewModel.state = .signedIn(signInResult.user)
         }
         #endif
     }

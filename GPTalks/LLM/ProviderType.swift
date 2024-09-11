@@ -21,7 +21,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         #if os(macOS) || targetEnvironment(macCatalyst)
         [.openai, .anthropic, .google, .vertex, .local]
         #else
-        [.openai, .anthropic, .google]
+        [.openai, .anthropic, .google, .vertex]
         #endif
     }
     
