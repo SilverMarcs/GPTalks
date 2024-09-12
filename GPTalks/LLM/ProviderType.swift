@@ -38,7 +38,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .anthropic: "Anthropic"
         case .google: "Google"
         case .vertex: "Vertex"
-        case .local: "Local AI"
+        case .local: "Local OpenAI"
         }
     }
     

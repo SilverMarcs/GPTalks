@@ -29,31 +29,26 @@ struct OpenAIService: AIService {
                 role: conversation.role.toOpenAIRole(),
                 content: conversation.content
             )!
-        } else {
-            var visionContent: [ChatQuery.ChatCompletionMessageParam.ChatCompletionUserMessageParam.Content.VisionContent] = []
-            
-            for dataFile in conversation.dataFiles {
-                if dataFile.fileType.conforms(to: .image) {
-                    visionContent.append(.init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: dataFile.data, detail: .auto))))
-                } else if dataFile.fileType.conforms(to: .pdf) {
-                    if let url = FileHelper.createTemporaryURL(for: dataFile) {
-                        let contents = readPDF(from: url)
-                        visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: "PDF File contents: \n\(contents)\n Respond to the user based on their query.")))
-                    }
-                } else if dataFile.fileType.conforms(to: .text) {
-                    if let textContent = String(data: dataFile.data, encoding: .utf8) {
-                        visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: "Text File contents: \n\(textContent)\n Respond to the user based on their query.")))
-                    }
-                }
-            }
-            
-            visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: conversation.content)))
-
-            return ChatQuery.ChatCompletionMessageParam(
-                role: conversation.role.toOpenAIRole(),
-                content: visionContent
-            )!
         }
+        
+        let processedContents = ContentHelper.processDataFiles(conversation.dataFiles, conversationContent: conversation.content)
+        
+        var visionContent: [ChatQuery.ChatCompletionMessageParam.ChatCompletionUserMessageParam.Content.VisionContent] = []
+        
+        for content in processedContents {
+            switch content {
+            case .image(let mimeType, let base64Data):
+                let url = "data:\(mimeType);base64,\(base64Data)"
+                visionContent.append(.init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: url, detail: .auto))))
+            case .text(let text):
+                visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: text)))
+            }
+        }
+        
+        return ChatQuery.ChatCompletionMessageParam(
+            role: conversation.role.toOpenAIRole(),
+            content: visionContent
+        )!
     }
     
     static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {

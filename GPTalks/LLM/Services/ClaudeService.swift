@@ -13,29 +13,24 @@ struct ClaudeService: AIService {
     typealias ConvertedType = MessageParameter.Message
     
     static func convert(conversation: Conversation) -> MessageParameter.Message {
+        let processedContents = ContentHelper.processDataFiles(conversation.dataFiles, conversationContent: conversation.content)
+        
+        // Convert processed contents into Claude's format
         var contentObjects: [MessageParameter.Message.Content.ContentObject] = []
         
-        for dataFile in conversation.dataFiles {
-            if dataFile.fileType.conforms(to: .image) {
+        for content in processedContents {
+            switch content {
+            case .image(let mimeType, let base64Data):
                 let imageSource = MessageParameter.Message.Content.ImageSource(
                     type: .base64,
-                    mediaType: .init(rawValue: dataFile.mimeType) ?? .jpeg,
-                    data: dataFile.data.base64EncodedString()
+                    mediaType: .init(rawValue: mimeType) ?? .jpeg,
+                    data: base64Data
                 )
                 contentObjects.append(.image(imageSource))
-            } else if dataFile.fileType.conforms(to: .pdf) {
-                if let url = FileHelper.createTemporaryURL(for: dataFile) {
-                    let contents = readPDF(from: url)
-                    contentObjects.append(.text("PDF File contents: \n\(contents)\n Respond to the user based on their query."))
-                }
-            } else if dataFile.fileType.conforms(to: .text) {
-                if let textContent = String(data: dataFile.data, encoding: .utf8) {
-                    contentObjects.append(.text("Text File contents: \n\(textContent)\n Respond to the user based on their query."))
-                }
+            case .text(let text):
+                contentObjects.append(.text(text))
             }
         }
-        
-        contentObjects.append(.text(conversation.content))
         
         let finalContent: MessageParameter.Message = .init(
             role: conversation.role.toClaudeRole(),

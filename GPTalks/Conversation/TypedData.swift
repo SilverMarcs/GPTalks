@@ -23,16 +23,6 @@ struct TypedData: Codable, Identifiable, Hashable {
         return fileType.preferredMIMEType ?? "application/octet-stream"
     }
     
-//    var imageName: String {
-//        if fileType.conforms(to: .pdf) {
-//            return "pdf"
-//        } else if fileType.conforms(to: .audio) {
-//            return "audio"
-//        } else {
-//            return "placeholder"
-//        }
-//    }
-    
     var image: PlatformImage {
         #if os(macOS)
         NSWorkspace.shared.icon(for: self.fileType)

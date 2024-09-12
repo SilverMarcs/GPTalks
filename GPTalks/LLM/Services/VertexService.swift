@@ -16,45 +16,31 @@ struct VertexService: AIService {
     }
     
     static func convert(conversation: Conversation) -> [String: Any] {
+        let processedContents = ContentHelper.processDataFiles(conversation.dataFiles, conversationContent: conversation.content)
+        
+        // Convert processed contents into dictionary format
         var contentObjects: [[String: Any]] = []
         
-        for dataFile in conversation.dataFiles {
-            if dataFile.fileType.conforms(to: .image) {
-                let imageSource: [String: Any] = [
-                    "type": "base64",
-                    "media_type": dataFile.mimeType,
-                    "data": dataFile.data.base64EncodedString()
-                ]
+        for content in processedContents {
+            switch content {
+            case .image(let mimeType, let base64Data):
                 let imageContent: [String: Any] = [
                     "type": "image",
-                    "source": imageSource
+                    "source": [
+                        "type": "base64",
+                        "media_type": mimeType,
+                        "data": base64Data
+                    ]
                 ]
                 contentObjects.append(imageContent)
-            } else if dataFile.fileType.conforms(to: .pdf) {
-                if let url = FileHelper.createTemporaryURL(for: dataFile) {
-                    let contents = readPDF(from: url)
-                    contentObjects.append([
-                        "type": "text",
-                        "text": "PDF File contents: \n\(contents)\n Respond to the user based on their query."
-                    ])
-                }
-            } else if dataFile.fileType.conforms(to: .text) {
-                if let textContent = String(data: dataFile.data, encoding: .utf8) {
-                    contentObjects.append([
-                        "type": "text",
-                        "text": "Text File contents: \n\(textContent)\n Respond to the user based on their query."
-                    ])
-                }
+            case .text(let text):
+                contentObjects.append([
+                    "type": "text",
+                    "text": text
+                ])
             }
         }
         
-        // Add the main conversation content
-        contentObjects.append([
-            "type": "text",
-            "text": conversation.content
-        ])
-        
-        // Construct the final dictionary
         let finalContent: [String: Any] = [
             "role": conversation.role.rawValue,
             "content": contentObjects
