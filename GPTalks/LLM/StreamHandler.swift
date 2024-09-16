@@ -16,8 +16,7 @@ struct StreamHandler {
         if config.stream {
             try await handleStream(from: conversations, config: config, assistant: assistant)
         } else {
-            let response = try await handleNonStreamingResponse(from: conversations, config: config, assistant: assistant)
-            assistant.content = response
+            try await handleNonStreamingResponse(from: conversations, config: config, assistant: assistant)
         }
     }
 
@@ -55,20 +54,39 @@ struct StreamHandler {
     }
 
     @MainActor
-    private static func handleNonStreamingResponse(from conversations: [Conversation], config: SessionConfig, assistant: Conversation) async throws -> String {
+    private static func handleNonStreamingResponse(from conversations: [Conversation], config: SessionConfig, assistant: Conversation) async throws {
         assistant.isReplying = true
         let serviceType = config.provider.type.getService()
         let response = try await serviceType.nonStreamingResponse(from: conversations, config: config)
         
-        assistant.isReplying = false
-
-        return response
+        switch response {
+        case .content(let content):
+            assistant.content = content
+        case .toolCalls(let calls):
+            // Handle tool calls
+            try await handleToolCalls(calls, config: config, assistant: assistant)
+        }
+        
+        // If there were no tool calls, we can set isReplying to false here
+        if assistant.toolCalls.isEmpty {
+            assistant.isReplying = false
+        }
+        
+        try? assistant.modelContext?.save()
     }
+
+
     
     static func handleTitleGeneration(from conversations: [Conversation], config: SessionConfig) async throws -> String {
         let serviceType = config.provider.type.getService()
-        config.stream = false // should not be necessary here
-        return try await serviceType.nonStreamingResponse(from: conversations, config: config)
+        let response = try await serviceType.nonStreamingResponse(from: conversations, config: config)
+        
+        switch response {
+        case .content(let content):
+            return content
+        case .toolCalls:
+            throw NSError(domain: "UnexpectedResponse", code: 1001, userInfo: [NSLocalizedDescriptionKey: "Expected content but got tool calls"])
+        }
     }
 
     @MainActor
@@ -120,7 +138,11 @@ struct StreamHandler {
             }
                           
             if toolDatas.isEmpty {
-                try await handleStream(from: session.adjustedGroups.map { $0.activeConversation }.dropLast(), config: config, assistant: assistant)
+                if config.stream {
+                    try await handleStream(from: session.adjustedGroups.map { $0.activeConversation }.dropLast(), config: config, assistant: assistant)
+                } else {
+                    try await handleNonStreamingResponse(from: session.adjustedGroups.map { $0.activeConversation }.dropLast(), config: config, assistant: assistant)
+                }
             } else {
                 let typedDataFiles = toolDatas.map { data in
                     TypedData(

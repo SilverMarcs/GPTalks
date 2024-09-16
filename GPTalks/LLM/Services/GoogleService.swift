@@ -50,7 +50,7 @@ struct GoogleService: AIService {
         return streamGoogleResponse(model: model, messages: messages)
     }
     
-    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
+    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> StreamResponse {
         let (model, messages) = createModelAndMessages(from: conversations, config: config)
         return try await nonStreamingGoogleResponse(model: model, messages: messages)
     }
@@ -109,9 +109,10 @@ struct GoogleService: AIService {
         }
     }
     
-    static private func nonStreamingGoogleResponse(model: GenerativeModel, messages: [ModelContent]) async throws -> String {
+    static private func nonStreamingGoogleResponse(model: GenerativeModel, messages: [ModelContent]) async throws -> StreamResponse {
         let response = try await model.generateContent(messages)
-        return response.text ?? ""
+        return .content(response.text ?? "")
+//        return response.text ?? ""
     }
     
     static func testModel(provider: Provider, model: AIModel) async -> Bool {

@@ -49,7 +49,7 @@ struct ClaudeService: AIService {
         return streamClaudeResponse(parameters: parameters, config: config)
     }
     
-    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
+    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> StreamResponse {
         let parameters = createParameters(from: conversations, config: config, stream: false)
         return try await nonStreamingClaudeResponse(parameters: parameters, config: config)
     }
@@ -92,7 +92,7 @@ struct ClaudeService: AIService {
         }
     }
     
-    static private func nonStreamingClaudeResponse(parameters: MessageParameter, config: SessionConfig) async throws -> String {
+    static private func nonStreamingClaudeResponse(parameters: MessageParameter, config: SessionConfig) async throws -> StreamResponse {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
@@ -109,7 +109,8 @@ struct ClaudeService: AIService {
             }
         }.joined()
         
-        return content
+//        return content
+        return .content(content)
     }
     
     static func testModel(provider: Provider, model: AIModel) async -> Bool {

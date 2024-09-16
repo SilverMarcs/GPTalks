@@ -76,7 +76,7 @@ struct OpenAIService: AIService {
         return streamOpenAIResponse(query: query, config: config)
     }
     
-    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
+    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> StreamResponse {
         let query = createQuery(from: conversations, config: config, stream: config.stream)
         return try await nonStreamingOpenAIResponse(query: query, config: config)
     }
@@ -151,13 +151,23 @@ struct OpenAIService: AIService {
         }
     }
     
-    static func nonStreamingOpenAIResponse(query: ChatQuery, config: SessionConfig) async throws -> String {
+    static func nonStreamingOpenAIResponse(query: ChatQuery, config: SessionConfig) async throws -> StreamResponse {
         let service = OpenAI(configuration: OpenAI.Configuration(token: config.provider.apiKey, host: config.provider.host, scheme: config.provider.type.scheme))
         
         let result = try await service.chats(query: query)
-        print("result \(result)")
-        
-        return result.choices.first?.message.content?.string ?? ""
+        if let content = result.choices.first?.message.content?.string {
+            return .content(content)
+        } else if let tools = result.choices.first?.message.toolCalls, tools.count > 0 {
+            // Create toolCalls from tools
+            let toolCalls = tools.map { tool in
+                ToolCall(toolCallId: tool.id, tool: ChatTool(rawValue: tool.function.name)!, arguments: tool.function.arguments)
+            }
+            
+            return .toolCalls(toolCalls)
+        } else {
+            // Add a default return statement to handle all cases
+            return .content("No content or tool calls available.")
+        }
     }
     
     static func testModel(provider: Provider, model: AIModel) async -> Bool {

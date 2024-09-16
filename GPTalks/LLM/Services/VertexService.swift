@@ -91,7 +91,7 @@ struct VertexService: AIService {
         }
     }
 
-    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> String {
+    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> StreamResponse {
         let request = try await createRequest(from: conversations, config: config)
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -106,7 +106,8 @@ struct VertexService: AIService {
         }
         
         let text = contentArray.compactMap { $0["text"] as? String }.joined(separator: " ")
-        return text
+//        return text
+        return .content(text)
     }
 
     static func createRequest(from conversations: [Conversation], config: SessionConfig) async throws -> URLRequest {
