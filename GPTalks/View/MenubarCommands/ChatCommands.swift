@@ -14,7 +14,9 @@ struct ChatCommands: Commands {
     var body: some Commands {
         CommandMenu("Chat") {
             Button("Send Prompt") {
-                sessionVM.sendMessage()
+                Task {
+                    await sessionVM.sendMessage()
+                }
             }
             .keyboardShortcut(.return, modifiers: commandModifier)
             
@@ -26,7 +28,7 @@ struct ChatCommands: Commands {
             
             Section {
                 Button("Regen Last Message") {
-                    Task { @MainActor in
+                    Task {
                         await sessionVM.regenLastMessage()
                     }
                 }

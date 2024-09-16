@@ -51,7 +51,7 @@ struct VertexService: AIService {
     
     static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<StreamResponse, any Error> {
         return AsyncThrowingStream { continuation in
-            Task { @MainActor in
+            Task {
                 do {
                     let request = try await createRequest(from: conversations, config: config)
                     
@@ -64,17 +64,12 @@ struct VertexService: AIService {
                                 let jsonString = line.dropFirst(6)
                                 
                                 if let jsonData = jsonString.data(using: .utf8) {
-                                    do {
-                                        if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
-                                           let type = jsonObject["type"] as? String,
-                                           type == "content_block_delta",
-                                           let delta = jsonObject["delta"] as? [String: Any],
-                                           let text = delta["text"] as? String {
-                                            continuation.yield(.content(text))
-                                        }
-                                    } catch {
-                                        continuation.finish(throwing: error)
-                                        return
+                                    if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+                                       let type = jsonObject["type"] as? String,
+                                       type == "content_block_delta",
+                                       let delta = jsonObject["delta"] as? [String: Any],
+                                       let text = delta["text"] as? String {
+                                        continuation.yield(.content(text))
                                     }
                                 }
                             }

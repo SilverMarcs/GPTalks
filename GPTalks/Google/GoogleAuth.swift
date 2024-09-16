@@ -71,8 +71,12 @@ import GoogleSignIn
           return
         }
 
-        GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { signInResult, error in
-          guard let signInResult = signInResult else {
+        GIDSignIn.sharedInstance.signIn(
+            withPresenting: rootViewController,
+            hint: "Accessing VertexAI",
+            additionalScopes: ["https://www.googleapis.com/auth/cloud-platform"]
+        ) { signInResult, error in
+          guard let _ = signInResult else {
             print("Error! \(String(describing: error))")
             return
           }
