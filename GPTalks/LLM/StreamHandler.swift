@@ -8,9 +8,6 @@
 import Foundation
 import SwiftUI
 
-import Foundation
-import SwiftUI
-
 struct StreamHandler {
     private let conversations: [Conversation]
     private let config: SessionConfig
@@ -24,7 +21,6 @@ struct StreamHandler {
         self.assistant = assistant
     }
 
-    @MainActor
     func handleRequest() async throws {
         if config.stream {
             try await handleStream()
@@ -32,8 +28,7 @@ struct StreamHandler {
             try await handleNonStreamingResponse()
         }
     }
-
-    @MainActor
+    
     private func handleStream() async throws {
         var streamText = ""
         var lastUIUpdateTime = Date()
@@ -41,7 +36,7 @@ struct StreamHandler {
         
         let serviceType = config.provider.type.getService()
 
-        assistant.isReplying = true
+        await assistant.setIsReplying(true)
 
         for try await response in serviceType.streamResponse(from: conversations, config: config) {
             switch response {
@@ -50,7 +45,7 @@ struct StreamHandler {
                 let currentTime = Date()
                 
                 if currentTime.timeIntervalSince(lastUIUpdateTime) >= Self.uiUpdateInterval {
-                    assistant.content = streamText
+                    await assistant.setContent(streamText)
                     lastUIUpdateTime = currentTime
                 }
             case .toolCalls(let calls):
@@ -65,26 +60,22 @@ struct StreamHandler {
         finalizeStream(streamText: streamText, toolCalls: pendingToolCalls)
     }
 
-    @MainActor
     private func handleNonStreamingResponse() async throws {
-        assistant.isReplying = true
+        await assistant.setIsReplying(true)
         let serviceType = config.provider.type.getService()
         let response = try await serviceType.nonStreamingResponse(from: conversations, config: config)
         
         switch response {
         case .content(let content):
-            assistant.content = content
+            await assistant.setContent(content)
         case .toolCalls(let calls):
             try await handleToolCalls(calls)
         }
         
         if assistant.toolCalls.isEmpty {
-            assistant.isReplying = false
+            await assistant.setIsReplying(false)
         }
-        
-        try? assistant.modelContext?.save()
     }
-
     func handleTitleGeneration() async throws -> String {
         let serviceType = config.provider.type.getService()
         let response = try await serviceType.nonStreamingResponse(from: conversations, config: config)
@@ -97,27 +88,25 @@ struct StreamHandler {
         }
     }
 
-    @MainActor
     private func finalizeStream(streamText: String, toolCalls: [ToolCall]) {
-        assistant.toolCalls = toolCalls
-        if !streamText.isEmpty {
-            DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiUpdateInterval) {
-                self.assistant.content = streamText
-                self.assistant.isReplying = false
+        Task { @MainActor in
+            assistant.toolCalls = toolCalls
+            if !streamText.isEmpty {
+                DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiUpdateInterval) {
+                    self.assistant.content = streamText
+                    self.assistant.isReplying = false
+                }
             }
         }
-
-        try? assistant.modelContext?.save()
     }
 
-    @MainActor
     private func handleToolCalls(_ toolCalls: [ToolCall]) async throws {
-        assistant.toolCalls = toolCalls
+        await assistant.setToolCalls(toolCalls)
         if let proxy = assistant.group?.session?.proxy {
             scrollToBottom(proxy: proxy)
         }
         
-        assistant.isReplying = false
+        await assistant.setIsReplying(false)
 
         var toolDatas: [Data] = []
         
@@ -132,7 +121,8 @@ struct StreamHandler {
                 tool.toolResponse?.processedContent = toolData.string
                 tool.toolResponse?.processedData = toolData.data
                 
-                tool.isReplying = false
+                await tool.setIsReplying(false)
+                
                 if let proxy = tool.group?.session?.proxy {
                     scrollToBottom(proxy: proxy)
                 }
@@ -164,7 +154,8 @@ struct StreamHandler {
                     )
                 }
                 newAssistant.dataFiles = typedDataFiles
-                newAssistant.isReplying = false
+                await newAssistant.setIsReplying(false)
+
             }
         }
     }

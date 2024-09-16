@@ -72,13 +72,9 @@ final class Session {
         self.config = config
     }
     
-    @MainActor
-    private func handleStreamingTask(regenContent: String?, assistantGroup: ConversationGroup?) async {
-        do {
-            try await processRequest(regenContent: regenContent, assistantGroup: assistantGroup)
-        } catch {
-            handleError(error)
-        }
+    private func handleStreamingTask(regenContent: String?, assistantGroup: ConversationGroup?) async throws {
+        try await processRequest(regenContent: regenContent, assistantGroup: assistantGroup)
+        
         streamingTask?.cancel()
         streamingTask = nil
     }
@@ -101,7 +97,6 @@ final class Session {
         }
     }
     
-    @MainActor
     private func processRequest(regenContent: String?, assistantGroup: ConversationGroup?) async throws {
         let conversations = prepareConversations(regenContent: regenContent)
         let assistant = prepareAssistantConversation(assistantGroup: assistantGroup)
@@ -170,9 +165,27 @@ final class Session {
             Task { await generateTitle() }
         }
         
-        streamingTask = Task(priority: .userInitiated) {
-            await handleStreamingTask(regenContent: regenContent, assistantGroup: assistantGroup)
+        streamingTask = Task {
+            try await handleStreamingTask(regenContent: regenContent, assistantGroup: assistantGroup)
             self.refreshTokens()
+        }
+        
+        // TODO: create func for this
+        do {
+            #if os(macOS)
+            try await streamingTask?.value
+            #else
+            let application = UIApplication.shared
+            let taskId = application.beginBackgroundTask {
+                // Handle expiration of background task here
+            }
+            
+            try await streamingTask?.value
+            
+            application.endBackgroundTask(taskId)
+            #endif
+        } catch {
+            handleError(error)
         }
     }
     
@@ -186,7 +199,6 @@ final class Session {
             groups[editingIndex].activeConversation.dataFiles = inputManager.dataFiles
             
             groups.removeSubrange((editingIndex + 1)...)
-            try? self.modelContext?.save()
             
             inputManager.resetEditing()
         } else {
@@ -197,7 +209,6 @@ final class Session {
         }
     }
     
-    @MainActor
     func regenerate(group: ConversationGroup) async {
         unsetResetMarker(group: group)
         guard group.role == .assistant else { return }
@@ -212,7 +223,6 @@ final class Session {
         group.addConversation(newAssistantConversation)
         
         groups.removeSubrange((index + 1)...)
-        try? self.modelContext?.save()
         
         await sendInput(isRegen: true, regenContent: userContent, assistantGroup: group)
     }
@@ -247,7 +257,6 @@ final class Session {
         self.refreshTokens()
     }
     
-    @MainActor
     func generateTitle(forced: Bool = false) async {
         if isQuick { return }
         
@@ -295,8 +304,6 @@ final class Session {
         let group = ConversationGroup(conversation: conversation, session: self)
         
         groups.append(group)
-        
-        try? group.modelContext?.save()
         
         return group
     }
@@ -360,7 +367,5 @@ final class Session {
         if let resetMarker = resetMarker, index < resetMarker + 1 {
             self.resetMarker = nil
         }
-        
-        try? self.modelContext?.save()
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ToolResponse: Identifiable, Codable {
+struct ToolResponse: Identifiable, Codable, Equatable {
     var id: UUID = UUID()
     var toolCallId: String
     var tool: ChatTool

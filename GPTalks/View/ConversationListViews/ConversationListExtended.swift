@@ -21,6 +21,16 @@ extension View {
                     scrollToBottom(proxy: proxy)
                 }
             }
+            .onChange(of: session.groups.last?.activeConversation.toolCalls) {
+                if !hasUserScrolled.wrappedValue && session.isStreaming {
+                    scrollToBottom(proxy: proxy)
+                }
+            }
+            .onChange(of: session.groups.last?.activeConversation.toolResponse) {
+                if !hasUserScrolled.wrappedValue && session.isStreaming {
+                    scrollToBottom(proxy: proxy)
+                }
+            }
             .onChange(of: session.isStreaming) {
                 if !session.isStreaming  {
                     if !hasUserScrolled.wrappedValue {

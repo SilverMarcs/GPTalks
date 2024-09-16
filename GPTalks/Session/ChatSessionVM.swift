@@ -15,11 +15,9 @@ extension SessionVM {
         return selections.first
     }
     
-    func sendMessage() {
+    func sendMessage() async {
         guard let session = activeSession else { return }
-        Task { @MainActor in
-            await session.sendInput()
-        }
+        await session.sendInput()
     }
     
     func stopStreaming() {

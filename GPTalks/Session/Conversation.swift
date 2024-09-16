@@ -68,4 +68,21 @@ final class Conversation {
     }
 }
 
+extension Conversation {
+    @MainActor
+    func setIsReplying(_ value: Bool) {
+        self.isReplying = value
+    }
+    
+    @MainActor
+    func setContent(_ value: String) {
+        self.content = value
+    }
+    
+    @MainActor
+    func setToolCalls(_ value: [ToolCall]) {
+        self.toolCalls = value
+    }
+}
+
 let dummyConversation: Conversation = Conversation(role: .user, content: "", model: AIModel.getDemoModel())
