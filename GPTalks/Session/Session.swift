@@ -26,7 +26,6 @@ final class Session {
     @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
     var unorderedGroups =  [ConversationGroup]()
     
-//    @Relationship(deleteRule: .cascade, inverse: \SessionConfig.session)
     @Relationship(deleteRule: .cascade)
     var config: SessionConfig
     
@@ -62,6 +61,9 @@ final class Session {
     
     @Attribute(.ephemeral)
     var searchText: String = ""
+    
+    @Transient
+    var streamer: StreamHandler?
     
     @Transient
     var inputManager = InputManager()
@@ -104,7 +106,10 @@ final class Session {
         let conversations = prepareConversations(regenContent: regenContent)
         let assistant = prepareAssistantConversation(assistantGroup: assistantGroup)
         
-        try await StreamHandler.handleRequest(from: conversations, config: config, assistant: assistant)
+        self.streamer = StreamHandler(conversations: conversations, config: config, assistant: assistant)
+        if let streamer = streamer {
+            try await streamer.handleRequest()
+        }
     }
     
     private func prepareAssistantConversation(assistantGroup: ConversationGroup?) -> Conversation {
