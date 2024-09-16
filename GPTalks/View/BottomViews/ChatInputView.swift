@@ -115,7 +115,7 @@ struct ChatInputView: View {
         #if !os(macOS)
         isFocused = false
         #endif
-        Task { @MainActor in
+        Task {
             await session.sendInput()
         }
     }

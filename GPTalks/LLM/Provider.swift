@@ -119,7 +119,6 @@ class Provider {
 }
 
 extension Provider {
-    @MainActor
     func refreshModels() async {
         let refreshedModels: [AIModel] = await type.getService().refreshModels(provider: self)
         
@@ -130,7 +129,6 @@ extension Provider {
         }
     }
     
-    @MainActor
     func testModel(model: AIModel) async -> Bool {
         let service = type.getService()
         let result = await service.testModel(provider: self, model: model)

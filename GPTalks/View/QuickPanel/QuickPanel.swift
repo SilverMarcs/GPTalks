@@ -188,7 +188,7 @@ struct QuickPanel: View {
         
         session.inputManager.prompt = prompt
         
-        Task { @MainActor in
+        Task {
             await session.sendInput()
         }
         

@@ -137,12 +137,12 @@ struct ConversationMenu: View {
                             group.session?.config.provider = provider
                             group.session?.config.model = model
                             if group.role == .assistant {
-                                Task { @MainActor in
+                                Task { 
                                     await group.session?.regenerate(group: group)
                                 }
                             } else if group.role == .user {
                                 group.setupEditing()
-                                Task { @MainActor in
+                                Task { 
                                     await group.session?.sendInput()
                                 }
                             }
@@ -175,12 +175,12 @@ struct ConversationMenu: View {
 
     private func performPrimaryAction() {
         if group.role == .assistant {
-            Task { @MainActor in
+            Task { 
                 await group.session?.regenerate(group: group)
             }
         } else if group.role == .user {
             group.setupEditing()
-            Task { @MainActor in
+            Task { 
                 await group.session?.sendInput()
             }
         }

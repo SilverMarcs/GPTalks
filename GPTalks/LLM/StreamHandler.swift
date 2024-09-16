@@ -89,13 +89,11 @@ struct StreamHandler {
     }
 
     private func finalizeStream(streamText: String, toolCalls: [ToolCall]) {
-        Task { @MainActor in
-            assistant.toolCalls = toolCalls
-            if !streamText.isEmpty {
-                DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiUpdateInterval) {
-                    self.assistant.content = streamText
-                    self.assistant.isReplying = false
-                }
+        assistant.toolCalls = toolCalls
+        if !streamText.isEmpty {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiUpdateInterval) {
+                self.assistant.content = streamText
+                self.assistant.isReplying = false
             }
         }
     }
