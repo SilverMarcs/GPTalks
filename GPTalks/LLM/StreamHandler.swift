@@ -124,7 +124,7 @@ struct StreamHandler {
         if let session = assistant.group?.session {
             for toolCall in assistant.toolCalls {
                 let toolResponse = ToolResponse(toolCallId: toolCall.toolCallId, tool: toolCall.tool, processedContent: "", processedData: [])
-                let tool = Conversation(role: .tool, model: config.model, isReplying: true, toolResponse: toolResponse)
+                let tool = Conversation(role: .tool, model: config.model, toolResponse: toolResponse, isReplying: true)
                 session.addConversationGroup(conversation: tool)
                 
                 let toolData = try await toolCall.tool.process(arguments: toolCall.arguments, modelContext: session.modelContext)

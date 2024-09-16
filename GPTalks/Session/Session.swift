@@ -298,15 +298,41 @@ final class Session {
     }
     
     func deleteConversationGroup(_ conversationGroup: ConversationGroup) {
-        if groups.count == 0 {
+        guard !groups.isEmpty else {
             errorMessage = ""
+            return
         }
-     
-        groups.removeAll(where: { $0 == conversationGroup })
         
-        self.modelContext?.delete(conversationGroup)
+        if let index = groups.firstIndex(of: conversationGroup) {
+            if conversationGroup.role == .assistant {
+                var groupsToDelete = [conversationGroup]
+                
+                // Iterate backwards from the index of the group to be deleted
+                for i in stride(from: index - 1, through: 0, by: -1) {
+                    let previousGroup = groups[i]
+                    if previousGroup.role == .user {
+                        break // Stop when we encounter a user role
+                    }
+                    groupsToDelete.append(previousGroup)
+                }
+                
+                // Remove the groups from the array
+                groups.removeAll(where: { groupsToDelete.contains($0) })
+                
+                // Delete the groups from the model context
+                for group in groupsToDelete {
+                    self.modelContext?.delete(group)
+                }
+            } else {
+                // If it's not an assistant role, just delete the single group
+                groups.removeAll(where: { $0 == conversationGroup })
+                self.modelContext?.delete(conversationGroup)
+            }
+        }
+        
         self.refreshTokens()
     }
+
     
     func deleteAllConversations() {
         resetMarker = nil
