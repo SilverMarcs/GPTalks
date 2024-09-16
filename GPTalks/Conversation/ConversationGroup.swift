@@ -37,9 +37,8 @@ final class ConversationGroup {
         }
         
         #warning("should not create new conversation instances")
-//        #error("should not create new conversation instances")
         
-        return Conversation(role: .user, content: "", group: self, model: AIModel.getDemoModel())
+        return dummyConversation
     }
     
     init(role: ConversationRole) {

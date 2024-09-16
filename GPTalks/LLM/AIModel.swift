@@ -18,11 +18,6 @@ final class AIModel: Hashable, Identifiable {
     var name: String
     var isEnabled: Bool = true
     var lastTestResult: Bool?
-    
-    init() {
-        self.code = "Dummy"
-        self.name = "Dummy"
-    }
 
     init(code: String, name: String, type: ModelType = .chat, order: Int = .max, isEnabled: Bool = true, lastTestResult: Bool? = nil) {
         self.code = code

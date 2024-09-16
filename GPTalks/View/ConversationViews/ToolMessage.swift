@@ -9,50 +9,36 @@ import SwiftUI
 
 struct ToolMessage: View {
     var conversation: Conversation
-    var providers: [Provider] = []
     @State private var showPopover = false
-    @State var isHovered: Bool = false
     
     var body: some View {
-        HStack(alignment: .top, spacing: spacing) {
-            Image(systemName: "hammer")
+        HStack(alignment: .center, spacing: spacing) {
+            Image(systemName: "blabla")
                 .resizable()
                 .frame(width: size, height: size)
                 .foregroundStyle(.teal)
             
-            VStack(alignment: .leading, spacing: 7) {
-                Text("Tool")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                
                 button
                     .popover(isPresented: $showPopover, arrowEdge: .leading) {
-                        ScrollView {
-                            if let toolResponse = conversation.toolResponse {
-                                Text(toolResponse.processedContent)
-                                    .textSelection(.enabled)
-                                    .padding()
-                            }
+                        if let toolResponse = conversation.toolResponse {
+                            popoverContent(content: toolResponse.processedContent)
                         }
-                        .frame(width: 500, height: 400)
                     }
-                
-                #if os(macOS) || targetEnvironment(macCatalyst)
-                if conversation.toolCalls.isEmpty, let group = conversation.group, let session = group.session {
-                    ConversationMenu(group: group, providers: providers, isExpanded: .constant(true))
-                        .symbolEffect(.appear, isActive: !isHovered)
-                        .opacity(session.isReplying ? 0 : 1)
-                }
-                #endif
-            }
-            .padding(.top, 2)
-            
             Spacer()
         }
-        .onHover { isHovered in
-            self.isHovered = isHovered
+    }
+    
+    func popoverContent(content: String) -> some View {
+        #if os (macOS)
+        ScrollView {
+            Text(content)
+                .textSelection(.enabled)
+                .padding()
         }
-        
+        .frame(width: 500, height: 400)
+        #else
+        TextSelectionView(content: content)
+        #endif
     }
     
     var button: some View {
@@ -79,11 +65,7 @@ struct ToolMessage: View {
     }
     
     var size: CGFloat {
-        #if os(macOS) || targetEnvironment(macCatalyst)
-        17
-        #else
-        10
-        #endif
+        18
     }
     
     var spacing: CGFloat {
@@ -95,6 +77,8 @@ struct ToolMessage: View {
     }
 }
 
-//#Preview {
-//    ToolMessage()
-//}
+#Preview {
+    let conversation = Conversation(role: .tool, content: "Hello, World!")
+    
+    ToolMessage(conversation: conversation)
+}

@@ -15,11 +15,11 @@ struct URLScrape {
         let url_list: [String]
     }
     
-    static func getContent(from arguments: String) async -> ToolData {
+    static func getContent(from arguments: String) async throws -> ToolData {
         var totalContent: String = ""
         let urls = URLScrape.getURLs(from: arguments)
         for url in urls {
-            let content = await URLScrape.retrieveWebContent(from: url)
+            let content = try await URLScrape.retrieveWebContent(from: url)
             totalContent += content
         }
         return .init(string: totalContent)
@@ -34,7 +34,7 @@ struct URLScrape {
         return urls
     }
     
-    static func retrieveWebContent(from url: URL) async -> String {
+    static func retrieveWebContent(from url: URL) async throws -> String {
         var final: String = "An error occurred while fetching the content."
         
         do {

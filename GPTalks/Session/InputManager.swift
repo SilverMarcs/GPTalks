@@ -145,7 +145,7 @@ extension InputManager {
     private func processURL(_ url: URL) {
         Task {
             do {
-                let webContent = await URLScrape.retrieveWebContent(from: url)
+                let webContent = try await URLScrape.retrieveWebContent(from: url)
                 
                 // Extract the first line from the webContent
                 let firstLine = webContent.components(separatedBy: .newlines).first ?? "defaultFilename"

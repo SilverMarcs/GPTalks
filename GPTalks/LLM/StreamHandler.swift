@@ -127,7 +127,7 @@ struct StreamHandler {
                 let tool = Conversation(role: .tool, model: config.model, isReplying: true, toolResponse: toolResponse)
                 session.addConversationGroup(conversation: tool)
                 
-                let toolData = await toolCall.tool.process(arguments: toolCall.arguments, modelContext: session.modelContext)
+                let toolData = try await toolCall.tool.process(arguments: toolCall.arguments, modelContext: session.modelContext)
                 toolDatas.append(contentsOf: toolData.data)
                 tool.toolResponse?.processedContent = toolData.string
                 tool.toolResponse?.processedData = toolData.data

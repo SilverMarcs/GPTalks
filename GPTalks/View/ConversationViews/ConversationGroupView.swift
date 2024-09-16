@@ -21,11 +21,16 @@ struct ConversationGroupView: View {
                     UserMessage(conversation: group.activeConversation, providers: providers)
                         .padding(.top, 5)
                 case .assistant:
-                    AssistantMessage(conversation: group.activeConversation, providers: providers)
-                        .padding(.top, 5)
+                    if group.activeConversation.toolCalls.isEmpty {
+                        AssistantMessage(conversation: group.activeConversation, providers: providers)
+                            .padding(.top, 5)
+                    } else {
+                        ToolCallView(conversation: group.activeConversation)
+                            .padding(.top, 5)
+                    }
                 case .tool:
-                    ToolMessage(conversation: group.activeConversation, providers: providers)
-                        .padding(.top, 5)
+                    ToolMessage(conversation: group.activeConversation)
+                        .padding(.vertical, 5)
                 default:
                     Text("Unknown role")
                 }

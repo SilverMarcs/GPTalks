@@ -65,3 +65,5 @@ final class Conversation {
         )
     }
 }
+
+let dummyConversation: Conversation = Conversation(role: .user, content: "", model: AIModel.getDemoModel())

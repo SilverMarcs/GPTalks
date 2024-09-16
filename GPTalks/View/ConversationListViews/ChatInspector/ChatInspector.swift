@@ -48,6 +48,7 @@ struct ChatInspector: View {
                 .background(.bar)
             }
             #else
+            .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     picker

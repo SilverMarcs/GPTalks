@@ -54,6 +54,9 @@
 		084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084C743F2C521A8A0015AE2F /* DismissButton.swift */; };
 		084C74432C5231980015AE2F /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 084C74422C5231980015AE2F /* OpenAI */; };
 		08505C9C2C3D3878001EBEEF /* IntegerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */; };
+		085276BC2C98705A009184D2 /* iOSInputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BB2C98705A009184D2 /* iOSInputEditor.swift */; };
+		085276BE2C98706E009184D2 /* MacInputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BD2C98706E009184D2 /* MacInputEditor.swift */; };
+		085276C02C98794C009184D2 /* ToolCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BF2C98794C009184D2 /* ToolCallView.swift */; };
 		085361052C491BF0007DAB62 /* ImageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361042C491BF0007DAB62 /* ImageSession.swift */; };
 		085361072C492282007DAB62 /* ImageGeneration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361062C49225E007DAB62 /* ImageGeneration.swift */; };
 		085361092C4923E2007DAB62 /* ImageConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361082C4923E2007DAB62 /* ImageConfig.swift */; };
@@ -266,6 +269,9 @@
 		0841391F2C7169D50049E3B2 /* SessionListTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListTips.swift; sourceTree = "<group>"; };
 		084C743F2C521A8A0015AE2F /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
 		08505C9B2C3D3878001EBEEF /* IntegerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerExtensions.swift; sourceTree = "<group>"; };
+		085276BB2C98705A009184D2 /* iOSInputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSInputEditor.swift; sourceTree = "<group>"; };
+		085276BD2C98706E009184D2 /* MacInputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacInputEditor.swift; sourceTree = "<group>"; };
+		085276BF2C98794C009184D2 /* ToolCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCallView.swift; sourceTree = "<group>"; };
 		085361042C491BF0007DAB62 /* ImageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSession.swift; sourceTree = "<group>"; };
 		085361062C49225E007DAB62 /* ImageGeneration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGeneration.swift; sourceTree = "<group>"; };
 		085361082C4923E2007DAB62 /* ImageConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConfig.swift; sourceTree = "<group>"; };
@@ -804,6 +810,8 @@
 				08C800392C36BA30009581C5 /* ChatInputView.swift */,
 				08D174C72C3DD729000257EF /* InputImageView.swift */,
 				082181612C38C76E00171BF3 /* InputEditor.swift */,
+				085276BB2C98705A009184D2 /* iOSInputEditor.swift */,
+				085276BD2C98706E009184D2 /* MacInputEditor.swift */,
 				08A313482C4AD0DC00C3E578 /* CommonModifiers.swift */,
 			);
 			path = BottomViews;
@@ -836,12 +844,13 @@
 		08C800402C36BF54009581C5 /* ConversationViews */ = {
 			isa = PBXGroup;
 			children = (
-				08B8DE222C97F4EA0041A690 /* ToolMessage.swift */,
 				088A09F22C55C7740055B567 /* TextSelectionView.swift */,
 				0821816E2C39082900171BF3 /* ConversationGroupView.swift */,
 				08C800442C36C10A009581C5 /* ConversationMenu.swift */,
 				08C800462C36C4ED009581C5 /* UserMessage.swift */,
 				08C800482C36C521009581C5 /* AssistantMessage.swift */,
+				085276BF2C98794C009184D2 /* ToolCallView.swift */,
+				08B8DE222C97F4EA0041A690 /* ToolMessage.swift */,
 			);
 			path = ConversationViews;
 			sourceTree = "<group>";
@@ -1111,6 +1120,7 @@
 				0805DEEF2C58CB1400A8354A /* OpenAIService.swift in Sources */,
 				08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */,
 				0821816A2C39001B00171BF3 /* ProviderRow.swift in Sources */,
+				085276BC2C98705A009184D2 /* iOSInputEditor.swift in Sources */,
 				08A77CC72C65A3680087D0F3 /* TextUtils.swift in Sources */,
 				08F815462C980ABF00B49355 /* StreamHandler.swift in Sources */,
 				082A63302C54F862003996B7 /* BackupSettings.swift in Sources */,
@@ -1182,6 +1192,7 @@
 				08A222872C2AB4FD00D76C8B /* Session.swift in Sources */,
 				085361132C4939C5007DAB62 /* ImageGenerationView.swift in Sources */,
 				0805DEF12C58CB2A00A8354A /* ClaudeService.swift in Sources */,
+				085276C02C98794C009184D2 /* ToolCallView.swift in Sources */,
 				08C1ACE42C54BCA600B86D37 /* FrequencyPenaltySlider.swift in Sources */,
 				0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */,
 				08B8DE192C97F3AC0041A690 /* ImageSessionToolbar.swift in Sources */,
@@ -1249,6 +1260,7 @@
 				0869A3F22C95DBF9009BF9F2 /* StreamResponse.swift in Sources */,
 				0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */,
 				089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */,
+				085276BE2C98706E009184D2 /* MacInputEditor.swift in Sources */,
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,
 				08C65E182C9295120013AE1F /* ContentHelper.swift in Sources */,
 				08149A572C3E5E5B004485AC /* ConversationRole.swift in Sources */,
@@ -1449,7 +1461,8 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalksNew;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalksNew1;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.zabir.GPTalksNew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
@@ -1493,7 +1506,8 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalksNew;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalksNew1;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.zabir.GPTalksNew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";

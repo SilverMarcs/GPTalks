@@ -112,15 +112,15 @@ enum NavigationDirection {
     case backward
 }
 
-//#Preview {
-//    @Previewable @State var showingSearchField = false
-//    let session = Session(config: SessionConfig())
-//    
-//    VStack {
-//        Text("Hello, World!")
-//    }
-//    .frame(width: 700, height: 300)
-//    .toolbar {
-//        ConversationListToolbar(session: session)
-//    }
-//}
+#Preview {
+    @Previewable @State var showingSearchField = false
+    let session = Session(config: SessionConfig())
+    
+    VStack {
+        Text("Hello, World!")
+    }
+    .frame(width: 700, height: 300)
+    .toolbar {
+        ConversationListToolbar(session: session, providers: [])
+    }
+}

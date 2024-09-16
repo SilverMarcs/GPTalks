@@ -48,14 +48,10 @@ struct GoogleSearch {
         }
     }
     
-    static func getResults(from arguments: String) async -> ToolData {
+    static func getResults(from arguments: String) async throws -> ToolData {
         let query = getQuery(from: arguments)
         
-        do {
-            return try await performSearch(query: query)
-        } catch {
-            return .init(string: "Error: \(error.localizedDescription)")
-        }
+        return try await performSearch(query: query)
     }
     
     private static func getQuery(from jsonString: String) -> String {

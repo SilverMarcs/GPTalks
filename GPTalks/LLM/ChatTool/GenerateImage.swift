@@ -12,7 +12,7 @@ import SwiftData
 
 struct GenerateImage {
     
-    static func generateImage(from arguments: String, modelContext: ModelContext?) async -> ToolData {
+    static func generateImage(from arguments: String, modelContext: ModelContext?) async throws -> ToolData {
         guard let modelContext = modelContext else {
             return .init(string: "Error: Model context not found")
         }
@@ -38,23 +38,19 @@ struct GenerateImage {
                                 quality: config.quality,
                                 size: config.size)
         
-        do {
-            let results = try await service.images(query: query)
-            var dataObjects: [Data] = []
+        let results = try await service.images(query: query)
+        var dataObjects: [Data] = []
 
-            for urlResult in results.data {
-                if let urlString = urlResult.url, let url = URL(string: urlString) {
-                    let (data, _) = try await URLSession.shared.data(from: url)
-                    dataObjects.append(data)
-                }
+        for urlResult in results.data {
+            if let urlString = urlResult.url, let url = URL(string: urlString) {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                dataObjects.append(data)
             }
-
-            // Now `dataObjects` contains all the Data objects fetched from the URLs
-            return .init(string: "Provider: \(provider.name)\nModel: \(provider.imageModel.name)\nQuality: \(config.quality)\nSize: \(config.size)",
-                         data: dataObjects)
-        } catch {
-            return .init(string: "Error: \(error.localizedDescription)")
         }
+
+        // Now `dataObjects` contains all the Data objects fetched from the URLs
+        return .init(string: "Provider: \(provider.name)\nModel: \(provider.imageModel.name)\nQuality: \(config.quality)\nSize: \(config.size)",
+                     data: dataObjects)
 
     }
     
@@ -115,5 +111,4 @@ struct GenerateImage {
             )
         ])
     }
-
 }

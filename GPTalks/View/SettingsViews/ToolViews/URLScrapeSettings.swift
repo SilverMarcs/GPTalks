@@ -12,7 +12,7 @@ struct URLScrapeSettings: View {
     
     var body: some View {
         Section("General") {
-            Toggle("Enabled for new chats", isOn: $config.googleSearch)
+            Toggle("Enabled for new chats", isOn: $config.urlScrape)
         }
         
         Section {

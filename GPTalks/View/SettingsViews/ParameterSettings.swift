@@ -23,13 +23,11 @@ struct ParameterSettings: View {
                 sysPrompt
             }
             
-            #if os(macOS) || targetEnvironment(macCatalyst)
             Section("Advanced", isExpanded: $expandAdvanced) {
                 TopPSlider(topP: $config.topP)
                 FrequencyPenaltySlider(penalty: $config.frequencyPenalty)
                 PresencePenaltySlider(penalty: $config.presencePenalty)
             }
-            #endif
         }
         .navigationTitle("Parameters")
         .toolbarTitleDisplayMode(.inline)

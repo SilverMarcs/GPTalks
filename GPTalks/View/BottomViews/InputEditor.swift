@@ -6,9 +6,6 @@
 //
 
 import SwiftUI
-#if !os(macOS) && !targetEnvironment(macCatalyst) && !os(visionOS)
-import VisualEffectView
-#endif
 
 struct InputEditor: View {
     @Binding var prompt: String
@@ -23,104 +20,6 @@ struct InputEditor: View {
         #endif
     }
 }
-
-
-struct iOSInputEditor: View {
-    @Environment(\.colorScheme) var colorScheme
-    @Binding var prompt: String
-    var provider: Provider
-    @FocusState var isFocused: Bool
-    
-    @State private var showPopover: Bool = false
-    
-    var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            TextField(placeHolder, text: $prompt, axis: .vertical)
-                .focused($isFocused)
-                .padding(6)
-                .padding(.leading, 15)
-                .lineLimit(10)
-                .modifier(RoundedRectangleOverlayModifier(radius: 18))
-            #if !os(macOS) && !targetEnvironment(macCatalyst) && !os(visionOS)
-                .background(
-                    VisualEffect(colorTint: colorScheme == .dark
-                                 ? Color(hex: "050505")
-                                 : Color(hex: "FAFAFE"),
-                                 colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
-                    .cornerRadius(6)
-                )
-            #endif
-            
-            if prompt.count > 25 {
-                ExpandButton(size: 25) { showPopover.toggle() }
-                    .padding(5)
-                    .sheet(isPresented: $showPopover) {
-                        ExpandedTextField(prompt: $prompt)
-                    }
-            }
-        }
-    }
-    
-    var placeHolder: String {
-        "Send a prompt • \(provider.name)"
-    }
-    
-    var leadingPadding: CGFloat {
-        return 10
-    }
-}
-
-struct MacInputEditor: View {
-    @Binding var prompt: String
-    var provider: Provider
-    @FocusState var isFocused: Bool
-    
-    var body: some View {
-        ZStack(alignment: .leading) {
-            if prompt.isEmpty {
-                Text(placeHolder)
-                    .padding(6)
-                    .padding(.leading, 6)
-                    .foregroundStyle(.placeholder)
-            }
-            
-            TextEditor(text: $prompt)
-                .focused($isFocused)
-                .frame(maxHeight: 400)
-                .fixedSize(horizontal: false, vertical: true)
-                .scrollContentBackground(.hidden)
-                .padding(6)
-        }
-        .font(.body)
-        .modifier(RoundedRectangleOverlayModifier(radius: 18))
-        .toolbar {
-            ToolbarItem(placement: .keyboard) {
-                Button {
-                    isFocused = true
-                    AppConfig.shared.sidebarFocus = false
-                } label: {
-                    Image(systemName: "keyboard.chevron.compact.down")
-                }
-                .keyboardShortcut("l", modifiers: .command)
-            }
-        }
-        .task {
-            if !AppConfig.shared.sidebarFocus {
-                isFocused = true
-            }
-        }
-    }
-    
-    var placeHolder: String {
-        "Send a prompt • \(provider.name)"
-    }
-    
-    var leadingPadding: CGFloat {
-        return 0
-    }
-}
-
-
 
 
 //struct InputEditor: View {
