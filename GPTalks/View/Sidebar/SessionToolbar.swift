@@ -95,31 +95,31 @@ struct SessionToolbar: ToolbarContent {
                     
                     Menu {
                         Button {
-                            for session in sessionVM.getSelections(for: selectionType) {
-                                session.isStarred.toggle()
-                            }
+//                            for session in sessionVM.getSelections(for: selectionType) {
+//                                session.isStarred.toggle()
+//                            }
                         } label: {
                             Label("Toggle Starred", systemImage: "star")
                         }
                         
                         Section {
                             Button {
-                                sessionVM.selectAll(of: T.self, in: modelContext)
+//                                sessionVM.selectAll(of: T.self, in: modelContext)
                             } label: {
                                 Label("Select All", systemImage: "checkmark.circle")
                             }
                             
                             Button {
-                                sessionVM.deselectAll(for: selectionType)
+//                                sessionVM.deselectAll(for: selectionType)
                             } label: {
                                 Label("Deselect All", systemImage: "xmark.circle")
                             }
                         }
                         
                         Button(role: .destructive) {
-                            for session in sessionVM.getSelections(for: selectionType) {
-                                modelContext.delete(session)
-                            }
+//                            for session in sessionVM.getSelections(for: selectionType) {
+//                                modelContext.delete(session)
+//                            }
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }

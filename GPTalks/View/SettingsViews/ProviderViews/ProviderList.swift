@@ -38,6 +38,7 @@ struct ProviderList: View {
     var content: some View {
         List(selection: $selectedProvider) {
             ForEach(reorderedProviders, id: \.self) { provider in
+//                NavigationLink(value: provider) {
                 NavigationLink(destination: ProviderDetail(provider: provider, reorderProviders: { self.reorderProviders() })) {
                     ProviderRow(provider: provider)
                 }

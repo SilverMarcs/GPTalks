@@ -13,11 +13,6 @@ struct ToolSettings: View {
     var body: some View {
         NavigationStack {
             Form {
-                //            Toggle("Google Search", isOn: $config.googleSearch)
-                //            Toggle("URL Scrape", isOn: $config.urlScrape)
-                //            Toggle("Image Generate", isOn: $config.imageGenerate)
-                //            Toggle("Transcribe", isOn: $config.transcribe)
-                
                 ForEach(ChatTool.allCases, id: \.self) { tool in
                     NavigationLink(value: tool) {
                         Label(tool.displayName, systemImage: tool.icon)
@@ -29,12 +24,14 @@ struct ToolSettings: View {
                     tool.settings
                 }
                 .navigationTitle("\(tool.displayName) Settings")
+                .toolbarTitleDisplayMode(.inline)
                 .formStyle(.grouped)
                 .scrollContentBackground(.visible)
             }
         }
         .formStyle(.grouped)
         .navigationTitle("Tool Settings")
+        .toolbarTitleDisplayMode(.inline)
     }
 }
 
