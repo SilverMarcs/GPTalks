@@ -7,6 +7,7 @@
 
 import Foundation
 import OpenAI
+import GoogleGenerativeAI
 import Reeeed
 
 struct URLScrape {
@@ -72,22 +73,44 @@ struct URLScrape {
     }
     
     static var openai: ChatQuery.ChatCompletionToolParam {
-        return .init(function:
-                .init(name: "urlScrape",
-                      description: """
-                                    You can open a URL directly if one is provided by the user. 
-                                    If you need more context or info, you may also call this with URLs returned by the googleSearch function.
-                                    Use this if the context from a previous googleSearch is not sufficient to answer the user's question and you need more info
-                                    for a more in-depth response.
-                                    """,
-                      parameters:
-                        .init(type: .object,
-                              properties: [
-                                "url_list":
-                                    .init(type: .array, description: "The array of URLs of the websites to scrape", items: .init(type: .string), maxItems: 5)
-                                ]
-                             )
-                     )
+         .init(function:
+            .init(name: "urlScrape",
+                  description: """
+                                You can open a URL directly if one is provided by the user. 
+                                If you need more context or info, you may also call this with URLs returned by the googleSearch function.
+                                Use this if the context from a previous googleSearch is not sufficient to answer the user's question and you need more info
+                                for a more in-depth response.
+                                """,
+                  parameters:
+                    .init(type: .object,
+                          properties: [
+                            "url_list":
+                                .init(type: .array, description: "The array of URLs of the websites to scrape", items: .init(type: .string), maxItems: 5)
+                            ]
+                         )
+                 )
         )
+    }
+    
+    static var google: Tool {
+        Tool(functionDeclarations: [
+            FunctionDeclaration(
+                name: "urlScrape",
+                description: """
+                             You can open a URL directly if one is provided by the user. 
+                             If you need more context or info, you may also call this with URLs returned by the googleSearch function.
+                             Use this if the context from a previous googleSearch is not sufficient to answer the user's question and you need more info
+                             for a more in-depth response.
+                             """,
+                parameters: [
+                    "url_list": Schema(
+                        type: .array,
+                        description: "The array of URLs of the websites to scrape",
+                        items: Schema(type: .string)
+                    )
+                ],
+                requiredParameters: ["url_list"]
+            )
+        ])
     }
 }

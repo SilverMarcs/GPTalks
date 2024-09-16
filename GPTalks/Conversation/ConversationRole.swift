@@ -50,7 +50,7 @@ enum ConversationRole: String, Codable {
         case .system:
             return "user"
         case .tool:
-            return "tool"
+            return "user"
         }
     }
     

@@ -35,6 +35,10 @@ struct GoogleService: AIService {
             }
         }
         
+        if let response = conversation.toolResponse {
+            parts.append(.functionResponse(.init(name: response.tool.rawValue, response: .init(dictionaryLiteral: ("content", .string(response.processedContent))))))
+        }
+        
         return ModelContent(
             role: conversation.role.toGoogleRole(),
             parts: parts
@@ -60,10 +64,13 @@ struct GoogleService: AIService {
             maxOutputTokens: config.maxTokens
         )
         
+        let tools = config.tools.enabledTools.map { $0.google }
+        
         let model = GenerativeModel(
             name: config.model.code,
             apiKey: config.provider.apiKey,
             generationConfig: genConfig,
+            tools: tools.isEmpty ? nil : tools,
             systemInstruction: systemPrompt)
         
         let messages = conversations.map { convert(conversation: $0) }
@@ -80,6 +87,17 @@ struct GoogleService: AIService {
                     for try await response in responseStream {
                         if let content = response.text {
                             continuation.yield(.content(content))
+                        }
+                        
+                        let content = response.functionCalls
+                        if !content.isEmpty {
+                            let functionCalls = response.functionCalls
+                            
+                            let calls: [ToolCall] = functionCalls.map {
+                                ToolCall(toolCallId: "", tool: ChatTool(rawValue: $0.name)!, arguments: encodeJSONObjectToString($0.args))
+                            }
+
+                            continuation.yield(.toolCalls(calls))
                         }
                     }
                     
@@ -105,5 +123,20 @@ struct GoogleService: AIService {
         } catch {
             return false
         }
+    }
+}
+
+func encodeJSONObjectToString(_ jsonObject: JSONObject) -> String {
+    let encoder = JSONEncoder()
+    do {
+        let data = try encoder.encode(jsonObject)
+        if let jsonString = String(data: data, encoding: .utf8) {
+            return jsonString
+        } else {
+            return "{}" // Return empty object as fallback
+        }
+    } catch {
+        print("Error encoding JSON: \(error)")
+        return "{}" // Return empty object in case of error
     }
 }

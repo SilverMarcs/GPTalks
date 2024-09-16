@@ -7,6 +7,7 @@
 
 import SwiftUI
 import OpenAI
+import GoogleGenerativeAI
 import SwiftData
 
 enum ChatTool: String, CaseIterable, Codable {
@@ -25,6 +26,19 @@ enum ChatTool: String, CaseIterable, Codable {
             GenerateImage.openai
         default:
             URLScrape.openai
+        }
+    }
+    
+    var google: Tool {
+        switch self {
+        case .urlScrape:
+            URLScrape.google
+        case .googleSearch:
+            GoogleSearch.google
+        case .imageGenerate:
+            GenerateImage.google
+        default:
+            URLScrape.google
         }
     }
     

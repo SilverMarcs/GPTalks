@@ -7,6 +7,7 @@
 
 import Foundation
 import OpenAI
+import GoogleGenerativeAI
 
 struct GoogleSearch {
     static func performSearch(query: String) async throws -> ToolData {
@@ -96,4 +97,26 @@ struct GoogleSearch {
                      )
         )
     }
+    
+    static var google: Tool {
+        Tool(functionDeclarations: [
+            FunctionDeclaration(
+                name: "googleSearch",
+                description: """
+                             Use this when
+                             - User is asking about current events or something that requires real-time information (weather, sports scores, etc.)
+                             - User is asking about some term you are totally unfamiliar with (it might be new)
+                             - Usually prioritize your pre-existing knowledge before wanting to call this tool
+                             """,
+                parameters: [
+                    "query": Schema(
+                        type: .string,
+                        description: "The search query to search google with"
+                    )
+                ],
+                requiredParameters: ["query"]
+            )
+        ])
+    }
+
 }
