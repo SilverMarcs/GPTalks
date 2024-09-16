@@ -36,8 +36,6 @@ final class ConversationGroup {
             return conversation
         }
         
-        #warning("should not create new conversation instances")
-        
         return dummyConversation
     }
     
@@ -70,17 +68,6 @@ final class ConversationGroup {
             return
         }
     }
-    
-//    var contentToCopy: String {
-//        switch role {
-//        case .user:
-//            return activeConversation.content
-//        case .assistant:
-//            if activeConversation.toolCalls.
-//            return activeConversation.content
-//        case .tool:
-//            return activeConversation.content
-//   }
     
     var canGoRight: Bool {
         return activeConversationIndex < conversations.count - 1

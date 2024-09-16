@@ -18,6 +18,7 @@ struct ToolCallView: View {
                 .fontWeight(.semibold)
                 .frame(width: 18, height: 18)
                 .foregroundStyle(.teal)
+                .opacity(0.9)
             
             VStack(alignment: .leading, spacing: 7) {
                 Button {
@@ -26,6 +27,7 @@ struct ToolCallView: View {
                     HStack {
                         Text("^[\(conversation.toolCalls.count) Tool](inflect: true)")
                             .foregroundStyle(.secondary)
+//                            .fontWeight(.semibold)
                         
                         if conversation.isReplying {
                             ProgressView()
@@ -48,16 +50,15 @@ struct ToolCallView: View {
                         
                         VStack(alignment: .leading, spacing: 10) {
                             ForEach(conversation.toolCalls) { toolCall in
-                                VStack(alignment: .leading) {
-                                    Text("Tool: \(toolCall.tool.displayName)")
-                                    Text("Arguments: \(toolCall.arguments)")
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(toolCall.tool.displayName)
+                                    Text(toolCall.arguments.prettyPrintJSON())
                                         .foregroundStyle(.secondary)
                                         .textSelection(.enabled)
+                                        .monospaced()
                                 }
                             }
                         }
-                        .padding(.vertical, -10)
-                        .padding(.top, -2)
                     }
                     .padding(.leading, 4)
                 }
@@ -92,3 +93,5 @@ struct ToolCallView: View {
     return AssistantMessage(conversation: conversation, providers: providers)
         .frame(width: 500, height: 300)
 }
+
+

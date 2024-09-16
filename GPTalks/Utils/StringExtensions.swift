@@ -56,6 +56,20 @@ extension String {
         }
     }
     
+    func prettyPrintJSON() -> String {
+        guard let data = self.data(using: .utf8),
+              let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
+              let prettyData = try? JSONSerialization.data(withJSONObject: jsonObject, options: [.prettyPrinted]),
+              var prettyString = String(data: prettyData, encoding: .utf8) else {
+            return self
+        }
+        
+        // Unescape forward slashes
+        prettyString = prettyString.replacingOccurrences(of: "\\/", with: "/")
+        
+        return prettyString
+    }
+    
     static private let demoAssistant: String =
     """
     This is a code block.

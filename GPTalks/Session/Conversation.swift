@@ -33,7 +33,7 @@ final class Conversation {
     var toolCalls: [ToolCall] = []
     var toolResponse: ToolResponse?
     
-    init(role: ConversationRole, content: String = "", group: ConversationGroup? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], isReplying: Bool = false, toolCalls: [ToolCall] = [], toolResponse: ToolResponse? = nil) {
+    init(role: ConversationRole, content: String = "", group: ConversationGroup? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
         self.role = role
         self.content = content
         self.group = group
@@ -61,6 +61,8 @@ final class Conversation {
             group: group,
             model: model,
             dataFiles: dataFiles,
+            toolCalls: toolCalls,
+            toolResponse: toolResponse,
             isReplying: isReplying
         )
     }
