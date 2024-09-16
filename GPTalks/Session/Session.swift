@@ -180,11 +180,13 @@ final class Session {
         if let editingIndex = inputManager.editingIndex,
            editingIndex < groups.count,
            groups[editingIndex].activeConversation.role == .user {
+            unsetResetMarker(group: groups[editingIndex])
             
             groups[editingIndex].activeConversation.content = inputManager.prompt
             groups[editingIndex].activeConversation.dataFiles = inputManager.dataFiles
             
             groups.removeSubrange((editingIndex + 1)...)
+            try? self.modelContext?.save()
             
             inputManager.resetEditing()
         } else {
@@ -197,6 +199,7 @@ final class Session {
     
     @MainActor
     func regenerate(group: ConversationGroup) async {
+        unsetResetMarker(group: group)
         guard group.role == .assistant else { return }
         
         guard let index = groups.firstIndex(where: { $0.id == group.id }),
@@ -209,6 +212,7 @@ final class Session {
         group.addConversation(newAssistantConversation)
         
         groups.removeSubrange((index + 1)...)
+        try? self.modelContext?.save()
         
         await sendInput(isRegen: true, regenContent: userContent, assistantGroup: group)
     }
@@ -298,6 +302,8 @@ final class Session {
     }
     
     func deleteConversationGroup(_ conversationGroup: ConversationGroup) {
+        unsetResetMarker(group: conversationGroup)
+        
         guard !groups.isEmpty else {
             errorMessage = ""
             return
@@ -345,5 +351,16 @@ final class Session {
         errorMessage = ""
         self.refreshTokens()
     }
-
+    
+    private func unsetResetMarker(group: ConversationGroup) {
+        guard let index = groups.firstIndex(where: { $0 == group }) else {
+            return // Group not found, nothing to delete
+        }
+        
+        if let resetMarker = resetMarker, index < resetMarker + 1 {
+            self.resetMarker = nil
+        }
+        
+        try? self.modelContext?.save()
+    }
 }
