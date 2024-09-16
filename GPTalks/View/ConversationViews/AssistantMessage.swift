@@ -26,28 +26,23 @@ struct AssistantMessage: View {
                 .foregroundStyle(Color(hex: conversation.group?.session?.config.provider.color ?? "#00947A"))
             
             VStack(alignment: .leading, spacing: 7) {
-//                if !conversation.toolCalls.isEmpty {
-//                    toolCallsView
-//                        .padding(.top, 1)
-//                } else {
-//                    modelNameView
-//                        .padding(.top, 2)
-//                }
-//                
-//                if showArguments {
-//                    tool
-//                }
-//                
-//                if conversation.toolCalls.isEmpty {
-//                    MarkdownView(conversation: conversation)
-//                } else {
-//                    EmptyView()
-//                }
+                if !conversation.toolCalls.isEmpty {
+                    toolCallsView
+                        .padding(.top, 1)
+                } else {
+                    modelNameView
+                        .padding(.top, 2)
+                }
                 
-                modelNameView
-                    .padding(.top, 2)
+                if showArguments {
+                    tool
+                }
                 
-                MarkdownView(conversation: conversation)
+                if conversation.toolCalls.isEmpty {
+                    MarkdownView(conversation: conversation)
+                } else {
+                    EmptyView()
+                }
                 
                 if !conversation.dataFiles.isEmpty {
                     DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false)
@@ -84,40 +79,40 @@ struct AssistantMessage: View {
         .padding(.trailing, 30)
     }
     
-//    var tool: some View {
-//        ForEach(Array(conversation.toolCalls.enumerated()), id: \.element.id) { index, toolCall in
-//            VStack(alignment: .leading) {
-//                Text("Tool Call \(index + 1):")
-//                    .font(.headline)
-//                Text("Tool: \(toolCall.tool)")
-//                    .padding(.leading)
-//                Text("Arguments: \(toolCall.arguments)")
-//                    .padding(.leading)
-//                    .textSelection(.enabled)
-//            }
-//        }
-//    }
-//    
-//    var toolCallsView: some View {
-//        Button {
-//            showArguments.toggle()
-//        } label: {
-//            HStack {
-//                Text("^[Called \(conversation.toolCalls.count) Tool](inflect: true)")
-//                    .foregroundStyle(.secondary)
-//                
-//                if conversation.isReplying {
-//                    ProgressView()
-//                        .controlSize(.mini)
-//                } else {
-//                    Image(systemName: showArguments ? "chevron.up" : "chevron.down")
-//                        .foregroundStyle(.secondary)
-//                }
-//            }
-//            .contentShape(Rectangle())
-//        }
-//        .buttonStyle(.plain)
-//    }
+    var tool: some View {
+        ForEach(Array(conversation.toolCalls.enumerated()), id: \.element.id) { index, toolCall in
+            VStack(alignment: .leading) {
+                Text("Tool Call \(index + 1):")
+                    .font(.headline)
+                Text("Tool: \(toolCall.tool)")
+                    .padding(.leading)
+                Text("Arguments: \(toolCall.arguments)")
+                    .padding(.leading)
+                    .textSelection(.enabled)
+            }
+        }
+    }
+    
+    var toolCallsView: some View {
+        Button {
+            showArguments.toggle()
+        } label: {
+            HStack {
+                Text("^[Called \(conversation.toolCalls.count) Tool](inflect: true)")
+                    .foregroundStyle(.secondary)
+                
+                if conversation.isReplying {
+                    ProgressView()
+                        .controlSize(.mini)
+                } else {
+                    Image(systemName: showArguments ? "chevron.up" : "chevron.down")
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
     
     @ViewBuilder
     var modelNameView: some View {

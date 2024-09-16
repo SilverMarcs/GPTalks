@@ -49,7 +49,7 @@ struct VertexService: AIService {
         return finalContent
     }
     
-    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, any Error> {
+    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<StreamResponse, any Error> {
         return AsyncThrowingStream { continuation in
             Task { @MainActor in
                 do {
@@ -70,7 +70,7 @@ struct VertexService: AIService {
                                            type == "content_block_delta",
                                            let delta = jsonObject["delta"] as? [String: Any],
                                            let text = delta["text"] as? String {
-                                            continuation.yield(text)
+                                            continuation.yield(.content(text))
                                         }
                                     } catch {
                                         continuation.finish(throwing: error)

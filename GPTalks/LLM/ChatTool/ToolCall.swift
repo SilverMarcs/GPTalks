@@ -13,12 +13,3 @@ struct ToolCall: Identifiable, Codable {
     var tool: ChatTool
     var arguments: String
 }
-
-struct ToolResponse: Identifiable, Codable {
-    var id: UUID = UUID()
-    var toolCallId: String
-    var tool: ChatTool
-//    var toolData: ToolData
-    var processedContent: String
-    var processedData: [Data] = []
-}

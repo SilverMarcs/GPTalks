@@ -22,13 +22,11 @@ struct Bubble: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-//            .padding(.horizontal, horizontalPadding)
-//            .padding(.vertical, verticalPadding)
             .padding(5)
-        #if os(visionOS)
-            .background(.background.secondary)
+        #if os(macOS) || targetEnvironment(macCatalyst)
+            .background(.background.quinary)
         #else
-            .background(.background.tertiary)
+            .background(.background.secondary)
         #endif
             .cornerRadius(radius)
             .clipShape(RoundedRectangle(cornerRadius: radius))

@@ -24,9 +24,9 @@ final class SessionConfig {
     @Relationship(deleteRule: .nullify)
     var model: AIModel
     
-    var tools: SessionConfigTools = SessionConfigTools()
+    var tools: SessionConfigTools
     
-    private init(provider: Provider, model: AIModel, temperature: Double?, frequencyPenalty: Double?, presencePenalty: Double?, topP: Double?, maxTokens: Int?, stream: Bool, systemPrompt: String, purpose: SessionConfigPurpose = .chat) {
+    private init(provider: Provider, model: AIModel, temperature: Double?, frequencyPenalty: Double?, presencePenalty: Double?, topP: Double?, maxTokens: Int?, stream: Bool, systemPrompt: String, purpose: SessionConfigPurpose = .chat, tools: SessionConfigTools) {
         self.provider = provider
         self.model = model
         self.temperature = temperature
@@ -37,6 +37,7 @@ final class SessionConfig {
         self.stream = stream
         self.systemPrompt = systemPrompt
         self.purpose = purpose
+        self.tools = tools
     }
     
     init(provider: Provider, purpose: SessionConfigPurpose) {
@@ -46,26 +47,30 @@ final class SessionConfig {
             case .chat:
                 self.systemPrompt = SessionConfigDefaults.shared.systemPrompt
                 self.model = provider.chatModel
+                self.tools = SessionConfigTools()
             case .title:
                 self.systemPrompt = ""
                 self.model = provider.titleModel
                 self.stream = false
+                self.tools = SessionConfigTools(isTitle: true)
             case .quick:
                 self.systemPrompt = AppConfig.shared.quickSystemPrompt
                 self.model = provider.quickChatModel
+                self.tools = SessionConfigTools()
         }
     }
     
     // for previews only. dont use this elsewhere
-    init(provider: Provider = Provider.factory(type: .openai), isDummy: Bool = true) {
+    init(provider: Provider = Provider.factory(type: .openai), isDummy: Bool = true, tools: SessionConfigTools = SessionConfigTools(isTitle: true)) {
         self.provider = provider
         self.model = provider.chatModel
         self.systemPrompt = ""
+        self.tools = tools
     }
     
 
     func copy(purpose: SessionConfigPurpose) -> SessionConfig {
-        return SessionConfig(provider: self.provider, model: self.model, temperature: self.temperature, frequencyPenalty: self.frequencyPenalty, presencePenalty: self.presencePenalty, topP: self.topP, maxTokens: self.maxTokens, stream: self.stream, systemPrompt: self.systemPrompt, purpose: purpose)
+        return SessionConfig(provider: self.provider, model: self.model, temperature: self.temperature, frequencyPenalty: self.frequencyPenalty, presencePenalty: self.presencePenalty, topP: self.topP, maxTokens: self.maxTokens, stream: self.stream, systemPrompt: self.systemPrompt, purpose: purpose, tools: self.tools)
     }
 }
 

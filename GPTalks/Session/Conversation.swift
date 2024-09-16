@@ -30,12 +30,17 @@ final class Conversation {
     @Attribute(.ephemeral)
     var isReplying: Bool = false
     
-    init(role: ConversationRole, content: String, group: ConversationGroup? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], isReplying: Bool = false) {
+    var toolCalls: [ToolCall] = []
+    var toolResponse: ToolResponse?
+    
+    init(role: ConversationRole, content: String = "", group: ConversationGroup? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], isReplying: Bool = false, toolCalls: [ToolCall] = [], toolResponse: ToolResponse? = nil) {
         self.role = role
         self.content = content
         self.group = group
         self.model = model
         self.dataFiles = dataFiles
+        self.toolCalls = toolCalls
+        self.toolResponse = toolResponse
         self.isReplying = isReplying
     }
     

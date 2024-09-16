@@ -41,7 +41,7 @@ struct GoogleService: AIService {
         )
     }
     
-    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
+    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let (model, messages) = createModelAndMessages(from: conversations, config: config)
         return streamGoogleResponse(model: model, messages: messages)
     }
@@ -71,7 +71,7 @@ struct GoogleService: AIService {
         return (model, messages)
     }
     
-    static private func streamGoogleResponse(model: GenerativeModel, messages: [ModelContent]) -> AsyncThrowingStream<String, Error> {
+    static private func streamGoogleResponse(model: GenerativeModel, messages: [ModelContent]) -> AsyncThrowingStream<StreamResponse, Error> {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
@@ -79,7 +79,7 @@ struct GoogleService: AIService {
                     
                     for try await response in responseStream {
                         if let content = response.text {
-                            continuation.yield(content)
+                            continuation.yield(.content(content))
                         }
                     }
                     

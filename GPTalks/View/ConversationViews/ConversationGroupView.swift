@@ -23,6 +23,9 @@ struct ConversationGroupView: View {
                 case .assistant:
                     AssistantMessage(conversation: group.activeConversation, providers: providers)
                         .padding(.top, 5)
+                case .tool:
+                    ToolMessage(conversation: group.activeConversation, providers: providers)
+                        .padding(.top, 5)
                 default:
                     Text("Unknown role")
                 }

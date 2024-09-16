@@ -24,9 +24,29 @@ struct OpenAIService: AIService {
     }
     
     static func convert(conversation: Conversation) -> ConvertedType {
+        let role = conversation.role.toOpenAIRole()
+        
+        if !conversation.toolCalls.isEmpty {
+            return .init(
+                role: role, // should always be .assistant here
+                toolCalls: conversation.toolCalls.map { toolCall in
+                        .init(id: toolCall.toolCallId, function: .init(arguments: toolCall.arguments, name: toolCall.tool.rawValue))
+                    }
+                )!
+        }
+        
+        if let toolResponse = conversation.toolResponse {
+            return .init(
+                role: role, // should always be .tool here
+                content: toolResponse.processedContent,
+                name: toolResponse.tool.rawValue,
+                toolCallId: toolResponse.toolCallId
+            )!
+        }
+        
         if conversation.dataFiles.isEmpty {
             return ChatQuery.ChatCompletionMessageParam(
-                role: conversation.role.toOpenAIRole(),
+                role: role,
                 content: conversation.content
             )!
         }
@@ -46,12 +66,12 @@ struct OpenAIService: AIService {
         }
         
         return ChatQuery.ChatCompletionMessageParam(
-            role: conversation.role.toOpenAIRole(),
+            role: role,
             content: visionContent
         )!
     }
     
-    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
+    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let query = createQuery(from: conversations, config: config, stream: config.stream)
         return streamOpenAIResponse(query: query, config: config)
     }
@@ -68,6 +88,8 @@ struct OpenAIService: AIService {
             messages.insert(convert(conversation: systemPrompt), at: 0)
         }
         
+        let tools = config.tools.enabledTools.map { $0.openai }
+    
         return ChatQuery(
             messages: messages,
             model: config.model.code,
@@ -75,23 +97,52 @@ struct OpenAIService: AIService {
             maxTokens: config.maxTokens,
             presencePenalty: config.presencePenalty,
             temperature: config.temperature,
-//            tools: [],
+            tools: tools.isEmpty ? nil : tools,
             topP: config.topP,
             stream: stream
         )
     }
     
-    static func streamOpenAIResponse(query: ChatQuery, config: SessionConfig) -> AsyncThrowingStream<String, Error> {
+    static func streamOpenAIResponse(query: ChatQuery, config: SessionConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let service = OpenAI(configuration: OpenAI.Configuration(token: config.provider.apiKey, host: config.provider.host, scheme: config.provider.type.scheme))
         
         return AsyncThrowingStream { continuation in
             Task {
                 do {
+                    var currentToolCalls: [ToolCall] = []
+                    
                     for try await result in service.chatsStream(query: query) {
-                        let chatStreamResult = result as ChatStreamResult
-                        let content = chatStreamResult.choices.first?.delta.content ?? ""
-                        continuation.yield(content)
+                        if let toolCallsDelta = result.choices.first?.delta.toolCalls {
+                            for toolCallDelta in toolCallsDelta {
+                                let index = toolCallDelta.index
+                                
+                                if currentToolCalls.count <= index {
+                                    if let tool = ChatTool(rawValue: toolCallDelta.function?.name ?? "") {
+                                        currentToolCalls.append(ToolCall(toolCallId: toolCallDelta.id ?? "", tool: tool, arguments: ""))
+                                    }
+                                }
+                                
+                                if let name = toolCallDelta.function?.name, let tool = ChatTool(rawValue: name) {
+                                    currentToolCalls[index].tool = tool
+                                }
+                                
+                                if let arguments = toolCallDelta.function?.arguments {
+                                    currentToolCalls[index].arguments += arguments
+                                }
+                            }
+                            
+                            if result.choices.first?.finishReason == .toolCalls {
+                                continuation.yield(.toolCalls(currentToolCalls))
+                            }
+                        } else if let content = result.choices.first?.delta.content, !content.isEmpty {
+                            continuation.yield(.content(content))
+                        }
                     }
+                    
+                    if !currentToolCalls.isEmpty {
+                        continuation.yield(.toolCalls(currentToolCalls))
+                    }
+                    
                     continuation.finish()
                 } catch {
                     continuation.finish(throwing: error)
@@ -104,6 +155,8 @@ struct OpenAIService: AIService {
         let service = OpenAI(configuration: OpenAI.Configuration(token: config.provider.apiKey, host: config.provider.host, scheme: config.provider.type.scheme))
         
         let result = try await service.chats(query: query)
+        print("result \(result)")
+        
         return result.choices.first?.message.content?.string ?? ""
     }
     

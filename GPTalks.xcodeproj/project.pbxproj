@@ -174,7 +174,6 @@
 		08D040222C5C8A0B0075B754 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08D040212C5C8A0B0075B754 /* GoogleGenerativeAI */; };
 		08D142CC2C73CEC5000A5646 /* PDFUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D142CB2C73CEC5000A5646 /* PDFUtils.swift */; };
 		08D174C02C3D901A000257EF /* CrossButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174BF2C3D901A000257EF /* CrossButton.swift */; };
-		08D174C22C3D96F8000257EF /* StreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C12C3D96F8000257EF /* StreamHandler.swift */; };
 		08D174C62C3DC2A8000257EF /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C52C3DC2A8000257EF /* DateUtils.swift */; };
 		08D174C82C3DD729000257EF /* InputImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C72C3DD729000257EF /* InputImageView.swift */; };
 		08D174CA2C3E3C78000257EF /* ImageViewerOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C92C3E3C78000257EF /* ImageViewerOld.swift */; };
@@ -205,7 +204,9 @@
 		08F8153A2C97F69200B49355 /* ImageInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F815392C97F69200B49355 /* ImageInspector.swift */; };
 		08F8153C2C97F72200B49355 /* TranscribeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F8153B2C97F72200B49355 /* TranscribeSettings.swift */; };
 		08F8153E2C97F75700B49355 /* GenerateImageSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F8153D2C97F75700B49355 /* GenerateImageSettings.swift */; };
-		08F815402C97F78800B49355 /* ToolData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F8153F2C97F78800B49355 /* ToolData.swift */; };
+		08F815422C98093800B49355 /* ToolResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F815412C98093800B49355 /* ToolResponse.swift */; };
+		08F815442C98097400B49355 /* ToolData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F815432C98097400B49355 /* ToolData.swift */; };
+		08F815462C980ABF00B49355 /* StreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F815452C980ABF00B49355 /* StreamHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -371,7 +372,6 @@
 		08CF5B882C68980B0079D5EE /* HighlightedTextViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightedTextViews.swift; sourceTree = "<group>"; };
 		08D142CB2C73CEC5000A5646 /* PDFUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFUtils.swift; sourceTree = "<group>"; };
 		08D174BF2C3D901A000257EF /* CrossButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossButton.swift; sourceTree = "<group>"; };
-		08D174C12C3D96F8000257EF /* StreamHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamHandler.swift; sourceTree = "<group>"; };
 		08D174C52C3DC2A8000257EF /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		08D174C72C3DD729000257EF /* InputImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputImageView.swift; sourceTree = "<group>"; };
 		08D174C92C3E3C78000257EF /* ImageViewerOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewerOld.swift; sourceTree = "<group>"; };
@@ -399,7 +399,9 @@
 		08F815392C97F69200B49355 /* ImageInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageInspector.swift; sourceTree = "<group>"; };
 		08F8153B2C97F72200B49355 /* TranscribeSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscribeSettings.swift; sourceTree = "<group>"; };
 		08F8153D2C97F75700B49355 /* GenerateImageSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateImageSettings.swift; sourceTree = "<group>"; };
-		08F8153F2C97F78800B49355 /* ToolData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolData.swift; sourceTree = "<group>"; };
+		08F815412C98093800B49355 /* ToolResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolResponse.swift; sourceTree = "<group>"; };
+		08F815432C98097400B49355 /* ToolData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolData.swift; sourceTree = "<group>"; };
+		08F815452C980ABF00B49355 /* StreamHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -851,9 +853,8 @@
 				0805DEEB2C58CAF900A8354A /* Services */,
 				08C8004F2C36F667009581C5 /* Provider.swift */,
 				08C800582C370A30009581C5 /* AIModel.swift */,
-				0869A3F52C95E4CC009BF9F2 /* ToolCall.swift */,
 				0869A3F12C95DBF9009BF9F2 /* StreamResponse.swift */,
-				08D174C12C3D96F8000257EF /* StreamHandler.swift */,
+				08F815452C980ABF00B49355 /* StreamHandler.swift */,
 				082181512C38046800171BF3 /* ProviderManager.swift */,
 				08F52EF32C52C3AB00E4482C /* ProviderBackup.swift */,
 				08F369E22C3C278E002E4A35 /* ProviderType.swift */,
@@ -905,7 +906,9 @@
 			isa = PBXGroup;
 			children = (
 				08F815282C97F5E100B49355 /* ChatTool.swift */,
-				08F8153F2C97F78800B49355 /* ToolData.swift */,
+				08F815412C98093800B49355 /* ToolResponse.swift */,
+				0869A3F52C95E4CC009BF9F2 /* ToolCall.swift */,
+				08F815432C98097400B49355 /* ToolData.swift */,
 				08F8152E2C97F60B00B49355 /* URLScrape.swift */,
 				08F8152C2C97F60100B49355 /* GoogleSearch.swift */,
 				08F8152A2C97F5FA00B49355 /* GenerateImage.swift */,
@@ -1109,6 +1112,7 @@
 				08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */,
 				0821816A2C39001B00171BF3 /* ProviderRow.swift in Sources */,
 				08A77CC72C65A3680087D0F3 /* TextUtils.swift in Sources */,
+				08F815462C980ABF00B49355 /* StreamHandler.swift in Sources */,
 				082A63302C54F862003996B7 /* BackupSettings.swift in Sources */,
 				08F3C9FE2C70483800A800F9 /* QuickPanelWindow.swift in Sources */,
 				08A77CCC2C65AA820087D0F3 /* DatabaseService.swift in Sources */,
@@ -1122,6 +1126,7 @@
 				08D174C82C3DD729000257EF /* InputImageView.swift in Sources */,
 				08C800592C370A30009581C5 /* AIModel.swift in Sources */,
 				08F815362C97F65500B49355 /* ChatInspector.swift in Sources */,
+				08F815422C98093800B49355 /* ToolResponse.swift in Sources */,
 				0891D5892C96A0DE00BA428F /* Bubble.swift in Sources */,
 				08D8F4472C51C1C20051C916 /* ModelCollection.swift in Sources */,
 				08C800452C36C10A009581C5 /* ConversationMenu.swift in Sources */,
@@ -1144,6 +1149,7 @@
 				085361092C4923E2007DAB62 /* ImageConfig.swift in Sources */,
 				0821816F2C39082900171BF3 /* ConversationGroupView.swift in Sources */,
 				08F815262C97F59900B49355 /* URLScrapeSettings.swift in Sources */,
+				08F815442C98097400B49355 /* ToolData.swift in Sources */,
 				082A632E2C54EADF003996B7 /* ChatSessionBackup.swift in Sources */,
 				08134E0C2C6B99DA00589991 /* ChatSessionListViewModel.swift in Sources */,
 				089B22432C394A4F00E248FE /* ButtonUtils.swift in Sources */,
@@ -1160,7 +1166,6 @@
 				08C800572C36F843009581C5 /* SettingsView.swift in Sources */,
 				082181752C39258500171BF3 /* ImageUtils.swift in Sources */,
 				08C1ACE02C54BC8A00B86D37 /* TemperatureSlider.swift in Sources */,
-				08F815402C97F78800B49355 /* ToolData.swift in Sources */,
 				08C1ACE22C54BC9C00B86D37 /* PresencePenaltySlider.swift in Sources */,
 				0819479E2C48DCDB0061227B /* ImageSessionList.swift in Sources */,
 				08505C9C2C3D3878001EBEEF /* IntegerExtensions.swift in Sources */,
@@ -1206,7 +1211,6 @@
 				0869A3EB2C958A4C009BF9F2 /* SessionConfigTools.swift in Sources */,
 				080ED38D2C415B6200046424 /* PreferenceKeys.swift in Sources */,
 				082181622C38C76E00171BF3 /* InputEditor.swift in Sources */,
-				08D174C22C3D96F8000257EF /* StreamHandler.swift in Sources */,
 				08B82C1D2C74EA9400DC0183 /* ImageViewer.swift in Sources */,
 				085361052C491BF0007DAB62 /* ImageSession.swift in Sources */,
 				08F815342C97F64E00B49355 /* BasicChatInspector.swift in Sources */,

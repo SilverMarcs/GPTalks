@@ -34,7 +34,14 @@ enum TitleGenerator {
     private static func formatConversations(_ groups: [ConversationGroup]) -> String {
         return groups.map { group in
             let convo = group.activeConversation
-            return "--- \(convo.role.rawValue.capitalized) ---\n\(convo.content)"
+            if convo.content.isEmpty {
+                return "--- \(convo.role.rawValue.capitalized) ---\n" +
+                convo.toolCalls.map { toolCall in
+                    "Called tool: \(toolCall.tool.rawValue)"
+                }.joined(separator: "\n")
+            } else {
+                return "--- \(convo.role.rawValue.capitalized) ---\n\(convo.content)"
+            }
         }.joined(separator: "\n\n")
     }
     

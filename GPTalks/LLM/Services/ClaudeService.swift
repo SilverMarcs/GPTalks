@@ -44,7 +44,7 @@ struct ClaudeService: AIService {
         return provider.type.getDefaultModels()
     }
     
-    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<String, Error> {
+    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let parameters = createParameters(from: conversations, config: config, stream: true)
         return streamClaudeResponse(parameters: parameters, config: config)
     }
@@ -69,7 +69,7 @@ struct ClaudeService: AIService {
         )
     }
     
-    static private func streamClaudeResponse(parameters: MessageParameter, config: SessionConfig) -> AsyncThrowingStream<String, Error> {
+    static private func streamClaudeResponse(parameters: MessageParameter, config: SessionConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
@@ -81,7 +81,7 @@ struct ClaudeService: AIService {
                     let response = try await service.streamMessage(parameters)
                     for try await result in response {
                         if let content = result.delta?.text {
-                            continuation.yield(content)
+                            continuation.yield(.content(content))
                         }
                     }
                     continuation.finish()
@@ -113,7 +113,7 @@ struct ClaudeService: AIService {
     }
     
     static func testModel(provider: Provider, model: AIModel) async -> Bool {
-        let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]  
+        let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: provider.apiKey,
             basePath: provider.type.scheme + "://" + provider.host, betaHeaders: betaHeaders)
