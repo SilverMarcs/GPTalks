@@ -82,10 +82,8 @@ struct AssistantMessage: View {
     var tool: some View {
         ForEach(Array(conversation.toolCalls.enumerated()), id: \.element.id) { index, toolCall in
             VStack(alignment: .leading) {
-                Text("Tool Call \(index + 1):")
+                Text("Tool: \(toolCall.tool.displayName)")
                     .font(.headline)
-                Text("Tool: \(toolCall.tool)")
-                    .padding(.leading)
                 Text("Arguments: \(toolCall.arguments)")
                     .padding(.leading)
                     .textSelection(.enabled)

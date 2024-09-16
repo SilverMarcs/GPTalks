@@ -28,7 +28,7 @@ struct OpenAIService: AIService {
         
         if !conversation.toolCalls.isEmpty {
             return .init(
-                role: role, // should always be .assistant here
+                role: .assistant, // should always be .assistant here
                 toolCalls: conversation.toolCalls.map { toolCall in
                         .init(id: toolCall.toolCallId, function: .init(arguments: toolCall.arguments, name: toolCall.tool.rawValue))
                     }
@@ -37,7 +37,7 @@ struct OpenAIService: AIService {
         
         if let toolResponse = conversation.toolResponse {
             return .init(
-                role: role, // should always be .tool here
+                role: .tool, // should always be .tool here
                 content: toolResponse.processedContent,
                 name: toolResponse.tool.rawValue,
                 toolCallId: toolResponse.toolCallId
@@ -58,7 +58,7 @@ struct OpenAIService: AIService {
         for content in processedContents {
             switch content {
             case .image(let mimeType, let base64Data):
-                let url = "data:\(mimeType);base64,\(base64Data)"
+                let url = "data:image/jpeg;base64,\(base64Data)"
                 visionContent.append(.init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: url, detail: .auto))))
             case .text(let text):
                 visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: text)))
@@ -66,7 +66,7 @@ struct OpenAIService: AIService {
         }
         
         return ChatQuery.ChatCompletionMessageParam(
-            role: role,
+            role: .user, // vision content can only be on user role
             content: visionContent
         )!
     }
