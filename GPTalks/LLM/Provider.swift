@@ -101,10 +101,6 @@ class Provider {
             provider.titleModel = first
         }
         
-        if let first = provider.imageModels.first {
-            provider.imageModel = first
-        }
-        
         if isDummy {
             provider.isEnabled = false
         }
@@ -112,6 +108,10 @@ class Provider {
         if type == .openai {
             provider.supportsImage = true
             provider.imageModels = AIModel.getOpenImageModels()
+        }
+        
+        if let first = provider.imageModels.first {
+            provider.imageModel = first
         }
         
         return provider
