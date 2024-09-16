@@ -88,6 +88,12 @@ struct QuickPanel: View {
 
                 ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
                 
+                Menu {
+                    ToolsController(tools: $session.config.tools)
+                } label: {
+                    Label("Tools", systemImage: "hammer")
+                }
+                
             } label: {
                 Image(systemName: "magnifyingglass")
                     .resizable()
@@ -131,6 +137,10 @@ struct QuickPanel: View {
                     Text(session.config.provider.name.uppercased())
                     
                     Text(session.config.model.name)
+                    
+                    ForEach(session.config.tools.enabledTools) { tool in
+                        Image(systemName: tool.icon)
+                    }
                 }
                 .font(.caption)
                 

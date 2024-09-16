@@ -10,7 +10,11 @@ import OpenAI
 import GoogleGenerativeAI
 import SwiftData
 
-enum ChatTool: String, CaseIterable, Codable {
+enum ChatTool: String, CaseIterable, Codable, Identifiable {
+    var id: Self {
+        return self
+    }
+    
     case urlScrape = "urlScrape"
     case googleSearch = "googleSearch"
     case imageGenerate = "imageGenerate"

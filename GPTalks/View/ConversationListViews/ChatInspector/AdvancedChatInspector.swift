@@ -22,7 +22,9 @@ struct AdvancedChatInspector: View {
                 PresencePenaltySlider(penalty: $session.config.presencePenalty, shortLabel: true)
             }
             
-            ToolsController(tools: $session.config.tools)
+            Section("Tools") {
+                ToolsController(tools: $session.config.tools)
+            }
             
             Section("Export") {
                 Button {
