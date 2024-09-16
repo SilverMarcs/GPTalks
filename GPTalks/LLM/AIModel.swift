@@ -12,7 +12,6 @@ import SwiftData
 final class AIModel: Hashable, Identifiable {
     var id: UUID = UUID()
     var order: Int = 0
-    // TODO: rename to just type
     var type: ModelType = ModelType.chat
 
     var code: String
@@ -20,17 +19,14 @@ final class AIModel: Hashable, Identifiable {
     var isEnabled: Bool = true
     var lastTestResult: Bool?
     
-    var provider: Provider?
-
     init() {
         self.code = "Dummy"
         self.name = "Dummy"
     }
 
-    init(code: String, name: String, provider: Provider? = nil, type: ModelType = .chat, order: Int = .max, isEnabled: Bool = true, lastTestResult: Bool? = nil) {
+    init(code: String, name: String, type: ModelType = .chat, order: Int = .max, isEnabled: Bool = true, lastTestResult: Bool? = nil) {
         self.code = code
         self.name = name
-        self.provider = provider
         self.type = type
         self.order = order
         self.isEnabled = isEnabled
@@ -55,11 +51,15 @@ extension AIModel {
     
     static func getOpenaiModels() -> [AIModel] {
         return [
-            AIModel(code: "chatgpt-4o-latest", name: "GPT-4o", order: 0),
+            AIModel(code: "gpt-4o", name: "GPT-4o", order: 0),
             AIModel(code: "gpt-4o-mini", name: "GPT-4om", order: 1),
-            
-            AIModel(code: "dall-e-2", name: "DALL-E-2", type: .image, order: 2),
-            AIModel(code: "dall-e-3", name: "DALL-E-3", type: .image, order: 3),
+        ]
+    }
+    
+    static func getOpenImageModels() -> [AIModel] {
+        return [
+            AIModel(code: "dall-e-2", name: "DALL-E-2", type: .image, order: 0),
+            AIModel(code: "dall-e-3", name: "DALL-E-3", type: .image, order: 1),
         ]
     }
     

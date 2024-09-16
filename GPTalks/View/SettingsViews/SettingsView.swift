@@ -34,9 +34,15 @@ struct SettingsView: View {
                 Label("Quick Panel", systemImage: "bolt.fill")
                     .tag(SidebarItem.quickPanel)
 #endif
+                Label("Tools", systemImage: "hammer")
+                    .tag(SidebarItem.tools)
                 
                 Label("Parameters", systemImage: "slider.horizontal.3")
                     .tag(SidebarItem.parameters)
+                
+                Label("Image", systemImage: "photo")
+                    .tag(SidebarItem.image)
+                
                 
                 Label("Providers", systemImage: "cpu")
                     .tag(SidebarItem.providers)
@@ -64,8 +70,12 @@ struct SettingsView: View {
                     MarkdownSettings()
                 case .quickPanel:
                     QuickPanelSettings()
+                case .tools:
+                    ToolSettings()
                 case .parameters:
                     ParameterSettings()
+                case .image:
+                    ImageSettings()
                 case .providers:
                     ProviderList()
                 case .backup:
@@ -84,18 +94,20 @@ struct SettingsView: View {
             }
         }
     }
-}
+    
+    enum SidebarItem {
+        case general
+        case appearance
+        case markdown
+        case quickPanel
+        case tools
+        case parameters
+        case image
+        case providers
+        case backup
+    }
 
-enum SidebarItem {
-    case general
-    case appearance
-    case markdown
-    case quickPanel
-    case parameters
-    case providers
-    case backup
 }
-
 
 #Preview {
     SettingsView()

@@ -12,6 +12,7 @@ struct ModelRow: View {
     @Environment(\.editMode) var editMode
     #endif
     @Bindable var model: AIModel
+    var provider: Provider
     var reorderModels: () -> Void
     
     @State private var isTestingModel = false
@@ -30,8 +31,10 @@ struct ModelRow: View {
                 TextField("Name", text: $model.name)
                     .frame(maxWidth: 205, alignment: .leading)
 
-                modelTester
-                    .frame(maxWidth: 35, alignment: .center)
+                if model.type == .chat {
+                    modelTester
+                        .frame(maxWidth: 35, alignment: .center)
+                }
             }
             #else
             if editMode?.wrappedValue == .active {
@@ -101,7 +104,7 @@ struct ModelRow: View {
     
     func runModelTest() async {
         isTestingModel = true
-        testResult = await model.provider?.testModel(model: model)
+        testResult = await provider.testModel(model: model)
         isTestingModel = false
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
@@ -112,6 +115,7 @@ struct ModelRow: View {
 
 #Preview {
     let model = AIModel(code: "gpt-3.5-turbo", name: "GPT-3.5 Turbo")
+    let provider = Provider.factory(type: .openai)
     
-    ModelRow(model: model) {}
+    ModelRow(model: model, provider: provider) {}
 }

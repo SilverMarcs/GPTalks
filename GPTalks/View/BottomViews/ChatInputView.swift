@@ -34,7 +34,7 @@ struct ChatInputView: View {
                 }
                 
                 InputEditor(prompt: $session.inputManager.prompt,
-                            isFocused: _isFocused)
+                            provider: session.config.provider, isFocused: _isFocused)
                 #if os(macOS) || targetEnvironment(macCatalyst)
                 .popoverTip(FocusTip())
                 #endif

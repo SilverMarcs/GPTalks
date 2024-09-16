@@ -18,14 +18,6 @@ import Observation
     
     var state: ListState = .chats
     
-    func addItem(provider: Provider, sessions: [Session]?, imageSessions: [ImageSession]?, modelContext: ModelContext) {
-        if state == .chats {
-//            addChatSession(provider: provider, sessions: sessions ?? [], modelContext: modelContext)
-        } else {
-            addImageSession(provider: provider, imageSessions: imageSessions ?? [], modelContext: modelContext)
-        }
-    }
-    
     enum ListState: String, CaseIterable {
         case chats
         case images

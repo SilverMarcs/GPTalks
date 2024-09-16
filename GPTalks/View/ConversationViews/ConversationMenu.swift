@@ -9,10 +9,11 @@ import SwiftUI
 import SwiftData
 
 struct ConversationMenu: View {
-    var group: ConversationGroup
     @Environment(\.modelContext) var modelContext
     @Environment(SessionVM.self) var sessionVM
-
+    @Environment(\.isQuick) var isQuick
+    
+    var group: ConversationGroup
     var providers: [Provider]
     
     @Binding var isExpanded: Bool
@@ -63,7 +64,7 @@ struct ConversationMenu: View {
     
     @ViewBuilder
     var editGroup: some View {
-        if group.role == .user {
+        if !isQuick && group.role == .user {
             HoverScaleButton(icon: "pencil.and.outline", label: "Edit") {
                 group.setupEditing()
             }
@@ -101,8 +102,9 @@ struct ConversationMenu: View {
 
     var copyText: some View {
         HoverScaleButton(icon: isCopied ? "checkmark" : "paperclip", label: "Copy Text") {
-            isCopied = true
             group.activeConversation.content.copyToPasteboard()
+            
+            isCopied = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 isCopied = false
             }

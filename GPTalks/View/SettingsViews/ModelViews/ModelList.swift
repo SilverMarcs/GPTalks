@@ -61,7 +61,7 @@ struct ModelListView: View {
 extension ModelListView {
     var collectiom: some View {
         ForEach(filteredModels) { model in
-            ModelRow(model: model) {
+            ModelRow(model: model, provider: provider) {
                 reorderModels()
             }
             .tag(model)
@@ -140,7 +140,11 @@ extension ModelListView {
             .disabled(true)
         } else {
             Menu {
-                Button(action: refreshModels) {
+                Button {
+                    Task {
+                        await refreshModels()
+                    }
+                } label: {
                     Label("Refresh Models", systemImage: "arrow.trianglehead.2.counterclockwise.rotate.90")
                 }
                 

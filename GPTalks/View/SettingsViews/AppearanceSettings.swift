@@ -57,18 +57,16 @@ struct AppearanceSettings: View {
             Section {
                 Toggle("Show Less Sessions", isOn: $config.truncateList)
 
-                HStack {
-                    Stepper(
-                        "List Count",
-                        value: Binding<Double>(
-                            get: { Double(config.listCount) },
-                            set: { config.listCount = Int($0) }
-                        ),
-                        in: 6...20,
-                        step: 1,
-                        format: .number
-                    )
-                }
+                Stepper(
+                    "List Count",
+                    value: Binding<Double>(
+                        get: { Double(config.listCount) },
+                        set: { config.listCount = Int($0) }
+                    ),
+                    in: 6...20,
+                    step: 1,
+                    format: .number
+                )
                 .opacity(config.truncateList ? 1 : 0.5)
                 .disabled(!config.truncateList)
             } header: {

@@ -42,6 +42,20 @@ extension String {
         return fileURL
     }
     
+    func truncateText() -> String {
+        let maxCharacters = 20
+        
+        if self.count > maxCharacters {
+            let prefixLength = maxCharacters / 2 - 1
+            let suffixLength = maxCharacters / 2 - 1
+            let prefix = self.prefix(prefixLength)
+            let suffix = self.suffix(suffixLength)
+            return "\(prefix)...\(suffix)"
+        } else {
+            return self
+        }
+    }
+    
     static private let demoAssistant: String =
     """
     This is a code block.

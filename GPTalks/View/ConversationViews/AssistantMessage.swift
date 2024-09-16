@@ -11,41 +11,51 @@ import MarkdownWebView
 struct AssistantMessage: View {
     @ObservedObject var config = AppConfig.shared
     
-    var conversation: Conversation
+    @Bindable var conversation: Conversation
     var providers: [Provider]
     
     @State var isHovered: Bool = false
     @State var showingTextSelection = false
-    
+    @State var showArguments = false
+
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack(alignment: .top, spacing: spacing) {
-                AssistantImage(size: size)
-//                    .symbolEffect(.bounce, isActive: conversation.group?.session?.isReplying ?? false)
-                
-                VStack(alignment: .leading, spacing: 7) {
-                    if let model = conversation.model {
-                        Text(model.name)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    
-                    MarkdownView(conversation: conversation)
-                    
-                    if conversation.isReplying {
-                        ProgressView()
-                            .controlSize(.small)
-                    }
-                    
-                    #if os(macOS) || targetEnvironment(macCatalyst)
-                    if let group = conversation.group, let session = group.session {
-                        ConversationMenu(group: group, providers: providers, isExpanded: .constant(true))
-                            .symbolEffect(.appear, isActive: !isHovered)
-                            .opacity(session.isReplying ? 0 : 1)
-                    }
-                    #endif
+        HStack(alignment: .top, spacing: spacing) {
+            Image(conversation.group?.session?.config.provider.type.imageName ?? "brain.SFSymbol")
+                .resizable()
+                .frame(width: size, height: size)
+                .foregroundStyle(Color(hex: conversation.group?.session?.config.provider.color ?? "#00947A"))
+            
+            VStack(alignment: .leading, spacing: 7) {
+                if !conversation.toolCalls.isEmpty {
+                    toolCallsView
+                        .padding(.top, 1)
+                } else {
+                    modelNameView
+                        .padding(.top, 2)
                 }
-                .padding(.top, 2)
+                
+                if showArguments {
+                    tool
+                }
+                
+                if conversation.toolCalls.isEmpty {
+                    MarkdownView(conversation: conversation)
+                } else {
+                    EmptyView()
+                }
+                
+                if !conversation.dataFiles.isEmpty {
+                    DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false)
+                } else {
+                    EmptyView()
+                }
+                
+                if conversation.isReplying {
+                    ProgressView()
+                        .controlSize(.small)
+                }
+                
+                conversationMenuView
             }
         }
 #if !os(macOS)
@@ -69,6 +79,61 @@ struct AssistantMessage: View {
         .padding(.trailing, 30)
     }
     
+    var tool: some View {
+        ForEach(Array(conversation.toolCalls.enumerated()), id: \.element.id) { index, toolCall in
+            VStack(alignment: .leading) {
+                Text("Tool Call \(index + 1):")
+                    .font(.headline)
+                Text("Tool: \(toolCall.tool)")
+                    .padding(.leading)
+                Text("Arguments: \(toolCall.arguments)")
+                    .padding(.leading)
+                    .textSelection(.enabled)
+            }
+        }
+    }
+    
+    var toolCallsView: some View {
+        Button {
+            showArguments.toggle()
+        } label: {
+            HStack {
+                Text("^[Called \(conversation.toolCalls.count) Tool](inflect: true)")
+                    .foregroundStyle(.secondary)
+                
+                if conversation.isReplying {
+                    ProgressView()
+                        .controlSize(.mini)
+                } else {
+                    Image(systemName: showArguments ? "chevron.up" : "chevron.down")
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+    
+    @ViewBuilder
+    var modelNameView: some View {
+        if let model = conversation.model {
+            Text(model.name)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+    
+    @ViewBuilder
+    var conversationMenuView: some View {
+        #if os(macOS) || targetEnvironment(macCatalyst)
+        if let group = conversation.group, let session = group.session {
+            ConversationMenu(group: group, providers: providers, isExpanded: .constant(true))
+                .symbolEffect(.appear, isActive: !isHovered)
+                .opacity(session.isReplying ? 0 : 1)
+        }
+        #endif
+    }
+    
     func toggleTextSelection() {
         showingTextSelection.toggle()
     }
@@ -83,7 +148,7 @@ struct AssistantMessage: View {
     
     var size: CGFloat {
         #if os(macOS) || targetEnvironment(macCatalyst)
-        12
+        17
         #else
         10
         #endif

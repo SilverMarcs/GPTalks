@@ -72,7 +72,7 @@ struct ModelAdder: View {
         }
 
         let model = AIModel(
-            code: newModelCode, name: newModelName, provider: provider, type: type, order: 0)
+            code: newModelCode, name: newModelName, type: type, order: 0)
         
         if type == .chat {
             for model in provider.chatModels {

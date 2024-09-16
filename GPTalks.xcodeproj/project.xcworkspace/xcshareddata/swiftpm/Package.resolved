@@ -1,5 +1,5 @@
 {
-  "originHash" : "a636aae8216856a9695036029f579112ee6e707d924a0c05caefd8a9cef62f68",
+  "originHash" : "55915917cbf110e5a7f5b2db2b64ee4610df047abcf8cfa32158716b97a82f7e",
   "pins" : [
     {
       "identity" : "app-check",
@@ -143,6 +143,15 @@
       "state" : {
         "revision" : "3c2c7e1e72b8abd96eafbae80323c5c1e5317437",
         "version" : "2.7.5"
+      }
+    },
+    {
+      "identity" : "visualeffectview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/VisualEffectView",
+      "state" : {
+        "branch" : "master",
+        "revision" : "dc8c4f1c5c381a7833bd05158b2956fcdfe9d292"
       }
     }
   ],

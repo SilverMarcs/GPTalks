@@ -27,6 +27,7 @@ class Provider {
     
     var color: String = "#00947A"
     var isEnabled: Bool = true
+    var supportsImage: Bool = false
     
     @Relationship(deleteRule: .cascade)
     var chatModel: AIModel
@@ -108,6 +109,11 @@ class Provider {
             provider.isEnabled = false
         }
         
+        if type == .openai {
+            provider.supportsImage = true
+            provider.imageModels = AIModel.getOpenImageModels()
+        }
+        
         return provider
     }
 }
@@ -164,7 +170,7 @@ extension Provider {
         }
     }
 
-    func removeModel(_ model: AIModel, for type: ModelType) {
+    func removeModel(_ model: AIModel, for type: ModelType, permanently: Bool = true) {
         switch type {
         case .chat:
             chatModels.removeAll { $0.id == model.id }
@@ -172,6 +178,8 @@ extension Provider {
             imageModels.removeAll { $0.id == model.id }
         // Add more cases here as you add more model types
         }
-        model.modelContext?.delete(model)
+        if permanently {
+            model.modelContext?.delete(model)
+        }
     }
 }

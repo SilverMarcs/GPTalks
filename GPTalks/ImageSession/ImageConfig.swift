@@ -21,18 +21,13 @@ class ImageConfig {
     
     var session: ImageSession?
     
-    var numImages: Int = 1
-    var size: ImagesQuery.Size = ImagesQuery.Size._256
-    var quality: ImagesQuery.Quality = ImagesQuery.Quality.standard
-    var style: ImagesQuery.Style = ImagesQuery.Style.natural
+    var numImages: Int = ImageConfigDefaults.shared.numImages
+    var size: ImagesQuery.Size = ImageConfigDefaults.shared.size
+    var quality: ImagesQuery.Quality = ImageConfigDefaults.shared.quality
+    var style: ImagesQuery.Style = ImageConfigDefaults.shared.style
     
     init(provider: Provider = Provider.factory(type: .openai)) {
         self.provider = provider
         self.model = provider.imageModel
-    }
-    
-    init(provider: Provider, model: AIModel) {
-        self.provider = provider
-        self.model = model
     }
 }

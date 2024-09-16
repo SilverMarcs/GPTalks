@@ -73,12 +73,21 @@ struct SessionList: View {
     private func deleteItems(offsets: IndexSet) {
         for index in offsets.sorted().reversed() {
             if !sessions[index].isStarred {
-                modelContext.delete(sessions[index])
-                let remainingSessions = sessions.filter { !$0.isDeleted }
-                for (newIndex, session) in remainingSessions.enumerated() {
-                    session.order = newIndex
+                DispatchQueue.main.async {
+                    withAnimation {
+                        if sessionVM.selections.contains(sessions[index]) {
+                            sessionVM.selections.remove(sessions[index])
+                        }
+                    } completion: {
+                        modelContext.delete(sessions[index])
+                        
+                        try? modelContext.save()
+                        let remainingSessions = sessions.filter { !$0.isDeleted }
+                        for (newIndex, session) in remainingSessions.enumerated() {
+                            session.order = newIndex
+                        }
+                    }
                 }
-//                try? modelContext.save()
             }
         }
     }

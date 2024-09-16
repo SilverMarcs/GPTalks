@@ -14,6 +14,7 @@ struct ErrorMessageView: View {
         if !session.errorMessage.isEmpty {
             HStack {
                 Text(session.errorMessage)
+                    .textSelection(.enabled)
                 
                 Button(role: .destructive) {
                     withAnimation {

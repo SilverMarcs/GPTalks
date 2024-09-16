@@ -21,7 +21,7 @@ struct FileViewer: View {
                     .frame(width: 38, height: 38)
                 
                 VStack(alignment: .leading) {
-                    Text(typedData.fileName)
+                    Text(typedData.fileName.truncateText())
                        .font(.callout)
                        .fontWeight(.bold)
                        .lineLimit(1)

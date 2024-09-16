@@ -17,7 +17,7 @@ struct ImageViewer: View {
                 Image(platformImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 100, height: 100)
+                    .frame(width: 100, height: 48)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
             } else {
                 FileViewer(typedData: typedData, onTap: onTap)

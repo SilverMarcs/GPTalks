@@ -130,7 +130,7 @@ extension InputManager {
         }
     }
 
-    private func processImageData(_ imageData: Data, supportedFileTypes: [UTType]) {
+    func processImageData(_ imageData: Data, supportedFileTypes: [UTType]) {
         let tempDirectory = FileManager.default.temporaryDirectory
         let tempFileURL = tempDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("png")
 
@@ -145,7 +145,7 @@ extension InputManager {
     private func processURL(_ url: URL) {
         Task {
             do {
-                let webContent = await WebScraper.retrieveWebContent(from: url)
+                let webContent = await URLScrape.retrieveWebContent(from: url)
                 
                 // Extract the first line from the webContent
                 let firstLine = webContent.components(separatedBy: .newlines).first ?? "defaultFilename"

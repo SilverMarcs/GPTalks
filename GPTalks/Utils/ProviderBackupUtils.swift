@@ -2,10 +2,11 @@
 //  ProviderBackupUtils.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 27/07/2024.
+//  Created by Zabir Raihan on 16/09/2024.
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 import SwiftData
 
 struct FileExporterModifier: ViewModifier {
@@ -47,9 +48,11 @@ struct FileImporterModifier: ViewModifier {
                     guard let url = urls.first else { return }
                     do {
                         let restoredProviders = try restoreProviders(from: url)
-                        for provider in restoredProviders {
-                            if !providers.contains(where: { $0.name.lowercased() == provider.name.lowercased() || $0.id == provider.id || $0.apiKey.lowercased() == provider.apiKey.lowercased() }) {
-                                modelContext.insert(provider)
+                        for restoredProvider in restoredProviders {
+                            if let existingProvider = providers.first(where: { $0.name.lowercased() == restoredProvider.name.lowercased() }) {
+                                existingProvider.apiKey = restoredProvider.apiKey
+                            } else {
+                                modelContext.insert(restoredProvider)
                             }
                         }
                     } catch {

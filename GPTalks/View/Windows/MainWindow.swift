@@ -72,12 +72,12 @@ struct MainWindow: Scene {
         
         let config = SessionConfig(provider: openAI, purpose: .quick)
         let session = Session(config: config)
-//        config.session = session
         session.isQuick = true
 
         modelContext.insert(session)
         
         ProviderManager.shared.defaultProvider = openAI.id.uuidString
         ProviderManager.shared.quickProvider = openAI.id.uuidString
+        ProviderManager.shared.imageProvider = openAI.id.uuidString
     }
 }

@@ -182,6 +182,8 @@ struct QuickPanel: View {
             return
         }
         
+        session.config.systemPrompt = AppConfig.shared.quickSystemPrompt
+        
         showAdditionalContent = true
         
         session.inputManager.prompt = prompt

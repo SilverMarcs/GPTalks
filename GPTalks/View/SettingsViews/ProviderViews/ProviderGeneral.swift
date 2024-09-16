@@ -105,6 +105,10 @@ struct ProviderGeneral: View {
                 #endif
                 
                 ModelPicker(model: $provider.titleModel, models: provider.chatModels, label: "Title Model")
+                
+                if provider.supportsImage {
+                    ModelPicker(model: $provider.imageModel, models: provider.imageModels, label: "Image Model")
+                }
             }
 
             Section("Customisation") {
@@ -126,14 +130,7 @@ struct ProviderGeneral: View {
                     .buttonStyle(.plain)
                     .rotationEffect(.degrees(45))
                 }
-                    
-                Picker("Type", selection: $provider.type) {
-                    ForEach(ProviderType.allCases, id: \.self) { type in
-                        Text(type.name).tag(type)
-                    }
-                }
             }
-
         }
         .formStyle(.grouped)
         .toolbar {

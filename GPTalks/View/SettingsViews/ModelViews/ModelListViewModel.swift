@@ -10,12 +10,12 @@ import SwiftData
 
 // MARK: - ViewModel
 extension ModelListView {    
-    func refreshModels() {
+    func refreshModels() async {
         isRefreshing = true
-        Task { @MainActor in
-            await provider.refreshModels()
-            isRefreshing = false
-        }
+//        Task {
+        await provider.refreshModels()
+        isRefreshing = false
+//        }
     }
     
     func deleteItems(at offsets: IndexSet) {
@@ -64,10 +64,11 @@ extension ModelListView {
         provider.setModels(reorderedModels, for: type)
     }
 
+    @MainActor
     func toggleModelType(for models: [AIModel]) {
         for model in models {
             let newType: ModelType = model.type == .chat ? .image : .chat
-            provider.removeModel(model, for: type)
+            provider.removeModel(model, for: type, permanently: false)
             model.type = newType
             provider.addModel(model, for: newType)
         }

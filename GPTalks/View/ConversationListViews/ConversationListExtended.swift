@@ -23,6 +23,9 @@ extension View {
             }
             .onChange(of: session.isStreaming) {
                 if !session.isStreaming  {
+                    if !hasUserScrolled.wrappedValue {
+                        scrollToBottom(proxy: proxy)
+                    }
                     hasUserScrolled.wrappedValue = false
                 }
             }

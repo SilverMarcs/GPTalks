@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ParameterSettings: View {
     @ObservedObject var config = SessionConfigDefaults.shared
-    @State var expandAdvanced: Bool = false
+    @State var expandAdvanced: Bool = true
 
     var body: some View {
         Form {

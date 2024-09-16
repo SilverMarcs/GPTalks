@@ -15,12 +15,12 @@ class DatabaseService {
     var container: ModelContainer = {
         let schema = Schema([
             Session.self,
+            SessionConfig.self,
             Folder.self,
             Conversation.self,
+            ConversationGroup.self,
             Provider.self,
             AIModel.self,
-            ConversationGroup.self,
-            SessionConfig.self,
             ImageSession.self,
             ImageGeneration.self,
             ImageConfig.self
@@ -41,12 +41,10 @@ class DatabaseService {
         modelContext = ModelContext(container)
     }
     
-//    @discardableResult
     func createNewSession(provider: Provider? = nil) {
         let config: SessionConfig
         
         if let providedProvider = provider {
-            // Use the provided provider
             config = SessionConfig(provider: providedProvider, purpose: .chat)
         } else {
             // Use the default provider
@@ -61,7 +59,6 @@ class DatabaseService {
         }
         
         let newItem = Session(config: config)
-//        config.session = newItem
         
         var fetchSessions = FetchDescriptor<Session>()
         fetchSessions.sortBy = [SortDescriptor(\.order)]
@@ -73,7 +70,5 @@ class DatabaseService {
         
         newItem.order = 0
         modelContext.insert(newItem)
-        
-//        return newItem
     }
 }

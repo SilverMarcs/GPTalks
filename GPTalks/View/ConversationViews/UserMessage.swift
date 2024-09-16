@@ -39,7 +39,7 @@ struct UserMessage: View {
                 )
             
     #if os(macOS) || targetEnvironment(macCatalyst)
-            if let group = conversation.group, let session = group.session {
+            if let group = conversation.group {
                 ConversationMenu(group: group, providers: providers, isExpanded: $isExpanded)
                     .symbolEffect(.appear, isActive: !isHovered)
             }

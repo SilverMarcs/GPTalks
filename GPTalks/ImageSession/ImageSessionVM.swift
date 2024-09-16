@@ -30,20 +30,41 @@ extension SessionVM {
         }
     }
     
-    func addImageSession(provider: Provider, imageSessions: [ImageSession], modelContext: ModelContext) {
-        let newItem = ImageSession(config: ImageConfig(provider: provider, model: provider.imageModel))
+    @discardableResult
+    func addImageSession(modelContext: ModelContext, provider: Provider? = nil) -> ImageSession? {
+        let config: ImageConfig
         
-        withAnimation {
-            for session in imageSessions {
-                session.order += 1
+        if let providedProvider = provider {
+            // Use the provided provider
+            config = ImageConfig(provider: providedProvider)
+        } else {
+            // Use the default provider
+            let fetchProviders = FetchDescriptor<Provider>()
+            let fetchedProviders = try! modelContext.fetch(fetchProviders)
+            
+            guard let defaultProvider = ProviderManager.shared.getImageProvider(providers: fetchedProviders) else {
+                return nil
             }
             
-            newItem.order = 0
-            modelContext.insert(newItem)
-            self.imageSelections = [newItem]
+            config = ImageConfig(provider: defaultProvider)
         }
         
+        let newItem = ImageSession(config: config)
+        
+        var fetchSessions = FetchDescriptor<ImageSession>()
+        fetchSessions.sortBy = [SortDescriptor(\.order)]
+        let fetchedSessions = try! modelContext.fetch(fetchSessions)
+        
+        for session in fetchedSessions {
+            session.order += 1
+        }
+        
+        newItem.order = 0
+        modelContext.insert(newItem)
         try? modelContext.save()
+        
+        self.imageSelections = [newItem]
+        
+        return newItem
     }
 }
-
