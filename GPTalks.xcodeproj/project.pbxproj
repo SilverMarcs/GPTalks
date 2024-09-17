@@ -47,6 +47,8 @@
 		082D70082C69DBA700DE56A2 /* ChatSessionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082D70072C69DBA700DE56A2 /* ChatSessionList.swift */; };
 		082D700A2C69DBD900DE56A2 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082D70092C69DBD900DE56A2 /* Folder.swift */; };
 		082D700C2C69DBFE00DE56A2 /* FolderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082D700B2C69DBFE00DE56A2 /* FolderLabel.swift */; };
+		082ED3422C99C21500A1DEFA /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 082ED3412C99C21500A1DEFA /* GoogleSignIn */; };
+		082ED3442C99C21500A1DEFA /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 082ED3432C99C21500A1DEFA /* GoogleSignInSwift */; };
 		0834E7792C719C00007CB294 /* DataFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E7782C719C00007CB294 /* DataFileView.swift */; };
 		0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E77A2C71A42F007CB294 /* TypedData.swift */; };
 		084139202C7169D50049E3B2 /* SessionListTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0841391F2C7169D50049E3B2 /* SessionListTips.swift */; };
@@ -80,8 +82,6 @@
 		0869A3F22C95DBF9009BF9F2 /* StreamResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869A3F12C95DBF9009BF9F2 /* StreamResponse.swift */; };
 		0869A3F62C95E4CC009BF9F2 /* ToolCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869A3F52C95E4CC009BF9F2 /* ToolCall.swift */; };
 		0869A3F92C95FC70009BF9F2 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0869A3F82C95FC70009BF9F2 /* OpenAI */; };
-		086CCFDB2C8A7743008F12E7 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 086CCFDA2C8A7743008F12E7 /* GoogleSignIn */; };
-		086CCFDD2C8A7743008F12E7 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 086CCFDC2C8A7743008F12E7 /* GoogleSignInSwift */; };
 		086CCFE02C8A7AA4008F12E7 /* GoogleAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086CCFDF2C8A7AA4008F12E7 /* GoogleAuth.swift */; };
 		086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */; };
 		086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */; };
@@ -418,18 +418,18 @@
 				0891D5712C961EFB00BA428F /* OpenAI in Frameworks */,
 				0891AC0D2C846B2B001379C0 /* Reeeed in Frameworks */,
 				08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */,
-				086CCFDB2C8A7743008F12E7 /* GoogleSignIn in Frameworks */,
 				08D040222C5C8A0B0075B754 /* GoogleGenerativeAI in Frameworks */,
 				08E1956C2C6FB66600BA9506 /* MarkdownWebView in Frameworks */,
 				089791FE2C835306003C95CD /* MarkdownWebView in Frameworks */,
 				08922EB32C81613F00521937 /* OpenAI in Frameworks */,
+				082ED3442C99C21500A1DEFA /* GoogleSignInSwift in Frameworks */,
 				084C74432C5231980015AE2F /* OpenAI in Frameworks */,
-				086CCFDD2C8A7743008F12E7 /* GoogleSignInSwift in Frameworks */,
 				08CF5B8C2C689BDF0079D5EE /* MarkdownWebView in Frameworks */,
 				0846B9FA2C6EFF0800AC3FD4 /* MarkdownWebView in Frameworks */,
 				08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */,
 				0886D81E2C8705680058700F /* OpenAI in Frameworks */,
 				08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */,
+				082ED3422C99C21500A1DEFA /* GoogleSignIn in Frameworks */,
 				080553272C5F99BC003C1842 /* MarkdownWebView in Frameworks */,
 				0869A3E52C9579BF009BF9F2 /* VisualEffectView in Frameworks */,
 				0809889D2C6F500000A73A71 /* MarkdownWebView in Frameworks */,
@@ -977,11 +977,11 @@
 				089792002C835885003C95CD /* MarkdownWebView */,
 				0891AC0C2C846B2B001379C0 /* Reeeed */,
 				0886D81D2C8705680058700F /* OpenAI */,
-				086CCFDA2C8A7743008F12E7 /* GoogleSignIn */,
-				086CCFDC2C8A7743008F12E7 /* GoogleSignInSwift */,
 				0869A3E42C9579BF009BF9F2 /* VisualEffectView */,
 				0869A3F82C95FC70009BF9F2 /* OpenAI */,
 				0891D5702C961EFB00BA428F /* OpenAI */,
+				082ED3412C99C21500A1DEFA /* GoogleSignIn */,
+				082ED3432C99C21500A1DEFA /* GoogleSignInSwift */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -1062,9 +1062,9 @@
 				086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 				089791FF2C835885003C95CD /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */,
-				086CCFD92C8A7743008F12E7 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				0869A3E32C9579BF009BF9F2 /* XCRemoteSwiftPackageReference "VisualEffectView" */,
 				0891D56F2C961EFB00BA428F /* XCRemoteSwiftPackageReference "OpenAI" */,
+				082ED3402C99C21500A1DEFA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1470,7 +1470,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6,7";
-				XROS_DEPLOYMENT_TARGET = 1.0;
+				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -1515,7 +1515,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6,7";
-				XROS_DEPLOYMENT_TARGET = 1.0;
+				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
@@ -1655,6 +1655,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		082ED3402C99C21500A1DEFA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/paulb777/GoogleSignIn-iOS";
+			requirement = {
+				branch = visionOS;
+				kind = branch;
+			};
+		};
 		086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/generative-ai-swift";
@@ -1669,14 +1677,6 @@
 			requirement = {
 				branch = master;
 				kind = branch;
-			};
-		};
-		086CCFD92C8A7743008F12E7 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.0.0;
 			};
 		};
 		0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */ = {
@@ -1754,6 +1754,16 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MarkdownWebView;
 		};
+		082ED3412C99C21500A1DEFA /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 082ED3402C99C21500A1DEFA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		082ED3432C99C21500A1DEFA /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 082ED3402C99C21500A1DEFA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
 		0846B9F92C6EFF0800AC3FD4 /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MarkdownWebView;
@@ -1775,16 +1785,6 @@
 		0869A3F82C95FC70009BF9F2 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
-		};
-		086CCFDA2C8A7743008F12E7 /* GoogleSignIn */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 086CCFD92C8A7743008F12E7 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
-			productName = GoogleSignIn;
-		};
-		086CCFDC2C8A7743008F12E7 /* GoogleSignInSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 086CCFD92C8A7743008F12E7 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
-			productName = GoogleSignInSwift;
 		};
 		0886D81D2C8705680058700F /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
