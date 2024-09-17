@@ -72,6 +72,7 @@ final class Session {
         self.config = config
     }
     
+    @MainActor
     private func handleStreamingTask(regenContent: String?, assistantGroup: ConversationGroup?) async throws {
         try await processRequest(regenContent: regenContent, assistantGroup: assistantGroup)
         
@@ -271,11 +272,12 @@ final class Session {
     }
     
     func refreshTokens() {
-        let messageTokens = adjustedGroups.reduce(0) { $0 + $1.activeConversation.countTokens() }
-        let sysPromptTokens = countTokensFromText(text: config.systemPrompt)
-        let inputTokens = countTokensFromText(text: inputManager.prompt)
+        let messageTokens = adjustedGroups.reduce(0) { $0 + $1.tokenCount}
+        let sysPromptTokens = countTokensFromText(config.systemPrompt)
+        let toolTokens = config.tools.tokenCount
+        let inputTokens = countTokensFromText(inputManager.prompt)
         
-        self.tokenCount = (messageTokens + sysPromptTokens + inputTokens)
+        self.tokenCount = (messageTokens + sysPromptTokens + toolTokens + inputTokens)
     }
     
     func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) -> Session {

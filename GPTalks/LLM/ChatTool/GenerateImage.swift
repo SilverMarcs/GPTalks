@@ -63,13 +63,18 @@ struct GenerateImage {
         return parameters
     }
     
+    static let tokenCount = countTokensFromText(description)
+    
+    static let description = """
+        If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. You may also specify the number of images to generate based on users request. If the user did not specify number, generate one image only.
+        """
+
     static var openai: ChatQuery.ChatCompletionToolParam {
         return .init(
             function:
                 .init(
                     name: "imageGenerate",
-                    description:
-                        "If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. You may also specify the number of images to generate based on users request. If the user did not specify number, generate one image only.",
+                    description: description,
                     parameters:
                         .init(
                             type: .object,
@@ -88,14 +93,12 @@ struct GenerateImage {
                         )
                 ))
     }
-    
+
     static var google: Tool {
         Tool(functionDeclarations: [
             FunctionDeclaration(
                 name: "imageGenerate",
-                description: """
-                             If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. You may also specify the number of images to generate based on users request. If the user did not specify number, generate a single image only.
-                             """,
+                description: description,
                 parameters: [
                     "prompt": Schema(
                         type: .string,
@@ -110,13 +113,11 @@ struct GenerateImage {
             )
         ])
     }
-    
+
     static var vertex: [String: Any] {
         [
             "name": "imageGenerate",
-            "description": """
-                If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. You may also specify the number of images to generate based on users request. If the user did not specify number, generate one image only.
-            """,
+            "description": description,
             "input_schema": [
                 "type": "object",
                 "properties": [
@@ -133,4 +134,5 @@ struct GenerateImage {
             ]
         ]
     }
+
 }

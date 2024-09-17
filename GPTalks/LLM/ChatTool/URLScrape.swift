@@ -72,15 +72,20 @@ struct URLScrape {
         }
     }
     
+    static let tokenCount = countTokensFromText(description)
+    
+    static let description: String = """
+        You can open a URL directly if one is provided by the user.
+        If you need more context or info, you may also call this with URLs returned by the googleSearch function.
+        But never try to use made up google search link with this tool, it is not a search engine. 
+        Use this if the context from a previous googleSearch is not sufficient to answer the user's question and you need more info
+        for a more in-depth response.
+        """
+    
     static var openai: ChatQuery.ChatCompletionToolParam {
          .init(function:
             .init(name: "urlScrape",
-                  description: """
-                                You can open a URL directly if one is provided by the user. 
-                                If you need more context or info, you may also call this with URLs returned by the googleSearch function.
-                                Use this if the context from a previous googleSearch is not sufficient to answer the user's question and you need more info
-                                for a more in-depth response.
-                                """,
+                  description: description,
                   parameters:
                     .init(type: .object,
                           properties: [
@@ -96,12 +101,7 @@ struct URLScrape {
         Tool(functionDeclarations: [
             FunctionDeclaration(
                 name: "urlScrape",
-                description: """
-                             You can open a URL directly if one is provided by the user. 
-                             If you need more context or info, you may also call this with URLs returned by the googleSearch function.
-                             Use this if the context from a previous googleSearch is not sufficient to answer the user's question and you need more info
-                             for a more in-depth response.
-                             """,
+                description: description,
                 parameters: [
                     "url_list": Schema(
                         type: .array,
@@ -117,12 +117,7 @@ struct URLScrape {
     static var vertex: [String: Any] {
          [
             "name": "urlScrape",
-            "description": """
-                You can open a URL directly if one is provided by the user. 
-                If you need more context or info, you may also call this with URLs returned by the googleSearch function.
-                Use this if the context from a previous googleSearch is not sufficient to answer the user's question and you need more info
-                for a more in-depth response.
-            """,
+            "description": description,
             "input_schema": [
                 "type": "object",
                 "properties": [

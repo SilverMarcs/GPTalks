@@ -10,7 +10,7 @@ import GPTEncoder
 
 let sharedEncoder = GPTEncoder()
 
-func countTokensFromText(text: String) -> Int {
+func countTokensFromText(_ text: String) -> Int {
     let encoded = sharedEncoder.encode(text: text)
     return encoded.count
 }

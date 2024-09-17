@@ -16,7 +16,7 @@ struct VertexService: AIService {
     }
     
     static func convert(conversation: Conversation) -> [String: Any] {
-        var role = conversation.role.toVertexRole()
+        let role = conversation.role.toVertexRole()
         let processedContents = ContentHelper.processDataFiles(conversation.dataFiles, conversationContent: conversation.content)
         
         var contentObjects: [[String: Any]] = []

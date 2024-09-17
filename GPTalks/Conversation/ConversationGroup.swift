@@ -39,6 +39,10 @@ final class ConversationGroup {
         return dummyConversation
     }
     
+    var tokenCount: Int {
+        return activeConversation.tokenCount
+    }
+    
     init(role: ConversationRole) {
         self.role = role
     }

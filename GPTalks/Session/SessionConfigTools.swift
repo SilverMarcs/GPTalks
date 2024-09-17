@@ -32,6 +32,10 @@ struct SessionConfigTools: Codable {
         return toolStates.filter { $0.value }.map { $0.key }
     }
     
+    var tokenCount: Int {
+        return enabledTools.reduce(0) { $0 + $1.tokenCount }
+    }
+    
     mutating func setTool(_ tool: ChatTool, enabled: Bool) {
         toolStates[tool] = enabled
     }

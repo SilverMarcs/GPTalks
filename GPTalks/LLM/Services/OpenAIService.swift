@@ -59,7 +59,8 @@ struct OpenAIService: AIService {
             switch content {
             case .image(let mimeType, let base64Data):
                 let url = "data:image/jpeg;base64,\(base64Data)"
-                visionContent.append(.init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: url, detail: .auto))))
+                // TODO: maybe low is not good?
+                visionContent.append(.init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: url, detail: .low))))
             case .text(let text):
                 visionContent.append(.init(chatCompletionContentPartTextParam: .init(text: text)))
             }

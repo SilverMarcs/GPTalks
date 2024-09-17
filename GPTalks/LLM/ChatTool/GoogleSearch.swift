@@ -75,15 +75,19 @@ struct GoogleSearch {
         let snippet: String
     }
     
+    static let tokenCount = countTokensFromText(description)
+    
+    static let description = """
+        Use this when
+        - User is asking about current events or something that requires real-time information (weather, sports scores, etc.)
+        - User is asking about some term you are totally unfamiliar with (it might be new)
+        - Usually prioritize your pre-existing knowledge before wanting to call this tool
+        """
+
     static var openai: ChatQuery.ChatCompletionToolParam {
         return .init(function:
                 .init(name: "googleSearch",
-                      description: """
-                                    Use this when
-                                    - User is asking about current events or something that requires real-time information (weather, sports scores, etc.)
-                                    - User is asking about some term you are totally unfamiliar with (it might be new)
-                                    - Usually prioritize your pre-existing knowledge before wanting to call this tool
-                                    """,
+                      description: description,
                       parameters:
                         .init(type: .object,
                               properties: ["query":
@@ -93,17 +97,12 @@ struct GoogleSearch {
                      )
         )
     }
-    
+
     static var google: Tool {
         Tool(functionDeclarations: [
             FunctionDeclaration(
                 name: "googleSearch",
-                description: """
-                             Use this when
-                             - User is asking about current events or something that requires real-time information (weather, sports scores, etc.)
-                             - User is asking about some term you are totally unfamiliar with (it might be new)
-                             - Usually prioritize your pre-existing knowledge before wanting to call this tool
-                             """,
+                description: description,
                 parameters: [
                     "query": Schema(
                         type: .string,
@@ -114,16 +113,11 @@ struct GoogleSearch {
             )
         ])
     }
-    
+
     static var vertex: [String: Any] {
         [
             "name": "googleSearch",
-            "description": """
-                Use this when
-                - User is asking about current events or something that requires real-time information (weather, sports scores, etc.)
-                - User is asking about some term you are totally unfamiliar with (it might be new)
-                - Usually prioritize your pre-existing knowledge before wanting to call this tool
-            """,
+            "description": description,
             "input_schema": [
                 "type": "object",
                 "properties": [
@@ -136,4 +130,5 @@ struct GoogleSearch {
             ]
         ]
     }
+
 }

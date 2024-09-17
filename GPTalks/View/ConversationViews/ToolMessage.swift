@@ -18,6 +18,8 @@ struct ToolMessage: View {
                 .frame(width: size, height: size)
                 .foregroundStyle(.teal)
             
+//                Text(conversation.content)
+            
                 button
                     .popover(isPresented: $showPopover, arrowEdge: .leading) {
                         if let toolResponse = conversation.toolResponse {
