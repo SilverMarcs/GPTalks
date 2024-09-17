@@ -1,22 +1,13 @@
 {
-  "originHash" : "55915917cbf110e5a7f5b2db2b64ee4610df047abcf8cfa32158716b97a82f7e",
+  "originHash" : "8407dd8705532de6b38008600d747a58201b749f5023a3743d6c9348be90d31d",
   "pins" : [
-    {
-      "identity" : "app-check",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/app-check.git",
-      "state" : {
-        "revision" : "21fe1af9be463a359aaf8d96789ef73fc3760d09",
-        "version" : "11.0.1"
-      }
-    },
     {
       "identity" : "appauth-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/openid/AppAuth-iOS.git",
+      "location" : "https://github.com/paulb777/AppAuth-iOS.git",
       "state" : {
-        "revision" : "c89ed571ae140f8eb1142735e6e23d7bb8c34cb2",
-        "version" : "1.7.5"
+        "branch" : "b866746",
+        "revision" : "b866746b699fb9252fe0c5a743d4575ac2676f27"
       }
     },
     {
@@ -40,19 +31,10 @@
     {
       "identity" : "googlesignin-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/GoogleSignIn-iOS",
+      "location" : "https://github.com/paulb777/GoogleSignIn-iOS",
       "state" : {
-        "revision" : "65fb3f1aa6ffbfdc79c4e22178a55cd91561f5e9",
-        "version" : "8.0.0"
-      }
-    },
-    {
-      "identity" : "googleutilities",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/GoogleUtilities.git",
-      "state" : {
-        "revision" : "53156c7ec267db846e6b64c9f4c4e31ba4cf75eb",
-        "version" : "8.0.2"
+        "branch" : "visionOS",
+        "revision" : "e110ece0c82cabf80615bf87b8f55850f58a4c53"
       }
     },
     {
@@ -107,15 +89,6 @@
       "state" : {
         "branch" : "cancellable",
         "revision" : "b00b7b607be73db06a4dc7a18fd50e5ac5d2c828"
-      }
-    },
-    {
-      "identity" : "promises",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/promises.git",
-      "state" : {
-        "revision" : "540318ecedd63d883069ae7f1ed811a2df00b6ac",
-        "version" : "2.4.0"
       }
     },
     {

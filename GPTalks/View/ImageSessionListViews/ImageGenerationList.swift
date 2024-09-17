@@ -56,9 +56,15 @@ struct ImageGenerationList: View {
                 scrollToBottom(proxy: proxy)
             }
             #endif
+            #if os(visionOS)
+            .sheet(isPresented: $showingInspector) {
+                ImageInspector(session: session)
+            }
+            #else
             .inspector(isPresented: $showingInspector) {
                 ImageInspector(session: session)
             }
+            #endif
         }
     }
     

@@ -5,6 +5,7 @@
 //  Created by Zabir Raihan on 16/09/2024.
 //
 
+#if os(macOS)
 import SwiftUI
 
 struct MacInputEditor: View {
@@ -56,3 +57,4 @@ struct MacInputEditor: View {
         return 0
     }
 }
+#endif
