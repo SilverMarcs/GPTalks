@@ -642,7 +642,7 @@
 		08A222812C2AB4FD00D76C8B /* GPTalks */ = {
 			isa = PBXGroup;
 			children = (
-				08C5C7272C9A138E004992A4 /* Group */,
+				08C5C7272C9A138E004992A4 /* GoogleAuth */,
 				0841391E2C7169B90049E3B2 /* Tips */,
 				08C8004E2C36F648009581C5 /* LLM */,
 				08A222C22C2AC6A800D76C8B /* View */,
@@ -792,13 +792,13 @@
 			path = Sidebar;
 			sourceTree = "<group>";
 		};
-		08C5C7272C9A138E004992A4 /* Group */ = {
+		08C5C7272C9A138E004992A4 /* GoogleAuth */ = {
 			isa = PBXGroup;
 			children = (
 				08C5C72A2C9A139F004992A4 /* SignInView.swift */,
 				08C5C7282C9A1392004992A4 /* GoogleAuthManager.swift */,
 			);
-			path = Group;
+			path = GoogleAuth;
 			sourceTree = "<group>";
 		};
 		08C800382C36BA1E009581C5 /* BottomViews */ = {
