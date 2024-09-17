@@ -97,6 +97,7 @@ final class Session {
         }
     }
     
+    @MainActor
     private func processRequest(regenContent: String?, assistantGroup: ConversationGroup?) async throws {
         let conversations = prepareConversations(regenContent: regenContent)
         let assistant = prepareAssistantConversation(assistantGroup: assistantGroup)
@@ -209,6 +210,7 @@ final class Session {
         }
     }
     
+    @MainActor
     func regenerate(group: ConversationGroup) async {
         unsetResetMarker(group: group)
         guard group.role == .assistant else { return }
@@ -227,6 +229,7 @@ final class Session {
         await sendInput(isRegen: true, regenContent: userContent, assistantGroup: group)
     }
     
+    @MainActor
     func stopStreaming() {
         streamingTask?.cancel()
         streamingTask = nil

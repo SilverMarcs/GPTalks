@@ -45,7 +45,8 @@ final class Conversation {
     }
     
     func countTokens() -> Int {
-        let textToken = countTokensFromText(text: content)
+        let textToken = countTokensFromText(content)
+        let toolResponseToken = countTokensFromText(toolResponse?.processedContent ?? "")
         // TODO: Count image tokens
         return textToken
     }
@@ -77,11 +78,15 @@ extension Conversation {
     @MainActor
     func setContent(_ value: String) {
         self.content = value
+        
+        try? self.modelContext?.save()
     }
     
     @MainActor
     func setToolCalls(_ value: [ToolCall]) {
         self.toolCalls = value
+        
+        try? self.modelContext?.save()
     }
 }
 

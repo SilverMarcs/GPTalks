@@ -14,21 +14,23 @@ struct ChatCommands: Commands {
     var body: some Commands {
         CommandMenu("Chat") {
             Button("Send Prompt") {
-                Task {
+                Task { @MainActor in
                     await sessionVM.sendMessage()
                 }
             }
             .keyboardShortcut(.return, modifiers: commandModifier)
             
             Button("Stop Streaming") {
-                sessionVM.stopStreaming()
+                Task { @MainActor in
+                    await sessionVM.stopStreaming()
+                }
             }
             .keyboardShortcut("d", modifiers: commandModifier)
             .disabled(!(sessionVM.activeSession?.isReplying ?? true))
             
             Section {
                 Button("Regen Last Message") {
-                    Task {
+                    Task { @MainActor in
                         await sessionVM.regenLastMessage()
                     }
                 }

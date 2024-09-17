@@ -20,9 +20,9 @@ extension SessionVM {
         await session.sendInput()
     }
     
-    func stopStreaming() {
+    func stopStreaming() async {
         guard let session = activeSession, session.isStreaming else { return }
-        session.stopStreaming()
+        await session.stopStreaming()
     }
     
     func regenLastMessage() async {
@@ -47,7 +47,7 @@ extension SessionVM {
     }
     
     func resetLastContext() {
-        guard let session = activeSession else { return }
+        guard let session = activeSession, !session.isStreaming else { return }
         
         if let lastGroup = session.groups.last {
             session.resetContext(at: lastGroup)
@@ -85,7 +85,11 @@ extension SessionVM {
                 // Insert the new session
                 session.order = 0
                 modelContext.insert(session)
+                #if os(macOS)
                 self.selections = [session]
+                #else
+                self.selections = []
+                #endif
             }
         }
         

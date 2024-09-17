@@ -21,6 +21,7 @@ struct StreamHandler {
         self.assistant = assistant
     }
 
+    @MainActor
     func handleRequest() async throws {
         if config.stream {
             try await handleStream()
@@ -29,6 +30,7 @@ struct StreamHandler {
         }
     }
     
+    @MainActor
     private func handleStream() async throws {
         var streamText = ""
         var lastUIUpdateTime = Date()
@@ -36,7 +38,7 @@ struct StreamHandler {
         
         let serviceType = config.provider.type.getService()
 
-        await assistant.setIsReplying(true)
+        assistant.setIsReplying(true)
 
         for try await response in serviceType.streamResponse(from: conversations, config: config) {
             switch response {
@@ -45,7 +47,7 @@ struct StreamHandler {
                 let currentTime = Date()
                 
                 if currentTime.timeIntervalSince(lastUIUpdateTime) >= Self.uiUpdateInterval {
-                    await assistant.setContent(streamText)
+                    assistant.setContent(streamText)
                     lastUIUpdateTime = currentTime
                 }
             case .toolCalls(let calls):
@@ -60,22 +62,24 @@ struct StreamHandler {
         finalizeStream(streamText: streamText, toolCalls: pendingToolCalls)
     }
 
+    @MainActor
     private func handleNonStreamingResponse() async throws {
-        await assistant.setIsReplying(true)
+        assistant.setIsReplying(true)
         let serviceType = config.provider.type.getService()
         let response = try await serviceType.nonStreamingResponse(from: conversations, config: config)
         
         switch response {
         case .content(let content):
-            await assistant.setContent(content)
+            assistant.setContent(content)
         case .toolCalls(let calls):
             try await handleToolCalls(calls)
         }
         
         if assistant.toolCalls.isEmpty {
-            await assistant.setIsReplying(false)
+            assistant.setIsReplying(false)
         }
     }
+    
     func handleTitleGeneration() async throws -> String {
         let serviceType = config.provider.type.getService()
         let response = try await serviceType.nonStreamingResponse(from: conversations, config: config)
@@ -88,6 +92,7 @@ struct StreamHandler {
         }
     }
 
+    @MainActor
     private func finalizeStream(streamText: String, toolCalls: [ToolCall]) {
         assistant.toolCalls = toolCalls
         if !streamText.isEmpty {
@@ -98,13 +103,14 @@ struct StreamHandler {
         }
     }
 
+    @MainActor
     private func handleToolCalls(_ toolCalls: [ToolCall]) async throws {
-        await assistant.setToolCalls(toolCalls)
+        assistant.setToolCalls(toolCalls)
         if let proxy = assistant.group?.session?.proxy {
             scrollToBottom(proxy: proxy)
         }
         
-        await assistant.setIsReplying(false)
+        assistant.setIsReplying(false)
 
         var toolDatas: [Data] = []
         
@@ -117,9 +123,8 @@ struct StreamHandler {
                 let toolData = try await toolCall.tool.process(arguments: toolCall.arguments, modelContext: session.modelContext)
                 toolDatas.append(contentsOf: toolData.data)
                 tool.toolResponse?.processedContent = toolData.string
-                tool.toolResponse?.processedData = toolData.data
-                
-                await tool.setIsReplying(false)
+                tool.toolResponse?.processedData = toolData.data    
+                tool.setIsReplying(false)
                 
                 if let proxy = tool.group?.session?.proxy {
                     scrollToBottom(proxy: proxy)
@@ -152,8 +157,7 @@ struct StreamHandler {
                     )
                 }
                 newAssistant.dataFiles = typedDataFiles
-                await newAssistant.setIsReplying(false)
-
+                newAssistant.setIsReplying(false)
             }
         }
     }

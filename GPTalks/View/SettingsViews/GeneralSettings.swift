@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct GeneralSettings: View {
     @ObservedObject var config = AppConfig.shared
+    @Environment(\.modelContext) var modelContext
 
     var body: some View {
         Form {
@@ -38,6 +40,12 @@ struct GeneralSettings: View {
                             NSApp.setActivationPolicy(.regular)
                         }
                     }
+            }
+            #endif
+            
+            #if DEBUG
+            Button("Clear Data") {
+                try? modelContext.save()
             }
             #endif
         }
