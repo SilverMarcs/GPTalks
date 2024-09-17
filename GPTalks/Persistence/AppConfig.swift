@@ -24,14 +24,14 @@ class AppConfig: ObservableObject {
     @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .native
     #endif
     
-    @AppStorage("compactList") var compactList: Bool = false
+    @AppStorage("compactList") var compactList: Bool = true
     @AppStorage("truncateList") var truncateList: Bool = false
-    @AppStorage("listCount") var listCount: Int = 12
+    @AppStorage("listCount") var listCount: Int = 16
     @AppStorage("conversationListStyle") var conversationListStyle: ConversationListStyle = .scrollview
     @AppStorage("folderView") var folderView: Bool = false
     
     // Markdown
-    @AppStorage("markdownTheme") var markdownTheme: MarkdownTheme = .github
+    @AppStorage("markdownTheme") var markdownTheme: MarkdownTheme = .atom
     
     // General
     @AppStorage("autogenTitle") var autogenTitle: Bool = true

@@ -24,8 +24,8 @@ struct ChatInputView: View {
             
             plusButton
             #if os(macOS) || targetEnvironment(macCatalyst)
-                .popoverTip(PasteTip())
                 .offset(y: -2.4)
+                .popoverTip(ChatCommandsTip())
             #endif
             
             VStack(alignment: .leading, spacing: 5) {
@@ -35,9 +35,9 @@ struct ChatInputView: View {
                 
                 InputEditor(prompt: $session.inputManager.prompt,
                             provider: session.config.provider, isFocused: _isFocused)
-                #if os(macOS) || targetEnvironment(macCatalyst)
-                .popoverTip(FocusTip())
-                #endif
+//                #if os(macOS) || targetEnvironment(macCatalyst)
+//                .popoverTip(FocusTip())
+//                #endif
             }
 
             ActionButton(size: imageSize, isStop: session.isReplying) {

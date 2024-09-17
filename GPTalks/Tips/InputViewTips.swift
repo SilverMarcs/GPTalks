@@ -8,9 +8,9 @@
 import SwiftUI
 import TipKit
 
-struct PasteTip: Tip {
+struct ChatCommandsTip: Tip {
     var title: Text {
-        Text("Press Command + B to paste files from your clipboard to the chat")
+        Text("Check Chat Commans in Menubar for useful shortcuts")
     }
 }
 

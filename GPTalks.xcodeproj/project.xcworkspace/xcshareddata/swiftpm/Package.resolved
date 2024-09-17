@@ -1,15 +1,6 @@
 {
-  "originHash" : "8407dd8705532de6b38008600d747a58201b749f5023a3743d6c9348be90d31d",
+  "originHash" : "97b9a25fe6175cfd3bfd0db713c1b21dd20b2a532d6c48c9e3bc36a0b4b162bd",
   "pins" : [
-    {
-      "identity" : "appauth-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/paulb777/AppAuth-iOS.git",
-      "state" : {
-        "branch" : "b866746",
-        "revision" : "b866746b699fb9252fe0c5a743d4575ac2676f27"
-      }
-    },
     {
       "identity" : "fuzi",
       "kind" : "remoteSourceControl",
@@ -29,39 +20,12 @@
       }
     },
     {
-      "identity" : "googlesignin-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/paulb777/GoogleSignIn-iOS",
-      "state" : {
-        "branch" : "visionOS",
-        "revision" : "e110ece0c82cabf80615bf87b8f55850f58a4c53"
-      }
-    },
-    {
       "identity" : "gptencoder",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/alfianlosari/GPTEncoder.git",
       "state" : {
         "revision" : "a86968867ab4380e36b904a14c42215f71efe8b4",
         "version" : "1.0.4"
-      }
-    },
-    {
-      "identity" : "gtm-session-fetcher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/gtm-session-fetcher.git",
-      "state" : {
-        "revision" : "a2ab612cb980066ee56d90d60d8462992c07f24b",
-        "version" : "3.5.0"
-      }
-    },
-    {
-      "identity" : "gtmappauth",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/GTMAppAuth.git",
-      "state" : {
-        "revision" : "5d7d66f647400952b1758b230e019b07c0b4b22a",
-        "version" : "4.1.1"
       }
     },
     {

@@ -6,11 +6,9 @@
 //
 
 import SwiftUI
-import GoogleSignInSwift
 
 struct ProviderGeneral: View {
     @ObservedObject var providerManager = ProviderManager.shared
-    @Environment(GoogleAuth.self) var googleAuth
     
     @Bindable var provider: Provider
     var reorderProviders: () -> Void
@@ -46,32 +44,7 @@ struct ProviderGeneral: View {
                 }
                 
                 if provider.type == .vertex {
-                    if googleAuth.isLoggedIn {
-                        HStack {
-                            AsyncImage(url: URL(string: googleAuth.profilePicUrl)) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 25, height: 25)
-                                    .clipShape(Circle())
-                            } placeholder: {
-                                Circle()
-                                    .fill(Color.gray.opacity(0.3))
-                                    .frame(width: 25, height: 25)
-                            }
-                            
-                            Text(googleAuth.name)
-                                .lineLimit(1)
-                            
-                            Spacer()
-                            
-                            Button("Sign Out", role: .destructive) {
-                                googleAuth.signOut()
-                            }
-                        }
-                    } else {
-                        GoogleSignInButton(action: googleAuth.signIn)
-                    }
+                    SignInView()
                 } else {
                     HStack {
                         if showKey {
