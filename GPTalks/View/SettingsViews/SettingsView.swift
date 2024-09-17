@@ -40,7 +40,7 @@ struct SettingsView: View {
                 Label("Parameters", systemImage: "slider.horizontal.3")
                     .tag(SidebarItem.parameters)
                 
-                Label("Image", systemImage: "photo")
+                Label("Image Gen", systemImage: "photo")
                     .tag(SidebarItem.image)
                 
                 

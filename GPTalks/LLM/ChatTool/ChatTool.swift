@@ -96,8 +96,6 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             GenerateImageSettings()
         case .transcribe:
             TranscribeSettings()
-        default:
-            EmptyView()
         }
     }
     

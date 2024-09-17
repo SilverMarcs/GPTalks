@@ -67,7 +67,7 @@ struct ImageSettings: View {
             }
         }
         .formStyle(.grouped)
-        .navigationTitle("Image Settings")
+        .navigationTitle("Image Gen")
     }
 }
 
