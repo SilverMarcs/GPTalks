@@ -16,6 +16,7 @@ struct VertexService: AIService {
     }
     
     static func convert(conversation: Conversation) -> [String: Any] {
+        var role = conversation.role.toVertexRole()
         let processedContents = ContentHelper.processDataFiles(conversation.dataFiles, conversationContent: conversation.content)
         
         // Convert processed contents into dictionary format
@@ -55,16 +56,18 @@ struct VertexService: AIService {
                 do {
                     let request = try await createRequest(from: conversations, config: config)
                     
-                    let (data, _) = try await URLSession.shared.data(for: request)
+                    let (asyncBytes, _) = try await URLSession.shared.bytes(for: request)
                     
-                    if let responseString = String(data: data, encoding: .utf8) {
-                        let lines = responseString.split(separator: "\n")
-                        for line in lines {
-                            if line.hasPrefix("data: ") {
-                                let jsonString = line.dropFirst(6)
-                                
-                                if let jsonData = jsonString.data(using: .utf8) {
-                                    if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+                    var buffer = ""
+                    for try await byte in asyncBytes {
+                        if let character = String(bytes: [byte], encoding: .utf8) {
+                            buffer += character
+                            if character == "\n" {
+                                if buffer.hasPrefix("data: ") {
+                                    let jsonString = buffer.dropFirst(6)
+                                    
+                                    if let jsonData = jsonString.data(using: .utf8),
+                                       let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
                                        let type = jsonObject["type"] as? String,
                                        type == "content_block_delta",
                                        let delta = jsonObject["delta"] as? [String: Any],
@@ -72,10 +75,9 @@ struct VertexService: AIService {
                                         continuation.yield(.content(text))
                                     }
                                 }
+                                buffer = ""
                             }
                         }
-                    } else {
-                        throw URLError(.cannotParseResponse)
                     }
                     
                     continuation.finish()
@@ -101,7 +103,6 @@ struct VertexService: AIService {
         }
         
         let text = contentArray.compactMap { $0["text"] as? String }.joined(separator: " ")
-//        return text
         return .content(text)
     }
 

@@ -43,14 +43,10 @@ enum ConversationRole: String, Codable {
     
     func toGoogleRole() -> String {
         switch self {
-        case .user:
+        case .user, .system, .tool:
             return "user"
         case .assistant:
             return "model"
-        case .system:
-            return "user"
-        case .tool:
-            return "user"
         }
     }
     
@@ -58,10 +54,17 @@ enum ConversationRole: String, Codable {
         switch self {
         case .user:
             return .user
+        case .assistant, .system, .tool:
+            return .assistant
+        }
+    }
+    
+    func toVertexRole() -> String {
+        switch self {
+        case .user, .tool, .system:
+            return "user"
         case .assistant:
-            return .assistant
-        case .system, .tool:
-            return .assistant
+            return "assistant"
         }
     }
 }
