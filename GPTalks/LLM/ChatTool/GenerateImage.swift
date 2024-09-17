@@ -18,7 +18,6 @@ struct GenerateImage {
         }
         
         let parameters = getImageGenerationParameters(from: arguments)
-        
         let config = ImageConfigDefaults.shared
         
         let fetchProviders = FetchDescriptor<Provider>()
@@ -34,7 +33,7 @@ struct GenerateImage {
         
         let query = ImagesQuery(prompt: parameters.prompt,
                                 model: provider.imageModel.code,
-                                n: parameters.n ?? 1,
+                                n: parameters.n,
                                 quality: config.quality,
                                 size: config.size)
         
@@ -48,7 +47,6 @@ struct GenerateImage {
             }
         }
 
-        // Now `dataObjects` contains all the Data objects fetched from the URLs
         return .init(string: "Provider: \(provider.name)\nModel: \(provider.imageModel.name)\nQuality: \(config.quality)\nSize: \(config.size)",
                      data: dataObjects)
 
@@ -56,7 +54,7 @@ struct GenerateImage {
     
     struct ImageGenerationParameters: Codable {
         let prompt: String
-        let n: Int?
+        let n: Int
     }
 
     private static func getImageGenerationParameters(from jsonString: String) -> ImageGenerationParameters {
@@ -85,7 +83,8 @@ struct GenerateImage {
                                         type: .integer,
                                         description:
                                             "The number of images to generate"),
-                            ]
+                            ],
+                            required: ["prompt", "n"]
                         )
                 ))
     }
@@ -95,7 +94,7 @@ struct GenerateImage {
             FunctionDeclaration(
                 name: "imageGenerate",
                 description: """
-                             If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. You may also specify the number of images to generate based on users request. If the user did not specify number, generate one image only.
+                             If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. You may also specify the number of images to generate based on users request. If the user did not specify number, generate a single image only.
                              """,
                 parameters: [
                     "prompt": Schema(
@@ -107,8 +106,31 @@ struct GenerateImage {
                         description: "The number of images to generate"
                     )
                 ],
-                requiredParameters: ["prompt"]
+                requiredParameters: ["prompt", "n"]
             )
         ])
+    }
+    
+    static var vertex: [String: Any] {
+        [
+            "name": "imageGenerate",
+            "description": """
+                If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. You may also specify the number of images to generate based on users request. If the user did not specify number, generate one image only.
+            """,
+            "input_schema": [
+                "type": "object",
+                "properties": [
+                    "prompt": [
+                        "type": "string",
+                        "description": "The prompt for dalle"
+                    ],
+                    "n": [
+                        "type": "integer",
+                        "description": "The number of images to generate"
+                    ]
+                ],
+                "required": ["prompt", "n"]
+            ]
+        ]
     }
 }

@@ -113,4 +113,30 @@ struct URLScrape {
             )
         ])
     }
+    
+    static var vertex: [String: Any] {
+         [
+            "name": "urlScrape",
+            "description": """
+                You can open a URL directly if one is provided by the user. 
+                If you need more context or info, you may also call this with URLs returned by the googleSearch function.
+                Use this if the context from a previous googleSearch is not sufficient to answer the user's question and you need more info
+                for a more in-depth response.
+            """,
+            "input_schema": [
+                "type": "object",
+                "properties": [
+                    "url_list": [
+                        "type": "array",
+                        "description": "The array of URLs of the websites to scrape",
+                        "items": [
+                            "type": "string"
+                        ],
+                        "maxItems": 5
+                    ]
+                ],
+                "required": ["url_list"]
+            ]
+        ]
+    }
 }

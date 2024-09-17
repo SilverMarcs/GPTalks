@@ -35,6 +35,7 @@ struct GoogleService: AIService {
             }
         }
         
+        // TODO: see if can send image here
         if let response = conversation.toolResponse {
             parts.append(.functionResponse(.init(name: response.tool.rawValue, response: .init(dictionaryLiteral: ("content", .string(response.processedContent))))))
         }

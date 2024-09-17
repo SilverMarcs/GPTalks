@@ -46,6 +46,19 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
         }
     }
     
+    var vertex: [String: Any] {
+        switch self {
+        case .urlScrape:
+            URLScrape.vertex
+        case .googleSearch:
+            GoogleSearch.vertex
+        case .imageGenerate:
+            GenerateImage.vertex
+        default:
+            URLScrape.vertex
+        }
+    }
+    
     func process(arguments: String, modelContext: ModelContext? = nil) async throws -> ToolData {
         switch self {
         case .urlScrape:

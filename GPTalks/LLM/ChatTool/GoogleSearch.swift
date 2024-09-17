@@ -114,5 +114,26 @@ struct GoogleSearch {
             )
         ])
     }
-
+    
+    static var vertex: [String: Any] {
+        [
+            "name": "googleSearch",
+            "description": """
+                Use this when
+                - User is asking about current events or something that requires real-time information (weather, sports scores, etc.)
+                - User is asking about some term you are totally unfamiliar with (it might be new)
+                - Usually prioritize your pre-existing knowledge before wanting to call this tool
+            """,
+            "input_schema": [
+                "type": "object",
+                "properties": [
+                    "query": [
+                        "type": "string",
+                        "description": "The search query to search google with"
+                    ]
+                ],
+                "required": ["query"]
+            ]
+        ]
+    }
 }

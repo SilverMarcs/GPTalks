@@ -112,7 +112,6 @@ extension SessionVM {
         }
         
         let newItem = Session(config: config)
-//        config.session = newItem
         try? modelContext.save()
         
         var fetchSessions = FetchDescriptor<Session>()
