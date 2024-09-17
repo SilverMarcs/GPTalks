@@ -54,13 +54,13 @@ _All providers require their respective API Key from the user's end_
 <td width="50%" align="center">
 
 #### Basic chat parameters
-<img src="https://github.com/user-attachments/assets/d6d27163-47a0-4282-8aef-a64909457a78" width="70%" alt="Basic parameters">
+<img src="https://github.com/user-attachments/assets/d6d27163-47a0-4282-8aef-a64909457a78" width="65%" alt="Basic parameters">
 
 </td>
 <td width="50%" align="center">
 
 #### Advanced chat parameters
-<img src="https://github.com/user-attachments/assets/0a0eff87-d98b-4ef3-81eb-cf0cc3b0c6d4" width="70%" alt="Advanced parameters">
+<img src="https://github.com/user-attachments/assets/0a0eff87-d98b-4ef3-81eb-cf0cc3b0c6d4" width="65%" alt="Advanced parameters">
 
 </td>
 </tr>
@@ -73,20 +73,39 @@ _All providers require their respective API Key from the user's end_
 <tr>
 <td width="50%">
 
-<img src="https://github.com/user-attachments/assets/30018995-99c8-4ba7-b3aa-7d4bc39bcd02" width="90%" alt="iOS Screenshot 1">
+<img src="https://github.com/user-attachments/assets/30018995-99c8-4ba7-b3aa-7d4bc39bcd02" width="95%" alt="iOS Screenshot 1">
 
 </td>
 <td width="50%">
 
-<img src="https://github.com/user-attachments/assets/b32d23c3-df96-4eed-96c1-b7460bc7bc7c" width="90%" alt="iOS Screenshot 2">
+<img src="https://github.com/user-attachments/assets/b32d23c3-df96-4eed-96c1-b7460bc7bc7c" width="95%" alt="iOS Screenshot 2">
 
 </td>
 </tr>
 <tr>
 <td colspan="2" align="center">
 
-<img src="https://github.com/user-attachments/assets/2ac734fe-5729-4c39-97ae-86880e1dbba0" width="80%" alt="iPadOS Screenshot 1">
+<img src="https://github.com/user-attachments/assets/2ac734fe-5729-4c39-97ae-86880e1dbba0" width="90%" alt="iPadOS Screenshot 1">
 
 </td>
 </tr>
 </table>
+
+## VisionOS
+
+<table>
+<tr>
+<td width="50%">
+
+<img src="https://github.com/user-attachments/assets/dd1a2bb7-1c74-4a18-af51-6c2abc8be77e" width="100%" alt="visionOS screenshot 1">
+
+</td>
+<td width="50%">
+
+<img src="https://github.com/user-attachments/assets/a3fd887e-b727-4def-a207-bc9a7182d4e1" width="100%" alt="visionOS screenshot 2">
+
+</td>
+</tr>
+</table>
+
+
