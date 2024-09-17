@@ -76,7 +76,6 @@ struct BasicChatInspector: View {
         }
         .buttonStyle(.plain)
         .foregroundStyle(.mint.gradient)
-        .popoverTip(GenerateTitleTip())
     }
     
     private var deleteAllMessages: some View {

@@ -47,8 +47,6 @@
 		082D70082C69DBA700DE56A2 /* ChatSessionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082D70072C69DBA700DE56A2 /* ChatSessionList.swift */; };
 		082D700A2C69DBD900DE56A2 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082D70092C69DBD900DE56A2 /* Folder.swift */; };
 		082D700C2C69DBFE00DE56A2 /* FolderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082D700B2C69DBFE00DE56A2 /* FolderLabel.swift */; };
-		082ED3422C99C21500A1DEFA /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 082ED3412C99C21500A1DEFA /* GoogleSignIn */; };
-		082ED3442C99C21500A1DEFA /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 082ED3432C99C21500A1DEFA /* GoogleSignInSwift */; };
 		0834E7792C719C00007CB294 /* DataFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E7782C719C00007CB294 /* DataFileView.swift */; };
 		0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E77A2C71A42F007CB294 /* TypedData.swift */; };
 		084139202C7169D50049E3B2 /* SessionListTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0841391F2C7169D50049E3B2 /* SessionListTips.swift */; };
@@ -82,7 +80,6 @@
 		0869A3F22C95DBF9009BF9F2 /* StreamResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869A3F12C95DBF9009BF9F2 /* StreamResponse.swift */; };
 		0869A3F62C95E4CC009BF9F2 /* ToolCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869A3F52C95E4CC009BF9F2 /* ToolCall.swift */; };
 		0869A3F92C95FC70009BF9F2 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0869A3F82C95FC70009BF9F2 /* OpenAI */; };
-		086CCFE02C8A7AA4008F12E7 /* GoogleAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086CCFDF2C8A7AA4008F12E7 /* GoogleAuth.swift */; };
 		086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */; };
 		086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */; };
 		087928352C48CF6F008646CD /* ExpandButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087928342C48CF6F008646CD /* ExpandButton.swift */; };
@@ -159,6 +156,8 @@
 		08C1ACE42C54BCA600B86D37 /* FrequencyPenaltySlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACE32C54BCA600B86D37 /* FrequencyPenaltySlider.swift */; };
 		08C1ACE62C54BCB600B86D37 /* TopPSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACE52C54BCB600B86D37 /* TopPSlider.swift */; };
 		08C49FD82C502EC90085792F /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C49FD72C502EC90085792F /* FileHelper.swift */; };
+		08C5C7292C9A1392004992A4 /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5C7282C9A1392004992A4 /* TokenManager.swift */; };
+		08C5C72B2C9A139F004992A4 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5C72A2C9A139F004992A4 /* SignInView.swift */; };
 		08C65E182C9295120013AE1F /* ContentHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C65E172C9295120013AE1F /* ContentHelper.swift */; };
 		08C800322C36AE1D009581C5 /* SessionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800312C36AE1D009581C5 /* SessionList.swift */; };
 		08C800372C36B8CC009581C5 /* SessionListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800362C36B8CC009581C5 /* SessionListRow.swift */; };
@@ -292,7 +291,6 @@
 		0869A3EA2C958A4C009BF9F2 /* SessionConfigTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionConfigTools.swift; sourceTree = "<group>"; };
 		0869A3F12C95DBF9009BF9F2 /* StreamResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamResponse.swift; sourceTree = "<group>"; };
 		0869A3F52C95E4CC009BF9F2 /* ToolCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCall.swift; sourceTree = "<group>"; };
-		086CCFDF2C8A7AA4008F12E7 /* GoogleAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuth.swift; sourceTree = "<group>"; };
 		086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextResetDivider.swift; sourceTree = "<group>"; };
 		087928342C48CF6F008646CD /* ExpandButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandButton.swift; sourceTree = "<group>"; };
@@ -362,6 +360,8 @@
 		08C1ACE32C54BCA600B86D37 /* FrequencyPenaltySlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyPenaltySlider.swift; sourceTree = "<group>"; };
 		08C1ACE52C54BCB600B86D37 /* TopPSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopPSlider.swift; sourceTree = "<group>"; };
 		08C49FD72C502EC90085792F /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
+		08C5C7282C9A1392004992A4 /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
+		08C5C72A2C9A139F004992A4 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		08C65E172C9295120013AE1F /* ContentHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentHelper.swift; sourceTree = "<group>"; };
 		08C800312C36AE1D009581C5 /* SessionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionList.swift; sourceTree = "<group>"; };
 		08C800362C36B8CC009581C5 /* SessionListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListRow.swift; sourceTree = "<group>"; };
@@ -422,14 +422,12 @@
 				08E1956C2C6FB66600BA9506 /* MarkdownWebView in Frameworks */,
 				089791FE2C835306003C95CD /* MarkdownWebView in Frameworks */,
 				08922EB32C81613F00521937 /* OpenAI in Frameworks */,
-				082ED3442C99C21500A1DEFA /* GoogleSignInSwift in Frameworks */,
 				084C74432C5231980015AE2F /* OpenAI in Frameworks */,
 				08CF5B8C2C689BDF0079D5EE /* MarkdownWebView in Frameworks */,
 				0846B9FA2C6EFF0800AC3FD4 /* MarkdownWebView in Frameworks */,
 				08AAFB902C3C735A002C04E0 /* SwiftAnthropic in Frameworks */,
 				0886D81E2C8705680058700F /* OpenAI in Frameworks */,
 				08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */,
-				082ED3422C99C21500A1DEFA /* GoogleSignIn in Frameworks */,
 				080553272C5F99BC003C1842 /* MarkdownWebView in Frameworks */,
 				0869A3E52C9579BF009BF9F2 /* VisualEffectView in Frameworks */,
 				0809889D2C6F500000A73A71 /* MarkdownWebView in Frameworks */,
@@ -583,14 +581,6 @@
 			path = MenubarCommands;
 			sourceTree = "<group>";
 		};
-		086CCFDE2C8A7A9D008F12E7 /* Google */ = {
-			isa = PBXGroup;
-			children = (
-				086CCFDF2C8A7AA4008F12E7 /* GoogleAuth.swift */,
-			);
-			path = Google;
-			sourceTree = "<group>";
-		};
 		08915D922C373332008ADE27 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -652,7 +642,7 @@
 		08A222812C2AB4FD00D76C8B /* GPTalks */ = {
 			isa = PBXGroup;
 			children = (
-				086CCFDE2C8A7A9D008F12E7 /* Google */,
+				08C5C7272C9A138E004992A4 /* Group */,
 				0841391E2C7169B90049E3B2 /* Tips */,
 				08C8004E2C36F648009581C5 /* LLM */,
 				08A222C22C2AC6A800D76C8B /* View */,
@@ -800,6 +790,15 @@
 				08B8DE152C97F39B0041A690 /* ChatSessionToolbar.swift */,
 			);
 			path = Sidebar;
+			sourceTree = "<group>";
+		};
+		08C5C7272C9A138E004992A4 /* Group */ = {
+			isa = PBXGroup;
+			children = (
+				08C5C72A2C9A139F004992A4 /* SignInView.swift */,
+				08C5C7282C9A1392004992A4 /* TokenManager.swift */,
+			);
+			path = Group;
 			sourceTree = "<group>";
 		};
 		08C800382C36BA1E009581C5 /* BottomViews */ = {
@@ -980,8 +979,6 @@
 				0869A3E42C9579BF009BF9F2 /* VisualEffectView */,
 				0869A3F82C95FC70009BF9F2 /* OpenAI */,
 				0891D5702C961EFB00BA428F /* OpenAI */,
-				082ED3412C99C21500A1DEFA /* GoogleSignIn */,
-				082ED3432C99C21500A1DEFA /* GoogleSignInSwift */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -1064,7 +1061,6 @@
 				0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */,
 				0869A3E32C9579BF009BF9F2 /* XCRemoteSwiftPackageReference "VisualEffectView" */,
 				0891D56F2C961EFB00BA428F /* XCRemoteSwiftPackageReference "OpenAI" */,
-				082ED3402C99C21500A1DEFA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1164,7 +1160,6 @@
 				08134E0C2C6B99DA00589991 /* ChatSessionListViewModel.swift in Sources */,
 				089B22432C394A4F00E248FE /* ButtonUtils.swift in Sources */,
 				08A3134D2C4AE7B800C3E578 /* CommonCompactRow.swift in Sources */,
-				086CCFE02C8A7AA4008F12E7 /* GoogleAuth.swift in Sources */,
 				08F8152F2C97F60B00B49355 /* URLScrape.swift in Sources */,
 				088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */,
 				08B8DE1D2C97F3BF0041A690 /* SessionToolbar.swift in Sources */,
@@ -1172,6 +1167,7 @@
 				08A222BE2C2ABDB400D76C8B /* InputManager.swift in Sources */,
 				08C49FD82C502EC90085792F /* FileHelper.swift in Sources */,
 				08A222852C2AB4FD00D76C8B /* ContentView.swift in Sources */,
+				08C5C7292C9A1392004992A4 /* TokenManager.swift in Sources */,
 				081F58B82C6C8FFE00565F20 /* HoverScaleButton.swift in Sources */,
 				08C800572C36F843009581C5 /* SettingsView.swift in Sources */,
 				082181752C39258500171BF3 /* ImageUtils.swift in Sources */,
@@ -1260,6 +1256,7 @@
 				0869A3F22C95DBF9009BF9F2 /* StreamResponse.swift in Sources */,
 				0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */,
 				089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */,
+				08C5C72B2C9A139F004992A4 /* SignInView.swift in Sources */,
 				085276BE2C98706E009184D2 /* MacInputEditor.swift in Sources */,
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,
 				08C65E182C9295120013AE1F /* ContentHelper.swift in Sources */,
@@ -1446,7 +1443,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GPTalks/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -1461,8 +1457,8 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalksNew1;
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.zabir.GPTalksNew;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalks1;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.zabir.GPTalks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
@@ -1491,7 +1487,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GPTalks/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -1506,8 +1501,8 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalksNew1;
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.zabir.GPTalksNew;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalks1;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.zabir.GPTalks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
@@ -1655,14 +1650,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		082ED3402C99C21500A1DEFA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/paulb777/GoogleSignIn-iOS";
-			requirement = {
-				branch = visionOS;
-				kind = branch;
-			};
-		};
 		086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/generative-ai-swift";
@@ -1753,16 +1740,6 @@
 		082178A32C5F6B3200C2A8E3 /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MarkdownWebView;
-		};
-		082ED3412C99C21500A1DEFA /* GoogleSignIn */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 082ED3402C99C21500A1DEFA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
-			productName = GoogleSignIn;
-		};
-		082ED3432C99C21500A1DEFA /* GoogleSignInSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 082ED3402C99C21500A1DEFA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
-			productName = GoogleSignInSwift;
 		};
 		0846B9F92C6EFF0800AC3FD4 /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;

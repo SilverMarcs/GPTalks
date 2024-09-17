@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import GoogleSignIn
 
 struct VertexService: AIService {
     typealias ConvertedType = [String: Any]
@@ -96,15 +95,15 @@ struct VertexService: AIService {
                         if let character = String(bytes: [byte], encoding: .utf8) {
                             buffer += character
                             if character == "\n" {
-                                print("Received data: \(buffer)")
+//                                print("Received data: \(buffer)")
                                 
                                 if buffer.hasPrefix("data: ") {
                                     let jsonString = buffer.dropFirst(6)
-                                    print("JSON string: \(jsonString)")
+//                                    print("JSON string: \(jsonString)")
                                     
                                     if let jsonData = jsonString.data(using: .utf8),
                                        let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-                                        print("Parsed JSON object: \(jsonObject)")
+//                                        print("Parsed JSON object: \(jsonObject)")
                                         
                                         if let type = jsonObject["type"] as? String {
                                             switch type {
@@ -187,31 +186,12 @@ struct VertexService: AIService {
         guard let url = URL(string: apiUrl) else {
             throw URLError(.badURL)
         }
-        
-        print("API URL: \(apiUrl)")
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        guard let currentUser = GIDSignIn.sharedInstance.currentUser else {
-            throw URLError(.userAuthenticationRequired)
-        }
-        
-        let token = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<String, Error>) in
-            currentUser.refreshTokensIfNeeded { user, error in
-                if let error = error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-                guard let user = user else {
-                    continuation.resume(throwing: URLError(.userAuthenticationRequired))
-                    return
-                }
-                continuation.resume(returning: user.accessToken.tokenString)
-            }
-        }
-        
+        let token = try await TokenManager.shared.getValidAccessToken()
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let messages: [[String: Any]] = conversations.map { conversation in
