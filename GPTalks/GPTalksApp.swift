@@ -13,7 +13,7 @@ import KeyboardShortcuts
 @main
 struct GPTalksApp: App {
     @State private var sessionVM = SessionVM()
-    @State private var tokenManager = TokenManager.shared
+    @State private var tokenManager = GoogleAuthManager.shared
     
     #if targetEnvironment(macCatalyst)
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate

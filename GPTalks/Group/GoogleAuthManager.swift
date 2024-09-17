@@ -1,39 +1,96 @@
 //
-//  TokenManager.swift
+//  GoogleAuthManager.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 17/09/2024.
 //
 
-import SwiftUI
+import Foundation
 import AuthenticationServices
 
-class TokenManager {
-    static let shared = TokenManager()
+@Observable class GoogleAuthManager: NSObject, ASWebAuthenticationPresentationContextProviding {
+    static let shared = GoogleAuthManager()
     
     private(set) var accessToken: String = ""
     private var refreshToken: String = ""
+    private var expirationDate: Date = Date()
+    
     let clientId = "401645137849-5tlu6a5kai0oav5m498ntbhevm2lvgu1.apps.googleusercontent.com"
     let redirectUri = "com.zabir.GPTalksNew:/oauth2redirect"
     
-    private init() {
+    private let queue = DispatchQueue(label: "com.zabir.GPTalksNew.tokenmanager")
+    private var authenticationSession: ASWebAuthenticationSession?
+    
+    private override init() {
+        super.init()
         loadTokens()
     }
     
+    // TODO: must not save tokens in UserDefaults
     private func loadTokens() {
         accessToken = UserDefaults.standard.string(forKey: "accessToken") ?? ""
         refreshToken = UserDefaults.standard.string(forKey: "refreshToken") ?? ""
+        expirationDate = UserDefaults.standard.object(forKey: "tokenExpirationDate") as? Date ?? Date()
     }
     
     private func saveTokens() {
         UserDefaults.standard.set(accessToken, forKey: "accessToken")
         UserDefaults.standard.set(refreshToken, forKey: "refreshToken")
+        UserDefaults.standard.set(expirationDate, forKey: "tokenExpirationDate")
     }
     
     func clearTokens() {
-        accessToken = ""
-        refreshToken = ""
-        saveTokens()
+        queue.async {
+            self.accessToken = ""
+            self.refreshToken = ""
+            self.expirationDate = Date()
+            self.saveTokens()
+        }
+    }
+    
+    func signIn() async throws {
+        let authUrl = URL(string: "https://accounts.google.com/o/oauth2/v2/auth?client_id=\(clientId)&redirect_uri=\(redirectUri)&response_type=code&scope=profile email https://www.googleapis.com/auth/cloud-platform openid")!
+        let callbackUrlScheme = "com.zabir.GPTalksNew"
+        
+        return try await withCheckedThrowingContinuation { continuation in
+            authenticationSession = ASWebAuthenticationSession(url: authUrl, callbackURLScheme: callbackUrlScheme) { callbackURL, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                
+                guard let callbackURL = callbackURL,
+                      let queryItems = URLComponents(string: callbackURL.absoluteString)?.queryItems,
+                      let code = queryItems.first(where: { $0.name == "code" })?.value else {
+                    continuation.resume(throwing: NSError(domain: "TokenManager", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to get authorization code"]))
+                    return
+                }
+                
+                Task {
+                    do {
+                        try await self.exchangeCodeForTokens(authCode: code)
+                        continuation.resume()
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+            
+            authenticationSession?.presentationContextProvider = self
+            authenticationSession?.start()
+        }
+    }
+    
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        #if os(iOS)
+        return UIApplication.shared.windows.first ?? ASPresentationAnchor()
+        #elseif os(macOS)
+        return NSApplication.shared.keyWindow ?? ASPresentationAnchor()
+        #endif
+    }
+    
+    var isSignedIn: Bool {
+        return !accessToken.isEmpty
     }
     
     private func refreshAccessToken() async throws -> String {
@@ -59,12 +116,14 @@ class TokenManager {
         let (data, _) = try await URLSession.shared.data(for: request)
         
         guard let jsonResult = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-              let newAccessToken = jsonResult["access_token"] as? String else {
+              let newAccessToken = jsonResult["access_token"] as? String,
+              let expiresIn = jsonResult["expires_in"] as? TimeInterval else {
             throw NSError(domain: "TokenManager", code: 2, userInfo: [NSLocalizedDescriptionKey: "Failed to parse response"])
         }
         
         DispatchQueue.main.async {
             self.accessToken = newAccessToken
+            self.expirationDate = Date().addingTimeInterval(expiresIn)
             self.saveTokens()
         }
         
@@ -93,23 +152,37 @@ class TokenManager {
         
         guard let jsonResult = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
               let accessToken = jsonResult["access_token"] as? String,
-              let refreshToken = jsonResult["refresh_token"] as? String else {
+              let refreshToken = jsonResult["refresh_token"] as? String,
+              let expiresIn = jsonResult["expires_in"] as? TimeInterval else {
             throw NSError(domain: "TokenManager", code: 3, userInfo: [NSLocalizedDescriptionKey: "Failed to parse response"])
         }
         
         DispatchQueue.main.async {
             self.accessToken = accessToken
             self.refreshToken = refreshToken
+            self.expirationDate = Date().addingTimeInterval(expiresIn)
             self.saveTokens()
         }
     }
     
     func getValidAccessToken() async throws -> String {
-        if accessToken.isEmpty {
-            throw NSError(domain: "TokenManager", code: 4, userInfo: [NSLocalizedDescriptionKey: "No access token available"])
+        if Date().addingTimeInterval(5 * 60) < expirationDate && !accessToken.isEmpty {
+            return accessToken
         }
-        
-        // Refresh the token every time to ensure it's always valid
         return try await refreshAccessToken()
     }
 }
+
+#if os(iOS)
+extension UIViewController: ASWebAuthenticationPresentationContextProviding {
+    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return self.view.window ?? ASPresentationAnchor()
+    }
+}
+#elseif os(macOS)
+extension NSWindow: ASWebAuthenticationPresentationContextProviding {
+    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return self
+    }
+}
+#endif
