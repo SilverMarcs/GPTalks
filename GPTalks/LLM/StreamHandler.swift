@@ -101,6 +101,8 @@ struct StreamHandler {
                 self.assistant.isReplying = false
             }
         }
+        
+        try? assistant.modelContext?.save()
     }
 
     @MainActor

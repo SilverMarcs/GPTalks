@@ -20,13 +20,18 @@ struct ChatCommands: Commands {
             }
             .keyboardShortcut(.return, modifiers: commandModifier)
             
+            Button("Paste Files") {
+                sessionVM.handlePaste()
+            }
+            .keyboardShortcut("b")
+            
             Button("Stop Streaming") {
                 Task { @MainActor in
                     await sessionVM.stopStreaming()
                 }
             }
             .keyboardShortcut("d", modifiers: commandModifier)
-            .disabled(!(sessionVM.activeSession?.isReplying ?? true))
+            .disabled(!(sessionVM.activeSession?.isReplying ?? false))
             
             Section {
                 Button("Regen Last Message") {
@@ -42,6 +47,7 @@ struct ChatCommands: Commands {
                     }
                 }
                 .keyboardShortcut("e", modifiers: commandModifier)
+                .disabled(sessionVM.activeSession?.isQuick ?? true)
             }
             
             Section {

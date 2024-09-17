@@ -25,7 +25,7 @@ struct AssistantMessage: View {
             
             VStack(alignment: .leading, spacing: 7) {
                 if let model = conversation.model {
-                    Text(model.name)
+                    Text(conversation.dataFiles.isEmpty ? model.name : conversation.group?.session?.config.provider.imageModel.name ?? "")
                         .font(.subheadline)
                         .bold()
                         .foregroundStyle(.secondary)

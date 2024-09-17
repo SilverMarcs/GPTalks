@@ -24,6 +24,8 @@ struct QuickPanel: View {
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
+    @State var selections: Set<Session> = []
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ZStack {
@@ -64,10 +66,15 @@ struct QuickPanel: View {
             }
         }
         .onAppear {
+            selections = sessionVM.selections
+            sessionVM.selections = []
             isFocused = true
             if !session.groups.isEmpty {
                 showAdditionalContent = true
             }
+        }
+        .onDisappear {
+            sessionVM.selections = selections
         }
         .onChange(of: isFocused) {
             isFocused = true
@@ -131,7 +138,7 @@ struct QuickPanel: View {
                     Image(systemName: "delete.left")
                         .imageScale(.medium)
                 }
-                .keyboardShortcut(.delete, modifiers: [.command])
+                .keyboardShortcut(.delete, modifiers: [.command, .shift])
                 
                 Group {
                     Text(session.config.provider.name.uppercased())

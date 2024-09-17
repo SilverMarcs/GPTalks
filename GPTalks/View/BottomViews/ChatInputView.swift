@@ -50,16 +50,6 @@ struct ChatInputView: View {
             .offset(y: -2.4)
         }
         .modifier(CommonInputStyling())
-        #if os(macOS) || targetEnvironment(macCatalyst)
-        .toolbar {
-            ToolbarItem(placement: .keyboard) {
-                Button("Paste Image") {
-                    session.inputManager.handlePaste(supportedFileTypes: session.config.provider.type.supportedFileTypes)
-                }
-                .keyboardShortcut("b")
-            }
-        }
-        #endif
     }
 
     var plusButton: some View {
