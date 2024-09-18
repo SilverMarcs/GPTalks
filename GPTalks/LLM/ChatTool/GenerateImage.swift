@@ -11,7 +11,6 @@ import GoogleGenerativeAI
 import SwiftData
 
 struct GenerateImage {
-    
     static func generateImage(from arguments: String, modelContext: ModelContext?) async throws -> ToolData {
         guard let modelContext = modelContext else {
             return .init(string: "Error: Model context not found")
@@ -23,7 +22,7 @@ struct GenerateImage {
         let fetchProviders = FetchDescriptor<Provider>()
         let fetchedProviders = try! modelContext.fetch(fetchProviders)
         
-        guard let provider = ProviderManager.shared.getImageProvider(providers: fetchedProviders) else {
+        guard let provider = ProviderManager.shared.getToolImageProvider(providers: fetchedProviders) else {
             return .init(string: "Error: No image provider")
         }
         

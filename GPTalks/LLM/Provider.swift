@@ -37,6 +37,8 @@ class Provider {
     var titleModel: AIModel
     @Relationship(deleteRule: .cascade)
     var imageModel: AIModel
+    @Relationship(deleteRule: .cascade)
+    var toolImageModel: AIModel
     
     @Relationship(deleteRule: .cascade)
     var chatModels: [AIModel] = []
@@ -57,6 +59,7 @@ class Provider {
                 quickChatModel: AIModel,
                 titleModel: AIModel,
                 imageModel: AIModel,
+                toolImageModel: AIModel,
                 chatModels: [AIModel] = [],
                 imageModels: [AIModel] = []) {
         self.id = id
@@ -72,6 +75,7 @@ class Provider {
         self.quickChatModel = quickChatModel
         self.titleModel = titleModel
         self.imageModel = imageModel
+        self.toolImageModel = toolImageModel
         self.chatModels = chatModels
         self.imageModels = imageModels
     }
@@ -84,6 +88,7 @@ class Provider {
         self.quickChatModel = demoModel
         self.titleModel = demoModel
         self.imageModel = demoModel
+        self.toolImageModel = demoModel
         self.type = .openai
     }
     
@@ -112,6 +117,7 @@ class Provider {
         
         if let first = provider.imageModels.first {
             provider.imageModel = first
+            provider.toolImageModel = first
         }
         
         return provider

@@ -30,7 +30,7 @@ struct ToolSettings: View {
             }
         }
         .formStyle(.grouped)
-        .navigationTitle("Tools")
+        .navigationTitle("Plugins")
         .toolbarTitleDisplayMode(.inline)
     }
 }

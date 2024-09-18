@@ -16,22 +16,78 @@ struct ImageSettings: View {
     @Query(filter: #Predicate { $0.isEnabled && $0.supportsImage}, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
-    @State private var selectedProviderId: String?
+//    @State private var selectedProviderId: String?
+    
+    private var providerBinding: Binding<Provider?> {
+        Binding<Provider?>(
+            get: {
+                self.providerManager.getImageProvider(providers: self.providers)
+            },
+            set: { newValue in
+                if let provider = newValue {
+                    self.providerManager.imageProvider = provider.id.uuidString
+                }
+            }
+        )
+    }
     
     var body: some View {
         Form {
-            Section("Image Provider") {
-                Picker("Default", selection: $selectedProviderId) {
-                    ForEach(providers, id: \.id) { provider in
-                        Text(provider.name).tag(provider.id.uuidString)
+            Section("Defaults") {
+                Picker("Provider", selection: providerBinding) {
+                    ForEach(providers) { provider in
+                        Text(provider.name).tag(provider)
                     }
                 }
-                .onChange(of: selectedProviderId) {
-                    providerManager.imageProvider = selectedProviderId
+                
+                if let provider = providerBinding.wrappedValue {
+                    VStack(alignment: .leading) {
+                        Picker("Model", selection: Binding(
+                            get: { provider.imageModel },
+                            set: { newValue in
+                                if let index = providers.firstIndex(where: { $0.id == provider.id }) {
+                                    providers[index].imageModel = newValue
+                                }
+                            }
+                        )) {
+                            ForEach(provider.imageModels) { model in
+                                Text(model.name).tag(model)
+                            }
+                        }
+                        
+                        Text("Will also be set as provider's default image model")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
-                .onAppear {
-                    selectedProviderId = providerManager.imageProvider
-                }
+            }
+            
+            Section {
+                Stepper(
+                    "Image Height",
+                    value: Binding<Double>(
+                        get: { Double(imageConfig.imageHeight) },
+                        set: { imageConfig.imageHeight = Int($0) }
+                    ),
+                    in: 40...300,
+                    step: 30,
+                    format: .number
+                )
+                
+                Stepper(
+                    "Generation Width",
+                    value: Binding<Double>(
+                        get: { Double(imageConfig.imageWidth) },
+                        set: { imageConfig.imageWidth = Int($0) }
+                    ),
+                    in: 80...300,
+                    step: 30,
+                    format: .number
+                )
+            } header: {
+                Text("Size")
+            } footer: {
+                SectionFooterView(text: "Recommend sticking with width: 100 and height: 48")
             }
             
             Section(header: Text("Default Parameters")) {
