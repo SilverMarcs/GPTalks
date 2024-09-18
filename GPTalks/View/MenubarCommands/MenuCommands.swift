@@ -43,17 +43,17 @@ struct MenuCommands: Commands {
                 Button("Actual Size") {
                     resetFontSize()
                 }
-                .keyboardShortcut("o", modifiers: commandModifier)
+                .keyboardShortcut("o", modifiers: .command)
                 
                 Button("Zoom In") {
                     increaseFontSize()
                 }
-                .keyboardShortcut("+", modifiers: commandModifier)
+                .keyboardShortcut("+", modifiers: .command)
                 
                 Button("Zoom Out") {
                     decreaseFontSize()
                 }
-                .keyboardShortcut("-", modifiers: commandModifier)
+                .keyboardShortcut("-", modifiers: .command)
             }
         }
         
@@ -82,13 +82,5 @@ struct MenuCommands: Commands {
     
     private func resetFontSize() {
         config.fontSize = 13
-    }
-    
-    private var commandModifier: EventModifiers {
-        #if targetEnvironment(macCatalyst)
-        return [.command, .shift]
-        #else
-        return .command
-        #endif
     }
 }

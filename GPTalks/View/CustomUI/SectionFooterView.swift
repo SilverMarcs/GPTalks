@@ -11,7 +11,7 @@ struct SectionFooterView: View {
     var text: String
     
     var body: some View {
-        #if os(macOS) || targetEnvironment(macCatalyst)
+        #if os(macOS)
         HStack {
             Text(text)
                 .font(.caption)

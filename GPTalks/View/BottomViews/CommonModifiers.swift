@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import VisualEffectView
+//import VisualEffectView
 
 struct CommonInputStyling: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
@@ -16,18 +16,19 @@ struct CommonInputStyling: ViewModifier {
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal)
             .padding(.vertical, verticalPadding)
-            #if os(macOS) || targetEnvironment(macCatalyst)
+            #if os(macOS)
             .background(.bar)
             #else
             .background(
-                VisualEffect(
-                    colorTint: colorScheme == .dark ? .black : .white,
-                    colorTintAlpha: 0.7,
-                    blurRadius: 15,
-                    scale: 1
-                )
-                .ignoresSafeArea()
-//                .background
+//                VisualEffect(
+//                    colorTint: colorScheme == .dark ? .black : .white,
+//                    colorTintAlpha: 0.7,
+//                    blurRadius: 15,
+//                    scale: 1
+//                )
+//                .ignoresSafeArea()
+                .background
+//                    .ignoresSafeArea()
             )
                 #if os(visionOS)
                 .background(.regularMaterial)
@@ -38,7 +39,7 @@ struct CommonInputStyling: ViewModifier {
     }
     
     private var verticalPadding: CGFloat {
-#if os(macOS) || targetEnvironment(macCatalyst)
+#if os(macOS)
         14
 #else
         9

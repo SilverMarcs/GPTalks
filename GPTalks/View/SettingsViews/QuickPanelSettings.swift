@@ -29,7 +29,7 @@ struct QuickPanelSettings: View {
     }
     
     var body: some View {
-        #if os(macOS) || targetEnvironment(macCatalyst)
+        #if os(macOS)
         content
         #else
         EmptyView()

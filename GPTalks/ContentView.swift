@@ -16,13 +16,13 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             SessionListSidebar(providers: providers)
-            #if os(macOS) || targetEnvironment(macCatalyst)
+            #if os(macOS)
                 .navigationSplitViewColumnWidth(min: 240, ideal: 250, max: 300)
             #endif
         } detail: {
             ConversationListDetail(providers: providers)
         }
-        #if os(macOS) || targetEnvironment(macCatalyst)
+        #if os(macOS)
         .frame(minWidth: 900, minHeight: 700)
         #endif
     }

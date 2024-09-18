@@ -71,7 +71,7 @@ struct ToolMessage: View {
     }
     
     var spacing: CGFloat {
-        #if os(macOS) || targetEnvironment(macCatalyst)
+        #if os(macOS)
         10
         #else
         7

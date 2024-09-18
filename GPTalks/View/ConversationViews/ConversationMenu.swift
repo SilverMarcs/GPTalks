@@ -22,7 +22,7 @@ struct ConversationMenu: View {
     @State var isCopied = false
 
     var body: some View {
-        #if os(macOS) || targetEnvironment(macCatalyst)
+        #if os(macOS)
             HStack {
                 buttons
                     .labelStyle(.iconOnly)
@@ -220,7 +220,7 @@ struct ConversationMenu: View {
         }
         
         return Group {
-            #if os(macOS) || targetEnvironment(macCatalyst)
+            #if os(macOS)
             if group.conversations.count > 1 && group.role == .assistant {
                 HoverScaleButton(icon: "chevron.left", label: "Previous") {
                     group.setActiveToLeft()

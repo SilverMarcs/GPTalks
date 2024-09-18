@@ -45,7 +45,7 @@ struct ListCard: View {
             }
             .padding(.vertical, verticalPadding)
             .padding(.horizontal, horizontalPadding)
-            #if os(macOS) || targetEnvironment(macCatalyst)
+            #if os(macOS)
             .background(.quaternary.opacity(0.8))
             #else
             .background(colorScheme == .dark
@@ -60,7 +60,7 @@ struct ListCard: View {
     }
     
     private var radius: CGFloat {
-    #if os(macOS) || targetEnvironment(macCatalyst)
+    #if os(macOS)
         return 7
     #else
         return 10
@@ -68,7 +68,7 @@ struct ListCard: View {
     }
     
     private var verticalPadding: CGFloat {
-        #if os(macOS) || targetEnvironment(macCatalyst)
+        #if os(macOS)
         return 5
         #else
         return 7
@@ -76,7 +76,7 @@ struct ListCard: View {
     }
     
     private var horizontalPadding: CGFloat {
-        #if os(macOS) || targetEnvironment(macCatalyst)
+        #if os(macOS)
         return 8
         #else
         return 10
@@ -84,7 +84,7 @@ struct ListCard: View {
     }
     
     private var spacing: CGFloat {
-        #if os(macOS) || targetEnvironment(macCatalyst)
+        #if os(macOS)
         return 6
         #else
         return 10

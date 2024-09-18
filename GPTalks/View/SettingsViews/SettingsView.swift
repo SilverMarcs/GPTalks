@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     
-    #if os(macOS) || targetEnvironment(macCatalyst)
+    #if os(macOS)
     @State private var selectedSidebarItem: SidebarItem? = .general
     #else
     @State private var selectedSidebarItem: SidebarItem?
@@ -30,7 +30,7 @@ struct SettingsView: View {
                 Label("Markdown", systemImage: "ellipsis.curlybraces")
                     .tag(SidebarItem.markdown)
                 
-#if os(macOS) || targetEnvironment(macCatalyst)
+#if os(macOS)
                 Label("Quick Panel", systemImage: "bolt.fill")
                     .tag(SidebarItem.quickPanel)
 #endif
