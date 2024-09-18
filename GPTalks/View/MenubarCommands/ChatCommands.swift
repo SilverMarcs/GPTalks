@@ -18,7 +18,7 @@ struct ChatCommands: Commands {
                     await sessionVM.sendMessage()
                 }
             }
-            .keyboardShortcut(.return, modifiers: commandModifier)
+            .keyboardShortcut(.return, modifiers: .command)
             
             Button("Paste Files") {
                 sessionVM.handlePaste()
@@ -30,7 +30,7 @@ struct ChatCommands: Commands {
                     await sessionVM.stopStreaming()
                 }
             }
-            .keyboardShortcut("d", modifiers: commandModifier)
+            .keyboardShortcut("d", modifiers: .command)
             .disabled(!(sessionVM.activeSession?.isReplying ?? false))
             
             Section {
@@ -39,14 +39,14 @@ struct ChatCommands: Commands {
                         await sessionVM.regenLastMessage()
                     }
                 }
-                .keyboardShortcut("r", modifiers: commandModifier)
+                .keyboardShortcut("r", modifiers: .command)
                 
                 Button("Edit Last Message") {
                     withAnimation {
                         sessionVM.editLastMessage()
                     }
                 }
-                .keyboardShortcut("e", modifiers: commandModifier)
+                .keyboardShortcut("e", modifiers: .command)
                 .disabled(sessionVM.activeSession?.isQuick ?? true)
             }
             
@@ -54,21 +54,13 @@ struct ChatCommands: Commands {
                 Button("Delete Last Message") {
                     sessionVM.deleteLastMessage()
                 }
-                .keyboardShortcut(.delete, modifiers: commandModifier)
+                .keyboardShortcut(.delete, modifiers: .command)
                 
                 Button("Reset Context") {
                     sessionVM.resetLastContext()
                 }
-                .keyboardShortcut("k", modifiers: commandModifier)
+                .keyboardShortcut("k", modifiers: .command)
             }
         }
-    }
-    
-    private var commandModifier: EventModifiers {
-        #if targetEnvironment(macCatalyst)
-        return [.command, .shift]
-        #else
-        return .command
-        #endif
     }
 }

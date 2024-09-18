@@ -32,7 +32,7 @@ struct AppearanceSettings: View {
             Section("View Customisation") {
                 Toggle("Compact List Row", isOn: $config.compactList)
                 
-                #if os(macOS) || targetEnvironment(macCatalyst)
+                #if os(macOS)
                 VStack(alignment: .leading) {
                     Picker("ConversationList Style", selection: $config.conversationListStyle) {
                         ForEach(ConversationListStyle.allCases, id: \.self) { style in

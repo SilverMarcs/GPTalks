@@ -32,7 +32,7 @@ struct ConversationListToolbar: ToolbarContent {
                 }
         }
         
-        #if os(macOS) || targetEnvironment(macCatalyst)
+        #if os(macOS)
         ToolbarItem(placement: .navigation) {
             Button {
                 toggleInspector()

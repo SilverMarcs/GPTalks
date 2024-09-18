@@ -47,7 +47,7 @@ struct ImageViewerOld: View {
     }
     
     private func setupQLItem() {
-#if os(macOS) || targetEnvironment(macCatalyst)
+#if os(macOS)
         qlItem = URL(string: imagePath)!
 #else
         if let fileURL = imagePath.absoluteURL() {

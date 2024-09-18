@@ -5,7 +5,7 @@
 //  Created by Zabir Raihan on 12/07/2024.
 //
 
-//#if os(macOS) || targetEnvironment(macCatalyst)
+//#if os(macOS)
 //import SwiftUI
 //
 //class QuickPanelWindow2<Content: View>: NSPanel {

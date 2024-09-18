@@ -75,7 +75,6 @@
 		085910C82C4F7A5A0086E493 /* ChatSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085910C72C4F7A5A0086E493 /* ChatSessionVM.swift */; };
 		085910CA2C4F7A720086E493 /* ImageSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085910C92C4F7A720086E493 /* ImageSessionVM.swift */; };
 		086783122C5CF16800BB768F /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 086783112C5CF16800BB768F /* GoogleGenerativeAI */; };
-		0869A3E52C9579BF009BF9F2 /* VisualEffectView in Frameworks */ = {isa = PBXBuildFile; productRef = 0869A3E42C9579BF009BF9F2 /* VisualEffectView */; };
 		0869A3EB2C958A4C009BF9F2 /* SessionConfigTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869A3EA2C958A4C009BF9F2 /* SessionConfigTools.swift */; };
 		0869A3F22C95DBF9009BF9F2 /* StreamResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869A3F12C95DBF9009BF9F2 /* StreamResponse.swift */; };
 		0869A3F62C95E4CC009BF9F2 /* ToolCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869A3F52C95E4CC009BF9F2 /* ToolCall.swift */; };
@@ -429,7 +428,6 @@
 				0886D81E2C8705680058700F /* OpenAI in Frameworks */,
 				08AAFB8D2C3C3F0B002C04E0 /* GoogleGenerativeAI in Frameworks */,
 				080553272C5F99BC003C1842 /* MarkdownWebView in Frameworks */,
-				0869A3E52C9579BF009BF9F2 /* VisualEffectView in Frameworks */,
 				0809889D2C6F500000A73A71 /* MarkdownWebView in Frameworks */,
 				08E1956F2C6FBFF400BA9506 /* MarkdownWebView in Frameworks */,
 				0869A3F92C95FC70009BF9F2 /* OpenAI in Frameworks */,
@@ -976,7 +974,6 @@
 				089792002C835885003C95CD /* MarkdownWebView */,
 				0891AC0C2C846B2B001379C0 /* Reeeed */,
 				0886D81D2C8705680058700F /* OpenAI */,
-				0869A3E42C9579BF009BF9F2 /* VisualEffectView */,
 				0869A3F82C95FC70009BF9F2 /* OpenAI */,
 				0891D5702C961EFB00BA428F /* OpenAI */,
 			);
@@ -1059,7 +1056,6 @@
 				086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 				089791FF2C835885003C95CD /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */,
-				0869A3E32C9579BF009BF9F2 /* XCRemoteSwiftPackageReference "VisualEffectView" */,
 				0891D56F2C961EFB00BA428F /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
@@ -1462,7 +1458,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6,7";
@@ -1506,7 +1502,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6,7";
@@ -1658,14 +1654,6 @@
 				kind = branch;
 			};
 		};
-		0869A3E32C9579BF009BF9F2 /* XCRemoteSwiftPackageReference "VisualEffectView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/VisualEffectView";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nate-parrott/reeeed";
@@ -1753,11 +1741,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
 			productName = GoogleGenerativeAI;
-		};
-		0869A3E42C9579BF009BF9F2 /* VisualEffectView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0869A3E32C9579BF009BF9F2 /* XCRemoteSwiftPackageReference "VisualEffectView" */;
-			productName = VisualEffectView;
 		};
 		0869A3F82C95FC70009BF9F2 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;

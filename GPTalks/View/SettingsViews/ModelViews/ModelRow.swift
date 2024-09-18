@@ -20,7 +20,7 @@ struct ModelRow: View {
     
     var body: some View {
         Group {
-            #if os(macOS) || targetEnvironment(macCatalyst)
+            #if os(macOS)
             HStack(spacing: 0) {
                 Toggle("Enabled", isOn: $model.isEnabled)
                     .frame(maxWidth: 39, alignment: .leading)
@@ -84,7 +84,7 @@ struct ModelRow: View {
         HStack {
             if isTestingModel {
                 ProgressView()
-                #if os(macOS) || targetEnvironment(macCatalyst)
+                #if os(macOS)
                     .controlSize(.small)
                 #endif
             } else if let result = testResult {

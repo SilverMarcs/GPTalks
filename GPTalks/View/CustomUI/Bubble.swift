@@ -20,7 +20,7 @@ struct Bubble: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding(7)
-#if os(macOS) || targetEnvironment(macCatalyst)
+#if os(macOS)
             .background(.background.quinary)
 #else
             .background(.background.secondary)

@@ -1,5 +1,5 @@
 {
-  "originHash" : "97b9a25fe6175cfd3bfd0db713c1b21dd20b2a532d6c48c9e3bc36a0b4b162bd",
+  "originHash" : "8be40d0e05d3b87c26a0bac2cedeb70ff5f1dffc17ae4e340344c1f7ce00ac12",
   "pins" : [
     {
       "identity" : "fuzi",
@@ -80,15 +80,6 @@
       "state" : {
         "revision" : "3c2c7e1e72b8abd96eafbae80323c5c1e5317437",
         "version" : "2.7.5"
-      }
-    },
-    {
-      "identity" : "visualeffectview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/VisualEffectView",
-      "state" : {
-        "branch" : "master",
-        "revision" : "dc8c4f1c5c381a7833bd05158b2956fcdfe9d292"
       }
     }
   ],

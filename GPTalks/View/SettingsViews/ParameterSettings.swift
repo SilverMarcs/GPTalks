@@ -41,7 +41,7 @@ struct ParameterSettings: View {
     }
     
     var lineLimit: Int {
-        #if os(macOS) || targetEnvironment(macCatalyst)
+        #if os(macOS)
         8
         #else
         5

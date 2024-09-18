@@ -23,7 +23,7 @@ struct ChatInputView: View {
             }
             
             plusButton
-            #if os(macOS) || targetEnvironment(macCatalyst)
+            #if os(macOS)
                 .offset(y: -2.4)
                 .popoverTip(ChatCommandsTip())
             #endif
@@ -35,7 +35,7 @@ struct ChatInputView: View {
                 
                 InputEditor(prompt: $session.inputManager.prompt,
                             provider: session.config.provider, isFocused: _isFocused)
-//                #if os(macOS) || targetEnvironment(macCatalyst)
+//                #if os(macOS)
 //                .popoverTip(FocusTip())
 //                #endif
             }
@@ -54,7 +54,7 @@ struct ChatInputView: View {
 
     var plusButton: some View {
         Group {
-#if os(macOS) || targetEnvironment(macCatalyst)
+#if os(macOS)
             PlusButton(size: imageSize) {
                 isPresented = true
             }
@@ -86,7 +86,7 @@ struct ChatInputView: View {
     }
     
     var verticalPadding: CGFloat {
-#if os(macOS) || targetEnvironment(macCatalyst)
+#if os(macOS)
         14
 #else
         9
@@ -94,7 +94,7 @@ struct ChatInputView: View {
     }
     
     var imageSize: CGFloat {
-      #if os(macOS) || targetEnvironment(macCatalyst)
+      #if os(macOS)
         23
         #else
         30

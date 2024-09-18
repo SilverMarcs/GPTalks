@@ -17,7 +17,7 @@ struct ProviderList: View {
     
     var body: some View {
         Group {
-            #if os(macOS) || targetEnvironment(macCatalyst)
+            #if os(macOS)
             NavigationStack {
                 Form {
                     content

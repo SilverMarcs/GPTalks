@@ -25,7 +25,7 @@ struct ChatInspector: View {
                     AdvancedChatInspector(session: session)
                 }
             }
-            #if os(macOS) || targetEnvironment(macCatalyst)
+            #if os(macOS)
             .frame(height: 610)
             .safeAreaInset(edge: .top, spacing: 0) {
                 ZStack(alignment: .trailing) {
