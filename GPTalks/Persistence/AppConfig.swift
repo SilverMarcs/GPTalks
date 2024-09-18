@@ -24,7 +24,12 @@ class AppConfig: ObservableObject {
     @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .native
     #endif
     
+    #if os(macOS)
     @AppStorage("compactList") var compactList: Bool = true
+    #else
+    @AppStorage("compactList") var compactList: Bool = false
+    #endif
+    
     @AppStorage("truncateList") var truncateList: Bool = false
     @AppStorage("listCount") var listCount: Int = 16
     @AppStorage("conversationListStyle") var conversationListStyle: ConversationListStyle = .scrollview

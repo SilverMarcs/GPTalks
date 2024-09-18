@@ -56,22 +56,29 @@ extension View {
         ) { result in
             switch result {
             case .success(let urls):
-                for url in urls {
-                    if let data = try? Data(contentsOf: url) {
-                        let fileType = UTType(filenameExtension: url.pathExtension) ?? .data
-                        let fileName = url.deletingPathExtension().lastPathComponent
-                        let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
-                        let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
-                        let fileExtension = url.pathExtension.lowercased()
-                        
-                        let typedData = TypedData(
-                            data: data,
-                            fileType: fileType,
-                            fileName: fileName,
-                            fileSize: fileSize,
-                            fileExtension: fileExtension
-                        )
-                        onDataAppend(typedData)
+                DispatchQueue.global(qos: .userInitiated).async {
+                    for url in urls {
+                        autoreleasepool {
+                            if let data = try? Data(contentsOf: url) {
+                                let fileType = UTType(filenameExtension: url.pathExtension) ?? .data
+                                let fileName = url.deletingPathExtension().lastPathComponent
+                                let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
+                                let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
+                                let fileExtension = url.pathExtension.lowercased()
+                                
+                                let typedData = TypedData(
+                                    data: data,
+                                    fileType: fileType,
+                                    fileName: fileName,
+                                    fileSize: fileSize,
+                                    fileExtension: fileExtension
+                                )
+                                
+                                DispatchQueue.main.async {
+                                    onDataAppend(typedData)
+                                }
+                            }
+                        }
                     }
                 }
             case .failure(let error):
