@@ -14,6 +14,7 @@ class ProviderManager: ObservableObject {
     @AppStorage("defaultProvider") var defaultProvider: String?
     @AppStorage("imageProvider") var imageProvider: String?
     @AppStorage("quickProvider") var quickProvider: String?
+    @AppStorage("toolImageProvider") var toolImageProvider: String?
     
     private init() {}
     
@@ -31,6 +32,12 @@ class ProviderManager: ObservableObject {
     
     func getImageProvider(providers: [Provider]) -> Provider? {
         imageProvider.flatMap { id in
+            providers.first { $0.id.uuidString == id }
+        }
+    }
+    
+    func getToolImageProvider(providers: [Provider]) -> Provider? {
+        toolImageProvider.flatMap { id in
             providers.first { $0.id.uuidString == id }
         }
     }

@@ -79,5 +79,6 @@ struct MainWindow: Scene {
         ProviderManager.shared.defaultProvider = openAI.id.uuidString
         ProviderManager.shared.quickProvider = openAI.id.uuidString
         ProviderManager.shared.imageProvider = openAI.id.uuidString
+        ProviderManager.shared.toolImageProvider = openAI.id.uuidString
     }
 }

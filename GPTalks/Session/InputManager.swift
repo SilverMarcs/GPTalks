@@ -101,15 +101,17 @@ extension InputManager {
             return
         }
 
-        for item in pasteboardItems {
-            if let fileURLData = item.data(forType: .fileURL),
-               let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
-                processFile(at: fileURL, supportedFileTypes: supportedFileTypes)
-            } else if let imageData = item.data(forType: .png) {
-                processImageData(imageData, supportedFileTypes: supportedFileTypes)
-            } else if let urlData = item.data(forType: .URL),
-                      let url = URL(dataRepresentation: urlData, relativeTo: nil) {
-                processURL(url)
+        DispatchQueue.global(qos: .userInitiated).async {
+            for item in pasteboardItems {
+                if let fileURLData = item.data(forType: .fileURL),
+                   let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
+                    self.processFile(at: fileURL, supportedFileTypes: supportedFileTypes)
+                } else if let imageData = item.data(forType: .png) {
+                    self.processImageData(imageData, supportedFileTypes: supportedFileTypes)
+                } else if let urlData = item.data(forType: .URL),
+                          let url = URL(dataRepresentation: urlData, relativeTo: nil) {
+                    self.processURL(url)
+                }
             }
         }
         #endif
@@ -124,21 +126,25 @@ extension InputManager {
 
         do {
             let data = try Data(contentsOf: url)
-            appendTypedData(data: data, url: url, fileType: fileType)
+            DispatchQueue.main.async {
+                self.appendTypedData(data: data, url: url, fileType: fileType)
+            }
         } catch {
             print("Failed to read file data: \(error)")
         }
     }
 
     func processImageData(_ imageData: Data, supportedFileTypes: [UTType]) {
-        let tempDirectory = FileManager.default.temporaryDirectory
-        let tempFileURL = tempDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("png")
+        DispatchQueue.global(qos: .userInitiated).async {
+            let tempDirectory = FileManager.default.temporaryDirectory
+            let tempFileURL = tempDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("png")
 
-        do {
-            try imageData.write(to: tempFileURL)
-            processFile(at: tempFileURL, supportedFileTypes: supportedFileTypes)
-        } catch {
-            print("Failed to write image data to temporary file: \(error)")
+            do {
+                try imageData.write(to: tempFileURL)
+                self.processFile(at: tempFileURL, supportedFileTypes: supportedFileTypes)
+            } catch {
+                print("Failed to write image data to temporary file: \(error)")
+            }
         }
     }
 
@@ -158,7 +164,7 @@ extension InputManager {
                 
                 try webContent.write(to: tempFileURL, atomically: true, encoding: .utf8)
                 
-                processFile(at: tempFileURL, supportedFileTypes: [.plainText])
+                self.processFile(at: tempFileURL, supportedFileTypes: [.plainText])
             } catch {
                 print("Failed to fetch and process URL content: \(error)")
             }

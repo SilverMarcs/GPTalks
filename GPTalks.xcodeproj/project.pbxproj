@@ -208,6 +208,7 @@
 		08F815422C98093800B49355 /* ToolResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F815412C98093800B49355 /* ToolResponse.swift */; };
 		08F815442C98097400B49355 /* ToolData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F815432C98097400B49355 /* ToolData.swift */; };
 		08F815462C980ABF00B49355 /* StreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F815452C980ABF00B49355 /* StreamHandler.swift */; };
+		08F840062C9AA26C000CB498 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F840052C9AA26C000CB498 /* CameraView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -407,6 +408,7 @@
 		08F815412C98093800B49355 /* ToolResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolResponse.swift; sourceTree = "<group>"; };
 		08F815432C98097400B49355 /* ToolData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolData.swift; sourceTree = "<group>"; };
 		08F815452C980ABF00B49355 /* StreamHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamHandler.swift; sourceTree = "<group>"; };
+		08F840052C9AA26C000CB498 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -802,6 +804,7 @@
 		08C800382C36BA1E009581C5 /* BottomViews */ = {
 			isa = PBXGroup;
 			children = (
+				08F840052C9AA26C000CB498 /* CameraView.swift */,
 				08A313462C4AD03300C3E578 /* ImageInputView.swift */,
 				087928362C48CFFB008646CD /* ExpandedTextField.swift */,
 				08C800392C36BA30009581C5 /* ChatInputView.swift */,
@@ -1161,6 +1164,7 @@
 				08B8DE1D2C97F3BF0041A690 /* SessionToolbar.swift in Sources */,
 				08F815322C97F63E00B49355 /* AdvancedChatInspector.swift in Sources */,
 				08A222BE2C2ABDB400D76C8B /* InputManager.swift in Sources */,
+				08F840062C9AA26C000CB498 /* CameraView.swift in Sources */,
 				08C49FD82C502EC90085792F /* FileHelper.swift in Sources */,
 				08A222852C2AB4FD00D76C8B /* ContentView.swift in Sources */,
 				08C5C7292C9A1392004992A4 /* GoogleAuthManager.swift in Sources */,
@@ -1439,6 +1443,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GPTalks/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Describe images using computer vision";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -1483,6 +1488,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GPTalks/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Describe images using computer vision";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

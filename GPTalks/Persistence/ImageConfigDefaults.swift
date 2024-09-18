@@ -15,4 +15,7 @@ class ImageConfigDefaults: ObservableObject {
     @AppStorage("size") var size: ImagesQuery.Size = ImagesQuery.Size._256
     @AppStorage("quality") var quality = ImagesQuery.Quality.standard
     @AppStorage("style") var style = ImagesQuery.Style.natural
+    
+    @AppStorage("imageWidth") var imageWidth: Int = 100
+    @AppStorage("imageHeight") var imageHeight: Int = 48
 }

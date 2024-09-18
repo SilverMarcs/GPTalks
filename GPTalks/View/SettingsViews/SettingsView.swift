@@ -34,7 +34,7 @@ struct SettingsView: View {
                 Label("Quick Panel", systemImage: "bolt.fill")
                     .tag(SidebarItem.quickPanel)
 #endif
-                Label("Tools", systemImage: "hammer")
+                Label("Plugins", systemImage: "hammer")
                     .tag(SidebarItem.tools)
                 
                 Label("Parameters", systemImage: "slider.horizontal.3")

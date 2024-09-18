@@ -17,15 +17,18 @@ struct ToolMessage: View {
                 .resizable()
                 .frame(width: size, height: size)
                 .foregroundStyle(.teal)
+                
+            if !conversation.content.isEmpty {
+                Text(conversation.content)
+            }
             
-//                Text(conversation.content)
-            
-                button
-                    .popover(isPresented: $showPopover, arrowEdge: .leading) {
-                        if let toolResponse = conversation.toolResponse {
-                            popoverContent(content: toolResponse.processedContent)
-                        }
+            button
+                .popover(isPresented: $showPopover, arrowEdge: .leading) {
+                    if let toolResponse = conversation.toolResponse {
+                        popoverContent(content: toolResponse.processedContent)
                     }
+                }
+            
             Spacer()
         }
     }

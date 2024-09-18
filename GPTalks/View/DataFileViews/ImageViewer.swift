@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ImageViewer: View {
+    @ObservedObject var imageConfig = ImageConfigDefaults.shared
+    
     let typedData: TypedData
     let onTap: () -> Void
     
@@ -17,7 +19,7 @@ struct ImageViewer: View {
                 Image(platformImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 100, height: 48)
+                    .frame(width: CGFloat(imageConfig.imageWidth), height: CGFloat(imageConfig.imageHeight))
                     .clipShape(RoundedRectangle(cornerRadius: 10))
             } else {
                 FileViewer(typedData: typedData, onTap: onTap)
