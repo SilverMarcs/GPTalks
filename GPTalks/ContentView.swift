@@ -23,7 +23,7 @@ struct ContentView: View {
             ConversationListDetail(providers: providers)
         }
         #if os(macOS)
-        .frame(minWidth: 900, minHeight: 700)
+        .frame(minWidth: 600, minHeight: 400)
         #endif
     }
 }
