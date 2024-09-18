@@ -245,6 +245,57 @@ struct VertexService: AIService {
     }
     
     static func testModel(provider: Provider, model: AIModel) async -> Bool {
-        return false
+        let testConversation = Conversation(role: .user, content: String.testPrompt)
+        let location = "us-east5"  // Assuming this is the default location
+        let apiUrl = "https://\(location)-aiplatform.googleapis.com/v1/projects/\(provider.host)/locations/\(location)/publishers/anthropic/models/\(model.code):streamRawPredict"
+        
+        guard let url = URL(string: apiUrl) else {
+            return false
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let token = try await GoogleAuthManager.shared.getValidAccessToken()
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            
+            let message = convert(conversation: testConversation)
+            
+            let body: [String: Any] = [
+                "anthropic_version": "vertex-2023-10-16",
+                "messages": [message],
+                "max_tokens": 100,  // A small number for testing
+                "temperature": 1.0,
+                "stream": false
+            ]
+            
+            request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
+            
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                return false
+            }
+            
+            guard let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                  let contentArray = jsonObject["content"] as? [[String: Any]] else {
+                return false
+            }
+            
+            let hasContent = contentArray.contains { content in
+                if let text = content["text"] as? String, !text.isEmpty {
+                    return true
+                }
+                return false
+            }
+            
+            return hasContent
+            
+        } catch {
+            print("Error testing Vertex AI model: \(error)")
+            return false
+        }
     }
 }
