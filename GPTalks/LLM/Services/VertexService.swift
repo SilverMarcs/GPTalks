@@ -164,6 +164,15 @@ struct VertexService: AIService {
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
+        #if DEBUG
+        if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
+           let prettyPrintedData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
+           let prettyPrintedString = String(data: prettyPrintedData, encoding: .utf8) {
+            print("Received JSON:")
+            print(prettyPrintedString)
+        }
+        #endif
+        
         guard (response as? HTTPURLResponse)?.statusCode == 200 else {
             throw URLError(.badServerResponse)
         }
@@ -173,6 +182,24 @@ struct VertexService: AIService {
             throw URLError(.cannotParseResponse)
         }
         
+        // Vertex Cla
+        let toolCalls = contentArray.filter { $0["type"] as? String == "tool_use" }
+        if !toolCalls.isEmpty {
+            let calls: [ToolCall] = toolCalls.compactMap { toolCall in
+                guard let id = toolCall["id"] as? String,
+                      let name = toolCall["name"] as? String,
+                      let tool = ChatTool(rawValue: name),
+                      let input = toolCall["input"] as? [String: Any],
+                      let inputJson = try? JSONSerialization.data(withJSONObject: input),
+                      let inputString = String(data: inputJson, encoding: .utf8) else {
+                    return nil
+                }
+                return ToolCall(toolCallId: id, tool: tool, arguments: inputString)
+            }
+            return .toolCalls(calls)
+        }
+        
+        // If no tool calls, return the text content
         let text = contentArray.compactMap { $0["text"] as? String }.joined(separator: " ")
         return .content(text)
     }
