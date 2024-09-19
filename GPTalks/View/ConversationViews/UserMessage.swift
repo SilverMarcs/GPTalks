@@ -20,7 +20,7 @@ struct UserMessage: View {
     var body: some View {
         VStack(alignment: .trailing, spacing: 7) {
             if !conversation.dataFiles.isEmpty {
-                DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false)
+                DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false, edge: .trailing)
             }
             
             HighlightedText(text: conversation.content, highlightedText: conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil)
