@@ -18,16 +18,7 @@ struct URLScrapeSettings: View {
         Section {
             VStack {
                 VStack(alignment: .leading) {
-                    Stepper(
-                        "Content Length",
-                        value: Binding<Double>(
-                            get: { Double(config.maxContentLength) },
-                            set: { config.maxContentLength = Int($0) }
-                        ),
-                        in: 500...20000,
-                        step: 500,
-                        format: .number
-                    )
+                    IntegerStepper(value: $config.maxContentLength, label: "Content Length", step: 500, range: 500...20000)
                     
                     Text("Number of prefix characters to return from each url")
                        .font(.caption)

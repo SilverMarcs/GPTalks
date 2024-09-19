@@ -57,16 +57,7 @@ struct AppearanceSettings: View {
             Section {
                 Toggle("Show Less Sessions", isOn: $config.truncateList)
 
-                Stepper(
-                    "List Count",
-                    value: Binding<Double>(
-                        get: { Double(config.listCount) },
-                        set: { config.listCount = Int($0) }
-                    ),
-                    in: 6...20,
-                    step: 1,
-                    format: .number
-                )
+                IntegerStepper(value: $config.listCount, label: "List Count", step: 1, range: 6...20)
                 .opacity(config.truncateList ? 1 : 0.5)
                 .disabled(!config.truncateList)
             } header: {

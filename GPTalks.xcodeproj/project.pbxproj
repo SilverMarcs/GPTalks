@@ -74,6 +74,7 @@
 		085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085645432C3F98DF00ED84DA /* TitleGenerator.swift */; };
 		085910C82C4F7A5A0086E493 /* ChatSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085910C72C4F7A5A0086E493 /* ChatSessionVM.swift */; };
 		085910CA2C4F7A720086E493 /* ImageSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085910C92C4F7A720086E493 /* ImageSessionVM.swift */; };
+		085EA4A52C9C4E9600124F83 /* IntegerStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085EA4A42C9C4E9600124F83 /* IntegerStepper.swift */; };
 		086783122C5CF16800BB768F /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 086783112C5CF16800BB768F /* GoogleGenerativeAI */; };
 		0869A3EB2C958A4C009BF9F2 /* SessionConfigTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869A3EA2C958A4C009BF9F2 /* SessionConfigTools.swift */; };
 		0869A3F22C95DBF9009BF9F2 /* StreamResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869A3F12C95DBF9009BF9F2 /* StreamResponse.swift */; };
@@ -288,6 +289,7 @@
 		085645432C3F98DF00ED84DA /* TitleGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleGenerator.swift; sourceTree = "<group>"; };
 		085910C72C4F7A5A0086E493 /* ChatSessionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionVM.swift; sourceTree = "<group>"; };
 		085910C92C4F7A720086E493 /* ImageSessionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSessionVM.swift; sourceTree = "<group>"; };
+		085EA4A42C9C4E9600124F83 /* IntegerStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerStepper.swift; sourceTree = "<group>"; };
 		0869A3EA2C958A4C009BF9F2 /* SessionConfigTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionConfigTools.swift; sourceTree = "<group>"; };
 		0869A3F12C95DBF9009BF9F2 /* StreamResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamResponse.swift; sourceTree = "<group>"; };
 		0869A3F52C95E4CC009BF9F2 /* ToolCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCall.swift; sourceTree = "<group>"; };
@@ -594,6 +596,7 @@
 				08A77CC82C65A3AD0087D0F3 /* SectionFooterView.swift */,
 				0893B2012C3955CC00D4D501 /* CustomSearchField.swift */,
 				08CF5B882C68980B0079D5EE /* HighlightedTextViews.swift */,
+				085EA4A42C9C4E9600124F83 /* IntegerStepper.swift */,
 			);
 			path = CustomUI;
 			sourceTree = "<group>";
@@ -1117,6 +1120,7 @@
 				0821816A2C39001B00171BF3 /* ProviderRow.swift in Sources */,
 				085276BC2C98705A009184D2 /* iOSInputEditor.swift in Sources */,
 				08A77CC72C65A3680087D0F3 /* TextUtils.swift in Sources */,
+				085EA4A52C9C4E9600124F83 /* IntegerStepper.swift in Sources */,
 				08F815462C980ABF00B49355 /* StreamHandler.swift in Sources */,
 				082A63302C54F862003996B7 /* BackupSettings.swift in Sources */,
 				08F3C9FE2C70483800A800F9 /* QuickPanelWindow.swift in Sources */,
@@ -1458,7 +1462,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalks1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalksNew1;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.zabir.GPTalks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1503,7 +1507,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalks1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalksNew1;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.zabir.GPTalks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

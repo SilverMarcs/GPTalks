@@ -13,16 +13,8 @@ struct GoogleSearchSettings: View {
     var body: some View {
         Section("General") {
             Toggle("Enabled for new chats", isOn: $config.googleSearch)
-            Stepper(
-                "Search Result Count",
-                value: Binding<Double>(
-                    get: { Double(config.gSearchCount) },
-                    set: { config.gSearchCount = Int($0) }
-                ),
-                in: 1...10,
-                step: 1,
-                format: .number
-            )
+
+            IntegerStepper(value: $config.gSearchCount, label: "Search Result Count", step: 1, range: 1...10)
         }
         
         Section("Secrets") {

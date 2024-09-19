@@ -15,9 +15,7 @@ struct ImageSettings: View {
     
     @Query(filter: #Predicate { $0.isEnabled && $0.supportsImage}, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
-    
-//    @State private var selectedProviderId: String?
-    
+
     private var providerBinding: Binding<Provider?> {
         Binding<Provider?>(
             get: {
@@ -41,53 +39,25 @@ struct ImageSettings: View {
                 }
                 
                 if let provider = providerBinding.wrappedValue {
-                    VStack(alignment: .leading) {
-                        Picker("Model", selection: Binding(
-                            get: { provider.imageModel },
-                            set: { newValue in
-                                if let index = providers.firstIndex(where: { $0.id == provider.id }) {
-                                    providers[index].imageModel = newValue
-                                }
-                            }
-                        )) {
-                            ForEach(provider.imageModels) { model in
-                                Text(model.name).tag(model)
+                    Picker("Model", selection: Binding(
+                        get: { provider.imageModel },
+                        set: { newValue in
+                            if let index = providers.firstIndex(where: { $0.id == provider.id }) {
+                                providers[index].imageModel = newValue
                             }
                         }
-                        
-                        Text("Will also be set as provider's default image model")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                    )) {
+                        ForEach(provider.imageModels) { model in
+                            Text(model.name).tag(model)
+                        }
                     }
                 }
             }
             
-            Section {
-                Stepper(
-                    "Image Height",
-                    value: Binding<Double>(
-                        get: { Double(imageConfig.imageHeight) },
-                        set: { imageConfig.imageHeight = Int($0) }
-                    ),
-                    in: 40...300,
-                    step: 30,
-                    format: .number
-                )
+            Section("Size") {
+                IntegerStepper(value: $imageConfig.imageHeight, label: "Image Height", step: 30, range: 40...300)
                 
-                Stepper(
-                    "Generation Width",
-                    value: Binding<Double>(
-                        get: { Double(imageConfig.imageWidth) },
-                        set: { imageConfig.imageWidth = Int($0) }
-                    ),
-                    in: 80...300,
-                    step: 30,
-                    format: .number
-                )
-            } header: {
-                Text("Size")
-            } footer: {
-                SectionFooterView(text: "Recommend sticking with width: 100 and height: 48")
+                IntegerStepper(value: $imageConfig.imageWidth, label: "Image Width", step: 30, range: 80...300)
             }
             
             Section(header: Text("Default Parameters")) {
