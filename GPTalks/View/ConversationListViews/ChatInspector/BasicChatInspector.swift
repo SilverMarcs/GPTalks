@@ -88,5 +88,6 @@ struct BasicChatInspector: View {
                 .frame(maxWidth: .infinity, alignment: .center)
         }
         .foregroundStyle(.red)
+        .buttonStyle(ExternalLinkButtonStyle())
     }
 }

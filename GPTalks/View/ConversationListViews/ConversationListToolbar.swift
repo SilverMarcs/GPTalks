@@ -39,6 +39,7 @@ struct ConversationListToolbar: ToolbarContent {
             } label: {
                 Label("Actions", systemImage: "slider.vertical.3")
             }
+            .keyboardShortcut(".")
         }
         
         if !session.searchText.isEmpty && !filteredGroups.isEmpty {

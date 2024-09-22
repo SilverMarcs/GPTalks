@@ -14,10 +14,6 @@ struct ImageInspector: View {
     @Query(filter: #Predicate { $0.isEnabled && $0.supportsImage }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
-    var openaiProviders: [Provider] {
-        providers.filter { $0.type == .openai }
-    }
-    
     var body: some View {
         NavigationStack {
             Form {
@@ -34,7 +30,7 @@ struct ImageInspector: View {
                 
                 Section("Models") {
                     ProviderPicker(provider: $session.config.provider,
-                                   providers: openaiProviders) { provider in
+                                   providers: providers) { provider in
                         session.config.model = provider.imageModel
                     }
                     

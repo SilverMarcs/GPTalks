@@ -73,15 +73,15 @@ struct ProviderGeneral: View {
             Section("Default Models") {
                 ModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
                 
-                #if os(macOS)
-                ModelPicker(model: $provider.quickChatModel, models: provider.chatModels, label: "Quick Model")
-                #endif
+//                #if os(macOS)
+//                ModelPicker(model: $provider.quickChatModel, models: provider.chatModels, label: "Quick Model")
+//                #endif
                 
                 ModelPicker(model: $provider.titleModel, models: provider.chatModels, label: "Title Model")
                 
-                if provider.supportsImage {
-                    ModelPicker(model: $provider.imageModel, models: provider.imageModels, label: "Image Model")
-                }
+//                if provider.supportsImage {
+//                    ModelPicker(model: $provider.imageModel, models: provider.imageModels, label: "Image Model")
+//                }
             }
 
             Section("Customisation") {

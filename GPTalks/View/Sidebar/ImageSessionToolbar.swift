@@ -21,7 +21,7 @@ struct ImageSessionToolbar: ToolbarContent {
                 sessionVM.addImageSession(modelContext: modelContext, provider: provider)
             },
             getDefaultProvider: { providers in
-                ProviderManager.shared.getImageProvider(providers: providers.filter { $0.type == .openai })
+                ProviderManager.shared.getImageProvider(providers: providers.filter { $0.supportsImage })
             },
             selectionType: .images
         )

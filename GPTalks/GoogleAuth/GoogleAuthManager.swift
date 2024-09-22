@@ -82,10 +82,10 @@ import AuthenticationServices
     }
     
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        #if os(iOS)
-        return UIApplication.shared.windows.first ?? ASPresentationAnchor()
-        #elseif os(macOS)
+        #if os(macOS)
         return NSApplication.shared.keyWindow ?? ASPresentationAnchor()
+        #else
+        return UIApplication.shared.windows.first ?? ASPresentationAnchor()
         #endif
     }
     
