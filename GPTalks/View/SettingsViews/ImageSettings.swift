@@ -54,12 +54,6 @@ struct ImageSettings: View {
                 }
             }
             
-            Section("Size") {
-                IntegerStepper(value: $imageConfig.imageHeight, label: "Image Height", step: 30, range: 40...300)
-                
-                IntegerStepper(value: $imageConfig.imageWidth, label: "Image Width", step: 30, range: 80...300)
-            }
-            
             Section(header: Text("Default Parameters")) {
                 Stepper(
                     "Number of Images",
@@ -89,6 +83,24 @@ struct ImageSettings: View {
                     ForEach(ImagesQuery.Style.allCases, id: \.self) { style in
                         Text(style.rawValue.capitalized)
                     }
+                }
+            }
+            
+            Section("Size") {
+                IntegerStepper(value: $imageConfig.imageHeight, label: "Image Height", step: 30, range: 40...300)
+                
+                IntegerStepper(value: $imageConfig.imageWidth, label: "Image Width", step: 30, range: 80...300)
+                
+                HStack(alignment: .top) {
+                    Text("Demo")
+                    
+                    Spacer()
+                    
+                    Image("sample")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: CGFloat(imageConfig.imageWidth), height: CGFloat(imageConfig.imageHeight))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
             }
         }

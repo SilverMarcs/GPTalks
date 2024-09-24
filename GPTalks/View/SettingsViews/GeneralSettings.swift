@@ -19,7 +19,7 @@ struct GeneralSettings: View {
             } header: {
                 Text("Title")
             } footer: {
-                SectionFooterView(text: "Uses Title model in provider general settings")
+                SectionFooterView(text: "Uses title model in provider general settings")
             }
             
             Section {
@@ -27,7 +27,7 @@ struct GeneralSettings: View {
             } header: {
                 Text("Search")
             } footer: {
-                SectionFooterView(text: "Expensive method searches all messages but may cause UI responsiveness issues")
+                SectionFooterView(text: "Expensives search searches all messages but may cause UI responsiveness issues")
             }
             
             #if os(macOS)
@@ -40,12 +40,6 @@ struct GeneralSettings: View {
                             NSApp.setActivationPolicy(.regular)
                         }
                     }
-            }
-            #endif
-            
-            #if DEBUG
-            Button("Clear Data") {
-                try? modelContext.save()
             }
             #endif
         }

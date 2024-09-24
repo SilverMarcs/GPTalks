@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
-import MarkdownWebView
+import SwiftData
 
 struct AppearanceSettings: View {
+    @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
+    
+    @State var session: Session?
 
     var body: some View {
         Form {
@@ -32,6 +35,18 @@ struct AppearanceSettings: View {
             Section("View Customisation") {
                 Toggle("Compact List Row", isOn: $config.compactList)
                 
+                if let session = session {
+                    HStack(alignment: .top) {
+                        Text("Demo")
+                        
+                        Spacer()
+                        
+                        SessionListRow(session: session)
+                            .frame(maxWidth: 220)
+                            .bubbleStyle(radius: 8)
+                    }
+                }
+                
                 #if os(macOS)
                 VStack(alignment: .leading) {
                     Picker("ConversationList Style", selection: $config.conversationListStyle) {
@@ -39,36 +54,44 @@ struct AppearanceSettings: View {
                             Text(style.rawValue)
                         }
                     }
-//                    .pickerStyle(.radioGroup)
+                    .pickerStyle(.radioGroup)
                     
                     Text("ListView is smoother but some features may not function.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 #endif
-
-                ToggleWithDescription(
-                    title: "Folder View",
-                    isOn: $config.folderView,
-                    description: "Folder View is Experimental and extremely buggy"
-                )
             }
-
-            Section {
+            
+            Section("List Truncation") {
                 Toggle("Show Less Sessions", isOn: $config.truncateList)
 
                 IntegerStepper(value: $config.listCount, label: "List Count", step: 1, range: 6...20)
                 .opacity(config.truncateList ? 1 : 0.5)
                 .disabled(!config.truncateList)
-            } header: {
-                Text("List Row Count")
-            } footer: {
-                SectionFooterView(text: "Only applicable when NOT using folder view")
             }
+        }
+        .onAppear {
+            fetchQuickSession()
         }
         .formStyle(.grouped)
         .navigationTitle("Appearance")
         .toolbarTitleDisplayMode(.inline)
+    }
+    
+    private func fetchQuickSession() {
+        var descriptor = FetchDescriptor<Session>(
+            predicate: #Predicate { $0.isQuick == true }
+        )
+        
+        descriptor.fetchLimit = 1
+        
+        do {
+            let quickSessions = try modelContext.fetch(descriptor)
+            session = quickSessions.first
+        } catch {
+            print("Error fetching quick session: \(error)")
+        }
     }
 }
 
