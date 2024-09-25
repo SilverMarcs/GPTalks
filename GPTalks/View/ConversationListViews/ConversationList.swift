@@ -34,11 +34,15 @@ struct ConversationList: View {
     var content: some View {
         ScrollViewReader { proxy in
             Group {
-                switch config.conversationListStyle {
-                case .list:
-                    listView
-                case .scrollview:
-                    vStackView
+                if session.groups.isEmpty {
+                    EmptyConversationList(session: session, providers: providers)
+                } else {
+                    switch config.conversationListStyle {
+                    case .list:
+                        listView
+                    case .scrollview:
+                        vStackView
+                    }
                 }
             }
             .toolbar { ConversationListToolbar(session: session, providers: providers) }

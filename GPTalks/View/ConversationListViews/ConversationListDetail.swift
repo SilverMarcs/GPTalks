@@ -25,7 +25,7 @@ struct ConversationListDetail: View {
                     .id(chatSession.id)
             }
         } else {
-            Group {
+            VStack {
                 if sessionVM.state == .chats && sessionVM.selections.count > 1 {
                     Text(String(sessionVM.selections.count) + " Items Selected")
                 } else if sessionVM.state == .images && sessionVM.imageSelections.count > 1 {
@@ -34,6 +34,8 @@ struct ConversationListDetail: View {
                     Text("Select an item")
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(.background)
             .font(.title)
         }
     }
