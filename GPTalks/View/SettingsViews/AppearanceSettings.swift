@@ -43,7 +43,7 @@ struct AppearanceSettings: View {
                         
                         SessionListRow(session: session)
                             .frame(maxWidth: 220)
-                            .bubbleStyle(radius: 8)
+                            .bubbleStyle(radius: 7, padding: 4)
                     }
                 }
                 
@@ -56,7 +56,7 @@ struct AppearanceSettings: View {
                     }
                     .pickerStyle(.radioGroup)
                     
-                    Text("ListView is smoother but some features may not function.")
+                    Text("List View is smoother but some features may not function.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

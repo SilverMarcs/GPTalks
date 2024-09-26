@@ -60,6 +60,7 @@ struct EmptyConversationList: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.background)
+        .toolbarBackground(.hidden, for: .windowToolbar)
     }
 }
 
