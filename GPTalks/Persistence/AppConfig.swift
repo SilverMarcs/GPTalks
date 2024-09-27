@@ -33,7 +33,7 @@ class AppConfig: ObservableObject {
     
     @AppStorage("truncateList") var truncateList: Bool = false
     @AppStorage("listCount") var listCount: Int = 16
-    @AppStorage("conversationListStyle") var conversationListStyle: ConversationListStyle = .scrollview
+    @AppStorage("conversationListStyle") var conversationListStyle: ConversationListStyle = .list
     @AppStorage("folderView") var folderView: Bool = false
     
     // Markdown

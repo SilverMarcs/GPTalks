@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UserMessage: View {
     @Environment(\.colorScheme) var colorScheme
+    @Environment(SessionVM.self) private var sessionVM
     @ObservedObject var config = AppConfig.shared
     
     @Bindable var conversation: Conversation
@@ -23,7 +24,7 @@ struct UserMessage: View {
                 DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false, edge: .trailing)
             }
             
-            HighlightedText(text: conversation.content, highlightedText: conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil)
+            HighlightedText(text: conversation.content, highlightedText: sessionVM.searchText.count > 3 ? sessionVM.searchText : nil)
                 #if os(macOS)
                 .lineSpacing(2)
                 #endif

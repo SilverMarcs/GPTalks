@@ -19,13 +19,13 @@ struct MarkdownSettings: View {
                 }
             }
             
-            if config.markdownProvider != .native || config.markdownProvider != .disabled {
-                Picker("Codeblock Theme", selection: $config.markdownTheme) {
-                    ForEach(MarkdownTheme.allCases, id: \.self) { theme in
-                        Text(theme.name)
-                    }
-                }
-            }
+//            if config.markdownProvider != .native || config.markdownProvider != .disabled {
+//                Picker("Codeblock Theme", selection: $config.markdownTheme) {
+//                    ForEach(MarkdownTheme.allCases, id: \.self) { theme in
+//                        Text(theme.name)
+//                    }
+//                }
+//            }
             
             Section("Demo") {
                 MarkdownView(conversation: Conversation(role: .assistant, content: codeBlock))

@@ -55,6 +55,7 @@ struct TextLeftIconRightLabelStyle: LabelStyle {
 struct ExternalLinkButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
+            .frame(maxWidth: .infinity, alignment: .center)
             .padding(10)
             .background(configuration.isPressed ? Color(.tertiarySystemFill): Color(.clear))
             .contentShape(Rectangle())

@@ -10,11 +10,13 @@ import MarkdownWebView
 
 struct MarkdownView: View {
     @Environment(\.isQuick) var isQuick
+    @Environment(SessionVM.self) private var sessionVM
+    
     @ObservedObject var config = AppConfig.shared
     var conversation: Conversation
     
     var highlightString: String? {
-        conversation.group?.session?.searchText.count ?? 0 > 3 ? conversation.group?.session?.searchText : nil
+        sessionVM.searchText.count > 3 ? sessionVM.searchText : nil
     }
     
     var body: some View {

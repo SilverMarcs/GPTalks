@@ -31,6 +31,7 @@ struct BasicChatInspector: View {
                         session.config.model = newProvider.chatModel
                     }
                 )
+                
                 ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
             }
             
@@ -44,8 +45,9 @@ struct BasicChatInspector: View {
                 sysPrompt
             }
             
+            resetContext
+            
             deleteAllMessages
-                .buttonStyle(.plain)
         }
         .formStyle(.grouped)
     }
@@ -78,6 +80,19 @@ struct BasicChatInspector: View {
         .foregroundStyle(.mint.gradient)
     }
     
+    private var resetContext: some View {
+        Button {
+            if session.isStreaming { return }
+            if let last = session.groups.last {
+                session.resetContext(at: last)
+            }
+        } label: {
+            Text("Reset Context")
+        }
+        .foregroundStyle(.orange)
+        .buttonStyle(ExternalLinkButtonStyle())
+    }
+    
     private var deleteAllMessages: some View {
         Button(role: .destructive) {
             if session.isStreaming { return }
@@ -85,7 +100,6 @@ struct BasicChatInspector: View {
             session.deleteAllConversations()
         } label: {
             Text("Delete All Messages")
-                .frame(maxWidth: .infinity, alignment: .center)
         }
         .foregroundStyle(.red)
         .buttonStyle(ExternalLinkButtonStyle())

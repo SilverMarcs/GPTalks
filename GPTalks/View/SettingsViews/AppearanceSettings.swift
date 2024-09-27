@@ -32,38 +32,37 @@ struct AppearanceSettings: View {
                 }
             }
             
-            Section("Status Bar") {
-                Toggle("Show Status Bar", isOn: $config.showStatusBar)
-            }
+//            Section("Status Bar") {
+//                Toggle("Show Status Bar", isOn: $config.showStatusBar)
+//            }
 
-            Section("View Customisation") {
-                VStack(alignment: .trailing) {
-                    Toggle("Compact List Row", isOn: $config.compactList)
-                        .onAppear {
-                            fetchQuickSession()
-                        }
-                    
+            Section("View Customisation") {                
+                Toggle(isOn: $config.compactList) {
                     if let session = session {
-                        SessionListRow(session: session)
-                            .frame(maxWidth: 220)
-                            .bubbleStyle(radius: 7, padding: 4)
-                    }
-                }
-
-                #if os(macOS)
-                VStack(alignment: .leading) {
-                    Picker("ConversationList Style", selection: $config.conversationListStyle) {
-                        ForEach(ConversationListStyle.allCases, id: \.self) { style in
-                            Text(style.rawValue)
+                        VStack(alignment: .leading) {
+                            Text("Compact List Row")
+                            
+                            SessionListRow(session: session)
+                                .frame(maxWidth: 220)
+                                .bubbleStyle(radius: 7, padding: 4)
                         }
                     }
-                    .pickerStyle(.radioGroup)
-                    
-                    Text("List View is smoother but some features may not function.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
                 }
-                #endif
+                .onAppear {
+                    fetchQuickSession()
+                }
+
+//                #if os(macOS)
+//                Picker(selection: $config.conversationListStyle) {
+//                    ForEach(ConversationListStyle.allCases, id: \.self) { style in
+//                        Text(style.rawValue)
+//                    }
+//                } label: {
+//                    Text("ConversationList Style")
+//                    Text("List View is smoother but some features may not function.")
+//                }
+//                .pickerStyle(.radioGroup)
+//                #endif
             }
             
             Section("List Truncation") {
