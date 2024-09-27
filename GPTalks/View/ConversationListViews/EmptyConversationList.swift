@@ -12,51 +12,12 @@ struct EmptyConversationList: View {
     var providers: [Provider]
     
     var body: some View {
-        VStack {
-            HStack {
-                HStack {
-                    ProviderImage(provider: session.config.provider, radius: 6, frame: 18, scale: .small)
-                    
-                    ProviderPicker(provider: $session.config.provider, providers: providers) { provider in
-                        session.config.model = provider.chatModel
-                    }
-                    .labelsHidden()
-                    .buttonStyle(.borderless)
-                    .fixedSize()
-                }
-                
-                ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
-                    .labelsHidden()
-                    .buttonStyle(.borderless)
-                    .fixedSize()
-                
-                HStack(spacing: 2) {
-                    Image(systemName: session.config.tools.enabledTools.isEmpty ? "hammer": "hammer.fill")
-                        .contentTransition(.symbolEffect(.replace))
-                        .foregroundStyle(.teal)
-                    
-                    Menu {
-                        ToolsController(tools: $session.config.tools)
-                    } label: {
-                        Text("^[\(session.config.tools.enabledTools.count) Plugin](inflect: true)")
-                    }
-                    .menuStyle(SimpleIconOnly())
-                }
-                
-                Spacer()
-            }
-            .padding()
-            
-            Spacer()
-            
+        VStack(alignment: .center) {
             Image(session.config.provider.type.imageName)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 100, height: 100)
                 .foregroundStyle(.quaternary)
-            
-            Spacer()
-            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.background)

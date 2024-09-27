@@ -57,6 +57,11 @@ struct ConversationList: View {
                 }
             }
             #if os(macOS)
+            .safeAreaInset(edge: .top, spacing: 0) {
+                if config.showStatusBar {
+                    ConversationStatusBar(session: session, providers: providers)
+                }
+            }
             .searchable(text: $session.searchText)
             #endif
         }

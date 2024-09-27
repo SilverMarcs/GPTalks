@@ -31,22 +31,25 @@ struct AppearanceSettings: View {
                         .monospacedDigit()
                 }
             }
+            
+            Section("Status Bar") {
+                Toggle("Show Status Bar", isOn: $config.showStatusBar)
+            }
 
             Section("View Customisation") {
-                Toggle("Compact List Row", isOn: $config.compactList)
-                
-                if let session = session {
-                    HStack(alignment: .top) {
-                        Text("Demo")
-                        
-                        Spacer()
-                        
+                VStack(alignment: .trailing) {
+                    Toggle("Compact List Row", isOn: $config.compactList)
+                        .onAppear {
+                            fetchQuickSession()
+                        }
+                    
+                    if let session = session {
                         SessionListRow(session: session)
                             .frame(maxWidth: 220)
                             .bubbleStyle(radius: 7, padding: 4)
                     }
                 }
-                
+
                 #if os(macOS)
                 VStack(alignment: .leading) {
                     Picker("ConversationList Style", selection: $config.conversationListStyle) {
@@ -70,9 +73,6 @@ struct AppearanceSettings: View {
                 .opacity(config.truncateList ? 1 : 0.5)
                 .disabled(!config.truncateList)
             }
-        }
-        .onAppear {
-            fetchQuickSession()
         }
         .formStyle(.grouped)
         .navigationTitle("Appearance")
