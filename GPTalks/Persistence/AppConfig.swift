@@ -31,9 +31,15 @@ class AppConfig: ObservableObject {
     @AppStorage("compactList") var compactList: Bool = false
     #endif
     
+    #if os(macOS)
+    @AppStorage("conversationListStyle") var conversationListStyle: ConversationListStyle = .list
+    #else
+    @AppStorage("conversationListStyle") var conversationListStyle: ConversationListStyle = .scrollview
+    #endif
+    
     @AppStorage("truncateList") var truncateList: Bool = false
     @AppStorage("listCount") var listCount: Int = 16
-    @AppStorage("conversationListStyle") var conversationListStyle: ConversationListStyle = .list
+    
     @AppStorage("folderView") var folderView: Bool = false
     
     // Markdown

@@ -21,7 +21,9 @@ struct EmptyConversationList: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.background)
+        #if os(macOS)
         .toolbarBackground(.hidden, for: .windowToolbar)
+        #endif
     }
 }
 
