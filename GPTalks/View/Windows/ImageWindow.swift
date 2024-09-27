@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(macOS)
 struct ImageWindow: Scene {
     @Environment(\.modelContext) private var modelContext
     
@@ -16,3 +17,4 @@ struct ImageWindow: Scene {
         }
     }
 }
+#endif

@@ -28,14 +28,15 @@ struct ChatContentView: View {
                     .font(.title)
             }
         }
+        #if os(macOS)
         .inspector(isPresented: $showingInspector) {
             if let chatSession = sessionVM.activeSession {
                 ChatInspector(session: chatSession, providers: providers, showingInspector: $showingInspector)
             } else {
-                Image(systemName: "gear")
-                    .imageScale(.large)
+                Text("Open a chat session for inspector")
             }
         }
+        #endif
     }
 }
 

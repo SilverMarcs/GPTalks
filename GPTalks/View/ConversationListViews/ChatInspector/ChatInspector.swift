@@ -39,16 +39,14 @@ struct ChatInspector: View {
                     Button {
                         showingInspector.toggle()
                     } label: {
-                        Image(systemName: "sidebar.right")
+                        #if os(macOS)
+                        Label("Toggle Inspector", systemImage: "sidebar.right")
+                        #else
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.gray, .gray.opacity(0.3))
+                        #endif
                     }
                 }
-                
-                #if !os(macOS)
-                ToolbarItem(placement: .cancellationAction) {
-                    DismissButton()
-                        .buttonStyle(.plain)
-                }
-                #endif
             }
         }
     }

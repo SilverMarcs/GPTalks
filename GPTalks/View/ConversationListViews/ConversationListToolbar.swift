@@ -38,11 +38,18 @@ struct ConversationListToolbar: ToolbarContent {
         ToolbarItem {
             Color.clear
                 .sheet(isPresented: $showingInspector) {
-                    ChatInspector(session: session, providers: providers)
+                    ChatInspector(session: session, providers: providers, showingInspector: $showingInspector)
                 }
         }
         
-        showInspector
+        ToolbarItem {
+            Button {
+                toggleInspector()
+            } label: {
+                Label("Show Inspector", systemImage: "info.circle")
+            }
+            .keyboardShortcut(".")
+        }
         #endif
     }
     

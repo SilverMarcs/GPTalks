@@ -46,9 +46,12 @@ struct ConversationList: View {
                 }
             }
             .onChange(of: sessionVM.chatSelections) {
+                #if os(macOS)
                 scrollToBottom(proxy: proxy, delay: 0.2)
+                #endif
                 session.proxy = proxy
                 sessionVM.chatSelections.first?.refreshTokens()
+                scrollToBottom(proxy: proxy, delay: 0.4)
             }
             .toolbar { ConversationListToolbar(session: session, providers: providers) }
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
