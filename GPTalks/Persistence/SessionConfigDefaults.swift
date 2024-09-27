@@ -9,6 +9,7 @@ import SwiftUI
 
 class SessionConfigDefaults: ObservableObject {
     static let shared = SessionConfigDefaults()
+    private init() {}
     
     @AppStorage("temperature") private var storedTemperature: Double?
     @AppStorage("presencePenalty") private var storedPresencePenalty: Double?

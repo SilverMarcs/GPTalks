@@ -9,6 +9,7 @@ import SwiftUI
 
 class ToolConfigDefaults: ObservableObject {
     static let shared = ToolConfigDefaults()
+    private init() {}
     
     @AppStorage("googleSearch") var googleSearch: Bool = false
     @AppStorage("urlScrape") var urlScrape: Bool = false

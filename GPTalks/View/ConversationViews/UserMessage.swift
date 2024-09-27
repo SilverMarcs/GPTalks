@@ -42,10 +42,7 @@ struct UserMessage: View {
                 )
             
     #if os(macOS)
-            if let group = conversation.group {
-                ConversationMenu(group: group, providers: providers, isExpanded: $isExpanded)
-                    .symbolEffect(.appear, isActive: !isHovered)
-            }
+            contextMenu
     #endif
         }
         .padding(.leading, leadingPadding)
@@ -67,6 +64,14 @@ struct UserMessage: View {
         }
         #endif
         .frame(maxWidth: .infinity, alignment: .trailing)
+    }
+    
+    @ViewBuilder
+    var contextMenu: some View {
+        if let group = conversation.group {
+            ConversationMenu(group: group, providers: providers, isExpanded: $isExpanded)
+                .symbolEffect(.appear, isActive: !isHovered)
+        }
     }
     
     func toggleTextSelection() {

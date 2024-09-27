@@ -10,6 +10,7 @@ import MarkdownWebView
 
 class AppConfig: ObservableObject {
     static let shared = AppConfig()
+    private init() {}
     
     // Appearance
     #if os(macOS)

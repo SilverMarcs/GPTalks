@@ -10,6 +10,7 @@ import OpenAI
 
 class ImageConfigDefaults: ObservableObject {
     static let shared = ImageConfigDefaults()
+    private init() {}
     
     @AppStorage("numImages") var numImages: Int = 1
     @AppStorage("size") var size: ImagesQuery.Size = ImagesQuery.Size._256

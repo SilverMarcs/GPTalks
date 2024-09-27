@@ -128,64 +128,19 @@ struct ConversationMenu: View {
     }
 
     var regenGroup: some View {
-        #if os(macOS)
-        Menu {
-            ForEach(providers) { provider in
-                Menu {
-                    ForEach(provider.chatModels.filter { $0.isEnabled }.sorted(by: { $0.order < $1.order })) { model in
-                        Button {
-                            group.session?.config.provider = provider
-                            group.session?.config.model = model
-                            if group.role == .assistant {
-                                Task { 
-                                    await group.session?.regenerate(group: group)
-                                }
-                            } else if group.role == .user {
-                                group.setupEditing()
-                                Task { 
-                                    await group.session?.sendInput()
-                                }
-                            }
-                        } label: {
-                            Text(model.name)
-                        }
-                    }
-                } label: {
-                    Text(provider.name)
+        HoverScaleButton(icon: "arrow.2.circlepath", label: "Regenerate") {
+            if group.role == .assistant {
+                Task {
+                    await group.session?.regenerate(group: group)
+                }
+            } else if group.role == .user {
+                group.setupEditing()
+                Task {
+                    await group.session?.sendInput()
                 }
             }
-        } label: {
-            Label("Regenerate", systemImage: "arrow.2.circlepath")
-        } primaryAction: {
-            performPrimaryAction()
-        }
-        .labelStyle(.iconOnly)
-        .buttonStyle(.plain)
-        .menuIndicator(.hidden)
-        .fixedSize()
-        #else
-        Button(action: performPrimaryAction) {
-            Label("Regenerate", systemImage: "arrow.2.circlepath")
-        }
-        .labelStyle(.iconOnly)
-        .buttonStyle(.plain)
-        .fixedSize()
-        #endif
-    }
-
-    private func performPrimaryAction() {
-        if group.role == .assistant {
-            Task { 
-                await group.session?.regenerate(group: group)
-            }
-        } else if group.role == .user {
-            group.setupEditing()
-            Task { 
-                await group.session?.sendInput()
-            }
         }
     }
-
 
     var navigate: some View {
         var canNavigateLeft: Bool {
