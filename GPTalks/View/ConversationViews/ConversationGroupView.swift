@@ -52,7 +52,7 @@ struct ConversationGroupView: View {
 
 #Preview {
     let config = SessionConfig()
-    let session = Session(config: config)
+    let session = ChatSession(config: config)
     let providers: [Provider] = []
     
     let userConversation = Conversation(role: .user, content: "Hello, World!")

@@ -2,17 +2,20 @@
 //  ChatSessionVM.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 23/07/2024.
+//  Created by Zabir Raihan on 04/07/2024.
 //
 
-import SwiftUI
-import SwiftData
 import Foundation
+import SwiftData
+import SwiftUI
 
-extension SessionVM {
-    public var activeSession: Session? {
-        guard selections.count == 1 else { return nil }
-        return selections.first
+@Observable class ChatSessionVM {
+    var chatSelections: Set<ChatSession> = []
+    var searchText: String = ""
+    
+    public var activeSession: ChatSession? {
+        guard chatSelections.count == 1 else { return nil }
+        return chatSelections.first
     }
     
     func sendMessage() async {
@@ -67,15 +70,15 @@ extension SessionVM {
         }
     }
     
-    func fork(session: Session, modelContext: ModelContext) {
+    func fork(session: ChatSession, modelContext: ModelContext) {
         withAnimation {
             // Create a predicate to filter out sessions where isQuick is true
-            let predicate = #Predicate<Session> { session in
+            let predicate = #Predicate<ChatSession> { session in
                 session.isQuick == false
             }
             
             // Create a FetchDescriptor with the predicate and sort descriptor
-            let descriptor = FetchDescriptor<Session>(
+            let descriptor = FetchDescriptor<ChatSession>(
                 predicate: predicate,
                 sortBy: [SortDescriptor(\.order)]
             )
@@ -91,9 +94,9 @@ extension SessionVM {
                 session.order = 0
                 modelContext.insert(session)
                 #if os(macOS)
-                self.selections = [session]
+                self.chatSelections = [session]
                 #else
-                self.selections = []
+                self.chatSelections = []
                 #endif
             }
         }
@@ -102,7 +105,7 @@ extension SessionVM {
     }
     
     @discardableResult
-    func createNewSession(modelContext: ModelContext, provider: Provider? = nil) -> Session? {
+    func createNewSession(modelContext: ModelContext, provider: Provider? = nil) -> ChatSession? {
         let config: SessionConfig
         
         if let providedProvider = provider {
@@ -120,10 +123,10 @@ extension SessionVM {
             config = SessionConfig(provider: defaultProvider, purpose: .chat)
         }
         
-        let newItem = Session(config: config)
+        let newItem = ChatSession(config: config)
         try? modelContext.save()
         
-        var fetchSessions = FetchDescriptor<Session>()
+        var fetchSessions = FetchDescriptor<ChatSession>()
         fetchSessions.sortBy = [SortDescriptor(\.order)]
         let fetchedSessions = try! modelContext.fetch(fetchSessions)
         
@@ -134,7 +137,7 @@ extension SessionVM {
         newItem.order = 0
         modelContext.insert(newItem)
         
-        selections = [newItem]
+        chatSelections = [newItem]
         
         return newItem
     }

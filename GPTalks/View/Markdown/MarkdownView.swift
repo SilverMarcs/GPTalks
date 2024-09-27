@@ -10,7 +10,7 @@ import MarkdownWebView
 
 struct MarkdownView: View {
     @Environment(\.isQuick) var isQuick
-    @Environment(SessionVM.self) private var sessionVM
+    @Environment(ChatSessionVM.self) private var sessionVM
     
     @ObservedObject var config = AppConfig.shared
     var conversation: Conversation

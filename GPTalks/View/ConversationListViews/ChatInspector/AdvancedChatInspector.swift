@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AdvancedChatInspector: View {
-    @Bindable var session: Session
+    @Bindable var session: ChatSession
     
     @State private var isExportingJSON = false
     @State private var isExportingMarkdown = false

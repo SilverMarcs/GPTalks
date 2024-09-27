@@ -11,13 +11,13 @@ import SwiftData
 struct ConversationList: View {
     @Environment(\.isQuick) var isQuick
     
-    @Bindable var session: Session
+    @Bindable var session: ChatSession
     var providers: [Provider]
     
     @ObservedObject var config: AppConfig = AppConfig.shared
     
     @Environment(\.modelContext) var modelContext
-    @Environment(SessionVM.self) private var sessionVM
+    @Environment(ChatSessionVM.self) private var sessionVM
     
     @State private var hasUserScrolled = false
     @State var showingInspector: Bool = false
@@ -45,9 +45,12 @@ struct ConversationList: View {
                     }
                 }
             }
+            .onChange(of: sessionVM.chatSelections) {
+                scrollToBottom(proxy: proxy, delay: 0.2)
+            }
             .toolbar { ConversationListToolbar(session: session, providers: providers) }
             .task {
-                sessionVM.selections.first?.refreshTokens()
+                sessionVM.chatSelections.first?.refreshTokens()
                 session.proxy = proxy
             }
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
@@ -137,9 +140,9 @@ struct ConversationList: View {
 
 #Preview {
     let config = SessionConfig()
-    let session = Session(config: config)
+    let session = ChatSession(config: config)
     let providers: [Provider] = []
     
     ConversationList(session: session, providers: providers)
-        .environment(SessionVM())
+        .environment(ChatSessionVM())
 }

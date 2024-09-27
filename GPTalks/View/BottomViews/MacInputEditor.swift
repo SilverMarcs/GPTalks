@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct MacInputEditor: View {
+    @Environment(ChatSessionVM.self) private var sessionVM
+    
     @Binding var prompt: String
     var provider: Provider
     @FocusState var isFocused: Bool
@@ -31,21 +33,8 @@ struct MacInputEditor: View {
         }
         .font(.body)
         .modifier(RoundedRectangleOverlayModifier(radius: 18))
-        .toolbar {
-            ToolbarItem(placement: .keyboard) {
-                Button {
-                    isFocused = true
-                    AppConfig.shared.sidebarFocus = false
-                } label: {
-                    Image(systemName: "keyboard.chevron.compact.down")
-                }
-                .keyboardShortcut("l", modifiers: .command)
-            }
-        }
-        .task {
-            if !AppConfig.shared.sidebarFocus {
-                isFocused = true
-            }
+        .onChange(of: sessionVM.chatSelections) {
+            isFocused = true
         }
     }
     

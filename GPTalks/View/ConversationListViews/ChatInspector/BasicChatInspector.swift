@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BasicChatInspector: View {
-    @Bindable var session: Session
+    @Bindable var session: ChatSession
     var providers: [Provider]
     
     @State var isGeneratingTtile: Bool = false

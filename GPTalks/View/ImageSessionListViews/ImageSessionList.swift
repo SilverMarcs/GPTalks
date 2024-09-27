@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ImageSessionList: View {
-    @Environment(SessionVM.self) var sessionVM
+    @Environment(ImageSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
     
@@ -43,19 +43,24 @@ struct ImageSessionList: View {
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.imageSelections) {
-                SessionListCards(sessionCount: "?", imageSessionsCount: String(sessions.count))
+                SessionListCards(sessionCount: "↗", imageSessionsCount: String(sessions.count))
                 
                 if !sessionVM.searchText.isEmpty && sessions.isEmpty {
                     ContentUnavailableView.search(text: sessionVM.searchText)
                 } else {
-                    ForEach(filteredSessions, id: \.self) { session in
+                    ForEach(filteredSessions) { session in
                         ImageListRow(session: session)
+                            .tag(session)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))
                     }
                     .onDelete(perform: deleteItems)
                     .onMove(perform: move)
                 }
+            }
+            .scrollContentBackground(.visible)
+            .toolbar {
+                ImageSessionToolbar()
             }
             .onChange(of: sessions.count) {
                 if let first = sessions.first {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ErrorMessageView: View {
-    var session: Session
+    var session: ChatSession
     
     var body: some View {
         if !session.errorMessage.isEmpty {
@@ -32,7 +32,7 @@ struct ErrorMessageView: View {
 
 #Preview {
     let config = SessionConfig()
-    let session = Session(config: config)
+    let session = ChatSession(config: config)
     
     ErrorMessageView(session: session)
 }

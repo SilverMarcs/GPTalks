@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 
 struct ChatInputView: View {
     @Environment(\.colorScheme) var colorScheme
-    @Bindable var session: Session
+    @Bindable var session: ChatSession
     
     @State private var isFilePickerPresented: Bool = false
     @State private var showCamera = false
@@ -175,7 +175,7 @@ struct ChatInputView: View {
 
 #Preview {
     let config = SessionConfig()
-    let session = Session(config: config)
+    let session = ChatSession(config: config)
     
     session.inputManager.prompt = "Hello, World"
     

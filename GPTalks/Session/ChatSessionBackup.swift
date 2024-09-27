@@ -34,7 +34,7 @@ struct ChatSessionBackup: Codable {
 }
 
 extension ChatSessionBackup {
-    init(from session: Session) {
+    init(from session: ChatSession) {
         self.id = session.id
         self.date = session.date
         self.order = session.order
@@ -50,18 +50,18 @@ extension ChatSessionBackup {
         }
     }
     
-    func toSession(providers: [Provider] = []) -> Session {
-        var session: Session
+    func toSession(providers: [Provider] = []) -> ChatSession {
+        var session: ChatSession
         let provider: Provider
         if let defaultProvider = ProviderManager.shared.getDefault(providers: providers) {
             provider = defaultProvider
-            session = Session(config: SessionConfig(provider: provider))
+            session = ChatSession(config: SessionConfig(provider: provider))
         } else if let firstProvider = providers.first {
             provider = firstProvider
-            session = Session(config: SessionConfig(provider: provider))
+            session = ChatSession(config: SessionConfig(provider: provider))
         } else {
             print("Should not reach here")
-            session = Session(config: SessionConfig())
+            session = ChatSession(config: SessionConfig())
         }
         
         session.id = self.id
@@ -98,9 +98,9 @@ extension ChatSessionBackup.ConversationBackup {
 struct SessionsDocument: FileDocument {
     static var readableContentTypes: [UTType] { [.json] }
     
-    var sessions: [Session]
+    var sessions: [ChatSession]
     
-    init(sessions: [Session]) {
+    init(sessions: [ChatSession]) {
         self.sessions = sessions.filter { !$0.isQuick }
     }
     
@@ -119,7 +119,7 @@ struct SessionsDocument: FileDocument {
     }
 }
 
-func restoreSessions(from url: URL, providers: [Provider]) throws -> [Session] {
+func restoreSessions(from url: URL, providers: [Provider]) throws -> [ChatSession] {
     guard url.startAccessingSecurityScopedResource() else {
         throw NSError(domain: "FileAccessError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to access the security-scoped resource."])
     }

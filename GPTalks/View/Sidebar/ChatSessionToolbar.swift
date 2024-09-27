@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ChatSessionToolbar: ToolbarContent {
-    @Environment(SessionVM.self) var sessionVM
+    @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
     var providers: [Provider]
@@ -22,8 +22,8 @@ struct ChatSessionToolbar: ToolbarContent {
             },
             getDefaultProvider: { providers in
                 ProviderManager.shared.getDefault(providers: providers)
-            },
-            selectionType: .chats
+            }
+//            selectionType: .chats
         )
     }
 }

@@ -9,8 +9,10 @@ import SwiftUI
 import SwiftData
 import Foundation
 
-//MARK: Image Session
-extension SessionVM {
+@Observable class ImageSessionVM {
+    var searchText: String = ""
+    var imageSelections: Set<ImageSession> = []
+    
     public var activeImageSession: ImageSession? {
         guard imageSelections.count == 1 else { return nil }
         return imageSelections.first

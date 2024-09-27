@@ -14,9 +14,8 @@ class DatabaseService {
     
     var container: ModelContainer = {
         let schema = Schema([
-            Session.self,
+            ChatSession.self,
             SessionConfig.self,
-            Folder.self,
             Conversation.self,
             ConversationGroup.self,
             Provider.self,
@@ -58,9 +57,9 @@ class DatabaseService {
             config = SessionConfig(provider: defaultProvider, purpose: .chat)
         }
         
-        let newItem = Session(config: config)
+        let newItem = ChatSession(config: config)
         
-        var fetchSessions = FetchDescriptor<Session>()
+        var fetchSessions = FetchDescriptor<ChatSession>()
         fetchSessions.sortBy = [SortDescriptor(\.order)]
         let fetchedSessions = try! modelContext.fetch(fetchSessions)
         

@@ -9,11 +9,11 @@ import SwiftUI
 
 struct SessionListRow: View {
     @Environment(\.modelContext) var modelContext
-    @Environment(SessionVM.self) private var sessionVM
+    @Environment(ChatSessionVM.self) private var sessionVM
     
     @ObservedObject var config = AppConfig.shared
     
-    @Bindable var session: Session
+    @Bindable var session: ChatSession
     
     var body: some View {
         Group {
@@ -25,6 +25,9 @@ struct SessionListRow: View {
         }
         .swipeActions(edge: .leading) {
             swipeActionsLeading
+        }
+        .swipeActions(edge: .trailing) {
+            swipeActionsTrailing
         }
     }
     
@@ -127,15 +130,26 @@ struct SessionListRow: View {
         }
         .tint(.orange)
     }
+    
+    var swipeActionsTrailing: some View {
+        Button(role: .destructive) {
+            // TODO: remove form vm selection if it is in it
+            if !session.isStarred && !session.isQuick {
+                modelContext.delete(session)
+            }
+        } label: {
+            Label("Delete", systemImage: "trash")
+        }
+    }
 }
 
 #Preview {
     let config = SessionConfig()
-    let session = Session(config: config)
+    let session = ChatSession(config: config)
     
     List {
         SessionListRow(session: session)
-            .environment(SessionVM())
+            .environment(ChatSessionVM())
     }
     .frame(width: 250)
 }

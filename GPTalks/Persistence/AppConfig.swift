@@ -55,9 +55,6 @@ class AppConfig: ObservableObject {
     @AppStorage("quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."
     @AppStorage("quickMarkdownProvider") var quickMarkdownProvider: MarkdownProvider = .native
     
-    // Misc
-    @AppStorage("sidebarFocus") var sidebarFocus: Bool = false
-    
     func resetFontSize() {
         #if os(macOS)
         fontSize = 13

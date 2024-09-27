@@ -10,7 +10,7 @@ import SwiftData
 
 struct ConversationMenu: View {
     @Environment(\.modelContext) var modelContext
-    @Environment(SessionVM.self) var sessionVM
+    @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.isQuick) var isQuick
     
     var group: ConversationGroup
@@ -216,7 +216,7 @@ struct ConversationMenu: View {
 
 #Preview {
     let config = SessionConfig()
-    let session = Session(config: config)
+    let session = ChatSession(config: config)
 
     let userConversation = Conversation(role: .user, content: "Hello, World!")
     let assistantConversation = Conversation(
@@ -237,7 +237,7 @@ struct ConversationMenu: View {
         ConversationGroupView(group: group, providers: providers)
         ConversationGroupView(group: group2, providers: providers)
     }
-    .environment(SessionVM())
+    .environment(ChatSessionVM())
     .frame(width: 500)
     .padding()
 }

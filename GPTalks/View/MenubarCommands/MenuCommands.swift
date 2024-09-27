@@ -11,7 +11,7 @@ import SwiftData
 struct MenuCommands: Commands {
     @Environment(\.modelContext) var modelContext
     @Environment(\.openWindow) private var openWindow
-    @Environment(SessionVM.self) var sessionVM
+    @Environment(ChatSessionVM.self) var sessionVM
 
     @ObservedObject var config = AppConfig.shared
 
@@ -28,24 +28,6 @@ struct MenuCommands: Commands {
         }
         
         CommandGroup(before: .toolbar) {
-            Section {
-                Picker("Sidebar State", selection: $sessionVM.state) {
-                    ForEach(SessionVM.ListState.allCases, id: \.self) { state in
-                        Text(state.label)
-                            .keyboardShortcut(state.shortcut, modifiers: [.control, .command])
-                    }
-                }
-                .pickerStyle(.inline)
-                .labelsHidden()
-            }
-            
-            Section {
-                Button("Toggle Status Bar") {
-                    config.showStatusBar.toggle()
-                }
-                .keyboardShortcut("/", modifiers: .command)
-            }
-            
             Section {
                 Button("Actual Size") {
                     resetFontSize()
@@ -64,12 +46,9 @@ struct MenuCommands: Commands {
             }
         }
         
-        switch sessionVM.state {
-        case .chats:
-            ChatCommands()
-        case .images:
-            ImageCommands()
-        }
+        ChatCommands()
+        
+        ImageCommands()
         
         CommandGroup(before: .appSettings) {
             Button("Settings") {

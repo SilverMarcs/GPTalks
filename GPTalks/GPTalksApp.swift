@@ -12,19 +12,26 @@ import KeyboardShortcuts
 
 @main
 struct GPTalksApp: App {
-    @State private var sessionVM = SessionVM()
+    @State private var sessionVM = ChatSessionVM()
+    @State private var imageSessionVM = ImageSessionVM()
 
     var body: some Scene {
         Group {
             MainWindow()
             
             #if os(macOS)
+            ImageWindow()
+            
             SettingsWindow()
-
+            
             QuickPanelWindow()
             #endif
         }
+        .commands {
+            MenuCommands()
+        }
         .environment(sessionVM)
+        .environment(imageSessionVM)
         .modelContainer(DatabaseService.shared.container)
     }
     

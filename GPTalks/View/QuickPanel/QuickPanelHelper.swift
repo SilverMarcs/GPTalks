@@ -10,9 +10,9 @@ import SwiftData
 #if os(macOS)
 struct QuickPanelHelper: View {
     @Environment(\.modelContext) var modelContext
-    @Environment(SessionVM.self) var sessionVM
+    @Environment(ChatSessionVM.self) var sessionVM
     
-    @State private var session: Session?
+    @State private var session: ChatSession?
     @Binding var showAdditionalContent: Bool
     
     var body: some View {
@@ -28,7 +28,7 @@ struct QuickPanelHelper: View {
     }
     
     private func fetchQuickSession() {
-        var descriptor = FetchDescriptor<Session>(
+        var descriptor = FetchDescriptor<ChatSession>(
             predicate: #Predicate { $0.isQuick == true }
         )
         

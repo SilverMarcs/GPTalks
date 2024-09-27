@@ -14,35 +14,30 @@ struct MainWindow: Scene {
     @State private var isQuick = false
     
     var body: some Scene {
-//        Group {
-//        #if os(macOS)
-//            Window("GPTalks", id: "main") {
-//                ContentView()
-//                    .environment(\.isQuick, isQuick)
-//                    .task {
-//                        try? Tips.configure([.datastoreLocation(.applicationDefault)])
-//                        initialSetup()
-//                    }
-//            }
-//        #else
-            WindowGroup("GPTalks", id: "main") {
-                ContentView()
-                    .environment(\.isQuick, isQuick)
-                    .task {
-                        try? Tips.configure([.datastoreLocation(.applicationDefault)])
-                        initialSetup()
-                    }
-            }
-//        #endif
-//        }
-        .commands {
-            MenuCommands()
+        #if os(macOS)
+        Window("Chats", id: "chats") {
+            ChatContentView()
+                .environment(\.isQuick, isQuick)
+                .task {
+                    try? Tips.configure([.datastoreLocation(.applicationDefault)])
+                    initialSetup()
+                }
         }
+        #else
+        WindowGroup("Chats", id: "chats") {
+            ContentView()
+                .environment(\.isQuick, isQuick)
+                .task {
+                    try? Tips.configure([.datastoreLocation(.applicationDefault)])
+                    initialSetup()
+                }
+        }
+        #endif
     }
     
     private func initialSetup() {
         // Fetch the quick session from the modelContext
-        var fetchQuickSession = FetchDescriptor<Session>()
+        var fetchQuickSession = FetchDescriptor<ChatSession>()
         fetchQuickSession.predicate = #Predicate { $0.isQuick == true }
         fetchQuickSession.fetchLimit = 1
         
@@ -71,8 +66,9 @@ struct MainWindow: Scene {
         modelContext.insert(google)
         
         let config = SessionConfig(provider: openAI, purpose: .quick)
-        let session = Session(config: config)
+        let session = ChatSession(config: config)
         session.isQuick = true
+        session.title = "(↯) Quick Session"
 
         modelContext.insert(session)
         

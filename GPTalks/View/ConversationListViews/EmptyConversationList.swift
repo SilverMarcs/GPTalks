@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EmptyConversationList: View {
-    @Bindable var session: Session
+    @Bindable var session: ChatSession
     var providers: [Provider]
     
     var body: some View {
@@ -29,7 +29,7 @@ struct EmptyConversationList: View {
 
 #Preview {
     let config = SessionConfig()
-    let session = Session(config: config)
+    let session = ChatSession(config: config)
     let provider = Provider.factory(type: .openai)
     
     EmptyConversationList(session: session, providers: [provider])

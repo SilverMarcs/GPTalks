@@ -9,7 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct SessionListCards: View {
-    @Environment(SessionVM.self) private var sessionVM
+    @Environment(\.openWindow) var openWindow
+    @Environment(ChatSessionVM.self) private var sessionVM
     @ObservedObject var config = AppConfig.shared
     var sessionCount: String
     var imageSessionsCount: String
@@ -20,17 +21,13 @@ struct SessionListCards: View {
                 ListCard(
                     icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
                     count: sessionCount) {
-                        if sessionVM.state == .chats {
-                            config.truncateList.toggle()
-                        } else {
-                            sessionVM.state = .chats
-                        }
+                        openWindow(id: "chats")
                     }
                 
                 ListCard(
                     icon: "photo.circle.fill", iconColor: .indigo, title: "Images",
                     count: imageSessionsCount) {
-                        sessionVM.state = .images
+                        openWindow(id: "images")
                     }
             }
             .listRowSeparator(.hidden)
@@ -56,6 +53,6 @@ struct SessionListCards: View {
 }
 
 #Preview {
-    SessionListCards(sessionCount: "5", imageSessionsCount: "3")
-        .environment(SessionVM())
+    SessionListCards(sessionCount: "5", imageSessionsCount: "?")
+        .environment(ChatSessionVM())
 }

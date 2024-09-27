@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ConversationListToolbar: ToolbarContent {
-    @Environment(SessionVM.self) private var sessionVM
-    @Bindable var session: Session
+    @Environment(ChatSessionVM.self) private var sessionVM
+    @Bindable var session: ChatSession
     var providers: [Provider]
     
     @State var showConfig: Bool = false
@@ -116,7 +116,7 @@ enum NavigationDirection {
 
 #Preview {
     @Previewable @State var showingSearchField = false
-    let session = Session(config: SessionConfig())
+    let session = ChatSession(config: SessionConfig())
     
     VStack {
         Text("Hello, World!")

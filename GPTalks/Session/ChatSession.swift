@@ -5,12 +5,11 @@
 //  Created by Zabir Raihan on 25/06/2024.
 //
 
-import Foundation
 import SwiftData
 import SwiftUI
 
 @Model
-final class Session {
+final class ChatSession {
     var id: UUID = UUID()
     var date: Date = Date()
     var order: Int = 0
@@ -20,8 +19,6 @@ final class Session {
     var resetMarker: Int?
     var isQuick: Bool = false
     var tokenCount: Int = 0
-    
-    var folder: Folder?
     
     @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
     var unorderedGroups =  [ConversationGroup]()
@@ -133,9 +130,12 @@ final class Session {
     }
     
     @MainActor
-    func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil) async {
+    func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil, forQuick: Bool = false) async {
+        if !forQuick {
+            self.order = 0
+        }
+        
         errorMessage = ""
-        self.order = 0
         self.date = Date()
         
         if !isRegen {
@@ -277,8 +277,8 @@ final class Session {
         self.tokenCount = (messageTokens + sysPromptTokens + toolTokens + inputTokens)
     }
     
-    func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) -> Session {
-        let newSession = Session(config: config.copy(purpose: purpose))
+    func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) -> ChatSession {
+        let newSession = ChatSession(config: config.copy(purpose: purpose))
         let leading: String
         
         switch purpose {

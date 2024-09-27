@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UserMessage: View {
     @Environment(\.colorScheme) var colorScheme
-    @Environment(SessionVM.self) private var sessionVM
+    @Environment(ChatSessionVM.self) private var sessionVM
     @ObservedObject var config = AppConfig.shared
     
     @Bindable var conversation: Conversation

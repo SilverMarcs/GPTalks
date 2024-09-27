@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ConversationStatusBar: View {
-    @Bindable var session: Session
+    @Bindable var session: ChatSession
     var providers: [Provider]
     
     var body: some View {

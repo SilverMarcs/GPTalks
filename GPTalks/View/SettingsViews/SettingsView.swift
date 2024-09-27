@@ -9,6 +9,10 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
+//    @Environment(ChatSessionVM.self) private var sessionVM
+//    
+//    @State var selections: Set<ChatSession> = []
+//    @FocusState private var isFocused: Bool
     
     #if os(macOS)
     @State private var selectedSidebarItem: SidebarItem? = .general
@@ -93,6 +97,14 @@ struct SettingsView: View {
                 }
             }
         }
+//        .onAppear {
+//            selections = sessionVM.chatSelections
+//            sessionVM.chatSelections = []
+//            isFocused = true
+//        }
+//        .onDisappear {
+//            sessionVM.chatSelections = selections
+//        }
     }
     
     enum SidebarItem {

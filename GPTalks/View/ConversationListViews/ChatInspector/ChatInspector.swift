@@ -10,7 +10,7 @@ import SwiftData
 
 struct ChatInspector: View {
     @Environment(\.dismiss) var dismiss
-    var session: Session
+    var session: ChatSession
     var providers: [Provider]
     
     @State private var selectedTab: Tab = .basic
@@ -84,7 +84,7 @@ struct ChatInspector: View {
 #Preview {
     let providers: [Provider] = []
     
-    ChatInspector(session: Session(config: SessionConfig()), providers: providers)
+    ChatInspector(session: ChatSession(config: SessionConfig()), providers: providers)
         .modelContainer(for: Provider.self, inMemory: true)
         .formStyle(.grouped)
         .frame(width: 400, height: 700)

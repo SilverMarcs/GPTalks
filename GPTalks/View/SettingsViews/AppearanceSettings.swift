@@ -12,7 +12,7 @@ struct AppearanceSettings: View {
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
     
-    @State var session: Session?
+    @State var session: ChatSession?
 
     var body: some View {
         Form {
@@ -79,7 +79,7 @@ struct AppearanceSettings: View {
     }
     
     private func fetchQuickSession() {
-        var descriptor = FetchDescriptor<Session>(
+        var descriptor = FetchDescriptor<ChatSession>(
             predicate: #Predicate { $0.isQuick == true }
         )
         
