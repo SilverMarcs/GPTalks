@@ -26,6 +26,14 @@ struct ChatContentView: View {
                     .font(.title)
             }
         }
+        .inspector(isPresented: .constant(true)) {
+            if let chatSession = sessionVM.activeSession {
+                ChatInspector(session: chatSession, providers: providers)
+            } else {
+                Image(systemName: "gear")
+                    .imageScale(.large)
+            }
+        }
     }
 }
 

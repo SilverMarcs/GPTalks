@@ -13,7 +13,7 @@ struct ChatSessionList: View {
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
     
-    @Query(sort: [SortDescriptor(\ChatSession.order, order: .forward)], animation: .default)
+    @Query(filter: #Predicate { !$0.isQuick }, sort: [SortDescriptor(\ChatSession.order, order: .forward)], animation: .default)
     var sessions: [ChatSession]
     var providers: [Provider]
     

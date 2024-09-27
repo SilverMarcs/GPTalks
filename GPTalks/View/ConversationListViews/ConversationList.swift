@@ -47,12 +47,10 @@ struct ConversationList: View {
             }
             .onChange(of: sessionVM.chatSelections) {
                 scrollToBottom(proxy: proxy, delay: 0.2)
+                session.proxy = proxy
+                sessionVM.chatSelections.first?.refreshTokens()
             }
             .toolbar { ConversationListToolbar(session: session, providers: providers) }
-            .task {
-                sessionVM.chatSelections.first?.refreshTokens()
-                session.proxy = proxy
-            }
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {

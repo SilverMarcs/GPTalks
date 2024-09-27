@@ -60,7 +60,7 @@ struct BasicChatInspector: View {
     
     private var sysPrompt: some View {
         TextField("System Prompt", text: $session.config.systemPrompt, axis: .vertical)
-            .lineLimit(5, reservesSpace: true)
+            .lineLimit(7, reservesSpace: true)
             .labelsHidden()
     }
     

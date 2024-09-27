@@ -42,9 +42,11 @@ struct AppearanceSettings: View {
                         VStack(alignment: .leading) {
                             Text("Compact List Row")
                             
-                            SessionListRow(session: session)
-                                .frame(maxWidth: 220)
-                                .bubbleStyle(radius: 7, padding: 4)
+                            GroupBox {
+                                SessionListRow(session: session)
+                                    .padding(6)
+                            }
+                            .frame(maxWidth: 220)
                         }
                     }
                 }

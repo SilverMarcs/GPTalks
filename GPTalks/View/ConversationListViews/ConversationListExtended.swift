@@ -69,9 +69,8 @@ struct PlatformSpecificModifiers: ViewModifier {
     @ViewBuilder
     func body(content: Content) -> some View {
         content
-//            .toolbar { ConversationListToolbar(session: session, providers: providers) }
             #if os(macOS)
-            .navigationSubtitle("\(session.tokenCount.formatToK()) tokens • \(session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))")
+            .navigationSubtitle("\(session.config.systemPrompt.prefix(70))")
             .navigationTitle(session.title)
             #else
             .onTapGesture { showingInspector = false }

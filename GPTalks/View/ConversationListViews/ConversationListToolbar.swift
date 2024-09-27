@@ -16,16 +16,23 @@ struct ConversationListToolbar: ToolbarContent {
     @State var showingInspector: Bool = false
     
     @State private var currentIndex: Int = 0
-    var filteredGroups: [ConversationGroup] {
-        if sessionVM.searchText.count < 4 {
-            return []
-        }
-        return session.groups.filter { group in
-            group.activeConversation.content.localizedCaseInsensitiveContains(sessionVM.searchText)
-        }
-    }
-    
+
     var body: some ToolbarContent {
+        #if os(macOS)
+        ToolbarItem(placement: .navigation) {
+            Button {
+//                toggleInspector()
+            } label: {
+                Label("Actions", systemImage: "slider.vertical.3")
+            }
+            .keyboardShortcut(".")
+        }
+        
+        ToolbarItem {
+            Text("Tokens: \(session.tokenCount.formatToK())")
+                .foregroundStyle(.secondary)
+        }
+        #else
         ToolbarItem {
             Color.clear
                 .sheet(isPresented: $showingInspector) {
@@ -33,22 +40,6 @@ struct ConversationListToolbar: ToolbarContent {
                 }
         }
         
-        #if os(macOS)
-        ToolbarItem(placement: .navigation) {
-            Button {
-                toggleInspector()
-            } label: {
-                Label("Actions", systemImage: "slider.vertical.3")
-            }
-            .keyboardShortcut(".")
-        }
-        
-        if !sessionVM.searchText.isEmpty && !filteredGroups.isEmpty {
-            ToolbarItem {
-                navigateButtons
-            }
-        }
-        #else
         showInspector
         #endif
     }
@@ -64,54 +55,12 @@ struct ConversationListToolbar: ToolbarContent {
         }
     }
     
-    private var navigateButtons: some View {
-        HStack(spacing: 2) {
-            Button(action: {
-                navigateToGroup(direction: .backward)
-            }) {
-                Image(systemName: "chevron.left")
-            }
-            .disabled(currentIndex == 0)
-            
-            Button(action: {
-                navigateToGroup(direction: .forward)
-            }) {
-                Image(systemName: "chevron.right")
-            }
-            .disabled(currentIndex == filteredGroups.count - 1)
-        }
-    }
-    
-    private func navigateToGroup(direction: NavigationDirection) {
-        switch direction {
-        case .forward:
-            if currentIndex < filteredGroups.count - 1 {
-                currentIndex += 1
-            }
-        case .backward:
-            if currentIndex > 0 {
-                currentIndex -= 1
-            }
-        }
-        
-        if let group = filteredGroups[safe: currentIndex] {
-            withAnimation {
-                session.proxy?.scrollTo(group, anchor: .top)
-            }
-        }
-    }
-    
     private func toggleInspector() {
         #if !os(macOS)
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         #endif
         showingInspector.toggle()
     }
-}
-
-enum NavigationDirection {
-    case forward
-    case backward
 }
 
 #Preview {

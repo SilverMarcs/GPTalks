@@ -26,40 +26,21 @@ struct ChatInspector: View {
                 }
             }
             #if os(macOS)
-            .frame(height: 610)
-            .safeAreaInset(edge: .top, spacing: 0) {
-                ZStack(alignment: .trailing) {
-                    HStack {
-                        Spacer()
-                        
-                        picker
-                        
-                        Spacer()
-                    }
-                    
-                    DismissButton() {
-                        dismiss()
-                    }
-                    .imageScale(.large)
-                    .buttonStyle(.plain)
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 10)
-                .background(.bar)
-            }
-            #else
+            .scrollDisabled(true)
+            #endif
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     picker
                 }
                 
+                #if !os(macOS)
                 ToolbarItem(placement: .cancellationAction) {
                     DismissButton()
                         .buttonStyle(.plain)
                 }
+                #endif
             }
-            #endif
         }
     }
     
