@@ -22,7 +22,7 @@ struct MenuCommands: Commands {
         
         CommandGroup(replacing: .newItem) {
             Button("New Session") {
-                sessionVM.createNewSession(modelContext: modelContext)
+                sessionVM.createNewSession()
             }
             .keyboardShortcut("n")
         }

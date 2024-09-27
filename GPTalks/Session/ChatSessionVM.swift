@@ -13,6 +13,12 @@ import SwiftUI
     var chatSelections: Set<ChatSession> = []
     var searchText: String = ""
     
+    var modelContext: ModelContext
+    
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
+    
     public var activeSession: ChatSession? {
         guard chatSelections.count == 1 else { return nil }
         return chatSelections.first
@@ -70,7 +76,7 @@ import SwiftUI
         }
     }
     
-    func fork(session: ChatSession, modelContext: ModelContext) {
+    func fork(session: ChatSession) {
         withAnimation {
             // Create a predicate to filter out sessions where isQuick is true
             let predicate = #Predicate<ChatSession> { session in
@@ -105,7 +111,7 @@ import SwiftUI
     }
     
     @discardableResult
-    func createNewSession(modelContext: ModelContext, provider: Provider? = nil) -> ChatSession? {
+    func createNewSession(provider: Provider? = nil) -> ChatSession? {
         let config: SessionConfig
         
         if let providedProvider = provider {

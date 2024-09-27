@@ -18,7 +18,7 @@ struct ChatSessionToolbar: ToolbarContent {
         SessionToolbar(
             providers: providers,
             addItemAction: { provider in
-                sessionVM.createNewSession(modelContext: modelContext, provider: provider)
+                sessionVM.createNewSession(provider: provider)
             },
             getDefaultProvider: { providers in
                 ProviderManager.shared.getDefault(providers: providers)

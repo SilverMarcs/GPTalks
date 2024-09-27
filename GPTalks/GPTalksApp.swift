@@ -12,9 +12,9 @@ import KeyboardShortcuts
 
 @main
 struct GPTalksApp: App {
-    @State private var sessionVM = ChatSessionVM()
-    @State private var imageSessionVM = ImageSessionVM()
-
+    @State private var chatVM = ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext)
+    @State private var imageVM = ImageSessionVM(modelContext: DatabaseService.shared.container.mainContext)
+    
     var body: some Scene {
         Group {
             ChatWindow()
@@ -30,8 +30,8 @@ struct GPTalksApp: App {
         .commands {
             MenuCommands()
         }
-        .environment(sessionVM)
-        .environment(imageSessionVM)
+        .environment(chatVM)
+        .environment(imageVM)
         .modelContainer(DatabaseService.shared.container)
     }
     

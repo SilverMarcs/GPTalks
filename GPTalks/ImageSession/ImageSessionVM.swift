@@ -13,6 +13,12 @@ import Foundation
     var searchText: String = ""
     var imageSelections: Set<ImageSession> = []
     
+    var modelContext: ModelContext
+    
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
+    
     public var activeImageSession: ImageSession? {
         guard imageSelections.count == 1 else { return nil }
         return imageSelections.first

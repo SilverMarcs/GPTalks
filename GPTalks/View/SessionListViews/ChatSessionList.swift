@@ -109,9 +109,9 @@ struct ChatSessionList: View {
     }
 }
 
-#Preview {
-    ChatSessionList(providers: [])
-    .frame(width: 400)
-    .modelContainer(for: ChatSession.self, inMemory: true)
-    .environment(ChatSessionVM())
-}
+//#Preview {
+//    ChatSessionList(providers: [])
+//    .frame(width: 400)
+//    .modelContainer(for: ChatSession.self, inMemory: true)
+//    .environment(ChatSessionVM())
+//}

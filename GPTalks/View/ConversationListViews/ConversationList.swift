@@ -136,11 +136,11 @@ struct ConversationList: View {
     }
 }
 
-#Preview {
-    let config = SessionConfig()
-    let session = ChatSession(config: config)
-    let providers: [Provider] = []
-    
-    ConversationList(session: session, providers: providers)
-        .environment(ChatSessionVM())
-}
+//#Preview {
+//    let config = SessionConfig()
+//    let session = ChatSession(config: config)
+//    let providers: [Provider] = []
+//    
+//    ConversationList(session: session, providers: providers)
+//        .environment(ChatSessionVM())
+//}

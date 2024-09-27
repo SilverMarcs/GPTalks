@@ -39,8 +39,8 @@ struct ChatContentView: View {
     }
 }
 
-#Preview {
-    ChatContentView()
-        .modelContainer(for: ChatSession.self, inMemory: true)
-        .environment(ChatSessionVM())
-}
+//#Preview {
+//    ChatContentView()
+//        .modelContainer(for: ChatSession.self, inMemory: true)
+//        .environment(ChatSessionVM())
+//}

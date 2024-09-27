@@ -186,7 +186,7 @@ struct QuickPanel: View {
         NSApp.keyWindow?.makeKeyAndOrderFront(nil)
         
         let newSession = session.copy(purpose: .quick)
-        sessionVM.fork(session: newSession, modelContext: modelContext)
+        sessionVM.fork(session: newSession)
         resetChat()
         
         showAdditionalContent = false
