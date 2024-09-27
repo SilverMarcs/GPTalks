@@ -12,6 +12,7 @@ struct ChatInspector: View {
     @Environment(\.dismiss) var dismiss
     var session: ChatSession
     var providers: [Provider]
+    @Binding var showingInspector: Bool
     
     @State private var selectedTab: Tab = .basic
     
@@ -32,6 +33,14 @@ struct ChatInspector: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     picker
+                }
+                
+                ToolbarItem {
+                    Button {
+                        showingInspector.toggle()
+                    } label: {
+                        Image(systemName: "sidebar.right")
+                    }
                 }
                 
                 #if !os(macOS)
@@ -65,7 +74,7 @@ struct ChatInspector: View {
 #Preview {
     let providers: [Provider] = []
     
-    ChatInspector(session: ChatSession(config: SessionConfig()), providers: providers)
+    ChatInspector(session: ChatSession(config: SessionConfig()), providers: providers, showingInspector: .constant(true))
         .modelContainer(for: Provider.self, inMemory: true)
         .formStyle(.grouped)
         .frame(width: 400, height: 700)

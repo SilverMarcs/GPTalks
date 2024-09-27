@@ -45,9 +45,11 @@ struct BasicChatInspector: View {
                 sysPrompt
             }
             
-            resetContext
-            
-            deleteAllMessages
+            Section("") {
+                resetContext
+                
+                deleteAllMessages
+            }
         }
         .formStyle(.grouped)
     }

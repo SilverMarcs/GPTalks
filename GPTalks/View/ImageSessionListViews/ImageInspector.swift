@@ -14,6 +14,8 @@ struct ImageInspector: View {
     @Query(filter: #Predicate { $0.isEnabled && $0.supportsImage }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
+    @Binding var showingInspector: Bool
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -61,6 +63,18 @@ struct ImageInspector: View {
                             Text(style.rawValue.capitalized).tag(style)
                         }
                     }
+                }
+            }
+            .toolbar {
+                Text("Config")
+                    .foregroundStyle(.secondary)
+                
+                Spacer()
+                
+                Button {
+                    showingInspector.toggle()
+                } label: {
+                    Image(systemName: "sidebar.right")
                 }
             }
             .formStyle(.grouped)

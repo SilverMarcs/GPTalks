@@ -27,7 +27,7 @@ class Provider {
     
     var color: String = "#00947A"
     var isEnabled: Bool = true
-    var supportsImage: Bool = false
+    var supportsImage: Bool = true
     
     @Relationship(deleteRule: .cascade)
     var chatModel: AIModel
@@ -55,6 +55,7 @@ class Provider {
                 type: ProviderType,
                 color: String,
                 isEnabled: Bool,
+                supportsImage: Bool,
                 chatModel: AIModel,
                 quickChatModel: AIModel,
                 titleModel: AIModel,
@@ -71,6 +72,7 @@ class Provider {
         self.type = type
         self.color = color
         self.isEnabled = isEnabled
+        self.supportsImage = supportsImage
         self.chatModel = chatModel
         self.quickChatModel = quickChatModel
         self.titleModel = titleModel

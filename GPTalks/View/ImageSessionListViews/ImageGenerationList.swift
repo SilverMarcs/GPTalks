@@ -35,11 +35,11 @@ struct ImageGenerationList: View {
             }
             #if os(macOS)
             .navigationTitle(session.title)
-            .toolbar {
-//                ImageGenerationListToolbar(session: session)
-                
-                showInspector
-            }
+//            .toolbar {
+////                ImageGenerationListToolbar(session: session)
+//                
+//                showInspector
+//            }
             #else
             #if !os(visionOS)
             .scrollDismissesKeyboard(.immediately)
@@ -61,9 +61,9 @@ struct ImageGenerationList: View {
                 ImageInspector(session: session)
             }
             #else
-            .inspector(isPresented: $showingInspector) {
-                ImageInspector(session: session)
-            }
+//            .inspector(isPresented: $showingInspector) {
+//                ImageInspector(session: session)
+//            }
             #endif
         }
     }

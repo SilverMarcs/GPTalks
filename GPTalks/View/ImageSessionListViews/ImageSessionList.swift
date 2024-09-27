@@ -16,30 +16,13 @@ struct ImageSessionList: View {
     @Query(sort: \ImageSession.order, order: .forward, animation: .default)
     var sessions: [ImageSession]
     
-    var filteredSessions: [ImageSession] {
-        let filteredSessions: [ImageSession]
-        
-        if sessionVM.searchText.isEmpty {
-            filteredSessions = sessions
-        } else {
-            filteredSessions = sessions.filter { session in
-                session.title.localizedStandardContains(sessionVM.searchText) ||
-                (AppConfig.shared.expensiveSearch &&
-                session.imageGenerations.contains { generation in
-                    generation.prompt.localizedStandardContains(sessionVM.searchText)
-                })
-            }
-        }
-        
-        if config.truncateList {
-            return Array(filteredSessions.prefix(config.listCount))
-        } else {
-            return filteredSessions
-        }
-    }
-    
     var body: some View {
         @Bindable var sessionVM = sessionVM
+        
+        #if os(macOS)
+        CustomSearchField("Search", text: $sessionVM.searchText)
+            .padding(.horizontal, 10)
+        #endif
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.imageSelections) {
@@ -51,6 +34,7 @@ struct ImageSessionList: View {
                     ForEach(filteredSessions) { session in
                         ImageListRow(session: session)
                             .tag(session)
+                            .deleteDisabled(session.isStarred)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))
                     }
@@ -62,12 +46,7 @@ struct ImageSessionList: View {
             .toolbar {
                 ImageSessionToolbar()
             }
-            .onChange(of: sessions.count) {
-                if let first = sessions.first {
-                    proxy.scrollTo(first, anchor: .top)
-                }
-            }
-#if os(macOS)
+#if DEBUG
             .task {
                 if sessionVM.imageSelections.isEmpty, let first = sessions.first {
                     DispatchQueue.main.async {
@@ -80,16 +59,11 @@ struct ImageSessionList: View {
     }
 
     private func deleteItems(offsets: IndexSet) {
-        // if current selection is in the index, then set to nil
-        
         withAnimation {
             for index in offsets.sorted().reversed() {
-                if !sessions[index].isStarred {
-                    modelContext.delete(sessions[index])
-                }
+                modelContext.delete(sessions[index])
             }
             
-            // Then, update the order of remaining items
             let remainingSessions = sessions.filter { !$0.isDeleted }
             for (newIndex, session) in remainingSessions.enumerated() {
                 session.order = newIndex
@@ -104,14 +78,32 @@ struct ImageSessionList: View {
         updatedSessions.move(fromOffsets: source, toOffset: destination)
         
         for (index, session) in updatedSessions.enumerated() {
-            withAnimation {
-                session.order = index
+            session.order = index
+        }
+    }
+    
+    var filteredSessions: [ImageSession] {
+        // Return early if search text is empty
+        guard !sessionVM.searchText.isEmpty else {
+            if config.truncateList {
+                return Array(sessions.prefix(config.listCount))
+            } else {
+                return sessions
             }
+        }
+        
+        // Perform filtering if search text is not empty
+        return sessions.filter { session in
+            session.title.localizedStandardContains(sessionVM.searchText) ||
+            (AppConfig.shared.expensiveSearch &&
+             session.imageGenerations.contains { generation in
+                 generation.prompt.localizedStandardContains(sessionVM.searchText)
+             })
         }
     }
 }
 
 
-//#Preview {
-//    ImageSessionList()
-//}
+#Preview {
+    ImageSessionList()
+}

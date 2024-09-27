@@ -20,6 +20,7 @@ struct ProviderBackup: Codable {
     var type: ProviderType
     var color: String
     var isEnabled: Bool
+    var supportsImage: Bool
     var chatModelCode: String
     var quickChatModelCode: String
     var titleModelCode: String
@@ -50,6 +51,7 @@ extension ProviderBackup {
         self.type = provider.type
         self.color = provider.color
         self.isEnabled = provider.isEnabled
+        self.supportsImage = provider.supportsImage
         self.chatModelCode = provider.chatModel.code
         self.quickChatModelCode = provider.quickChatModel.code
         self.titleModelCode = provider.titleModel.code
@@ -72,6 +74,7 @@ extension ProviderBackup {
             type: self.type,
             color: self.color,
             isEnabled: self.isEnabled,
+            supportsImage: self.supportsImage,
             chatModel: chatModels.first(where: { $0.code == self.chatModelCode }) ?? AIModel(code: self.chatModelCode, name: ""),
             quickChatModel: chatModels.first(where: { $0.code == self.quickChatModelCode }) ?? AIModel(code: self.quickChatModelCode, name: ""),
             titleModel: chatModels.first(where: { $0.code == self.titleModelCode }) ?? AIModel(code: self.titleModelCode, name: ""),

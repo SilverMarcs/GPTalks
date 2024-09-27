@@ -13,6 +13,8 @@ struct ChatContentView: View {
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
+    @State var showingInspector: Bool = true
+    
     var body: some View {
         NavigationSplitView {
             ChatSessionList(providers: providers)
@@ -26,9 +28,9 @@ struct ChatContentView: View {
                     .font(.title)
             }
         }
-        .inspector(isPresented: .constant(true)) {
+        .inspector(isPresented: $showingInspector) {
             if let chatSession = sessionVM.activeSession {
-                ChatInspector(session: chatSession, providers: providers)
+                ChatInspector(session: chatSession, providers: providers, showingInspector: $showingInspector)
             } else {
                 Image(systemName: "gear")
                     .imageScale(.large)
