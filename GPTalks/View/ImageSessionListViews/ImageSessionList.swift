@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ImageSessionList: View {
-    @Environment(ImageSessionVM.self) var sessionVM
+    @Environment(ImageSessionVM.self) var imageVM
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
     
@@ -17,19 +17,19 @@ struct ImageSessionList: View {
     var sessions: [ImageSession]
     
     var body: some View {
-        @Bindable var sessionVM = sessionVM
+        @Bindable var imageVM = imageVM
         
         #if os(macOS)
-        CustomSearchField("Search", text: $sessionVM.searchText)
+        CustomSearchField("Search", text: $imageVM.searchText)
             .padding(.horizontal, 10)
         #endif
         
         ScrollViewReader { proxy in
-            List(selection: $sessionVM.imageSelections) {
+            List(selection: $imageVM.imageSelections) {
                 SessionListCards(sessionCount: "↗", imageSessionsCount: String(sessions.count))
                 
-                if !sessionVM.searchText.isEmpty && sessions.isEmpty {
-                    ContentUnavailableView.search(text: sessionVM.searchText)
+                if !imageVM.searchText.isEmpty && sessions.isEmpty {
+                    ContentUnavailableView.search(text: imageVM.searchText)
                 } else {
                     ForEach(filteredSessions) { session in
                         ImageListRow(session: session)
@@ -42,15 +42,18 @@ struct ImageSessionList: View {
                     .onMove(perform: move)
                 }
             }
-            .scrollContentBackground(.visible)
             .toolbar {
                 ImageSessionToolbar()
             }
+            .navigationTitle("Images")
+            #if !os(macOS)
+            .searchable(text: $imageVM.searchText)
+            #endif
 #if DEBUG
             .task {
-                if sessionVM.imageSelections.isEmpty, let first = sessions.first {
+                if imageVM.imageSelections.isEmpty, let first = sessions.first, !isIOS() {
                     DispatchQueue.main.async {
-                        sessionVM.imageSelections = [first]
+                        imageVM.imageSelections = [first]
                     }
                 }
             }
@@ -84,7 +87,7 @@ struct ImageSessionList: View {
     
     var filteredSessions: [ImageSession] {
         // Return early if search text is empty
-        guard !sessionVM.searchText.isEmpty else {
+        guard !imageVM.searchText.isEmpty else {
             if config.truncateList {
                 return Array(sessions.prefix(config.listCount))
             } else {
@@ -94,10 +97,10 @@ struct ImageSessionList: View {
         
         // Perform filtering if search text is not empty
         return sessions.filter { session in
-            session.title.localizedStandardContains(sessionVM.searchText) ||
+            session.title.localizedStandardContains(imageVM.searchText) ||
             (AppConfig.shared.expensiveSearch &&
              session.imageGenerations.contains { generation in
-                 generation.prompt.localizedStandardContains(sessionVM.searchText)
+                 generation.prompt.localizedStandardContains(imageVM.searchText)
              })
         }
     }

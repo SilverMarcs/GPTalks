@@ -9,8 +9,6 @@ import SwiftUI
 
 #if os(macOS)
 struct ImageWindow: Scene {
-    @Environment(\.modelContext) private var modelContext
-    
     var body: some Scene {
         Window("Images", id: "images") {
             ImageContentView()

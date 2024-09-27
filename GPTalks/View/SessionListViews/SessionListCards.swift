@@ -10,7 +10,7 @@ import SwiftData
 
 struct SessionListCards: View {
     @Environment(\.openWindow) var openWindow
-    @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(ListStateVM.self) private var listStateVM
     @ObservedObject var config = AppConfig.shared
     var sessionCount: String
     var imageSessionsCount: String
@@ -21,13 +21,13 @@ struct SessionListCards: View {
                 ListCard(
                     icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
                     count: sessionCount) {
-                        openWindow(id: "chats")
+                        handleChatPress()
                     }
                 
                 ListCard(
                     icon: "photo.circle.fill", iconColor: .indigo, title: "Images",
                     count: imageSessionsCount) {
-                        openWindow(id: "images")
+                        handleImagePress()
                     }
             }
             .listRowSeparator(.hidden)
@@ -40,6 +40,22 @@ struct SessionListCards: View {
         }
         #if !os(macOS)
         .listSectionSpacing(15)
+        #endif
+    }
+    
+    func handleChatPress() {
+        #if os(macOS)
+        openWindow(id: "chats")
+        #else
+        listStateVM.state = .chats
+        #endif
+    }
+    
+    func handleImagePress() {
+        #if os(macOS)
+        openWindow(id: "images")
+        #else
+        listStateVM.state = .images
         #endif
     }
     

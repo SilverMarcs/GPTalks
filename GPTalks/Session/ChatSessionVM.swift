@@ -147,4 +147,11 @@ import SwiftUI
         
         return newItem
     }
+    
+    var state: ListState = .chats
+    
+    enum ListState: String, CaseIterable {
+        case chats
+        case images
+    }
 }

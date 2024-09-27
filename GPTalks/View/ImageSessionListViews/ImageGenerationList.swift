@@ -9,61 +9,51 @@ import SwiftUI
 import SwiftData
 
 struct ImageGenerationList: View {
+    @Environment(ImageSessionVM.self) var imageVM
     @Bindable var session: ImageSession
     @State private var showingInspector: Bool = false
     
     var body: some View {
         ScrollViewReader { proxy in
-            ScrollView {
-                VStack(spacing: 35) {
-                    ForEach(session.imageGenerations, id: \.self) { generation in
-                        ImageGenerationView(generation: generation)
-                    }
-                    
-                    Color.clear
-                        .id(String.bottomID)
+            List {
+                ForEach(session.imageGenerations, id: \.self) { generation in
+                    ImageGenerationView(generation: generation)
                 }
-                .padding()
+                .listRowSeparator(.hidden)
+                
+                Color.clear
+                    .id(String.bottomID)
             }
-            .onAppear {
+            .listStyle(.plain)
+            .onChange(of: imageVM.imageSelections) {
                 session.proxy = proxy
                 scrollToBottom(proxy: proxy)
             }
-            .scrollContentBackground(.visible)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 ImageInputView(session: session)
             }
             #if os(macOS)
             .navigationTitle(session.title)
-//            .toolbar {
-////                ImageGenerationListToolbar(session: session)
-//                
-//                showInspector
-//            }
+            .toolbar {
+                ImageGenerationListToolbar()
+            }
             #else
             #if !os(visionOS)
             .scrollDismissesKeyboard(.immediately)
             #endif
             .navigationTitle(session.config.model.name)
-            .onTapGesture {
-                showingInspector = false
-            }
+            .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 showInspector
             }
-            .toolbarTitleDisplayMode(.inline)
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) { _ in
                 scrollToBottom(proxy: proxy)
             }
             #endif
-            #if os(visionOS)
+            #if !os(macOS)
             .sheet(isPresented: $showingInspector) {
-                ImageInspector(session: session)
+                ImageInspector(session: session, showingInspector: $showingInspector)
             }
-            #else
-//            .inspector(isPresented: $showingInspector) {
-//                ImageInspector(session: session)
-//            }
             #endif
         }
     }

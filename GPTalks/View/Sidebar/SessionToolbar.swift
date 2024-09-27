@@ -20,7 +20,6 @@ struct SessionToolbar: ToolbarContent {
     var providers: [Provider]
     var addItemAction: (Provider) -> Void
     var getDefaultProvider: ([Provider]) -> Provider?
-//    var selectionType: ChatSessionVM.ListState
     
     var body: some ToolbarContent {
         #if !os(macOS)

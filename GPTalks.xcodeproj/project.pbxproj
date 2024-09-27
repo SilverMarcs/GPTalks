@@ -90,6 +90,7 @@
 		0886D81E2C8705680058700F /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0886D81D2C8705680058700F /* OpenAI */; };
 		0886D8202C8707190058700F /* VertexService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886D81F2C8707190058700F /* VertexService.swift */; };
 		088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A09F22C55C7740055B567 /* TextSelectionView.swift */; };
+		088DA8F92CA752EF006C017E /* IOSWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DA8F82CA752EF006C017E /* IOSWindow.swift */; };
 		08915D942C373340008ADE27 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D932C373340008ADE27 /* ProviderImage.swift */; };
 		08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D982C37C648008ADE27 /* ProviderDetail.swift */; };
 		0891AC0D2C846B2B001379C0 /* Reeeed in Frameworks */ = {isa = PBXBuildFile; productRef = 0891AC0C2C846B2B001379C0 /* Reeeed */; };
@@ -300,6 +301,7 @@
 		087B67F42C97CBBA00B51737 /* ProviderBackupUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderBackupUtils.swift; sourceTree = "<group>"; };
 		0886D81F2C8707190058700F /* VertexService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexService.swift; sourceTree = "<group>"; };
 		088A09F22C55C7740055B567 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
+		088DA8F82CA752EF006C017E /* IOSWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSWindow.swift; sourceTree = "<group>"; };
 		08915D932C373340008ADE27 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
 		08915D982C37C648008ADE27 /* ProviderDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDetail.swift; sourceTree = "<group>"; };
 		0891D5722C96796100BA428F /* ImageConfigDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConfigDefaults.swift; sourceTree = "<group>"; };
@@ -872,6 +874,7 @@
 		08F3CA022C705B1600A800F9 /* Windows */ = {
 			isa = PBXGroup;
 			children = (
+				088DA8F82CA752EF006C017E /* IOSWindow.swift */,
 				08B5D7B72C77A64000D1F100 /* ChatWindow.swift */,
 				087906862CA6C73100E5DCAD /* ImageWindow.swift */,
 				08F3C9FD2C70483800A800F9 /* QuickPanelWindow.swift */,
@@ -1216,6 +1219,7 @@
 				0805DEF52C58E69300A8354A /* ModelListViewModel.swift in Sources */,
 				08A77CC52C65A0B70087D0F3 /* AppearanceSettings.swift in Sources */,
 				0869A3F62C95E4CC009BF9F2 /* ToolCall.swift in Sources */,
+				088DA8F92CA752EF006C017E /* IOSWindow.swift in Sources */,
 				08D174C02C3D901A000257EF /* CrossButton.swift in Sources */,
 				0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */,
 				08A313492C4AD0DC00C3E578 /* CommonModifiers.swift in Sources */,

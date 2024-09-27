@@ -74,7 +74,12 @@ struct ImageInspector: View {
                 Button {
                     showingInspector.toggle()
                 } label: {
-                    Image(systemName: "sidebar.right")
+                    #if os(macOS)
+                    Label("Toggle Inspector", systemImage: "sidebar.right")
+                    #else
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.gray, .gray.opacity(0.3))
+                    #endif
                 }
             }
             .formStyle(.grouped)

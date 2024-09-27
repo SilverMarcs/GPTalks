@@ -8,23 +8,25 @@
 import SwiftUI
 import SwiftData
 import TipKit
-import KeyboardShortcuts
 
 @main
 struct GPTalksApp: App {
     @State private var chatVM = ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext)
     @State private var imageVM = ImageSessionVM(modelContext: DatabaseService.shared.container.mainContext)
+    @State private var listStateVM = ListStateVM()
     
     var body: some Scene {
         Group {
+            #if os(macOS)
             ChatWindow()
             
-            #if os(macOS)
             ImageWindow()
             
             SettingsWindow()
             
             QuickPanelWindow()
+            #else
+            IOSWindow()
             #endif
         }
         .commands {
@@ -32,13 +34,16 @@ struct GPTalksApp: App {
         }
         .environment(chatVM)
         .environment(imageVM)
+        .environment(listStateVM)
         .modelContainer(DatabaseService.shared.container)
     }
     
-    #if os(macOS)
     init() {
+        #if os(macOS)
         NSWindow.allowsAutomaticWindowTabbing = false
         AppConfig.shared.hideDock = false
+        #endif
+        DatabaseService.shared.initialSetup(modelContext: chatVM.modelContext)
+        try? Tips.configure([.datastoreLocation(.applicationDefault)])
     }
-    #endif
 }
