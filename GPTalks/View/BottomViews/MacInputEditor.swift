@@ -36,6 +36,16 @@ struct MacInputEditor: View {
         .onChange(of: sessionVM.chatSelections) {
             isFocused = true
         }
+        .toolbar {
+            ToolbarItem(placement: .keyboard) {
+                Button {
+                    isFocused = true
+                } label: {
+                    Image(systemName: "pencil")
+                }
+                .keyboardShortcut("l")
+            }
+        }
     }
     
     var placeHolder: String {

@@ -57,7 +57,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "api.openai.com"
         case .anthropic: "api.anthropic.com"
         case .google: "generativelanguage.googleapis.com"
-        case .vertex: "Enter your Google Cloud project ID here"
+        case .vertex: ""
         case .local: "localhost:11434"
         }
     }

@@ -166,7 +166,7 @@ struct ProviderGeneral: View {
     private var popoverText: String {
         switch provider.type {
         case .vertex:
-            "Put in your Google Cloud Project ID.\nOnly anthropic models are supported.\nMake sure to enable Vertex AI Api in GCloud Console and enable Anthropic models."
+            "Put in your Google Cloud Project ID.\nOnly Anthropic models are supported.\nMake sure to enable Vertex AI Api in GCloud Console and enable Anthropic models."
         case .openai, .google, .anthropic, .local:
             "Omit https:// and /v1/ from the URL.\nFor example: api.openai.com"
         }

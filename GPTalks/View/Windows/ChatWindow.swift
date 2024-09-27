@@ -9,7 +9,7 @@ import SwiftUI
 import TipKit
 import SwiftData
 
-struct MainWindow: Scene {
+struct ChatWindow: Scene {
     @Environment(\.modelContext) private var modelContext
     @State private var isQuick = false
     
@@ -25,7 +25,7 @@ struct MainWindow: Scene {
         }
         #else
         WindowGroup("Chats", id: "chats") {
-            ContentView()
+            ChatContentView()
                 .environment(\.isQuick, isQuick)
                 .task {
                     try? Tips.configure([.datastoreLocation(.applicationDefault)])

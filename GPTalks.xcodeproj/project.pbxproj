@@ -136,7 +136,7 @@
 		08AAFB9C2C3D01A6002C04E0 /* SessionListCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9B2C3D01A6002C04E0 /* SessionListCards.swift */; };
 		08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFBA02C3D1086002C04E0 /* GPTEncoder */; };
 		08AAFBA42C3D10DF002C04E0 /* GPTEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */; };
-		08B5D7B82C77A64000D1F100 /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B5D7B72C77A64000D1F100 /* MainWindow.swift */; };
+		08B5D7B82C77A64000D1F100 /* ChatWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B5D7B72C77A64000D1F100 /* ChatWindow.swift */; };
 		08B82C1D2C74EA9400DC0183 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B82C1C2C74EA9400DC0183 /* ImageViewer.swift */; };
 		08B82C1F2C74EAFD00DC0183 /* FileViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B82C1E2C74EAFD00DC0183 /* FileViewer.swift */; };
 		08B8DE132C97F3550041A690 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE122C97F3550041A690 /* MarkdownView.swift */; };
@@ -340,7 +340,7 @@
 		08AAFB992C3D0017002C04E0 /* ListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCard.swift; sourceTree = "<group>"; };
 		08AAFB9B2C3D01A6002C04E0 /* SessionListCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListCards.swift; sourceTree = "<group>"; };
 		08AAFBA32C3D10DF002C04E0 /* GPTEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTEncoder.swift; sourceTree = "<group>"; };
-		08B5D7B72C77A64000D1F100 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
+		08B5D7B72C77A64000D1F100 /* ChatWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWindow.swift; sourceTree = "<group>"; };
 		08B82C1C2C74EA9400DC0183 /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		08B82C1E2C74EAFD00DC0183 /* FileViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileViewer.swift; sourceTree = "<group>"; };
 		08B8DE122C97F3550041A690 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
@@ -869,7 +869,7 @@
 		08F3CA022C705B1600A800F9 /* Windows */ = {
 			isa = PBXGroup;
 			children = (
-				08B5D7B72C77A64000D1F100 /* MainWindow.swift */,
+				08B5D7B72C77A64000D1F100 /* ChatWindow.swift */,
 				087906862CA6C73100E5DCAD /* ImageWindow.swift */,
 				08F3C9FD2C70483800A800F9 /* QuickPanelWindow.swift */,
 				08F3CA032C705B3300A800F9 /* SettingsWindow.swift */,
@@ -1125,7 +1125,7 @@
 				08B8DE1B2C97F3B60041A690 /* SessionListSidebar.swift in Sources */,
 				082181522C38046800171BF3 /* ProviderManager.swift in Sources */,
 				082181662C38CBAE00171BF3 /* PlusButton.swift in Sources */,
-				08B5D7B82C77A64000D1F100 /* MainWindow.swift in Sources */,
+				08B5D7B82C77A64000D1F100 /* ChatWindow.swift in Sources */,
 				085361072C492282007DAB62 /* ImageGeneration.swift in Sources */,
 				08C800502C36F667009581C5 /* Provider.swift in Sources */,
 				085361092C4923E2007DAB62 /* ImageConfig.swift in Sources */,

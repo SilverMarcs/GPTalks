@@ -17,7 +17,7 @@ struct GPTalksApp: App {
 
     var body: some Scene {
         Group {
-            MainWindow()
+            ChatWindow()
             
             #if os(macOS)
             ImageWindow()

@@ -57,13 +57,13 @@ struct ConversationList: View {
                     ChatInputView(session: session)
                 }
             }
-            #if os(macOS)
-            .safeAreaInset(edge: .top, spacing: 0) {
-                if config.showStatusBar {
-                    ConversationStatusBar(session: session, providers: providers)
-                }
-            }
-            #endif
+//            #if os(macOS)
+//            .safeAreaInset(edge: .top, spacing: 0) {
+//                if config.showStatusBar {
+//                    ConversationStatusBar(session: session, providers: providers)
+//                }
+//            }
+//            #endif
         }
     }
     
