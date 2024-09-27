@@ -62,7 +62,6 @@ struct ConversationList: View {
                     ConversationStatusBar(session: session, providers: providers)
                 }
             }
-            .searchable(text: $session.searchText)
             #endif
         }
     }
