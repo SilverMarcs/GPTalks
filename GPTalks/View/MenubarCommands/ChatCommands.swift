@@ -34,13 +34,6 @@ struct ChatCommands: Commands {
             .disabled(!(sessionVM.activeSession?.isReplying ?? false))
             
             Section {
-                Button("Regen Last Message") {
-                    Task { @MainActor in
-                        await sessionVM.regenLastMessage()
-                    }
-                }
-                .keyboardShortcut("r", modifiers: .command)
-                
                 Button("Edit Last Message") {
                     withAnimation {
                         sessionVM.editLastMessage()
@@ -48,18 +41,25 @@ struct ChatCommands: Commands {
                 }
                 .keyboardShortcut("e", modifiers: .command)
                 .disabled(sessionVM.activeSession?.isQuick ?? true)
+                
+                Button("Regen Last Message") {
+                    Task { @MainActor in
+                        await sessionVM.regenLastMessage()
+                    }
+                }
+                .keyboardShortcut("r", modifiers: .command)
             }
             
             Section {
-                Button("Delete Last Message") {
-                    sessionVM.deleteLastMessage()
-                }
-                .keyboardShortcut(.delete, modifiers: .command)
-                
                 Button("Reset Context") {
                     sessionVM.resetLastContext()
                 }
                 .keyboardShortcut("k", modifiers: .command)
+                
+                Button("Delete Last Message") {
+                    sessionVM.deleteLastMessage()
+                }
+                .keyboardShortcut(.delete, modifiers: .command)
             }
         }
     }

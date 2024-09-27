@@ -27,7 +27,7 @@ class Provider {
     
     var color: String = "#00947A"
     var isEnabled: Bool = true
-    var supportsImage: Bool = true
+    var supportsImage: Bool = false
     
     @Relationship(deleteRule: .cascade)
     var chatModel: AIModel

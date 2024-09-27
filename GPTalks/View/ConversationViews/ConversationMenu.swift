@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct ConversationMenu: View {
-    @Environment(\.modelContext) var modelContext
     @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.isQuick) var isQuick
     

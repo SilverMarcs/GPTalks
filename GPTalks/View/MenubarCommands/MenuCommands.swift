@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct MenuCommands: Commands {
-    @Environment(\.modelContext) var modelContext
     @Environment(\.openWindow) private var openWindow
     @Environment(ChatSessionVM.self) var sessionVM
 

@@ -12,20 +12,22 @@ struct ConversationListToolbar: ToolbarContent {
     @Bindable var session: ChatSession
     var providers: [Provider]
     
-    @State var showConfig: Bool = false
     @State var showingInspector: Bool = false
-    
-    @State private var currentIndex: Int = 0
+    @State var showingShortcuts = false
 
     var body: some ToolbarContent {
         #if os(macOS)
         ToolbarItem(placement: .navigation) {
             Button {
 //                toggleInspector()
+                showingShortcuts.toggle()
             } label: {
-                Label("Actions", systemImage: "slider.vertical.3")
+                Label("Shortcuts", systemImage: "slider.vertical.3")
             }
             .keyboardShortcut(".")
+            .popover(isPresented: $showingShortcuts) {
+                ConversationShortcuts()
+            }
         }
         
         ToolbarItem {
