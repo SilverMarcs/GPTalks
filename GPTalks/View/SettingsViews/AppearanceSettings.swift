@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
-import MarkdownWebView
+import SwiftData
 
 struct AppearanceSettings: View {
+    @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
+    
+    @State var session: Session?
 
     var body: some View {
         Form {
@@ -28,56 +31,66 @@ struct AppearanceSettings: View {
                         .monospacedDigit()
                 }
             }
+            
+//            Section("Status Bar") {
+//                Toggle("Show Status Bar", isOn: $config.showStatusBar)
+//            }
 
-            Section("View Customisation") {
-                Toggle("Compact List Row", isOn: $config.compactList)
-                
-                #if os(macOS)
-                VStack(alignment: .leading) {
-                    Picker("ConversationList Style", selection: $config.conversationListStyle) {
-                        ForEach(ConversationListStyle.allCases, id: \.self) { style in
-                            Text(style.rawValue)
+            Section("View Customisation") {                
+                Toggle(isOn: $config.compactList) {
+                    if let session = session {
+                        VStack(alignment: .leading) {
+                            Text("Compact List Row")
+                            
+                            SessionListRow(session: session)
+                                .frame(maxWidth: 220)
+                                .bubbleStyle(radius: 7, padding: 4)
                         }
                     }
-//                    .pickerStyle(.radioGroup)
-                    
-                    Text("ListView is smoother but some features may not function.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
                 }
-                #endif
+                .onAppear {
+                    fetchQuickSession()
+                }
 
-                ToggleWithDescription(
-                    title: "Folder View",
-                    isOn: $config.folderView,
-                    description: "Folder View is Experimental and extremely buggy"
-                )
+//                #if os(macOS)
+//                Picker(selection: $config.conversationListStyle) {
+//                    ForEach(ConversationListStyle.allCases, id: \.self) { style in
+//                        Text(style.rawValue)
+//                    }
+//                } label: {
+//                    Text("ConversationList Style")
+//                    Text("List View is smoother but some features may not function.")
+//                }
+//                .pickerStyle(.radioGroup)
+//                #endif
             }
-
-            Section {
+            
+            Section("List Truncation") {
                 Toggle("Show Less Sessions", isOn: $config.truncateList)
 
-                Stepper(
-                    "List Count",
-                    value: Binding<Double>(
-                        get: { Double(config.listCount) },
-                        set: { config.listCount = Int($0) }
-                    ),
-                    in: 6...20,
-                    step: 1,
-                    format: .number
-                )
+                IntegerStepper(value: $config.listCount, label: "List Count", step: 1, range: 6...20)
                 .opacity(config.truncateList ? 1 : 0.5)
                 .disabled(!config.truncateList)
-            } header: {
-                Text("List Row Count")
-            } footer: {
-                SectionFooterView(text: "Only applicable when NOT using folder view")
             }
         }
         .formStyle(.grouped)
         .navigationTitle("Appearance")
         .toolbarTitleDisplayMode(.inline)
+    }
+    
+    private func fetchQuickSession() {
+        var descriptor = FetchDescriptor<Session>(
+            predicate: #Predicate { $0.isQuick == true }
+        )
+        
+        descriptor.fetchLimit = 1
+        
+        do {
+            let quickSessions = try modelContext.fetch(descriptor)
+            session = quickSessions.first
+        } catch {
+            print("Error fetching quick session: \(error)")
+        }
     }
 }
 

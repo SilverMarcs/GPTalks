@@ -5,7 +5,7 @@
 //  Created by Zabir Raihan on 18/09/2024.
 //
 
-#if !os(macOS)
+#if os(iOS)
 import SwiftUI
 import UniformTypeIdentifiers
 

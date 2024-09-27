@@ -79,15 +79,11 @@ extension Conversation {
     @MainActor
     func setContent(_ value: String) {
         self.content = value
-        
-        try? self.modelContext?.save()
     }
     
     @MainActor
     func setToolCalls(_ value: [ToolCall]) {
         self.toolCalls = value
-        
-        try? self.modelContext?.save()
     }
 }
 

@@ -73,35 +73,32 @@ struct ProviderGeneral: View {
             Section("Default Models") {
                 ModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
                 
-                #if os(macOS)
-                ModelPicker(model: $provider.quickChatModel, models: provider.chatModels, label: "Quick Model")
-                #endif
-                
                 ModelPicker(model: $provider.titleModel, models: provider.chatModels, label: "Title Model")
-                
-                if provider.supportsImage {
-                    ModelPicker(model: $provider.imageModel, models: provider.imageModels, label: "Image Model")
-                }
             }
 
             Section("Customisation") {
                 HStack {
-                    ColorPicker("Accent Color", selection: $color)
-                        .task {
-                            color = Color(hex: provider.color)
-                        }
-                        .onChange(of: color) {
-                            provider.color = color.toHex()
-                        }
-
+                    Text("Accent Color")
+                    
                     Button {
                         color = Color.getRandomColor()
                     } label: {
-                        Image(systemName: "die.face.2")
+                        Image(systemName: "die.face.5")
                             .foregroundStyle(.secondary)
                     }
                     .buttonStyle(.plain)
                     .rotationEffect(.degrees(45))
+                    
+                    Spacer()
+                    
+                    ColorPicker("Accent Color", selection: $color)
+                        .labelsHidden()
+                }
+                .task {
+                    color = Color(hex: provider.color)
+                }
+                .onChange(of: color) {
+                    provider.color = color.toHex()
                 }
             }
         }

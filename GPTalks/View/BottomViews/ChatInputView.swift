@@ -35,7 +35,7 @@ struct ChatInputView: View {
             
             VStack(alignment: .leading, spacing: 5) {
                 if !session.inputManager.dataFiles.isEmpty {
-                    DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
+                    DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true, edge: .leading)
                 }
                 
                 InputEditor(prompt: $session.inputManager.prompt,
@@ -111,6 +111,9 @@ struct ChatInputView: View {
         .onChange(of: selectedPhotos) {
             Task {
                 await loadTransferredPhotos(from: selectedPhotos)
+                DispatchQueue.main.async {
+                    selectedPhotos.removeAll()
+                }
             }
         }
     }

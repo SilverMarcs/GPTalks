@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ConversationListToolbar: ToolbarContent {
+    @Environment(SessionVM.self) private var sessionVM
     @Bindable var session: Session
     var providers: [Provider]
     
@@ -16,11 +17,11 @@ struct ConversationListToolbar: ToolbarContent {
     
     @State private var currentIndex: Int = 0
     var filteredGroups: [ConversationGroup] {
-        if session.searchText.count < 4 {
+        if sessionVM.searchText.count < 4 {
             return []
         }
         return session.groups.filter { group in
-            group.activeConversation.content.localizedCaseInsensitiveContains(session.searchText)
+            group.activeConversation.content.localizedCaseInsensitiveContains(sessionVM.searchText)
         }
     }
     
@@ -39,9 +40,10 @@ struct ConversationListToolbar: ToolbarContent {
             } label: {
                 Label("Actions", systemImage: "slider.vertical.3")
             }
+            .keyboardShortcut(".")
         }
         
-        if !session.searchText.isEmpty && !filteredGroups.isEmpty {
+        if !sessionVM.searchText.isEmpty && !filteredGroups.isEmpty {
             ToolbarItem {
                 navigateButtons
             }

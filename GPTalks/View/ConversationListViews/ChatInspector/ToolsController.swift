@@ -12,10 +12,14 @@ struct ToolsController: View {
     
     var body: some View {
         ForEach(ChatTool.allCases, id: \.self) { tool in
-            Toggle(tool.displayName, isOn: Binding(
-                get: { tools.isToolEnabled(tool) },
-                set: { tools.setTool(tool, enabled: $0) }
-            ))
+            Toggle(
+                tool.displayName,
+                systemImage: tool.icon,
+                isOn: Binding(
+                    get: { tools.isToolEnabled(tool) },
+                    set: { tools.setTool(tool, enabled: $0) }
+                )
+            )
         }
     }
 }

@@ -72,14 +72,14 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
         }
     }
     
-    func process(arguments: String, modelContext: ModelContext? = nil) async throws -> ToolData {
+    func process(arguments: String) async throws -> ToolData {
         switch self {
         case .urlScrape:
             try await URLScrape.getContent(from: arguments)
         case .googleSearch:
             try await GoogleSearch.getResults(from: arguments)
         case .imageGenerate:
-            try await GenerateImage.generateImage(from: arguments, modelContext: modelContext)
+            try await GenerateImage.generateImage(from: arguments)
         default:
             .init(string: "No tool")
         }

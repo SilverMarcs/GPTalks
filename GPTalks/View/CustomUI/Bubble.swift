@@ -8,18 +8,19 @@
 import SwiftUI
 
 extension View {
-    func bubbleStyle(compact: Bool = false, radius: CGFloat = 5) -> some View {
-        modifier(Bubble(compact: compact, radius: radius))
+    func bubbleStyle(compact: Bool = false, radius: CGFloat = 5, padding: CGFloat = 7) -> some View {
+        modifier(Bubble(compact: compact, radius: radius, padding: padding))
     }
 }
 
 struct Bubble: ViewModifier {
     var compact: Bool
     var radius: CGFloat
-
+    var padding: CGFloat
+            
     func body(content: Content) -> some View {
         content
-            .padding(7)
+            .padding(padding)
 #if os(macOS)
             .background(.background.quinary)
 #else

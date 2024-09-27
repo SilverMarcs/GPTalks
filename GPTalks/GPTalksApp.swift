@@ -13,7 +13,6 @@ import KeyboardShortcuts
 @main
 struct GPTalksApp: App {
     @State private var sessionVM = SessionVM()
-    @State private var tokenManager = GoogleAuthManager.shared
 
     var body: some Scene {
         Group {

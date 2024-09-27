@@ -10,6 +10,7 @@ import MarkdownWebView
 
 class AppConfig: ObservableObject {
     static let shared = AppConfig()
+    private init() {}
     
     // Appearance
     #if os(macOS)
@@ -32,7 +33,7 @@ class AppConfig: ObservableObject {
     
     @AppStorage("truncateList") var truncateList: Bool = false
     @AppStorage("listCount") var listCount: Int = 16
-    @AppStorage("conversationListStyle") var conversationListStyle: ConversationListStyle = .scrollview
+    @AppStorage("conversationListStyle") var conversationListStyle: ConversationListStyle = .list
     @AppStorage("folderView") var folderView: Bool = false
     
     // Markdown
@@ -42,6 +43,7 @@ class AppConfig: ObservableObject {
     @AppStorage("autogenTitle") var autogenTitle: Bool = true
     @AppStorage("expensiveSearch") var expensiveSearch: Bool = false
     @AppStorage("hideDock") var hideDock = false
+    @AppStorage("showStatusBar") var showStatusBar = false
     
     // Quick
     @AppStorage("quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."
