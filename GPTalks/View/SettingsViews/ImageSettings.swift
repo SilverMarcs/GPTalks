@@ -31,7 +31,7 @@ struct ImageSettings: View {
     
     var body: some View {
         Form {
-            Section("Defaults") {
+            Section {
                 Picker("Provider", selection: providerBinding) {
                     ForEach(providers) { provider in
                         Text(provider.name).tag(provider)
@@ -52,6 +52,10 @@ struct ImageSettings: View {
                         }
                     }
                 }
+            } header: {
+                Text("Defaults")
+            } footer: {
+                SectionFooterView(text: "Check Plugin Settings to configure models for plugin generations")
             }
             
             Section(header: Text("Default Parameters")) {

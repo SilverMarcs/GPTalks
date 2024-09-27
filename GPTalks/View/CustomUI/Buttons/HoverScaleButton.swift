@@ -11,7 +11,7 @@ struct HoverScaleButton: View {
     let icon: String // SF Symbol name
     let label: String
     let action: () -> Void
-//    @State var hovering = false
+    @State var hovering = false
 
     var body: some View {
         Button(action: {
@@ -20,7 +20,7 @@ struct HoverScaleButton: View {
             Label(label, systemImage: icon)
         }
         .buttonStyle(.plain)
-//        .onHover { hovering = $0 }
-//        .symbolEffect(.scale.up, isActive: hovering)
+        .onHover { hovering = $0 }
+        .symbolEffect(.scale.up, isActive: hovering)
     }
 }

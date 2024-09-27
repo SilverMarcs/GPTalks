@@ -11,10 +11,8 @@ import GoogleGenerativeAI
 import SwiftData
 
 struct GenerateImage {
-    static func generateImage(from arguments: String, modelContext: ModelContext?) async throws -> ToolData {
-        guard let modelContext = modelContext else {
-            return .init(string: "Error: Model context not found")
-        }
+    static func generateImage(from arguments: String) async throws -> ToolData {
+        let modelContext = DatabaseService.shared.modelContext
         
         let parameters = getImageGenerationParameters(from: arguments)
         let config = ImageConfigDefaults.shared
@@ -48,7 +46,6 @@ struct GenerateImage {
 
         return .init(string: "Provider: \(provider.name)\nModel: \(provider.imageModel.name)\nQuality: \(config.quality)\nSize: \(config.size)",
                      data: dataObjects)
-
     }
     
     struct ImageGenerationParameters: Codable {
