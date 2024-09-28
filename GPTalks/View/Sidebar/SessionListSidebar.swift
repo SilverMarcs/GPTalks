@@ -17,11 +17,10 @@ struct SessionListSidebar: View {
         
         #if os(macOS)
         CustomSearchField("Search", text: $sessionVM.searchText)
-//            .id(String.topID)
             .padding(.horizontal, 10)
         #endif
         
-        ChatSessionList(providers: providers)
+        ChatSessionList()
     }
 }
 

@@ -58,7 +58,7 @@ struct QuickPanel: View {
                     EmptyView()
                 }
                 
-                ConversationList(session: session, providers: providers)
+                ConversationList(session: session)
                     .navigationTitle("Quick Panel")
                     .scrollContentBackground(.hidden)
                 

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ConversationGroupView: View {
     var group: ConversationGroup
-    var providers: [Provider]
     
     @State var isHovered: Bool = false
     
@@ -18,11 +17,11 @@ struct ConversationGroupView: View {
             Group {
                 switch group.role {
                 case .user:
-                    UserMessage(conversation: group.activeConversation, providers: providers)
+                    UserMessage(conversation: group.activeConversation)
                         .padding(.top, 5)
                 case .assistant:
                     if group.activeConversation.toolCalls.isEmpty {
-                        AssistantMessage(conversation: group.activeConversation, providers: providers)
+                        AssistantMessage(conversation: group.activeConversation)
                             .padding(.top, 5)
                     } else {
                         ToolCallView(conversation: group.activeConversation)
@@ -68,8 +67,8 @@ struct ConversationGroupView: View {
         conversation: assistantConversation, session: session)
 
     VStack {
-        ConversationGroupView(group: group, providers: providers)
-        ConversationGroupView(group: group2, providers: providers)
+        ConversationGroupView(group: group)
+        ConversationGroupView(group: group2)
     }
     .frame(width: 400)
     .padding()

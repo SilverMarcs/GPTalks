@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct BasicChatInspector: View {
     @Bindable var session: ChatSession
+    
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
     @State var isGeneratingTtile: Bool = false

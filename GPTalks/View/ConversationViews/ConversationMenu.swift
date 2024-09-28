@@ -13,7 +13,6 @@ struct ConversationMenu: View {
     @Environment(\.isQuick) var isQuick
     
     var group: ConversationGroup
-    var providers: [Provider]
     
     @Binding var isExpanded: Bool
     var toggleTextSelection: (() -> Void)? = nil

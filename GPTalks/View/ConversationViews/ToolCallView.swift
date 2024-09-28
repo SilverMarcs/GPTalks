@@ -90,7 +90,7 @@ struct ToolCallView: View {
                                     toolResponse: toolResponse)
     conversation.isReplying = true
     
-    return AssistantMessage(conversation: conversation, providers: providers)
+    return AssistantMessage(conversation: conversation)
         .frame(width: 500, height: 300)
 }
 

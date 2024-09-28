@@ -11,7 +11,6 @@ import MarkdownWebView
 struct AssistantMessage: View {
     @ObservedObject var config = AppConfig.shared
     @Bindable var conversation: Conversation
-    var providers: [Provider]
     
     @State private var isHovering: Bool = false
     @State private var showingTextSelection = false
@@ -73,7 +72,7 @@ struct AssistantMessage: View {
     var conversationMenuView: some View {
         #if os(macOS)
         if let group = conversation.group, let session = group.session {
-            ConversationMenu(group: group, providers: providers, isExpanded: .constant(true))
+            ConversationMenu(group: group, isExpanded: .constant(true))
                 .symbolEffect(.appear, isActive: !isHovering)
                 .opacity(session.isReplying ? 0 : 1)
         }
@@ -113,7 +112,7 @@ struct AssistantMessage: View {
                                     content: codeBlock)
     conversation.isReplying = true
     
-    return AssistantMessage(conversation: conversation, providers: providers)
+    return AssistantMessage(conversation: conversation)
         .frame(width: 500, height: 300)
 }
 

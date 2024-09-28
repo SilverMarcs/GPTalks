@@ -23,6 +23,7 @@ struct ImageGenerationList: View {
                 
                 Color.clear
                     .id(String.bottomID)
+                    .listRowSeparator(.hidden)
             }
             .listStyle(.plain)
             .onChange(of: imageVM.imageSelections) {

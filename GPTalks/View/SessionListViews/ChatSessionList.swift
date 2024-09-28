@@ -15,7 +15,6 @@ struct ChatSessionList: View {
     
     @Query(filter: #Predicate { !$0.isQuick }, sort: [SortDescriptor(\ChatSession.order, order: .forward)], animation: .default)
     var sessions: [ChatSession]
-    var providers: [Provider]
     
     var body: some View {
         @Bindable var sessionVM = sessionVM
@@ -28,7 +27,7 @@ struct ChatSessionList: View {
         ScrollViewReader { proxy in
             List(selection: $sessionVM.chatSelections) {
                 SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "↗")
-//                    .id(String.topID)
+                    .id(String.topID)
                 
                 if !sessionVM.searchText.isEmpty && sessions.isEmpty {
                     ContentUnavailableView.search(text: sessionVM.searchText)
@@ -48,7 +47,7 @@ struct ChatSessionList: View {
                 }
             }
             .toolbar {
-                ChatSessionToolbar(providers: providers)
+                ChatSessionToolbar()
             }
             .navigationTitle("Chats")
             #if !os(macOS)

@@ -12,6 +12,7 @@ struct ChatSessionToolbar: ToolbarContent {
     @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
     var body: some ToolbarContent {
@@ -23,7 +24,6 @@ struct ChatSessionToolbar: ToolbarContent {
             getDefaultProvider: { providers in
                 ProviderManager.shared.getDefault(providers: providers)
             }
-//            selectionType: .chats
         )
     }
 }
@@ -32,6 +32,6 @@ struct ChatSessionToolbar: ToolbarContent {
     VStack {
         Text("Hi")
     }.toolbar  {
-        ChatSessionToolbar(providers: [])
+        ChatSessionToolbar()
     }
 }

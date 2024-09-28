@@ -12,7 +12,6 @@ struct ConversationList: View {
     @Environment(\.isQuick) var isQuick
     
     @Bindable var session: ChatSession
-    var providers: [Provider]
     
     @ObservedObject var config: AppConfig = AppConfig.shared
     
@@ -35,7 +34,7 @@ struct ConversationList: View {
         ScrollViewReader { proxy in
             Group {
                 if session.groups.isEmpty {
-                    EmptyConversationList(session: session, providers: providers)
+                    EmptyConversationList(session: session)
                 } else {
                     switch config.conversationListStyle {
                     case .list:
@@ -53,7 +52,7 @@ struct ConversationList: View {
                 sessionVM.chatSelections.first?.refreshTokens()
                 scrollToBottom(proxy: proxy, delay: 0.4)
             }
-            .toolbar { ConversationListToolbar(session: session, providers: providers) }
+            .toolbar { ConversationListToolbar(session: session) }
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
@@ -74,7 +73,7 @@ struct ConversationList: View {
         ScrollView {
             VStack(spacing: spacing) {
                 ForEach(session.groups, id: \.self) { group in
-                    ConversationGroupView(group: group, providers: providers)
+                    ConversationGroupView(group: group)
                 }
 
                 ErrorMessageView(session: session)
@@ -96,7 +95,7 @@ struct ConversationList: View {
         List {
             VStack(spacing: 3) {
                 ForEach(session.groups) { group in
-                    ConversationGroupView(group: group, providers: providers)
+                    ConversationGroupView(group: group)
                 }
                 .transaction { $0.animation = nil }
 

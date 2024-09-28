@@ -10,7 +10,6 @@ import SwiftUI
 struct ConversationListToolbar: ToolbarContent {
     @Environment(ChatSessionVM.self) private var sessionVM
     @Bindable var session: ChatSession
-    var providers: [Provider]
     
     @State var showingInspector: Bool = false
     @State var showingShortcuts = false
@@ -38,7 +37,7 @@ struct ConversationListToolbar: ToolbarContent {
         ToolbarItem {
             Color.clear
                 .sheet(isPresented: $showingInspector) {
-                    ChatInspector(session: session, providers: providers, showingInspector: $showingInspector)
+                    ChatInspector(session: session, showingInspector: $showingInspector)
                 }
         }
         
@@ -81,6 +80,6 @@ struct ConversationListToolbar: ToolbarContent {
     }
     .frame(width: 700, height: 300)
     .toolbar {
-        ConversationListToolbar(session: session, providers: [])
+        ConversationListToolbar(session: session)
     }
 }

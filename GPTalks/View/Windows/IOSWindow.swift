@@ -12,16 +12,13 @@ struct IOSWindow: Scene {
     @Environment(ListStateVM.self) private var listStateVM
     @Environment(ChatSessionVM.self) private var chatVM
     @Environment(ImageSessionVM.self) private var imageVM
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
-    var providers: [Provider]
-    
     
     var body: some Scene {
         WindowGroup("Chats", id: "chats") {
             NavigationSplitView {
                 switch listStateVM.state {
                 case .chats:
-                    ChatSessionList(providers: providers)
+                    ChatSessionList()
                 case .images:
                     ImageSessionList()
                 }
@@ -29,7 +26,7 @@ struct IOSWindow: Scene {
                 switch listStateVM.state {
                 case .chats:
                     if let chatSession = chatVM.activeSession {
-                        ConversationList(session: chatSession, providers: providers)
+                        ConversationList(session: chatSession)
                     } else {
                         Text("^[\(chatVM.chatSelections.count) Chat Session](inflect: true) Selected")
                     }
