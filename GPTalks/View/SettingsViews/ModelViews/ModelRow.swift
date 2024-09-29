@@ -113,9 +113,6 @@ struct ModelRow: View {
     }
 }
 
-#Preview {
-    let model = AIModel(code: "gpt-3.5-turbo", name: "GPT-3.5 Turbo")
-    let provider = Provider.factory(type: .openai)
-    
-    ModelRow(model: model, provider: provider) {}
+#Preview {    
+    ModelRow(model: .gpt4, provider: .openAIProvider) {}
 }

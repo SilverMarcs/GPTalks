@@ -71,8 +71,6 @@ struct ChatInspector: View {
 #Preview {
     let providers: [Provider] = []
     
-    ChatInspector(session: ChatSession(config: SessionConfig()), showingInspector: .constant(true))
-        .modelContainer(for: Provider.self, inMemory: true)
-        .formStyle(.grouped)
+    ChatInspector(session: .mockChatSession, showingInspector: .constant(true))
         .frame(width: 400, height: 700)
 }

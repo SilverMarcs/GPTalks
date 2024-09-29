@@ -110,6 +110,6 @@ struct ImageInspector: View {
     }
 }
 
-//#Preview {
-//    ImageInspector()
-//}
+#Preview {
+    ImageInspector(session: .mockImageSession, showingInspector: .constant(true))
+}

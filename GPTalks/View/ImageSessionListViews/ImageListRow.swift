@@ -34,6 +34,6 @@ struct ImageListRow: View {
     }
 }
 
-//#Preview {
-//    ImageListRow()
-//}
+#Preview {
+    ImageListRow(session: .mockImageSession)
+}

@@ -42,8 +42,6 @@ struct ProviderRow: View {
     }
 }
 
-#Preview {
-    let provider = Provider.factory(type: .openai)
-    
-    ProviderRow(provider: provider)
+#Preview 
+    ProviderRow(provider: .openAIProvider)
 }

@@ -61,12 +61,12 @@ final class SessionConfig {
     }
     
     // for previews only. dont use this elsewhere
-    init(provider: Provider = Provider.factory(type: .openai), isDummy: Bool = true, tools: SessionConfigTools = SessionConfigTools(isTitle: true)) {
-        self.provider = provider
-        self.model = provider.chatModel
-        self.systemPrompt = ""
-        self.tools = tools
-    }
+//    init(provider: Provider = Provider.factory(type: .openai), isDummy: Bool = true, tools: SessionConfigTools = SessionConfigTools(isTitle: true)) {
+//        self.provider = provider
+//        self.model = provider.chatModel
+//        self.systemPrompt = ""
+//        self.tools = tools
+//    }
     
 
     func copy(purpose: SessionConfigPurpose) -> SessionConfig {

@@ -28,7 +28,5 @@ struct InputImageView: View {
 }
 
 #Preview {
-    let config = SessionConfig()
-    let session = ChatSession(config: config)
-    InputImageView(session: session)
+    InputImageView(session: .mockChatSession)
 }

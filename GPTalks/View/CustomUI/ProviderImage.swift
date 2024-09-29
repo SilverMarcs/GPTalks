@@ -29,5 +29,5 @@ struct ProviderImage: View {
 }
 
 #Preview {
-    ProviderImage(provider: Provider.factory(type: .openai), scale: .small)
+    ProviderImage(provider: .openAIProvider, scale: .small)
 }

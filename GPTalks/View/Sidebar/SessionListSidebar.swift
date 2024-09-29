@@ -25,5 +25,5 @@ struct SessionListSidebar: View {
 }
 
 #Preview {
-    SessionListSidebar(providers: [])
+    SessionListSidebar(providers: Provider.mockProviders)
 }

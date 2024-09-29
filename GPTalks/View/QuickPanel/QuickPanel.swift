@@ -214,8 +214,9 @@ struct QuickPanel: View {
 }
 
 #Preview {
-    let showAdditionalContent = Binding.constant(true)
+    let quickSesion = ChatSession.mockChatSession
+    quickSesion.isQuick = true
     
-    QuickPanel(session: ChatSession(config: .init()), showAdditionalContent: showAdditionalContent)
+    return QuickPanel(session: quickSesion, showAdditionalContent: .constant(true))
 }
 #endif

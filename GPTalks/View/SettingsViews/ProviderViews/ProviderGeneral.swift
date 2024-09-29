@@ -174,9 +174,7 @@ struct ProviderGeneral: View {
 }
 
 #Preview {
-    let provider = Provider.factory(type: .openai)
-
-    return ProviderGeneral(provider: provider) {}
+    return ProviderGeneral(provider: .openAIProvider) {}
         .padding()
         .frame(width: 500, height: 600)
 }

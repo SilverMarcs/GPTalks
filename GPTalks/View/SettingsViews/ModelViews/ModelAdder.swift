@@ -91,5 +91,5 @@ struct ModelAdder: View {
 }
 
 #Preview {
-    ModelAdder(provider: Provider.factory(type: .openai), type: .chat)
+    ModelAdder(provider: .openAIProvider, type: .chat)
 }

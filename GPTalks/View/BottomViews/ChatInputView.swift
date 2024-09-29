@@ -174,11 +174,6 @@ struct ChatInputView: View {
 }
 
 #Preview {
-    let config = SessionConfig()
-    let session = ChatSession(config: config)
-    
-    session.inputManager.prompt = "Hello, World"
-    
-    return ChatInputView(session: session)
+    ChatInputView(session: .mockChatSession)
         .padding()
 }

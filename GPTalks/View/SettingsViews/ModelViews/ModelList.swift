@@ -207,5 +207,5 @@ extension ModelListView {
 #Preview {
     let provider = Provider.factory(type: .openai)
     
-    ModelListView(provider: provider, type: .chat)
+    ModelListView(provider: .openAIProvider, type: .chat)
 }

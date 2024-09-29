@@ -143,13 +143,10 @@ struct SessionListRow: View {
     }
 }
 
-//#Preview {
-//    let config = SessionConfig()
-//    let session = ChatSession(config: config)
-//    
-//    List {
-//        SessionListRow(session: session)
-//            .environment(ChatSessionVM())
-//    }
-//    .frame(width: 250)
-//}
+#Preview {
+    List {
+        SessionListRow(session: .mockChatSession)
+            .environment(ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext))
+    }
+    .frame(width: 250)
+}

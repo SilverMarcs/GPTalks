@@ -104,10 +104,6 @@ struct UserMessage: View {
 }
 
 #Preview {
-    let providers: [Provider] = []
-    let conversation = Conversation(
-        role: .user, content: "Hello, World! who are you and how are you")
-
-    UserMessage(conversation: conversation)
+    UserMessage(conversation: .mockUserConversation)
         .frame(width: 500, height: 300)
 }

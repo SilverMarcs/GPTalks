@@ -73,13 +73,12 @@ struct ConversationListToolbar: ToolbarContent {
 
 #Preview {
     @Previewable @State var showingSearchField = false
-    let session = ChatSession(config: SessionConfig())
-    
+
     VStack {
         Text("Hello, World!")
     }
     .frame(width: 700, height: 300)
     .toolbar {
-        ConversationListToolbar(session: session)
+        ConversationListToolbar(session: .mockChatSession)
     }
 }

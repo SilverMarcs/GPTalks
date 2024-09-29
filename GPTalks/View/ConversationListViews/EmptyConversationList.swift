@@ -27,9 +27,5 @@ struct EmptyConversationList: View {
 }
 
 #Preview {
-    let config = SessionConfig()
-    let session = ChatSession(config: config)
-    let provider = Provider.factory(type: .openai)
-    
-    EmptyConversationList(session: session)
+    EmptyConversationList(session: .mockChatSession)
 }

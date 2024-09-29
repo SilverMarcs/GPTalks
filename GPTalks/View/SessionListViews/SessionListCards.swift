@@ -68,7 +68,7 @@ struct SessionListCards: View {
     }
 }
 
-//#Preview {
-//    SessionListCards(sessionCount: "5", imageSessionsCount: "?")
-//        .environment(ChatSessionVM())
-//}
+#Preview {
+    SessionListCards(sessionCount: "5", imageSessionsCount: "?")
+        .environment(ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext))
+}

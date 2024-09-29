@@ -41,6 +41,6 @@ struct CommonCompactRow: View {
     }
 }
 
-//#Preview {
-//    CommonCompactRow()
-//}
+#Preview {
+    CommonCompactRow(provider: .openAIProvider, model: .gpt4, title: "Hello, World!", isStarred: true)
+}

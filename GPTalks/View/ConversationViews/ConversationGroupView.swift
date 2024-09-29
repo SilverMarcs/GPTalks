@@ -50,25 +50,9 @@ struct ConversationGroupView: View {
 
 
 #Preview {
-    let config = SessionConfig()
-    let session = ChatSession(config: config)
-    let providers: [Provider] = []
-    
-    let userConversation = Conversation(role: .user, content: "Hello, World!")
-    let assistantConversation = Conversation(
-        role: .assistant, content: """
-        Hello, World! \n
-        Hi boss
-        """)
-
-    let group = ConversationGroup(
-        conversation: userConversation, session: session)
-    let group2 = ConversationGroup(
-        conversation: assistantConversation, session: session)
-
     VStack {
-        ConversationGroupView(group: group)
-        ConversationGroupView(group: group2)
+        ConversationGroupView(group: .mockUserConversationGroup)
+        ConversationGroupView(group: .mockAssistantConversationGroup)
     }
     .frame(width: 400)
     .padding()

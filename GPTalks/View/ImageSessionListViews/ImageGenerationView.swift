@@ -98,6 +98,6 @@ struct ImageGenerationView: View {
 }
 
 
-//#Preview {
-//    ImageGenerationView()
-//}
+#Preview {
+    ImageGenerationView(generation: .mockImageGeneration)
+}

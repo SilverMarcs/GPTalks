@@ -85,7 +85,5 @@ struct ToolMessage: View {
 }
 
 #Preview {
-    let conversation = Conversation(role: .tool, content: "Hello, World!")
-    
-    ToolMessage(conversation: conversation)
+    ToolMessage(conversation: .mockToolConversation)
 }

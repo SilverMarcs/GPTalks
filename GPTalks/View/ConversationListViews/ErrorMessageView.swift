@@ -31,8 +31,5 @@ struct ErrorMessageView: View {
 }
 
 #Preview {
-    let config = SessionConfig()
-    let session = ChatSession(config: config)
-    
-    ErrorMessageView(session: session)
+    ErrorMessageView(session: .mockChatSession)
 }

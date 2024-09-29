@@ -212,30 +212,11 @@ struct ConversationMenu: View {
     }
 }
 
-//#Preview {
-//    let config = SessionConfig()
-//    let session = ChatSession(config: config)
-//
-//    let userConversation = Conversation(role: .user, content: "Hello, World!")
-//    let assistantConversation = Conversation(
-//        role: .assistant, content: "Hello, World!")
-//
-//    let group = ConversationGroup(
-//        conversation: userConversation, session: session)
-//    group.addConversation(
-//        Conversation(role: .user, content: "This is second."))
-//    group.addConversation(
-//        Conversation(role: .user, content: "This is third message."))
-//    let group2 = ConversationGroup(
-//        conversation: assistantConversation, session: session)
-//
-//    let providers: [Provider] = []
-//    
-//    return VStack {
-//        ConversationGroupView(group: group, providers: providers)
-//        ConversationGroupView(group: group2, providers: providers)
-//    }
-//    .environment(ChatSessionVM())
-//    .frame(width: 500)
-//    .padding()
-//}
+#Preview {
+    VStack {
+        ConversationMenu(group: .mockUserConversationGroup, isExpanded: .constant(true))
+        ConversationMenu(group: .mockAssistantConversationGroup, isExpanded: .constant(true))
+    }
+    .frame(width: 500)
+    .padding()
+}

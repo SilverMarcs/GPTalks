@@ -93,26 +93,7 @@ struct AssistantMessage: View {
 }
 
 #Preview {
-    let codeBlock = """
-    This is a code block
-    
-    ```swift
-    struct ContentView: View {
-        var body: some View {
-            Text("Hello, World!")
-        }
-    }
-    ```
-    
-    Thank you for using me.
-    
-    """
-    let providers: [Provider] = []
-    let conversation = Conversation(role: .assistant,
-                                    content: codeBlock)
-    conversation.isReplying = true
-    
-    return AssistantMessage(conversation: conversation)
+    return AssistantMessage(conversation: .mockAssistantConversation)
         .frame(width: 500, height: 300)
 }
 

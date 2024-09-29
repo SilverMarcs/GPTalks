@@ -36,14 +36,6 @@ enum ModelType: String, CaseIterable, Codable, Hashable {
 }
 
 extension AIModel {
-    static func getDemoModel() -> AIModel {
-        return AIModel(code: "gpt-3.5-turbo", name: "GPT-3.5T")
-    }
-    
-    static func getDemoImageModel() -> AIModel {
-        return AIModel(code: "dall-e-3", name: "DALL-E-3", type: .image)
-    }
-    
     static func getOpenaiModels() -> [AIModel] {
         return [
             AIModel(code: "gpt-4o", name: "GPT-4o", order: 0),

@@ -74,5 +74,5 @@ struct ImageGenerationList: View {
 
 
 #Preview {
-    ImageGenerationList(session: ImageSession(config: ImageConfig()))
+    ImageGenerationList(session: .mockImageSession)
 }
