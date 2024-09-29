@@ -10,6 +10,7 @@ import SwiftData
 
 struct SessionListCards: View {
     @Environment(\.openWindow) var openWindow
+    @Environment(\.dismissWindow) var dismissWindow
     @Environment(ListStateVM.self) private var listStateVM
     @ObservedObject var config = AppConfig.shared
     var sessionCount: String
@@ -46,6 +47,9 @@ struct SessionListCards: View {
     func handleChatPress() {
         #if os(macOS)
         openWindow(id: "chats")
+        if config.onlyOneWindow {
+            dismissWindow(id: "images")
+        }
         #else
         listStateVM.state = .chats
         #endif
@@ -54,6 +58,9 @@ struct SessionListCards: View {
     func handleImagePress() {
         #if os(macOS)
         openWindow(id: "images")
+        if config.onlyOneWindow {
+            dismissWindow(id: "chats")
+        }
         #else
         listStateVM.state = .images
         #endif

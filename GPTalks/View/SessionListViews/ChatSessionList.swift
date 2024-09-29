@@ -109,7 +109,7 @@ struct ChatSessionList: View {
 }
 
 #Preview {
-    ChatSessionList(providers: [])
+    ChatSessionList()
     .frame(width: 400)
     .environment(ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext))
 }

@@ -90,13 +90,31 @@ struct ImageSettings: View {
                 }
             }
             
-            Section("Size") {
-                IntegerStepper(value: $imageConfig.imageHeight, label: "Image Height", step: 30, range: 40...300)
+            Section("Chat Image Size") {
+                IntegerStepper(value: $imageConfig.chatImageHeight, label: "Image Height", step: 30, range: 40...300)
                 
-                IntegerStepper(value: $imageConfig.imageWidth, label: "Image Width", step: 30, range: 80...300)
+                IntegerStepper(value: $imageConfig.chatImageWidth, label: "Image Width", step: 30, range: 80...300)
                 
                 HStack(alignment: .top) {
-                    Text("Demo")
+                    Text("Only applies to images in Chat Session")
+                    
+                    Spacer()
+                    
+                    Image("sample")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: CGFloat(imageConfig.chatImageWidth), height: CGFloat(imageConfig.chatImageHeight))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+            }
+            
+            Section("Generation Image Size") {
+                IntegerStepper(value: $imageConfig.imageHeight, label: "Image Height", step: 50, range: 50...500)
+                
+                IntegerStepper(value: $imageConfig.imageWidth, label: "Image Width", step: 50, range: 50...500)
+                
+                HStack(alignment: .top) {
+                    Text("Only applies to images from Image Generation Session")
                     
                     Spacer()
                     

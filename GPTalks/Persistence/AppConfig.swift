@@ -50,6 +50,7 @@ class AppConfig: ObservableObject {
     @AppStorage("expensiveSearch") var expensiveSearch: Bool = false
     @AppStorage("hideDock") var hideDock = false
     @AppStorage("showStatusBar") var showStatusBar = false
+    @AppStorage("onlyOneWindow") var onlyOneWindow = false
     
     // Quick
     @AppStorage("quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."

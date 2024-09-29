@@ -12,6 +12,32 @@ struct ChatCommands: Commands {
     @Environment(ChatSessionVM.self) var sessionVM
     
     var body: some Commands {
+        CommandGroup(replacing: .newItem) {
+            Button("New Session") {
+                sessionVM.createNewSession()
+            }
+            .keyboardShortcut("n")
+        }
+        
+        CommandGroup(before: .toolbar) {
+            Section {
+                Button("Actual Size") {
+                    resetFontSize()
+                }
+                .keyboardShortcut("o", modifiers: .command)
+                
+                Button("Zoom In") {
+                    increaseFontSize()
+                }
+                .keyboardShortcut("+", modifiers: .command)
+                
+                Button("Zoom Out") {
+                    decreaseFontSize()
+                }
+                .keyboardShortcut("-", modifiers: .command)
+            }
+        }
+        
         CommandMenu("Chat") {
             Button("Send Prompt") {
                 Task { @MainActor in
@@ -62,5 +88,17 @@ struct ChatCommands: Commands {
                 .keyboardShortcut(.delete, modifiers: .command)
             }
         }
+    }
+    
+    private func increaseFontSize() {
+        config.fontSize = min(config.fontSize + 1, 25)
+    }
+    
+    private func decreaseFontSize() {
+        config.fontSize = max(config.fontSize - 1, 8)
+    }
+    
+    private func resetFontSize() {
+        config.fontSize = 13
     }
 }

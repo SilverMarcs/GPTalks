@@ -42,6 +42,6 @@ struct ProviderRow: View {
     }
 }
 
-#Preview 
+#Preview {
     ProviderRow(provider: .openAIProvider)
 }

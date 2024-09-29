@@ -16,6 +16,9 @@ struct ChatWindow: Scene {
             ChatContentView()
                 .environment(\.isQuick, isQuick)
         }
+        .commands {
+            ChatCommands()
+        }
     }
 }
 #endif

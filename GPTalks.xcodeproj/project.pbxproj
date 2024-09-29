@@ -110,6 +110,7 @@
 		089C7E122C405904005E3BE9 /* QuickPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E112C405904005E3BE9 /* QuickPanel.swift */; };
 		089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */; };
 		089DB5162CA865F70013E5C3 /* MockedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089DB5152CA865F70013E5C3 /* MockedData.swift */; };
+		089DB5182CA8EC140013E5C3 /* ImageViewerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089DB5172CA8EC140013E5C3 /* ImageViewerData.swift */; };
 		08A222832C2AB4FD00D76C8B /* GPTalksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222822C2AB4FD00D76C8B /* GPTalksApp.swift */; };
 		08A222852C2AB4FD00D76C8B /* ChatContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222842C2AB4FD00D76C8B /* ChatContentView.swift */; };
 		08A222872C2AB4FD00D76C8B /* ChatSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222862C2AB4FD00D76C8B /* ChatSession.swift */; };
@@ -178,7 +179,6 @@
 		08D174C02C3D901A000257EF /* CrossButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174BF2C3D901A000257EF /* CrossButton.swift */; };
 		08D174C62C3DC2A8000257EF /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C52C3DC2A8000257EF /* DateUtils.swift */; };
 		08D174C82C3DD729000257EF /* InputImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C72C3DD729000257EF /* InputImageView.swift */; };
-		08D174CA2C3E3C78000257EF /* ImageViewerOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D174C92C3E3C78000257EF /* ImageViewerOld.swift */; };
 		08D8F44B2C51C4E50051C916 /* ModelAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8F44A2C51C4E50051C916 /* ModelAdder.swift */; };
 		08DA5B0D2C72CE7700A7FE82 /* InputViewTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DA5B0C2C72CE7100A7FE82 /* InputViewTips.swift */; };
 		08DAB22A2C7E579500CDD3B6 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08DAB2292C7E579500CDD3B6 /* MarkdownWebView */; };
@@ -316,6 +316,7 @@
 		089C7E112C405904005E3BE9 /* QuickPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanel.swift; sourceTree = "<group>"; };
 		089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelSettings.swift; sourceTree = "<group>"; };
 		089DB5152CA865F70013E5C3 /* MockedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedData.swift; sourceTree = "<group>"; };
+		089DB5172CA8EC140013E5C3 /* ImageViewerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewerData.swift; sourceTree = "<group>"; };
 		08A2227F2C2AB4FD00D76C8B /* GPTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08A222822C2AB4FD00D76C8B /* GPTalksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTalksApp.swift; sourceTree = "<group>"; };
 		08A222842C2AB4FD00D76C8B /* ChatContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatContentView.swift; sourceTree = "<group>"; };
@@ -381,7 +382,6 @@
 		08D174BF2C3D901A000257EF /* CrossButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossButton.swift; sourceTree = "<group>"; };
 		08D174C52C3DC2A8000257EF /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		08D174C72C3DD729000257EF /* InputImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputImageView.swift; sourceTree = "<group>"; };
-		08D174C92C3E3C78000257EF /* ImageViewerOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewerOld.swift; sourceTree = "<group>"; };
 		08D8F44A2C51C4E50051C916 /* ModelAdder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelAdder.swift; sourceTree = "<group>"; };
 		08DA5B0C2C72CE7100A7FE82 /* InputViewTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputViewTips.swift; sourceTree = "<group>"; };
 		08E195682C6FB36900BA9506 /* MarkdownSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownSettings.swift; sourceTree = "<group>"; };
@@ -477,6 +477,7 @@
 		0819479F2C48DCE50061227B /* ImageSessionListViews */ = {
 			isa = PBXGroup;
 			children = (
+				089DB5172CA8EC140013E5C3 /* ImageViewerData.swift */,
 				0819479D2C48DCDB0061227B /* ImageSessionList.swift */,
 				085361102C4938C4007DAB62 /* ImageGenerationList.swift */,
 				085361122C4939C5007DAB62 /* ImageGenerationView.swift */,
@@ -578,7 +579,6 @@
 				0821815F2C3880F700171BF3 /* RoundedRectangleOverlay.swift */,
 				08915D932C373340008ADE27 /* ProviderImage.swift */,
 				086E620D2C39C73F00AB4110 /* ContextResetDivider.swift */,
-				08D174C92C3E3C78000257EF /* ImageViewerOld.swift */,
 				08A3134E2C4AF56200C3E578 /* NamedImage.swift */,
 				08A77CC82C65A3AD0087D0F3 /* SectionFooterView.swift */,
 				0893B2012C3955CC00D4D501 /* CustomSearchField.swift */,
@@ -1100,7 +1100,6 @@
 				08AAFB932C3C88D9002C04E0 /* StopButton.swift in Sources */,
 				08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */,
 				08F815382C97F65E00B49355 /* ToolsController.swift in Sources */,
-				08D174CA2C3E3C78000257EF /* ImageViewerOld.swift in Sources */,
 				08915D942C373340008ADE27 /* ProviderImage.swift in Sources */,
 				087906872CA6C73100E5DCAD /* ImageWindow.swift in Sources */,
 				08B8DE232C97F4EA0041A690 /* ToolMessage.swift in Sources */,
@@ -1137,6 +1136,7 @@
 				08DA5B0D2C72CE7700A7FE82 /* InputViewTips.swift in Sources */,
 				082181582C3823A400171BF3 /* ModelRow.swift in Sources */,
 				08B8DE1B2C97F3B60041A690 /* SessionListSidebar.swift in Sources */,
+				089DB5182CA8EC140013E5C3 /* ImageViewerData.swift in Sources */,
 				082181522C38046800171BF3 /* ProviderManager.swift in Sources */,
 				082181662C38CBAE00171BF3 /* PlusButton.swift in Sources */,
 				08B5D7B82C77A64000D1F100 /* ChatWindow.swift in Sources */,

@@ -86,5 +86,3 @@ extension Conversation {
         self.toolCalls = value
     }
 }
-
-let dummyConversation: Conversation = Conversation(role: .user, content: "", model: AIModel.getDemoModel())

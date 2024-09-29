@@ -83,44 +83,27 @@ class Provider {
     }
     
     
-    private init() {
-        let demoModel = AIModel.getDemoModel()
-        
-        self.chatModel = demoModel
-        self.quickChatModel = demoModel
-        self.titleModel = demoModel
-        self.imageModel = demoModel
-        self.toolImageModel = demoModel
-        self.type = .openai
-    }
-    
     static func factory(type: ProviderType, isDummy: Bool = false) -> Provider {
-        let provider = Provider()
-        provider.type = type
-        provider.name = type.name
-        provider.host = type.defaultHost
-        provider.chatModels = type.getDefaultModels()
-        provider.color = type.defaultColor
+        let demoModel = AIModel.gpt4
+        let chatModels = type.getDefaultModels()
+        let imageModels = type == .openai ? AIModel.getOpenImageModels() : []
         
-        if let first = provider.chatModels.first {
-            provider.chatModel = first
-            provider.quickChatModel = first
-            provider.titleModel = first
-        }
-        
-        if isDummy {
-            provider.isEnabled = false
-        }
-        
-        if type == .openai {
-            provider.supportsImage = true
-            provider.imageModels = AIModel.getOpenImageModels()
-        }
-        
-        if let first = provider.imageModels.first {
-            provider.imageModel = first
-            provider.toolImageModel = first
-        }
+        let provider = Provider(
+            name: type.name,
+            host: type.defaultHost,
+            apiKey: "",
+            type: type,
+            color: type.defaultColor,
+            isEnabled: !isDummy,
+            supportsImage: type == .openai,
+            chatModel: chatModels.first ?? demoModel,
+            quickChatModel: chatModels.first ?? demoModel,
+            titleModel: chatModels.first ?? demoModel,
+            imageModel: imageModels.first ?? demoModel,
+            toolImageModel: imageModels.first ?? demoModel,
+            chatModels: chatModels,
+            imageModels: imageModels
+        )
         
         return provider
     }

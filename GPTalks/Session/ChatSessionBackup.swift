@@ -55,13 +55,13 @@ extension ChatSessionBackup {
         let provider: Provider
         if let defaultProvider = ProviderManager.shared.getDefault(providers: providers) {
             provider = defaultProvider
-            session = ChatSession(config: SessionConfig(provider: provider))
+            session = ChatSession(config: SessionConfig(provider: provider, purpose: .chat))
         } else if let firstProvider = providers.first {
             provider = firstProvider
-            session = ChatSession(config: SessionConfig(provider: provider))
+            session = ChatSession(config: SessionConfig(provider: provider, purpose: .chat))
         } else {
             print("Should not reach here")
-            session = ChatSession(config: SessionConfig())
+            session = ChatSession(config: .mockChatConfig)
         }
         
         session.id = self.id

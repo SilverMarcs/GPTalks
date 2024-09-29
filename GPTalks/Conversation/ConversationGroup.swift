@@ -114,3 +114,5 @@ final class ConversationGroup {
         return ConversationGroup(conversation: activeConversation.copy())
     }
 }
+
+let dummyConversation = Conversation(role: .user, content: "")

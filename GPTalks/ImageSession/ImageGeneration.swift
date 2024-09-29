@@ -18,13 +18,12 @@ class ImageGeneration {
     var session: ImageSession?
     
     var prompt: String
-    
     var errorMessage: String = ""
     
     @Relationship(deleteRule: .nullify)
     var config: ImageConfig
     
-    var imagePaths: [String] = []
+    var images: [Data] = []
     
     @Attribute(.ephemeral)
     var state: GenerationState
@@ -37,14 +36,6 @@ class ImageGeneration {
         self.config = config
         self.session = session
         self.state = .generating
-    }
-    
-    func sendDemo() async {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.imagePaths.append(.demoImages.randomElement()!)
-            self.state = .success
-            return
-        }
     }
     
     @MainActor
@@ -76,9 +67,7 @@ class ImageGeneration {
                         do {
                             let (data, _) = try await URLSession.shared.data(from: url)
                             
-                            if let savedPath = PlatformImage.from(data: data)?.save() {
-                                self.imagePaths.append(savedPath)
-                            }
+                            self.images.append(data)
                             
                             state = .success
                         } catch {
@@ -97,8 +86,6 @@ class ImageGeneration {
             }
         }
 
-
-
         do {
             #if os(macOS)
             try await generatingTask?.value
@@ -115,6 +102,10 @@ class ImageGeneration {
         } catch {
             errorMessage = error.localizedDescription
             state = .error
+        }
+        
+        if let proxy = session?.proxy {
+            scrollToBottom(proxy: proxy, delay: 0.2)
         }
     }
     

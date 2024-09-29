@@ -29,6 +29,13 @@ struct GeneralSettings: View {
             }
             
             #if os(macOS)
+            Section("Windows") {
+                Toggle(isOn: $config.onlyOneWindow) {
+                    Text("Show one window at a time")
+                    Text("If enabled, chat window will be closed when image window is opened and vice versa") 
+                }
+            }
+            
             Section("Dock") {
                 Toggle(isOn: $config.hideDock) {
                     Text("Hide icon in Dock")
@@ -42,6 +49,7 @@ struct GeneralSettings: View {
                     }
                 }
             }
+            
             #endif
         }
         .formStyle(.grouped)

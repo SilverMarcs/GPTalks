@@ -19,10 +19,11 @@ struct ImageViewer: View {
                 Image(platformImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: CGFloat(imageConfig.imageWidth), height: CGFloat(imageConfig.imageHeight))
+                    .frame(width: CGFloat(imageConfig.chatImageWidth), height: CGFloat(imageConfig.chatImageHeight))
                     .clipShape(RoundedRectangle(cornerRadius: 10))
             } else {
-                FileViewer(typedData: typedData, onTap: onTap)
+                Text("Image Unable to Load")
+                    .frame(width: 100, height: 48)
             }
         }
         .buttonStyle(.plain)

@@ -53,6 +53,20 @@ extension String {
     Feel free to adjust the examples or ask if you have a specific sorting scenario in mind!
     """
     
+    static let demoAssistant: String =
+    """
+    ## Heading   
+    There are three ways to print a string in python
+    1. Not printing
+    2. Printing carelessly
+    3. Blaming it on Teammates
+    
+    ### Subheading
+    But whats even better is the ability to see into the future.  
+        
+    Thank you for using me.
+    """
+    
     static let codeBlock = """
     This is a code block
     
@@ -92,7 +106,7 @@ extension SessionConfig {
 }
 
 extension ImageConfig {
-    static var mockImageConfig = ImageConfig(provider: .openAIProvider)
+    static var mockImageConfig = ImageConfig(provider: .openAIProvider, model: .dalle)
 }
 
 extension ChatSession {
