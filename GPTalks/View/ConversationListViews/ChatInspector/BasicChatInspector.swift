@@ -15,6 +15,7 @@ struct BasicChatInspector: View {
     var providers: [Provider]
     
     @State var isGeneratingTtile: Bool = false
+    @State var showingDeleteConfirmation: Bool = false
     
     var body: some View {
         Form {
@@ -106,11 +107,17 @@ struct BasicChatInspector: View {
         Button(role: .destructive) {
             if session.isStreaming { return }
             
-            session.deleteAllConversations()
+            showingDeleteConfirmation.toggle()
         } label: {
             Text("Delete All Messages")
         }
         .foregroundStyle(.red)
         .buttonStyle(ExternalLinkButtonStyle())
+        .confirmationDialog("Are you sure you want to delete all messages?", isPresented: $showingDeleteConfirmation) {
+            Button("Delete All", role: .destructive) {
+                session.deleteAllConversations()
+            }
+            Button("Cancel", role: .cancel) {}
+        }
     }
 }

@@ -49,7 +49,7 @@ struct UserMessage: View {
         #if !os(macOS)
         .contextMenu {
             if let group = conversation.group {
-                ConversationMenu(group: group, providers: providers, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
+                ConversationMenu(group: group, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
             }
         } preview: {
             Text("User Message")

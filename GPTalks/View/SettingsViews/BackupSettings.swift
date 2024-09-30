@@ -53,10 +53,6 @@ struct BackupSettings: View {
                 SectionFooterView(text: "API Keys will be stored in plaintext")
             }
         }
-
-
-
-
         .navigationTitle("Backup")
         .toolbarTitleDisplayMode(.inline)
         .buttonStyle(.plain)

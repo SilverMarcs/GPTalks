@@ -13,7 +13,6 @@ struct AdvancedChatInspector: View {
     @State private var isExportingJSON = false
     @State private var isExportingMarkdown = false
     
-    
     var body: some View {
         Form {
             Section("Advanced Settings") {

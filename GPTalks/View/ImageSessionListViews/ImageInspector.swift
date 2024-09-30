@@ -83,6 +83,9 @@ struct ImageInspector: View {
                 }
             }
             .formStyle(.grouped)
+            #if os(macOS)
+            .scrollDisabled(true)
+            #endif
         }
     }
     

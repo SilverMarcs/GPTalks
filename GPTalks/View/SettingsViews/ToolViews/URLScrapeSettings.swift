@@ -22,7 +22,7 @@ struct URLScrapeSettings: View {
                     
                     Text("Number of prefix characters to return from each url")
                        .font(.caption)
-                       .foregroundColor(.secondary)
+                       .foregroundStyle(.secondary)
                 }
             }
         }

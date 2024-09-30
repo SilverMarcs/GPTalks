@@ -190,7 +190,6 @@
 		08F3C9FE2C70483800A800F9 /* QuickPanelWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F3C9FD2C70483800A800F9 /* QuickPanelWindow.swift */; };
 		08F3CA042C705B3300A800F9 /* SettingsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F3CA032C705B3300A800F9 /* SettingsWindow.swift */; };
 		08F52EF42C52C3AB00E4482C /* ProviderBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F52EF32C52C3AB00E4482C /* ProviderBackup.swift */; };
-		08F5AFEE2C7CF53100EE3D13 /* ToggleWithDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F5AFED2C7CF53100EE3D13 /* ToggleWithDescription.swift */; };
 		08F815222C97F58800B49355 /* GoogleSearchSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F815212C97F58800B49355 /* GoogleSearchSettings.swift */; };
 		08F815242C97F59100B49355 /* ToolSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F815232C97F59100B49355 /* ToolSettings.swift */; };
 		08F815262C97F59900B49355 /* URLScrapeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F815252C97F59900B49355 /* URLScrapeSettings.swift */; };
@@ -390,7 +389,6 @@
 		08F3C9FD2C70483800A800F9 /* QuickPanelWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelWindow.swift; sourceTree = "<group>"; };
 		08F3CA032C705B3300A800F9 /* SettingsWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindow.swift; sourceTree = "<group>"; };
 		08F52EF32C52C3AB00E4482C /* ProviderBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderBackup.swift; sourceTree = "<group>"; };
-		08F5AFED2C7CF53100EE3D13 /* ToggleWithDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleWithDescription.swift; sourceTree = "<group>"; };
 		08F815212C97F58800B49355 /* GoogleSearchSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSearchSettings.swift; sourceTree = "<group>"; };
 		08F815232C97F59100B49355 /* ToolSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolSettings.swift; sourceTree = "<group>"; };
 		08F815252C97F59900B49355 /* URLScrapeSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLScrapeSettings.swift; sourceTree = "<group>"; };
@@ -738,7 +736,6 @@
 		08AAFB912C3C88CA002C04E0 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
-				08F5AFED2C7CF53100EE3D13 /* ToggleWithDescription.swift */,
 				081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */,
 				08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */,
 				082181632C38C92E00171BF3 /* SendButton.swift */,
@@ -1217,7 +1214,6 @@
 				08A222832C2AB4FD00D76C8B /* GPTalksApp.swift in Sources */,
 				089C7E122C405904005E3BE9 /* QuickPanel.swift in Sources */,
 				08A313532C4BB2AB00C3E578 /* ImageGenerationListToolbar.swift in Sources */,
-				08F5AFEE2C7CF53100EE3D13 /* ToggleWithDescription.swift in Sources */,
 				08C8003A2C36BA30009581C5 /* ChatInputView.swift in Sources */,
 				08B8DE212C97F3E10041A690 /* SessionConfigDefaults.swift in Sources */,
 				0805DEF32C58CB3D00A8354A /* GoogleService.swift in Sources */,

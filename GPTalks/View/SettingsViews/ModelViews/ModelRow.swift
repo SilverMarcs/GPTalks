@@ -97,7 +97,7 @@ struct ModelRow: View {
                     Image(systemName: "play.circle")
                 }
                 .buttonStyle(.plain)
-                .foregroundColor(model.lastTestResult == nil ? .primary : model.lastTestResult! ? .green : .red)
+                .foregroundStyle(model.lastTestResult == nil ? .primary : model.lastTestResult! ? .green : .red)
             }
         }
     }

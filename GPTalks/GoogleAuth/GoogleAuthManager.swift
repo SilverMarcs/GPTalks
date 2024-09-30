@@ -173,16 +173,16 @@ import AuthenticationServices
     }
 }
 
-#if os(iOS)
-extension UIViewController: ASWebAuthenticationPresentationContextProviding {
-    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return self.view.window ?? ASPresentationAnchor()
-    }
-}
-#elseif os(macOS)
-extension NSWindow: ASWebAuthenticationPresentationContextProviding {
-    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return self
-    }
-}
-#endif
+//#if os(iOS)
+//extension UIViewController: ASWebAuthenticationPresentationContextProviding {
+//    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+//        return self.view.window ?? ASPresentationAnchor()
+//    }
+//}
+//#elseif os(macOS)
+//extension NSWindow: ASWebAuthenticationPresentationContextProviding {
+//    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+//        return self
+//    }
+//}
+//#endif

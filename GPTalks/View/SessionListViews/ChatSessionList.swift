@@ -53,7 +53,6 @@ struct ChatSessionList: View {
             #if !os(macOS)
             .searchable(text: $sessionVM.searchText)
             #endif
-            #if DEBUG
             .task {
                 if let first = sessions.first, sessionVM.chatSelections.isEmpty, !isIOS() {
                     DispatchQueue.main.async {
@@ -61,7 +60,6 @@ struct ChatSessionList: View {
                     }
                 }
             }
-            #endif
         }
     }
 

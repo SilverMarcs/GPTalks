@@ -49,7 +49,6 @@ struct ImageSessionList: View {
             #if !os(macOS)
             .searchable(text: $imageVM.searchText)
             #endif
-#if DEBUG
             .task {
                 if imageVM.imageSelections.isEmpty, let first = sessions.first, !isIOS() {
                     DispatchQueue.main.async {
@@ -57,7 +56,6 @@ struct ImageSessionList: View {
                     }
                 }
             }
-#endif
         }
     }
 

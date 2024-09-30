@@ -33,10 +33,16 @@ struct MarkdownView: View {
                 Text(LocalizedStringKey(conversation.content))
                     .font(.system(size: config.fontSize))
                     .textSelection(.enabled)
+                    #if os(macOS)
+                    .lineSpacing(2)
+                    #endif
             case .disabled:
                 Text(conversation.content)
                     .font(.system(size: config.fontSize))
                     .textSelection(.enabled)
+                    #if os(macOS)
+                    .lineSpacing(2)
+                    #endif
         }
     }
 }
