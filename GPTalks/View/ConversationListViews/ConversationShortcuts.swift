@@ -72,6 +72,7 @@ struct ConversationShortcuts: View {
             }
         }
         .padding()
+        .font(.callout)
     }
 }
 

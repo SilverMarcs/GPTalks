@@ -45,11 +45,15 @@ struct ConversationList: View {
                 }
             }
             .onChange(of: sessionVM.chatSelections) {
+                
+                Task {
+                    await sessionVM.chatSelections.first?.refreshTokens()
+                }
+                
                 #if os(macOS)
                 scrollToBottom(proxy: proxy, delay: 0.2)
                 #endif
                 session.proxy = proxy
-                sessionVM.chatSelections.first?.refreshTokens()
                 scrollToBottom(proxy: proxy, delay: 0.4)
             }
             .toolbar { ConversationListToolbar(session: session) }

@@ -158,7 +158,9 @@ final class ChatSession {
             }
         }
         
-        self.refreshTokens()
+        Task {
+            await self.refreshTokens()
+        }
         
         if AppConfig.shared.autogenTitle {
             Task { await generateTitle() }
@@ -166,7 +168,9 @@ final class ChatSession {
         
         streamingTask = Task {
             try await handleStreamingTask(regenContent: regenContent, assistantGroup: assistantGroup)
-            self.refreshTokens()
+            Task {
+                await self.refreshTokens()
+            }
         }
         
         // TODO: create func for this
@@ -255,7 +259,9 @@ final class ChatSession {
             }
         }
         
-        self.refreshTokens()
+        Task {
+            await self.refreshTokens()
+        }
     }
     
     func generateTitle(forced: Bool = false) async {
@@ -268,7 +274,7 @@ final class ChatSession {
         }
     }
     
-    func refreshTokens() {
+    func refreshTokens() async {
         let messageTokens = adjustedGroups.reduce(0) { $0 + $1.tokenCount}
         let sysPromptTokens = countTokensFromText(config.systemPrompt)
         let toolTokens = config.tools.tokenCount
@@ -345,7 +351,9 @@ final class ChatSession {
             }
         }
         
-        self.refreshTokens()
+        Task {
+            await self.refreshTokens()
+        }
     }
 
     
@@ -358,7 +366,10 @@ final class ChatSession {
         }
         
         errorMessage = ""
-        self.refreshTokens()
+        
+        Task {
+            await self.refreshTokens()
+        }
     }
     
     private func unsetResetMarker(group: ConversationGroup) {

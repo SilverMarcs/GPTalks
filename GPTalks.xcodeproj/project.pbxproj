@@ -647,12 +647,12 @@
 				085361032C491BE5007DAB62 /* ImageSession */,
 				08A77CCA2C65AA5D0087D0F3 /* Persistence */,
 				0821816B2C39011100171BF3 /* Utils */,
+				089DB5142CA865780013E5C3 /* Preview */,
 				08A222822C2AB4FD00D76C8B /* GPTalksApp.swift */,
 				08A222842C2AB4FD00D76C8B /* ChatContentView.swift */,
 				087906882CA6E22900E5DCAD /* ImageContentView.swift */,
 				08A222882C2AB4FE00D76C8B /* Assets.xcassets */,
 				08A2228A2C2AB4FE00D76C8B /* GPTalks.entitlements */,
-				089DB5142CA865780013E5C3 /* Preview */,
 			);
 			path = GPTalks;
 			sourceTree = "<group>";
@@ -1358,6 +1358,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -1413,6 +1414,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};

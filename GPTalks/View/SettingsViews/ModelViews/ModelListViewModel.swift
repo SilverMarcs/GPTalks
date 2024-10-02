@@ -64,7 +64,6 @@ extension ModelListView {
         provider.setModels(reorderedModels, for: type)
     }
 
-    @MainActor
     func toggleModelType(for models: [AIModel]) {
         for model in models {
             let newType: ModelType = model.type == .chat ? .image : .chat
@@ -73,6 +72,7 @@ extension ModelListView {
             provider.addModel(model, for: newType)
         }
     }
+    
     func toggleEnabled(for models: [AIModel]) {
         for model in models {
             model.isEnabled.toggle()

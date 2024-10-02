@@ -32,6 +32,7 @@ struct ChatContentView: View {
                 ChatInspector(session: chatSession, showingInspector: $showingInspector)
             } else {
                 Text("Open a chat session for inspector")
+                    .font(.title)
             }
         }
         #endif
