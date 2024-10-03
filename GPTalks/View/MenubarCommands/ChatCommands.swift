@@ -69,7 +69,7 @@ struct ChatCommands: Commands {
                 .disabled(sessionVM.activeSession?.isQuick ?? true)
                 
                 Button("Regen Last Message") {
-                    Task { @MainActor in
+                    Task {
                         await sessionVM.regenLastMessage()
                     }
                 }

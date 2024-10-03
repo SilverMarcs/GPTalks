@@ -79,7 +79,9 @@ struct PlatformSpecificModifiers: ViewModifier {
             .toolbarTitleMenu {
                 Section("\(session.tokenCount.formatToK()) tokens") {
                     Button {
-                        session.refreshTokens()
+                        Task {
+                            await session.refreshTokens()
+                        }
                     } label: {
                         Label("Refresh Tokens", systemImage: "arrow.clockwise")
                     }

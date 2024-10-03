@@ -12,10 +12,8 @@ import SwiftData
 extension ModelListView {    
     func refreshModels() async {
         isRefreshing = true
-//        Task {
         await provider.refreshModels()
         isRefreshing = false
-//        }
     }
     
     func deleteItems(at offsets: IndexSet) {
