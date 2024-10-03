@@ -105,7 +105,7 @@ import AuthenticationServices
         
         let parameters: [String: String] = [
             "client_id": clientId,
-            "client_secret": "",
+            "client_secret": "", // intentionally left blank
             "refresh_token": refreshToken,
             "grant_type": "refresh_token"
         ]

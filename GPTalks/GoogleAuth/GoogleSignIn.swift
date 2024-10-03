@@ -1,5 +1,5 @@
 //
-//  SignInView.swift
+//  GoogleSignIn.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 17/09/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SignInView: View {
+struct GoogleSignIn: View {
     private var tokenManager = GoogleAuthManager.shared
     
     @State private var isSigningIn = false
@@ -19,10 +19,9 @@ struct SignInView: View {
                 HStack {
                     Text("Signed In")
                     Spacer()
-                    Button("Sign Out") {
+                    Button("Sign Out", role: .destructive) {
                         tokenManager.clearTokens()
                     }
-                    .foregroundStyle(.red)
                 }
             } else {
                 Button("Sign In With Google") {
@@ -33,7 +32,8 @@ struct SignInView: View {
             
             if let errorMessage = errorMessage {
                 Text(errorMessage)
-                    .foregroundColor(.red)
+                    .font(.caption)
+                    .foregroundStyle(.red)
             }
         }
     }

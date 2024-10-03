@@ -44,7 +44,7 @@ struct ProviderGeneral: View {
                 }
                 
                 if provider.type == .vertex {
-                    SignInView()
+                    GoogleSignIn()
                 } else {
                     HStack {
                         if showKey {
