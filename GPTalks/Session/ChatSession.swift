@@ -50,6 +50,8 @@ final class ChatSession {
     
     @Transient
     var proxy: ScrollViewProxy?
+    @Transient
+    var showCamera: Bool = false
     
     @Transient
     var isReplying: Bool {

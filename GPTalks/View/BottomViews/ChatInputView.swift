@@ -14,7 +14,7 @@ struct ChatInputView: View {
     @Bindable var session: ChatSession
     
     @State private var isFilePickerPresented: Bool = false
-    @State private var showCamera = false
+//    @State private var showCamera = false
     @State private var showPhotosPicker = false
     @State private var selectedPhotos = [PhotosPickerItem]()
     
@@ -79,7 +79,7 @@ struct ChatInputView: View {
             }
             
             Button {
-                self.showCamera.toggle()
+                session.showCamera.toggle()
             } label: {
                 Label("Open Camera", systemImage: "camera")
             }
@@ -98,7 +98,7 @@ struct ChatInputView: View {
         .menuStyle(.borderlessButton)
         .menuIndicator(.hidden)
         .accentColor(.primary)
-        .fullScreenCover(isPresented: $showCamera) {
+        .fullScreenCover(isPresented: $session.showCamera) {
             CameraView { typedData in
                 session.inputManager.dataFiles.append(typedData)
             }
