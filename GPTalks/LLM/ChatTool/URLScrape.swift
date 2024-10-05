@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import OpenAI
+import SwiftOpenAI
 import GoogleGenerativeAI
 import Reeeed
 
@@ -27,6 +27,7 @@ struct URLScrape {
     
     private static func getURLs(from jsonString: String) -> [URL] {
         let jsonData = jsonString.data(using: .utf8)!
+        print(jsonString)
         let urlList = try! JSONDecoder().decode(URLList.self, from: jsonData)
         
         // Convert strings to URL objects
@@ -82,18 +83,25 @@ struct URLScrape {
         for a more in-depth response.
         """
     
-    static var openai: ChatQuery.ChatCompletionToolParam {
-         .init(function:
-            .init(name: "urlScrape",
-                  description: description,
-                  parameters:
-                    .init(type: .object,
-                          properties: [
-                            "url_list":
-                                .init(type: .array, description: "The array of URLs of the websites to scrape", items: .init(type: .string), maxItems: 5)
+    static var openai: ChatCompletionParameters.Tool {
+        .init(function:
+                .init(
+                    name: "urlScrape",
+                    strict: false,
+                    description: description,
+                    parameters:
+                        .init(
+                            type: .object,
+                            properties: [
+                                "url_list":
+                                    .init(
+                                        type: .array,
+                                        description: "The array of URLs of the websites to scrape",
+                                        items: .init(type: .string)
+                                    )
                             ]
-                         )
-                 )
+                        )
+                )
         )
     }
     

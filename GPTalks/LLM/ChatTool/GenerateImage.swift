@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import OpenAI
+import SwiftOpenAI
 import GoogleGenerativeAI
 import SwiftData
 
@@ -24,28 +24,21 @@ struct GenerateImage {
             return .init(string: "Error: No image provider")
         }
         
-        let service = OpenAI(
-            configuration: OpenAI.Configuration(
-                token: provider.apiKey, host: provider.host))
-        
-        let query = ImagesQuery(prompt: parameters.prompt,
-                                model: provider.imageModel.code,
-                                n: parameters.n,
-                                quality: config.quality,
-                                size: config.size)
-        
-        let results = try await service.images(query: query)
-        var dataObjects: [Data] = []
-
-        for urlResult in results.data {
-            if let urlString = urlResult.url, let url = URL(string: urlString) {
-                let (data, _) = try await URLSession.shared.data(from: url)
-                dataObjects.append(data)
-            }
+        do {
+            let dataObjects = try await ImageGenerator.generateImages(
+                provider: provider,
+                model: provider.imageModel,
+                prompt: parameters.prompt,
+                numberOfImages: parameters.n
+            )
+            
+            return .init(
+                string: "Provider: \(provider.name)\nModel: \(provider.imageModel.name)\nSize: \(config.size)",
+                data: dataObjects
+            )
+        } catch {
+            return .init(string: "Error: \(error.localizedDescription)")
         }
-
-        return .init(string: "Provider: \(provider.name)\nModel: \(provider.imageModel.name)\nQuality: \(config.quality)\nSize: \(config.size)",
-                     data: dataObjects)
     }
     
     struct ImageGenerationParameters: Codable {
@@ -65,11 +58,12 @@ struct GenerateImage {
         If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. You may also specify the number of images to generate based on users request. If the user did not specify number, generate one image only.
         """
 
-    static var openai: ChatQuery.ChatCompletionToolParam {
+    static var openai: ChatCompletionParameters.Tool {
         return .init(
             function:
                 .init(
                     name: "imageGenerate",
+                    strict: false,
                     description: description,
                     parameters:
                         .init(

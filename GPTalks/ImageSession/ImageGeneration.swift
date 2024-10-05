@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftData
-import OpenAI
 import SwiftUI
 
 @Model
@@ -41,43 +40,18 @@ class ImageGeneration {
     @MainActor
     func send() async {
         state = .generating
-        
-//        #if DEBUG
-//        await self.sendDemo()
-//        return
-//        #endif
-
-        let service = OpenAI(
-            configuration: OpenAI.Configuration(
-                token: config.provider.apiKey, host: config.provider.host))
-        
-        let query = ImagesQuery(prompt: self.prompt,
-                                model: config.model.code,
-                                n: config.numImages,
-                                quality: config.quality,
-                                size: config.size)
 
         generatingTask = Task {
             do {
-                let results = try await service.images(query: query)
-
-                // Download and store image data asynchronously
-                for urlResult in results.data {
-                    if let urlString = urlResult.url, let url = URL(string: urlString) {
-                        do {
-                            let (data, _) = try await URLSession.shared.data(from: url)
-                            
-                            self.images.append(data)
-                            
-                            state = .success
-                        } catch {
-                            if state != .error {
-                                errorMessage = "Error downloading image: \(error)"
-                                state = .error
-                            }
-                        }
-                    }
-                }
+                let dataObjects = try await ImageGenerator.generateImages(
+                    provider: config.provider,
+                    model: config.provider.imageModel,
+                    prompt: prompt,
+                    numberOfImages: config.numImages
+                )
+                
+                self.images = dataObjects
+                state = .success
             } catch {
                 if state != .error {
                     errorMessage = "Error fetching images: \(error)"

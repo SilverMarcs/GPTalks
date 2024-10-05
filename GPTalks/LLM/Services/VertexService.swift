@@ -129,8 +129,8 @@ struct VertexService: AIService {
                                                 }
                                             case "message_stop":
                                                 if !toolCalls.isEmpty {
-                                                    let calls: [ToolCall] = toolCalls.map {
-                                                        ToolCall(toolCallId: $0["id"] as? String ?? "",
+                                                    let calls: [ChatToolCall] = toolCalls.map {
+                                                        ChatToolCall(toolCallId: $0["id"] as? String ?? "",
                                                                  tool: ChatTool(rawValue: $0["name"] as? String ?? "")!,
                                                                  arguments: $0["input"] as? String ?? "")
                                                     }
@@ -185,7 +185,7 @@ struct VertexService: AIService {
         // Vertex Cla
         let toolCalls = contentArray.filter { $0["type"] as? String == "tool_use" }
         if !toolCalls.isEmpty {
-            let calls: [ToolCall] = toolCalls.compactMap { toolCall in
+            let calls: [ChatToolCall] = toolCalls.compactMap { toolCall in
                 guard let id = toolCall["id"] as? String,
                       let name = toolCall["name"] as? String,
                       let tool = ChatTool(rawValue: name),
@@ -194,7 +194,7 @@ struct VertexService: AIService {
                       let inputString = String(data: inputJson, encoding: .utf8) else {
                     return nil
                 }
-                return ToolCall(toolCallId: id, tool: tool, arguments: inputString)
+                return ChatToolCall(toolCallId: id, tool: tool, arguments: inputString)
             }
             return .toolCalls(calls)
         }

@@ -34,11 +34,11 @@ struct StreamHandler {
     private func handleStream() async throws {
         var streamText = ""
         var lastUIUpdateTime = Date()
-        var pendingToolCalls: [ToolCall] = []
+        var pendingToolCalls: [ChatToolCall] = []
         
         let serviceType = config.provider.type.getService()
 
-        assistant.setIsReplying(true)
+        assistant.isReplying = true
 
         for try await response in serviceType.streamResponse(from: conversations, config: config) {
             switch response {
@@ -47,7 +47,7 @@ struct StreamHandler {
                 let currentTime = Date()
                 
                 if currentTime.timeIntervalSince(lastUIUpdateTime) >= Self.uiUpdateInterval {
-                    assistant.setContent(streamText)
+                    assistant.content = streamText
                     lastUIUpdateTime = currentTime
                 }
             case .toolCalls(let calls):
@@ -64,19 +64,19 @@ struct StreamHandler {
 
     @MainActor
     private func handleNonStreamingResponse() async throws {
-        assistant.setIsReplying(true)
+        assistant.isReplying = true
         let serviceType = config.provider.type.getService()
         let response = try await serviceType.nonStreamingResponse(from: conversations, config: config)
         
         switch response {
         case .content(let content):
-            assistant.setContent(content)
+            assistant.content = content
         case .toolCalls(let calls):
             try await handleToolCalls(calls)
         }
         
         if assistant.toolCalls.isEmpty {
-            assistant.setIsReplying(false)
+            assistant.isReplying = false
         }
     }
     
@@ -93,7 +93,7 @@ struct StreamHandler {
     }
 
     @MainActor
-    private func finalizeStream(streamText: String, toolCalls: [ToolCall]) {
+    private func finalizeStream(streamText: String, toolCalls: [ChatToolCall]) {
         assistant.toolCalls = toolCalls
         if !streamText.isEmpty {
             DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiUpdateInterval) {
@@ -106,13 +106,13 @@ struct StreamHandler {
     }
 
     @MainActor
-    private func handleToolCalls(_ toolCalls: [ToolCall]) async throws {
-        assistant.setToolCalls(toolCalls)
+    private func handleToolCalls(_ toolCalls: [ChatToolCall]) async throws {
+        assistant.toolCalls = toolCalls
         if let proxy = assistant.group?.session?.proxy {
             scrollToBottom(proxy: proxy)
         }
         
-        assistant.setIsReplying(false)
+        assistant.isReplying = false
 
         var toolDatas: [Data] = []
         
@@ -126,7 +126,7 @@ struct StreamHandler {
                 toolDatas.append(contentsOf: toolData.data)
                 tool.toolResponse?.processedContent = toolData.string
                 tool.toolResponse?.processedData = toolData.data    
-                tool.setIsReplying(false)
+                tool.isReplying = false
                 
                 if let proxy = tool.group?.session?.proxy {
                     scrollToBottom(proxy: proxy)
@@ -159,7 +159,7 @@ struct StreamHandler {
                     )
                 }
                 newAssistant.dataFiles = typedDataFiles
-                newAssistant.setIsReplying(false)
+                newAssistant.isReplying = false
             }
         }
     }

@@ -69,8 +69,6 @@ struct ChatInspector: View {
 
 
 #Preview {
-    let providers: [Provider] = []
-    
     ChatInspector(session: .mockChatSession, showingInspector: .constant(true))
         .frame(width: 400, height: 700)
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 import SwiftData
-import OpenAI
+import SwiftOpenAI
 
 struct ImageInspector: View {
     @Bindable var session: ImageSession
@@ -46,21 +46,9 @@ struct ImageInspector: View {
                         }
                     }
                     
-                    Picker("Quality", selection: $session.config.quality) {
-                        ForEach(ImagesQuery.Quality.allCases, id: \.self) { quality in
-                            Text(quality.rawValue.uppercased()).tag(quality)
-                        }
-                    }
-                    
                     Picker("Size", selection: $session.config.size) {
-                        ForEach(ImagesQuery.Size.allCases, id: \.self) { size in
+                        ForEach(Dalle.Dalle2ImageSize.allCases, id: \.self) { size in
                             Text(size.rawValue.capitalized).tag(size)
-                        }
-                    }
-                    
-                    Picker("Style", selection: $session.config.style) {
-                        ForEach(ImagesQuery.Style.allCases, id: \.self) { style in
-                            Text(style.rawValue.capitalized).tag(style)
                         }
                     }
                 }

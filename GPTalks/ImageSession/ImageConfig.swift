@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import OpenAI
+import SwiftOpenAI
 import SwiftData
 
 @Model
@@ -20,9 +20,7 @@ class ImageConfig {
     var model: AIModel
     
     var numImages: Int = ImageConfigDefaults.shared.numImages
-    var size: ImagesQuery.Size = ImageConfigDefaults.shared.size
-    var quality: ImagesQuery.Quality = ImageConfigDefaults.shared.quality
-    var style: ImagesQuery.Style = ImageConfigDefaults.shared.style
+    var size: Dalle.Dalle2ImageSize = ImageConfigDefaults.shared.size
     
     init(provider: Provider) {
         self.provider = provider
@@ -38,8 +36,6 @@ class ImageConfig {
         let copy = ImageConfig(provider: provider, model: model)
         copy.numImages = numImages
         copy.size = size
-        copy.quality = quality
-        copy.style = style
         return copy
     }
 }

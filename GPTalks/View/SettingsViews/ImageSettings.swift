@@ -7,7 +7,7 @@
 
 import SwiftUI
 import SwiftData
-import OpenAI
+import SwiftOpenAI
 
 struct ImageSettings: View {
     @ObservedObject var imageConfig = ImageConfigDefaults.shared
@@ -72,20 +72,8 @@ struct ImageSettings: View {
 
                 
                 Picker("Size", selection: $imageConfig.size) {
-                    ForEach(ImagesQuery.Size.allCases, id: \.self) { size in
+                    ForEach(ImageCreateParameters.ImageSize.allCases, id: \.self) { size in
                         Text(size.rawValue)
-                    }
-                }
-                
-                Picker("Quality", selection: $imageConfig.quality) {
-                    ForEach(ImagesQuery.Quality.allCases, id: \.self) { quality in
-                        Text(quality.rawValue.uppercased())
-                    }
-                }
-                
-                Picker("Style", selection: $imageConfig.style) {
-                    ForEach(ImagesQuery.Style.allCases, id: \.self) { style in
-                        Text(style.rawValue.capitalized)
                     }
                 }
             }

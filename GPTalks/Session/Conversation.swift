@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftData
-import OpenAI
+import SwiftOpenAI
 import GoogleGenerativeAI
 import SwiftAnthropic
 
@@ -30,10 +30,10 @@ final class Conversation {
     @Attribute(.ephemeral)
     var isReplying: Bool = false
     
-    var toolCalls: [ToolCall] = []
+    var toolCalls: [ChatToolCall] = []
     var toolResponse: ToolResponse?
     
-    init(role: ConversationRole, content: String = "", group: ConversationGroup? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
+    init(role: ConversationRole, content: String = "", group: ConversationGroup? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
         self.role = role
         self.content = content
         self.group = group
@@ -67,22 +67,5 @@ final class Conversation {
             toolResponse: toolResponse,
             isReplying: isReplying
         )
-    }
-}
-
-extension Conversation {
-    @MainActor
-    func setIsReplying(_ value: Bool) {
-        self.isReplying = value
-    }
-    
-    @MainActor
-    func setContent(_ value: String) {
-        self.content = value
-    }
-    
-    @MainActor
-    func setToolCalls(_ value: [ToolCall]) {
-        self.toolCalls = value
     }
 }

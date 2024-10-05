@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftData
-import OpenAI
 import GoogleGenerativeAI
 
 @Model

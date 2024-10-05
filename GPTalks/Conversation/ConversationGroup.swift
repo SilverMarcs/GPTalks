@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftData
-import OpenAI
+import SwiftOpenAI
 import SwiftUI
 
 @Model

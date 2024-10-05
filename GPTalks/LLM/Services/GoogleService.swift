@@ -94,8 +94,8 @@ struct GoogleService: AIService {
                         if !content.isEmpty {
                             let functionCalls = response.functionCalls
                             
-                            let calls: [ToolCall] = functionCalls.map {
-                                ToolCall(toolCallId: "", tool: ChatTool(rawValue: $0.name)!, arguments: encodeJSONObjectToString($0.args))
+                            let calls: [ChatToolCall] = functionCalls.map {
+                                ChatToolCall(toolCallId: "", tool: ChatTool(rawValue: $0.name)!, arguments: encodeJSONObjectToString($0.args))
                             }
 
                             continuation.yield(.toolCalls(calls))

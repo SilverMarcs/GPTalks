@@ -160,10 +160,6 @@ final class ChatSession {
             }
         }
         
-        Task {
-            await self.refreshTokens()
-        }
-        
         if AppConfig.shared.autogenTitle {
             Task { await generateTitle() }
         }
