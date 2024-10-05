@@ -19,20 +19,10 @@ struct CommonInputStyling: ViewModifier {
             #if os(macOS)
             .background(.bar)
             #else
-            .background(
-//                VisualEffect(
-//                    colorTint: colorScheme == .dark ? .black : .white,
-//                    colorTintAlpha: 0.7,
-//                    blurRadius: 15,
-//                    scale: 1
-//                )
-//                .ignoresSafeArea()
-                .background
-//                    .ignoresSafeArea()
-            )
-                #if os(visionOS)
-                .background(.regularMaterial)
-                #endif
+            .background(.background)
+            #if os(visionOS)
+            .background(.regularMaterial)
+            #endif
             #endif
             .ignoresSafeArea()
         

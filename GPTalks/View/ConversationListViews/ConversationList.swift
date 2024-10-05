@@ -45,7 +45,6 @@ struct ConversationList: View {
                 }
             }
             .onChange(of: sessionVM.chatSelections) {
-                
                 Task {
                     await sessionVM.chatSelections.first?.refreshTokens()
                 }
