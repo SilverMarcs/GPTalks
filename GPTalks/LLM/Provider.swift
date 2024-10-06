@@ -109,20 +109,14 @@ class Provider {
 }
 
 extension Provider {
-//    func refreshModels() async {
-//        let refreshedModels: [ChatModel] = await type.getService().refreshModels(provider: self)
-//        
-//        for model in refreshedModels {
-//            if !chatModels.contains(where: { $0.code == model.code }) {
-//                chatModels.append(model)
-//            }
-//        }
-//    }
-    
-    func refreshModels() async -> [ChatModel] {
-        let refreshedModels: [ChatModel] = await type.getService().refreshModels(provider: self)
-        return refreshedModels.filter { model in
+    func refreshModels() async -> [GenericModel] {
+        let refreshedChatModels: [ChatModel] = await type.getService().refreshModels(provider: self)
+        let newModels = refreshedChatModels.filter { model in
             !chatModels.contains(where: { $0.code == model.code })
+        }
+        
+        return newModels.map { chatModel in
+            GenericModel(code: chatModel.code, name: chatModel.name)
         }
     }
     

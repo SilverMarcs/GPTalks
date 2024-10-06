@@ -7,63 +7,77 @@
 
 import SwiftUI
 
-struct ModelSelectionSheet<M: ModelType>: View {
+struct ModelSelectionSheet: View {
     @Environment(\.dismiss) var dismiss
     
-    var refreshedModels: [M]
-    var onAddToChatModels: ([M]) -> Void
-    var onAddToImageModels: ([M]) -> Void
-
-    @State private var selectedChatModels: Set<M> = []
-    @State private var selectedImageModels: Set<M> = []
-
+    @State private var refreshedModels: [GenericModel] = []
+    @State private var isLoading = true
+    var provider: Provider
+    
     var body: some View {
         NavigationStack {
-            List(refreshedModels, id: \.id) { model in
-                HStack {
-                    Text(model.name)
-                    Spacer()
-                    Button(action: {
-                        toggleSelection(for: model, in: &selectedChatModels)
-                    }) {
-                        Image(systemName: "message")
-                            .foregroundStyle(selectedChatModels.contains(model) ? .green : .gray)
-                    }
-                    Button(action: {
-                        toggleSelection(for: model, in: &selectedImageModels)
-                    }) {
-                        Image(systemName: "photo")
-                            .foregroundStyle(selectedImageModels.contains(model) ? .indigo : .gray)
-                    }
-                }
-            }
-            .safeAreaInset(edge: .top, spacing: 0) {
-                HStack {
-                    Text("Select models")
-                        .bold()
-                    
-                    Spacer()
-                    
-                    Button("Save") {
-                        onAddToChatModels(Array(selectedChatModels))
-                        onAddToImageModels(Array(selectedImageModels))
-                        dismiss()
+            if isLoading {
+                ProgressView("Loading models...")
+                    .onAppear(perform: loadModels)
+            } else {
+                Form {
+                    List($refreshedModels) { $selectableModel in
+                        HStack {
+                            Toggle(isOn: $selectableModel.isSelected) {
+                                Text("\(selectableModel.code)")
+                                Text("\(selectableModel.name)")
+                            }
+                            
+                            Spacer()
+                            
+                            Picker("Model Type", selection: $selectableModel.selectedModelType) {
+                                ForEach(ModelTypeOption.allCases, id: \.self) { option in
+                                    Image(systemName: option.icon)
+                                        .tag(option)
+                                }
+                            }
+                            .labelsHidden()
+                            .pickerStyle(.segmented)
+                            .fixedSize()
+                        }
                     }
                 }
-                .padding(10)
-                .background(.regularMaterial)
+                .navigationTitle("Select models to add")
+                .toolbarTitleDisplayMode(.inline)
+                .toolbar {
+                    Button("Add") {
+                        addSelectedModels()
+                    }
+                }
             }
         }
+        .formStyle(.grouped)
         #if os(macOS)
-        .frame(height: 400)
+        .frame(width: 400, height: 450)
         #endif
     }
-
-    private func toggleSelection(for model: M, in set: inout Set<M>) {
-        if set.contains(model) {
-            set.remove(model)
-        } else {
-            set.insert(model)
+    
+    private func loadModels() {
+        Task {
+            refreshedModels = await provider.refreshModels()
+            isLoading = false
         }
+    }
+    
+    private func addSelectedModels() {
+        let selectedModels = refreshedModels.filter { $0.isSelected }
+        
+        for selectableModel in selectedModels {
+            switch selectableModel.selectedModelType {
+            case .chat:
+                let chatModel = ChatModel(code: selectableModel.code, name: selectableModel.name)
+                provider.chatModels.append(chatModel)
+            case .image:
+                let imageModel = ImageModel(code: selectableModel.code, name: selectableModel.name)
+                provider.imageModels.append(imageModel)
+            }
+        }
+        
+        dismiss()
     }
 }

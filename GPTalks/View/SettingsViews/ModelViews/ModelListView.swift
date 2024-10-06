@@ -1,5 +1,5 @@
 //
-//  ChatModelList.swift
+//  ModelListView.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 23/07/2024.
@@ -15,10 +15,8 @@ struct ModelListView<M: ModelType>: View {
     @Bindable var provider: Provider
     @Binding var models: [M]
 
-    @State var showAdder = false
-    @State var isRefreshing = false
+    @State private var showAdder = false
     @State private var showModelSelectionSheet = false
-    @State private var refreshedModels: [M] = []
     
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -38,6 +36,16 @@ struct ModelListView<M: ModelType>: View {
 #else
             table
 #endif
+        }
+        .toolbar {
+            refreshButton
+            addButton
+        }
+        .sheet(isPresented: $showAdder) {
+            AddModelSheet<M>(models: $models)
+        }
+        .sheet(isPresented: $showModelSelectionSheet) {
+            ModelSelectionSheet(provider: provider)
         }
     }
 
@@ -80,43 +88,18 @@ struct ModelListView<M: ModelType>: View {
         }
     }
     
-    func refreshModels() async {
-//        isRefreshing = true
-//        // Assuming you have a way to refresh models generically
-//        refreshedModels = await provider.refreshModels(for: M.self)
-//        isRefreshing = false
-//        showModelSelectionSheet = true
-    }
-}
-
-// MARK: - Shared Components
-extension ModelListView {
-    @ViewBuilder
     var addButton: some View {
-        if isRefreshing {
-            Button(action: {}) {
-                Label("Refreshing", systemImage: "arrow.trianglehead.2.counterclockwise.rotate.90")
-            }
-            .symbolEffect(.rotate, isActive: isRefreshing)
-            .disabled(true)
-        } else {
-            Menu {
-                Button {
-                    Task {
-                        await refreshModels()
-                    }
-                } label: {
-                    Label("Refresh Models", systemImage: "arrow.trianglehead.2.counterclockwise.rotate.90")
-                }
-                
-                Section {
-                    Button(action: { showAdder = true }) {
-                        Label("Add Custom Model", systemImage: "plus")
-                    }
-                }
-            } label: {
-                Label("Add", systemImage: "plus")
-            }
+        Button(action: { showAdder = true }) {
+            Label("Add Model", systemImage: "plus")
+        }
+    }
+    
+    var refreshButton: some View {
+        Button {
+            showModelSelectionSheet = true
+        } label: {
+            Label("Refresh Models", systemImage: "arrow.triangle.2.circlepath")
         }
     }
 }
+

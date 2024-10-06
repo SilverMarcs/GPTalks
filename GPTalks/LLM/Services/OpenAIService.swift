@@ -17,7 +17,7 @@ struct OpenAIService: AIService {
         
         do {
             let result = try await service.listModels()
-            return result.data.map { ChatModel(code: $0.id, name: $0.id) }
+            return result.data.map { ChatModel(code: $0.id, name: $0.id.capitalized) }
         } catch {
             return []
         }

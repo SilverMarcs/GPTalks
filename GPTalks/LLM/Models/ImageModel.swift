@@ -17,11 +17,6 @@ struct ImageModel: Hashable, Identifiable, Codable, ModelType {
         self.name = name
     }
     
-    init(from chatModel: ChatModel) {
-        self.code = chatModel.code
-        self.name = chatModel.name
-    }
-    
     static func getOpenImageModels() -> [ImageModel] {
         return [
             ImageModel(code: "dall-e-2", name: "DALL-E-2"),

@@ -7,41 +7,52 @@
 
 import SwiftUI
 
-struct AddModelSheet: View {
+struct AddModelSheet<M: ModelType>: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var chatModels: [ChatModel]
-    @Binding var imageModels: [ImageModel]
+    @Binding var models: [M]
     
     @State private var modelName: String = ""
     @State private var modelCode: String = ""
-    @State private var isImageModel: Bool = false
-    
+    @State private var selectedModelType: ModelTypeOption
+
+    init(models: Binding<[M]>) {
+        self._models = models
+        if M.self == ChatModel.self {
+            self._selectedModelType = State(initialValue: .chat)
+        } else if M.self == ImageModel.self {
+            self._selectedModelType = State(initialValue: .image)
+        } else {
+            fatalError("Unsupported model type")
+        }
+    }
+
     var body: some View {
         NavigationStack {
             Form {
                 TextField("Model Name", text: $modelName)
                 TextField("Model Code", text: $modelCode)
-                Toggle("Is Image Model", isOn: $isImageModel)
             }
             .formStyle(.grouped)
-            .navigationTitle("Add New Model")
+            .navigationTitle("Add \(selectedModelType.rawValue.capitalized) Model")
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
                 }
+                
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add") {
-                        if isImageModel {
-                            imageModels.append(ImageModel(code: modelCode, name: modelName))
-                        } else {
-                            chatModels.append(ChatModel(code: modelCode, name: modelName))
-                        }
+                        addModel()
                         dismiss()
                     }
                     .disabled(modelName.isEmpty || modelCode.isEmpty)
                 }
             }
         }
+    }
+    
+    private func addModel() {
+        let newModel = M(code: modelCode, name: modelName)
+        models.append(newModel)
     }
 }

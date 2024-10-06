@@ -6,10 +6,8 @@
 //
 
 import Foundation
-import SwiftData
 
-@Model
-final class TranscriptionModel: Hashable, Identifiable {
+struct TranscriptionModel: Hashable, Identifiable, Codable, ModelType {
     var id: UUID = UUID()
     var code: String
     var name: String
