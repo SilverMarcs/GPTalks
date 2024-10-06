@@ -11,10 +11,9 @@ struct TranscribeSettings: View {
     @ObservedObject var config = ToolConfigDefaults.shared
     
     var body: some View {
-//        Section("General") {
-//            Toggle("Enabled for new chats", isOn: $config.transcribe)
-//        }
-        Text("Coming soon!")
+        Section("General") {
+            Toggle("Enabled for new chats", isOn: $config.transcribe)
+        }
     }
 }
 

@@ -10,6 +10,7 @@ import SwiftUI
 struct IntegerStepper: View {
     @Binding var value: Int
     let label: String
+    var secondaryLabel: String? = nil
     let step: Int
     let range: ClosedRange<Int>
     
@@ -17,7 +18,6 @@ struct IntegerStepper: View {
     // TODO: use secondary text for subtitle
     var body: some View {
         Stepper(
-            platformLabel,
             value: Binding<Double>(
                 get: { Double(value) },
                 set: { value = Int($0) }
@@ -25,7 +25,12 @@ struct IntegerStepper: View {
             in: Double(range.lowerBound)...Double(range.upperBound),
             step: Double(step),
             format: .number
-        )
+        ) {
+            Text(platformLabel)
+            if let secondaryLabel = secondaryLabel {
+                Text(secondaryLabel)
+            }
+        }
     }
     
     

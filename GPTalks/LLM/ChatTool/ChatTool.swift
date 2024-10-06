@@ -77,7 +77,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
         case .transcribe:
             0
         case .pdfReader:
-            0
+            PDFReader.tokenCount
         }
     }
     
@@ -108,7 +108,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
         case .transcribe:
             TranscribeSettings()
         case .pdfReader:
-            EmptyView()
+            PDFReaderSettings()
         }
     }
     

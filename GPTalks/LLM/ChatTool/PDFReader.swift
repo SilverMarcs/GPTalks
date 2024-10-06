@@ -37,7 +37,7 @@ struct PDFReader {
             for name in args.fileNames {
                 if let typedData = conversation.dataFiles.first(where: { $0.fileName == name }) {
                     let pdfContent = readPDF(from: typedData.data)
-                    totalContent += pdfContent + "\n"
+                    totalContent += pdfContent.prefix(ToolConfigDefaults.shared.pdfMaxContentLength) + "\n"
                 }
             }
             

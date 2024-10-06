@@ -51,7 +51,7 @@ struct URLScrape {
             print(error.localizedDescription)
         }
         
-        return String(final.prefix(ToolConfigDefaults.shared.maxContentLength))
+        return String(final.prefix(ToolConfigDefaults.shared.urlMaxContentLength))
     }
     
     
