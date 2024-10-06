@@ -15,18 +15,28 @@ struct ChatModelList: View {
     @Bindable var provider: Provider
 
     @State var showAdder = false
-    @State var selections: Set<ChatModel> = []
     @State var isRefreshing = false
     @State private var showModelSelectionSheet = false
     @State private var refreshedModels: [ChatModel] = []
     
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    private var isCompact: Bool { horizontalSizeClass == .compact }
+    #else
+    private let isCompact = false
+    #endif
+        
     var body: some View {
         Group {
-            #if os(macOS)
-            macOSContent
-            #else
-            iOSContent
-            #endif
+#if os(macOS)
+            Form {
+                table
+            }
+            .formStyle(.grouped)
+            .labelsHidden()
+#else
+            table
+#endif
         }
         .sheet(isPresented: $showAdder) {
             ChatModelAdder(provider: provider)
@@ -48,81 +58,54 @@ struct ChatModelList: View {
             }
         }
     }
-    
-    var searchPlacement: SearchFieldPlacement {
-        #if os(macOS)
-        return .toolbar
-        #else
-        return .navigationBarDrawer(displayMode: .always)
-        #endif
-    }
-}
 
-// MARK: - common foreach
-extension ChatModelList {
-    var collectiom: some View {
-        ForEach($provider.chatModels) { $model in
-            ChatModelRow(model: $model, provider: provider)
-                .tag(model)
-        }
-        .onDelete(perform: deleteItems)
-    }
-    
-    private func deleteItems(offsets: IndexSet) {
-        provider.chatModels.remove(atOffsets: offsets)
-    }
-}
-
-// MARK: - macOS Specific Views
-#if os(macOS)
-extension ChatModelList {
-    var macOSContent: some View {
-        Form {
-            List(selection: $selections) {
-                Section(header: sectionHeader) {
-                    collectiom
-                }
-            }
-            .labelsHidden()
-            .alternatingRowBackgrounds()
-        }
-        .formStyle(.grouped)
-    }
-    
-    var sectionHeader: some View {
-        HStack(spacing: 0) {
-            Text("Code")
-                .frame(maxWidth: 300, alignment: .leading)
-            Text("Name")
-                .frame(maxWidth: 205, alignment: .leading)
-            Text("Test")
-                .frame(maxWidth: 35, alignment: .center)
-        }
-    }
-}
-#endif
-
-// MARK: - iOS Specific Views
-#if !os(macOS)
-extension ModelListView {
-    var iOSContent: some View {
-        List(selection: $selections) {
-            collectiom
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .bottomBar) {
+    var table: some View {
+        Table($provider.chatModels) {
+            TableColumn("Code") { $model in
                 HStack {
-                    EditButton()
-                    Spacer()
-                    if editMode?.wrappedValue == .active {
-                        editMenu
+                    TextField("Code", text: $model.code)
+                    
+                    if isCompact {
+                        Spacer()
+                        Button {
+                            provider.chatModels.removeAll(where: { $0.id == model.id })
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundStyle(.red)
+                        }
                     }
                 }
             }
+            #if os(macOS)
+            .width(250)
+            #endif
+            .alignment(.leading)
+            
+            TableColumn("Name") { $model in
+                TextField("Name", text: $model.name)
+            }
+            .width(200)
+            
+            TableColumn("Action") { model in
+                Button {
+                    provider.chatModels.removeAll(where: { $0.id == model.id })
+                } label: {
+                    Image(systemName: "minus.circle.fill")
+                        .foregroundStyle(.red)
+                }
+            }
+            .width()
+            .alignment(.trailing)
         }
     }
+    
+    func refreshModels() async {
+        isRefreshing = true
+        refreshedModels = await provider.refreshModels()
+        isRefreshing = false
+        showModelSelectionSheet = true
+    }
 }
-#endif
 
 // MARK: - Shared Components
 extension ChatModelList {
@@ -153,30 +136,6 @@ extension ChatModelList {
                 Label("Add", systemImage: "plus")
             }
         }
-    }
-    
-    var editMenu: some View {
-        Menu {
-            Section {
-                Button(action: { selections = Set(provider.chatModels) }) {
-                    Label("Select All", systemImage: "checkmark.circle.fill")
-                }
-                
-                Button(action: { selections.removeAll() }) {
-                    Label("Deselect All", systemImage: "xmark.circle")
-                }
-            }
-        } label: {
-            Label("Actions", systemImage: "ellipsis.circle")
-                .labelStyle(.iconOnly)
-        }
-    }
-    
-    func refreshModels() async {
-        isRefreshing = true
-        refreshedModels = await provider.refreshModels()
-        isRefreshing = false
-        showModelSelectionSheet = true
     }
 }
 

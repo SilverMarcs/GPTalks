@@ -15,20 +15,68 @@ struct ImageModelList: View {
     @Bindable var provider: Provider
 
     @State var showAdder = false
-    @State var selections: Set<ImageModel> = []
-    @State var searchText = ""
     @State var isRefreshing = false
+    @State private var showModelSelectionSheet = false
+    @State private var refreshedModels: [ChatModel] = []
     
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    private var isCompact: Bool { horizontalSizeClass == .compact }
+    #else
+    private let isCompact = false
+    #endif
+        
     var body: some View {
-        Group {
-            #if os(macOS)
-            macOSContent
-            #else
-            iOSContent
-            #endif
+        Form {
+            Table($provider.imageModels) {
+                TableColumn("Code") { $model in
+                    TextField("Code", text: $model.code)
+                    
+                    if isCompact {
+                        Button {
+                            provider.imageModels.removeAll(where: { $0.id == model.id })
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundStyle(.red)
+                        }
+                    }
+                }
+                .width(250)
+                .alignment(.leading)
+                
+                TableColumn("Name") { $model in
+                    TextField("Name", text: $model.name)
+                }
+                .width(200)
+                
+                TableColumn("Action") { model in
+                    Button {
+                        provider.imageModels.removeAll(where: { $0.id == model.id })
+                    } label: {
+                        Label("Remove", systemImage: "minus.circle.fill")
+                            .foregroundStyle(.red)
+                            .labelStyle(.iconOnly)
+                    }
+                }
+                .width()
+                .alignment(.trailing)
+            }
         }
+        .labelsHidden()
+        .formStyle(.grouped)
         .sheet(isPresented: $showAdder) {
             ChatModelAdder(provider: provider)
+        }
+        .sheet(isPresented: $showModelSelectionSheet) {
+            ModelSelectionSheet(
+                refreshedModels: refreshedModels,
+                onAddToChatModels: { selectedModels in
+                    provider.chatModels.append(contentsOf: selectedModels)
+                },
+                onAddToImageModels: { selectedModels in
+                    provider.imageModels.append(contentsOf: selectedModels.map { ImageModel(from: $0) })
+                }
+            )
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -37,81 +85,13 @@ struct ImageModelList: View {
         }
     }
     
-    var searchPlacement: SearchFieldPlacement {
-        #if os(macOS)
-        return .toolbar
-        #else
-        return .navigationBarDrawer(displayMode: .always)
-        #endif
+    func refreshModels() async {
+        isRefreshing = true
+        refreshedModels = await provider.refreshModels()
+        isRefreshing = false
+        showModelSelectionSheet = true
     }
 }
-
-// MARK: - common foreach
-extension ImageModelList {
-    var collectiom: some View {
-        ForEach($provider.imageModels) { $model in
-            ImageModelRow(model: $model, provider: provider)
-                .tag(model)
-        }
-        .onDelete(perform: deleteItems)
-    }
-    
-    private func deleteItems(offsets: IndexSet) {
-        provider.imageModels.remove(atOffsets: offsets)
-    }
-    
-}
-
-// MARK: - macOS Specific Views
-#if os(macOS)
-extension ImageModelList {
-    var macOSContent: some View {
-        Form {
-            List(selection: $selections) {
-                Section(header: sectionHeader) {
-                    collectiom
-                }
-            }
-            .labelsHidden()
-            .alternatingRowBackgrounds()
-        }
-        .formStyle(.grouped)
-    }
-    
-    var sectionHeader: some View {
-        HStack(spacing: 0) {
-            Text("Code")
-                .frame(maxWidth: 300, alignment: .leading)
-            Text("Name")
-                .frame(maxWidth: 205, alignment: .leading)
-            Text("Test")
-                .frame(maxWidth: 35, alignment: .center)
-        }
-    }
-}
-#endif
-
-// MARK: - iOS Specific Views
-#if !os(macOS)
-extension ImageModelList {
-    var iOSContent: some View {
-        List(selection: $selections) {
-            collectiom
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .bottomBar) {
-                HStack {
-                    EditButton()
-                    Spacer()
-                    if editMode?.wrappedValue == .active {
-                        editMenu
-                    }
-                }
-            }
-        }
-    }
-}
-#endif
 
 // MARK: - Shared Components
 extension ImageModelList {
@@ -143,33 +123,8 @@ extension ImageModelList {
             }
         }
     }
-    
-    var editMenu: some View {
-        Menu {
-            Section {
-                Button(action: { selections = Set(provider.imageModels) }) {
-                    Label("Select All", systemImage: "checkmark.circle.fill")
-                }
-                
-                Button(action: { selections.removeAll() }) {
-                    Label("Deselect All", systemImage: "xmark.circle")
-                }
-            }
-            
-        } label: {
-            Label("Actions", systemImage: "ellipsis.circle")
-                .labelStyle(.iconOnly)
-        }
-    }
-    
-    func refreshModels() async {
-        isRefreshing = true
-        await provider.refreshModels()
-        isRefreshing = false
-    }
 }
 
-
 #Preview {
-    ChatModelList(provider: .openAIProvider)
+    ImageModelList(provider: .openAIProvider)
 }

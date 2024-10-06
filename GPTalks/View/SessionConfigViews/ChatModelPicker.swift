@@ -1,5 +1,5 @@
 //
-//  ModelPicker.swift
+//  ChatModelPicker.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 19/07/2024.
