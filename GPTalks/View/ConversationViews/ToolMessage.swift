@@ -48,23 +48,25 @@ struct ToolMessage: View {
     
     var button: some View {
         Button(action: { showPopover.toggle() }) {
-            HStack(spacing: 4) {
-                Text(conversation.isReplying ? "Using" : "Used")
-                    .foregroundStyle(.secondary)
-                
-                if let tool = conversation.toolResponse?.tool {
-                    Text(tool.displayName)
-                        .fontWeight(.semibold)
+            GroupBox {
+                HStack(spacing: 4) {
+                    Text(conversation.isReplying ? "Using" : "Used")
+                        .foregroundStyle(.secondary)
                     
-                    if conversation.isReplying {
-                        ProgressView()
-                            .controlSize(.mini)
-                    } else {
-                        Image(systemName: tool.icon)
+                    if let tool = conversation.toolResponse?.tool {
+                        Text(tool.displayName)
+                            .fontWeight(.semibold)
+                        
+                        if conversation.isReplying {
+                            ProgressView()
+                                .controlSize(.mini)
+                        } else {
+                            Image(systemName: tool.icon)
+                        }
                     }
                 }
+                .padding(3)
             }
-            .bubbleStyle()
         }
         .buttonStyle(.plain)
     }
@@ -83,7 +85,5 @@ struct ToolMessage: View {
 }
 
 #Preview {
-    let conversation = Conversation(role: .tool, content: "Hello, World!")
-    
-    ToolMessage(conversation: conversation)
+    ToolMessage(conversation: .mockToolConversation)
 }

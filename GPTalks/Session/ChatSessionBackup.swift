@@ -14,7 +14,6 @@ import UniformTypeIdentifiers
 struct ChatSessionBackup: Codable {
     var id: UUID
     var date: Date
-    var order: Int
     var title: String
     var isStarred: Bool
     var errorMessage: String
@@ -34,10 +33,9 @@ struct ChatSessionBackup: Codable {
 }
 
 extension ChatSessionBackup {
-    init(from session: Session) {
+    init(from session: ChatSession) {
         self.id = session.id
         self.date = session.date
-        self.order = session.order
         self.title = session.title
         self.isStarred = session.isStarred
         self.errorMessage = session.errorMessage
@@ -50,23 +48,22 @@ extension ChatSessionBackup {
         }
     }
     
-    func toSession(providers: [Provider] = []) -> Session {
-        var session: Session
+    func toSession(providers: [Provider] = []) -> ChatSession {
+        var session: ChatSession
         let provider: Provider
         if let defaultProvider = ProviderManager.shared.getDefault(providers: providers) {
             provider = defaultProvider
-            session = Session(config: SessionConfig(provider: provider))
+            session = ChatSession(config: SessionConfig(provider: provider, purpose: .chat))
         } else if let firstProvider = providers.first {
             provider = firstProvider
-            session = Session(config: SessionConfig(provider: provider))
+            session = ChatSession(config: SessionConfig(provider: provider, purpose: .chat))
         } else {
             print("Should not reach here")
-            session = Session(config: SessionConfig())
+            session = ChatSession(config: .mockChatConfig)
         }
         
         session.id = self.id
         session.date = self.date
-        session.order = self.order
         session.title = self.title
         session.isStarred = self.isStarred
         session.errorMessage = self.errorMessage
@@ -98,9 +95,9 @@ extension ChatSessionBackup.ConversationBackup {
 struct SessionsDocument: FileDocument {
     static var readableContentTypes: [UTType] { [.json] }
     
-    var sessions: [Session]
+    var sessions: [ChatSession]
     
-    init(sessions: [Session]) {
+    init(sessions: [ChatSession]) {
         self.sessions = sessions.filter { !$0.isQuick }
     }
     
@@ -119,7 +116,7 @@ struct SessionsDocument: FileDocument {
     }
 }
 
-func restoreSessions(from url: URL, providers: [Provider]) throws -> [Session] {
+func restoreSessions(from url: URL, providers: [Provider]) throws -> [ChatSession] {
     guard url.startAccessingSecurityScopedResource() else {
         throw NSError(domain: "FileAccessError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to access the security-scoped resource."])
     }

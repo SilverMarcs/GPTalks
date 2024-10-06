@@ -105,7 +105,7 @@ import AuthenticationServices
         
         let parameters: [String: String] = [
             "client_id": clientId,
-            "client_secret": "",
+            "client_secret": "", // intentionally left blank
             "refresh_token": refreshToken,
             "grant_type": "refresh_token"
         ]
@@ -173,16 +173,16 @@ import AuthenticationServices
     }
 }
 
-#if os(iOS)
-extension UIViewController: ASWebAuthenticationPresentationContextProviding {
-    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return self.view.window ?? ASPresentationAnchor()
-    }
-}
-#elseif os(macOS)
-extension NSWindow: ASWebAuthenticationPresentationContextProviding {
-    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return self
-    }
-}
-#endif
+//#if os(iOS)
+//extension UIViewController: ASWebAuthenticationPresentationContextProviding {
+//    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+//        return self.view.window ?? ASPresentationAnchor()
+//    }
+//}
+//#elseif os(macOS)
+//extension NSWindow: ASWebAuthenticationPresentationContextProviding {
+//    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+//        return self
+//    }
+//}
+//#endif

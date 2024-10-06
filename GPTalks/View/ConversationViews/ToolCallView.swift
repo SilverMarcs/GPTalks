@@ -70,27 +70,7 @@ struct ToolCallView: View {
 }
 
 #Preview {
-    let codeBlock = """
-    This is a code block
-    
-    ```swift
-    struct ContentView: View {
-        var body: some View {
-            Text("Hello, World!")
-        }
-    }
-    ```
-    
-    Thank you for using me.
-    
-    """
-    let providers: [Provider] = []
-    let toolResponse: ToolResponse = .init(toolCallId: "", tool: .urlScrape, processedContent: codeBlock)
-    let conversation = Conversation(role: .tool,
-                                    toolResponse: toolResponse)
-    conversation.isReplying = true
-    
-    return AssistantMessage(conversation: conversation, providers: providers)
+    return AssistantMessage(conversation: .mockAssistantTolCallConversation)
         .frame(width: 500, height: 300)
 }
 

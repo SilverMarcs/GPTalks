@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import OpenAI
+import SwiftOpenAI
 import GoogleGenerativeAI
 
 struct GoogleSearch {
@@ -60,7 +60,7 @@ struct GoogleSearch {
         
         return query.query
     }
-
+    
     struct Query: Codable {
         let query: String
     }
@@ -68,7 +68,7 @@ struct GoogleSearch {
     struct SearchResult: Decodable {
         let items: [SearchItem]
     }
-
+    
     struct SearchItem: Decodable {
         let title: String
         let link: String
@@ -83,19 +83,21 @@ struct GoogleSearch {
         - User is asking about some term you are totally unfamiliar with (it might be new)
         - Usually prioritize your pre-existing knowledge before wanting to call this tool
         """
-
-    static var openai: ChatQuery.ChatCompletionToolParam {
-        return .init(function:
-                .init(name: "googleSearch",
-                      description: description,
-                      parameters:
-                        .init(type: .object,
-                              properties: ["query":
-                                    .init(type: .string,
-                                          description: "The search query to search google with")]
-                             )
-                     )
-        )
+    
+    static var openai: ChatCompletionParameters.Tool {
+        .init(function:
+                .init(
+                    name: "googleSearch",
+                    strict: false,
+                    description: description,
+                    parameters:
+                            .init(type: .object,
+                                  properties: ["query":
+                                        .init(type: .string,
+                                              description: "The search query to search google with")]
+                                 )
+                    )
+              )
     }
 
     static var google: Tool {

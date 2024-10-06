@@ -22,11 +22,11 @@ final class SessionConfig {
     @Relationship(deleteRule: .nullify)
     var provider: Provider
     @Relationship(deleteRule: .nullify)
-    var model: AIModel
+    var model: ChatModel
     
     var tools: SessionConfigTools
     
-    private init(provider: Provider, model: AIModel, temperature: Double?, frequencyPenalty: Double?, presencePenalty: Double?, topP: Double?, maxTokens: Int?, stream: Bool, systemPrompt: String, purpose: SessionConfigPurpose = .chat, tools: SessionConfigTools) {
+    private init(provider: Provider, model: ChatModel, temperature: Double?, frequencyPenalty: Double?, presencePenalty: Double?, topP: Double?, maxTokens: Int?, stream: Bool, systemPrompt: String, purpose: SessionConfigPurpose = .chat, tools: SessionConfigTools) {
         self.provider = provider
         self.model = model
         self.temperature = temperature
@@ -59,15 +59,6 @@ final class SessionConfig {
                 self.tools = SessionConfigTools()
         }
     }
-    
-    // for previews only. dont use this elsewhere
-    init(provider: Provider = Provider.factory(type: .openai), isDummy: Bool = true, tools: SessionConfigTools = SessionConfigTools(isTitle: true)) {
-        self.provider = provider
-        self.model = provider.chatModel
-        self.systemPrompt = ""
-        self.tools = tools
-    }
-    
 
     func copy(purpose: SessionConfigPurpose) -> SessionConfig {
         return SessionConfig(provider: self.provider, model: self.model, temperature: self.temperature, frequencyPenalty: self.frequencyPenalty, presencePenalty: self.presencePenalty, topP: self.topP, maxTokens: self.maxTokens, stream: self.stream, systemPrompt: self.systemPrompt, purpose: purpose, tools: self.tools)

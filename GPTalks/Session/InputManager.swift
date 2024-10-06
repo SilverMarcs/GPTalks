@@ -108,9 +108,6 @@ extension InputManager {
                     self.processFile(at: fileURL, supportedFileTypes: supportedFileTypes)
                 } else if let imageData = item.data(forType: .png) {
                     self.processImageData(imageData, supportedFileTypes: supportedFileTypes)
-                } else if let urlData = item.data(forType: .URL),
-                          let url = URL(dataRepresentation: urlData, relativeTo: nil) {
-                    self.processURL(url)
                 }
             }
         }
@@ -144,29 +141,6 @@ extension InputManager {
                 self.processFile(at: tempFileURL, supportedFileTypes: supportedFileTypes)
             } catch {
                 print("Failed to write image data to temporary file: \(error)")
-            }
-        }
-    }
-
-    private func processURL(_ url: URL) {
-        Task {
-            do {
-                let webContent = try await URLScrape.retrieveWebContent(from: url)
-                
-                // Extract the first line from the webContent
-                let firstLine = webContent.components(separatedBy: .newlines).first ?? "defaultFilename"
-                
-                // Sanitize the first line to create a valid filename
-                let sanitizedFirstLine = firstLine.replacingOccurrences(of: "[^a-zA-Z0-9]", with: "_", options: .regularExpression)
-                
-                let tempDirectory = FileManager.default.temporaryDirectory
-                let tempFileURL = tempDirectory.appendingPathComponent(sanitizedFirstLine).appendingPathExtension("txt")
-                
-                try webContent.write(to: tempFileURL, atomically: true, encoding: .utf8)
-                
-                self.processFile(at: tempFileURL, supportedFileTypes: [.plainText])
-            } catch {
-                print("Failed to fetch and process URL content: \(error)")
             }
         }
     }

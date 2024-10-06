@@ -20,22 +20,25 @@ struct ProviderBackup: Codable {
     var type: ProviderType
     var color: String
     var isEnabled: Bool
+    var supportsImage: Bool
     var chatModelCode: String
     var quickChatModelCode: String
     var titleModelCode: String
     var imageModelCode: String
     var toolImageModelCode: String
     var chatModels: [AIModelBackup]
-    var imageModels: [AIModelBackup]
+    var imageModels: [ImageModelBackup]
     
     struct AIModelBackup: Codable {
         var id: UUID
-        var order: Int
-        var type: ModelType
         var code: String
         var name: String
-        var isEnabled: Bool
-        var lastTestResult: Bool?
+    }
+    
+    struct ImageModelBackup: Codable {
+        var id: UUID
+        var code: String
+        var name: String
     }
 }
 
@@ -50,13 +53,14 @@ extension ProviderBackup {
         self.type = provider.type
         self.color = provider.color
         self.isEnabled = provider.isEnabled
+        self.supportsImage = provider.supportsImage
         self.chatModelCode = provider.chatModel.code
         self.quickChatModelCode = provider.quickChatModel.code
         self.titleModelCode = provider.titleModel.code
         self.imageModelCode = provider.imageModel.code
         self.toolImageModelCode = provider.toolImageModel.code
         self.chatModels = provider.chatModels.map { AIModelBackup(from: $0) }
-        self.imageModels = provider.imageModels.map { AIModelBackup(from: $0) }
+        self.imageModels = provider.imageModels.map { ImageModelBackup(from: $0) }
     }
 
     func toProvider() -> Provider {
@@ -72,11 +76,12 @@ extension ProviderBackup {
             type: self.type,
             color: self.color,
             isEnabled: self.isEnabled,
-            chatModel: chatModels.first(where: { $0.code == self.chatModelCode }) ?? AIModel(code: self.chatModelCode, name: ""),
-            quickChatModel: chatModels.first(where: { $0.code == self.quickChatModelCode }) ?? AIModel(code: self.quickChatModelCode, name: ""),
-            titleModel: chatModels.first(where: { $0.code == self.titleModelCode }) ?? AIModel(code: self.titleModelCode, name: ""),
-            imageModel: imageModels.first(where: { $0.code == self.imageModelCode }) ?? AIModel(code: self.imageModelCode, name: ""),
-            toolImageModel: imageModels.first(where: { $0.code == self.toolImageModelCode }) ?? AIModel(code: self.toolImageModelCode, name: ""),
+            supportsImage: self.supportsImage,
+            chatModel: chatModels.first(where: { $0.code == self.chatModelCode }) ?? ChatModel(code: self.chatModelCode, name: ""),
+            quickChatModel: chatModels.first(where: { $0.code == self.quickChatModelCode }) ?? ChatModel(code: self.quickChatModelCode, name: ""),
+            titleModel: chatModels.first(where: { $0.code == self.titleModelCode }) ?? ChatModel(code: self.titleModelCode, name: ""),
+            imageModel: imageModels.first(where: { $0.code == self.imageModelCode }) ?? ImageModel(code: self.imageModelCode, name: ""),
+            toolImageModel: imageModels.first(where: { $0.code == self.toolImageModelCode }) ?? ImageModel(code: self.toolImageModelCode, name: ""),
             chatModels: chatModels,
             imageModels: imageModels
         )
@@ -84,24 +89,31 @@ extension ProviderBackup {
 }
 
 extension ProviderBackup.AIModelBackup {
-    init(from model: AIModel) {
+    init(from model: ChatModel) {
         self.id = model.id
-        self.order = model.order
-        self.type = model.type
         self.code = model.code
         self.name = model.name
-        self.isEnabled = model.isEnabled
-        self.lastTestResult = model.lastTestResult
     }
 
-    func toAIModel() -> AIModel {
-        AIModel(
+    func toAIModel() -> ChatModel {
+        ChatModel(
             code: self.code,
-            name: self.name,
-            type: self.type,
-            order: self.order,
-            isEnabled: self.isEnabled,
-            lastTestResult: self.lastTestResult
+            name: self.name
+        )
+    }
+}
+
+extension ProviderBackup.ImageModelBackup {
+    init(from model: ImageModel) {
+        self.id = model.id
+        self.code = model.code
+        self.name = model.name
+    }
+    
+    func toAIModel() -> ImageModel {
+        ImageModel(
+            code: self.code,
+            name: self.name
         )
     }
 }

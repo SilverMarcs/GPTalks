@@ -9,13 +9,10 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 extension View {
-    func applyObservers(proxy: ScrollViewProxy, session: Session, hasUserScrolled: Binding<Bool>) -> some View {
+    func applyObservers(proxy: ScrollViewProxy, session: ChatSession, hasUserScrolled: Binding<Bool>) -> some View {
         @ObservedObject var config = AppConfig.shared
         
         return self
-            .onAppear {
-                scrollToBottom(proxy: proxy, delay: 0.4)
-            }
             .onChange(of: session.groups.last?.activeConversation.content) {
                 if !hasUserScrolled.wrappedValue && session.isStreaming {
                     scrollToBottom(proxy: proxy)
@@ -62,7 +59,7 @@ extension View {
 }
 
 struct PlatformSpecificModifiers: ViewModifier {
-    let session: Session
+    let session: ChatSession
     @Binding var showingInspector: Bool
     @Binding var hasUserScrolled: Bool
     
@@ -72,9 +69,8 @@ struct PlatformSpecificModifiers: ViewModifier {
     @ViewBuilder
     func body(content: Content) -> some View {
         content
-//            .toolbar { ConversationListToolbar(session: session, providers: providers) }
             #if os(macOS)
-            .navigationSubtitle("\(session.tokenCount.formatToK()) tokens • \(session.config.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45))")
+            .navigationSubtitle("\(session.config.systemPrompt.prefix(70))")
             .navigationTitle(session.title)
             #else
             .onTapGesture { showingInspector = false }
@@ -83,7 +79,9 @@ struct PlatformSpecificModifiers: ViewModifier {
             .toolbarTitleMenu {
                 Section("\(session.tokenCount.formatToK()) tokens") {
                     Button {
-                        session.refreshTokens()
+                        Task {
+                            await session.refreshTokens()
+                        }
                     } label: {
                         Label("Refresh Tokens", systemImage: "arrow.clockwise")
                     }

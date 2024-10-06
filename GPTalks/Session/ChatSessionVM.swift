@@ -2,17 +2,26 @@
 //  ChatSessionVM.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 23/07/2024.
+//  Created by Zabir Raihan on 04/07/2024.
 //
 
-import SwiftUI
-import SwiftData
 import Foundation
+import SwiftData
+import SwiftUI
 
-extension SessionVM {
-    public var activeSession: Session? {
-        guard selections.count == 1 else { return nil }
-        return selections.first
+@Observable class ChatSessionVM {
+    var chatSelections: Set<ChatSession> = []
+    var searchText: String = ""
+    
+    var modelContext: ModelContext
+    
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
+    
+    public var activeSession: ChatSession? {
+        guard chatSelections.count == 1 else { return nil }
+        return chatSelections.first
     }
     
     func sendMessage() async {
@@ -46,8 +55,10 @@ extension SessionVM {
     func deleteLastMessage() {
         guard let session = activeSession, !session.isStreaming else { return }
         
-        if let lastGroup = session.groups.last {
-            session.deleteConversationGroup(lastGroup)
+        Task.detached {
+            if let lastGroup = session.adjustedGroups.last {
+                session.deleteConversationGroup(lastGroup)
+            }
         }
     }
     
@@ -67,33 +78,25 @@ extension SessionVM {
         }
     }
     
-    func fork(session: Session, modelContext: ModelContext) {
+    func fork(session: ChatSession) {
         withAnimation {
             // Create a predicate to filter out sessions where isQuick is true
-            let predicate = #Predicate<Session> { session in
+            let predicate = #Predicate<ChatSession> { session in
                 session.isQuick == false
             }
             
             // Create a FetchDescriptor with the predicate and sort descriptor
-            let descriptor = FetchDescriptor<Session>(
-                predicate: predicate,
-                sortBy: [SortDescriptor(\.order)]
+            let descriptor = FetchDescriptor<ChatSession>(
+                predicate: predicate
             )
             
             // Fetch the sessions
             if let sessions = try? modelContext.fetch(descriptor) {
-                // Update the order of existing sessions
-                for existingSession in sessions {
-                    existingSession.order += 1
-                }
-                
-                // Insert the new session
-                session.order = 0
                 modelContext.insert(session)
                 #if os(macOS)
-                self.selections = [session]
+                self.chatSelections = [session]
                 #else
-                self.selections = []
+                self.chatSelections = []
                 #endif
             }
         }
@@ -102,7 +105,7 @@ extension SessionVM {
     }
     
     @discardableResult
-    func createNewSession(modelContext: ModelContext, provider: Provider? = nil) -> Session? {
+    func createNewSession(provider: Provider? = nil) -> ChatSession? {
         let config: SessionConfig
         
         if let providedProvider = provider {
@@ -120,22 +123,23 @@ extension SessionVM {
             config = SessionConfig(provider: defaultProvider, purpose: .chat)
         }
         
-        let newItem = Session(config: config)
+        let newItem = ChatSession(config: config)
         try? modelContext.save()
         
-        var fetchSessions = FetchDescriptor<Session>()
-        fetchSessions.sortBy = [SortDescriptor(\.order)]
+        var fetchSessions = FetchDescriptor<ChatSession>()
         let fetchedSessions = try! modelContext.fetch(fetchSessions)
         
-        for session in fetchedSessions {
-            session.order += 1
-        }
-        
-        newItem.order = 0
         modelContext.insert(newItem)
         
-        selections = [newItem]
+        chatSelections = [newItem]
         
         return newItem
+    }
+    
+    var state: ListState = .chats
+    
+    enum ListState: String, CaseIterable {
+        case chats
+        case images
     }
 }

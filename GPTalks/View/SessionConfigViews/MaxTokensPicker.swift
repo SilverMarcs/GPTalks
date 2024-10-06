@@ -81,6 +81,6 @@ struct MaxTokensPicker: View {
     let options = [512, 1024, 2048, 4096, 8192]
 }
 
-//#Preview {
-//    MaxTokensPicker()
-//}
+#Preview {
+    MaxTokensPicker(value: .constant(4096))
+}

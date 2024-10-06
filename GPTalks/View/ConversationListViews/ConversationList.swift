@@ -11,13 +11,12 @@ import SwiftData
 struct ConversationList: View {
     @Environment(\.isQuick) var isQuick
     
-    @Bindable var session: Session
-    var providers: [Provider]
+    @Bindable var session: ChatSession
     
     @ObservedObject var config: AppConfig = AppConfig.shared
     
     @Environment(\.modelContext) var modelContext
-    @Environment(SessionVM.self) private var sessionVM
+    @Environment(ChatSessionVM.self) private var sessionVM
     
     @State private var hasUserScrolled = false
     @State var showingInspector: Bool = false
@@ -35,7 +34,7 @@ struct ConversationList: View {
         ScrollViewReader { proxy in
             Group {
                 if session.groups.isEmpty {
-                    EmptyConversationList(session: session, providers: providers)
+                    EmptyConversationList(session: session)
                 } else {
                     switch config.conversationListStyle {
                     case .list:
@@ -45,24 +44,31 @@ struct ConversationList: View {
                     }
                 }
             }
-            .toolbar { ConversationListToolbar(session: session, providers: providers) }
-            .task {
-                sessionVM.selections.first?.refreshTokens()
+            .onChange(of: sessionVM.chatSelections) {
+                Task {
+                    await sessionVM.chatSelections.first?.refreshTokens()
+                }
+                
+                #if os(macOS)
+                scrollToBottom(proxy: proxy, delay: 0.2)
+                #endif
                 session.proxy = proxy
+                scrollToBottom(proxy: proxy, delay: 0.4)
             }
+            .toolbar { ConversationListToolbar(session: session) }
             .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
                     ChatInputView(session: session)
                 }
             }
-            #if os(macOS)
-            .safeAreaInset(edge: .top, spacing: 0) {
-                if config.showStatusBar {
-                    ConversationStatusBar(session: session, providers: providers)
-                }
-            }
-            #endif
+//            #if os(macOS)
+//            .safeAreaInset(edge: .top, spacing: 0) {
+//                if config.showStatusBar {
+//                    ConversationStatusBar(session: session, providers: providers)
+//                }
+//            }
+//            #endif
         }
     }
     
@@ -70,7 +76,7 @@ struct ConversationList: View {
         ScrollView {
             VStack(spacing: spacing) {
                 ForEach(session.groups, id: \.self) { group in
-                    ConversationGroupView(group: group, providers: providers)
+                    ConversationGroupView(group: group)
                 }
 
                 ErrorMessageView(session: session)
@@ -92,7 +98,7 @@ struct ConversationList: View {
         List {
             VStack(spacing: 3) {
                 ForEach(session.groups) { group in
-                    ConversationGroupView(group: group, providers: providers)
+                    ConversationGroupView(group: group)
                 }
                 .transaction { $0.animation = nil }
 
@@ -136,10 +142,6 @@ struct ConversationList: View {
 }
 
 #Preview {
-    let config = SessionConfig()
-    let session = Session(config: config)
-    let providers: [Provider] = []
-    
-    ConversationList(session: session, providers: providers)
-        .environment(SessionVM())
+    ConversationList(session: .mockChatSession)
+        .environment(ChatSessionVM.mockSessionVM)
 }

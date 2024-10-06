@@ -9,47 +9,32 @@ import SwiftUI
 import SwiftData
 
 struct ImageSessionList: View {
-    @Environment(SessionVM.self) var sessionVM
+    @Environment(ImageSessionVM.self) var imageVM
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
     
     @Query(sort: \ImageSession.order, order: .forward, animation: .default)
     var sessions: [ImageSession]
     
-    var filteredSessions: [ImageSession] {
-        let filteredSessions: [ImageSession]
-        
-        if sessionVM.searchText.isEmpty {
-            filteredSessions = sessions
-        } else {
-            filteredSessions = sessions.filter { session in
-                session.title.localizedStandardContains(sessionVM.searchText) ||
-                (AppConfig.shared.expensiveSearch &&
-                session.imageGenerations.contains { generation in
-                    generation.prompt.localizedStandardContains(sessionVM.searchText)
-                })
-            }
-        }
-        
-        if config.truncateList {
-            return Array(filteredSessions.prefix(config.listCount))
-        } else {
-            return filteredSessions
-        }
-    }
-    
     var body: some View {
-        @Bindable var sessionVM = sessionVM
+        @Bindable var imageVM = imageVM
+        
+        #if os(macOS)
+        CustomSearchField("Search", text: $imageVM.searchText)
+            .padding(.horizontal, 10)
+        #endif
         
         ScrollViewReader { proxy in
-            List(selection: $sessionVM.imageSelections) {
-                SessionListCards(sessionCount: "?", imageSessionsCount: String(sessions.count))
+            List(selection: $imageVM.imageSelections) {
+                SessionListCards(sessionCount: "↗", imageSessionsCount: String(sessions.count))
                 
-                if !sessionVM.searchText.isEmpty && sessions.isEmpty {
-                    ContentUnavailableView.search(text: sessionVM.searchText)
+                if !imageVM.searchText.isEmpty && sessions.isEmpty {
+                    ContentUnavailableView.search(text: imageVM.searchText)
                 } else {
-                    ForEach(filteredSessions, id: \.self) { session in
+                    ForEach(filteredSessions) { session in
                         ImageListRow(session: session)
+                            .tag(session)
+                            .deleteDisabled(session.isStarred)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))
                     }
@@ -57,34 +42,29 @@ struct ImageSessionList: View {
                     .onMove(perform: move)
                 }
             }
-            .onChange(of: sessions.count) {
-                if let first = sessions.first {
-                    proxy.scrollTo(first, anchor: .top)
-                }
+            .toolbar {
+                ImageSessionToolbar()
             }
-#if os(macOS)
+            .navigationTitle("Images")
+            #if !os(macOS)
+            .searchable(text: $imageVM.searchText)
+            #endif
             .task {
-                if sessionVM.imageSelections.isEmpty, let first = sessions.first {
+                if imageVM.imageSelections.isEmpty, let first = sessions.first, !isIOS() {
                     DispatchQueue.main.async {
-                        sessionVM.imageSelections = [first]
+                        imageVM.imageSelections = [first]
                     }
                 }
             }
-#endif
         }
     }
 
     private func deleteItems(offsets: IndexSet) {
-        // if current selection is in the index, then set to nil
-        
         withAnimation {
             for index in offsets.sorted().reversed() {
-                if !sessions[index].isStarred {
-                    modelContext.delete(sessions[index])
-                }
+                modelContext.delete(sessions[index])
             }
             
-            // Then, update the order of remaining items
             let remainingSessions = sessions.filter { !$0.isDeleted }
             for (newIndex, session) in remainingSessions.enumerated() {
                 session.order = newIndex
@@ -99,14 +79,32 @@ struct ImageSessionList: View {
         updatedSessions.move(fromOffsets: source, toOffset: destination)
         
         for (index, session) in updatedSessions.enumerated() {
-            withAnimation {
-                session.order = index
+            session.order = index
+        }
+    }
+    
+    var filteredSessions: [ImageSession] {
+        // Return early if search text is empty
+        guard !imageVM.searchText.isEmpty else {
+            if config.truncateList {
+                return Array(sessions.prefix(config.listCount))
+            } else {
+                return sessions
             }
+        }
+        
+        // Perform filtering if search text is not empty
+        return sessions.filter { session in
+            session.title.localizedStandardContains(imageVM.searchText) ||
+            (AppConfig.shared.expensiveSearch &&
+             session.imageGenerations.contains { generation in
+                 generation.prompt.localizedStandardContains(imageVM.searchText)
+             })
         }
     }
 }
 
 
-//#Preview {
-//    ImageSessionList()
-//}
+#Preview {
+    ImageSessionList()
+}

@@ -12,7 +12,7 @@ import UniformTypeIdentifiers
 // MARK: - JSON Exporting
 struct SessionFileExporterModifier: ViewModifier {
     @Binding var isExporting: Bool
-    let sessions: [Session]
+    let sessions: [ChatSession]
     
     func body(content: Content) -> some View {
         content
@@ -35,7 +35,7 @@ struct SessionFileExporterModifier: ViewModifier {
 struct SessionFileImporterModifier: ViewModifier {
     @Binding var isImporting: Bool
     let modelContext: ModelContext
-    let existingSessions: [Session]
+    let existingSessions: [ChatSession]
     let providers: [Provider]
     
     func body(content: Content) -> some View {
@@ -66,11 +66,11 @@ struct SessionFileImporterModifier: ViewModifier {
 }
 
 extension View {
-    func sessionExporter(isExporting: Binding<Bool>, sessions: [Session]) -> some View {
+    func sessionExporter(isExporting: Binding<Bool>, sessions: [ChatSession]) -> some View {
         self.modifier(SessionFileExporterModifier(isExporting: isExporting, sessions: sessions))
     }
     
-    func sessionImporter(isImporting: Binding<Bool>, modelContext: ModelContext, existingSessions: [Session], providers: [Provider]) -> some View {
+    func sessionImporter(isImporting: Binding<Bool>, modelContext: ModelContext, existingSessions: [ChatSession], providers: [Provider]) -> some View {
         self.modifier(SessionFileImporterModifier(isImporting: isImporting, modelContext: modelContext, existingSessions: existingSessions, providers: providers))
     }
 }
@@ -100,7 +100,7 @@ struct MarkdownFile: FileDocument {
     }
 }
 
-private func generateMarkdown(for session: Session) -> String {
+private func generateMarkdown(for session: ChatSession) -> String {
     var markdown = "# Session: \(session.title)\n\n"
     
     for group in session.groups {
@@ -112,7 +112,7 @@ private func generateMarkdown(for session: Session) -> String {
     return markdown
 }
     
-private func exportMarkdown(session: Session) {
+private func exportMarkdown(session: ChatSession) {
     let markdown = generateMarkdown(for: session)
     
     let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(session.title).md")
@@ -124,7 +124,7 @@ private func exportMarkdown(session: Session) {
 }
 
 extension View {
-    func markdownSessionExporter(isExporting: Binding<Bool>, session: Session) -> some View {
+    func markdownSessionExporter(isExporting: Binding<Bool>, session: ChatSession) -> some View {
         let markdown = generateMarkdown(for: session)
         return self.fileExporter(
             isPresented: isExporting,

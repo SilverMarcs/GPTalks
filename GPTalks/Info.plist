@@ -13,5 +13,24 @@
 			</array>
 		</dict>
 	</array>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeCompose</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>New Chat</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>newchat</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeCapturePhoto</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Open Camera</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>camera</string>
+		</dict>
+	</array>
 </dict>
 </plist>

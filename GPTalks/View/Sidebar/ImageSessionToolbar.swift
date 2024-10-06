@@ -9,10 +9,12 @@ import SwiftUI
 import SwiftData
 
 struct ImageSessionToolbar: ToolbarContent {
-    @Environment(SessionVM.self) var sessionVM
+    @Environment(ImageSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
+//    var providers: [Provider]
     
     var body: some ToolbarContent {
         SessionToolbar(
@@ -22,8 +24,7 @@ struct ImageSessionToolbar: ToolbarContent {
             },
             getDefaultProvider: { providers in
                 ProviderManager.shared.getImageProvider(providers: providers.filter { $0.supportsImage })
-            },
-            selectionType: .images
+            }
         )
     }
 }
@@ -32,6 +33,6 @@ struct ImageSessionToolbar: ToolbarContent {
     VStack {
         Text("Hi")
     }.toolbar  {
-        ImageSessionToolbar(providers: [])
+        ImageSessionToolbar()
     }
 }

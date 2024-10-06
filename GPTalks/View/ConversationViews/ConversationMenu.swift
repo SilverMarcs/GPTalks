@@ -9,12 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct ConversationMenu: View {
-    @Environment(\.modelContext) var modelContext
-    @Environment(SessionVM.self) var sessionVM
+    @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.isQuick) var isQuick
     
     var group: ConversationGroup
-    var providers: [Provider]
     
     @Binding var isExpanded: Bool
     var toggleTextSelection: (() -> Void)? = nil
@@ -95,7 +93,7 @@ struct ConversationMenu: View {
     var forkSession: some View {
         HoverScaleButton(icon: "arrow.branch", label: "Fork Session") {
             if let newSession = group.session?.copy(from: group, purpose: .chat) {
-                sessionVM.fork(session: newSession, modelContext: modelContext)
+                sessionVM.fork(session: newSession)
             }
         }
     }
@@ -130,12 +128,12 @@ struct ConversationMenu: View {
     var regenGroup: some View {
         HoverScaleButton(icon: "arrow.2.circlepath", label: "Regenerate") {
             if group.role == .assistant {
-                Task {
+                Task { @MainActor in
                     await group.session?.regenerate(group: group)
                 }
             } else if group.role == .user {
                 group.setupEditing()
-                Task {
+                Task { @MainActor in
                     await group.session?.sendInput()
                 }
             }
@@ -215,29 +213,10 @@ struct ConversationMenu: View {
 }
 
 #Preview {
-    let config = SessionConfig()
-    let session = Session(config: config)
-
-    let userConversation = Conversation(role: .user, content: "Hello, World!")
-    let assistantConversation = Conversation(
-        role: .assistant, content: "Hello, World!")
-
-    let group = ConversationGroup(
-        conversation: userConversation, session: session)
-    group.addConversation(
-        Conversation(role: .user, content: "This is second."))
-    group.addConversation(
-        Conversation(role: .user, content: "This is third message."))
-    let group2 = ConversationGroup(
-        conversation: assistantConversation, session: session)
-
-    let providers: [Provider] = []
-    
-    return VStack {
-        ConversationGroupView(group: group, providers: providers)
-        ConversationGroupView(group: group2, providers: providers)
+    VStack {
+        ConversationMenu(group: .mockUserConversationGroup, isExpanded: .constant(true))
+        ConversationMenu(group: .mockAssistantConversationGroup, isExpanded: .constant(true))
     }
-    .environment(SessionVM())
     .frame(width: 500)
     .padding()
 }

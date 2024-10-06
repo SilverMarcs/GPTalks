@@ -22,7 +22,7 @@ class ImageSession {
     @Relationship(deleteRule: .cascade, inverse: \ImageGeneration.session)
     var imageGenerations = [ImageGeneration]()
     
-    @Relationship(deleteRule: .cascade, inverse: \ImageConfig.session)
+    @Relationship(deleteRule: .cascade)
     var config: ImageConfig
     
     @Transient
@@ -38,12 +38,12 @@ class ImageSession {
         
         guard !prompt.isEmpty else { return }
         
-        let generation = ImageGeneration(prompt: self.prompt, config: config, session: self)
+        let generation = ImageGeneration(prompt: prompt, config: config.copy(), session: self)
 
         imageGenerations.append(generation)
         
         if let proxy = proxy {
-            scrollToBottom(proxy: proxy, delay: 0.1)
+            scrollToBottom(proxy: proxy, delay: 0.2)
         }
 
         await generation.send()

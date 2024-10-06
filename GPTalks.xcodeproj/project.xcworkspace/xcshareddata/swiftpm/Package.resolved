@@ -1,5 +1,5 @@
 {
-  "originHash" : "8be40d0e05d3b87c26a0bac2cedeb70ff5f1dffc17ae4e340344c1f7ce00ac12",
+  "originHash" : "b8d805799215c2484121eff19e48ba0927a76dd101092ef66b7691deda53d15f",
   "pins" : [
     {
       "identity" : "fuzi",
@@ -47,15 +47,6 @@
       }
     },
     {
-      "identity" : "openai",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/OpenAI",
-      "state" : {
-        "branch" : "cancellable",
-        "revision" : "b00b7b607be73db06a4dc7a18fd50e5ac5d2c828"
-      }
-    },
-    {
       "identity" : "reeeed",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nate-parrott/reeeed",
@@ -71,6 +62,15 @@
       "state" : {
         "revision" : "a624abcf464117a0c113043d0b94f294b4bed4d1",
         "version" : "1.8.2"
+      }
+    },
+    {
+      "identity" : "swiftopenai",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/SwiftOpenAI",
+      "state" : {
+        "branch" : "main",
+        "revision" : "1975f54a3ac52d5d847a5a77393a1c12f1decbc5"
       }
     },
     {

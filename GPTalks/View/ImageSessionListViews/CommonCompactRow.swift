@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CommonCompactRow: View {
     var provider: Provider
-    var model: AIModel
+    var model: String
     var title: String
     var isStarred: Bool
     
@@ -25,7 +25,7 @@ struct CommonCompactRow: View {
             
             Spacer()
             
-            Text(model.name)
+            Text(model)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .fontWidth(.compressed)
@@ -41,6 +41,6 @@ struct CommonCompactRow: View {
     }
 }
 
-//#Preview {
-//    CommonCompactRow()
-//}
+#Preview {
+    CommonCompactRow(provider: .openAIProvider, model: "Model", title: "Hello, World!", isStarred: true)
+}

@@ -14,14 +14,11 @@ class DatabaseService {
     
     var container: ModelContainer = {
         let schema = Schema([
-            Session.self,
+            ChatSession.self,
             SessionConfig.self,
-            Folder.self,
             Conversation.self,
             ConversationGroup.self,
             Provider.self,
-            AIModel.self,
-            ImageSession.self,
             ImageGeneration.self,
             ImageConfig.self
         ])
@@ -41,34 +38,46 @@ class DatabaseService {
         modelContext = ModelContext(container)
     }
     
-    func createNewSession(provider: Provider? = nil) {
-        let config: SessionConfig
+    func initialSetup(modelContext: ModelContext) {
+        // Fetch the quick session from the modelContext
+        var fetchQuickSession = FetchDescriptor<ChatSession>()
+        fetchQuickSession.predicate = #Predicate { $0.isQuick == true }
+        fetchQuickSession.fetchLimit = 1
         
-        if let providedProvider = provider {
-            config = SessionConfig(provider: providedProvider, purpose: .chat)
-        } else {
-            // Use the default provider
-            let fetchProviders = FetchDescriptor<Provider>()
-            let fetchedProviders = try! modelContext.fetch(fetchProviders)
-            
-            guard let defaultProvider = ProviderManager.shared.getDefault(providers: fetchedProviders) else {
-                return
-            }
-            
-            config = SessionConfig(provider: defaultProvider, purpose: .chat)
+        if let quickSession = try? modelContext.fetch(fetchQuickSession).first {
+            quickSession.deleteAllConversations()
         }
         
-        let newItem = Session(config: config)
+        var fetchProviders = FetchDescriptor<Provider>()
+        fetchProviders.fetchLimit = 1
         
-        var fetchSessions = FetchDescriptor<Session>()
-        fetchSessions.sortBy = [SortDescriptor(\.order)]
-        let fetchedSessions = try! modelContext.fetch(fetchSessions)
+        // If there are already providers in the modelContext, return since the setup has already been done
+        guard try! modelContext.fetch(fetchProviders).count == 0 else { return }
         
-        for session in fetchedSessions {
-            session.order += 1
-        }
+        let openAI = Provider.factory(type: .openai)
+        openAI.order = 0
+        openAI.isPersistent = true
+        let anthropic = Provider.factory(type: .anthropic)
+        anthropic.order = 1
+        anthropic.isPersistent = true
+        let google = Provider.factory(type: .google)
+        google.order = 2
+        google.isPersistent = true
         
-        newItem.order = 0
-        modelContext.insert(newItem)
+        modelContext.insert(openAI)
+        modelContext.insert(anthropic)
+        modelContext.insert(google)
+        
+        let config = SessionConfig(provider: openAI, purpose: .quick)
+        let session = ChatSession(config: config)
+        session.isQuick = true
+        session.title = "(↯) Quick Session"
+        
+        modelContext.insert(session)
+        
+        ProviderManager.shared.defaultProvider = openAI.id.uuidString
+        ProviderManager.shared.quickProvider = openAI.id.uuidString
+        ProviderManager.shared.imageProvider = openAI.id.uuidString
+        ProviderManager.shared.toolImageProvider = openAI.id.uuidString
     }
 }

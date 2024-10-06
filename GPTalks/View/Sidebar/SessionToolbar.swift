@@ -12,7 +12,7 @@ struct SessionToolbar: ToolbarContent {
     #if !os(macOS)
     @Environment(\.editMode) var editMode
     #endif
-    @Environment(SessionVM.self) var sessionVM
+    @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
     @ObservedObject var config = AppConfig.shared
@@ -20,7 +20,6 @@ struct SessionToolbar: ToolbarContent {
     var providers: [Provider]
     var addItemAction: (Provider) -> Void
     var getDefaultProvider: ([Provider]) -> Provider?
-    var selectionType: SessionVM.ListState
     
     var body: some ToolbarContent {
         #if !os(macOS)

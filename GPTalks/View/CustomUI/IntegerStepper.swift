@@ -13,6 +13,8 @@ struct IntegerStepper: View {
     let step: Int
     let range: ClosedRange<Int>
     
+    
+    // TODO: use secondary text for subtitle
     var body: some View {
         Stepper(
             platformLabel,

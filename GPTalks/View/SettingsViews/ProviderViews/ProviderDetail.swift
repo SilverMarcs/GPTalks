@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftUI
 
 struct ProviderDetail: View {
-    var provider: Provider
+    @Bindable var provider: Provider
     var reorderProviders: () -> Void
     
     @State private var selectedTab: ProviderDetailTab = .general
@@ -21,9 +21,9 @@ struct ProviderDetail: View {
             case .general:
                 ProviderGeneral(provider: provider, reorderProviders: reorderProviders)
             case .models:
-                ModelListView(provider: provider, type: .chat)
+                ModelListView<ChatModel>(provider: provider, models: $provider.chatModels)
             case .image:
-                ModelListView(provider: provider, type: .image)
+                ModelListView<ImageModel>(provider: provider, models: $provider.imageModels)
             }
         }
         .scrollContentBackground(.visible)
@@ -63,7 +63,5 @@ enum ProviderDetailTab: String, CaseIterable {
 }
 
 #Preview {
-    let provider = Provider.factory(type: .openai)
-
-    ProviderDetail(provider: provider) {}
+    ProviderDetail(provider: .openAIProvider) {}
 }

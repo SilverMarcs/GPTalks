@@ -7,14 +7,14 @@
 
 import Foundation
 import SwiftData
-import OpenAI
+import SwiftOpenAI
 import SwiftUI
 
 @Model
 final class ConversationGroup {
     var id: UUID = UUID()
     var date: Date = Date()
-    var session: Session?
+    var session: ChatSession?
     
     var activeConversationIndex: Int = 0
     
@@ -52,7 +52,7 @@ final class ConversationGroup {
         self.role = conversation.role
     }
     
-    init(conversation: Conversation, session: Session) {
+    init(conversation: Conversation, session: ChatSession) {
         self.conversations = [conversation]
         self.role = conversation.role
         self.session = session
@@ -114,3 +114,5 @@ final class ConversationGroup {
         return ConversationGroup(conversation: activeConversation.copy())
     }
 }
+
+let dummyConversation = Conversation(role: .user, content: "")

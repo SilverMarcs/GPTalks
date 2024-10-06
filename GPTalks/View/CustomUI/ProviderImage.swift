@@ -24,12 +24,10 @@ struct ProviderImage: View {
             Image(provider.type.imageName)
                 .foregroundStyle(provider.type == .local ? .black : .white)
                 .imageScale(scale)
-//                .frame(width: frame - 4,
-//                       height: frame - 4)
         }
     }
 }
 
 #Preview {
-    ProviderImage(provider: Provider.factory(type: .openai), scale: .small)
+    ProviderImage(provider: .openAIProvider, scale: .small)
 }

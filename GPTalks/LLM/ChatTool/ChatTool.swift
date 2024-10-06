@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import OpenAI
+import SwiftOpenAI
 import GoogleGenerativeAI
 import SwiftData
 
@@ -20,7 +20,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
     case imageGenerate = "imageGenerate"
     case transcribe = "transcribe"
     
-    var openai: ChatQuery.ChatCompletionToolParam {
+    var openai: ChatCompletionParameters.Tool {
         switch self {
         case .urlScrape:
             URLScrape.openai
@@ -28,7 +28,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             GoogleSearch.openai
         case .imageGenerate:
             GenerateImage.openai
-        default:
+        case .transcribe:
             URLScrape.openai
         }
     }
@@ -41,7 +41,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             GoogleSearch.google
         case .imageGenerate:
             GenerateImage.google
-        default:
+        case .transcribe:
             URLScrape.google
         }
     }
@@ -54,7 +54,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             GoogleSearch.vertex
         case .imageGenerate:
             GenerateImage.vertex
-        default:
+        case .transcribe:
             URLScrape.vertex
         }
     }
@@ -67,7 +67,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             GoogleSearch.tokenCount
         case .imageGenerate:
             GenerateImage.tokenCount
-        default:
+        case .transcribe:
             0
         }
     }
@@ -81,7 +81,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
         case .imageGenerate:
             try await GenerateImage.generateImage(from: arguments)
         default:
-            .init(string: "No tool")
+            .init(string: "No tool available")
         }
     }
     

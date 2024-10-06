@@ -11,7 +11,6 @@ import MarkdownWebView
 struct AssistantMessage: View {
     @ObservedObject var config = AppConfig.shared
     @Bindable var conversation: Conversation
-    var providers: [Provider]
     
     @State private var isHovering: Bool = false
     @State private var showingTextSelection = false
@@ -51,7 +50,7 @@ struct AssistantMessage: View {
     #if !os(macOS)
     .contextMenu {
         if let group = conversation.group, !conversation.isReplying {
-            ConversationMenu(group: group, providers: providers, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
+            ConversationMenu(group: group, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
         }
     } preview: {
         Text("Assistant Message")
@@ -73,7 +72,7 @@ struct AssistantMessage: View {
     var conversationMenuView: some View {
         #if os(macOS)
         if let group = conversation.group, let session = group.session {
-            ConversationMenu(group: group, providers: providers, isExpanded: .constant(true))
+            ConversationMenu(group: group, isExpanded: .constant(true))
                 .symbolEffect(.appear, isActive: !isHovering)
                 .opacity(session.isReplying ? 0 : 1)
         }
@@ -94,26 +93,7 @@ struct AssistantMessage: View {
 }
 
 #Preview {
-    let codeBlock = """
-    This is a code block
-    
-    ```swift
-    struct ContentView: View {
-        var body: some View {
-            Text("Hello, World!")
-        }
-    }
-    ```
-    
-    Thank you for using me.
-    
-    """
-    let providers: [Provider] = []
-    let conversation = Conversation(role: .assistant,
-                                    content: codeBlock)
-    conversation.isReplying = true
-    
-    return AssistantMessage(conversation: conversation, providers: providers)
+    return AssistantMessage(conversation: .mockAssistantConversation)
         .frame(width: 500, height: 300)
 }
 

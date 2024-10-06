@@ -19,7 +19,7 @@ struct SendButton: View {
                 .resizable()
                 .frame(width: size, height: size)
                 .fontWeight(.semibold)
-                .foregroundStyle(.white, Color.accentColor)
+                .foregroundStyle(.white, .accent)
         }
         .buttonStyle(.plain)
     }

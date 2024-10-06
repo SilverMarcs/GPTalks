@@ -7,12 +7,14 @@
 
 import SwiftUI
 import SwiftData
-import OpenAI
+import SwiftOpenAI
 
 struct ImageInspector: View {
     @Bindable var session: ImageSession
     @Query(filter: #Predicate { $0.isEnabled && $0.supportsImage }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
+    
+    @Binding var showingInspector: Bool
     
     var body: some View {
         NavigationStack {
@@ -34,7 +36,7 @@ struct ImageInspector: View {
                         session.config.model = provider.imageModel
                     }
                     
-                    ModelPicker(model: $session.config.model, models: session.config.provider.imageModels, label: "Model")
+                    ImageModelPicker(model: $session.config.model, models: session.config.provider.imageModels, label: "Model")
                 }
                 
                 Section("Parameters") {
@@ -44,26 +46,34 @@ struct ImageInspector: View {
                         }
                     }
                     
-                    Picker("Quality", selection: $session.config.quality) {
-                        ForEach(ImagesQuery.Quality.allCases, id: \.self) { quality in
-                            Text(quality.rawValue.uppercased()).tag(quality)
-                        }
-                    }
-                    
                     Picker("Size", selection: $session.config.size) {
-                        ForEach(ImagesQuery.Size.allCases, id: \.self) { size in
+                        ForEach(Dalle.Dalle2ImageSize.allCases, id: \.self) { size in
                             Text(size.rawValue.capitalized).tag(size)
-                        }
-                    }
-                    
-                    Picker("Style", selection: $session.config.style) {
-                        ForEach(ImagesQuery.Style.allCases, id: \.self) { style in
-                            Text(style.rawValue.capitalized).tag(style)
                         }
                     }
                 }
             }
+            .toolbar {
+                Text("Config")
+                    .foregroundStyle(.secondary)
+                
+                Spacer()
+                
+                Button {
+                    showingInspector.toggle()
+                } label: {
+                    #if os(macOS)
+                    Label("Toggle Inspector", systemImage: "sidebar.right")
+                    #else
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.gray, .gray.opacity(0.3))
+                    #endif
+                }
+            }
             .formStyle(.grouped)
+            #if os(macOS)
+            .scrollDisabled(true)
+            #endif
         }
     }
     
@@ -91,6 +101,6 @@ struct ImageInspector: View {
     }
 }
 
-//#Preview {
-//    ImageInspector()
-//}
+#Preview {
+    ImageInspector(session: .mockImageSession, showingInspector: .constant(true))
+}

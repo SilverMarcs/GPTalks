@@ -10,7 +10,7 @@ import SwiftData
 
 struct BackupSettings: View {
     @Environment(\.modelContext) private var modelContext
-    @Query var sessions: [Session]
+    @Query var sessions: [ChatSession]
     @Query var providers: [Provider]
     
     @State private var isExportingProvider = false
@@ -53,10 +53,6 @@ struct BackupSettings: View {
                 SectionFooterView(text: "API Keys will be stored in plaintext")
             }
         }
-
-
-
-
         .navigationTitle("Backup")
         .toolbarTitleDisplayMode(.inline)
         .buttonStyle(.plain)

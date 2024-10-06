@@ -41,6 +41,6 @@ struct ImageInputView: View {
     }
 }
 
-//#Preview {
-//    ImageInputView()
-//}
+#Preview {
+    ImageInputView(session: .mockImageSession)
+}

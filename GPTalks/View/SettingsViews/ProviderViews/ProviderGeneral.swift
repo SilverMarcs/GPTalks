@@ -44,7 +44,7 @@ struct ProviderGeneral: View {
                 }
                 
                 if provider.type == .vertex {
-                    SignInView()
+                    GoogleSignIn()
                 } else {
                     HStack {
                         if showKey {
@@ -71,9 +71,9 @@ struct ProviderGeneral: View {
             }
     
             Section("Default Models") {
-                ModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
+                ChatModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
                 
-                ModelPicker(model: $provider.titleModel, models: provider.chatModels, label: "Title Model")
+                ChatModelPicker(model: $provider.titleModel, models: provider.chatModels, label: "Title Model")
             }
 
             Section("Customisation") {
@@ -166,7 +166,7 @@ struct ProviderGeneral: View {
     private var popoverText: String {
         switch provider.type {
         case .vertex:
-            "Put in your Google Cloud Project ID.\nOnly anthropic models are supported.\nMake sure to enable Vertex AI Api in GCloud Console and enable Anthropic models."
+            "Put in your Google Cloud Project ID.\nOnly Anthropic models are supported.\nMake sure to enable Vertex AI Api in GCloud Console and enable Anthropic models."
         case .openai, .google, .anthropic, .local:
             "Omit https:// and /v1/ from the URL.\nFor example: api.openai.com"
         }
@@ -174,9 +174,7 @@ struct ProviderGeneral: View {
 }
 
 #Preview {
-    let provider = Provider.factory(type: .openai)
-
-    return ProviderGeneral(provider: provider) {}
+    return ProviderGeneral(provider: .openAIProvider) {}
         .padding()
         .frame(width: 500, height: 600)
 }

@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftData
-import OpenAI
 import GoogleGenerativeAI
 
 @Model
@@ -30,21 +29,20 @@ class Provider {
     var supportsImage: Bool = false
     
     @Relationship(deleteRule: .cascade)
-    var chatModel: AIModel
+    var chatModel: ChatModel
     @Relationship(deleteRule: .cascade)
-    var quickChatModel: AIModel
+    var quickChatModel: ChatModel
     @Relationship(deleteRule: .cascade)
-    var titleModel: AIModel
+    var titleModel: ChatModel
     @Relationship(deleteRule: .cascade)
-    var imageModel: AIModel
-    @Relationship(deleteRule: .cascade)
-    var toolImageModel: AIModel
+    var chatModels: [ChatModel] = []
     
     @Relationship(deleteRule: .cascade)
-    var chatModels: [AIModel] = []
-    
+    var imageModel: ImageModel
     @Relationship(deleteRule: .cascade)
-    var imageModels: [AIModel] = []
+    var toolImageModel: ImageModel
+    @Relationship(deleteRule: .cascade)
+    var imageModels: [ImageModel] = []
 
     public init(id: UUID = UUID(),
                 date: Date = Date(),
@@ -55,13 +53,14 @@ class Provider {
                 type: ProviderType,
                 color: String,
                 isEnabled: Bool,
-                chatModel: AIModel,
-                quickChatModel: AIModel,
-                titleModel: AIModel,
-                imageModel: AIModel,
-                toolImageModel: AIModel,
-                chatModels: [AIModel] = [],
-                imageModels: [AIModel] = []) {
+                supportsImage: Bool,
+                chatModel: ChatModel,
+                quickChatModel: ChatModel,
+                titleModel: ChatModel,
+                imageModel: ImageModel,
+                toolImageModel: ImageModel,
+                chatModels: [ChatModel] = [],
+                imageModels: [ImageModel] = []) {
         self.id = id
         self.date = date
         self.order = order
@@ -71,6 +70,7 @@ class Provider {
         self.type = type
         self.color = color
         self.isEnabled = isEnabled
+        self.supportsImage = supportsImage
         self.chatModel = chatModel
         self.quickChatModel = quickChatModel
         self.titleModel = titleModel
@@ -81,109 +81,48 @@ class Provider {
     }
     
     
-    private init() {
-        let demoModel = AIModel.getDemoModel()
-        
-        self.chatModel = demoModel
-        self.quickChatModel = demoModel
-        self.titleModel = demoModel
-        self.imageModel = demoModel
-        self.toolImageModel = demoModel
-        self.type = .openai
-    }
-    
     static func factory(type: ProviderType, isDummy: Bool = false) -> Provider {
-        let provider = Provider()
-        provider.type = type
-        provider.name = type.name
-        provider.host = type.defaultHost
-        provider.chatModels = type.getDefaultModels()
-        provider.color = type.defaultColor
+        let demoChatModel = ChatModel.gpt4
+        let demoImageModel = ImageModel.dalle
+        let chatModels = type.getDefaultModels()
+        let imageModels = type == .openai ? ImageModel.getOpenImageModels() : []
         
-        if let first = provider.chatModels.first {
-            provider.chatModel = first
-            provider.quickChatModel = first
-            provider.titleModel = first
-        }
-        
-        if isDummy {
-            provider.isEnabled = false
-        }
-        
-        if type == .openai {
-            provider.supportsImage = true
-            provider.imageModels = AIModel.getOpenImageModels()
-        }
-        
-        if let first = provider.imageModels.first {
-            provider.imageModel = first
-            provider.toolImageModel = first
-        }
+        let provider = Provider(
+            name: type.name,
+            host: type.defaultHost,
+            apiKey: "",
+            type: type,
+            color: type.defaultColor,
+            isEnabled: !isDummy,
+            supportsImage: type == .openai,
+            chatModel: chatModels.first!,
+            quickChatModel: chatModels.first!,
+            titleModel: chatModels.first!,
+            imageModel: imageModels.first ?? demoImageModel,
+            toolImageModel: imageModels.first ?? demoImageModel,
+            chatModels: chatModels,
+            imageModels: imageModels
+        )
         
         return provider
     }
 }
 
 extension Provider {
-    func refreshModels() async {
-        let refreshedModels: [AIModel] = await type.getService().refreshModels(provider: self)
+    func refreshModels() async -> [GenericModel] {
+        let refreshedChatModels: [ChatModel] = await type.getService().refreshModels(provider: self)
+        let newModels = refreshedChatModels.filter { model in
+            !chatModels.contains(where: { $0.code == model.code })
+        }
         
-        for model in refreshedModels {
-            if !chatModels.contains(where: { $0.code == model.code }) {
-                chatModels.append(model)
-            }
+        return newModels.map { chatModel in
+            GenericModel(code: chatModel.code, name: chatModel.name)
         }
     }
     
-    func testModel(model: AIModel) async -> Bool {
+    func testModel(model: ChatModel) async -> Bool {
         let service = type.getService()
         let result = await service.testModel(provider: self, model: model)
-        model.lastTestResult = result
         return result
-    }
-}
-
-extension Provider {
-    func models(for type: ModelType) -> [AIModel] {
-        switch type {
-        case .chat:
-            return chatModels
-        case .image:
-            return imageModels
-        // Add more cases here as you add more model types
-        }
-    }
-
-    func setModels(_ models: [AIModel], for type: ModelType) {
-        switch type {
-        case .chat:
-            chatModels = models
-        case .image:
-            imageModels = models
-        // Add more cases here as you add more model types
-        }
-    }
-
-    func addModel(_ model: AIModel, for type: ModelType) {
-        switch type {
-        case .chat:
-            chatModels.append(model)
-        case .image:
-            imageModels.append(model)
-        // Add more cases here as you add more model types
-        }
-    }
-
-    func removeModel(_ model: AIModel, for type: ModelType, permanently: Bool = true) {
-        switch type {
-        case .chat:
-            chatModels.removeAll { $0.id == model.id }
-        case .image:
-            imageModels.removeAll { $0.id == model.id }
-        // Add more cases here as you add more model types
-        }
-        if permanently {
-            model.modelContext?.delete(model)
-        }
     }
 }

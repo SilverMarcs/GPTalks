@@ -8,30 +8,52 @@
 import SwiftUI
 import SwiftData
 import TipKit
-import KeyboardShortcuts
 
 @main
 struct GPTalksApp: App {
-    @State private var sessionVM = SessionVM()
-
+    @State private var chatVM: ChatSessionVM
+    @State private var imageVM: ImageSessionVM
+    @State private var listStateVM: ListStateVM
+    
+    #if !os(macOS)
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    #endif
+    
     var body: some Scene {
         Group {
-            MainWindow()
-            
             #if os(macOS)
+            ChatWindow()
+            ImageWindow()
             SettingsWindow()
-
             QuickPanelWindow()
+            #else
+            IOSWindow()
             #endif
         }
-        .environment(sessionVM)
+        .commands { MenuCommands() }
+        .environment(chatVM)
+        .environment(imageVM)
+        .environment(listStateVM)
         .modelContainer(DatabaseService.shared.container)
     }
     
-    #if os(macOS)
     init() {
+        // Initialize the DatabaseService and perform setup.
+        let dbService = DatabaseService.shared
+        dbService.initialSetup(modelContext: dbService.container.mainContext)
+
+        // Now that the database service is set up, initialize the state variables.
+        _chatVM = State(initialValue: ChatSessionVM(modelContext: dbService.container.mainContext))
+        _imageVM = State(initialValue: ImageSessionVM(modelContext: dbService.container.mainContext))
+        _listStateVM = State(initialValue: ListStateVM())
+
+        #if os(macOS)
         NSWindow.allowsAutomaticWindowTabbing = false
         AppConfig.shared.hideDock = false
+        #else
+        AppDelegate.shared.chatVM = _chatVM.wrappedValue
+        #endif
+
+        try? Tips.configure([.datastoreLocation(.applicationDefault)])
     }
-    #endif
 }

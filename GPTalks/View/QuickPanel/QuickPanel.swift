@@ -13,9 +13,9 @@ struct QuickPanel: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismissWindow) var dismissWindow
     @Environment(\.openWindow) var openWindow
-    @Environment(SessionVM.self) private var sessionVM
+    @Environment(ChatSessionVM.self) private var sessionVM
     
-    @Bindable var session: Session
+    @Bindable var session: ChatSession
     @Binding var showAdditionalContent: Bool
     
     @State var prompt: String = ""
@@ -24,7 +24,7 @@ struct QuickPanel: View {
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
-    @State var selections: Set<Session> = []
+    @State var selections: Set<ChatSession> = []
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -58,7 +58,7 @@ struct QuickPanel: View {
                     EmptyView()
                 }
                 
-                ConversationList(session: session, providers: providers)
+                ConversationList(session: session)
                     .navigationTitle("Quick Panel")
                     .scrollContentBackground(.hidden)
                 
@@ -66,15 +66,15 @@ struct QuickPanel: View {
             }
         }
         .onAppear {
-            selections = sessionVM.selections
-            sessionVM.selections = []
+            selections = sessionVM.chatSelections
+            sessionVM.chatSelections = []
             isFocused = true
             if !session.groups.isEmpty {
                 showAdditionalContent = true
             }
         }
         .onDisappear {
-            sessionVM.selections = selections
+            sessionVM.chatSelections = selections
         }
         .onChange(of: isFocused) {
             isFocused = true
@@ -93,7 +93,7 @@ struct QuickPanel: View {
                     }
                 )
 
-                ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
+                ChatModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
                 
                 Menu {
                     ToolsController(tools: $session.config.tools)
@@ -186,7 +186,7 @@ struct QuickPanel: View {
         NSApp.keyWindow?.makeKeyAndOrderFront(nil)
         
         let newSession = session.copy(purpose: .quick)
-        sessionVM.fork(session: newSession, modelContext: modelContext)
+        sessionVM.fork(session: newSession)
         resetChat()
         
         showAdditionalContent = false
@@ -206,7 +206,7 @@ struct QuickPanel: View {
         session.inputManager.prompt = prompt
         
         Task {
-            await session.sendInput()
+            await session.sendInput(forQuick: true)
         }
         
         prompt = ""
@@ -214,8 +214,9 @@ struct QuickPanel: View {
 }
 
 #Preview {
-    let showAdditionalContent = Binding.constant(true)
+    let quickSesion = ChatSession.mockChatSession
+    quickSesion.isQuick = true
     
-    QuickPanel(session: Session(config: .init()), showAdditionalContent: showAdditionalContent)
+    return QuickPanel(session: quickSesion, showAdditionalContent: .constant(true))
 }
 #endif

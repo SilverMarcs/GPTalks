@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftData
-import OpenAI
+import SwiftOpenAI
 import GoogleGenerativeAI
 import SwiftAnthropic
 
@@ -19,7 +19,7 @@ final class Conversation {
     var group: ConversationGroup?
     
     @Relationship(deleteRule: .nullify)
-    var model: AIModel?
+    var model: ChatModel?
     
     var content: String
 
@@ -30,10 +30,10 @@ final class Conversation {
     @Attribute(.ephemeral)
     var isReplying: Bool = false
     
-    var toolCalls: [ToolCall] = []
+    var toolCalls: [ChatToolCall] = []
     var toolResponse: ToolResponse?
     
-    init(role: ConversationRole, content: String = "", group: ConversationGroup? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
+    init(role: ConversationRole, content: String = "", group: ConversationGroup? = nil, model: ChatModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
         self.role = role
         self.content = content
         self.group = group
@@ -69,22 +69,3 @@ final class Conversation {
         )
     }
 }
-
-extension Conversation {
-    @MainActor
-    func setIsReplying(_ value: Bool) {
-        self.isReplying = value
-    }
-    
-    @MainActor
-    func setContent(_ value: String) {
-        self.content = value
-    }
-    
-    @MainActor
-    func setToolCalls(_ value: [ToolCall]) {
-        self.toolCalls = value
-    }
-}
-
-let dummyConversation: Conversation = Conversation(role: .user, content: "", model: AIModel.getDemoModel())

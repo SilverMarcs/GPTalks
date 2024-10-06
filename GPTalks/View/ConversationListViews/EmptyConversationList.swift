@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct EmptyConversationList: View {
-    @Bindable var session: Session
-    var providers: [Provider]
+    @Bindable var session: ChatSession
     
     var body: some View {
         VStack(alignment: .center) {
@@ -21,16 +20,12 @@ struct EmptyConversationList: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.background)
-        #if os(macOS)
-        .toolbarBackground(.hidden, for: .windowToolbar)
-        #endif
+//        #if os(macOS)
+//        .toolbarBackground(.hidden, for: .windowToolbar)
+//        #endif
     }
 }
 
 #Preview {
-    let config = SessionConfig()
-    let session = Session(config: config)
-    let provider = Provider.factory(type: .openai)
-    
-    EmptyConversationList(session: session, providers: [provider])
+    EmptyConversationList(session: .mockChatSession)
 }

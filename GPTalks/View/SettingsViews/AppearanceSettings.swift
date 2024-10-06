@@ -12,7 +12,7 @@ struct AppearanceSettings: View {
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
     
-    @State var session: Session?
+    @State var session: ChatSession?
 
     var body: some View {
         Form {
@@ -36,33 +36,37 @@ struct AppearanceSettings: View {
 //                Toggle("Show Status Bar", isOn: $config.showStatusBar)
 //            }
 
-            Section("View Customisation") {                
-                Toggle(isOn: $config.compactList) {
+            Section("View Customisation") {
+                Toggle("Compact List Row", isOn: $config.compactList)
+                    .onAppear {
+                        fetchSession()
+                    }
+                
                     if let session = session {
-                        VStack(alignment: .leading) {
-                            Text("Compact List Row")
+                        HStack {
+                            Text("Demo")
                             
-                            SessionListRow(session: session)
-                                .frame(maxWidth: 220)
-                                .bubbleStyle(radius: 7, padding: 4)
+                            Spacer()
+                            
+                            GroupBox {
+                                SessionListRow(session: session)
+                                    .padding(6)
+                            }
+                            .frame(maxWidth: 220)
                         }
                     }
-                }
-                .onAppear {
-                    fetchQuickSession()
-                }
 
-//                #if os(macOS)
-//                Picker(selection: $config.conversationListStyle) {
-//                    ForEach(ConversationListStyle.allCases, id: \.self) { style in
-//                        Text(style.rawValue)
-//                    }
-//                } label: {
-//                    Text("ConversationList Style")
-//                    Text("List View is smoother but some features may not function.")
-//                }
-//                .pickerStyle(.radioGroup)
-//                #endif
+                #if os(macOS)
+                Picker(selection: $config.conversationListStyle) {
+                    ForEach(ConversationListStyle.allCases, id: \.self) { style in
+                        Text(style.rawValue)
+                    }
+                } label: {
+                    Text("ConversationList Style")
+                    Text("List View is smoother but some features may not function.")
+                }
+                .pickerStyle(.radioGroup)
+                #endif
             }
             
             Section("List Truncation") {
@@ -78,16 +82,14 @@ struct AppearanceSettings: View {
         .toolbarTitleDisplayMode(.inline)
     }
     
-    private func fetchQuickSession() {
-        var descriptor = FetchDescriptor<Session>(
-            predicate: #Predicate { $0.isQuick == true }
-        )
+    private func fetchSession() {
+        var descriptor = FetchDescriptor<ChatSession>()
         
         descriptor.fetchLimit = 1
         
         do {
-            let quickSessions = try modelContext.fetch(descriptor)
-            session = quickSessions.first
+            let sessions = try modelContext.fetch(descriptor)
+            session = sessions.first
         } catch {
             print("Error fetching quick session: \(error)")
         }

@@ -9,5 +9,5 @@ import Foundation
 
 enum StreamResponse {
     case content(String)
-    case toolCalls([ToolCall])
+    case toolCalls([ChatToolCall])
 }

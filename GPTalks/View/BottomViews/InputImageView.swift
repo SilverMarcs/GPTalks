@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct InputImageView: View {
-    var session: Session
+    var session: ChatSession
     var maxHeight: CGFloat = 100
     
     var body: some View {
@@ -28,7 +28,5 @@ struct InputImageView: View {
 }
 
 #Preview {
-    let config = SessionConfig()
-    let session = Session(config: config)
-    InputImageView(session: session)
+    InputImageView(session: .mockChatSession)
 }

@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftData
-import OpenAI
 import SwiftUI
 
 @Model
@@ -18,13 +17,12 @@ class ImageGeneration {
     var session: ImageSession?
     
     var prompt: String
-    
     var errorMessage: String = ""
     
     @Relationship(deleteRule: .nullify)
     var config: ImageConfig
     
-    var imagePaths: [String] = []
+    var images: [Data] = []
     
     @Attribute(.ephemeral)
     var state: GenerationState
@@ -39,56 +37,21 @@ class ImageGeneration {
         self.state = .generating
     }
     
-    func sendDemo() async {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.imagePaths.append(.demoImages.randomElement()!)
-            self.state = .success
-            return
-        }
-    }
-    
     @MainActor
     func send() async {
         state = .generating
-        
-//        #if DEBUG
-//        await self.sendDemo()
-//        return
-//        #endif
-
-        let service = OpenAI(
-            configuration: OpenAI.Configuration(
-                token: config.provider.apiKey, host: config.provider.host))
-        
-        let query = ImagesQuery(prompt: self.prompt,
-                                model: config.model.code,
-                                n: config.numImages,
-                                quality: config.quality,
-                                size: config.size)
 
         generatingTask = Task {
             do {
-                let results = try await service.images(query: query)
-
-                // Download and store image data asynchronously
-                for urlResult in results.data {
-                    if let urlString = urlResult.url, let url = URL(string: urlString) {
-                        do {
-                            let (data, _) = try await URLSession.shared.data(from: url)
-                            
-                            if let savedPath = PlatformImage.from(data: data)?.save() {
-                                self.imagePaths.append(savedPath)
-                            }
-                            
-                            state = .success
-                        } catch {
-                            if state != .error {
-                                errorMessage = "Error downloading image: \(error)"
-                                state = .error
-                            }
-                        }
-                    }
-                }
+                let dataObjects = try await ImageGenerator.generateImages(
+                    provider: config.provider,
+                    model: config.provider.imageModel,
+                    prompt: prompt,
+                    numberOfImages: config.numImages
+                )
+                
+                self.images = dataObjects
+                state = .success
             } catch {
                 if state != .error {
                     errorMessage = "Error fetching images: \(error)"
@@ -96,8 +59,6 @@ class ImageGeneration {
                 }
             }
         }
-
-
 
         do {
             #if os(macOS)
@@ -115,6 +76,10 @@ class ImageGeneration {
         } catch {
             errorMessage = error.localizedDescription
             state = .error
+        }
+        
+        if let proxy = session?.proxy {
+            scrollToBottom(proxy: proxy, delay: 0.2)
         }
     }
     

@@ -9,11 +9,10 @@ import SwiftUI
 
 struct UserMessage: View {
     @Environment(\.colorScheme) var colorScheme
-    @Environment(SessionVM.self) private var sessionVM
+    @Environment(ChatSessionVM.self) private var sessionVM
     @ObservedObject var config = AppConfig.shared
     
     @Bindable var conversation: Conversation
-    var providers: [Provider]
     @State var isHovered: Bool = false
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
@@ -50,7 +49,7 @@ struct UserMessage: View {
         #if !os(macOS)
         .contextMenu {
             if let group = conversation.group {
-                ConversationMenu(group: group, providers: providers, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
+                ConversationMenu(group: group, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
             }
         } preview: {
             Text("User Message")
@@ -70,7 +69,7 @@ struct UserMessage: View {
     @ViewBuilder
     var contextMenu: some View {
         if let group = conversation.group {
-            ConversationMenu(group: group, providers: providers, isExpanded: $isExpanded)
+            ConversationMenu(group: group, isExpanded: $isExpanded)
                 .symbolEffect(.appear, isActive: !isHovered)
         }
     }
@@ -105,10 +104,6 @@ struct UserMessage: View {
 }
 
 #Preview {
-    let providers: [Provider] = []
-    let conversation = Conversation(
-        role: .user, content: "Hello, World! who are you and how are you")
-
-    UserMessage(conversation: conversation, providers: providers)
+    UserMessage(conversation: .mockUserConversation)
         .frame(width: 500, height: 300)
 }

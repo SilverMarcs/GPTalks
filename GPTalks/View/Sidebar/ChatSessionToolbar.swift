@@ -9,21 +9,21 @@ import SwiftUI
 import SwiftData
 
 struct ChatSessionToolbar: ToolbarContent {
-    @Environment(SessionVM.self) var sessionVM
+    @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
     var body: some ToolbarContent {
         SessionToolbar(
             providers: providers,
             addItemAction: { provider in
-                sessionVM.createNewSession(modelContext: modelContext, provider: provider)
+                sessionVM.createNewSession(provider: provider)
             },
             getDefaultProvider: { providers in
                 ProviderManager.shared.getDefault(providers: providers)
-            },
-            selectionType: .chats
+            }
         )
     }
 }
@@ -32,6 +32,6 @@ struct ChatSessionToolbar: ToolbarContent {
     VStack {
         Text("Hi")
     }.toolbar  {
-        ChatSessionToolbar(providers: [])
+        ChatSessionToolbar()
     }
 }

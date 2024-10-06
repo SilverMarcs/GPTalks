@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct ImageGenerationView: View {
+    @ObservedObject var imageConfig = ImageConfigDefaults.shared
     var generation: ImageGeneration
     
     var body: some View {
         VStack(spacing: 10) {
-            
             HStack {
+                Spacer()
+                
                 if generation.state == .generating {
                     StopButton {
                         generation.stopGenerating()
@@ -33,13 +35,11 @@ struct ImageGenerationView: View {
                         #endif
                     )
             }
-            .frame(maxWidth: .infinity, alignment: .trailing)
+            
             
             VStack(alignment: .leading) {
                 Text(generation.config.model.name)
-//                    .foregroundStyle(.accent)
                     .font(.caption)
-//                    .foregroundStyle(.secondary)
                     .padding(.leading, 5)
                     .foregroundStyle(LinearGradient(
                         colors: [.purple, .pink],
@@ -53,30 +53,31 @@ struct ImageGenerationView: View {
                         .padding(.leading, 5)
                         .padding(.top, 1)
                 } else {
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 10) {
-                            if generation.state == .generating {
-                                ForEach(1 ... generation.config.numImages, id: \.self) { image in
-                                    ProgressView()
-                                        .frame(width: 250, height: 250)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 15)
-                                            #if os(macOS)
-                                                .fill(.background.quinary)
-                                            #else
-                                                .fill(.background.secondary)
-                                            #endif
-                                        )}
-                            } else if generation.state == .success {
-                                ForEach(generation.imagePaths, id: \.self) { path in
-                                    ImageViewerOld(imagePath: path, maxWidth: 250, maxHeight: 250, isCrossable: false) { }
-                                }
+                    LazyVGrid(columns: [
+                        GridItem(.fixed(CGFloat(imageConfig.imageHeight)), spacing: gridSpacing),
+                        GridItem(.fixed(CGFloat(imageConfig.imageHeight)), spacing: gridSpacing),
+                    ], alignment: .leading, spacing: gridSpacing) {
+                        if generation.state == .generating {
+                            ForEach(1 ... generation.config.numImages, id: \.self) { image in
+                                ProgressView()
+                                    .frame(width: CGFloat(imageConfig.imageWidth), height: CGFloat(imageConfig.imageHeight))
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 15)
+                                        #if os(macOS)
+                                            .fill(.background.quinary)
+                                        #else
+                                            .fill(.background.secondary)
+                                        #endif
+                                    )
+                            }
+                        } else if generation.state == .success {
+                            ForEach(generation.images, id: \.self) { image in
+                                ImageViewerData(data: image)
                             }
                         }
                     }
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .contentShape(.rect)
         .contextMenu {
@@ -86,6 +87,14 @@ struct ImageGenerationView: View {
                 Label("Delete Generation", systemImage: "trash")
             }
         }
+    }
+    
+    var gridSpacing: CGFloat {
+        #if os(macOS)
+        10
+        #else
+        10
+        #endif
     }
     
     var size: CGFloat {
@@ -98,6 +107,6 @@ struct ImageGenerationView: View {
 }
 
 
-//#Preview {
-//    ImageGenerationView()
-//}
+#Preview {
+    ImageGenerationView(generation: .mockImageGeneration)
+}

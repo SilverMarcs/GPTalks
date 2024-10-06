@@ -1,5 +1,5 @@
 //
-//  ToolCall.swift
+//  ChatToolCall.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 14/09/2024.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ToolCall: Identifiable, Codable, Equatable {
+struct ChatToolCall: Identifiable, Codable, Equatable {
     var id: UUID = UUID()
     var toolCallId: String
     var tool: ChatTool

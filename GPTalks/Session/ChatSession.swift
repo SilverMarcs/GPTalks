@@ -5,23 +5,19 @@
 //  Created by Zabir Raihan on 25/06/2024.
 //
 
-import Foundation
 import SwiftData
 import SwiftUI
 
 @Model
-final class Session {
+final class ChatSession {
     var id: UUID = UUID()
     var date: Date = Date()
-    var order: Int = 0
     var title: String = "Chat Session"
     var isStarred: Bool = false
     var errorMessage: String = ""
     var resetMarker: Int?
     var isQuick: Bool = false
     var tokenCount: Int = 0
-    
-    var folder: Folder?
     
     @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
     var unorderedGroups =  [ConversationGroup]()
@@ -53,6 +49,8 @@ final class Session {
     
     @Transient
     var proxy: ScrollViewProxy?
+    @Transient
+    var showCamera: Bool = false
     
     @Transient
     var isReplying: Bool {
@@ -133,9 +131,8 @@ final class Session {
     }
     
     @MainActor
-    func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil) async {
+    func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil, forQuick: Bool = false) async {
         errorMessage = ""
-        self.order = 0
         self.date = Date()
         
         if !isRegen {
@@ -150,15 +147,8 @@ final class Session {
                 
                 let user = Conversation(role: .user, content: content, dataFiles: dataFiles)
                 addConversationGroup(conversation: user)
-                
-//                #if DEBUG
-//                addConversationGroup(conversation: Conversation(role: .assistant, content: .assistantDemos.randomElement()!))
-//                return
-//                #endif
             }
         }
-        
-        self.refreshTokens()
         
         if AppConfig.shared.autogenTitle {
             Task { await generateTitle() }
@@ -166,7 +156,9 @@ final class Session {
         
         streamingTask = Task {
             try await handleStreamingTask(regenContent: regenContent, assistantGroup: assistantGroup)
-            self.refreshTokens()
+            Task {
+                await self.refreshTokens()
+            }
         }
         
         // TODO: create func for this
@@ -255,9 +247,12 @@ final class Session {
             }
         }
         
-        self.refreshTokens()
+        Task {
+            await self.refreshTokens()
+        }
     }
     
+    @MainActor
     func generateTitle(forced: Bool = false) async {
         if isQuick { return }
         
@@ -268,7 +263,7 @@ final class Session {
         }
     }
     
-    func refreshTokens() {
+    func refreshTokens() async {
         let messageTokens = adjustedGroups.reduce(0) { $0 + $1.tokenCount}
         let sysPromptTokens = countTokensFromText(config.systemPrompt)
         let toolTokens = config.tools.tokenCount
@@ -277,8 +272,8 @@ final class Session {
         self.tokenCount = (messageTokens + sysPromptTokens + toolTokens + inputTokens)
     }
     
-    func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) -> Session {
-        let newSession = Session(config: config.copy(purpose: purpose))
+    func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) -> ChatSession {
+        let newSession = ChatSession(config: config.copy(purpose: purpose))
         let leading: String
         
         switch purpose {
@@ -345,7 +340,9 @@ final class Session {
             }
         }
         
-        self.refreshTokens()
+        Task {
+            await self.refreshTokens()
+        }
     }
 
     
@@ -358,7 +355,10 @@ final class Session {
         }
         
         errorMessage = ""
-        self.refreshTokens()
+        
+        Task {
+            await self.refreshTokens()
+        }
     }
     
     private func unsetResetMarker(group: ConversationGroup) {

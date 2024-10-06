@@ -9,7 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct SessionListCards: View {
-    @Environment(SessionVM.self) private var sessionVM
+    @Environment(\.openWindow) var openWindow
+    @Environment(\.dismissWindow) var dismissWindow
+    @Environment(ListStateVM.self) private var listStateVM
     @ObservedObject var config = AppConfig.shared
     var sessionCount: String
     var imageSessionsCount: String
@@ -20,17 +22,13 @@ struct SessionListCards: View {
                 ListCard(
                     icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
                     count: sessionCount) {
-                        if sessionVM.state == .chats {
-                            config.truncateList.toggle()
-                        } else {
-                            sessionVM.state = .chats
-                        }
+                        handleChatPress()
                     }
                 
                 ListCard(
                     icon: "photo.circle.fill", iconColor: .indigo, title: "Images",
                     count: imageSessionsCount) {
-                        sessionVM.state = .images
+                        handleImagePress()
                     }
             }
             .listRowSeparator(.hidden)
@@ -46,6 +44,28 @@ struct SessionListCards: View {
         #endif
     }
     
+    func handleChatPress() {
+        #if os(macOS)
+        openWindow(id: "chats")
+        if config.onlyOneWindow {
+            dismissWindow(id: "images")
+        }
+        #else
+        listStateVM.state = .chats
+        #endif
+    }
+    
+    func handleImagePress() {
+        #if os(macOS)
+        openWindow(id: "images")
+        if config.onlyOneWindow {
+            dismissWindow(id: "chats")
+        }
+        #else
+        listStateVM.state = .images
+        #endif
+    }
+    
     private var spacing: CGFloat {
         #if os(macOS)
         return 9
@@ -56,6 +76,6 @@ struct SessionListCards: View {
 }
 
 #Preview {
-    SessionListCards(sessionCount: "5", imageSessionsCount: "3")
-        .environment(SessionVM())
+    SessionListCards(sessionCount: "5", imageSessionsCount: "?")
+        .environment(ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext))
 }

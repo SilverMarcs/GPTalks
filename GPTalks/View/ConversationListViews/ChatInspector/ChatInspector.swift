@@ -10,8 +10,8 @@ import SwiftData
 
 struct ChatInspector: View {
     @Environment(\.dismiss) var dismiss
-    var session: Session
-    var providers: [Provider]
+    var session: ChatSession
+    @Binding var showingInspector: Bool
     
     @State private var selectedTab: Tab = .basic
     
@@ -20,46 +20,33 @@ struct ChatInspector: View {
             Group {
                 switch selectedTab {
                 case .basic:
-                    BasicChatInspector(session: session, providers: providers)
+                    BasicChatInspector(session: session)
                 case .advanced:
                     AdvancedChatInspector(session: session)
                 }
             }
             #if os(macOS)
-            .frame(height: 610)
-            .safeAreaInset(edge: .top, spacing: 0) {
-                ZStack(alignment: .trailing) {
-                    HStack {
-                        Spacer()
-                        
-                        picker
-                        
-                        Spacer()
-                    }
-                    
-                    DismissButton() {
-                        dismiss()
-                    }
-                    .imageScale(.large)
-                    .buttonStyle(.plain)
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 10)
-                .background(.bar)
-            }
-            #else
+            .scrollDisabled(true)
+            #endif
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     picker
                 }
                 
-                ToolbarItem(placement: .cancellationAction) {
-                    DismissButton()
-                        .buttonStyle(.plain)
+                ToolbarItem {
+                    Button {
+                        showingInspector.toggle()
+                    } label: {
+                        #if os(macOS)
+                        Label("Toggle Inspector", systemImage: "sidebar.right")
+                        #else
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.gray, .gray.opacity(0.3))
+                        #endif
+                    }
                 }
             }
-            #endif
         }
     }
     
@@ -82,10 +69,6 @@ struct ChatInspector: View {
 
 
 #Preview {
-    let providers: [Provider] = []
-    
-    ChatInspector(session: Session(config: SessionConfig()), providers: providers)
-        .modelContainer(for: Provider.self, inMemory: true)
-        .formStyle(.grouped)
+    ChatInspector(session: .mockChatSession, showingInspector: .constant(true))
         .frame(width: 400, height: 700)
 }
