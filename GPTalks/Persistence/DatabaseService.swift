@@ -19,8 +19,6 @@ class DatabaseService {
             Conversation.self,
             ConversationGroup.self,
             Provider.self,
-//            ChatModel.self,
-            ImageSession.self,
             ImageGeneration.self,
             ImageConfig.self
         ])

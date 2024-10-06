@@ -13,7 +13,7 @@ struct ChatSessionList: View {
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
     
-    @Query(filter: #Predicate { !$0.isQuick }, sort: [SortDescriptor(\ChatSession.order, order: .forward)], animation: .default)
+    @Query(filter: #Predicate { !$0.isQuick }, sort: [SortDescriptor(\ChatSession.date, order: .reverse)], animation: .default)
     var sessions: [ChatSession]
     
     var body: some View {
@@ -43,7 +43,6 @@ struct ChatSessionList: View {
                             #endif
                     }
                     .onDelete(perform: deleteItems)
-                    .onMove(perform: move)
                 }
             }
             .toolbar {
@@ -64,26 +63,11 @@ struct ChatSessionList: View {
     }
 
     private func deleteItems(offsets: IndexSet) {
-        for index in offsets.sorted().reversed() {
+        for index in offsets {
             modelContext.delete(sessions[index])
-            
-            let remainingSessions = sessions.filter { !$0.isDeleted }
-            for (newIndex, session) in remainingSessions.enumerated() {
-                session.order = newIndex
-            }
         }
-        try? modelContext.save()
     }
     
-    private func move(from source: IndexSet, to destination: Int) {
-        var updatedSessions = sessions
-        updatedSessions.move(fromOffsets: source, toOffset: destination)
-        
-        for (index, session) in updatedSessions.enumerated() {
-            session.order = index
-        }
-        try? modelContext.save()
-    }
     
     var filteredSessions: [ChatSession] {
         // Return early if search text is empty

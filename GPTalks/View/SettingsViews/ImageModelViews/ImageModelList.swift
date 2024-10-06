@@ -35,7 +35,6 @@ struct ImageModelList: View {
                 addButton
             }
         }
-        .searchable(text: $searchText, placement: searchPlacement)
     }
     
     var searchPlacement: SearchFieldPlacement {
@@ -50,9 +49,9 @@ struct ImageModelList: View {
 // MARK: - common foreach
 extension ImageModelList {
     var collectiom: some View {
-        ForEach(provider.imageModels) { model in
-            ImageModelRow(model: $provider.imageModels[provider.imageModels.firstIndex(of: model)!], provider: provider)
-            .tag(model)
+        ForEach($provider.imageModels) { $model in
+            ImageModelRow(model: $model, provider: provider)
+                .tag(model)
         }
         .onDelete(perform: deleteItems)
     }

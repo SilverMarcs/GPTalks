@@ -35,7 +35,6 @@ struct ChatModelList: View {
                 addButton
             }
         }
-        .searchable(text: $searchText, placement: searchPlacement)
     }
     
     var searchPlacement: SearchFieldPlacement {
@@ -45,19 +44,14 @@ struct ChatModelList: View {
         return .navigationBarDrawer(displayMode: .always)
         #endif
     }
-    
-//    var filteredModels: [ChatModel] {
-//        let filtered = searchText.isEmpty ? provider.chatModels : provider.chatModels.filter { $0.name.localizedCaseInsensitiveContains(searchText) || $0.code.localizedCaseInsensitiveContains(searchText) }
-//        return filtered
-//    }
 }
 
 // MARK: - common foreach
 extension ChatModelList {
     var collectiom: some View {
-        ForEach(provider.chatModels) { model in
-            ChatModelRow(model: $provider.chatModels[provider.chatModels.firstIndex(of: model)!], provider: provider)
-            .tag(model)
+        ForEach($provider.chatModels) { $model in
+            ChatModelRow(model: $model, provider: provider)
+                .tag(model)
         }
         .onDelete(perform: deleteItems)
     }

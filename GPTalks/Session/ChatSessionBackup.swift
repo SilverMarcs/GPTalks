@@ -14,7 +14,6 @@ import UniformTypeIdentifiers
 struct ChatSessionBackup: Codable {
     var id: UUID
     var date: Date
-    var order: Int
     var title: String
     var isStarred: Bool
     var errorMessage: String
@@ -37,7 +36,6 @@ extension ChatSessionBackup {
     init(from session: ChatSession) {
         self.id = session.id
         self.date = session.date
-        self.order = session.order
         self.title = session.title
         self.isStarred = session.isStarred
         self.errorMessage = session.errorMessage
@@ -66,7 +64,6 @@ extension ChatSessionBackup {
         
         session.id = self.id
         session.date = self.date
-        session.order = self.order
         session.title = self.title
         session.isStarred = self.isStarred
         session.errorMessage = self.errorMessage

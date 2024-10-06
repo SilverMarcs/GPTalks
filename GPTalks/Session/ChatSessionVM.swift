@@ -85,19 +85,11 @@ import SwiftUI
             
             // Create a FetchDescriptor with the predicate and sort descriptor
             let descriptor = FetchDescriptor<ChatSession>(
-                predicate: predicate,
-                sortBy: [SortDescriptor(\.order)]
+                predicate: predicate
             )
             
             // Fetch the sessions
             if let sessions = try? modelContext.fetch(descriptor) {
-                // Update the order of existing sessions
-                for existingSession in sessions {
-                    existingSession.order += 1
-                }
-                
-                // Insert the new session
-                session.order = 0
                 modelContext.insert(session)
                 #if os(macOS)
                 self.chatSelections = [session]
@@ -133,14 +125,8 @@ import SwiftUI
         try? modelContext.save()
         
         var fetchSessions = FetchDescriptor<ChatSession>()
-        fetchSessions.sortBy = [SortDescriptor(\.order)]
         let fetchedSessions = try! modelContext.fetch(fetchSessions)
         
-        for session in fetchedSessions {
-            session.order += 1
-        }
-        
-        newItem.order = 0
         modelContext.insert(newItem)
         
         chatSelections = [newItem]

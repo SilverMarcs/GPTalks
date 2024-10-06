@@ -12,7 +12,6 @@ import SwiftUI
 final class ChatSession {
     var id: UUID = UUID()
     var date: Date = Date()
-    var order: Int = 0
     var title: String = "Chat Session"
     var isStarred: Bool = false
     var errorMessage: String = ""
@@ -133,10 +132,6 @@ final class ChatSession {
     
     @MainActor
     func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil, forQuick: Bool = false) async {
-        if !forQuick {
-            self.order = 0
-        }
-        
         errorMessage = ""
         self.date = Date()
         
