@@ -152,11 +152,6 @@ final class ChatSession {
                 
                 let user = Conversation(role: .user, content: content, dataFiles: dataFiles)
                 addConversationGroup(conversation: user)
-                
-//                #if DEBUG
-//                addConversationGroup(conversation: Conversation(role: .assistant, content: .assistantDemos.randomElement()!))
-//                return
-//                #endif
             }
         }
         
@@ -262,6 +257,7 @@ final class ChatSession {
         }
     }
     
+    @MainActor
     func generateTitle(forced: Bool = false) async {
         if isQuick { return }
         

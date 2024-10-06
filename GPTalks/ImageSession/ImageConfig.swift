@@ -17,7 +17,7 @@ class ImageConfig {
     @Relationship(deleteRule: .nullify)
     var provider: Provider
     @Relationship(deleteRule: .nullify)
-    var model: AIModel
+    var model: ImageModel
     
     var numImages: Int = ImageConfigDefaults.shared.numImages
     var size: Dalle.Dalle2ImageSize = ImageConfigDefaults.shared.size
@@ -27,7 +27,7 @@ class ImageConfig {
         self.model = provider.imageModel
     }
     
-    init(provider: Provider, model: AIModel) {
+    init(provider: Provider, model: ImageModel) {
         self.provider = provider
         self.model = model
     }

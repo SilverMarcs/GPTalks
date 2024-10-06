@@ -23,9 +23,12 @@ extension Provider {
     ]
 }
 
-extension AIModel {
-    static var gpt4 = AIModel(code: "gpt", name: "GPT-4")
-    static var dalle = AIModel(code: "dall-e-3", name: "DALL-E-3", type: .image)
+extension ChatModel {
+    static var gpt4 = ChatModel(code: "gpt", name: "GPT-4")
+}
+
+extension ImageModel {
+    static var dalle = ImageModel(code: "dall-e-3", name: "DALL-E-3")
 }
 
 extension String {

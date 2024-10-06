@@ -1,5 +1,5 @@
 //
-//  ModelRow.swift
+//  ImageModelRow.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 05/07/2024.
@@ -7,13 +7,12 @@
 
 import SwiftUI
 
-struct ModelRow: View {
+struct ImageModelRow: View {
     #if !os(macOS)
     @Environment(\.editMode) var editMode
     #endif
-    @Bindable var model: AIModel
+    @Bindable var model: ChatModel
     var provider: Provider
-    var reorderModels: () -> Void
     
     @State private var isTestingModel = false
     @State private var testResult: Bool? = nil
@@ -22,19 +21,15 @@ struct ModelRow: View {
         Group {
             #if os(macOS)
             HStack(spacing: 0) {
-                Toggle("Enabled", isOn: $model.isEnabled)
-                    .frame(maxWidth: 39, alignment: .leading)
-
+                // TODO: use grid
                 TextField("Code", text: $model.code)
                     .frame(maxWidth: 300, alignment: .leading)
                 
                 TextField("Name", text: $model.name)
                     .frame(maxWidth: 205, alignment: .leading)
 
-                if model.type == .chat {
-                    modelTester
-                        .frame(maxWidth: 35, alignment: .center)
-                }
+                modelTester
+                    .frame(maxWidth: 35, alignment: .center)
             }
             #else
             if editMode?.wrappedValue == .active {
@@ -56,10 +51,6 @@ struct ModelRow: View {
                 }
             }
             #endif
-        }
-        .opacity(model.isEnabled ? 1 : 0.5)
-        .onChange(of: model.isEnabled) {
-            reorderModels()
         }
         #if !os(macOS)
         .swipeActions(edge: .leading) {
@@ -114,5 +105,5 @@ struct ModelRow: View {
 }
 
 #Preview {    
-    ModelRow(model: .gpt4, provider: .openAIProvider) {}
+    ChatModelRow(model: .gpt4, provider: .openAIProvider)
 }

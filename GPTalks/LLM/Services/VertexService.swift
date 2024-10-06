@@ -10,7 +10,7 @@ import Foundation
 struct VertexService: AIService {
     typealias ConvertedType = [String: Any]
     
-    static func refreshModels(provider: Provider) async -> [AIModel] {
+    static func refreshModels(provider: Provider) async -> [ChatModel] {
         return provider.type.getDefaultModels()
     }
     
@@ -244,7 +244,7 @@ struct VertexService: AIService {
         return request
     }
     
-    static func testModel(provider: Provider, model: AIModel) async -> Bool {
+    static func testModel(provider: Provider, model: ChatModel) async -> Bool {
         let testConversation = Conversation(role: .user, content: String.testPrompt)
         let location = "us-east5"  // Assuming this is the default location
         let apiUrl = "https://\(location)-aiplatform.googleapis.com/v1/projects/\(provider.host)/locations/\(location)/publishers/anthropic/models/\(model.code):streamRawPredict"

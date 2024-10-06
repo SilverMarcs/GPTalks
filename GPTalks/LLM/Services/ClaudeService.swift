@@ -40,7 +40,7 @@ struct ClaudeService: AIService {
         return finalContent
     }
     
-    static func refreshModels(provider: Provider) async -> [AIModel] {
+    static func refreshModels(provider: Provider) async -> [ChatModel] {
         return provider.type.getDefaultModels()
     }
     
@@ -113,7 +113,7 @@ struct ClaudeService: AIService {
         return .content(content)
     }
     
-    static func testModel(provider: Provider, model: AIModel) async -> Bool {
+    static func testModel(provider: Provider, model: ChatModel) async -> Bool {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: provider.apiKey,

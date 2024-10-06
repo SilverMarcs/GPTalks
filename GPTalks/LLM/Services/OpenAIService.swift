@@ -12,12 +12,12 @@ import SwiftOpenAI
 struct OpenAIService: AIService {
     typealias ConvertedType = ChatCompletionParameters.Message
     
-    static func refreshModels(provider: Provider) async -> [AIModel] {
+    static func refreshModels(provider: Provider) async -> [ChatModel] {
         let service = getService(provider: provider)
         
         do {
             let result = try await service.listModels()
-            return result.data.map { AIModel(code: $0.id, name: $0.id) }
+            return result.data.map { ChatModel(code: $0.id, name: $0.id) }
         } catch {
             return []
         }
@@ -165,7 +165,7 @@ struct OpenAIService: AIService {
         return .content("No content or tool calls available.")
     }
     
-    static func testModel(provider: Provider, model: AIModel) async -> Bool {
+    static func testModel(provider: Provider, model: ChatModel) async -> Bool {
         let service = getService(provider: provider)
         let messages = [convert(conversation: Conversation(role: .user, content: String.testPrompt))]
         let query = ChatCompletionParameters(messages: messages, model: .custom(model.code))

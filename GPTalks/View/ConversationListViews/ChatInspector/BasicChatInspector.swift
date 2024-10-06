@@ -36,7 +36,7 @@ struct BasicChatInspector: View {
                     }
                 )
                 
-                ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
+                ChatModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
             }
             
             Section("Basic") {

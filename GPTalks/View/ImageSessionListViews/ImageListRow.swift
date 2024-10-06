@@ -14,7 +14,7 @@ struct ImageListRow: View {
     
     var body: some View {
         CommonCompactRow(provider: session.config.provider,
-                         model: session.config.model,
+                         model: session.config.model.name,
                          title: session.title,
                          isStarred: session.isStarred)
         .swipeActions(edge: .leading) {

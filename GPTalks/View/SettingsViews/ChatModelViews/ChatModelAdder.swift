@@ -1,5 +1,5 @@
 //
-//  ModelAdder.swift
+//  ChatModelAdder.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 25/07/2024.
@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-struct ModelAdder: View {
+struct ChatModelAdder: View {
     @Environment(\.dismiss) var dismiss
     var provider: Provider
-    var type: ModelType
     
     @State var newModelCode: String = ""
     @State var newModelName: String = ""
@@ -18,7 +17,7 @@ struct ModelAdder: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text(type.rawValue.capitalized)) {
+                Section("Chat") {
                     TextField("Code", text: $newModelCode)
                     TextField("Name", text: $newModelName)
                 }
@@ -71,25 +70,15 @@ struct ModelAdder: View {
             return
         }
 
-        let model = AIModel(
-            code: newModelCode, name: newModelName, type: type, order: 0)
+        let model = ChatModel(
+            code: newModelCode, name: newModelName)
         
-        if type == .chat {
-            for model in provider.chatModels {
-                model.order += 1
-            }
-            provider.chatModels.insert(model, at: 0)
-        } else if type == .image {
-            for model in provider.imageModels {
-                model.order += 1
-            }
-            provider.imageModels.insert(model, at: 0)
-        }
+        provider.chatModels.insert(model, at: 0)
         
         dismiss()
     }
 }
 
 #Preview {
-    ModelAdder(provider: .openAIProvider, type: .chat)
+    ChatModelAdder(provider: .openAIProvider)
 }

@@ -136,6 +136,7 @@ struct SessionListRow: View {
             // TODO: remove form vm selection if it is in it
             if !session.isStarred && !session.isQuick {
                 modelContext.delete(session)
+                try? modelContext.save()
             }
         } label: {
             Label("Delete", systemImage: "trash")

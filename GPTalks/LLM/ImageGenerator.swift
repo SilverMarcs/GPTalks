@@ -9,7 +9,7 @@ import SwiftOpenAI
 import Foundation
 
 class ImageGenerator {
-    static func generateImages(provider: Provider, model: AIModel, prompt: String, numberOfImages: Int) async throws -> [Data] {
+    static func generateImages(provider: Provider, model: ImageModel, prompt: String, numberOfImages: Int) async throws -> [Data] {
         let service = OpenAIService.getService(provider: provider)
         let createParameters = ImageCreateParameters(
             prompt: prompt,
