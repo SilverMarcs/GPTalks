@@ -27,43 +27,17 @@ struct ImageModelList: View {
     #endif
         
     var body: some View {
-        Form {
-            Table($provider.imageModels) {
-                TableColumn("Code") { $model in
-                    TextField("Code", text: $model.code)
-                    
-                    if isCompact {
-                        Button {
-                            provider.imageModels.removeAll(where: { $0.id == model.id })
-                        } label: {
-                            Image(systemName: "minus.circle.fill")
-                                .foregroundStyle(.red)
-                        }
-                    }
-                }
-                .width(250)
-                .alignment(.leading)
-                
-                TableColumn("Name") { $model in
-                    TextField("Name", text: $model.name)
-                }
-                .width(200)
-                
-                TableColumn("Action") { model in
-                    Button {
-                        provider.imageModels.removeAll(where: { $0.id == model.id })
-                    } label: {
-                        Label("Remove", systemImage: "minus.circle.fill")
-                            .foregroundStyle(.red)
-                            .labelStyle(.iconOnly)
-                    }
-                }
-                .width()
-                .alignment(.trailing)
+        Group {
+#if os(macOS)
+            Form {
+                table
             }
+            .formStyle(.grouped)
+            .labelsHidden()
+#else
+            table
+#endif
         }
-        .labelsHidden()
-        .formStyle(.grouped)
         .sheet(isPresented: $showAdder) {
             ChatModelAdder(provider: provider)
         }
@@ -82,6 +56,46 @@ struct ImageModelList: View {
             ToolbarItem(placement: .primaryAction) {
                 addButton
             }
+        }
+    }
+
+    var table: some View {
+        Table($provider.imageModels) {
+            TableColumn("Code") { $model in
+                HStack {
+                    TextField("Code", text: $model.code)
+                    
+                    if isCompact {
+                        Spacer()
+                        Button {
+                            provider.imageModels.removeAll(where: { $0.id == model.id })
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundStyle(.red)
+                        }
+                    }
+                }
+            }
+            #if os(macOS)
+            .width(250)
+            #endif
+            .alignment(.leading)
+            
+            TableColumn("Name") { $model in
+                TextField("Name", text: $model.name)
+            }
+            .width(200)
+            
+            TableColumn("Action") { model in
+                Button {
+                    provider.imageModels.removeAll(where: { $0.id == model.id })
+                } label: {
+                    Image(systemName: "minus.circle.fill")
+                        .foregroundStyle(.red)
+                }
+            }
+            .width()
+            .alignment(.trailing)
         }
     }
     
