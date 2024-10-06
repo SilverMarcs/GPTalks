@@ -23,7 +23,7 @@ struct ProviderDetail: View {
             case .models:
                 ChatModelList(provider: provider)
             case .image:
-                ChatModelList(provider: provider)
+                ImageModelList(provider: provider)
             }
         }
         .scrollContentBackground(.visible)

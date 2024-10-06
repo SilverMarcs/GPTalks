@@ -5,20 +5,16 @@
 //  Created by Zabir Raihan on 05/10/2024.
 //
 
-import SwiftData
 import Foundation
 
-@Model
-final class ImageModel: Hashable, Identifiable {
+struct ImageModel: Hashable, Identifiable, Codable {
     var id: UUID = UUID()
     var code: String
     var name: String
-    var lastTestResult: Bool?
-
-    init(code: String, name: String, lastTestResult: Bool? = nil) {
+    
+    init(code: String, name: String) {
         self.code = code
         self.name = name
-        self.lastTestResult = lastTestResult
     }
     
     static func getOpenImageModels() -> [ImageModel] {

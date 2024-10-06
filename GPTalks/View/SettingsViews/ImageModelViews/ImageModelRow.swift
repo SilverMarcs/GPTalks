@@ -11,7 +11,7 @@ struct ImageModelRow: View {
     #if !os(macOS)
     @Environment(\.editMode) var editMode
     #endif
-    @Bindable var model: ChatModel
+    @Binding var model: ImageModel
     var provider: Provider
     
     @State private var isTestingModel = false
@@ -83,27 +83,26 @@ struct ImageModelRow: View {
                     .foregroundStyle(result ? .green : .red)
             } else {
                 Button {
-                    Task { await runModelTest() }
+//                    Task { await runModelTest() }
                 } label: {
                     Image(systemName: "play.circle")
                 }
                 .buttonStyle(.plain)
-                .foregroundColor(model.lastTestResult == nil ? .primary : model.lastTestResult! ? .green : .red)
             }
         }
     }
-    
-    func runModelTest() async {
-        isTestingModel = true
-        testResult = await provider.testModel(model: model)
-        isTestingModel = false
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            testResult = nil
-        }
-    }
+//    
+//    func runModelTest() async {
+//        isTestingModel = true
+//        testResult = await provider.testModel(model: model)
+//        isTestingModel = false
+//        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//            testResult = nil
+//        }
+//    }
 }
 
 #Preview {    
-    ChatModelRow(model: .gpt4, provider: .openAIProvider)
+    ImageModelRow(model: Binding.constant(ImageModel.dalle), provider: .openAIProvider)
 }

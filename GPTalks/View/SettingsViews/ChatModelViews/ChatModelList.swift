@@ -46,17 +46,17 @@ struct ChatModelList: View {
         #endif
     }
     
-    var filteredModels: [ChatModel] {
-        let filtered = searchText.isEmpty ? provider.chatModels : provider.chatModels.filter { $0.name.localizedCaseInsensitiveContains(searchText) || $0.code.localizedCaseInsensitiveContains(searchText) }
-        return filtered
-    }
+//    var filteredModels: [ChatModel] {
+//        let filtered = searchText.isEmpty ? provider.chatModels : provider.chatModels.filter { $0.name.localizedCaseInsensitiveContains(searchText) || $0.code.localizedCaseInsensitiveContains(searchText) }
+//        return filtered
+//    }
 }
 
 // MARK: - common foreach
 extension ChatModelList {
     var collectiom: some View {
-        ForEach(filteredModels) { model in
-            ChatModelRow(model: model, provider: provider) 
+        ForEach(provider.chatModels) { model in
+            ChatModelRow(model: $provider.chatModels[provider.chatModels.firstIndex(of: model)!], provider: provider)
             .tag(model)
         }
         .onDelete(perform: deleteItems)
@@ -65,7 +65,6 @@ extension ChatModelList {
     private func deleteItems(offsets: IndexSet) {
         provider.chatModels.remove(atOffsets: offsets)
     }
-    
 }
 
 // MARK: - macOS Specific Views
@@ -153,7 +152,7 @@ extension ChatModelList {
     var editMenu: some View {
         Menu {
             Section {
-                Button(action: { selections = Set(filteredModels) }) {
+                Button(action: { selections = Set(provider.chatModels) }) {
                     Label("Select All", systemImage: "checkmark.circle.fill")
                 }
                 

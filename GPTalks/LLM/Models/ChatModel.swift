@@ -6,19 +6,15 @@
 //
 
 import Foundation
-import SwiftData
 
-@Model
-final class ChatModel: Hashable, Identifiable {
+struct ChatModel: Hashable, Identifiable, Codable {
     var id: UUID = UUID()
     var code: String
     var name: String
-    var lastTestResult: Bool?
 
-    init(code: String, name: String, lastTestResult: Bool? = nil) {
+    init(code: String, name: String) {
         self.code = code
         self.name = name
-        self.lastTestResult = lastTestResult
     }
 }
 

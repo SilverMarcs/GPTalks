@@ -15,7 +15,7 @@ struct ImageModelList: View {
     @Bindable var provider: Provider
 
     @State var showAdder = false
-    @State var selections: Set<ChatModel> = []
+    @State var selections: Set<ImageModel> = []
     @State var searchText = ""
     @State var isRefreshing = false
     
@@ -45,22 +45,14 @@ struct ImageModelList: View {
         return .navigationBarDrawer(displayMode: .always)
         #endif
     }
-    
-    var filteredModels: [ChatModel] {
-        let filtered = searchText.isEmpty ? provider.chatModels : provider.chatModels.filter { $0.name.localizedCaseInsensitiveContains(searchText) || $0.code.localizedCaseInsensitiveContains(searchText) }
-        return filtered
-    }
 }
 
 // MARK: - common foreach
 extension ImageModelList {
     var collectiom: some View {
-        ForEach(filteredModels) { model in
-            ChatModelRow(model: model, provider: provider) 
+        ForEach(provider.imageModels) { model in
+            ImageModelRow(model: $provider.imageModels[provider.imageModels.firstIndex(of: model)!], provider: provider)
             .tag(model)
-            #if os(macOS)
-            .contextMenu { contextMenuItems(for: model) }
-            #endif
         }
         .onDelete(perform: deleteItems)
     }
@@ -156,11 +148,7 @@ extension ImageModelList {
     var editMenu: some View {
         Menu {
             Section {
-                commonMenuItems(for: Array(selections))
-            }
-            
-            Section {
-                Button(action: { selections = Set(filteredModels) }) {
+                Button(action: { selections = Set(provider.imageModels) }) {
                     Label("Select All", systemImage: "checkmark.circle.fill")
                 }
                 
@@ -169,30 +157,9 @@ extension ImageModelList {
                 }
             }
             
-            Section {
-//                Button(role: .destructive, action: deleteSelectedModels) {
-//                    Label("Delete Selected", systemImage: "trash")
-//                }
-            }
         } label: {
             Label("Actions", systemImage: "ellipsis.circle")
                 .labelStyle(.iconOnly)
-        }
-    }
-    
-    func contextMenuItems(for model: ChatModel) -> some View {
-        commonMenuItems(for: selections.isEmpty ? [model] : Array(selections))
-    }
-    
-    func commonMenuItems(for models: [ChatModel]) -> some View {
-        Group {
-//            Button(action: { toggleEnabled(for: models) }) {
-//                Label("Toggle Enabled", systemImage: "power")
-//            }
-//            
-//            Button(action: { toggleModelType(for: models) }) {
-//                Label("Toggle Chat/Image", systemImage: "arrow.triangle.2.circlepath")
-//            }
         }
     }
     

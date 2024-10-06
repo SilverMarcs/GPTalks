@@ -11,7 +11,7 @@ struct ChatModelRow: View {
     #if !os(macOS)
     @Environment(\.editMode) var editMode
     #endif
-    @Bindable var model: ChatModel
+    @Binding var model: ChatModel
     var provider: Provider
     
     @State private var isTestingModel = false
@@ -88,7 +88,6 @@ struct ChatModelRow: View {
                     Image(systemName: "play.circle")
                 }
                 .buttonStyle(.plain)
-                .foregroundColor(model.lastTestResult == nil ? .primary : model.lastTestResult! ? .green : .red)
             }
         }
     }
@@ -105,5 +104,5 @@ struct ChatModelRow: View {
 }
 
 #Preview {    
-    ChatModelRow(model: .gpt4, provider: .openAIProvider)
+    ChatModelRow(model: Binding.constant(ChatModel.gpt4), provider: .openAIProvider)
 }

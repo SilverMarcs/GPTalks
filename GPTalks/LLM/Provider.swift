@@ -98,8 +98,8 @@ class Provider {
             chatModel: chatModels.first!,
             quickChatModel: chatModels.first!,
             titleModel: chatModels.first!,
-            imageModel: imageModels.first!,
-            toolImageModel: imageModels.first!,
+            imageModel: imageModels.first ?? demoImageModel,
+            toolImageModel: imageModels.first ?? demoImageModel,
             chatModels: chatModels,
             imageModels: imageModels
         )
@@ -122,52 +122,6 @@ extension Provider {
     func testModel(model: ChatModel) async -> Bool {
         let service = type.getService()
         let result = await service.testModel(provider: self, model: model)
-        model.lastTestResult = result
         return result
     }
 }
-
-//extension Provider {
-//    func models(for type: ModelType) -> [ChatModel] {
-//        switch type {
-//        case .chat:
-//            return chatModels
-//        case .image:
-//            return imageModels
-//        // Add more cases here as you add more model types
-//        }
-//    }
-//
-//    func setModels(_ models: [ChatModel], for type: ModelType) {
-//        switch type {
-//        case .chat:
-//            chatModels = models
-//        case .image:
-//            imageModels = models
-//        // Add more cases here as you add more model types
-//        }
-//    }
-//
-//    func addModel(_ model: ChatModel, for type: ModelType) {
-//        switch type {
-//        case .chat:
-//            chatModels.append(model)
-//        case .image:
-//            imageModels.append(model)
-//        // Add more cases here as you add more model types
-//        }
-//    }
-//
-//    func removeModel(_ model: ChatModel, for type: ModelType, permanently: Bool = true) {
-//        switch type {
-//        case .chat:
-//            chatModels.removeAll { $0.id == model.id }
-//        case .image:
-//            imageModels.removeAll { $0.id == model.id }
-//        // Add more cases here as you add more model types
-//        }
-//        if permanently {
-//            model.modelContext?.delete(model)
-//        }
-//    }
-//}

@@ -33,14 +33,12 @@ struct ProviderBackup: Codable {
         var id: UUID
         var code: String
         var name: String
-        var lastTestResult: Bool?
     }
     
     struct ImageModelBackup: Codable {
         var id: UUID
         var code: String
         var name: String
-        var lastTestResult: Bool?
     }
 }
 
@@ -95,14 +93,12 @@ extension ProviderBackup.AIModelBackup {
         self.id = model.id
         self.code = model.code
         self.name = model.name
-        self.lastTestResult = model.lastTestResult
     }
 
     func toAIModel() -> ChatModel {
         ChatModel(
             code: self.code,
-            name: self.name,
-            lastTestResult: self.lastTestResult
+            name: self.name
         )
     }
 }
@@ -112,14 +108,12 @@ extension ProviderBackup.ImageModelBackup {
         self.id = model.id
         self.code = model.code
         self.name = model.name
-        self.lastTestResult = model.lastTestResult
     }
     
     func toAIModel() -> ImageModel {
         ImageModel(
             code: self.code,
-            name: self.name,
-            lastTestResult: self.lastTestResult
+            name: self.name
         )
     }
 }
