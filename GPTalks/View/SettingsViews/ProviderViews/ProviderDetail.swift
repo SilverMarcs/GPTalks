@@ -10,10 +10,12 @@ import SwiftUI
 import SwiftUI
 
 struct ProviderDetail: View {
-    var provider: Provider
+    @Bindable var provider: Provider
     var reorderProviders: () -> Void
     
     @State private var selectedTab: ProviderDetailTab = .general
+    @State var showChatModelAdder = false
+    @State var showImageModelAdder = false
     
     var body: some View {
         Group {
@@ -21,9 +23,33 @@ struct ProviderDetail: View {
             case .general:
                 ProviderGeneral(provider: provider, reorderProviders: reorderProviders)
             case .models:
-                ChatModelList(provider: provider)
+                ModelListView<ChatModel>(provider: provider, models: $provider.chatModels)
+                    .toolbar {
+                        ToolbarItem(placement: .primaryAction) {
+                            Button {
+                                showChatModelAdder.toggle()
+                            } label: {
+                                Label("Add Model", systemImage: "plus")
+                            }
+                        }
+                    }
+                    .sheet(isPresented: $showChatModelAdder) {
+                        AddModelSheet(chatModels: $provider.chatModels, imageModels: $provider.imageModels)
+                    }
             case .image:
-                ImageModelList(provider: provider)
+                ModelListView<ImageModel>(provider: provider, models: $provider.imageModels)
+                    .toolbar {
+                        ToolbarItem(placement: .primaryAction) {
+                            Button {
+                                showImageModelAdder.toggle()
+                            } label: {
+                                Label("Add Model", systemImage: "plus")
+                            }
+                        }
+                    }
+                    .sheet(isPresented: $showImageModelAdder) {
+                        AddModelSheet(chatModels: $provider.chatModels, imageModels: $provider.imageModels)
+                    }
             }
         }
         .scrollContentBackground(.visible)

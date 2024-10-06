@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ChatModel: Hashable, Identifiable, Codable {
+struct ChatModel: Hashable, Identifiable, Codable, ModelType {
     var id: UUID = UUID()
     var code: String
     var name: String
@@ -18,11 +18,6 @@ struct ChatModel: Hashable, Identifiable, Codable {
     }
 }
 
-
-enum ModelType: String, CaseIterable, Codable, Hashable {
-    case chat
-    case image
-}
 
 extension ChatModel {
     static func getOpenaiModels() -> [ChatModel] {

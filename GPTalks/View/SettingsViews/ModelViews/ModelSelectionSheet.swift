@@ -7,19 +7,19 @@
 
 import SwiftUI
 
-struct ModelSelectionSheet: View {
+struct ModelSelectionSheet<M: ModelType>: View {
     @Environment(\.dismiss) var dismiss
     
-    var refreshedModels: [ChatModel]
-    var onAddToChatModels: ([ChatModel]) -> Void
-    var onAddToImageModels: ([ChatModel]) -> Void
+    var refreshedModels: [M]
+    var onAddToChatModels: ([M]) -> Void
+    var onAddToImageModels: ([M]) -> Void
 
-    @State private var selectedChatModels: Set<ChatModel> = []
-    @State private var selectedImageModels: Set<ChatModel> = []
+    @State private var selectedChatModels: Set<M> = []
+    @State private var selectedImageModels: Set<M> = []
 
     var body: some View {
         NavigationStack {
-            List(refreshedModels, id: \.code) { model in
+            List(refreshedModels, id: \.id) { model in
                 HStack {
                     Text(model.name)
                     Spacer()
@@ -59,7 +59,7 @@ struct ModelSelectionSheet: View {
         #endif
     }
 
-    private func toggleSelection(for model: ChatModel, in set: inout Set<ChatModel>) {
+    private func toggleSelection(for model: M, in set: inout Set<M>) {
         if set.contains(model) {
             set.remove(model)
         } else {

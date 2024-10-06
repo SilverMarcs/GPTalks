@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct ChatModelAdder: View {
+struct ModelAdderView<M: ModelType>: View {
     @Environment(\.dismiss) var dismiss
     var provider: Provider
     
     @State var newModelCode: String = ""
     @State var newModelName: String = ""
-    
+
     var body: some View {
         NavigationStack {
             Form {
@@ -23,8 +23,8 @@ struct ChatModelAdder: View {
                 }
             }
             #if !os(macOS)
-                        .navigationTitle("Add Model")
-                        .toolbarTitleDisplayMode(.inline)
+            .navigationTitle("Add Model")
+            .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     cancelButton
@@ -49,7 +49,6 @@ struct ChatModelAdder: View {
             .padding()
             #endif
         }
-
     }
     
     private var addButton: some View {
@@ -70,15 +69,14 @@ struct ChatModelAdder: View {
             return
         }
 
-        let model = ChatModel(
-            code: newModelCode, name: newModelName)
+        let model = M(code: newModelCode, name: newModelName)
         
-        provider.chatModels.insert(model, at: 0)
+        if M.self == ChatModel.self {
+            provider.chatModels.insert(model as! ChatModel, at: 0)
+        } else if M.self == ImageModel.self {
+            provider.imageModels.insert(model as! ImageModel, at: 0)
+        }
         
         dismiss()
     }
-}
-
-#Preview {
-    ChatModelAdder(provider: .openAIProvider)
 }

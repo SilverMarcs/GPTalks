@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ImageModel: Hashable, Identifiable, Codable {
+struct ImageModel: Hashable, Identifiable, Codable, ModelType {
     var id: UUID = UUID()
     var code: String
     var name: String

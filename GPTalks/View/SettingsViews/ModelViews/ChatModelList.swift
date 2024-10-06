@@ -7,17 +7,18 @@
 
 import SwiftUI
 
-struct ChatModelList: View {
+struct ModelListView<M: ModelType>: View {
     @Environment(\.modelContext) var modelContext
     #if !os(macOS)
     @Environment(\.editMode) var editMode
     #endif
     @Bindable var provider: Provider
+    @Binding var models: [M]
 
     @State var showAdder = false
     @State var isRefreshing = false
     @State private var showModelSelectionSheet = false
-    @State private var refreshedModels: [ChatModel] = []
+    @State private var refreshedModels: [M] = []
     
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -38,29 +39,10 @@ struct ChatModelList: View {
             table
 #endif
         }
-        .sheet(isPresented: $showAdder) {
-            ChatModelAdder(provider: provider)
-        }
-        .sheet(isPresented: $showModelSelectionSheet) {
-            ModelSelectionSheet(
-                refreshedModels: refreshedModels,
-                onAddToChatModels: { selectedModels in
-                    provider.chatModels.append(contentsOf: selectedModels)
-                },
-                onAddToImageModels: { selectedModels in
-                    provider.imageModels.append(contentsOf: selectedModels.map { ImageModel(from: $0) })
-                }
-            )
-        }
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                addButton
-            }
-        }
     }
 
     var table: some View {
-        Table($provider.chatModels) {
+        Table($models) {
             TableColumn("Code") { $model in
                 HStack {
                     TextField("Code", text: $model.code)
@@ -68,7 +50,7 @@ struct ChatModelList: View {
                     if isCompact {
                         Spacer()
                         Button {
-                            provider.chatModels.removeAll(where: { $0.id == model.id })
+                            models.removeAll(where: { $0.id == model.id })
                         } label: {
                             Image(systemName: "minus.circle.fill")
                                 .foregroundStyle(.red)
@@ -88,27 +70,27 @@ struct ChatModelList: View {
             
             TableColumn("Action") { model in
                 Button {
-                    provider.chatModels.removeAll(where: { $0.id == model.id })
+                    models.removeAll(where: { $0.id == model.id })
                 } label: {
                     Image(systemName: "minus.circle.fill")
                         .foregroundStyle(.red)
                 }
             }
-            .width()
             .alignment(.trailing)
         }
     }
     
     func refreshModels() async {
-        isRefreshing = true
-        refreshedModels = await provider.refreshModels()
-        isRefreshing = false
-        showModelSelectionSheet = true
+//        isRefreshing = true
+//        // Assuming you have a way to refresh models generically
+//        refreshedModels = await provider.refreshModels(for: M.self)
+//        isRefreshing = false
+//        showModelSelectionSheet = true
     }
 }
 
 // MARK: - Shared Components
-extension ChatModelList {
+extension ModelListView {
     @ViewBuilder
     var addButton: some View {
         if isRefreshing {
@@ -138,9 +120,3 @@ extension ChatModelList {
         }
     }
 }
-
-
-#Preview {
-    ChatModelList(provider: .openAIProvider)
-}
-
