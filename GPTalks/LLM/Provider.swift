@@ -43,6 +43,11 @@ class Provider {
     var toolImageModel: ImageModel
     @Relationship(deleteRule: .cascade)
     var imageModels: [ImageModel] = []
+    
+    @Relationship(deleteRule: .cascade)
+    var ttsModel: TTSModel
+    @Relationship(deleteRule: .cascade)
+    var ttsModels: [TTSModel] = []
 
     public init(id: UUID = UUID(),
                 date: Date = Date(),
@@ -60,7 +65,9 @@ class Provider {
                 imageModel: ImageModel,
                 toolImageModel: ImageModel,
                 chatModels: [ChatModel] = [],
-                imageModels: [ImageModel] = []) {
+                imageModels: [ImageModel] = [],
+                ttsModel: TTSModel,
+                ttsModels: [TTSModel] = []) {
         self.id = id
         self.date = date
         self.order = order
@@ -78,14 +85,18 @@ class Provider {
         self.toolImageModel = toolImageModel
         self.chatModels = chatModels
         self.imageModels = imageModels
+        self.ttsModel = ttsModel
+        self.ttsModels = ttsModels
     }
     
     
     static func factory(type: ProviderType, isDummy: Bool = false) -> Provider {
-        let demoChatModel = ChatModel.gpt4
         let demoImageModel = ImageModel.dalle
+        let demoTTSModel = TTSModel.whisper
+        
         let chatModels = type.getDefaultModels()
         let imageModels = type == .openai ? ImageModel.getOpenImageModels() : []
+        let ttsModels = type == .openai ? TTSModel.getOpenAITTSModels() : []
         
         let provider = Provider(
             name: type.name,
@@ -101,7 +112,9 @@ class Provider {
             imageModel: imageModels.first ?? demoImageModel,
             toolImageModel: imageModels.first ?? demoImageModel,
             chatModels: chatModels,
-            imageModels: imageModels
+            imageModels: imageModels,
+            ttsModel: ttsModels.first ?? demoTTSModel,
+            ttsModels: ttsModels
         )
         
         return provider

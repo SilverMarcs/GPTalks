@@ -31,6 +31,10 @@ extension ImageModel {
     static var dalle = ImageModel(code: "dall-e-3", name: "DALL-E-3")
 }
 
+extension TTSModel {
+    static var whisper = TTSModel(code: "whisper-1", name: "Whisper-1")
+}
+
 extension String {
     static let markdownContent = """
     Certainly! In Python, you can sort data using the built-in `sort()` method for lists or the `sorted()` function. Below are examples of both methods along with explanations.

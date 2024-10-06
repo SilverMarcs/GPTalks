@@ -10,18 +10,6 @@ import SwiftOpenAI
 import GoogleGenerativeAI
 import SwiftAnthropic
 
-//enum ConversationRole: Codable {
-//    case user
-//    case assistant(AssistantType)
-//    case system
-//    case tool
-//
-//    enum AssistantType: String, Codable {
-//        case regular
-//        case tool
-//    }
-
-
 enum ConversationRole: String, Codable {
     case user
     case assistant

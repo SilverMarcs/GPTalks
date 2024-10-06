@@ -83,7 +83,9 @@ extension ProviderBackup {
             imageModel: imageModels.first(where: { $0.code == self.imageModelCode }) ?? ImageModel(code: self.imageModelCode, name: ""),
             toolImageModel: imageModels.first(where: { $0.code == self.toolImageModelCode }) ?? ImageModel(code: self.toolImageModelCode, name: ""),
             chatModels: chatModels,
-            imageModels: imageModels
+            imageModels: imageModels,
+            ttsModel: TTSModel(code: "", name: ""),
+            ttsModels: []
         )
     }
 }

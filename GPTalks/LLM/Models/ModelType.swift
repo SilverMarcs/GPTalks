@@ -17,7 +17,7 @@ protocol ModelType: Hashable, Identifiable, Codable {
 enum ModelTypeOption: String, CaseIterable {
     case chat
     case image
-    // Add more cases as needed
+    case tts
     
     var icon: String {
         switch self {
@@ -25,6 +25,8 @@ enum ModelTypeOption: String, CaseIterable {
             return "quote.bubble"
         case .image:
             return "photo"
+        case .tts:
+            return "waveform"
         }
     }
 }

@@ -24,6 +24,8 @@ struct ProviderDetail: View {
                 ModelListView<ChatModel>(provider: provider, models: $provider.chatModels)
             case .image:
                 ModelListView<ImageModel>(provider: provider, models: $provider.imageModels)
+            case .tts:
+                ModelListView<TTSModel>(provider: provider, models: $provider.ttsModels)
             }
         }
         .scrollContentBackground(.visible)
@@ -40,14 +42,14 @@ struct ProviderDetail: View {
         if provider.type == .openai {
             return ProviderDetailTab.allCases
         } else {
-            return ProviderDetailTab.allCases.filter { $0 != .image }
+            return ProviderDetailTab.allCases.filter { $0 != .image || $0 != .tts }
         }
     }
 
     private var picker: some View {
         Picker("Tabs", selection: $selectedTab) {
-            ForEach(filteredTabs, id: \.self) { tab in
-                Text(tab.rawValue.capitalized).tag(tab)
+            ForEach(filteredTabs) { tab in
+                Text(tab.name).tag(tab)
             }
         }
         .pickerStyle(.segmented)
@@ -56,10 +58,26 @@ struct ProviderDetail: View {
 }
 
 
-enum ProviderDetailTab: String, CaseIterable {
+enum ProviderDetailTab: String, CaseIterable, Identifiable {
+    var id: String { rawValue }
+    
     case general
     case models
     case image
+    case tts
+    
+    var name: String {
+        switch self {
+        case .general:
+            return "General"
+        case .models:
+            return "Chat"
+        case .image:
+            return "Image"
+        case .tts:
+            return "TTS"
+        }
+    }
 }
 
 #Preview {

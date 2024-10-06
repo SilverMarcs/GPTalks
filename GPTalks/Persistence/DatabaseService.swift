@@ -75,6 +75,10 @@ class DatabaseService {
         
         modelContext.insert(session)
         
+        let normalSessionConfig = SessionConfig(provider: openAI, purpose: .chat)
+        let normalSession = ChatSession(config: normalSessionConfig)
+        modelContext.insert(normalSession)
+        
         ProviderManager.shared.defaultProvider = openAI.id.uuidString
         ProviderManager.shared.quickProvider = openAI.id.uuidString
         ProviderManager.shared.imageProvider = openAI.id.uuidString
