@@ -78,6 +78,8 @@ import SwiftUI
         }
     }
     
+    
+    #warning("this may not work")
     func fork(session: ChatSession) {
         withAnimation {
             // Create a predicate to filter out sessions where isQuick is true
@@ -125,9 +127,6 @@ import SwiftUI
         
         let newItem = ChatSession(config: config)
         try? modelContext.save()
-        
-        var fetchSessions = FetchDescriptor<ChatSession>()
-        let fetchedSessions = try! modelContext.fetch(fetchSessions)
         
         modelContext.insert(newItem)
         

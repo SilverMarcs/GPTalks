@@ -25,7 +25,7 @@ struct ProviderDetail: View {
             case .image:
                 ModelListView<ImageModel>(provider: provider, models: $provider.imageModels)
             case .tts:
-                ModelListView<TTSModel>(provider: provider, models: $provider.ttsModels)
+                ModelListView<STT>(provider: provider, models: $provider.sttModels)
             }
         }
         .scrollContentBackground(.visible)
@@ -75,7 +75,7 @@ enum ProviderDetailTab: String, CaseIterable, Identifiable {
         case .image:
             return "Image"
         case .tts:
-            return "TTS"
+            return "STT"
         }
     }
 }

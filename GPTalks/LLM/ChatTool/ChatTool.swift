@@ -19,6 +19,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
     case googleSearch = "googleSearch"
     case imageGenerate = "imageGenerate"
     case transcribe = "transcribe"
+    case pdfReader = "pdfReader"
     
     var openai: ChatCompletionParameters.Tool {
         switch self {
@@ -30,6 +31,8 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             GenerateImage.openai
         case .transcribe:
             URLScrape.openai
+        case .pdfReader:
+            PDFReader.openai
         }
     }
     
@@ -43,6 +46,8 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             GenerateImage.google
         case .transcribe:
             URLScrape.google
+        case .pdfReader:
+            PDFReader.google
         }
     }
     
@@ -56,6 +61,8 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             GenerateImage.vertex
         case .transcribe:
             URLScrape.vertex
+        case .pdfReader:
+            PDFReader.vertex
         }
     }
     
@@ -69,6 +76,8 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             GenerateImage.tokenCount
         case .transcribe:
             0
+        case .pdfReader:
+            0
         }
     }
     
@@ -80,8 +89,10 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             try await GoogleSearch.getResults(from: arguments)
         case .imageGenerate:
             try await GenerateImage.generateImage(from: arguments)
-        default:
-            .init(string: "No tool available")
+        case .transcribe:
+                .init(string: "No tool available")
+        case .pdfReader:
+            try await PDFReader.getContent(from: arguments)
         }
     }
     
@@ -96,6 +107,8 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             GenerateImageSettings()
         case .transcribe:
             TranscribeSettings()
+        case .pdfReader:
+            EmptyView()
         }
     }
     
@@ -109,6 +122,8 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             "Image Generate"
         case .transcribe:
             "Transcribe"
+        case .pdfReader:
+            "PDF Reader"
         }
     }
     
@@ -122,6 +137,8 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             "waveform"
         case .imageGenerate:
             "photo"
+        case .pdfReader:
+            "doc.text"
         }
     }
 }

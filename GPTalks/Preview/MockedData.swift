@@ -31,8 +31,8 @@ extension ImageModel {
     static var dalle = ImageModel(code: "dall-e-3", name: "DALL-E-3")
 }
 
-extension TTSModel {
-    static var whisper = TTSModel(code: "whisper-1", name: "Whisper-1")
+extension STT {
+    static var whisper = STT(code: "whisper-1", name: "Whisper-1")
 }
 
 extension String {

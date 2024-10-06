@@ -45,9 +45,9 @@ class Provider {
     var imageModels: [ImageModel] = []
     
     @Relationship(deleteRule: .cascade)
-    var ttsModel: TTSModel
+    var sttModel: STT
     @Relationship(deleteRule: .cascade)
-    var ttsModels: [TTSModel] = []
+    var sttModels: [STT] = []
 
     public init(id: UUID = UUID(),
                 date: Date = Date(),
@@ -66,8 +66,8 @@ class Provider {
                 toolImageModel: ImageModel,
                 chatModels: [ChatModel] = [],
                 imageModels: [ImageModel] = [],
-                ttsModel: TTSModel,
-                ttsModels: [TTSModel] = []) {
+                sttModel: STT,
+                sttModels: [STT] = []) {
         self.id = id
         self.date = date
         self.order = order
@@ -85,18 +85,18 @@ class Provider {
         self.toolImageModel = toolImageModel
         self.chatModels = chatModels
         self.imageModels = imageModels
-        self.ttsModel = ttsModel
-        self.ttsModels = ttsModels
+        self.sttModel = sttModel
+        self.sttModels = sttModels
     }
     
     
     static func factory(type: ProviderType, isDummy: Bool = false) -> Provider {
         let demoImageModel = ImageModel.dalle
-        let demoTTSModel = TTSModel.whisper
+        let demoTTSModel = STT.whisper
         
         let chatModels = type.getDefaultModels()
         let imageModels = type == .openai ? ImageModel.getOpenImageModels() : []
-        let ttsModels = type == .openai ? TTSModel.getOpenAITTSModels() : []
+        let ttsModels = type == .openai ? STT.getOpenAITTSModels() : []
         
         let provider = Provider(
             name: type.name,
@@ -113,8 +113,8 @@ class Provider {
             toolImageModel: imageModels.first ?? demoImageModel,
             chatModels: chatModels,
             imageModels: imageModels,
-            ttsModel: ttsModels.first ?? demoTTSModel,
-            ttsModels: ttsModels
+            sttModel: ttsModels.first ?? demoTTSModel,
+            sttModels: ttsModels
         )
         
         return provider

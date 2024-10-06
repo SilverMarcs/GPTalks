@@ -31,19 +31,21 @@ struct OpenAIService: AIService {
         var toolCallID: String?
 
         switch role {
-        case .user:
+        case .user where !conversation.dataFiles.isEmpty:
             contents.append(.text(conversation.content))
-            let processedContents = ContentHelper.processDataFiles(conversation.dataFiles, conversationContent: conversation.content)
-            for content in processedContents {
-                switch content {
-                case .image(let mimeType, let base64Data):
-                    let url = "data:image/jpeg;base64,\(base64Data)"
+            
+            for data in conversation.dataFiles {
+                if data.fileType.conforms(to: .image) {
+                    let url = "data:image/jpeg;base64,\(data.data.base64EncodedString())"
                     contents.append(.imageUrl(.init(url: URL(string: url)!)))
-                case .text(let text):
-                    contents.append(.text(text))
+                } else {
+                    contents.append(.text("Conversation ID: \(conversation.id)\nFile: \(data.fileName).\(data.fileExtension)"))
                 }
             }
-
+        
+        case .user:
+            contents.append(.text(conversation.content))
+            
         case .assistant where !conversation.toolCalls.isEmpty:
             toolCalls = conversation.toolCalls.map { toolCall in
                 .init(id: toolCall.toolCallId, function: .init(arguments: toolCall.arguments, name: toolCall.tool.rawValue))
@@ -179,6 +181,6 @@ struct OpenAIService: AIService {
     }
     
     static func getService(provider: Provider) -> SwiftOpenAI.OpenAIService {
-        return OpenAIServiceFactory.service(apiKey: provider.apiKey, baseURL: "\(provider.type.scheme)://\(provider.host)", debugEnabled: true)
+        return OpenAIServiceFactory.service(apiKey: provider.apiKey, baseURL: "\(provider.type.scheme)://\(provider.host)", debugEnabled: false)
     }
 }

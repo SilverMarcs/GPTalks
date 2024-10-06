@@ -27,7 +27,6 @@ struct URLScrape {
     
     private static func getURLs(from jsonString: String) -> [URL] {
         let jsonData = jsonString.data(using: .utf8)!
-        print(jsonString)
         let urlList = try! JSONDecoder().decode(URLList.self, from: jsonData)
         
         // Convert strings to URL objects
