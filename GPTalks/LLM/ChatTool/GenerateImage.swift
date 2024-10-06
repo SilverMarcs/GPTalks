@@ -10,8 +10,11 @@ import SwiftOpenAI
 import GoogleGenerativeAI
 import SwiftData
 
-struct GenerateImage {
-    static func generateImage(from arguments: String) async throws -> ToolData {
+struct GenerateImage: ToolProtocol {
+    static var displayName: String = "Image Generate" 
+    static var icon: String = "photo"
+    
+    static func process(arguments: String) async throws -> ToolData {
         let modelContext = DatabaseService.shared.modelContext
         
         let parameters = getImageGenerationParameters(from: arguments)

@@ -21,79 +21,42 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
     case transcribe = "transcribe"
     case pdfReader = "pdfReader"
     
-    var openai: ChatCompletionParameters.Tool {
+    var toolType: ToolProtocol.Type {
         switch self {
-        case .urlScrape:
-            URLScrape.openai
-        case .googleSearch:
-            GoogleSearch.openai
-        case .imageGenerate:
-            GenerateImage.openai
-        case .transcribe:
-            URLScrape.openai
-        case .pdfReader:
-            PDFReader.openai
+        case .urlScrape: return URLScrape.self
+        case .googleSearch: return GoogleSearch.self
+        case .imageGenerate: return GenerateImage.self
+        case .transcribe: return TranscribeTool.self
+        case .pdfReader: return PDFReader.self
         }
+    }
+    
+    var openai: ChatCompletionParameters.Tool {
+        toolType.openai
     }
     
     var google: Tool {
-        switch self {
-        case .urlScrape:
-            URLScrape.google
-        case .googleSearch:
-            GoogleSearch.google
-        case .imageGenerate:
-            GenerateImage.google
-        case .transcribe:
-            URLScrape.google
-        case .pdfReader:
-            PDFReader.google
-        }
+        toolType.google
     }
     
     var vertex: [String: Any] {
-        switch self {
-        case .urlScrape:
-            URLScrape.vertex
-        case .googleSearch:
-            GoogleSearch.vertex
-        case .imageGenerate:
-            GenerateImage.vertex
-        case .transcribe:
-            URLScrape.vertex
-        case .pdfReader:
-            PDFReader.vertex
-        }
+        toolType.vertex
     }
     
     var tokenCount: Int {
-        switch self {
-        case .urlScrape:
-            URLScrape.tokenCount
-        case .googleSearch:
-            GoogleSearch.tokenCount
-        case .imageGenerate:
-            GenerateImage.tokenCount
-        case .transcribe:
-            0
-        case .pdfReader:
-            PDFReader.tokenCount
-        }
+        toolType.tokenCount
     }
     
     func process(arguments: String) async throws -> ToolData {
-        switch self {
-        case .urlScrape:
-            try await URLScrape.getContent(from: arguments)
-        case .googleSearch:
-            try await GoogleSearch.getResults(from: arguments)
-        case .imageGenerate:
-            try await GenerateImage.generateImage(from: arguments)
-        case .transcribe:
-                .init(string: "No tool available")
-        case .pdfReader:
-            try await PDFReader.getContent(from: arguments)
-        }
+        try await toolType.process(arguments: arguments)
+    }
+    
+    var displayName: String {
+        toolType.displayName
+    }
+    
+    var icon: String {
+        toolType.icon
     }
     
     @ViewBuilder
@@ -109,36 +72,6 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             TranscribeSettings()
         case .pdfReader:
             PDFReaderSettings()
-        }
-    }
-    
-    var displayName: String {
-        switch self {
-        case .urlScrape:
-            "URL Scrape"
-        case .googleSearch:
-            "Google Search"
-        case .imageGenerate:
-            "Image Generate"
-        case .transcribe:
-            "Transcribe"
-        case .pdfReader:
-            "PDF Reader"
-        }
-    }
-    
-    var icon: String {
-        switch self {
-        case .urlScrape:
-            "network"
-        case .googleSearch:
-            "safari"
-        case .transcribe:
-            "waveform"
-        case .imageGenerate:
-            "photo"
-        case .pdfReader:
-            "doc.text"
         }
     }
 }

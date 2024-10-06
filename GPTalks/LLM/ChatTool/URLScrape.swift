@@ -10,12 +10,15 @@ import SwiftOpenAI
 import GoogleGenerativeAI
 import Reeeed
 
-struct URLScrape {
+struct URLScrape: ToolProtocol {
+    static var displayName: String = "URL Scrape"
+    static var icon: String = "network" 
+    
     struct URLList: Codable {
         let url_list: [String]
     }
     
-    static func getContent(from arguments: String) async throws -> ToolData {
+    static func process(arguments: String) async throws -> ToolData {
         var totalContent: String = ""
         let urls = URLScrape.getURLs(from: arguments)
         for url in urls {

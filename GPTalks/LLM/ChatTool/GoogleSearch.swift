@@ -9,7 +9,10 @@ import Foundation
 import SwiftOpenAI
 import GoogleGenerativeAI
 
-struct GoogleSearch {
+struct GoogleSearch: ToolProtocol {
+    static var displayName: String = "Google Search"
+    static var icon: String = "safari" 
+    
     static func performSearch(query: String) async throws -> ToolData {
         let apiKey = ToolConfigDefaults.shared.googleApiKey
         let googleSearchEngineId = ToolConfigDefaults.shared.googleSearchEngineId
@@ -48,7 +51,7 @@ struct GoogleSearch {
         }
     }
     
-    static func getResults(from arguments: String) async throws -> ToolData {
+    static func process(arguments: String) async throws -> ToolData {
         let query = getQuery(from: arguments)
         
         return try await performSearch(query: query)

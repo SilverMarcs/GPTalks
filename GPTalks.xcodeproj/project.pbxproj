@@ -53,6 +53,8 @@
 		082F09DD2CB275BF00B7860A /* RuntimeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09DC2CB275BF00B7860A /* RuntimeError.swift */; };
 		082F09DF2CB2890C00B7860A /* PDFReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09DE2CB2890C00B7860A /* PDFReader.swift */; };
 		082F09E12CB34DD100B7860A /* PDFReaderSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09E02CB34DD100B7860A /* PDFReaderSettings.swift */; };
+		082F09E32CB3545600B7860A /* ToolProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09E22CB3545600B7860A /* ToolProtocol.swift */; };
+		082F09E52CB354FF00B7860A /* TranscribeTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09E42CB354FF00B7860A /* TranscribeTool.swift */; };
 		0834E7792C719C00007CB294 /* DataFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E7782C719C00007CB294 /* DataFileView.swift */; };
 		0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E77A2C71A42F007CB294 /* TypedData.swift */; };
 		083E72E22CB19075008F50B3 /* SwiftOpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 083E72E12CB19075008F50B3 /* SwiftOpenAI */; };
@@ -271,6 +273,8 @@
 		082F09DC2CB275BF00B7860A /* RuntimeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeError.swift; sourceTree = "<group>"; };
 		082F09DE2CB2890C00B7860A /* PDFReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFReader.swift; sourceTree = "<group>"; };
 		082F09E02CB34DD100B7860A /* PDFReaderSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFReaderSettings.swift; sourceTree = "<group>"; };
+		082F09E22CB3545600B7860A /* ToolProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolProtocol.swift; sourceTree = "<group>"; };
+		082F09E42CB354FF00B7860A /* TranscribeTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscribeTool.swift; sourceTree = "<group>"; };
 		0834E7782C719C00007CB294 /* DataFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFileView.swift; sourceTree = "<group>"; };
 		0834E77A2C71A42F007CB294 /* TypedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedData.swift; sourceTree = "<group>"; };
 		0841391F2C7169D50049E3B2 /* SessionListTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListTips.swift; sourceTree = "<group>"; };
@@ -921,6 +925,7 @@
 		08F815272C97F5D400B49355 /* ChatTool */ = {
 			isa = PBXGroup;
 			children = (
+				082F09E22CB3545600B7860A /* ToolProtocol.swift */,
 				08F815282C97F5E100B49355 /* ChatTool.swift */,
 				08F815412C98093800B49355 /* ToolResponse.swift */,
 				0869A3F52C95E4CC009BF9F2 /* ChatToolCall.swift */,
@@ -929,6 +934,7 @@
 				08F8152C2C97F60100B49355 /* GoogleSearch.swift */,
 				08F8152A2C97F5FA00B49355 /* GenerateImage.swift */,
 				082F09DE2CB2890C00B7860A /* PDFReader.swift */,
+				082F09E42CB354FF00B7860A /* TranscribeTool.swift */,
 			);
 			path = ChatTool;
 			sourceTree = "<group>";
@@ -1191,6 +1197,7 @@
 				082A63362C551749003996B7 /* DeviceCheckers.swift in Sources */,
 				082F09CD2CB237C400B7860A /* ModelSelectionSheet.swift in Sources */,
 				08C800552C36F82B009581C5 /* ProviderList.swift in Sources */,
+				082F09E52CB354FF00B7860A /* TranscribeTool.swift in Sources */,
 				08A222872C2AB4FD00D76C8B /* ChatSession.swift in Sources */,
 				085361132C4939C5007DAB62 /* ImageGenerationView.swift in Sources */,
 				0805DEF12C58CB2A00A8354A /* ClaudeService.swift in Sources */,
@@ -1277,6 +1284,7 @@
 				08B8DE162C97F39B0041A690 /* ChatSessionToolbar.swift in Sources */,
 				086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */,
 				0891D5822C968B3A00BA428F /* ToolConfigDefaults.swift in Sources */,
+				082F09E32CB3545600B7860A /* ToolProtocol.swift in Sources */,
 				0834E7792C719C00007CB294 /* DataFileView.swift in Sources */,
 				08C800432C36C045009581C5 /* ChatSessionVM.swift in Sources */,
 				081C1D9A2C3BE91C0078BB24 /* ColorExtensions.swift in Sources */,

@@ -1,20 +1,18 @@
 //
-//  PDFReader.swift
+//  TranscribeTool.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 06/10/2024.
+//  Created by Zabir Raihan on 07/10/2024.
 //
 
 import Foundation
-import SwiftData
 import SwiftOpenAI
 import GoogleGenerativeAI
-import PDFKit
+import SwiftData
 
-
-struct PDFReader: ToolProtocol {
-    static var displayName: String = "PDF Reader"
-    static var icon: String = "doc.text" 
+struct TranscribeTool: ToolProtocol {
+    static let displayName: String = "Transcribe"
+    static let icon: String = "waveform"
     
     struct PDFArgs: Codable {
         let conversationID: String
@@ -23,7 +21,7 @@ struct PDFReader: ToolProtocol {
     
     static func process(arguments: String) async throws -> ToolData {
         var totalContent: String = ""
-        let args = try PDFReader.getFileIds(from: arguments)
+        let args = try TranscribeTool.getFileIds(from: arguments)
         
         let modelContext = DatabaseService.shared.modelContext
         let uuid = UUID(uuidString: args.conversationID)!
@@ -57,20 +55,21 @@ struct PDFReader: ToolProtocol {
     }
     
     private static func readPDF(from data: Data) -> String {
-        guard let document = PDFDocument(data: data) else {
-            return "Unable to load PDF from data"
-        }
-        
-        let pageCount = document.pageCount
-        var content = ""
-        
-        for i in 0 ..< pageCount {
-            guard let page = document.page(at: i) else { continue }
-            guard let pageContent = page.string else { continue }
-            content += pageContent
-        }
-        
-        return content
+//        guard let document = PDFDocument(data: data) else {
+//            return "Unable to load PDF from data"
+//        }
+//        
+//        let pageCount = document.pageCount
+//        var content = ""
+//        
+//        for i in 0 ..< pageCount {
+//            guard let page = document.page(at: i) else { continue }
+//            guard let pageContent = page.string else { continue }
+//            content += pageContent
+//        }
+//        
+//        return content
+        return ""
     }
     
     static let tokenCount = countTokensFromText(description)
