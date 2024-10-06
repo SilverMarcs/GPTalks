@@ -1,5 +1,5 @@
 //
-//  ChatModelList.swift
+//  ImageModelList.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 23/07/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ChatModelList: View {
+struct ImageModelList: View {
     @Environment(\.modelContext) var modelContext
     #if !os(macOS)
     @Environment(\.editMode) var editMode
@@ -15,7 +15,7 @@ struct ChatModelList: View {
     @Bindable var provider: Provider
 
     @State var showAdder = false
-    @State var selections: Set<ChatModel> = []
+    @State var selections: Set<ImageModel> = []
     @State var searchText = ""
     @State var isRefreshing = false
     
@@ -47,23 +47,24 @@ struct ChatModelList: View {
 }
 
 // MARK: - common foreach
-extension ChatModelList {
+extension ImageModelList {
     var collectiom: some View {
-        ForEach($provider.chatModels) { $model in
-            ChatModelRow(model: $model, provider: provider)
+        ForEach($provider.imageModels) { $model in
+            ImageModelRow(model: $model, provider: provider)
                 .tag(model)
         }
         .onDelete(perform: deleteItems)
     }
     
     private func deleteItems(offsets: IndexSet) {
-        provider.chatModels.remove(atOffsets: offsets)
+        provider.imageModels.remove(atOffsets: offsets)
     }
+    
 }
 
 // MARK: - macOS Specific Views
 #if os(macOS)
-extension ChatModelList {
+extension ImageModelList {
     var macOSContent: some View {
         Form {
             List(selection: $selections) {
@@ -92,7 +93,7 @@ extension ChatModelList {
 
 // MARK: - iOS Specific Views
 #if !os(macOS)
-extension ModelListView {
+extension ImageModelList {
     var iOSContent: some View {
         List(selection: $selections) {
             collectiom
@@ -113,7 +114,7 @@ extension ModelListView {
 #endif
 
 // MARK: - Shared Components
-extension ChatModelList {
+extension ImageModelList {
     @ViewBuilder
     var addButton: some View {
         if isRefreshing {
@@ -146,7 +147,7 @@ extension ChatModelList {
     var editMenu: some View {
         Menu {
             Section {
-                Button(action: { selections = Set(provider.chatModels) }) {
+                Button(action: { selections = Set(provider.imageModels) }) {
                     Label("Select All", systemImage: "checkmark.circle.fill")
                 }
                 
@@ -154,6 +155,7 @@ extension ChatModelList {
                     Label("Deselect All", systemImage: "xmark.circle")
                 }
             }
+            
         } label: {
             Label("Actions", systemImage: "ellipsis.circle")
                 .labelStyle(.iconOnly)

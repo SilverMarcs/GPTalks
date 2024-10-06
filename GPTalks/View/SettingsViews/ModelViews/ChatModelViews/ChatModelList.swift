@@ -1,5 +1,5 @@
 //
-//  ImageModelList.swift
+//  ChatModelList.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 23/07/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ImageModelList: View {
+struct ChatModelList: View {
     @Environment(\.modelContext) var modelContext
     #if !os(macOS)
     @Environment(\.editMode) var editMode
@@ -15,9 +15,10 @@ struct ImageModelList: View {
     @Bindable var provider: Provider
 
     @State var showAdder = false
-    @State var selections: Set<ImageModel> = []
-    @State var searchText = ""
+    @State var selections: Set<ChatModel> = []
     @State var isRefreshing = false
+    @State private var showModelSelectionSheet = false
+    @State private var refreshedModels: [ChatModel] = []
     
     var body: some View {
         Group {
@@ -29,6 +30,17 @@ struct ImageModelList: View {
         }
         .sheet(isPresented: $showAdder) {
             ChatModelAdder(provider: provider)
+        }
+        .sheet(isPresented: $showModelSelectionSheet) {
+            ModelSelectionSheet(
+                refreshedModels: refreshedModels,
+                onAddToChatModels: { selectedModels in
+                    provider.chatModels.append(contentsOf: selectedModels)
+                },
+                onAddToImageModels: { selectedModels in
+                    provider.imageModels.append(contentsOf: selectedModels.map { ImageModel(from: $0) })
+                }
+            )
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -47,10 +59,10 @@ struct ImageModelList: View {
 }
 
 // MARK: - common foreach
-extension ImageModelList {
+extension ChatModelList {
     var collectiom: some View {
-        ForEach($provider.imageModels) { $model in
-            ImageModelRow(model: $model, provider: provider)
+        ForEach($provider.chatModels) { $model in
+            ChatModelRow(model: $model, provider: provider)
                 .tag(model)
         }
         .onDelete(perform: deleteItems)
@@ -59,12 +71,11 @@ extension ImageModelList {
     private func deleteItems(offsets: IndexSet) {
         provider.chatModels.remove(atOffsets: offsets)
     }
-    
 }
 
 // MARK: - macOS Specific Views
 #if os(macOS)
-extension ImageModelList {
+extension ChatModelList {
     var macOSContent: some View {
         Form {
             List(selection: $selections) {
@@ -93,7 +104,7 @@ extension ImageModelList {
 
 // MARK: - iOS Specific Views
 #if !os(macOS)
-extension ImageModelList {
+extension ModelListView {
     var iOSContent: some View {
         List(selection: $selections) {
             collectiom
@@ -114,7 +125,7 @@ extension ImageModelList {
 #endif
 
 // MARK: - Shared Components
-extension ImageModelList {
+extension ChatModelList {
     @ViewBuilder
     var addButton: some View {
         if isRefreshing {
@@ -147,7 +158,7 @@ extension ImageModelList {
     var editMenu: some View {
         Menu {
             Section {
-                Button(action: { selections = Set(provider.imageModels) }) {
+                Button(action: { selections = Set(provider.chatModels) }) {
                     Label("Select All", systemImage: "checkmark.circle.fill")
                 }
                 
@@ -155,7 +166,6 @@ extension ImageModelList {
                     Label("Deselect All", systemImage: "xmark.circle")
                 }
             }
-            
         } label: {
             Label("Actions", systemImage: "ellipsis.circle")
                 .labelStyle(.iconOnly)
@@ -164,8 +174,9 @@ extension ImageModelList {
     
     func refreshModels() async {
         isRefreshing = true
-        await provider.refreshModels()
+        refreshedModels = await provider.refreshModels()
         isRefreshing = false
+        showModelSelectionSheet = true
     }
 }
 
@@ -173,3 +184,4 @@ extension ImageModelList {
 #Preview {
     ChatModelList(provider: .openAIProvider)
 }
+

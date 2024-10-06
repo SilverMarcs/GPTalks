@@ -55,8 +55,10 @@ import SwiftUI
     func deleteLastMessage() {
         guard let session = activeSession, !session.isStreaming else { return }
         
-        if let lastGroup = session.groups.last {
-            session.deleteConversationGroup(lastGroup)
+        Task.detached {
+            if let lastGroup = session.adjustedGroups.last {
+                session.deleteConversationGroup(lastGroup)
+            }
         }
     }
     
