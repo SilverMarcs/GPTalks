@@ -73,12 +73,15 @@ class DatabaseService {
         let session = ChatSession(config: config)
         session.isQuick = true
         session.title = "(↯) Quick Session"
-        
         modelContext.insert(session)
         
         let normalSessionConfig = SessionConfig(provider: openAI, purpose: .chat)
         let normalSession = ChatSession(config: normalSessionConfig)
         modelContext.insert(normalSession)
+        
+        let imageSessionConfig = ImageConfig(provider: openAI)
+        let imageSession = ImageSession(config: imageSessionConfig)
+        modelContext.insert(imageSession)
         
         let providerDefaults = ProviderDefaults(defaultProvider: openAI,
                                                 quickProvider: openAI,

@@ -21,11 +21,11 @@ struct ProviderDetail: View {
             case .general:
                 ProviderGeneral(provider: provider, reorderProviders: reorderProviders)
             case .models:
-                ModelListView<ChatModel>(provider: provider, models: $provider.chatModels)
+                ModelList<ChatModel>(provider: provider, models: $provider.chatModels)
             case .image:
-                ModelListView<ImageModel>(provider: provider, models: $provider.imageModels)
+                ModelList<ImageModel>(provider: provider, models: $provider.imageModels)
             case .tts:
-                ModelListView<STTModel>(provider: provider, models: $provider.sttModels)
+                ModelList<STTModel>(provider: provider, models: $provider.sttModels)
             }
         }
         .scrollContentBackground(.visible)

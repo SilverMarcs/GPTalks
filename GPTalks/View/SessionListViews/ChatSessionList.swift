@@ -9,6 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct ChatSessionList: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
@@ -53,7 +54,7 @@ struct ChatSessionList: View {
             .searchable(text: $sessionVM.searchText)
             #endif
             .task {
-                if let first = sessions.first, sessionVM.chatSelections.isEmpty, !isIOS() {
+                if let first = sessions.first, sessionVM.chatSelections.isEmpty, !(horizontalSizeClass == .compact) {
                     DispatchQueue.main.async {
                         sessionVM.chatSelections = [first]
                     }

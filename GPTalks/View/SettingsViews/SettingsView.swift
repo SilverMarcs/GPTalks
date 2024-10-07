@@ -10,6 +10,7 @@ import SwiftData
 
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     #if os(macOS)
     @State private var selectedSidebarItem: SidebarItem? = .general
@@ -57,7 +58,7 @@ struct SettingsView: View {
             .toolbar(removing: .sidebarToggle)
             .toolbar{
                 Spacer()
-                if isIOS() || isVisionOS() {
+                if horizontalSizeClass == .compact {
                     DismissButton()
                 }
             }

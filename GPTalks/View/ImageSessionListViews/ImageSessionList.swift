@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ImageSessionList: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ImageSessionVM.self) var imageVM
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
@@ -50,7 +51,7 @@ struct ImageSessionList: View {
             .searchable(text: $imageVM.searchText)
             #endif
             .task {
-                if imageVM.imageSelections.isEmpty, let first = sessions.first, !isIOS() {
+                if imageVM.imageSelections.isEmpty, let first = sessions.first, !(horizontalSizeClass == .compact) {
                     DispatchQueue.main.async {
                         imageVM.imageSelections = [first]
                     }
