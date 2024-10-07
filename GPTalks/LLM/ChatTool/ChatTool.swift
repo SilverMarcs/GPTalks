@@ -60,16 +60,16 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
     }
     
     @ViewBuilder
-    var settings: some View {
+    func settings(providerDefaults: ProviderDefaults) -> some View {
         switch self {
         case .urlScrape:
             URLScrapeSettings()
         case .googleSearch:
             GoogleSearchSettings()
         case .imageGenerator:
-            GenerateImageSettings()
+            GenerateImageSettings(providerDefaults: providerDefaults)
         case .transcribe:
-            TranscribeSettings()
+            TranscribeSettings(providerDefaults: providerDefaults)
         case .pdfReader:
             PDFReaderSettings()
         }

@@ -36,7 +36,7 @@ struct ImageInspector: View {
                         session.config.model = provider.imageModel
                     }
                     
-                    ImageModelPicker(model: $session.config.model, models: session.config.provider.imageModels, label: "Model")
+                    ModelPicker(model: $session.config.model, models: session.config.provider.imageModels, label: "Model")
                 }
                 
                 Section("Parameters") {

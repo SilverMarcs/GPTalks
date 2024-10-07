@@ -71,9 +71,9 @@ struct ProviderGeneral: View {
             }
     
             Section("Default Models") {
-                ChatModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
+                ModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
                 
-                ChatModelPicker(model: $provider.titleModel, models: provider.chatModels, label: "Title Model")
+                ModelPicker(model: $provider.titleModel, models: provider.chatModels, label: "Title Model")
             }
 
             Section("Customisation") {

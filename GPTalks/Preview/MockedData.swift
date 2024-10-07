@@ -23,6 +23,10 @@ extension Provider {
     ]
 }
 
+extension ProviderDefaults {
+    static var mockProviderDefaults = ProviderDefaults(defaultProvider: .openAIProvider, quickProvider: .openAIProvider, imageProvider: .openAIProvider, toolImageProvider: .openAIProvider, toolSTTProvider: .openAIProvider)
+}
+
 extension ChatModel {
     static var gpt4 = ChatModel(code: "gpt", name: "GPT-4")
 }

@@ -10,23 +10,11 @@ import SwiftData
 
 struct TranscribeSettings: View {
     @ObservedObject var config = ToolConfigDefaults.shared
-    @ObservedObject var providerManager: ProviderManager = .shared
     
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate { $0.isEnabled && $0.supportsSTT }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
-
-    private var providerBinding: Binding<Provider?> {
-        Binding<Provider?>(
-            get: {
-                self.providerManager.getToolSTTProvider(providers: self.providers)
-            },
-            set: { newValue in
-                if let provider = newValue {
-                    self.providerManager.toolSTTProvider = provider.id.uuidString
-                }
-            }
-        )
-    }
+    
+    @Bindable var providerDefaults: ProviderDefaults
     
     var body: some View {
         Section("General") {
@@ -34,30 +22,13 @@ struct TranscribeSettings: View {
         }
         
         Section("Defaults") {
-            Picker("Provider", selection: providerBinding) {
-                ForEach(providers) { provider in
-                    Text(provider.name).tag(provider)
-                }
-            }
+            ProviderPicker(provider: $providerDefaults.toolSTTProvider, providers: providers)
             
-            if let provider = providerBinding.wrappedValue {
-                Picker("Model", selection: Binding(
-                    get: { provider.sttModel },
-                    set: { newValue in
-                        if let index = providers.firstIndex(where: { $0.id == provider.id }) {
-                            providers[index].sttModel = newValue
-                        }
-                    }
-                )) {
-                    ForEach(provider.sttModels) { model in
-                        Text(model.name).tag(model)
-                    }
-                }
-            }
+            ModelPicker(model: $providerDefaults.toolSTTProvider.sttModel, models: providerDefaults.toolSTTProvider.sttModels, label: "STT Model")
         }
     }
 }
 
 #Preview {
-    TranscribeSettings()
+    TranscribeSettings(providerDefaults: .mockProviderDefaults)
 }

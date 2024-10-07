@@ -20,7 +20,8 @@ class DatabaseService {
             ConversationGroup.self,
             Provider.self,
             ImageGeneration.self,
-            ImageConfig.self
+            ImageConfig.self,
+            ProviderDefaults.self,
         ])
         
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
@@ -79,6 +80,13 @@ class DatabaseService {
         let normalSession = ChatSession(config: normalSessionConfig)
         modelContext.insert(normalSession)
         
+        let providerDefaults = ProviderDefaults(defaultProvider: openAI,
+                                                quickProvider: openAI,
+                                                imageProvider: openAI,
+                                                toolImageProvider: openAI,
+                                                toolSTTProvider: openAI)
+        modelContext.insert(providerDefaults)
+
         ProviderManager.shared.defaultProvider = openAI.id.uuidString
         ProviderManager.shared.quickProvider = openAI.id.uuidString
         ProviderManager.shared.imageProvider = openAI.id.uuidString

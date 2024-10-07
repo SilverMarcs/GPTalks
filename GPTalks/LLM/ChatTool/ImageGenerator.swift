@@ -21,11 +21,11 @@ struct ImageGenerator: ToolProtocol {
         let parameters = getImageGenerationParameters(from: arguments)
         let config = ImageConfigDefaults.shared
         
-        let fetchProviders = FetchDescriptor<Provider>()
-        let fetchedProviders = try! modelContext.fetch(fetchProviders)
-        
-        guard let provider = ProviderManager.shared.getToolImageProvider(providers: fetchedProviders) else {
-            throw RuntimeError("No image provider found")
+        var fetchDefaults = FetchDescriptor<ProviderDefaults>()
+        fetchDefaults.fetchLimit = 1
+        let fetchedProviders = try modelContext.fetch(fetchDefaults)
+        guard let provider = fetchedProviders.first?.toolImageProvider else {
+            throw RuntimeError("No Tool Image provider found")
         }
         
         let dataObjects = try await ImageGenerator.generateImages(
@@ -38,7 +38,7 @@ struct ImageGenerator: ToolProtocol {
         return .init(
             string: "Provider: \(provider.name)\nModel: \(provider.imageModel.name)\nSize: \(config.size)",
             data: dataObjects
-        )   
+        )
     }
     
     struct ImageGenerationParameters: Codable {

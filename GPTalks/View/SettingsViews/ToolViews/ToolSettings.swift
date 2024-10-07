@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ToolSettings: View {
     @ObservedObject var config = ToolConfigDefaults.shared
+    @Query var providerDefaults: [ProviderDefaults]
     
     var body: some View {
         NavigationStack {
@@ -21,7 +23,7 @@ struct ToolSettings: View {
             }
             .navigationDestination(for: ChatTool.self) { tool in
                 Form {
-                    tool.settings
+                    tool.settings(providerDefaults: providerDefaults.first!)
                 }
                 .navigationTitle("\(tool.displayName) Settings")
                 .toolbarTitleDisplayMode(.inline)

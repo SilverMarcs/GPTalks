@@ -34,10 +34,11 @@ struct TranscribeTool: ToolProtocol {
         )
         let conversations = try modelContext.fetch(fetchDescriptor)
         
-        let fetchProviders = FetchDescriptor<Provider>()
-        let fetchedProviders = try! modelContext.fetch(fetchProviders)
-        guard let provider = ProviderManager.shared.getToolImageProvider(providers: fetchedProviders) else {
-            throw RuntimeError("No image provider found")
+        var fetchDefaults = FetchDescriptor<ProviderDefaults>()
+        fetchDefaults.fetchLimit = 1
+        let fetchedProviders = try modelContext.fetch(fetchDefaults)
+        guard let provider = fetchedProviders.first?.toolSTTProvider else {
+            throw RuntimeError("No STT provider found")
         }
         
         if let conversation = conversations.first {
@@ -64,7 +65,7 @@ struct TranscribeTool: ToolProtocol {
         
         let data = typedData.data
         let fileName = typedData.fileExtension
-        let parameters = AudioTranscriptionParameters(fileName: fileName, file: data) // **Important**: in the file name always provide the file extension.
+        let parameters = AudioTranscriptionParameters(fileName: fileName, file: data, model: model.code)
         return try await service.createTranscription(parameters: parameters).text
     }
     

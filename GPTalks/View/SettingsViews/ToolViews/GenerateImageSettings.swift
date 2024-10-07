@@ -10,54 +10,25 @@ import SwiftData
 
 struct GenerateImageSettings: View {
     @ObservedObject var config = ToolConfigDefaults.shared
-    @ObservedObject var providerManager: ProviderManager = .shared
     
-    @Query(filter: #Predicate { $0.isEnabled && !$0.imageModels.isEmpty }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate { $0.isEnabled && $0.supportsImage }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
-
-    private var providerBinding: Binding<Provider?> {
-        Binding<Provider?>(
-            get: {
-                self.providerManager.getToolImageProvider(providers: providers)
-            },
-            set: { newValue in
-                if let provider = newValue {
-                    self.providerManager.toolImageProvider = provider.id.uuidString
-                }
-            }
-        )
-    }
+    
+    @Bindable var providerDefaults: ProviderDefaults
     
     var body: some View {
         Section("General") {
             Toggle("Enabled for new chats", isOn: $config.imageGenerate)
         }
         
-        Section("Defaults") {
-            Picker("Provider", selection: providerBinding) {
-                ForEach(providers) { provider in
-                    Text(provider.name).tag(provider)
-                }
-            }
+        Section("Defaults") {            
+            ProviderPicker(provider: $providerDefaults.imageProvider, providers: providers)
             
-            if let provider = providerBinding.wrappedValue {
-                Picker("Model", selection: Binding(
-                    get: { provider.toolImageModel },
-                    set: { newValue in
-                        if let index = providers.firstIndex(where: { $0.id == provider.id }) {
-                            providers[index].toolImageModel = newValue
-                        }
-                    }
-                )) {
-                    ForEach(provider.imageModels) { model in
-                        Text(model.name).tag(model)
-                    }
-                }
-            }
+            ModelPicker(model: $providerDefaults.imageProvider.imageModel, models: providerDefaults.imageProvider.imageModels, label: "Image Model")
         }
     }
 }
 
 #Preview {
-    GenerateImageSettings()
+    GenerateImageSettings(providerDefaults: .mockProviderDefaults)
 }

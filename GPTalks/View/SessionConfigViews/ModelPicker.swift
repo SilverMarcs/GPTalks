@@ -1,16 +1,16 @@
 //
-//  ChatModelPicker.swift
+//  ModelPicker.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 19/07/2024.
+//  Created by Zabir Raihan on 07/10/2024.
 //
 
 import SwiftUI
 
-struct ChatModelPicker: View {
-    @Binding var model: ChatModel
-    var models: [ChatModel]
-    var label: String = "Model"
+struct ModelPicker<T: ModelType>: View {
+    @Binding var model: T
+    var models: [T]
+    var label: String
     
     var body: some View {
         Picker(label, selection: $model) {
