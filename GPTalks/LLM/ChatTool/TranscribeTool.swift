@@ -11,10 +11,11 @@ import GoogleGenerativeAI
 import SwiftData
 
 struct TranscribeTool: ToolProtocol {
+    static let toolName: String = "transcribe"
     static let displayName: String = "Transcribe"
     static let icon: String = "waveform"
     
-    struct PDFArgs: Codable {
+    struct TranscribeArgs: Codable {
         let conversationID: String
         let fileNames: [String]
     }
@@ -31,14 +32,18 @@ struct TranscribeTool: ToolProtocol {
                 conversation.id == uuid
             }
         )
-        
         let conversations = try modelContext.fetch(fetchDescriptor)
+        
+        let fetchProviders = FetchDescriptor<Provider>()
+        let fetchedProviders = try! modelContext.fetch(fetchProviders)
+        guard let provider = ProviderManager.shared.getToolImageProvider(providers: fetchedProviders) else {
+            throw RuntimeError("No image provider found")
+        }
         
         if let conversation = conversations.first {
             for name in args.fileNames {
                 if let typedData = conversation.dataFiles.first(where: { $0.fileName == name }) {
-                    let pdfContent = readPDF(from: typedData.data)
-                    totalContent += pdfContent.prefix(ToolConfigDefaults.shared.pdfMaxContentLength) + "\n"
+                    totalContent += try await transcribeText(provider: provider, model: provider.sttModel, typedData: typedData)
                 }
             }
             
@@ -48,40 +53,31 @@ struct TranscribeTool: ToolProtocol {
         }
     }
 
-    private static func getFileIds(from jsonString: String) throws -> PDFArgs {
+    private static func getFileIds(from jsonString: String) throws -> TranscribeArgs {
         let jsonData = jsonString.data(using: .utf8)!
-        let urlList = try JSONDecoder().decode(PDFArgs.self, from: jsonData)
-        return urlList
+        let audioArgs = try JSONDecoder().decode(TranscribeArgs.self, from: jsonData)
+        return audioArgs
     }
     
-    private static func readPDF(from data: Data) -> String {
-//        guard let document = PDFDocument(data: data) else {
-//            return "Unable to load PDF from data"
-//        }
-//        
-//        let pageCount = document.pageCount
-//        var content = ""
-//        
-//        for i in 0 ..< pageCount {
-//            guard let page = document.page(at: i) else { continue }
-//            guard let pageContent = page.string else { continue }
-//            content += pageContent
-//        }
-//        
-//        return content
-        return ""
+    private static func transcribeText(provider: Provider, model: STTModel, typedData: TypedData) async throws -> String {
+        let service = OpenAIService.getService(provider: provider)
+        
+        let data = typedData.data
+        let fileName = typedData.fileExtension
+        let parameters = AudioTranscriptionParameters(fileName: fileName, file: data) // **Important**: in the file name always provide the file extension.
+        return try await service.createTranscription(parameters: parameters).text
     }
     
     static let tokenCount = countTokensFromText(description)
     
     static let description: String = """
-        You can open and access contents of pdf files. Just respond with a list of file names without file extensions
+        You can open and access contents of audio files. Just respond with a list of file names without file extensions
         """
     
     static var openai: ChatCompletionParameters.Tool {
         .init(function:
                 .init(
-                    name: "pdfReader",
+                    name: toolName,
                     strict: false,
                     description: description,
                     parameters:
@@ -96,7 +92,7 @@ struct TranscribeTool: ToolProtocol {
                                 "fileNames":
                                     .init(
                                         type: .array,
-                                        description: "The array of pdf file ids to access",
+                                        description: "The array of audio file ids to access",
                                         items: .init(type: .string)
                                     )
                             ]
@@ -108,7 +104,7 @@ struct TranscribeTool: ToolProtocol {
     static var google: Tool {
         Tool(functionDeclarations: [
             FunctionDeclaration(
-                name: "pdfReader",
+                name: toolName,
                 description: description,
                 parameters: [
                     "conversationID": Schema(
@@ -117,7 +113,7 @@ struct TranscribeTool: ToolProtocol {
                     ),
                     "fileNames": Schema(
                         type: .array,
-                        description: "The array of pdf file ids to access",
+                        description: "The array of audio file ids to access",
                         items: Schema(type: .string)
                     )
                 ],
@@ -128,7 +124,7 @@ struct TranscribeTool: ToolProtocol {
     
     static var vertex: [String: Any] {
          [
-            "name": "pdfReader",
+            "name": toolName,
             "description": description,
             "input_schema": [
                 "type": "object",
@@ -139,7 +135,7 @@ struct TranscribeTool: ToolProtocol {
                     ],
                     "fileNames": [
                         "type": "array",
-                        "description": "The array of pdf file ids to access",
+                        "description": "The array of audio file ids to access",
                         "items": [
                             "type": "string"
                         ],

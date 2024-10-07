@@ -15,7 +15,7 @@ struct SessionConfigTools: Codable {
             toolStates = [
                 .googleSearch: false,
                 .urlScrape: false,
-                .imageGenerate: false,
+                .imageGenerator: false,
                 .transcribe: false,
                 .pdfReader: false
             ]
@@ -23,7 +23,7 @@ struct SessionConfigTools: Codable {
             toolStates = [
                 .googleSearch: ToolConfigDefaults.shared.googleSearch,
                 .urlScrape: ToolConfigDefaults.shared.urlScrape,
-                .imageGenerate: ToolConfigDefaults.shared.imageGenerate,
+                .imageGenerator: ToolConfigDefaults.shared.imageGenerate,
                 .transcribe: ToolConfigDefaults.shared.transcribe,
                 .pdfReader: ToolConfigDefaults.shared.pdfReader
             ]

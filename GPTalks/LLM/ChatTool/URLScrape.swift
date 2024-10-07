@@ -11,8 +11,9 @@ import GoogleGenerativeAI
 import Reeeed
 
 struct URLScrape: ToolProtocol {
-    static var displayName: String = "URL Scrape"
-    static var icon: String = "network" 
+    static let toolName = "urlScrape"
+    static let displayName: String = "URL Scrape"
+    static let icon: String = "network"
     
     struct URLList: Codable {
         let url_list: [String]
@@ -88,7 +89,7 @@ struct URLScrape: ToolProtocol {
     static var openai: ChatCompletionParameters.Tool {
         .init(function:
                 .init(
-                    name: "urlScrape",
+                    name: toolName,
                     strict: false,
                     description: description,
                     parameters:
@@ -110,13 +111,13 @@ struct URLScrape: ToolProtocol {
     static var google: Tool {
         Tool(functionDeclarations: [
             FunctionDeclaration(
-                name: "urlScrape",
+                name: toolName,
                 description: description,
                 parameters: [
-                    "url_list": Schema(
+                    "url_list": .init(
                         type: .array,
                         description: "The array of URLs of the websites to scrape",
-                        items: Schema(type: .string)
+                        items: .init(type: .string)
                     )
                 ],
                 requiredParameters: ["url_list"]
@@ -126,7 +127,7 @@ struct URLScrape: ToolProtocol {
     
     static var vertex: [String: Any] {
          [
-            "name": "urlScrape",
+            "name": toolName,
             "description": description,
             "input_schema": [
                 "type": "object",

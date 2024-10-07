@@ -45,9 +45,9 @@ class Provider {
     var imageModels: [ImageModel] = []
     
     @Relationship(deleteRule: .cascade)
-    var sttModel: STT
+    var sttModel: STTModel
     @Relationship(deleteRule: .cascade)
-    var sttModels: [STT] = []
+    var sttModels: [STTModel] = []
 
     public init(id: UUID = UUID(),
                 date: Date = Date(),
@@ -66,8 +66,8 @@ class Provider {
                 toolImageModel: ImageModel,
                 chatModels: [ChatModel] = [],
                 imageModels: [ImageModel] = [],
-                sttModel: STT,
-                sttModels: [STT] = []) {
+                sttModel: STTModel,
+                sttModels: [STTModel] = []) {
         self.id = id
         self.date = date
         self.order = order
@@ -92,11 +92,11 @@ class Provider {
     
     static func factory(type: ProviderType, isDummy: Bool = false) -> Provider {
         let demoImageModel = ImageModel.dalle
-        let demoTTSModel = STT.whisper
+        let demoTTSModel = STTModel.whisper
         
         let chatModels = type.getDefaultModels()
         let imageModels = type == .openai ? ImageModel.getOpenImageModels() : []
-        let ttsModels = type == .openai ? STT.getOpenAITTSModels() : []
+        let ttsModels = type == .openai ? STTModel.getOpenAITTSModels() : []
         
         let provider = Provider(
             name: type.name,

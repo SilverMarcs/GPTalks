@@ -17,7 +17,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
     
     case urlScrape = "urlScrape"
     case googleSearch = "googleSearch"
-    case imageGenerate = "imageGenerate"
+    case imageGenerator = "imageGenerator"
     case transcribe = "transcribe"
     case pdfReader = "pdfReader"
     
@@ -25,7 +25,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .urlScrape: return URLScrape.self
         case .googleSearch: return GoogleSearch.self
-        case .imageGenerate: return GenerateImage.self
+        case .imageGenerator: return ImageGenerator.self
         case .transcribe: return TranscribeTool.self
         case .pdfReader: return PDFReader.self
         }
@@ -66,7 +66,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             URLScrapeSettings()
         case .googleSearch:
             GoogleSearchSettings()
-        case .imageGenerate:
+        case .imageGenerator:
             GenerateImageSettings()
         case .transcribe:
             TranscribeSettings()

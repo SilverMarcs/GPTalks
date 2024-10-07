@@ -11,10 +11,9 @@ import SwiftOpenAI
 import GoogleGenerativeAI
 import PDFKit
 
-
 struct PDFReader: ToolProtocol {
-    static var displayName: String = "PDF Reader"
-    static var icon: String = "doc.text" 
+    static let displayName: String = "PDF Reader"
+    static let icon: String = "doc.text"
     
     struct PDFArgs: Codable {
         let conversationID: String
@@ -52,8 +51,8 @@ struct PDFReader: ToolProtocol {
 
     private static func getFileIds(from jsonString: String) throws -> PDFArgs {
         let jsonData = jsonString.data(using: .utf8)!
-        let urlList = try JSONDecoder().decode(PDFArgs.self, from: jsonData)
-        return urlList
+        let pdfArgs = try JSONDecoder().decode(PDFArgs.self, from: jsonData)
+        return pdfArgs
     }
     
     private static func readPDF(from data: Data) -> String {

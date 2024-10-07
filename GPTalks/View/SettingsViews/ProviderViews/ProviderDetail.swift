@@ -25,7 +25,7 @@ struct ProviderDetail: View {
             case .image:
                 ModelListView<ImageModel>(provider: provider, models: $provider.imageModels)
             case .tts:
-                ModelListView<STT>(provider: provider, models: $provider.sttModels)
+                ModelListView<STTModel>(provider: provider, models: $provider.sttModels)
             }
         }
         .scrollContentBackground(.visible)

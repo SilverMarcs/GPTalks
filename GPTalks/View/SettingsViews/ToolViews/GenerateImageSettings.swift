@@ -18,7 +18,7 @@ struct GenerateImageSettings: View {
     private var providerBinding: Binding<Provider?> {
         Binding<Provider?>(
             get: {
-                self.providerManager.getToolImageProvider(providers: self.providers)
+                self.providerManager.getToolImageProvider(providers: providers)
             },
             set: { newValue in
                 if let provider = newValue {

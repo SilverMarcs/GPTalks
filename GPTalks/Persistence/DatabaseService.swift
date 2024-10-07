@@ -83,5 +83,6 @@ class DatabaseService {
         ProviderManager.shared.quickProvider = openAI.id.uuidString
         ProviderManager.shared.imageProvider = openAI.id.uuidString
         ProviderManager.shared.toolImageProvider = openAI.id.uuidString
+        ProviderManager.shared.toolSTTProvider = openAI.id.uuidString
     }
 }
