@@ -572,13 +572,6 @@
 			path = SessionConfigViews;
 			sourceTree = "<group>";
 		};
-		0854A18F2CB36C350055344E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		085524E02C4ED29400CBB827 /* MenubarCommands */ = {
 			isa = PBXGroup;
 			children = (
@@ -641,7 +634,6 @@
 				08A222812C2AB4FD00D76C8B /* GPTalks */,
 				08A222952C2AB4FE00D76C8B /* GPTalksTests */,
 				08A2229F2C2AB4FE00D76C8B /* GPTalksUITests */,
-				0854A18F2CB36C350055344E /* Frameworks */,
 				08A222802C2AB4FD00D76C8B /* Products */,
 			);
 			sourceTree = "<group>";
