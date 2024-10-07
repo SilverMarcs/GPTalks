@@ -29,7 +29,7 @@ struct ChatSessionList: View {
                 SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "↗")
                     .id(String.topID)
                 
-                if !sessionVM.searchText.isEmpty && sessions.isEmpty {
+                if !sessionVM.searchText.isEmpty && filteredSessions.isEmpty {
                     ContentUnavailableView.search(text: sessionVM.searchText)
                 } else {
                     ForEach(filteredSessions) { session in

@@ -44,7 +44,7 @@ struct ImageSettings: View {
 
                 
                 Picker("Size", selection: $imageConfig.size) {
-                    ForEach(ImageCreateParameters.ImageSize.allCases, id: \.self) { size in
+                    ForEach(Dalle.Dalle2ImageSize.allCases, id: \.self) { size in
                         Text(size.rawValue).tag(size)
                     }
                 }
