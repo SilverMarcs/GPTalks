@@ -10,7 +10,7 @@ import SwiftUI
 struct ModelPicker<T: ModelType>: View {
     @Binding var model: T
     var models: [T]
-    var label: String
+    var label: String = "Model"
     
     var body: some View {
         Picker(label, selection: $model) {

@@ -12,7 +12,7 @@ struct ImageSessionToolbar: ToolbarContent {
     @Environment(ImageSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate { $0.isEnabled && $0.supportsImage }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
 //    var providers: [Provider]
     
@@ -23,7 +23,11 @@ struct ImageSessionToolbar: ToolbarContent {
                 sessionVM.addImageSession(modelContext: modelContext, provider: provider)
             },
             getDefaultProvider: { providers in
-                ProviderManager.shared.getImageProvider(providers: providers.filter { $0.supportsImage })
+                let fetchDefaults = FetchDescriptor<ProviderDefaults>()
+                let defaults = try! modelContext.fetch(fetchDefaults)
+                
+                let defaultProvider = defaults.first!.imageProvider
+                return defaultProvider
             }
         )
     }

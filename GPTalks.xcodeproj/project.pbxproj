@@ -25,7 +25,6 @@
 		081D222D2C5C8C7700634F39 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 081D222C2C5C8C7700634F39 /* GoogleGenerativeAI */; };
 		081F58B82C6C8FFE00565F20 /* HoverScaleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */; };
 		082178A42C5F6B3200C2A8E3 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 082178A32C5F6B3200C2A8E3 /* MarkdownWebView */; };
-		082181522C38046800171BF3 /* ProviderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181512C38046800171BF3 /* ProviderManager.swift */; };
 		0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181592C382B9B00171BF3 /* ProviderGeneral.swift */; };
 		082181602C3880F700171BF3 /* RoundedRectangleOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0821815F2C3880F700171BF3 /* RoundedRectangleOverlay.swift */; };
 		082181622C38C76E00171BF3 /* InputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181612C38C76E00171BF3 /* InputEditor.swift */; };
@@ -243,7 +242,6 @@
 		081C1D972C3BD8A50078BB24 /* GeneralSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettings.swift; sourceTree = "<group>"; };
 		081C1D992C3BE91C0078BB24 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverScaleButton.swift; sourceTree = "<group>"; };
-		082181512C38046800171BF3 /* ProviderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderManager.swift; sourceTree = "<group>"; };
 		082181592C382B9B00171BF3 /* ProviderGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderGeneral.swift; sourceTree = "<group>"; };
 		0821815F2C3880F700171BF3 /* RoundedRectangleOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedRectangleOverlay.swift; sourceTree = "<group>"; };
 		082181612C38C76E00171BF3 /* InputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputEditor.swift; sourceTree = "<group>"; };
@@ -874,7 +872,6 @@
 				08C8004F2C36F667009581C5 /* Provider.swift */,
 				0869A3F12C95DBF9009BF9F2 /* StreamResponse.swift */,
 				08F815452C980ABF00B49355 /* StreamHandler.swift */,
-				082181512C38046800171BF3 /* ProviderManager.swift */,
 				08F52EF32C52C3AB00E4482C /* ProviderBackup.swift */,
 				08F369E22C3C278E002E4A35 /* ProviderType.swift */,
 			);
@@ -1159,7 +1156,6 @@
 				08DA5B0D2C72CE7700A7FE82 /* InputViewTips.swift in Sources */,
 				08B8DE1B2C97F3B60041A690 /* SessionListSidebar.swift in Sources */,
 				089DB5182CA8EC140013E5C3 /* ImageViewerData.swift in Sources */,
-				082181522C38046800171BF3 /* ProviderManager.swift in Sources */,
 				082181662C38CBAE00171BF3 /* PlusButton.swift in Sources */,
 				08B5D7B82C77A64000D1F100 /* ChatWindow.swift in Sources */,
 				085361072C492282007DAB62 /* ImageGeneration.swift in Sources */,

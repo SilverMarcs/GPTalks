@@ -86,11 +86,5 @@ class DatabaseService {
                                                 toolImageProvider: openAI,
                                                 toolSTTProvider: openAI)
         modelContext.insert(providerDefaults)
-
-        ProviderManager.shared.defaultProvider = openAI.id.uuidString
-        ProviderManager.shared.quickProvider = openAI.id.uuidString
-        ProviderManager.shared.imageProvider = openAI.id.uuidString
-        ProviderManager.shared.toolImageProvider = openAI.id.uuidString
-        ProviderManager.shared.toolSTTProvider = openAI.id.uuidString
     }
 }

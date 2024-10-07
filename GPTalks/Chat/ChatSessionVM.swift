@@ -115,12 +115,10 @@ import SwiftUI
             config = SessionConfig(provider: providedProvider, purpose: .chat)
         } else {
             // Use the default provider
-            let fetchProviders = FetchDescriptor<Provider>()
-            let fetchedProviders = try! modelContext.fetch(fetchProviders)
+            let fetchDefaults = FetchDescriptor<ProviderDefaults>()
+            let defaults = try! modelContext.fetch(fetchDefaults)
             
-            guard let defaultProvider = ProviderManager.shared.getDefault(providers: fetchedProviders) else {
-                return nil
-            }
+            let defaultProvider = defaults.first!.defaultProvider
             
             config = SessionConfig(provider: defaultProvider, purpose: .chat)
         }
