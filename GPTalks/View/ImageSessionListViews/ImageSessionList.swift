@@ -52,9 +52,7 @@ struct ImageSessionList: View {
             #endif
             .task {
                 if imageVM.imageSelections.isEmpty, let first = sessions.first, !(horizontalSizeClass == .compact) {
-                    DispatchQueue.main.async {
-                        imageVM.imageSelections = [first]
-                    }
+                    imageVM.imageSelections = [first]
                 }
             }
         }

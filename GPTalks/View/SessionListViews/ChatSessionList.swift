@@ -55,9 +55,7 @@ struct ChatSessionList: View {
             #endif
             .task {
                 if let first = sessions.first, sessionVM.chatSelections.isEmpty, !(horizontalSizeClass == .compact) {
-                    DispatchQueue.main.async {
-                        sessionVM.chatSelections = [first]
-                    }
+                    sessionVM.chatSelections = [first]
                 }
             }
         }

@@ -78,9 +78,9 @@ struct ModelSelectionSheet: View {
             case .image:
                 let imageModel = ImageModel(code: selectableModel.code, name: selectableModel.name)
                 provider.imageModels.append(imageModel)
-            case .tts:
-                let ttsModel = STTModel(code: selectableModel.code, name: selectableModel.name)
-                provider.sttModels.append(ttsModel)
+            case .stt:
+                let sttModel = STTModel(code: selectableModel.code, name: selectableModel.name)
+                provider.sttModels.append(sttModel )
             }
         }
         
