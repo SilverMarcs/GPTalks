@@ -5,7 +5,7 @@
 //  Created by Zabir Raihan on 18/09/2024.
 //
 
-#if os(iOS)
+#if !os(macOS)
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -16,8 +16,10 @@ struct CameraView: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
+        #if !os(visionOS)
         imagePicker.sourceType = .camera
-        imagePicker.allowsEditing = false // Ensure full-sized image
+        #endif
+        imagePicker.allowsEditing = false
         imagePicker.delegate = context.coordinator
         return imagePicker
     }

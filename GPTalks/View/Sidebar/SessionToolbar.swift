@@ -9,9 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct SessionToolbar: ToolbarContent {
-    #if !os(macOS)
-    @Environment(\.editMode) var editMode
-    #endif
     @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     

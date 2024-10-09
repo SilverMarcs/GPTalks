@@ -37,6 +37,8 @@ struct ConversationListToolbar: ToolbarContent {
             Color.clear
                 .sheet(isPresented: $showingInspector) {
                     ChatInspector(session: session, showingInspector: $showingInspector)
+                        .presentationDetents([.medium, .large])
+                        .presentationDragIndicator(.hidden)
                 }
         }
         

@@ -10,9 +10,6 @@ import SwiftUI
 struct ModelList<M: ModelType>: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    #if !os(macOS)
-    @Environment(\.editMode) var editMode
-    #endif
     @Bindable var provider: Provider
     @Binding var models: [M]
 
