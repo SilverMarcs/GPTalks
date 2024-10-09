@@ -14,7 +14,6 @@ struct ImageSessionToolbar: ToolbarContent {
     
     @Query(filter: #Predicate { $0.isEnabled && $0.supportsImage }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
-//    var providers: [Provider]
     
     var body: some ToolbarContent {
         SessionToolbar(

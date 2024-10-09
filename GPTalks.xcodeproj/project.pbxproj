@@ -720,7 +720,6 @@
 			isa = PBXGroup;
 			children = (
 				08B8DE142C97F3830041A690 /* Sidebar */,
-				08B8DE112C97F3510041A690 /* Markdown */,
 				08B82C1B2C74EA8300DC0183 /* DataFileViews */,
 				085524E02C4ED29400CBB827 /* MenubarCommands */,
 				08915D922C373332008ADE27 /* CustomUI */,
@@ -773,14 +772,6 @@
 				0834E7782C719C00007CB294 /* DataFileView.swift */,
 			);
 			path = DataFileViews;
-			sourceTree = "<group>";
-		};
-		08B8DE112C97F3510041A690 /* Markdown */ = {
-			isa = PBXGroup;
-			children = (
-				08B8DE122C97F3550041A690 /* MarkdownView.swift */,
-			);
-			path = Markdown;
 			sourceTree = "<group>";
 		};
 		08B8DE142C97F3830041A690 /* Sidebar */ = {
@@ -854,6 +845,7 @@
 				08C800482C36C521009581C5 /* AssistantMessage.swift */,
 				085276BF2C98794C009184D2 /* ToolCallView.swift */,
 				08B8DE222C97F4EA0041A690 /* ToolMessage.swift */,
+				08B8DE122C97F3550041A690 /* MarkdownView.swift */,
 			);
 			path = ConversationViews;
 			sourceTree = "<group>";

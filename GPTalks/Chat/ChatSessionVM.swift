@@ -79,7 +79,6 @@ import SwiftUI
     }
     
     
-    #warning("this may not work")
     func fork(session: ChatSession) {
         withAnimation {
             // Create a predicate to filter out sessions where isQuick is true
@@ -92,15 +91,12 @@ import SwiftUI
                 predicate: predicate
             )
             
-            // Fetch the sessions
-            if let sessions = try? modelContext.fetch(descriptor) {
-                modelContext.insert(session)
-                #if os(macOS)
-                self.chatSelections = [session]
-                #else
-                self.chatSelections = []
-                #endif
-            }
+            modelContext.insert(session)
+            #if os(macOS)
+            self.chatSelections = [session]
+            #else
+            self.chatSelections = []
+            #endif
         }
         
         try? modelContext.save()
@@ -131,12 +127,5 @@ import SwiftUI
         chatSelections = [newItem]
         
         return newItem
-    }
-    
-    var state: ListState = .chats
-    
-    enum ListState: String, CaseIterable {
-        case chats
-        case images
     }
 }
