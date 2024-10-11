@@ -32,7 +32,7 @@ struct AdvancedChatInspector: View {
                     Label("JSON", systemImage: "ellipsis.curlybraces")
                 }
                 .sessionExporter(isExporting: $isExportingJSON, sessions: [session])
-                .buttonStyle(ExternalLinkButtonStyle())
+                .buttonStyle(ClickHighlightButton())
                 .foregroundStyle(.accent)
                 
                 Button {
@@ -41,7 +41,7 @@ struct AdvancedChatInspector: View {
                     Label("Markdown", systemImage: "richtext.page")
                 }
                 .markdownSessionExporter(isExporting: $isExportingMarkdown, session: session)
-                .buttonStyle(ExternalLinkButtonStyle())
+                .buttonStyle(ClickHighlightButton())
                 .foregroundStyle(.accent)
             }
         }

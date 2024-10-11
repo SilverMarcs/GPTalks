@@ -100,7 +100,7 @@ struct BasicChatInspector: View {
             Text("Reset Context")
         }
         .foregroundStyle(.orange)
-        .buttonStyle(ExternalLinkButtonStyle())
+        .buttonStyle(ClickHighlightButton())
     }
     
     private var deleteAllMessages: some View {
@@ -112,7 +112,7 @@ struct BasicChatInspector: View {
             Text("Delete All Messages")
         }
         .foregroundStyle(.red)
-        .buttonStyle(ExternalLinkButtonStyle())
+        .buttonStyle(ClickHighlightButton())
         .confirmationDialog("Are you sure you want to delete all messages?", isPresented: $showingDeleteConfirmation) {
             Button("Delete All", role: .destructive) {
                 session.deleteAllConversations()

@@ -31,6 +31,7 @@ final class ConversationGroup {
         set { conversationsUnsorted = newValue }
     }
     
+    #warning("find better way to do this")
     var activeConversation: Conversation {
         if let conversation = conversations[safe: activeConversationIndex] {
             return conversation
