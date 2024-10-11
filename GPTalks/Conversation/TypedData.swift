@@ -6,10 +6,9 @@
 //
 
 import SwiftData
+import SwiftUI
 import UniformTypeIdentifiers
-#if os(macOS)
-import AppKit
-#endif
+import OpenAI
 
 struct TypedData: Codable, Identifiable, Hashable {
     var id: UUID = UUID()
@@ -29,5 +28,12 @@ struct TypedData: Codable, Identifiable, Hashable {
         #else
         PlatformImage(systemName: "doc.on.doc.fill")!
         #endif
+    }
+}
+
+extension TypedData {
+    var derivedFileType: AudioTranscriptionQuery.FileType? {
+        // Use the fileExtension property to find the corresponding FileType; this assumes your TypedData is using a String for file extensions.
+        return AudioTranscriptionQuery.FileType(rawValue: fileExtension)
     }
 }

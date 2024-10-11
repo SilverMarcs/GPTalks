@@ -97,7 +97,7 @@ struct ImageSessionList: View {
             session.title.localizedStandardContains(imageVM.searchText) ||
             (AppConfig.shared.expensiveSearch &&
              session.imageGenerations.contains { generation in
-                 generation.prompt.localizedStandardContains(imageVM.searchText)
+                generation.config.prompt.localizedStandardContains(imageVM.searchText)
              })
         }
     }

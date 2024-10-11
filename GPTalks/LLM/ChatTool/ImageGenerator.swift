@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftOpenAI
+import OpenAI
 import GoogleGenerativeAI
 import SwiftData
 
@@ -19,24 +19,22 @@ struct ImageGenerator: ToolProtocol {
         let modelContext = DatabaseService.shared.modelContext
         
         let parameters = getImageGenerationParameters(from: arguments)
-        let config = ImageConfigDefaults.shared
         
         var fetchDefaults = FetchDescriptor<ProviderDefaults>()
         fetchDefaults.fetchLimit = 1
         let fetchedProviders = try modelContext.fetch(fetchDefaults)
-        guard let provider = fetchedProviders.first?.toolImageProvider else {
+        guard let toolImageProvider = fetchedProviders.first?.toolImageProvider else {
             throw RuntimeError("No Tool Image provider found")
         }
         
+        let config: ImageConfig = .init(prompt: parameters.prompt, provider: toolImageProvider, model: toolImageProvider.toolImageModel)
+        
         let dataObjects = try await ImageGenerator.generateImages(
-            provider: provider,
-            model: provider.imageModel,
-            prompt: parameters.prompt,
-            numberOfImages: parameters.n
+            config: config
         )
         
         return .init(
-            string: "Provider: \(provider.name)\nModel: \(provider.imageModel.name)\nSize: \(config.size)",
+            string: "Provider: \(toolImageProvider.name)\nModel: \(toolImageProvider.imageModel.name)\nSize: \(config.size)\nQuality: \(config.quality)\nNumber of Images: \(config.numImages)",
             data: dataObjects
         )
     }
@@ -46,29 +44,34 @@ struct ImageGenerator: ToolProtocol {
         let n: Int
     }
     
-    static func generateImages(provider: Provider, model: ImageModel, prompt: String, numberOfImages: Int) async throws -> [Data] {
-        let service = OpenAIService.getService(provider: provider)
-        let createParameters = ImageCreateParameters(
-            prompt: prompt,
-            model: .custom(modelCode: model.code, size: .small),
-            numberOfImages: numberOfImages
-        )
-        let imageURLS = try await service.createImages(parameters: createParameters).data.map(\.url)
+    static func generateImages(config: ImageConfig) async throws -> [Data] {
+        let service = OpenAIService.getService(provider: config.provider)
+
+        let query = ImagesQuery(prompt: config.prompt,
+                                model: config.provider.imageModel.code,
+                                n: config.numImages,
+                                quality: config.quality,
+                                size: config.size)
         
+        
+        let imageUrls = try await service.images(query: query).data.map(\.url)
         var dataObjects: [Data] = []
-        
-        for url in imageURLS {
-            if let imageUrl = url {
+
+        for imageUrl in imageUrls {
+            if let urlString = imageUrl, let url = URL(string: urlString) {
                 do {
-                    let (data, _) = try await URLSession.shared.data(from: imageUrl)
+                    let (data, _) = try await URLSession.shared.data(from: url)
                     dataObjects.append(data)
                 } catch {
-                    print("Failed to download image from \(imageUrl): \(error)")
+                    print("Failed to download image from \(url): \(error)")
                 }
+            } else {
+                throw RuntimeError("Invalid image URL: \(imageUrl ?? "")")
             }
         }
-        
+
         return dataObjects
+
     }
     private static func getImageGenerationParameters(from jsonString: String) -> ImageGenerationParameters {
         let jsonData = jsonString.data(using: .utf8)!
@@ -82,12 +85,11 @@ struct ImageGenerator: ToolProtocol {
         If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. You may also specify the number of images to generate based on users request. If the user did not specify number, generate one image only.
         """
 
-    static var openai: ChatCompletionParameters.Tool {
+    static var openai: ChatQuery.ChatCompletionToolParam {
         return .init(
             function:
                 .init(
                     name: toolName,
-                    strict: false,
                     description: description,
                     parameters:
                         .init(

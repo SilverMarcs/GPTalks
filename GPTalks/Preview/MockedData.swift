@@ -117,7 +117,7 @@ extension SessionConfig {
 }
 
 extension ImageConfig {
-    static var mockImageConfig = ImageConfig(provider: .openAIProvider, model: .dalle)
+    static var mockImageConfig = ImageConfig(prompt: "New York City", provider: .openAIProvider, model: .dalle)
 }
 
 extension ChatSession {
@@ -129,7 +129,7 @@ extension ImageSession {
 }
 
 extension ImageGeneration {
-    static var mockImageGeneration: ImageGeneration = .init(prompt: "New York City", config: .mockImageConfig, session: .mockImageSession)
+    static var mockImageGeneration: ImageGeneration = .init(config: .mockImageConfig, session: .mockImageSession)
 }
 
 extension ConversationGroup {

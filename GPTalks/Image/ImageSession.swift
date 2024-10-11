@@ -38,7 +38,7 @@ class ImageSession {
         
         guard !prompt.isEmpty else { return }
         
-        let generation = ImageGeneration(prompt: prompt, config: config.copy(), session: self)
+        let generation = ImageGeneration(config: config.copy(prompt: prompt), session: self)
 
         imageGenerations.append(generation)
         

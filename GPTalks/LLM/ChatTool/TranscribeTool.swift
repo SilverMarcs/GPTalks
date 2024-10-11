@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftOpenAI
+import OpenAI
 import GoogleGenerativeAI
 import SwiftData
 
@@ -62,11 +62,16 @@ struct TranscribeTool: ToolProtocol {
     
     private static func transcribeText(provider: Provider, model: STTModel, typedData: TypedData) async throws -> String {
         let service = OpenAIService.getService(provider: provider)
+
         
-        let data = typedData.data
-        let fileName = typedData.fileExtension
-        let parameters = AudioTranscriptionParameters(fileName: fileName, file: data, model: model.code)
-        return try await service.createTranscription(parameters: parameters).text
+        if let fileType = typedData.derivedFileType {
+            let query = AudioTranscriptionQuery(file: typedData.data, fileType: fileType, model: model.code)
+            let result = try await service.audioTranscriptions(query: query)
+            return result.text
+        } else {
+            throw RuntimeError("Invalid audio/video file type")
+        }
+        
     }
     
     static let tokenCount = countTokensFromText(description)
@@ -75,11 +80,10 @@ struct TranscribeTool: ToolProtocol {
         You can open and access contents of audio files. Just respond with a list of file names without file extensions
         """
     
-    static var openai: ChatCompletionParameters.Tool {
+    static var openai: ChatQuery.ChatCompletionToolParam {
         .init(function:
                 .init(
                     name: toolName,
-                    strict: false,
                     description: description,
                     parameters:
                         .init(

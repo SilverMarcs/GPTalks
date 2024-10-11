@@ -73,7 +73,6 @@
 		085361232C4A390D007DAB62 /* ProviderPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361222C4A390D007DAB62 /* ProviderPicker.swift */; };
 		085361252C4A5ECC007DAB62 /* MaxTokensPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361242C4A5ECC007DAB62 /* MaxTokensPicker.swift */; };
 		0854706F2CB4C3A1007FE9DB /* ModelTypeOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0854706E2CB4C3A1007FE9DB /* ModelTypeOption.swift */; };
-		0854A18E2CB36C270055344E /* SwiftOpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0854A18D2CB36C270055344E /* SwiftOpenAI */; };
 		0854A1912CB36C350055344E /* SwiftAnthropic in Frameworks */ = {isa = PBXBuildFile; productRef = 0854A1902CB36C350055344E /* SwiftAnthropic */; };
 		085524E22C4ED2A400CBB827 /* MenuCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E12C4ED2A400CBB827 /* MenuCommands.swift */; };
 		085524E42C4ED2B800CBB827 /* ChatCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E32C4ED2B800CBB827 /* ChatCommands.swift */; };
@@ -161,6 +160,7 @@
 		08C1ACE22C54BC9C00B86D37 /* PresencePenaltySlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACE12C54BC9C00B86D37 /* PresencePenaltySlider.swift */; };
 		08C1ACE42C54BCA600B86D37 /* FrequencyPenaltySlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACE32C54BCA600B86D37 /* FrequencyPenaltySlider.swift */; };
 		08C1ACE62C54BCB600B86D37 /* TopPSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACE52C54BCB600B86D37 /* TopPSlider.swift */; };
+		08C219CB2CB80D5F0062BF1B /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08C219CA2CB80D5F0062BF1B /* OpenAI */; };
 		08C49FD82C502EC90085792F /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C49FD72C502EC90085792F /* FileHelper.swift */; };
 		08C5C7292C9A1392004992A4 /* GoogleAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5C7282C9A1392004992A4 /* GoogleAuthManager.swift */; };
 		08C5C72B2C9A139F004992A4 /* GoogleSignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5C72A2C9A139F004992A4 /* GoogleSignIn.swift */; };
@@ -428,7 +428,7 @@
 				08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */,
 				08D040222C5C8A0B0075B754 /* GoogleGenerativeAI in Frameworks */,
 				0854A1912CB36C350055344E /* SwiftAnthropic in Frameworks */,
-				0854A18E2CB36C270055344E /* SwiftOpenAI in Frameworks */,
+				08C219CB2CB80D5F0062BF1B /* OpenAI in Frameworks */,
 				08E1956C2C6FB66600BA9506 /* MarkdownWebView in Frameworks */,
 				089791FE2C835306003C95CD /* MarkdownWebView in Frameworks */,
 				08CF5B8C2C689BDF0079D5EE /* MarkdownWebView in Frameworks */,
@@ -972,8 +972,8 @@
 				089791FD2C835306003C95CD /* MarkdownWebView */,
 				089792002C835885003C95CD /* MarkdownWebView */,
 				0891AC0C2C846B2B001379C0 /* Reeeed */,
-				0854A18D2CB36C270055344E /* SwiftOpenAI */,
 				0854A1902CB36C350055344E /* SwiftAnthropic */,
+				08C219CA2CB80D5F0062BF1B /* OpenAI */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -1054,7 +1054,7 @@
 				086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 				089791FF2C835885003C95CD /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */,
-				0854A18C2CB36C270055344E /* XCRemoteSwiftPackageReference "SwiftOpenAI" */,
+				08C219C92CB80D5F0062BF1B /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1656,14 +1656,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		0854A18C2CB36C270055344E /* XCRemoteSwiftPackageReference "SwiftOpenAI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/SwiftOpenAI";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/generative-ai-swift";
@@ -1712,6 +1704,14 @@
 				minimumVersion = 1.0.4;
 			};
 		};
+		08C219C92CB80D5F0062BF1B /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SilverMarcs/OpenAI";
+			requirement = {
+				branch = cancellable;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1738,11 +1738,6 @@
 		0846B9F92C6EFF0800AC3FD4 /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MarkdownWebView;
-		};
-		0854A18D2CB36C270055344E /* SwiftOpenAI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0854A18C2CB36C270055344E /* XCRemoteSwiftPackageReference "SwiftOpenAI" */;
-			productName = SwiftOpenAI;
 		};
 		0854A1902CB36C350055344E /* SwiftAnthropic */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1781,6 +1776,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 08AAFB9F2C3D1086002C04E0 /* XCRemoteSwiftPackageReference "GPTEncoder" */;
 			productName = GPTEncoder;
+		};
+		08C219CA2CB80D5F0062BF1B /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08C219C92CB80D5F0062BF1B /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
 		};
 		08CF5B8B2C689BDF0079D5EE /* MarkdownWebView */ = {
 			isa = XCSwiftPackageProductDependency;

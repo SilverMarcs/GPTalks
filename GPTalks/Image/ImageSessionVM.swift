@@ -44,7 +44,7 @@ import Foundation
         
         if let providedProvider = provider {
             // Use the provided provider
-            config = ImageConfig(provider: providedProvider)
+            config = ImageConfig(prompt: "", provider: providedProvider)
         } else {
             // Use the default provider
             let fetchDefaults = FetchDescriptor<ProviderDefaults>()

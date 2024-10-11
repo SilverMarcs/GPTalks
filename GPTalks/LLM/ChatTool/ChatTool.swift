@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SwiftOpenAI
+import OpenAI
 import GoogleGenerativeAI
 import SwiftData
 
@@ -31,7 +31,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
         }
     }
     
-    var openai: ChatCompletionParameters.Tool {
+    var openai: ChatQuery.ChatCompletionToolParam {
         toolType.openai
     }
     

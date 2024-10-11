@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftOpenAI
+import OpenAI
 import GoogleGenerativeAI
 import Reeeed
 
@@ -86,11 +86,10 @@ struct URLScrape: ToolProtocol {
         for a more in-depth response.
         """
     
-    static var openai: ChatCompletionParameters.Tool {
+    static var openai: ChatQuery.ChatCompletionToolParam {
         .init(function:
                 .init(
                     name: toolName,
-                    strict: false,
                     description: description,
                     parameters:
                         .init(

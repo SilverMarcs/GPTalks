@@ -6,11 +6,11 @@
 //
 
 import Foundation
-import SwiftOpenAI
+import OpenAI
 import GoogleGenerativeAI
 
 protocol ToolProtocol {
-    static var openai: ChatCompletionParameters.Tool { get }
+    static var openai: ChatQuery.ChatCompletionToolParam { get }
     static var google: Tool { get }
     static var vertex: [String: Any] { get }
     static var tokenCount: Int { get }

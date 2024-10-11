@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftData
-import SwiftOpenAI
+import OpenAI
 import GoogleGenerativeAI
 import PDFKit
 
@@ -78,11 +78,10 @@ struct PDFReader: ToolProtocol {
         You can open and access contents of pdf files. Just respond with a list of file names without file extensions
         """
     
-    static var openai: ChatCompletionParameters.Tool {
+    static var openai: ChatQuery.ChatCompletionToolParam {
         .init(function:
                 .init(
                     name: "pdfReader",
-                    strict: false,
                     description: description,
                     parameters:
                         .init(

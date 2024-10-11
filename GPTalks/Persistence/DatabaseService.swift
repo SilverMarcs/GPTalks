@@ -79,7 +79,7 @@ class DatabaseService {
         let normalSession = ChatSession(config: normalSessionConfig)
         modelContext.insert(normalSession)
         
-        let imageSessionConfig = ImageConfig(provider: openAI)
+        let imageSessionConfig = ImageConfig(prompt: "", provider: openAI)
         let imageSession = ImageSession(config: imageSessionConfig)
         modelContext.insert(imageSession)
         

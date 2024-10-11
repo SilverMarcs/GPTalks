@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftOpenAI
+import OpenAI
 import SwiftData
 
 @Model
@@ -19,23 +19,31 @@ class ImageConfig {
     @Relationship(deleteRule: .nullify)
     var model: ImageModel
     
+    var prompt: String
     var numImages: Int = ImageConfigDefaults.shared.numImages
-    var size: Dalle.Dalle2ImageSize = ImageConfigDefaults.shared.size
+    var size: ImagesQuery.Size = ImageConfigDefaults.shared.size
+    var quality: ImagesQuery.Quality = ImageConfigDefaults.shared.quality
+    var style: ImagesQuery.Style = ImageConfigDefaults.shared.style
     
-    init(provider: Provider) {
+    init(prompt: String = "", provider: Provider) {
+        self.prompt = prompt
         self.provider = provider
         self.model = provider.imageModel
     }
     
-    init(provider: Provider, model: ImageModel) {
+    init(prompt: String = "", provider: Provider, model: ImageModel) {
+        self.prompt = prompt
         self.provider = provider
         self.model = model
     }
     
-    func copy() -> ImageConfig {
+    func copy(prompt: String) -> ImageConfig {
         let copy = ImageConfig(provider: provider, model: model)
-        copy.numImages = numImages
-        copy.size = size
+        copy.prompt = prompt
+        copy.numImages = self.numImages
+        copy.size = self.size
+        copy.quality = self.quality
+        copy.style = self.style
         return copy
     }
 }

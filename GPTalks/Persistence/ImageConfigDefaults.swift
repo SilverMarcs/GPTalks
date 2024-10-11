@@ -6,14 +6,16 @@
 //
 
 import SwiftUI
-import SwiftOpenAI
+import OpenAI
 
 class ImageConfigDefaults: ObservableObject {
     static let shared = ImageConfigDefaults()
     private init() {}
     
     @AppStorage("numImages") var numImages: Int = 1
-    @AppStorage("size") var size: Dalle.Dalle2ImageSize = Dalle.Dalle2ImageSize.small
+    @AppStorage("size") var size: ImagesQuery.Size = ImagesQuery.Size._256
+    @AppStorage("quality") var quality = ImagesQuery.Quality.standard
+    @AppStorage("style") var style = ImagesQuery.Style.natural
     
     @AppStorage("imageWidth") var imageWidth: Int = 250
     @AppStorage("imageHeight") var imageHeight: Int = 250

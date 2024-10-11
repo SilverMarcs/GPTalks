@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftOpenAI
+import OpenAI
 import GoogleGenerativeAI
 
 struct GoogleSearch: ToolProtocol {
@@ -87,11 +87,10 @@ struct GoogleSearch: ToolProtocol {
         - Usually prioritize your pre-existing knowledge before wanting to call this tool
         """
     
-    static var openai: ChatCompletionParameters.Tool {
+    static var openai: ChatQuery.ChatCompletionToolParam {
         .init(function:
                 .init(
                     name: "googleSearch",
-                    strict: false,
                     description: description,
                     parameters:
                             .init(type: .object,

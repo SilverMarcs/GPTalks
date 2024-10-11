@@ -19,7 +19,7 @@ struct URLScrapeSettings: View {
             IntegerStepper(value: $config.urlMaxContentLength,
                            label: "Content Length",
                            secondaryLabel: "Number of prefix characters to return from each url",
-                           step: 500, range: 500...20000)
+                           step: 500, range: 1000...30000)
         }
     }
 }
