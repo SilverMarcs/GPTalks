@@ -36,7 +36,6 @@ struct SessionFileImporterModifier: ViewModifier {
     @Binding var isImporting: Bool
     let modelContext: ModelContext
     let existingSessions: [ChatSession]
-    let providers: [Provider]
     
     func body(content: Content) -> some View {
         content
@@ -49,7 +48,7 @@ struct SessionFileImporterModifier: ViewModifier {
                 case .success(let urls):
                     guard let url = urls.first else { return }
                     do {
-                        let restoredSessions = try restoreSessions(from: url, providers: providers)
+                        let restoredSessions = try restoreSessions(from: url)
                         for session in restoredSessions {
                             if !existingSessions.contains(where: { $0.id == session.id }) {
                                 modelContext.insert(session)
@@ -70,8 +69,8 @@ extension View {
         self.modifier(SessionFileExporterModifier(isExporting: isExporting, sessions: sessions))
     }
     
-    func sessionImporter(isImporting: Binding<Bool>, modelContext: ModelContext, existingSessions: [ChatSession], providers: [Provider]) -> some View {
-        self.modifier(SessionFileImporterModifier(isImporting: isImporting, modelContext: modelContext, existingSessions: existingSessions, providers: providers))
+    func sessionImporter(isImporting: Binding<Bool>, modelContext: ModelContext, existingSessions: [ChatSession]) -> some View {
+        self.modifier(SessionFileImporterModifier(isImporting: isImporting, modelContext: modelContext, existingSessions: existingSessions))
     }
 }
 

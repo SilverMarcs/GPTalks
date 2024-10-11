@@ -36,6 +36,9 @@ struct ModelSelectionSheet: View {
                                         .tag(option)
                                 }
                             }
+                            .onChange(of: selectableModel.selectedModelType) {
+                                selectableModel.isSelected = true
+                            }
                             .labelsHidden()
                             .pickerStyle(.segmented)
                             .fixedSize()
@@ -75,6 +78,9 @@ struct ModelSelectionSheet: View {
             case .image:
                 let imageModel = ImageModel(code: selectableModel.code, name: selectableModel.name)
                 provider.imageModels.append(imageModel)
+            case .stt:
+                let sttModel = STTModel(code: selectableModel.code, name: selectableModel.name)
+                provider.sttModels.append(sttModel )
             }
         }
         

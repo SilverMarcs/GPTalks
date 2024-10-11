@@ -6,17 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ProviderRow: View {
     var provider: Provider
-    @ObservedObject var selectionManager = ProviderManager.shared
+    @Query var providerDefaults: [ProviderDefaults]
     
     var body: some View {
         HStack {
             ProviderImage(provider: provider, radius: 6, frame: 18, scale: .small)
             Text(provider.name)
             Spacer()
-            if selectionManager.defaultProvider == provider.id.uuidString {
+            if providerDefaults.first!.defaultProvider == provider {
                 Image(systemName: "star.fill")
                     .imageScale(.small)
                     .foregroundStyle(.orange)

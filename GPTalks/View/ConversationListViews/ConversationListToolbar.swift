@@ -18,7 +18,6 @@ struct ConversationListToolbar: ToolbarContent {
         #if os(macOS)
         ToolbarItem(placement: .navigation) {
             Button {
-//                toggleInspector()
                 showingShortcuts.toggle()
             } label: {
                 Label("Shortcuts", systemImage: "slider.vertical.3")
@@ -38,6 +37,8 @@ struct ConversationListToolbar: ToolbarContent {
             Color.clear
                 .sheet(isPresented: $showingInspector) {
                     ChatInspector(session: session, showingInspector: $showingInspector)
+                        .presentationDetents([.medium, .large])
+                        .presentationDragIndicator(.hidden)
                 }
         }
         

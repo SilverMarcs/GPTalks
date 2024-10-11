@@ -1,5 +1,5 @@
 {
-  "originHash" : "b8d805799215c2484121eff19e48ba0927a76dd101092ef66b7691deda53d15f",
+  "originHash" : "5d1d8c6e8f87989a9a61e1a4b54ca926b0305ed6155b1862c1d0d683dd049a0b",
   "pins" : [
     {
       "identity" : "fuzi",
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
       "state" : {
-        "revision" : "9369a045a72a5296150879781321aecd228171db",
-        "version" : "2.1.0"
+        "revision" : "09e4a10ed6b65b3a40fe07b6bf0c84809313efc4",
+        "version" : "2.0.0"
       }
     },
     {
@@ -44,6 +44,15 @@
       "state" : {
         "branch" : "master",
         "revision" : "fda3c84242a5aa0c29d94b6208db45911b45be98"
+      }
+    },
+    {
+      "identity" : "openai",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/OpenAI",
+      "state" : {
+        "branch" : "cancellable",
+        "revision" : "b00b7b607be73db06a4dc7a18fd50e5ac5d2c828"
       }
     },
     {
@@ -62,15 +71,6 @@
       "state" : {
         "revision" : "a624abcf464117a0c113043d0b94f294b4bed4d1",
         "version" : "1.8.2"
-      }
-    },
-    {
-      "identity" : "swiftopenai",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/SwiftOpenAI",
-      "state" : {
-        "branch" : "main",
-        "revision" : "1975f54a3ac52d5d847a5a77393a1c12f1decbc5"
       }
     },
     {

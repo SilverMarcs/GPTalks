@@ -44,15 +44,13 @@ import Foundation
         
         if let providedProvider = provider {
             // Use the provided provider
-            config = ImageConfig(provider: providedProvider)
+            config = ImageConfig(prompt: "", provider: providedProvider)
         } else {
             // Use the default provider
-            let fetchProviders = FetchDescriptor<Provider>()
-            let fetchedProviders = try! modelContext.fetch(fetchProviders)
+            let fetchDefaults = FetchDescriptor<ProviderDefaults>()
+            let defaults = try! modelContext.fetch(fetchDefaults)
             
-            guard let defaultProvider = ProviderManager.shared.getImageProvider(providers: fetchedProviders) else {
-                return nil
-            }
+            let defaultProvider = defaults.first!.imageProvider
             
             config = ImageConfig(provider: defaultProvider)
         }

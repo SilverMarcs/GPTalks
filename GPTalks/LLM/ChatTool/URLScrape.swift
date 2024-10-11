@@ -6,16 +6,20 @@
 //
 
 import Foundation
-import SwiftOpenAI
+import OpenAI
 import GoogleGenerativeAI
 import Reeeed
 
-struct URLScrape {
+struct URLScrape: ToolProtocol {
+    static let toolName = "urlScrape"
+    static let displayName: String = "URL Scrape"
+    static let icon: String = "network"
+    
     struct URLList: Codable {
         let url_list: [String]
     }
     
-    static func getContent(from arguments: String) async throws -> ToolData {
+    static func process(arguments: String) async throws -> ToolData {
         var totalContent: String = ""
         let urls = URLScrape.getURLs(from: arguments)
         for url in urls {
@@ -27,7 +31,6 @@ struct URLScrape {
     
     private static func getURLs(from jsonString: String) -> [URL] {
         let jsonData = jsonString.data(using: .utf8)!
-        print(jsonString)
         let urlList = try! JSONDecoder().decode(URLList.self, from: jsonData)
         
         // Convert strings to URL objects
@@ -52,7 +55,7 @@ struct URLScrape {
             print(error.localizedDescription)
         }
         
-        return String(final.prefix(ToolConfigDefaults.shared.maxContentLength))
+        return String(final.prefix(ToolConfigDefaults.shared.urlMaxContentLength))
     }
     
     
@@ -83,11 +86,10 @@ struct URLScrape {
         for a more in-depth response.
         """
     
-    static var openai: ChatCompletionParameters.Tool {
+    static var openai: ChatQuery.ChatCompletionToolParam {
         .init(function:
                 .init(
-                    name: "urlScrape",
-                    strict: false,
+                    name: toolName,
                     description: description,
                     parameters:
                         .init(
@@ -108,13 +110,13 @@ struct URLScrape {
     static var google: Tool {
         Tool(functionDeclarations: [
             FunctionDeclaration(
-                name: "urlScrape",
+                name: toolName,
                 description: description,
                 parameters: [
-                    "url_list": Schema(
+                    "url_list": .init(
                         type: .array,
                         description: "The array of URLs of the websites to scrape",
-                        items: Schema(type: .string)
+                        items: .init(type: .string)
                     )
                 ],
                 requiredParameters: ["url_list"]
@@ -124,7 +126,7 @@ struct URLScrape {
     
     static var vertex: [String: Any] {
          [
-            "name": "urlScrape",
+            "name": toolName,
             "description": description,
             "input_schema": [
                 "type": "object",

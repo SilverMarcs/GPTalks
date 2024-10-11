@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ImageSessionList: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ImageSessionVM.self) var imageVM
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
@@ -50,10 +51,8 @@ struct ImageSessionList: View {
             .searchable(text: $imageVM.searchText)
             #endif
             .task {
-                if imageVM.imageSelections.isEmpty, let first = sessions.first, !isIOS() {
-                    DispatchQueue.main.async {
-                        imageVM.imageSelections = [first]
-                    }
+                if imageVM.imageSelections.isEmpty, let first = sessions.first, !(horizontalSizeClass == .compact) {
+                    imageVM.imageSelections = [first]
                 }
             }
         }
@@ -98,7 +97,7 @@ struct ImageSessionList: View {
             session.title.localizedStandardContains(imageVM.searchText) ||
             (AppConfig.shared.expensiveSearch &&
              session.imageGenerations.contains { generation in
-                 generation.prompt.localizedStandardContains(imageVM.searchText)
+                generation.config.prompt.localizedStandardContains(imageVM.searchText)
              })
         }
     }

@@ -16,15 +16,10 @@ struct URLScrapeSettings: View {
         }
         
         Section {
-            VStack {
-                VStack(alignment: .leading) {
-                    IntegerStepper(value: $config.maxContentLength, label: "Content Length", step: 500, range: 500...20000)
-                    
-                    Text("Number of prefix characters to return from each url")
-                       .font(.caption)
-                       .foregroundStyle(.secondary)
-                }
-            }
+            IntegerStepper(value: $config.urlMaxContentLength,
+                           label: "Content Length",
+                           secondaryLabel: "Number of prefix characters to return from each url",
+                           step: 500, range: 1000...30000)
         }
     }
 }

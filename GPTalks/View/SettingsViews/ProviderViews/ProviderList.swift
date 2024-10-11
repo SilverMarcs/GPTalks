@@ -11,7 +11,7 @@ import SwiftData
 struct ProviderList: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \Provider.order) var providers: [Provider]
-    @ObservedObject var providerManager = ProviderManager.shared
+    @Query var providerDefaults: [ProviderDefaults]
     
     @State var selectedProvider: Provider?
     
@@ -38,7 +38,6 @@ struct ProviderList: View {
     var content: some View {
         List(selection: $selectedProvider) {
             ForEach(reorderedProviders, id: \.self) { provider in
-//                NavigationLink(value: provider) {
                 NavigationLink(destination: ProviderDetail(provider: provider, reorderProviders: { self.reorderProviders() })) {
                     ProviderRow(provider: provider)
                 }
@@ -94,7 +93,7 @@ extension ProviderList {
             return
         }
         
-        let defaultProvider = ProviderManager.shared.getDefault(providers: providers)
+        let defaultProvider = providerDefaults.first!.defaultProvider
         
         for index in offsets {
             let providerToDelete = reorderedProviders[index]
@@ -103,10 +102,8 @@ extension ProviderList {
                 providersToDelete.remove(index)
             } else {
                 for sessionConfig in allSessionConfigs where sessionConfig.provider == providerToDelete {
-                    if let defaultProvider = defaultProvider {
-                        sessionConfig.provider = defaultProvider
-                        sessionConfig.model = sessionConfig.provider.chatModel
-                    }
+                    sessionConfig.provider = defaultProvider
+                    sessionConfig.model = sessionConfig.provider.chatModel
                 }
             }
         }

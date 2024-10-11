@@ -6,13 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
-//    @Environment(ChatSessionVM.self) private var sessionVM
-//    
-//    @State var selections: Set<ChatSession> = []
-//    @FocusState private var isFocused: Bool
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     #if os(macOS)
     @State private var selectedSidebarItem: SidebarItem? = .general
@@ -21,6 +19,8 @@ struct SettingsView: View {
     #endif
     
     @State private var columnVisibility = NavigationSplitViewVisibility.automatic
+    
+    @Query var providerDefaults: [ProviderDefaults]
     
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
@@ -58,7 +58,7 @@ struct SettingsView: View {
             .toolbar(removing: .sidebarToggle)
             .toolbar{
                 Spacer()
-                if isIOS() || isVisionOS() {
+                if horizontalSizeClass == .compact {
                     DismissButton()
                 }
             }
@@ -73,13 +73,13 @@ struct SettingsView: View {
                 case .markdown:
                     MarkdownSettings()
                 case .quickPanel:
-                    QuickPanelSettings()
+                    QuickPanelSettings(providerDefaults: providerDefaults.first!)
                 case .tools:
-                    ToolSettings()
+                    ToolSettings(providerDefaults: providerDefaults.first!)
                 case .parameters:
                     ParameterSettings()
                 case .image:
-                    ImageSettings()
+                    ImageSettings(providerDefaults: providerDefaults.first!)
                 case .providers:
                     ProviderList()
                 case .backup:
@@ -97,14 +97,6 @@ struct SettingsView: View {
                 }
             }
         }
-//        .onAppear {
-//            selections = sessionVM.chatSelections
-//            sessionVM.chatSelections = []
-//            isFocused = true
-//        }
-//        .onDisappear {
-//            sessionVM.chatSelections = selections
-//        }
     }
     
     enum SidebarItem {

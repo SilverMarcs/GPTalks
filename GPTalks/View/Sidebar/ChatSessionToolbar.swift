@@ -22,7 +22,11 @@ struct ChatSessionToolbar: ToolbarContent {
                 sessionVM.createNewSession(provider: provider)
             },
             getDefaultProvider: { providers in
-                ProviderManager.shared.getDefault(providers: providers)
+                let fetchDefaults = FetchDescriptor<ProviderDefaults>()
+                let defaults = try! modelContext.fetch(fetchDefaults)
+                
+                let defaultProvider = defaults.first!.defaultProvider
+                return defaultProvider
             }
         )
     }

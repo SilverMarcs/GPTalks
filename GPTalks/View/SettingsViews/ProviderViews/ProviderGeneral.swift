@@ -6,18 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ProviderGeneral: View {
-    @ObservedObject var providerManager = ProviderManager.shared
-    
     @Bindable var provider: Provider
     var reorderProviders: () -> Void
     
     @State var showKey: Bool = false
     @State var showPopover: Bool = false
 
-    @State private var color =
-        Color(.sRGB, red: 1, green: 1, blue: 1)
+    @State private var color = Color(.sRGB, red: 1, green: 1, blue: 1)
+    
+    @Query var providerDefaults: [ProviderDefaults]
 
     var body: some View {
         Form {
@@ -71,9 +71,9 @@ struct ProviderGeneral: View {
             }
     
             Section("Default Models") {
-                ChatModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
+                ModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
                 
-                ChatModelPicker(model: $provider.titleModel, models: provider.chatModels, label: "Title Model")
+                ModelPicker(model: $provider.titleModel, models: provider.chatModels, label: "Title Model")
             }
 
             Section("Customisation") {
@@ -144,22 +144,21 @@ struct ProviderGeneral: View {
         }
     }
     
+    @ViewBuilder
     private var defaultSetter: some View {
-        Group {
-            if provider.id.uuidString == providerManager.defaultProvider {
-                Text("DEFAULT")
-                    .font(.body)
-                    .foregroundStyle(.secondary)
-                
-            } else {
-                Button {
-                    providerManager.defaultProvider = provider.id.uuidString
-                } label: {
-                    Text("Set as Default")
-                }
-                .buttonStyle(.plain)
-                .foregroundStyle(.blue)
+        if provider == providerDefaults.first!.defaultProvider {
+            Text("DEFAULT")
+                .font(.body)
+                .foregroundStyle(.secondary)
+            
+        } else {
+            Button {
+                providerDefaults.first!.defaultProvider = provider
+            } label: {
+                Text("Set as Default")
             }
+            .buttonStyle(.plain)
+            .foregroundStyle(.blue)
         }
     }
     

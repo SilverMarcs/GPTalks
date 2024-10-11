@@ -302,6 +302,8 @@ final class ChatSession {
         
         groups.append(group)
         
+        try? modelContext?.save()
+        
         return group
     }
     

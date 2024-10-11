@@ -7,51 +7,23 @@
 
 import SwiftUI
 import SwiftData
-import SwiftOpenAI
+import OpenAI
 
 struct ImageSettings: View {
     @ObservedObject var imageConfig = ImageConfigDefaults.shared
-    @ObservedObject var providerManager = ProviderManager.shared
     
     @Query(filter: #Predicate { $0.isEnabled && $0.supportsImage}, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
 
-    private var providerBinding: Binding<Provider?> {
-        Binding<Provider?>(
-            get: {
-                self.providerManager.getImageProvider(providers: self.providers)
-            },
-            set: { newValue in
-                if let provider = newValue {
-                    self.providerManager.imageProvider = provider.id.uuidString
-                }
-            }
-        )
-    }
+    @Bindable var providerDefaults: ProviderDefaults
     
     var body: some View {
         Form {
             Section {
-                Picker("Provider", selection: providerBinding) {
-                    ForEach(providers) { provider in
-                        Text(provider.name).tag(provider)
-                    }
-                }
+                ProviderPicker(provider: $providerDefaults.toolSTTProvider, providers: providers)
                 
-                if let provider = providerBinding.wrappedValue {
-                    Picker("Model", selection: Binding(
-                        get: { provider.imageModel },
-                        set: { newValue in
-                            if let index = providers.firstIndex(where: { $0.id == provider.id }) {
-                                providers[index].imageModel = newValue
-                            }
-                        }
-                    )) {
-                        ForEach(provider.imageModels) { model in
-                            Text(model.name).tag(model)
-                        }
-                    }
-                }
+                ModelPicker(model: $providerDefaults.imageProvider.imageModel, models: providerDefaults.imageProvider.imageModels, label: "Image Model")
+                
             } header: {
                 Text("Defaults")
             } footer: {
@@ -72,8 +44,20 @@ struct ImageSettings: View {
 
                 
                 Picker("Size", selection: $imageConfig.size) {
-                    ForEach(ImageCreateParameters.ImageSize.allCases, id: \.self) { size in
-                        Text(size.rawValue).tag(size)
+                    ForEach(ImagesQuery.Size.allCases, id: \.self) { size in
+                        Text(size.rawValue)
+                    }
+                }
+                
+                Picker("Quality", selection: $imageConfig.quality) {
+                    ForEach(ImagesQuery.Quality.allCases, id: \.self) { quality in
+                        Text(quality.rawValue.uppercased())
+                    }
+                }
+                
+                Picker("Style", selection: $imageConfig.style) {
+                    ForEach(ImagesQuery.Style.allCases, id: \.self) { style in
+                        Text(style.rawValue.capitalized)
                     }
                 }
             }
@@ -120,5 +104,5 @@ struct ImageSettings: View {
 }
 
 #Preview {
-    ImageSettings()
+    ImageSettings(providerDefaults: .mockProviderDefaults)
 }

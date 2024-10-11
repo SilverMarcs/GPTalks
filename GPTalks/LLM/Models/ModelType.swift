@@ -13,18 +13,3 @@ protocol ModelType: Hashable, Identifiable, Codable {
     var name: String { get set }
     init(code: String, name: String)
 }
-
-enum ModelTypeOption: String, CaseIterable {
-    case chat
-    case image
-    // Add more cases as needed
-    
-    var icon: String {
-        switch self {
-        case .chat:
-            return "quote.bubble"
-        case .image:
-            return "photo"
-        }
-    }
-}

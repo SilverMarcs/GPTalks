@@ -78,6 +78,7 @@ import SwiftUI
         }
     }
     
+    
     func fork(session: ChatSession) {
         withAnimation {
             // Create a predicate to filter out sessions where isQuick is true
@@ -90,15 +91,12 @@ import SwiftUI
                 predicate: predicate
             )
             
-            // Fetch the sessions
-            if let sessions = try? modelContext.fetch(descriptor) {
-                modelContext.insert(session)
-                #if os(macOS)
-                self.chatSelections = [session]
-                #else
-                self.chatSelections = []
-                #endif
-            }
+            modelContext.insert(session)
+            #if os(macOS)
+            self.chatSelections = [session]
+            #else
+            self.chatSelections = []
+            #endif
         }
         
         try? modelContext.save()
@@ -113,12 +111,10 @@ import SwiftUI
             config = SessionConfig(provider: providedProvider, purpose: .chat)
         } else {
             // Use the default provider
-            let fetchProviders = FetchDescriptor<Provider>()
-            let fetchedProviders = try! modelContext.fetch(fetchProviders)
+            let fetchDefaults = FetchDescriptor<ProviderDefaults>()
+            let defaults = try! modelContext.fetch(fetchDefaults)
             
-            guard let defaultProvider = ProviderManager.shared.getDefault(providers: fetchedProviders) else {
-                return nil
-            }
+            let defaultProvider = defaults.first!.defaultProvider
             
             config = SessionConfig(provider: defaultProvider, purpose: .chat)
         }
@@ -126,20 +122,10 @@ import SwiftUI
         let newItem = ChatSession(config: config)
         try? modelContext.save()
         
-        var fetchSessions = FetchDescriptor<ChatSession>()
-        let fetchedSessions = try! modelContext.fetch(fetchSessions)
-        
         modelContext.insert(newItem)
         
         chatSelections = [newItem]
         
         return newItem
-    }
-    
-    var state: ListState = .chats
-    
-    enum ListState: String, CaseIterable {
-        case chats
-        case images
     }
 }

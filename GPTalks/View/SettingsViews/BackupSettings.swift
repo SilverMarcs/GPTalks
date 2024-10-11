@@ -25,7 +25,7 @@ struct BackupSettings: View {
                 importButton {
                     isImportingSession = true
                 }
-                .sessionImporter(isImporting: $isImportingSession, modelContext: modelContext, existingSessions: sessions, providers: providers)
+                .sessionImporter(isImporting: $isImportingSession, modelContext: modelContext, existingSessions: sessions)
                 
                 exportButton {
                     isExportingSession = true

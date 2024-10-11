@@ -21,6 +21,8 @@ struct AddModelSheet<M: ModelType>: View {
             self._selectedModelType = State(initialValue: .chat)
         } else if M.self == ImageModel.self {
             self._selectedModelType = State(initialValue: .image)
+        } else if M.self == STTModel.self {
+            self._selectedModelType = State(initialValue: .stt)
         } else {
             fatalError("Unsupported model type")
         }

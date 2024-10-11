@@ -22,7 +22,7 @@ struct ImageGenerationView: View {
                     }
                 }
                 
-                Text(generation.prompt)
+                Text(generation.config.prompt)
                     .textSelection(.enabled)
                     .padding(.vertical, 7)
                     .padding(.horizontal, 11)

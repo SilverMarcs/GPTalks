@@ -40,16 +40,13 @@ class AppConfig: ObservableObject {
     @AppStorage("truncateList") var truncateList: Bool = false
     @AppStorage("listCount") var listCount: Int = 16
     
-    @AppStorage("folderView") var folderView: Bool = false
-    
     // Markdown
     @AppStorage("markdownTheme") var markdownTheme: MarkdownTheme = .atom
     
     // General
     @AppStorage("autogenTitle") var autogenTitle: Bool = true
-    @AppStorage("expensiveSearch") var expensiveSearch: Bool = false
+    @AppStorage("expensiveSearch") var expensiveSearch: Bool = true
     @AppStorage("hideDock") var hideDock = false
-    @AppStorage("showStatusBar") var showStatusBar = false
     @AppStorage("onlyOneWindow") var onlyOneWindow = false
     
     // Quick

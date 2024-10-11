@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TranscriptionModel: Hashable, Identifiable, Codable, ModelType {
+struct STT: Hashable, Identifiable, Codable, ModelType {
     var id: UUID = UUID()
     var code: String
     var name: String
@@ -15,5 +15,11 @@ struct TranscriptionModel: Hashable, Identifiable, Codable, ModelType {
     init(code: String, name: String) {
         self.code = code
         self.name = name
+    }
+    
+    static func getOpenAITTSModels() -> [STT] {
+        return [
+            STT(code: "whisper-1", name: "Whisper-1"),
+        ]
     }
 }

@@ -6,10 +6,13 @@
 //
 
 import Foundation
-import SwiftOpenAI
+import OpenAI
 import GoogleGenerativeAI
 
-struct GoogleSearch {
+struct GoogleSearch: ToolProtocol {
+    static let displayName: String = "Google Search"
+    static let icon: String = "safari" 
+    
     static func performSearch(query: String) async throws -> ToolData {
         let apiKey = ToolConfigDefaults.shared.googleApiKey
         let googleSearchEngineId = ToolConfigDefaults.shared.googleSearchEngineId
@@ -48,7 +51,7 @@ struct GoogleSearch {
         }
     }
     
-    static func getResults(from arguments: String) async throws -> ToolData {
+    static func process(arguments: String) async throws -> ToolData {
         let query = getQuery(from: arguments)
         
         return try await performSearch(query: query)
@@ -84,11 +87,10 @@ struct GoogleSearch {
         - Usually prioritize your pre-existing knowledge before wanting to call this tool
         """
     
-    static var openai: ChatCompletionParameters.Tool {
+    static var openai: ChatQuery.ChatCompletionToolParam {
         .init(function:
                 .init(
                     name: "googleSearch",
-                    strict: false,
                     description: description,
                     parameters:
                             .init(type: .object,
@@ -106,7 +108,7 @@ struct GoogleSearch {
                 name: "googleSearch",
                 description: description,
                 parameters: [
-                    "query": Schema(
+                    "query": .init(
                         type: .string,
                         description: "The search query to search google with"
                     )

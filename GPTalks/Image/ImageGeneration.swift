@@ -16,12 +16,12 @@ class ImageGeneration {
     
     var session: ImageSession?
     
-    var prompt: String
     var errorMessage: String = ""
     
     @Relationship(deleteRule: .nullify)
     var config: ImageConfig
     
+    @Relationship(deleteRule: .cascade)
     var images: [Data] = []
     
     @Attribute(.ephemeral)
@@ -30,8 +30,7 @@ class ImageGeneration {
     @Transient
     var generatingTask: Task<Void, Error>?
 
-    init(prompt: String, config: ImageConfig, session: ImageSession) {
-        self.prompt = prompt
+    init(config: ImageConfig, session: ImageSession) {
         self.config = config
         self.session = session
         self.state = .generating
@@ -44,10 +43,7 @@ class ImageGeneration {
         generatingTask = Task {
             do {
                 let dataObjects = try await ImageGenerator.generateImages(
-                    provider: config.provider,
-                    model: config.provider.imageModel,
-                    prompt: prompt,
-                    numberOfImages: config.numImages
+                    config: config
                 )
                 
                 self.images = dataObjects

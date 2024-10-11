@@ -6,9 +6,7 @@
 //
 
 import SwiftUI
-
-import Foundation
-import SwiftUI
+import SwiftData
 import UniformTypeIdentifiers
 
 struct ChatSessionBackup: Codable {
@@ -48,14 +46,16 @@ extension ChatSessionBackup {
         }
     }
     
-    func toSession(providers: [Provider] = []) -> ChatSession {
+    func toSession() -> ChatSession {
         var session: ChatSession
         let provider: Provider
-        if let defaultProvider = ProviderManager.shared.getDefault(providers: providers) {
-            provider = defaultProvider
-            session = ChatSession(config: SessionConfig(provider: provider, purpose: .chat))
-        } else if let firstProvider = providers.first {
-            provider = firstProvider
+        
+        let modelContext = DatabaseService.shared.modelContext
+        
+        var fetchDefaults = FetchDescriptor<ProviderDefaults>()
+        fetchDefaults.fetchLimit = 1
+        
+        if let fetchedProviders = try? modelContext.fetch(fetchDefaults), let provider = fetchedProviders.first?.defaultProvider {
             session = ChatSession(config: SessionConfig(provider: provider, purpose: .chat))
         } else {
             print("Should not reach here")
@@ -116,7 +116,7 @@ struct SessionsDocument: FileDocument {
     }
 }
 
-func restoreSessions(from url: URL, providers: [Provider]) throws -> [ChatSession] {
+func restoreSessions(from url: URL) throws -> [ChatSession] {
     guard url.startAccessingSecurityScopedResource() else {
         throw NSError(domain: "FileAccessError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to access the security-scoped resource."])
     }
@@ -127,7 +127,7 @@ func restoreSessions(from url: URL, providers: [Provider]) throws -> [ChatSessio
     do {
         let data = try Data(contentsOf: url)
         let backups = try JSONDecoder().decode([ChatSessionBackup].self, from: data)
-        return backups.map { $0.toSession(providers: providers) }
+        return backups.map { $0.toSession() }
     } catch {
         print("Error reading or decoding file: \(error)")
         throw error

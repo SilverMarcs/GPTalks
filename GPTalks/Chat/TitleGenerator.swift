@@ -51,7 +51,7 @@ enum TitleGenerator {
     // Method to format image generations into a single string
     private static func formatImageGenerations(_ generations: [ImageGeneration]) -> String {
         return generations.map { generation in
-            return "--- Image Prompt ---\n\(generation.prompt)"
+            return "--- Image Prompt ---\n\(generation.config.prompt)"
         }.joined(separator: "\n\n")
     }
     

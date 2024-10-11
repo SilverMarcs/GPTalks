@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ToolSettings: View {
     @ObservedObject var config = ToolConfigDefaults.shared
+    var providerDefaults: ProviderDefaults
     
     var body: some View {
         NavigationStack {
@@ -21,7 +22,7 @@ struct ToolSettings: View {
             }
             .navigationDestination(for: ChatTool.self) { tool in
                 Form {
-                    tool.settings
+                    tool.settings(providerDefaults: providerDefaults)
                 }
                 .navigationTitle("\(tool.displayName) Settings")
                 .toolbarTitleDisplayMode(.inline)
@@ -36,5 +37,5 @@ struct ToolSettings: View {
 }
 
 #Preview {
-    ToolSettings()
+    ToolSettings(providerDefaults: .mockProviderDefaults)
 }

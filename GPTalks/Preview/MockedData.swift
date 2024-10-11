@@ -23,12 +23,20 @@ extension Provider {
     ]
 }
 
+extension ProviderDefaults {
+    static var mockProviderDefaults = ProviderDefaults(defaultProvider: .openAIProvider, quickProvider: .openAIProvider, imageProvider: .openAIProvider, toolImageProvider: .openAIProvider, toolSTTProvider: .openAIProvider)
+}
+
 extension ChatModel {
     static var gpt4 = ChatModel(code: "gpt", name: "GPT-4")
 }
 
 extension ImageModel {
     static var dalle = ImageModel(code: "dall-e-3", name: "DALL-E-3")
+}
+
+extension STTModel {
+    static var whisper = STTModel(code: "whisper-1", name: "Whisper-1")
 }
 
 extension String {
@@ -109,7 +117,7 @@ extension SessionConfig {
 }
 
 extension ImageConfig {
-    static var mockImageConfig = ImageConfig(provider: .openAIProvider, model: .dalle)
+    static var mockImageConfig = ImageConfig(prompt: "New York City", provider: .openAIProvider, model: .dalle)
 }
 
 extension ChatSession {
@@ -121,7 +129,7 @@ extension ImageSession {
 }
 
 extension ImageGeneration {
-    static var mockImageGeneration: ImageGeneration = .init(prompt: "New York City", config: .mockImageConfig, session: .mockImageSession)
+    static var mockImageGeneration: ImageGeneration = .init(config: .mockImageConfig, session: .mockImageSession)
 }
 
 extension ConversationGroup {

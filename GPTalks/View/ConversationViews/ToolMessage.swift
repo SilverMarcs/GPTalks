@@ -13,10 +13,9 @@ struct ToolMessage: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: spacing) {
-            Image(systemName: "blabla")
-                .resizable()
+            Rectangle()
+                .opacity(0)
                 .frame(width: size, height: size)
-                .foregroundStyle(.teal)
                 
             if !conversation.content.isEmpty {
                 Text(conversation.content)

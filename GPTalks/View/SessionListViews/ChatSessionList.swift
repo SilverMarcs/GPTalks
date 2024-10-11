@@ -9,6 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct ChatSessionList: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
@@ -29,7 +30,7 @@ struct ChatSessionList: View {
                 SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "↗")
                     .id(String.topID)
                 
-                if !sessionVM.searchText.isEmpty && sessions.isEmpty {
+                if !sessionVM.searchText.isEmpty && filteredSessions.isEmpty {
                     ContentUnavailableView.search(text: sessionVM.searchText)
                 } else {
                     ForEach(filteredSessions) { session in
@@ -53,10 +54,8 @@ struct ChatSessionList: View {
             .searchable(text: $sessionVM.searchText)
             #endif
             .task {
-                if let first = sessions.first, sessionVM.chatSelections.isEmpty, !isIOS() {
-                    DispatchQueue.main.async {
-                        sessionVM.chatSelections = [first]
-                    }
+                if let first = sessions.first, sessionVM.chatSelections.isEmpty, !(horizontalSizeClass == .compact) {
+                    sessionVM.chatSelections = [first]
                 }
             }
         }

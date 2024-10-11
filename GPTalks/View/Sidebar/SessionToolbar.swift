@@ -9,9 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct SessionToolbar: ToolbarContent {
-    #if !os(macOS)
-    @Environment(\.editMode) var editMode
-    #endif
     @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
@@ -55,17 +52,6 @@ struct SessionToolbar: ToolbarContent {
     var iosParts: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             Menu {
-                if editMode?.wrappedValue == .inactive {
-                    Button {
-                        withAnimation {
-                            editMode?.wrappedValue = .active
-                            config.truncateList = false
-                        }
-                    } label: {
-                        Label("Edit", systemImage: "pencil")
-                    }
-                }
-                
                 Button(action: { showSettings.toggle() }) {
                     Label("Settings", systemImage: "gear")
                 }
@@ -75,57 +61,6 @@ struct SessionToolbar: ToolbarContent {
             }
             .sheet(isPresented: $showSettings) {
                 SettingsView()
-            }
-        }
-        
-        if editMode?.wrappedValue == .active {
-            ToolbarItem(placement: .bottomBar) {
-                HStack {
-                    Button {
-                        withAnimation {
-                            editMode?.wrappedValue = .inactive
-                            config.truncateList = true
-                        }
-                    } label: {
-                        Text("Done")
-                    }
-                    
-                    Spacer()
-                    
-                    Menu {
-                        Button {
-//                            for session in sessionVM.getSelections(for: selectionType) {
-//                                session.isStarred.toggle()
-//                            }
-                        } label: {
-                            Label("Toggle Starred", systemImage: "star")
-                        }
-                        
-                        Section {
-                            Button {
-//                                sessionVM.selectAll(of: T.self, in: modelContext)
-                            } label: {
-                                Label("Select All", systemImage: "checkmark.circle")
-                            }
-                            
-                            Button {
-//                                sessionVM.deselectAll(for: selectionType)
-                            } label: {
-                                Label("Deselect All", systemImage: "xmark.circle")
-                            }
-                        }
-                        
-                        Button(role: .destructive) {
-//                            for session in sessionVM.getSelections(for: selectionType) {
-//                                modelContext.delete(session)
-//                            }
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
-                    } label: {
-                        Label("Actions", systemImage: "ellipsis.circle")
-                    }
-                }
             }
         }
     }

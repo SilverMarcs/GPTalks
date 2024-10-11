@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SwiftOpenAI
+import OpenAI
 import GoogleGenerativeAI
 import SwiftData
 
@@ -17,111 +17,61 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
     
     case urlScrape = "urlScrape"
     case googleSearch = "googleSearch"
-    case imageGenerate = "imageGenerate"
+    case imageGenerator = "imageGenerator"
     case transcribe = "transcribe"
+    case pdfReader = "pdfReader"
     
-    var openai: ChatCompletionParameters.Tool {
+    var toolType: ToolProtocol.Type {
         switch self {
-        case .urlScrape:
-            URLScrape.openai
-        case .googleSearch:
-            GoogleSearch.openai
-        case .imageGenerate:
-            GenerateImage.openai
-        case .transcribe:
-            URLScrape.openai
+        case .urlScrape: return URLScrape.self
+        case .googleSearch: return GoogleSearch.self
+        case .imageGenerator: return ImageGenerator.self
+        case .transcribe: return TranscribeTool.self
+        case .pdfReader: return PDFReader.self
         }
+    }
+    
+    var openai: ChatQuery.ChatCompletionToolParam {
+        toolType.openai
     }
     
     var google: Tool {
-        switch self {
-        case .urlScrape:
-            URLScrape.google
-        case .googleSearch:
-            GoogleSearch.google
-        case .imageGenerate:
-            GenerateImage.google
-        case .transcribe:
-            URLScrape.google
-        }
+        toolType.google
     }
     
     var vertex: [String: Any] {
-        switch self {
-        case .urlScrape:
-            URLScrape.vertex
-        case .googleSearch:
-            GoogleSearch.vertex
-        case .imageGenerate:
-            GenerateImage.vertex
-        case .transcribe:
-            URLScrape.vertex
-        }
+        toolType.vertex
     }
     
     var tokenCount: Int {
-        switch self {
-        case .urlScrape:
-            URLScrape.tokenCount
-        case .googleSearch:
-            GoogleSearch.tokenCount
-        case .imageGenerate:
-            GenerateImage.tokenCount
-        case .transcribe:
-            0
-        }
+        toolType.tokenCount
     }
     
     func process(arguments: String) async throws -> ToolData {
-        switch self {
-        case .urlScrape:
-            try await URLScrape.getContent(from: arguments)
-        case .googleSearch:
-            try await GoogleSearch.getResults(from: arguments)
-        case .imageGenerate:
-            try await GenerateImage.generateImage(from: arguments)
-        default:
-            .init(string: "No tool available")
-        }
+        try await toolType.process(arguments: arguments)
+    }
+    
+    var displayName: String {
+        toolType.displayName
+    }
+    
+    var icon: String {
+        toolType.icon
     }
     
     @ViewBuilder
-    var settings: some View {
+    func settings(providerDefaults: ProviderDefaults) -> some View {
         switch self {
         case .urlScrape:
             URLScrapeSettings()
         case .googleSearch:
             GoogleSearchSettings()
-        case .imageGenerate:
-            GenerateImageSettings()
+        case .imageGenerator:
+            GenerateImageSettings(providerDefaults: providerDefaults)
         case .transcribe:
-            TranscribeSettings()
-        }
-    }
-    
-    var displayName: String {
-        switch self {
-        case .urlScrape:
-            "URL Scrape"
-        case .googleSearch:
-            "Google Search"
-        case .imageGenerate:
-            "Image Generate"
-        case .transcribe:
-            "Transcribe"
-        }
-    }
-    
-    var icon: String {
-        switch self {
-        case .urlScrape:
-            "network"
-        case .googleSearch:
-            "safari"
-        case .transcribe:
-            "waveform"
-        case .imageGenerate:
-            "photo"
+            TranscribeSettings(providerDefaults: providerDefaults)
+        case .pdfReader:
+            PDFReaderSettings()
         }
     }
 }

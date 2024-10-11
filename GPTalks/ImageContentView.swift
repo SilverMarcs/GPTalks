@@ -10,9 +10,6 @@ import SwiftData
 
 struct ImageContentView: View {
     @Environment(ImageSessionVM.self) private var sessionVM
-//    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
-//    var providers: [Provider]
-    
     @State var showingInspector: Bool = true
     
     var body: some View {
@@ -28,6 +25,7 @@ struct ImageContentView: View {
                     .font(.title)
             }
         }
+        #if os(macOS)
         .inspector(isPresented: $showingInspector) {
             if let imageSession = sessionVM.activeImageSession {
                 ImageInspector(session: imageSession, showingInspector: $showingInspector)
@@ -36,6 +34,7 @@ struct ImageContentView: View {
                     .imageScale(.large)
             }
         }
+        #endif
     }
 }
 

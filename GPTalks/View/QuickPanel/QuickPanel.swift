@@ -93,7 +93,7 @@ struct QuickPanel: View {
                     }
                 )
 
-                ChatModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
+                ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
                 
                 Menu {
                     ToolsController(tools: $session.config.tools)
@@ -175,9 +175,13 @@ struct QuickPanel: View {
         session.deleteAllConversations()
         session.inputManager.dataFiles.removeAll()
         let oldConfig = session.config
-        if let quickProvider = ProviderManager.shared.getQuickProvider(providers: providers) {
-            session.config = .init(provider: quickProvider, purpose: .quick)
-        }
+
+        let fetchDefaults = FetchDescriptor<ProviderDefaults>()
+        let defaults = try! modelContext.fetch(fetchDefaults)
+        
+        let quickProvider = defaults.first!.quickProvider
+        session.config = .init(provider: quickProvider, purpose: .quick)
+        
         modelContext.delete(oldConfig)
     }
     

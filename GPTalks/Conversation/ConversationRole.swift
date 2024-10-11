@@ -6,21 +6,9 @@
 //
 
 import Foundation
-import SwiftOpenAI
+import OpenAI
 import GoogleGenerativeAI
 import SwiftAnthropic
-
-//enum ConversationRole: Codable {
-//    case user
-//    case assistant(AssistantType)
-//    case system
-//    case tool
-//
-//    enum AssistantType: String, Codable {
-//        case regular
-//        case tool
-//    }
-
 
 enum ConversationRole: String, Codable {
     case user
@@ -28,7 +16,7 @@ enum ConversationRole: String, Codable {
     case system
     case tool
     
-    func toOpenAIRole() -> ChatCompletionParameters.Message.Role {
+    func toOpenAIRole() -> ChatQuery.ChatCompletionMessageParam.Role {
         switch self {
         case .user:
             return .user
@@ -50,7 +38,7 @@ enum ConversationRole: String, Codable {
         }
     }
     
-    func toClaudeRole() -> SwiftAnthropic.MessageParameter.Message.Role {
+    func toClaudeRole() -> MessageParameter.Message.Role {
         switch self {
         case .user:
             return .user

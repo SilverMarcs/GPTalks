@@ -15,15 +15,17 @@ struct SessionConfigTools: Codable {
             toolStates = [
                 .googleSearch: false,
                 .urlScrape: false,
-                .imageGenerate: false,
-                .transcribe: false
+                .imageGenerator: false,
+                .transcribe: false,
+                .pdfReader: false
             ]
         } else {
             toolStates = [
                 .googleSearch: ToolConfigDefaults.shared.googleSearch,
                 .urlScrape: ToolConfigDefaults.shared.urlScrape,
-                .imageGenerate: ToolConfigDefaults.shared.imageGenerate,
-                .transcribe: ToolConfigDefaults.shared.transcribe
+                .imageGenerator: ToolConfigDefaults.shared.imageGenerate,
+                .transcribe: ToolConfigDefaults.shared.transcribe,
+                .pdfReader: ToolConfigDefaults.shared.pdfReader
             ]
         }
     }

@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+#if !os(macOS)
 struct IOSWindow: Scene {
     @Environment(ListStateVM.self) private var listStateVM
     @Environment(ChatSessionVM.self) private var chatVM
@@ -41,6 +42,7 @@ struct IOSWindow: Scene {
         }
     }
 }
+#endif
 
 @Observable class ListStateVM {
     var state: ListState = .chats

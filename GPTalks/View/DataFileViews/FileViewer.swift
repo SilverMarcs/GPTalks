@@ -14,7 +14,7 @@ struct FileViewer: View {
     var body: some View {
         Button(action: onTap) {
             HStack {
-                Image(platformImage: typedData.image)
+                Image(platformImage: typedData.imageName)
                     .renderingMode(.original)
                     .resizable()
                     .scaledToFit()
