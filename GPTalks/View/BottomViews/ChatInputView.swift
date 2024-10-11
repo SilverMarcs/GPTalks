@@ -14,7 +14,7 @@ struct ChatInputView: View {
     @Bindable var session: ChatSession
     
     @State private var isFilePickerPresented: Bool = false
-//    @State private var showCamera = false
+
     @State private var showPhotosPicker = false
     @State private var selectedPhotos = [PhotosPickerItem]()
     
@@ -24,12 +24,10 @@ struct ChatInputView: View {
         HStack(alignment: .bottom, spacing: 15) {
             if session.inputManager.state == .editing {
                 CrossButton(size: imageSize) { session.inputManager.resetEditing() }
-                    .offset(y: -2.4)
             }
             
             plusButton
             #if os(macOS)
-                .offset(y: -2.4)
                 .popoverTip(ChatCommandsTip())
             #endif
             
@@ -40,6 +38,7 @@ struct ChatInputView: View {
                 
                 InputEditor(prompt: $session.inputManager.prompt,
                             provider: session.config.provider, isFocused: _isFocused)
+                .padding(.vertical, -2)
             }
 
             ActionButton(size: imageSize, isStop: session.isReplying) {
@@ -49,8 +48,8 @@ struct ChatInputView: View {
                     sendInput()
                 }
             }
-            .offset(y: -2.4)
         }
+        .padding(.vertical, 1)
         .modifier(CommonInputStyling())
     }
 

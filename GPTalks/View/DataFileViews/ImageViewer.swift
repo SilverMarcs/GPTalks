@@ -20,7 +20,7 @@ struct ImageViewer: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: CGFloat(imageConfig.chatImageWidth), height: CGFloat(imageConfig.chatImageHeight))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
             } else {
                 Text("Image Unable to Load")
                     .frame(width: 100, height: 48)

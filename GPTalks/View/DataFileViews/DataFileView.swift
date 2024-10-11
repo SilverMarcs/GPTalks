@@ -17,34 +17,12 @@ struct DataFileView: View {
     @State private var selectedFileURL: URL?
     
     var body: some View {
-        VStack(alignment: edge, spacing: 10) {
-            // Image files
-            if !imageFiles.isEmpty {
-                HStack(alignment: .bottom, spacing: 10) {
-                    ForEach(imageFiles, id: \.self) { typedData in
-                        fileItemView(for: typedData)
-                    }
-                }
+        HStack {
+            ForEach(dataFiles, id: \.self) { typedData in
+                fileItemView(for: typedData)
             }
-            
-            // Other data files
-            if !otherFiles.isEmpty {
-                HStack(alignment: .bottom, spacing: 10) {
-                    ForEach(otherFiles, id: \.self) { typedData in
-                        fileItemView(for: typedData)
-                    }
-                }
-            }
+            .quickLookPreview($selectedFileURL)
         }
-        .quickLookPreview($selectedFileURL)
-    }
-    
-    private var imageFiles: [TypedData] {
-        dataFiles.filter { $0.fileType.conforms(to: .image) }
-    }
-    
-    private var otherFiles: [TypedData] {
-        dataFiles.filter { !$0.fileType.conforms(to: .image) }
     }
     
     @ViewBuilder
@@ -57,7 +35,7 @@ struct DataFileView: View {
                     dataFiles.removeAll(where: { $0.id == typedData.id })
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.background, .primary)
                         #if !os(macOS)
                         .padding(10) // Increase padding for better touch area
                         #endif
@@ -65,6 +43,8 @@ struct DataFileView: View {
                 }
                 .shadow(radius: 5)
                 .buttonStyle(.plain)
+                .padding(.top, -5)
+                .padding(.leading, -5)
             }
         }
     }

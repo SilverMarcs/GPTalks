@@ -13,29 +13,28 @@ struct FileViewer: View {
     
     var body: some View {
         Button(action: onTap) {
-            HStack {
-                Image(platformImage: typedData.imageName)
-                    .renderingMode(.original)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 38, height: 38)
-                
-                VStack(alignment: .leading) {
-                    Text(typedData.fileName.truncateText())
-                       .font(.callout)
-                       .fontWeight(.bold)
-                       .lineLimit(1)
-                       .truncationMode(.middle)
+            GroupBox {
+                HStack {
+                    Image(platformImage: typedData.imageName)
+                        .renderingMode(.original)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 38, height: 38)
                     
-                    Text("\(typedData.fileExtension.uppercased()) • \(typedData.fileSize)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    VStack(alignment: .leading) {
+                        Text(typedData.fileName.truncateText())
+                            .font(.callout)
+                            .fontWeight(.bold)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                        
+                        Text("\(typedData.fileExtension.uppercased()) • \(typedData.fileSize)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
-            .contentShape(Rectangle())
         }
-        .padding(5)
-        .background(RoundedRectangle(cornerRadius: 10).fill(.background.tertiary))
         .buttonStyle(.plain)
     }
 }
