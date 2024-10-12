@@ -24,14 +24,6 @@ struct ConversationShortcuts: View {
                 Divider()
                 
                 HStack {
-                    Text("Paste Files from Clipboard")
-                    Spacer()
-                    Text("⌘B")
-                }
-                
-                Divider()
-                
-                HStack {
                     Text("Stop Streaming")
                     Spacer()
                     Text("⌘D")

@@ -12,8 +12,6 @@ import SwiftData
 struct ChatContentView: View {
     @Environment(ChatSessionVM.self) private var sessionVM
     
-    @State var showingInspector: Bool = true
-    
     var body: some View {
         NavigationSplitView {
             ChatSessionList()
@@ -28,14 +26,6 @@ struct ChatContentView: View {
             }
         }
         .pasteHandler()
-        .inspector(isPresented: $showingInspector) {
-            if let chatSession = sessionVM.activeSession {
-                ChatInspector(session: chatSession, showingInspector: $showingInspector)
-            } else {
-                Text("Open a chat session for inspector")
-                    .font(.title)
-            }
-        }
     }
 }
 

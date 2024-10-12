@@ -26,6 +26,9 @@ struct DismissButton: View {
                 .foregroundStyle(.gray, .gray.opacity(0.3))
             #endif
         }
+        #if os(macOS)
+        .buttonStyle(.plain)
+        #endif
     }
 }
 

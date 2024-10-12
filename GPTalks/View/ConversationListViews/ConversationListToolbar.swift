@@ -22,7 +22,6 @@ struct ConversationListToolbar: ToolbarContent {
             } label: {
                 Label("Shortcuts", systemImage: "slider.vertical.3")
             }
-            .keyboardShortcut(".")
             .popover(isPresented: $showingShortcuts) {
                 ConversationShortcuts()
             }
@@ -32,15 +31,7 @@ struct ConversationListToolbar: ToolbarContent {
             Text("Tokens: \(session.tokenCount.formatToK())")
                 .foregroundStyle(.secondary)
         }
-        #else
-        ToolbarItem {
-            Color.clear
-                .sheet(isPresented: $showingInspector) {
-                    ChatInspector(session: session, showingInspector: $showingInspector)
-                        .presentationDetents([.medium, .large])
-                        .presentationDragIndicator(.hidden)
-                }
-        }
+        #endif
         
         ToolbarItem {
             Button {
@@ -49,18 +40,11 @@ struct ConversationListToolbar: ToolbarContent {
                 Label("Show Inspector", systemImage: "info.circle")
             }
             .keyboardShortcut(".")
-        }
-        #endif
-    }
-    
-    private var showInspector: some ToolbarContent {
-        ToolbarItem {
-            Button {
-                toggleInspector()
-            } label: {
-                Label("Show Inspector", systemImage: "info.circle")
+            .sheet(isPresented: $showingInspector) {
+                ChatInspector(session: session)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.hidden)
             }
-            .keyboardShortcut("i", modifiers: [.command, .shift])
         }
     }
     
@@ -73,8 +57,6 @@ struct ConversationListToolbar: ToolbarContent {
 }
 
 #Preview {
-    @Previewable @State var showingSearchField = false
-
     VStack {
         Text("Hello, World!")
     }

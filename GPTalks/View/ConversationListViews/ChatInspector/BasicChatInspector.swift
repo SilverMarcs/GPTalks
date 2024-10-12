@@ -49,7 +49,7 @@ struct BasicChatInspector: View {
                 sysPrompt
             }
             
-            Section("") {
+            Section {
                 resetContext
                 
                 deleteAllMessages
@@ -67,7 +67,7 @@ struct BasicChatInspector: View {
     private var sysPrompt: some View {
         TextField("System Prompt", text: $session.config.systemPrompt, axis: .vertical)
             #if os(macOS)
-            .lineLimit(7, reservesSpace: true)
+            .lineLimit(6, reservesSpace: true)
             #else
             .lineLimit(5, reservesSpace: true)
             #endif

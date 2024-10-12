@@ -61,6 +61,11 @@ struct ConversationList: View {
                     ChatInputView(session: session)
                 }
             }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                 if config.showStatusBar {
+                     ConversationStatusBar(session: session)
+                 }
+             }
         }
     }
     

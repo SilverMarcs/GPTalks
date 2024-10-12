@@ -11,41 +11,63 @@ import SwiftData
 struct ChatInspector: View {
     @Environment(\.dismiss) var dismiss
     var session: ChatSession
-    @Binding var showingInspector: Bool
     
     @State private var selectedTab: Tab = .basic
     
     var body: some View {
-        NavigationStack {
-            Group {
-                switch selectedTab {
-                case .basic:
-                    BasicChatInspector(session: session)
-                case .advanced:
-                    AdvancedChatInspector(session: session)
-                }
-            }
-            #if os(macOS)
-            .scrollDisabled(true)
-            #endif
-            .toolbarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
+        #if os(macOS)
+        macos
+        #else
+        ios
+        #endif
+    }
+    
+    var macos: some View {
+        commonParts
+            .frame(height: 625)
+            .safeAreaInset(edge: .top, spacing: 0) {
+                HStack {
+                    DismissButton()
+                        .opacity(0)
+                    
+                    Spacer()
+                    
+                    
                     picker
+                    
+                    Spacer()
+                    
+                    DismissButton()
                 }
-                
-                ToolbarItem {
-                    Button {
-                        showingInspector.toggle()
-                    } label: {
-                        #if os(macOS)
-                        Label("Toggle Inspector", systemImage: "sidebar.right")
-                        #else
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.gray, .gray.opacity(0.3))
-                        #endif
+                .padding(.horizontal)
+                .padding(.vertical, 10)
+                .background(.bar)
+            }
+    }
+    
+    var ios: some View {
+        NavigationStack {
+            commonParts
+                .toolbarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        picker
+                    }
+                    
+                    ToolbarItem(placement: .cancellationAction) {
+                        DismissButton()
                     }
                 }
+        }
+    }
+    
+    var commonParts: some View {
+        Group {
+            switch selectedTab {
+            case .basic:
+                BasicChatInspector(session: session)
+            case .advanced:
+                AdvancedChatInspector(session: session)
             }
         }
     }
@@ -69,6 +91,6 @@ struct ChatInspector: View {
 
 
 #Preview {
-    ChatInspector(session: .mockChatSession, showingInspector: .constant(true))
+    ChatInspector(session: .mockChatSession)
         .frame(width: 400, height: 700)
 }
