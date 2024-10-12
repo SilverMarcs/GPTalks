@@ -46,6 +46,8 @@ struct GPTalksApp: App {
         _chatVM = State(initialValue: ChatSessionVM(modelContext: dbService.container.mainContext))
         _imageVM = State(initialValue: ImageSessionVM(modelContext: dbService.container.mainContext))
         _listStateVM = State(initialValue: ListStateVM())
+        
+        try? Tips.configure()
 
         #if os(macOS)
         NSWindow.allowsAutomaticWindowTabbing = false
@@ -53,7 +55,5 @@ struct GPTalksApp: App {
         #else
         AppDelegate.shared.chatVM = _chatVM.wrappedValue
         #endif
-
-        try? Tips.configure([.datastoreLocation(.applicationDefault)])
     }
 }

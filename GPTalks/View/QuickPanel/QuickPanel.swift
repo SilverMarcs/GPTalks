@@ -29,12 +29,12 @@ struct QuickPanel: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ZStack {
-                Button("Paste Image") {
-                    session.inputManager.handlePaste(supportedFileTypes: session.config.provider.type.supportedFileTypes)
-                    showAdditionalContent = true
-                }
-                .hidden()
-                .keyboardShortcut("b")
+//                Button("Paste Image") {
+//                    session.inputManager.handlePaste(pasteboardItems: [], supportedFileTypes: session.config.provider.type.supportedFileTypes)
+//                    showAdditionalContent = true
+//                }
+//                .hidden()
+//                .keyboardShortcut("b")
                 
                 Button("Focus Field") {
                     isFocused = true

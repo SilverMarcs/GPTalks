@@ -31,7 +31,7 @@ struct ChatInputView: View {
                 .popoverTip(ChatCommandsTip())
             #endif
             
-            VStack(alignment: .leading, spacing: 5) {
+            VStack(alignment: .leading, spacing: 8) {
                 if !session.inputManager.dataFiles.isEmpty {
                     DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true, edge: .leading)
                 }

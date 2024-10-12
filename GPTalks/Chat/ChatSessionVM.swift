@@ -29,11 +29,6 @@ import SwiftUI
         await session.sendInput()
     }
     
-    func handlePaste() {
-        guard let session = activeSession else { return }
-        session.inputManager.handlePaste(supportedFileTypes: session.config.provider.type.supportedFileTypes)
-    }
-    
     func stopStreaming() async {
         guard let session = activeSession, session.isStreaming else { return }
         await session.stopStreaming()

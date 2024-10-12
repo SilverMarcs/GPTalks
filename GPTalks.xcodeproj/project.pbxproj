@@ -172,6 +172,8 @@
 		08C800552C36F82B009581C5 /* ProviderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800542C36F82B009581C5 /* ProviderList.swift */; };
 		08C800572C36F843009581C5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800562C36F843009581C5 /* SettingsView.swift */; };
 		08C800592C370A30009581C5 /* ChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800582C370A30009581C5 /* ChatModel.swift */; };
+		08CD009B2CBA20E900A96425 /* PasteHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CD009A2CBA20E900A96425 /* PasteHandler.swift */; };
+		08CD009D2CBA2CC000A96425 /* PasteWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CD009C2CBA2CC000A96425 /* PasteWindow.swift */; };
 		08CF5B892C68980B0079D5EE /* HighlightedTextViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF5B882C68980B0079D5EE /* HighlightedTextViews.swift */; };
 		08CF5B8C2C689BDF0079D5EE /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 08CF5B8B2C689BDF0079D5EE /* MarkdownWebView */; };
 		08D040222C5C8A0B0075B754 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08D040212C5C8A0B0075B754 /* GoogleGenerativeAI */; };
@@ -381,6 +383,8 @@
 		08C800542C36F82B009581C5 /* ProviderList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderList.swift; sourceTree = "<group>"; };
 		08C800562C36F843009581C5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		08C800582C370A30009581C5 /* ChatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModel.swift; sourceTree = "<group>"; };
+		08CD009A2CBA20E900A96425 /* PasteHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteHandler.swift; sourceTree = "<group>"; };
+		08CD009C2CBA2CC000A96425 /* PasteWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteWindow.swift; sourceTree = "<group>"; };
 		08CF5B882C68980B0079D5EE /* HighlightedTextViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightedTextViews.swift; sourceTree = "<group>"; };
 		08D174BF2C3D901A000257EF /* CrossButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossButton.swift; sourceTree = "<group>"; };
 		08D174C52C3DC2A8000257EF /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
@@ -502,6 +506,7 @@
 				08D174C52C3DC2A8000257EF /* DateUtils.swift */,
 				082A63372C55175E003996B7 /* SwiftDataUtils.swift */,
 				082A63352C551749003996B7 /* DeviceCheckers.swift */,
+				08CD009C2CBA2CC000A96425 /* PasteWindow.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -804,6 +809,7 @@
 		08C8003B2C36BC56009581C5 /* ConversationListViews */ = {
 			isa = PBXGroup;
 			children = (
+				08CD009A2CBA20E900A96425 /* PasteHandler.swift */,
 				08F815302C97F62B00B49355 /* ChatInspector */,
 				08A222C32C2AC6B300D76C8B /* ConversationList.swift */,
 				0844C2742CA3E6E100F0A325 /* EmptyConversationList.swift */,
@@ -1188,6 +1194,7 @@
 				085361112C4938C4007DAB62 /* ImageGenerationList.swift in Sources */,
 				08C800492C36C521009581C5 /* AssistantMessage.swift in Sources */,
 				08B82C1F2C74EAFD00DC0183 /* FileViewer.swift in Sources */,
+				08CD009B2CBA20E900A96425 /* PasteHandler.swift in Sources */,
 				085524E22C4ED2A400CBB827 /* MenuCommands.swift in Sources */,
 				082F09CF2CB25EF500B7860A /* ModelType.swift in Sources */,
 				0891D5752C967A9700BA428F /* ImageSettings.swift in Sources */,
@@ -1243,6 +1250,7 @@
 				0869A3F22C95DBF9009BF9F2 /* StreamResponse.swift in Sources */,
 				0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */,
 				089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */,
+				08CD009D2CBA2CC000A96425 /* PasteWindow.swift in Sources */,
 				08C5C72B2C9A139F004992A4 /* GoogleSignIn.swift in Sources */,
 				085276BE2C98706E009184D2 /* MacInputEditor.swift in Sources */,
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,

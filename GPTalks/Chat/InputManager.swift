@@ -93,63 +93,39 @@ enum InputState {
 
 // MARK: - Pasting
 extension InputManager {
-    func handlePaste(supportedFileTypes: [UTType]) {
-        #if os(macOS)
-        let pasteboard = NSPasteboard.general
+    func handlePaste(pasteboardItem: NSPasteboardItem) {
+        // Capture only the file URL data from pasteboardItem
+        let fileURLData = pasteboardItem.data(forType: .fileURL)
 
-        guard let pasteboardItems = pasteboard.pasteboardItems else {
-            return
-        }
-
-        DispatchQueue.global(qos: .userInitiated).async {
-            for item in pasteboardItems {
-                if let fileURLData = item.data(forType: .fileURL),
-                   let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
-                    self.processFile(at: fileURL, supportedFileTypes: supportedFileTypes)
-                } else if let imageData = item.data(forType: .png) {
-                    self.processImageData(imageData, supportedFileTypes: supportedFileTypes)
-                }
+        DispatchQueue.global(qos: .userInitiated).async { [fileURLData] in
+            if let fileURLData = fileURLData,
+               let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
+                self.processFile(at: fileURL)
             }
         }
-        #endif
     }
 
-    private func processFile(at url: URL, supportedFileTypes: [UTType]) {
-        guard let fileUTType = try? url.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier,
-              let fileType = UTType(fileUTType),
-              supportedFileTypes.contains(where: { fileType.conforms(to: $0) }) else {
-            return
-        }
-
+    private func processFile(at url: URL) {
         do {
             let data = try Data(contentsOf: url)
             DispatchQueue.main.async {
-                self.appendTypedData(data: data, url: url, fileType: fileType)
+                self.appendTypedData(data: data, url: url)
             }
         } catch {
             print("Failed to read file data: \(error)")
         }
     }
 
-    func processImageData(_ imageData: Data, supportedFileTypes: [UTType]) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            let tempDirectory = FileManager.default.temporaryDirectory
-            let tempFileURL = tempDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("png")
-
-            do {
-                try imageData.write(to: tempFileURL)
-                self.processFile(at: tempFileURL, supportedFileTypes: supportedFileTypes)
-            } catch {
-                print("Failed to write image data to temporary file: \(error)")
-            }
-        }
-    }
-
-    private func appendTypedData(data: Data, url: URL, fileType: UTType) {
+    private func appendTypedData(data: Data, url: URL) {
         let fileName = url.deletingPathExtension().lastPathComponent
         let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
         let fileSize = (attributes?[.size] as? Int ?? data.count).formatFileSize()
         let fileExtension = url.pathExtension.lowercased()
+        
+        guard let fileUTType = try? url.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier,
+              let fileType = UTType(fileUTType) else {
+            return
+        }
 
         let typedData = TypedData(
             data: data,
@@ -162,6 +138,7 @@ extension InputManager {
         dataFiles.append(typedData)
     }
 }
+
 
 // MARK: - Drag and Drop
 extension InputManager {

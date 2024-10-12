@@ -46,11 +46,6 @@ struct ChatCommands: Commands {
             }
             .keyboardShortcut(.return, modifiers: .command)
             
-            Button("Paste Files") {
-                sessionVM.handlePaste()
-            }
-            .keyboardShortcut("b")
-            
             Button("Stop Streaming") {
                 Task { @MainActor in
                     await sessionVM.stopStreaming()

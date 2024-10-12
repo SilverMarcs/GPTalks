@@ -5,6 +5,7 @@
 //  Created by Zabir Raihan on 27/09/2024.
 //
 
+#if os(macOS)
 import SwiftUI
 import SwiftData
 
@@ -25,7 +26,7 @@ struct ImageContentView: View {
                     .font(.title)
             }
         }
-        #if os(macOS)
+
         .inspector(isPresented: $showingInspector) {
             if let imageSession = sessionVM.activeImageSession {
                 ImageInspector(session: imageSession, showingInspector: $showingInspector)
@@ -34,10 +35,10 @@ struct ImageContentView: View {
                     .imageScale(.large)
             }
         }
-        #endif
     }
 }
 
 #Preview {
     ImageContentView()
 }
+#endif

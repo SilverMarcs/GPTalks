@@ -5,6 +5,7 @@
 //  Created by Zabir Raihan on 25/06/2024.
 //
 
+#if os(macOS)
 import SwiftUI
 import SwiftData
 
@@ -26,7 +27,7 @@ struct ChatContentView: View {
                     .font(.title)
             }
         }
-        #if os(macOS)
+        .pasteHandler()
         .inspector(isPresented: $showingInspector) {
             if let chatSession = sessionVM.activeSession {
                 ChatInspector(session: chatSession, showingInspector: $showingInspector)
@@ -35,7 +36,6 @@ struct ChatContentView: View {
                     .font(.title)
             }
         }
-        #endif
     }
 }
 
@@ -44,3 +44,4 @@ struct ChatContentView: View {
         .modelContainer(for: ChatSession.self, inMemory: true)
         .environment(ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext))
 }
+#endif
