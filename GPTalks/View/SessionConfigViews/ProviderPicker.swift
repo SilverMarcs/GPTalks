@@ -15,7 +15,7 @@ struct ProviderPicker: View {
     var body: some View {
         Picker("Provider", selection: $provider) {
             ForEach(providers) { provider in
-                Text(provider.name)
+                Text(provider.name.uppercased())
                     .tag(provider)
             }
         }

@@ -12,12 +12,12 @@ import GoogleGenerativeAI
 struct GoogleService: AIService {
     typealias ConvertedType = ModelContent
     
-    static func refreshModels(provider: Provider) async -> [ChatModel] {
+    static func refreshModels(provider: Provider) async -> [GenericModel] {
         let service = GenerativeAIService(apiKey: provider.apiKey, urlSession: .shared)
         
         do {
             let models = try await service.listModels()
-            return models.models.map { ChatModel(code: $0.name, name: $0.displayName ?? $0.name) }
+            return models.models.map { GenericModel(code: $0.name, name: $0.displayName ?? $0.name) }
         } catch {
             print(error.localizedDescription)
             return []

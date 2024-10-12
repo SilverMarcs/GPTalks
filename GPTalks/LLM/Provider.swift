@@ -127,7 +127,7 @@ class Provider {
 
 extension Provider {
     func refreshModels() async -> [GenericModel] {
-        let refreshedChatModels: [ChatModel] = await type.getService().refreshModels(provider: self)
+        let refreshedChatModels: [GenericModel] = await type.getService().refreshModels(provider: self)
         let newModels = refreshedChatModels.filter { model in
             !chatModels.contains(where: { $0.code == model.code })
         }

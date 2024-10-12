@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ConversationListToolbar: ToolbarContent {
     @Environment(ChatSessionVM.self) private var sessionVM
@@ -14,8 +15,11 @@ struct ConversationListToolbar: ToolbarContent {
     @State var showingInspector: Bool = false
     @State var showingShortcuts = false
 
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    var providers: [Provider]
+    
     var body: some ToolbarContent {
-        #if os(macOS)
+    #if os(macOS)
         ToolbarItem(placement: .navigation) {
             Button {
                 showingShortcuts.toggle()
@@ -28,9 +32,15 @@ struct ConversationListToolbar: ToolbarContent {
         }
         
         ToolbarItem {
-            Text("Tokens: \(session.tokenCount.formatToK())")
-                .foregroundStyle(.secondary)
+            ProviderPicker(provider: $session.config.provider, providers: providers) { provider in
+                session.config.model = provider.chatModel
+            }
         }
+        
+        ToolbarItem {
+            ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
+        }
+        
         #endif
         
         ToolbarItem {

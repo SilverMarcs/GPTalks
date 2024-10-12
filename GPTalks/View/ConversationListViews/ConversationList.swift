@@ -21,12 +21,105 @@ struct ConversationList: View {
     @State private var hasUserScrolled = false
     
     var body: some View {
-        if isQuick {
-            content
-        } else {
-            content
-                .modifier(PlatformSpecificModifiers(session: session, hasUserScrolled: $hasUserScrolled))
+        ScrollViewReader { proxy in
+            Group {
+                if session.groups.isEmpty {
+                    EmptyConversationList(session: session)
+                } else {
+                    switch config.conversationListStyle {
+                    case .list:
+                        listView
+                    case .scrollview:
+                        vStackView
+                    }
+                }
+            }
+            .onChange(of: sessionVM.chatSelections) {
+                Task {
+                    await sessionVM.chatSelections.first?.refreshTokens()
+                }
+                
+                #if os(macOS)
+                scrollToBottom(proxy: proxy, delay: 0.2)
+                #endif
+                session.proxy = proxy
+                scrollToBottom(proxy: proxy, delay: 0.4)
+            }
+            .toolbar { ConversationListToolbar(session: session) }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                if !isQuick {
+                    ChatInputView(session: session)
+                }
+            }
+//            .safeAreaInset(edge: .top, spacing: 0) {
+//                 if config.showStatusBar {
+//                     ConversationStatusBar(session: session)
+//                 }
+//             }
+            .onChange(of: session.groups.last?.activeConversation.content) {
+                if !hasUserScrolled && session.isStreaming {
+                    scrollToBottom(proxy: proxy)
+                }
+            }
+            .onChange(of: session.groups.last?.activeConversation.toolCalls) {
+                if !hasUserScrolled && session.isStreaming {
+                    scrollToBottom(proxy: proxy)
+                }
+            }
+            .onChange(of: session.groups.last?.activeConversation.toolResponse) {
+                if !hasUserScrolled && session.isStreaming {
+                    scrollToBottom(proxy: proxy)
+                }
+            }
+            .onChange(of: session.isStreaming) {
+                if !session.isStreaming  {
+                    if !hasUserScrolled {
+                        scrollToBottom(proxy: proxy)
+                    }
+                    hasUserScrolled = false
+                }
+            }
+            .onChange(of: session.inputManager.prompt) {
+                if session.inputManager.state == .normal {
+                    scrollToBottom(proxy: proxy)
+                }
+            }
+            .onDrop(of: session.config.provider.type.supportedFileTypes, isTargeted: nil) { providers in
+                session.inputManager.handleDrop(providers, supportedTypes: session.config.provider.type.supportedFileTypes)
+            }
+        #if os(macOS)
+            .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
+                if config.conversationListStyle == .list && session.isReplying {
+                    hasUserScrolled = true
+                }
+            }
+        #else
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)) { _ in
+                scrollToBottom(proxy: proxy, delay: 0.1)
+            }
+        #endif
         }
+                #if os(macOS)
+                .navigationSubtitle("Tokens: \(session.tokenCount.formatToK()) • \(session.config.systemPrompt.prefix(50))")
+                .navigationTitle(session.title)
+                #else
+                .toolbarTitleDisplayMode(.inline)
+                .navigationTitle(session.config.model.name)
+                .toolbarTitleMenu {
+                    Section("\(session.tokenCount.formatToK()) tokens") {
+                        Button {
+                            Task {
+                                await session.refreshTokens()
+                            }
+                        } label: {
+                            Label("Refresh Tokens", systemImage: "arrow.clockwise")
+                        }
+                    }
+                }
+                #if !os(visionOS)
+                .scrollDismissesKeyboard(.immediately)
+                #endif
+                #endif
     }
     
     var content: some View {
@@ -55,17 +148,58 @@ struct ConversationList: View {
                 scrollToBottom(proxy: proxy, delay: 0.4)
             }
             .toolbar { ConversationListToolbar(session: session) }
-            .applyObservers(proxy: proxy, session: session, hasUserScrolled: $hasUserScrolled)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
                     ChatInputView(session: session)
                 }
             }
-            .safeAreaInset(edge: .top, spacing: 0) {
-                 if config.showStatusBar {
-                     ConversationStatusBar(session: session)
-                 }
-             }
+//            .safeAreaInset(edge: .top, spacing: 0) {
+//                 if config.showStatusBar {
+//                     ConversationStatusBar(session: session)
+//                 }
+//             }
+            .onChange(of: session.groups.last?.activeConversation.content) {
+                if !hasUserScrolled && session.isStreaming {
+                    scrollToBottom(proxy: proxy)
+                }
+            }
+            .onChange(of: session.groups.last?.activeConversation.toolCalls) {
+                if !hasUserScrolled && session.isStreaming {
+                    scrollToBottom(proxy: proxy)
+                }
+            }
+            .onChange(of: session.groups.last?.activeConversation.toolResponse) {
+                if !hasUserScrolled && session.isStreaming {
+                    scrollToBottom(proxy: proxy)
+                }
+            }
+            .onChange(of: session.isStreaming) {
+                if !session.isStreaming  {
+                    if !hasUserScrolled {
+                        scrollToBottom(proxy: proxy)
+                    }
+                    hasUserScrolled = false
+                }
+            }
+            .onChange(of: session.inputManager.prompt) {
+                if session.inputManager.state == .normal {
+                    scrollToBottom(proxy: proxy)
+                }
+            }
+            .onDrop(of: session.config.provider.type.supportedFileTypes, isTargeted: nil) { providers in
+                session.inputManager.handleDrop(providers, supportedTypes: session.config.provider.type.supportedFileTypes)
+            }
+        #if os(macOS)
+            .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
+                if config.conversationListStyle == .list && session.isReplying {
+                    hasUserScrolled = true
+                }
+            }
+        #else
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)) { _ in
+                scrollToBottom(proxy: proxy, delay: 0.1)
+            }
+        #endif
         }
     }
     

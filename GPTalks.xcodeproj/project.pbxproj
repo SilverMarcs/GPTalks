@@ -94,6 +94,8 @@
 		087B40C02C561DDF00EAFA0A /* QuickPanelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087B40BF2C561DDF00EAFA0A /* QuickPanelHelper.swift */; };
 		087B67F52C97CBC200B51737 /* ProviderBackupUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087B67F42C97CBBA00B51737 /* ProviderBackupUtils.swift */; };
 		0881BB3D2CBAC4FF0002D6C0 /* ConversationStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0881BB3C2CBAC4FF0002D6C0 /* ConversationStatusBar.swift */; };
+		0881BB3F2CBAC8B10002D6C0 /* OptionalsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0881BB3E2CBAC8B10002D6C0 /* OptionalsExtensions.swift */; };
+		0881BB412CBADBEA0002D6C0 /* ScrollUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0881BB402CBADBEA0002D6C0 /* ScrollUtils.swift */; };
 		088475342CAE8E57006C04F0 /* AppIconMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088475332CAE8E57006C04F0 /* AppIconMenu.swift */; };
 		0886D8202C8707190058700F /* VertexService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886D81F2C8707190058700F /* VertexService.swift */; };
 		088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A09F22C55C7740055B567 /* TextSelectionView.swift */; };
@@ -309,6 +311,8 @@
 		087B40BF2C561DDF00EAFA0A /* QuickPanelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelHelper.swift; sourceTree = "<group>"; };
 		087B67F42C97CBBA00B51737 /* ProviderBackupUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderBackupUtils.swift; sourceTree = "<group>"; };
 		0881BB3C2CBAC4FF0002D6C0 /* ConversationStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationStatusBar.swift; sourceTree = "<group>"; };
+		0881BB3E2CBAC8B10002D6C0 /* OptionalsExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalsExtensions.swift; sourceTree = "<group>"; };
+		0881BB402CBADBEA0002D6C0 /* ScrollUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollUtils.swift; sourceTree = "<group>"; };
 		088475332CAE8E57006C04F0 /* AppIconMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconMenu.swift; sourceTree = "<group>"; };
 		0886D81F2C8707190058700F /* VertexService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexService.swift; sourceTree = "<group>"; };
 		088A09F22C55C7740055B567 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
@@ -509,6 +513,8 @@
 				082A63372C55175E003996B7 /* SwiftDataUtils.swift */,
 				082A63352C551749003996B7 /* DeviceCheckers.swift */,
 				08CD009C2CBA2CC000A96425 /* PasteWindow.swift */,
+				0881BB3E2CBAC8B10002D6C0 /* OptionalsExtensions.swift */,
+				0881BB402CBADBEA0002D6C0 /* ScrollUtils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1203,6 +1209,7 @@
 				0891D5752C967A9700BA428F /* ImageSettings.swift in Sources */,
 				082F09DB2CB2715A00B7860A /* Conversation.swift in Sources */,
 				085524E82C4ED61F00CBB827 /* ConversationListToolbar.swift in Sources */,
+				0881BB412CBADBEA0002D6C0 /* ScrollUtils.swift in Sources */,
 				08F815222C97F58800B49355 /* GoogleSearchSettings.swift in Sources */,
 				0805DEED2C58CB0300A8354A /* AIService.swift in Sources */,
 				08F8152D2C97F60100B49355 /* GoogleSearch.swift in Sources */,
@@ -1238,6 +1245,7 @@
 				08D174C02C3D901A000257EF /* CrossButton.swift in Sources */,
 				0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */,
 				08A313492C4AD0DC00C3E578 /* CommonModifiers.swift in Sources */,
+				0881BB3F2CBAC8B10002D6C0 /* OptionalsExtensions.swift in Sources */,
 				08A222C42C2AC6B300D76C8B /* ConversationList.swift in Sources */,
 				08AAFB982C3CF0F4002C04E0 /* KeyboardShortcuts.swift in Sources */,
 				08C800472C36C4ED009581C5 /* UserMessage.swift in Sources */,

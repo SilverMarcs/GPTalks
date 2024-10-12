@@ -66,7 +66,7 @@ struct PlatformSpecificModifiers: ViewModifier {
     func body(content: Content) -> some View {
         content
             #if os(macOS)
-            .navigationSubtitle("\(session.config.systemPrompt.prefix(70))")
+            .navigationSubtitle("Tokens: \(session.tokenCount.formatToK()) • \(session.config.systemPrompt.prefix(50))")
             .navigationTitle(session.title)
             #else
             .toolbarTitleDisplayMode(.inline)
@@ -86,23 +86,5 @@ struct PlatformSpecificModifiers: ViewModifier {
             .scrollDismissesKeyboard(.immediately)
             #endif
             #endif
-    }
-}
-
-func scrollToBottom(proxy: ScrollViewProxy, id: String = .bottomID, anchor: UnitPoint = .bottom, animated: Bool = true, delay: TimeInterval = 0.0) {
-    let action = {
-        if animated {
-            withAnimation {
-                proxy.scrollTo(id, anchor: anchor)
-            }
-        } else {
-            proxy.scrollTo(id, anchor: anchor)
-        }
-    }
-    
-    if delay > 0 {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: action)
-    } else {
-        DispatchQueue.main.async(execute: action)
     }
 }

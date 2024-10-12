@@ -40,8 +40,10 @@ struct ClaudeService: AIService {
         return finalContent
     }
     
-    static func refreshModels(provider: Provider) async -> [ChatModel] {
-        return provider.type.getDefaultModels()
+    static func refreshModels(provider: Provider) async -> [GenericModel] {
+        return provider.type.getDefaultModels().map { model in
+            GenericModel(code: model.code, name: model.name)
+        }
     }
     
     static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<StreamResponse, Error> {

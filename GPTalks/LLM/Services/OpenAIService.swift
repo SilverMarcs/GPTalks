@@ -12,13 +12,13 @@ import OpenAI
 struct OpenAIService: AIService {
     typealias ConvertedType = ChatQuery.ChatCompletionMessageParam
     
-    static func refreshModels(provider: Provider) async -> [ChatModel] {
+    static func refreshModels(provider: Provider) async -> [GenericModel] {
         let service = getService(provider: provider)
         
         do {
             let result = try await service.models()
             let sortedModels = result.data
-                .map { ChatModel(code: $0.id, name: $0.name) }
+                .map { GenericModel(code: $0.id, name: $0.name) }
                 .sorted { $0.name < $1.name }
             return sortedModels
         } catch {

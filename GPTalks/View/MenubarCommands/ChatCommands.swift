@@ -20,12 +20,12 @@ struct ChatCommands: Commands {
         }
         
         CommandGroup(before: .toolbar) {
-            Section {
-                Button("Toggle Status Bar") {
-                    config.showStatusBar.toggle()
-                }
-                .keyboardShortcut("/", modifiers: .command)
-            }
+//            Section {
+//                Button("Toggle Status Bar") {
+//                    config.showStatusBar.toggle()
+//                }
+//                .keyboardShortcut("/", modifiers: .command)
+//            }
             
             Section {
                 Button("Actual Size") {
