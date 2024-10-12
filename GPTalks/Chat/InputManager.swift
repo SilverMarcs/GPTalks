@@ -92,6 +92,7 @@ enum InputState {
 
 
 // MARK: - Pasting
+#if os(macOS)
 extension InputManager {
     func handlePaste(pasteboardItem: NSPasteboardItem) {
         // Capture only the file URL data from pasteboardItem
@@ -138,6 +139,7 @@ extension InputManager {
         dataFiles.append(typedData)
     }
 }
+#endif
 
 
 // MARK: - Drag and Drop

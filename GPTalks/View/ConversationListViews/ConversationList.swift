@@ -19,14 +19,13 @@ struct ConversationList: View {
     @Environment(ChatSessionVM.self) private var sessionVM
     
     @State private var hasUserScrolled = false
-    @State var showingInspector: Bool = false
     
     var body: some View {
         if isQuick {
             content
         } else {
             content
-                .modifier(PlatformSpecificModifiers(session: session, showingInspector: $showingInspector, hasUserScrolled: $hasUserScrolled))
+                .modifier(PlatformSpecificModifiers(session: session, hasUserScrolled: $hasUserScrolled))
         }
     }
     

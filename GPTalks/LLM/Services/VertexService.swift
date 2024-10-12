@@ -16,29 +16,33 @@ struct VertexService: AIService {
     
     static func convert(conversation: Conversation) -> [String: Any] {
         let role = conversation.role.toVertexRole()
-        let processedContents = ContentHelper.processDataFiles(conversation.dataFiles, conversationContent: conversation.content)
         
         var contentObjects: [[String: Any]] = []
         
-        for content in processedContents {
-            switch content {
-            case .image(let mimeType, let base64Data):
+        contentObjects.append([
+            "type": "text",
+            "text": conversation.content
+        ])
+        
+        for data in conversation.dataFiles {
+            if data.fileType.conforms(to: .image) {
                 let imageContent: [String: Any] = [
                     "type": "image",
                     "source": [
                         "type": "base64",
-                        "media_type": mimeType,
-                        "data": base64Data
+                        "media_type": data.mimeType,
+                        "data": data.data.base64EncodedString()
                     ]
                 ]
                 contentObjects.append(imageContent)
-            case .text(let text):
-                if !text.isEmpty {
-                    contentObjects.append([
-                        "type": "text",
-                        "text": text
-                    ])
-                }
+            } else {
+                let warning = "Notify the user if a file has been added but the assistant could not find a compatible plugin to read it with."
+                let detail = "Conversation ID: \(conversation.id)\nFile: \(data.fileName).\(data.fileExtension)\n\(warning)"
+                
+                contentObjects.append([
+                    "type": "text",
+                    "text": detail
+                ])
             }
         }
         
@@ -63,13 +67,14 @@ struct VertexService: AIService {
         }
         
         if let toolResponse = conversation.toolResponse {
-            // TODO: can send image here also
             let toolResponseContent: [String: Any] = [
                 "type": "tool_result",
                 "content": toolResponse.processedContent,
                 "tool_use_id": toolResponse.toolCallId,
             ]
             contentObjects.append(toolResponseContent)
+        } else {
+            print("No tool response found for conversation ID: \(conversation.id)")
         }
         
         let finalContent: [String: Any] = [
@@ -95,15 +100,15 @@ struct VertexService: AIService {
                         if let character = String(bytes: [byte], encoding: .utf8) {
                             buffer += character
                             if character == "\n" {
-//                                print("Received data: \(buffer)")
+                                print("Received data: \(buffer)")
                                 
                                 if buffer.hasPrefix("data: ") {
                                     let jsonString = buffer.dropFirst(6)
-//                                    print("JSON string: \(jsonString)")
+                                    print("JSON string: \(jsonString)")
                                     
                                     if let jsonData = jsonString.data(using: .utf8),
                                        let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-//                                        print("Parsed JSON object: \(jsonObject)")
+                                        print("Parsed JSON object: \(jsonObject)")
                                         
                                         if let type = jsonObject["type"] as? String {
                                             switch type {
@@ -182,7 +187,6 @@ struct VertexService: AIService {
             throw URLError(.cannotParseResponse)
         }
         
-        // Vertex Cla
         let toolCalls = contentArray.filter { $0["type"] as? String == "tool_use" }
         if !toolCalls.isEmpty {
             let calls: [ChatToolCall] = toolCalls.compactMap { toolCall in

@@ -60,11 +60,7 @@ extension View {
 
 struct PlatformSpecificModifiers: ViewModifier {
     let session: ChatSession
-    @Binding var showingInspector: Bool
     @Binding var hasUserScrolled: Bool
-    
-    @State private var isExportingJSON = false
-    @State private var isExportingMarkdown = false
     
     @ViewBuilder
     func body(content: Content) -> some View {
@@ -73,7 +69,6 @@ struct PlatformSpecificModifiers: ViewModifier {
             .navigationSubtitle("\(session.config.systemPrompt.prefix(70))")
             .navigationTitle(session.title)
             #else
-            .onTapGesture { showingInspector = false }
             .toolbarTitleDisplayMode(.inline)
             .navigationTitle(session.config.model.name)
             .toolbarTitleMenu {

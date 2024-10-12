@@ -5,6 +5,8 @@
 //  Created by Zabir Raihan on 12/10/2024.
 //
 
+#if os(macOS)
+// not used atm
 import SwiftUI
 
 class PasteWindow: NSWindow {
@@ -36,7 +38,7 @@ struct WindowAccessor: NSViewRepresentable {
         let view = NSView()
         DispatchQueue.main.async {
             if let window = view.window {
-                let customWindow = CustomWindow(contentRect: window.frame,
+                let customWindow = PasteWindow(contentRect: window.frame,
                                                 styleMask: window.styleMask,
                                                 backing: .buffered,
                                                 defer: false)
@@ -50,3 +52,4 @@ struct WindowAccessor: NSViewRepresentable {
 
     func updateNSView(_ nsView: NSView, context: Context) {}
 }
+#endif
