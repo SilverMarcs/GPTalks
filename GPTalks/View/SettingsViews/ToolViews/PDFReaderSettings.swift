@@ -19,7 +19,7 @@ struct PDFReaderSettings: View {
             IntegerStepper(value: $config.pdfMaxContentLength,
                            label: "Content Length",
                            secondaryLabel: "Number of prefix characters to return from each PDF",
-                           step: 500, range: 500...20000)
+                           step: 500, range: 1000...100000)
         }
     }
 }

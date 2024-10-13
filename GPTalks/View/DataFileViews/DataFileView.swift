@@ -12,17 +12,19 @@ import UniformTypeIdentifiers
 struct DataFileView: View {
     @Binding var dataFiles: [TypedData]
     var isCrossable: Bool
-    var edge: HorizontalAlignment = .leading
     
     @State private var selectedFileURL: URL?
     
     var body: some View {
-        HStack {
-            ForEach(dataFiles, id: \.self) { typedData in
-                fileItemView(for: typedData)
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack {
+                ForEach(dataFiles) { dataFile in
+                    fileItemView(for: dataFile)
+                }
             }
             .quickLookPreview($selectedFileURL)
         }
+        .defaultScrollAnchor(.trailing)
     }
     
     @ViewBuilder

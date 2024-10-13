@@ -33,7 +33,7 @@ struct ChatInputView: View {
             
             VStack(alignment: .leading, spacing: 8) {
                 if !session.inputManager.dataFiles.isEmpty {
-                    DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true, edge: .leading)
+                    DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
                 }
                 
                 InputEditor(prompt: $session.inputManager.prompt,

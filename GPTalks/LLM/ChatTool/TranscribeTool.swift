@@ -97,7 +97,7 @@ struct TranscribeTool: ToolProtocol {
                                 "fileNames":
                                     .init(
                                         type: .array,
-                                        description: "The array of audio file ids to access",
+                                        description: "The array of audio file names without extension to access",
                                         items: .init(type: .string)
                                     )
                             ]
@@ -118,7 +118,7 @@ struct TranscribeTool: ToolProtocol {
                     ),
                     "fileNames": Schema(
                         type: .array,
-                        description: "The array of audio file ids to access",
+                        description: "The array of audio file names without extension to access",
                         items: Schema(type: .string)
                     )
                 ],
@@ -140,7 +140,7 @@ struct TranscribeTool: ToolProtocol {
                     ],
                     "fileNames": [
                         "type": "array",
-                        "description": "The array of audio file ids to access",
+                        "description": "The array of audio file names without extension to access",
                         "items": [
                             "type": "string"
                         ],

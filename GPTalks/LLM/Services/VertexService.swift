@@ -21,10 +21,24 @@ struct VertexService: AIService {
         
         var contentObjects: [[String: Any]] = []
         
-        contentObjects.append([
-            "type": "text",
-            "text": conversation.content
-        ])
+        if let toolResponse = conversation.toolResponse {
+            print("Tool response: \(toolResponse.tool.displayName)")
+            let toolResponseContent: [String: Any] = [
+                "type": "tool_result",
+                "content": toolResponse.processedContent,
+                "tool_use_id": toolResponse.toolCallId,
+            ]
+            contentObjects.append(toolResponseContent)
+            
+            print(toolResponse)
+        }
+        
+        if !conversation.content.isEmpty {
+            contentObjects.append([
+                "type": "text",
+                "text": conversation.content
+            ])
+        }
         
         for data in conversation.dataFiles {
             if data.fileType.conforms(to: .image) {
@@ -67,18 +81,7 @@ struct VertexService: AIService {
                 print("Failed to parse tool call arguments: \(toolCall.arguments)")
             }
         }
-        
-        if let toolResponse = conversation.toolResponse {
-            let toolResponseContent: [String: Any] = [
-                "type": "tool_result",
-                "content": toolResponse.processedContent,
-                "tool_use_id": toolResponse.toolCallId,
-            ]
-            contentObjects.append(toolResponseContent)
-        } else {
-            print("No tool response found for conversation ID: \(conversation.id)")
-        }
-        
+                
         let finalContent: [String: Any] = [
             "role": role,
             "content": contentObjects
@@ -102,15 +105,15 @@ struct VertexService: AIService {
                         if let character = String(bytes: [byte], encoding: .utf8) {
                             buffer += character
                             if character == "\n" {
-                                print("Received data: \(buffer)")
+//                                print("Received data: \(buffer)")
                                 
                                 if buffer.hasPrefix("data: ") {
                                     let jsonString = buffer.dropFirst(6)
-                                    print("JSON string: \(jsonString)")
+//                                    print("JSON string: \(jsonString)")
                                     
                                     if let jsonData = jsonString.data(using: .utf8),
                                        let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-                                        print("Parsed JSON object: \(jsonObject)")
+//                                        print("Parsed JSON object: \(jsonObject)")
                                         
                                         if let type = jsonObject["type"] as? String {
                                             switch type {
@@ -180,13 +183,13 @@ struct VertexService: AIService {
         }
         #endif
         
-        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-            throw URLError(.badServerResponse)
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw RuntimeError("Unexpected response type: \(response)")
         }
-        
+
         guard let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
               let contentArray = jsonObject["content"] as? [[String: Any]] else {
-            throw URLError(.cannotParseResponse)
+            throw RuntimeError("Failed to parse JSON response")
         }
         
         let toolCalls = contentArray.filter { $0["type"] as? String == "tool_use" }
@@ -231,7 +234,6 @@ struct VertexService: AIService {
             return convert(conversation: conversation)
         }
         
-
         var body: [String: Any] = [
             "anthropic_version": "vertex-2023-10-16",
             "messages": messages,

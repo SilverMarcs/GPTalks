@@ -12,6 +12,7 @@ import GoogleGenerativeAI
 import PDFKit
 
 struct PDFReader: ToolProtocol {
+    static let toolName = "pdfReader"
     static let displayName: String = "PDF Reader"
     static let icon: String = "doc.text"
     
@@ -21,6 +22,7 @@ struct PDFReader: ToolProtocol {
     }
     
     static func process(arguments: String) async throws -> ToolData {
+        print("arguments \(arguments)")
         var totalContent: String = ""
         let args = try PDFReader.getFileIds(from: arguments)
         
@@ -81,7 +83,7 @@ struct PDFReader: ToolProtocol {
     static var openai: ChatQuery.ChatCompletionToolParam {
         .init(function:
                 .init(
-                    name: "pdfReader",
+                    name: toolName,
                     description: description,
                     parameters:
                         .init(
@@ -95,7 +97,7 @@ struct PDFReader: ToolProtocol {
                                 "fileNames":
                                     .init(
                                         type: .array,
-                                        description: "The array of pdf file ids to access",
+                                        description: "The array of pdf file names without extension to access",
                                         items: .init(type: .string)
                                     )
                             ]
@@ -107,7 +109,7 @@ struct PDFReader: ToolProtocol {
     static var google: Tool {
         Tool(functionDeclarations: [
             FunctionDeclaration(
-                name: "pdfReader",
+                name: toolName,
                 description: description,
                 parameters: [
                     "conversationID": Schema(
@@ -116,7 +118,7 @@ struct PDFReader: ToolProtocol {
                     ),
                     "fileNames": Schema(
                         type: .array,
-                        description: "The array of pdf file ids to access",
+                        description: "The array of pdf file names without extension to access",
                         items: Schema(type: .string)
                     )
                 ],
@@ -127,7 +129,7 @@ struct PDFReader: ToolProtocol {
     
     static var vertex: [String: Any] {
          [
-            "name": "pdfReader",
+            "name": toolName,
             "description": description,
             "input_schema": [
                 "type": "object",
@@ -138,14 +140,14 @@ struct PDFReader: ToolProtocol {
                     ],
                     "fileNames": [
                         "type": "array",
-                        "description": "The array of pdf file ids to access",
+                        "description": "The array of pdf file names without extension to access",
                         "items": [
                             "type": "string"
                         ],
                         "maxItems": 5
                     ]
                 ],
-                "required": ["url_list"]
+                "required": ["conversationID", "fileNames"]
             ]
         ]
     }
