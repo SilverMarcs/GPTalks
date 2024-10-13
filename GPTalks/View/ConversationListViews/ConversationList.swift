@@ -87,39 +87,36 @@ struct ConversationList: View {
             .onDrop(of: session.config.provider.type.supportedFileTypes, isTargeted: nil) { providers in
                 session.inputManager.handleDrop(providers, supportedTypes: session.config.provider.type.supportedFileTypes)
             }
-        #if os(macOS)
+            #if os(macOS)
+            .navigationSubtitle("Tokens: \(session.tokenCount.formatToK()) • \(session.config.systemPrompt.prefix(60))")
+            .navigationTitle(session.title)
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 if config.conversationListStyle == .list && session.isReplying {
                     hasUserScrolled = true
                 }
             }
-        #else
+            #else
+            .toolbarTitleDisplayMode(.inline)
+            .navigationTitle(session.config.model.name)
+            .toolbarTitleMenu {
+                Section("\(session.tokenCount.formatToK()) tokens") {
+                    Button {
+                        Task {
+                            await session.refreshTokens()
+                        }
+                    } label: {
+                        Label("Refresh Tokens", systemImage: "arrow.clockwise")
+                    }
+                }
+            }
+            #if !os(visionOS)
+            .scrollDismissesKeyboard(.immediately)
+            #endif
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)) { _ in
                 scrollToBottom(proxy: proxy, delay: 0.1)
             }
-        #endif
+            #endif
         }
-                #if os(macOS)
-                .navigationSubtitle("Tokens: \(session.tokenCount.formatToK()) • \(session.config.systemPrompt.prefix(50))")
-                .navigationTitle(session.title)
-                #else
-                .toolbarTitleDisplayMode(.inline)
-                .navigationTitle(session.config.model.name)
-                .toolbarTitleMenu {
-                    Section("\(session.tokenCount.formatToK()) tokens") {
-                        Button {
-                            Task {
-                                await session.refreshTokens()
-                            }
-                        } label: {
-                            Label("Refresh Tokens", systemImage: "arrow.clockwise")
-                        }
-                    }
-                }
-                #if !os(visionOS)
-                .scrollDismissesKeyboard(.immediately)
-                #endif
-                #endif
     }
     
     var content: some View {

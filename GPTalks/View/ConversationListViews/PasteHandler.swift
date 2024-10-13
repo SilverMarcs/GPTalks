@@ -46,6 +46,9 @@ struct PasteHandler: ViewModifier {
             if let _ = item.data(forType: .fileURL) {
                 session.inputManager.handlePaste(pasteboardItem: item)
                 handledFiles = true
+            } else if item.types.contains(.png) || item.types.contains(.tiff) {
+                session.inputManager.handlePaste(pasteboardItem: item)
+                handledFiles = true
             } else if item.types.contains(.string) {
                 containsText = true
             }

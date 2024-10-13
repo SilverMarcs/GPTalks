@@ -94,29 +94,50 @@ enum InputState {
 // MARK: - Pasting
 #if os(macOS)
 extension InputManager {
+    // Define supported image types
+    private static let supportedImageTypes: Set<UTType> = [.png, .tiff, .jpeg, .gif]
+
     func handlePaste(pasteboardItem: NSPasteboardItem) {
-        // Capture only the file URL data from pasteboardItem
-        let fileURLData = pasteboardItem.data(forType: .fileURL)
-
-        DispatchQueue.global(qos: .userInitiated).async { [fileURLData] in
-            if let fileURLData = fileURLData,
-               let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
-                self.processFile(at: fileURL)
+        Task {
+            do {
+                if let fileURLData = pasteboardItem.data(forType: .fileURL),
+                   let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
+                    try await processFile(at: fileURL)
+                } else if let imageData = pasteboardItem.data(forType: .png) ?? pasteboardItem.data(forType: .tiff) {
+                    try await processImageData(imageData)
+                }
+            } catch {
+                print("Error processing paste: \(error)")
             }
         }
     }
 
-    private func processFile(at url: URL) {
-        do {
-            let data = try Data(contentsOf: url)
-            DispatchQueue.main.async {
-                self.appendTypedData(data: data, url: url)
-            }
-        } catch {
-            print("Failed to read file data: \(error)")
+    private func processImageData(_ imageData: Data) async throws {
+        await MainActor.run {
+            let fileName = "Pasted Image"
+            let fileSize = imageData.count.formatFileSize()
+            let fileExtension = "png"
+
+            let typedData = TypedData(
+                data: imageData,
+                fileType: .png,
+                fileName: fileName,
+                fileSize: fileSize,
+                fileExtension: fileExtension
+            )
+
+            self.dataFiles.append(typedData)
         }
     }
 
+    private func processFile(at url: URL) async throws {
+        let data = try Data(contentsOf: url)
+        
+        await MainActor.run {
+            appendTypedData(data: data, url: url)
+        }
+    }
+    
     private func appendTypedData(data: Data, url: URL) {
         let fileName = url.deletingPathExtension().lastPathComponent
         let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
