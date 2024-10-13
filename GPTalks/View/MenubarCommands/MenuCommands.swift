@@ -16,6 +16,8 @@ struct MenuCommands: Commands {
         
         InspectorCommands()
         
+        ToolbarCommands()
+        
         CommandGroup(before: .appSettings) {
             Button("Settings") {
                 openWindow(id: "settings")

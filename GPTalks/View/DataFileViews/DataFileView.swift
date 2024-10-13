@@ -12,6 +12,7 @@ import UniformTypeIdentifiers
 struct DataFileView: View {
     @Binding var dataFiles: [TypedData]
     var isCrossable: Bool
+    var edge: UnitPoint = .trailing
     
     @State private var selectedFileURL: URL?
     
@@ -24,7 +25,7 @@ struct DataFileView: View {
             }
             .quickLookPreview($selectedFileURL)
         }
-        .defaultScrollAnchor(.trailing)
+        .defaultScrollAnchor(edge)
     }
     
     @ViewBuilder
@@ -33,20 +34,25 @@ struct DataFileView: View {
             fileView(for: typedData)
             
             if isCrossable {
+                #if os(macOS)
+                HoverScaleButton(icon: "xmark.circle.fill", label: "") {
+                    dataFiles.removeAll(where: { $0.id == typedData.id })
+                }
+                .shadow(radius: 5)
+                .padding(.leading, 5)
+                #else
                 Button {
                     dataFiles.removeAll(where: { $0.id == typedData.id })
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundStyle(.background, .primary)
-                        #if !os(macOS)
                         .padding(10) // Increase padding for better touch area
-                        #endif
                         .contentShape(.rect)
                 }
                 .shadow(radius: 5)
                 .buttonStyle(.plain)
-                .padding(.top, -5)
-                .padding(.leading, -5)
+                .padding(3)
+                #endif
             }
         }
     }

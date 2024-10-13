@@ -51,11 +51,6 @@ struct ConversationList: View {
                     ChatInputView(session: session)
                 }
             }
-//            .safeAreaInset(edge: .top, spacing: 0) {
-//                 if config.showStatusBar {
-//                     ConversationStatusBar(session: session)
-//                 }
-//             }
             .onChange(of: session.groups.last?.activeConversation.content) {
                 if !hasUserScrolled && session.isStreaming {
                     scrollToBottom(proxy: proxy)

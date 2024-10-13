@@ -36,15 +36,22 @@ enum TitleGenerator {
     // Method to format conversations into a single string
     private static func formatConversations(_ groups: [ConversationGroup]) -> String {
         return groups.map { group in
+            var toolResponse: String = ""
+            
             let convo = group.activeConversation
-            if convo.content.isEmpty {
-                return "--- \(convo.role.rawValue.capitalized) ---\n" +
-                convo.toolCalls.map { toolCall in
-                    "Called tool: \(toolCall.tool.rawValue)"
-                }.joined(separator: "\n")
-            } else {
-                return "--- \(convo.role.rawValue.capitalized) ---\n\(convo.content)"
+            let toolCalls = convo.toolCalls.map { toolCall in
+                "Called tool: \(toolCall.tool.rawValue)"
+            }.joined(separator: "\n")
+            
+            let dataFiles = convo.dataFiles.map { dataFile in
+                "Data file: \(dataFile.fileName).\(dataFile.fileExtension)"
+            }.joined(separator: "\n")
+            
+            if let response = convo.toolResponse {
+                toolResponse = "Tool response: \(response)"
             }
+            
+            return "--- \(convo.role.rawValue.capitalized) ---\n\(convo.content)\n\(toolCalls)\n\(dataFiles)\n\(toolResponse)"
         }.joined(separator: "\n\n")
     }
     
