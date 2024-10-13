@@ -8,7 +8,7 @@
 import Foundation
 
 struct SessionConfigTools: Codable {
-    private var toolStates: [ChatTool: Bool]
+    var toolStates: [ChatTool: Bool]
     
     init(isTitle: Bool = false) {
         if isTitle {

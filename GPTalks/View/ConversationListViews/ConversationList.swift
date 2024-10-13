@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ConversationList: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.isQuick) var isQuick
     
     @Bindable var session: ChatSession
@@ -45,7 +46,10 @@ struct ConversationList: View {
                 session.proxy = proxy
                 scrollToBottom(proxy: proxy, delay: 0.4)
             }
-            .toolbar { ConversationListToolbar(session: session) }
+            .toolbar(id: "conversation-list-toolbar") {
+                ConversationListToolbar(session: session)
+            }
+            .toolbarRole(horizontalSizeClass == .compact ? .automatic : .editor)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
                     ChatInputView(session: session)

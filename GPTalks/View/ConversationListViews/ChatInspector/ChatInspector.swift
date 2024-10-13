@@ -54,7 +54,7 @@ struct ChatInspector: View {
                         picker
                     }
                     
-                    ToolbarItem(placement: .cancellationAction) {
+                    ToolbarItem(placement: .confirmationAction) {
                         DismissButton()
                     }
                 }

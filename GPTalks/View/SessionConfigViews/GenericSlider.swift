@@ -35,6 +35,7 @@ struct GenericSlider: View {
                    in: min...max,
                    step: steps) {
                 labelView
+                // TODO: explanation here
             } minimumValueLabel: {
                 Text("")
                     .frame(width: 0)

@@ -8,27 +8,50 @@
 import SwiftUI
 import SwiftData
 
-struct ChatSessionToolbar: ToolbarContent {
+struct ChatSessionToolbar: CustomizableToolbarContent {
     @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
-    var body: some ToolbarContent {
-        SessionToolbar(
-            providers: providers,
-            addItemAction: { provider in
-                sessionVM.createNewSession(provider: provider)
-            },
-            getDefaultProvider: { providers in
-                let fetchDefaults = FetchDescriptor<ProviderDefaults>()
-                let defaults = try! modelContext.fetch(fetchDefaults)
-                
-                let defaultProvider = defaults.first!.defaultProvider
-                return defaultProvider
+    @State private var showSettings = false
+    
+    var body: some CustomizableToolbarContent {
+        #if !os(macOS)
+        ToolbarItem(id: "settings", placement: .topBarLeading) {
+            Menu {
+                Button(action: { showSettings.toggle() }) {
+                    Label("Settings", systemImage: "gear")
+                }
+            } label: {
+                Label("More", systemImage: "ellipsis.circle")
+                    .labelStyle(.titleOnly)
             }
-        )
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
+            }
+        }
+        #endif
+        
+        ToolbarItem(id: "spacer") { Spacer() }
+        
+        ToolbarItem(id: "add-chat-session") {
+            Menu {
+                ForEach(providers) { provider in
+                    Button(provider.name) {
+                        sessionVM.createNewSession(provider: provider)
+                    }
+                    .keyboardShortcut(.none)
+                }
+            } label: {
+                Label("Add Item", systemImage: "square.and.pencil")
+            } primaryAction: {
+                sessionVM.createNewSession()
+            }
+            .menuIndicator(.hidden)
+            .popoverTip(NewSessionTip())
+        }
     }
 }
 

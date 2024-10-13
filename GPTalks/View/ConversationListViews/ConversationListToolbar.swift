@@ -8,7 +8,8 @@
 import SwiftUI
 import SwiftData
 
-struct ConversationListToolbar: ToolbarContent {
+struct ConversationListToolbar: CustomizableToolbarContent {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ChatSessionVM.self) private var sessionVM
     @Bindable var session: ChatSession
     
@@ -18,44 +19,81 @@ struct ConversationListToolbar: ToolbarContent {
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
-    var body: some ToolbarContent {
-    #if os(macOS)
-        ToolbarItem(placement: .navigation) {
+    var body: some CustomizableToolbarContent {
+        ToolbarItem(id: "chat-inspector-toggle", placement: horizontalSizeClass == .compact ? .primaryAction : .navigation) {
+            Button {
+                toggleInspector()
+            } label: {
+                Label("Shortcuts", systemImage: horizontalSizeClass == .compact ? "info.circle" : "slider.vertical.3")
+            }
+            .keyboardShortcut(".")
+            .sheet(isPresented: $showingInspector) {
+                ChatInspector(session: session)
+                    .presentationDetents(horizontalSizeClass == .compact ? [.medium, .large] : [.large])
+                    .presentationDragIndicator(.hidden)
+            }
+        }
+        .customizationBehavior(.disabled)
+        
+        if !(horizontalSizeClass == .compact) {
+            ToolbarItem(id: "provider-picker") {
+                ProviderPicker(provider: $session.config.provider, providers: providers) { provider in
+                    session.config.model = provider.chatModel
+                }
+            }
+            .defaultCustomization(.visible)
+            
+            ToolbarItem(id: "model-picker") {
+                ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
+            }
+            .defaultCustomization(.visible)
+            
+            ToolbarItem(id: "temp-slider") {
+                TemperatureSlider(temperature: $session.config.temperature)
+                    .frame(width: 100)
+            }
+            .defaultCustomization(.hidden)
+            
+            ToolbarItem(id: "stream-control") {
+                Toggle("Stream", isOn: $session.config.stream)
+            }
+            .defaultCustomization(.hidden)
+            
+            ToolbarItem(id: "tools-controls") {
+                ControlGroup {
+                    ForEach(Array(session.config.tools.toolStates.keys), id: \.self) { tool in
+                        Toggle(isOn: Binding(
+                            get: { session.config.tools.isToolEnabled(tool) },
+                            set: { newValue in
+                                session.config.tools.setTool(tool, enabled: newValue)
+                            }
+                        )) {
+                            Label(tool.displayName, systemImage: tool.icon)
+                        }
+                    }
+                }
+            }
+            .defaultCustomization(.hidden)
+            
+            ToolbarItem(id: "max-tokens-picker") {
+                MaxTokensPicker(value: $session.config.maxTokens)
+            }
+            .defaultCustomization(.hidden)
+        }
+        
+        #if os(macOS)
+        ToolbarItem(id: "shortcuts-popover", placement: .primaryAction) {
             Button {
                 showingShortcuts.toggle()
             } label: {
-                Label("Shortcuts", systemImage: "slider.vertical.3")
+                Label("Show Inspector", systemImage: "info.circle")
             }
             .popover(isPresented: $showingShortcuts) {
                 ConversationShortcuts()
             }
         }
-        
-        ToolbarItem {
-            ProviderPicker(provider: $session.config.provider, providers: providers) { provider in
-                session.config.model = provider.chatModel
-            }
-        }
-        
-        ToolbarItem {
-            ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
-        }
-        
+        .defaultCustomization(.visible)
         #endif
-        
-        ToolbarItem {
-            Button {
-                toggleInspector()
-            } label: {
-                Label("Show Inspector", systemImage: "info.circle")
-            }
-            .keyboardShortcut(".")
-            .sheet(isPresented: $showingInspector) {
-                ChatInspector(session: session)
-                    .presentationDetents([.medium, .large])
-                    .presentationDragIndicator(.hidden)
-            }
-        }
     }
     
     private func toggleInspector() {
