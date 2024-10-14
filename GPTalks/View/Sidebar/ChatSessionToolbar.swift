@@ -32,6 +32,7 @@ struct ChatSessionToolbar: CustomizableToolbarContent {
                 SettingsView()
             }
         }
+        .customizationBehavior(.disabled)
         #endif
         
         ToolbarItem(id: "spacer") { Spacer() }
@@ -52,6 +53,7 @@ struct ChatSessionToolbar: CustomizableToolbarContent {
             .menuIndicator(.hidden)
             .popoverTip(NewSessionTip())
         }
+        .customizationBehavior(.disabled)
     }
 }
 

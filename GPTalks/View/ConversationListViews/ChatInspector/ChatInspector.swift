@@ -24,7 +24,7 @@ struct ChatInspector: View {
     
     var macos: some View {
         commonParts
-            .frame(height: 625)
+//            .frame(height: 625)
             .safeAreaInset(edge: .top, spacing: 0) {
                 HStack {
                     DismissButton()
