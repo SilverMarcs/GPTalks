@@ -18,6 +18,7 @@ struct ProviderBackup: Codable {
     var host: String
     var apiKey: String
     var type: ProviderType
+    var schema: HTTPScheme
     var color: String
     var isEnabled: Bool
     var supportsImage: Bool
@@ -52,6 +53,7 @@ extension ProviderBackup {
         self.host = provider.host
         self.apiKey = provider.apiKey
         self.type = provider.type
+        self.schema = provider.scheme
         self.color = provider.color
         self.isEnabled = provider.isEnabled
         self.supportsImage = provider.supportsImage
@@ -76,6 +78,7 @@ extension ProviderBackup {
             host: self.host,
             apiKey: self.apiKey,
             type: self.type,
+            scheme: self.schema,
             color: self.color,
             isEnabled: self.isEnabled,
             supportsImage: self.supportsImage,

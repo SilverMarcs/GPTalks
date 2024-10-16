@@ -126,6 +126,14 @@ class Provider {
             sttModels: ttsModels
         )
         
+        
+//        Task {
+//            let newModels = await type.getService().refreshModels(provider: provider).map { model in
+//                ChatModel(code: model.code, name: model.name)
+//            }
+//            provider.chatModels.append(contentsOf: newModels)
+//        }
+        
         return provider
     }
 }

@@ -20,8 +20,7 @@ struct SettingsView: View {
     #endif
     
     @State private var columnVisibility = NavigationSplitViewVisibility.automatic
-    @State var selections: Set<ChatSession> = []
-    
+
     @Query var providerDefaults: [ProviderDefaults]
     
     var body: some View {
@@ -89,13 +88,6 @@ struct SettingsView: View {
                 case .none:
                     Text("Select an option from the sidebar")
                 }
-            }
-            .onAppear {
-                selections = sessionVM.chatSelections
-                sessionVM.chatSelections = []
-            }
-            .onDisappear {
-                sessionVM.chatSelections = selections
             }
             .scrollContentBackground(.visible)
             .onChange(of: columnVisibility, initial: true) { oldVal, newVal in

@@ -74,6 +74,7 @@ struct ProviderList: View {
                 }
             }
             
+            #if os(macOS)
             Section(header: Text("Local Providers")) {
                 ForEach([ProviderType.lmstudio, .ollama], id: \.self) { type in
                     Button(action: { addProvider(type: type) }) {
@@ -81,6 +82,7 @@ struct ProviderList: View {
                     }
                 }
             }
+            #endif
             
             Section(header: Text("Custom")) {
                 Button(action: { addProvider(type: .custom) }) {

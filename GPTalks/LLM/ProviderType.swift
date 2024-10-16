@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import UniformTypeIdentifiers
 
 enum ProviderType: String, Codable, CaseIterable, Identifiable {
@@ -83,7 +84,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .google: "#E64335"
         case .vertex: "#4B62CA"
         case .ollama: "#EFEFEF"
-        default: "#00947A"
+        default: Color.randomColors.randomElement() ?? "#00947A"
         }
     }
     

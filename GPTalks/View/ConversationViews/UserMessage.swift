@@ -23,23 +23,18 @@ struct UserMessage: View {
                 DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false)
             }
             
-            HighlightedText(text: conversation.content, highlightedText: sessionVM.searchText.count > 3 ? sessionVM.searchText : nil)
-                #if os(macOS)
-                .lineSpacing(2)
-                #endif
-                .font(.system(size: config.fontSize))
-                .lineLimit(!isExpanded ? lineLimit : nil)
-                .padding(.vertical, 8)
-                .padding(.horizontal, 11)
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                    #if os(macOS)
-                        .fill(.background.quinary)
-                    #else
-                        .fill(.background.secondary)
-                    #endif
-                        .fill(conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
-                )
+            GroupBox {
+                HighlightedText(text: conversation.content, highlightedText: sessionVM.searchText.count > 3 ? sessionVM.searchText : nil)
+#if os(macOS)
+                    .lineSpacing(2)
+#endif
+                    .font(.system(size: config.fontSize))
+                    .lineLimit(!isExpanded ? lineLimit : nil)
+                    .padding(5)
+                    .background(
+                            (conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
+                    )
+            }
             
     #if os(macOS)
             contextMenu
