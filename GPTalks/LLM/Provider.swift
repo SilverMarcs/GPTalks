@@ -21,6 +21,7 @@ class Provider {
     var apiKey: String = ""
     
     var type: ProviderType
+    var scheme: HTTPScheme
     var isPersistent: Bool = false  // added by the app by default and are not deletable
     var extraInfo: String = ""
     
@@ -57,6 +58,7 @@ class Provider {
                 host: String,
                 apiKey: String,
                 type: ProviderType,
+                scheme: HTTPScheme,
                 color: String,
                 isEnabled: Bool,
                 supportsImage: Bool,
@@ -77,6 +79,7 @@ class Provider {
         self.host = host
         self.apiKey = apiKey
         self.type = type
+        self.scheme = scheme
         self.color = color
         self.isEnabled = isEnabled
         self.supportsImage = supportsImage
@@ -101,11 +104,13 @@ class Provider {
         let imageModels = type == .openai ? ImageModel.getOpenImageModels() : []
         let ttsModels = type == .openai ? STTModel.getOpenAITTSModels() : []
         
+        
         let provider = Provider(
             name: type.name,
             host: type.defaultHost,
             apiKey: "",
             type: type,
+            scheme: type.scheme,
             color: type.defaultColor,
             isEnabled: !isDummy,
             supportsImage: type == .openai,
@@ -123,6 +128,11 @@ class Provider {
         
         return provider
     }
+}
+
+enum HTTPScheme: String, Codable, CaseIterable {
+    case http
+    case https
 }
 
 extension Provider {

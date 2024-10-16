@@ -75,7 +75,7 @@ struct ClaudeService: AIService {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
-            basePath: config.provider.type.scheme + "://" + config.provider.host, betaHeaders: betaHeaders)
+            basePath: config.provider.scheme.rawValue + "://" + config.provider.host, betaHeaders: betaHeaders)
         
         return AsyncThrowingStream { continuation in
             Task {
@@ -98,7 +98,7 @@ struct ClaudeService: AIService {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
-            basePath: config.provider.type.scheme + "://" + config.provider.host, betaHeaders: betaHeaders)
+            basePath: config.provider.scheme.rawValue + "://" + config.provider.host, betaHeaders: betaHeaders)
         
         let message = try await service.createMessage(parameters)
         // Extract the text content from the message
@@ -119,7 +119,7 @@ struct ClaudeService: AIService {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: provider.apiKey,
-            basePath: provider.type.scheme + "://" + provider.host, betaHeaders: betaHeaders)
+            basePath: provider.scheme.rawValue + "://" + provider.host, betaHeaders: betaHeaders)
         
         let messageParameter = MessageParameter(
             model: .other(model.code),

@@ -75,7 +75,7 @@ struct ModelList<M: ModelType>: View {
                 
                 TableColumn("Actions") { $model in
                     HStack {
-                        if let model = model as? ChatModel {
+                        if let _ = model as? ChatModel {
                             ModelTester(provider: provider, model: $model)
                         }
                         

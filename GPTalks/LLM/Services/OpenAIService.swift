@@ -207,6 +207,6 @@ struct OpenAIService: AIService {
     }
     
     static func getService(provider: Provider) -> OpenAI {
-        return OpenAI(configuration: OpenAI.Configuration(token: provider.apiKey, host: provider.host, scheme: provider.type.scheme))
+        return OpenAI(configuration: OpenAI.Configuration(token: provider.apiKey, host: provider.host, scheme: provider.scheme.rawValue))
     }
 }

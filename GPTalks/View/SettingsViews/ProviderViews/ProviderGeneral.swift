@@ -162,11 +162,12 @@ struct ProviderGeneral: View {
         }
     }
     
+    // This sud come form extarContexr in provider type or provider itself
     private var popoverText: String {
         switch provider.type {
         case .vertex:
             "Put in your Google Cloud Project ID.\nOnly Anthropic models are supported.\nMake sure to enable Vertex AI Api in GCloud Console and enable Anthropic models."
-        case .openai, .google, .anthropic, .local:
+        default:
             "Omit https:// and /v1/ from the URL.\nFor example: api.openai.com"
         }
     }

@@ -58,9 +58,33 @@ struct ProviderList: View {
     
     private var addButton: some View {
         Menu {
-            ForEach(ProviderType.allTypes, id: \.self) { type in
-                Button(action: { addProvider(type: type) }) {
-                    Label(type.name, image: type.imageName)
+            Section(header: Text("Primary Providers")) {
+                ForEach([ProviderType.openai, .google, .anthropic, .vertex], id: \.self) { type in
+                    Button(action: { addProvider(type: type) }) {
+                        Label(type.name, image: type.imageName)
+                    }
+                }
+            }
+            
+            Section(header: Text("Other Providers")) {
+                ForEach([ProviderType.openrouter, .groq, .mistral, .perplexity, .togetherai], id: \.self) { type in
+                    Button(action: { addProvider(type: type) }) {
+                        Label(type.name, image: type.imageName)
+                    }
+                }
+            }
+            
+            Section(header: Text("Local Providers")) {
+                ForEach([ProviderType.lmstudio, .ollama], id: \.self) { type in
+                    Button(action: { addProvider(type: type) }) {
+                        Label(type.name, image: type.imageName)
+                    }
+                }
+            }
+            
+            Section(header: Text("Custom")) {
+                Button(action: { addProvider(type: .custom) }) {
+                    Label(ProviderType.custom.name, image: ProviderType.custom.imageName)
                 }
             }
         } label: {
@@ -77,7 +101,6 @@ extension ProviderList {
             modelContext.insert(newProvider)
             reorderProviders()
         } completion: {
-//            try? modelContext.save()
             DispatchQueue.main.async {
                 selectedProvider = newProvider
             }

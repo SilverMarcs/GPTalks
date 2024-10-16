@@ -10,35 +10,41 @@ import UniformTypeIdentifiers
 
 enum ProviderType: String, Codable, CaseIterable, Identifiable {
     case openai
+    case openrouter
+    case groq
+    case mistral
+    case perplexity
+    case togetherai
     case anthropic
     case google
     case vertex
-    case local
-    
+    case ollama
+    case lmstudio
+    case custom
+
     var id: ProviderType { self }
-    
-    static var allTypes: [ProviderType] {
-        #if os(macOS)
-        [.openai, .anthropic, .google, .vertex, .local]
-        #else
-        [.openai, .anthropic, .google, .vertex]
-        #endif
-    }
-    
-    var scheme: String {
+
+    var scheme: HTTPScheme {
         switch self {
-        case .openai, .anthropic, .google, .vertex: "https"
-        case .local: "http"
+        case .ollama, .lmstudio: .http
+        default: .https
         }
     }
     
     var name: String {
         switch self {
         case .openai: "OpenAI"
+        case .openrouter: "OpenRouter"
+        case .groq: "Groq"
+        case .mistral: "MistralAI"
+        case .perplexity: "PerplexityAI"
+        case .togetherai: "TogetherAI"
         case .anthropic: "Anthropic"
         case .google: "Google"
-        case .vertex: "Vertex Anthropic"
-        case .local: "Local OpenAI"
+        case .vertex: "VertexAI"
+        case .ollama: "Ollama"
+        case .lmstudio: "LMStudio"
+        case .custom: "Custom OpenAI"
         }
     }
     
@@ -48,7 +54,8 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .anthropic: "anthropic.SFSymbol"
         case .google: "google.SFSymbol"
         case .vertex: "storm.SFSymbol"
-        case .local: "ollama.SFSymbol"
+        case .ollama: "ollama.SFSymbol"
+        default: "brain.SFSymbol"
         }
     }
     
@@ -58,7 +65,14 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .anthropic: "api.anthropic.com"
         case .google: "generativelanguage.googleapis.com"
         case .vertex: ""
-        case .local: "localhost:11434"
+        case .ollama: "ollamahost:11434"
+        case .perplexity: "api.perplexity.ai"
+        case .groq: "api.groq.com/openai"
+        case .openrouter: "openrouter.ai/api"
+        case .mistral: "api.mistral.ai"
+        case .togetherai: "api.together.xyz"
+        case .lmstudio: "localhost:1234"
+        case .custom: ""
         }
     }
     
@@ -68,17 +82,15 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .anthropic: "#E6784B"
         case .google: "#E64335"
         case .vertex: "#4B62CA"
-        case .local: "#EFEFEF"
+        case .ollama: "#EFEFEF"
+        default: "#00947A"
         }
     }
     
     var supportedFileTypes: [UTType] {
         switch self {
-        case .openai: [.image, .pdf, .audio]
-        case .anthropic:  [.image, .pdf]
         case .google: [.audio, .image, .pdf, .commaSeparatedText, .text]
-        case .vertex: [.image, .pdf, .audio]
-        case .local: [.pdf, .commaSeparatedText, .audio]
+        default: [.image, .pdf, .audio]
         }
     }
     
@@ -88,13 +100,14 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .anthropic: ChatModel.getAnthropicModels()
         case .google: ChatModel.getGoogleModels()
         case .vertex: ChatModel.getVertexModels()
-        case .local: ChatModel.getLocalModels()
+        case .ollama: ChatModel.getLocalModels()
+        default: ChatModel.getOpenaiModels()
         }
     }
     
     func getService() -> any AIService.Type {
         switch self {
-        case .openai, .local:
+        case .openai, .ollama, .openrouter, .groq, .mistral, .perplexity, .togetherai, .lmstudio, .custom:
             OpenAIService.self
         case .anthropic:
             ClaudeService.self

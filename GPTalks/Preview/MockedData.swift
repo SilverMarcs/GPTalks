@@ -12,14 +12,12 @@ extension Provider {
     static var googleProvider = Provider.factory(type: .google)
     static var anthropicProvider = Provider.factory(type: .anthropic)
     static var vertexProvider = Provider.factory(type: .vertex)
-    static var localProvider = Provider.factory(type: .local)
     
     static var mockProviders = [
         openAIProvider,
         googleProvider,
         anthropicProvider,
         vertexProvider,
-        localProvider
     ]
 }
 
