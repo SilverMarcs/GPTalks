@@ -93,7 +93,7 @@ struct ConversationMenu: View {
     var forkSession: some View {
         HoverScaleButton(icon: "arrow.branch", label: "Fork Session") {
             if let newSession = group.session?.copy(from: group, purpose: .chat) {
-                sessionVM.fork(session: newSession)
+                sessionVM.fork(newSession: newSession)
             }
         }
     }

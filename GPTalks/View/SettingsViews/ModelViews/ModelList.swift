@@ -75,10 +75,9 @@ struct ModelList<M: ModelType>: View {
                 
                 TableColumn("Actions") { $model in
                     HStack {
-                        // TODO: add this
-//                        if let model = model as? ChatModel {
-//                            testModel(model: model)
-//                        }
+                        if let model = model as? ChatModel {
+                            ModelTester(provider: provider, model: $model)
+                        }
                         
                         Button {
                             models.removeAll(where: { $0.id == model.id })
@@ -104,15 +103,4 @@ struct ModelList<M: ModelType>: View {
             Label("Refresh Models", systemImage: "arrow.triangle.2.circlepath")
         }
     }
-    
-    func testModel(model: ChatModel) -> some View {
-        Button {
-            Task {
-                await provider.testModel(model: model)
-            }
-        } label: {
-            Image(systemName: "play.cirle")
-        }
-    }
 }
-

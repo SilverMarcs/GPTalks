@@ -73,22 +73,12 @@ import SwiftUI
         }
     }
     
-    
-    func fork(session: ChatSession) {
+    // must provide new session, not the one to be forked
+    func fork(newSession: ChatSession) {
         withAnimation {
-            // Create a predicate to filter out sessions where isQuick is true
-            let predicate = #Predicate<ChatSession> { session in
-                session.isQuick == false
-            }
-            
-            // Create a FetchDescriptor with the predicate and sort descriptor
-            let descriptor = FetchDescriptor<ChatSession>(
-                predicate: predicate
-            )
-            
-            modelContext.insert(session)
+            modelContext.insert(newSession)
             #if os(macOS)
-            self.chatSelections = [session]
+            self.chatSelections = [newSession]
             #else
             self.chatSelections = []
             #endif

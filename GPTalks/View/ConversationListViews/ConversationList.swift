@@ -86,9 +86,9 @@ struct ConversationList: View {
             .onDrop(of: session.config.provider.type.supportedFileTypes, isTargeted: nil) { providers in
                 session.inputManager.handleDrop(providers, supportedTypes: session.config.provider.type.supportedFileTypes)
             }
+            .navigationTitle(navTitle)
             #if os(macOS)
             .navigationSubtitle("Tokens: \(session.tokenCount.formatToK()) • \(session.config.systemPrompt.prefix(60))")
-            .navigationTitle(session.title)
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 if config.conversationListStyle == .list && session.isReplying {
                     hasUserScrolled = true
@@ -96,16 +96,6 @@ struct ConversationList: View {
             }
             #else
             .toolbarTitleDisplayMode(.inline)
-            .navigationTitle(session.config.model.name)
-//            .toolbarTitleMenu {
-//                Section("\(session.tokenCount.formatToK()) tokens") {
-//                    Button {
-//                        session.refreshTokens()
-//                    } label: {
-//                        Label("Refresh Tokens", systemImage: "arrow.clockwise")
-//                    }
-//                }
-//            }
             #if !os(visionOS)
             .scrollDismissesKeyboard(.immediately)
             #endif
@@ -114,6 +104,10 @@ struct ConversationList: View {
             }
             #endif
         }
+    }
+    
+    var navTitle: String {
+        horizontalSizeClass == .compact ? session.config.model.name : session.title
     }
     
     var vStackView: some View  {

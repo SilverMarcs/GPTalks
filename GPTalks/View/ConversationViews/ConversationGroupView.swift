@@ -8,35 +8,36 @@
 import SwiftUI
 
 struct ConversationGroupView: View {
+    @Environment(ChatSessionVM.self) var sessionVM
     var group: ConversationGroup
-    
-    @State var isHovered: Bool = false
-    
+
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            Group {
-                switch group.role {
-                case .user:
-                    UserMessage(conversation: group.activeConversation)
-                        .padding(.top, 5)
-                case .assistant:
-                    if group.activeConversation.toolCalls.isEmpty {
-                        AssistantMessage(conversation: group.activeConversation)
+            if shouldShowMessage() {
+                Group {
+                    switch group.role {
+                    case .user:
+                        UserMessage(conversation: group.activeConversation)
                             .padding(.top, 5)
-                    } else {
-                        ToolCallView(conversation: group.activeConversation)
-                            .padding(.top, 5)
+                    case .assistant:
+                        if group.activeConversation.toolCalls.isEmpty {
+                            AssistantMessage(conversation: group.activeConversation)
+                                .padding(.top, 5)
+                        } else {
+                            ToolCallView(conversation: group.activeConversation)
+                                .padding(.top, 5)
+                        }
+                    case .tool:
+                        ToolMessage(conversation: group.activeConversation)
+                            .padding(.vertical, 5)
+                    default:
+                        Text("Unknown role")
                     }
-                case .tool:
-                    ToolMessage(conversation: group.activeConversation)
-                        .padding(.vertical, 5)
-                default:
-                    Text("Unknown role")
                 }
+                #if os(iOS)
+                .opacity(0.9)
+                #endif
             }
-            #if os(iOS)
-            .opacity(0.9)
-            #endif
             
             if group.session?.groups.firstIndex(where: { $0 == group }) == group.session?.resetMarker {
                 ContextResetDivider() {
@@ -45,6 +46,13 @@ struct ConversationGroupView: View {
                 .padding(.vertical)
             }
         }
+    }
+    
+    private func shouldShowMessage() -> Bool {
+        if sessionVM.searchText.isEmpty {
+            return true
+        }
+        return group.activeConversation.content.lowercased().contains(sessionVM.searchText.lowercased())
     }
 }
 

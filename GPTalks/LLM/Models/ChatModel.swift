@@ -11,6 +11,7 @@ struct ChatModel: Hashable, Identifiable, Codable, ModelType {
     var id: UUID = UUID()
     var code: String
     var name: String
+    var testResult: Bool?
 
     init(code: String, name: String) {
         self.code = code

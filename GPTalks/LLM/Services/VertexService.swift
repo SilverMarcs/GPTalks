@@ -252,7 +252,7 @@ struct VertexService: AIService {
         return request
     }
     
-    static func testModel(provider: Provider, model: ChatModel) async -> Bool {
+    static func testModel(provider: Provider, model: any ModelType) async -> Bool {
         let testConversation = Conversation(role: .user, content: String.testPrompt)
         let location = "us-east5"  // Assuming this is the default location
         let apiUrl = "https://\(location)-aiplatform.googleapis.com/v1/projects/\(provider.host)/locations/\(location)/publishers/anthropic/models/\(model.code):streamRawPredict"

@@ -183,7 +183,7 @@ struct QuickPanel: View {
         NSApp.keyWindow?.makeKeyAndOrderFront(nil)
         
         let newSession = session.copy(purpose: .quick)
-        sessionVM.fork(session: newSession)
+        sessionVM.fork(newSession: newSession)
         resetChat()
         
         showAdditionalContent = false
@@ -198,11 +198,12 @@ struct QuickPanel: View {
         
         session.config.systemPrompt = AppConfig.shared.quickSystemPrompt
         
-        showAdditionalContent = true
+//        showAdditionalContent = true
         
         Task {
             await session.sendInput(forQuick: true)
         }
+        showAdditionalContent = true
     }
 }
 
