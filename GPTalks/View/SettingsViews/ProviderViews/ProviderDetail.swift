@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct ProviderDetail: View {
     @Bindable var provider: Provider
     var reorderProviders: () -> Void
@@ -20,7 +18,7 @@ struct ProviderDetail: View {
             switch selectedTab {
             case .general:
                 ProviderGeneral(provider: provider, reorderProviders: reorderProviders)
-            case .models:
+            case .chat:
                 ModelList<ChatModel>(provider: provider, models: $provider.chatModels)
             case .image:
                 ModelList<ImageModel>(provider: provider, models: $provider.imageModels)
@@ -38,18 +36,15 @@ struct ProviderDetail: View {
         }
     }
     
-    private var filteredTabs: [ProviderDetailTab] {
-        if provider.type == .openai {
-            return ProviderDetailTab.allCases
-        } else {
-            return ProviderDetailTab.allCases.filter { $0 != .image || $0 != .tts }
-        }
-    }
-
+//    private var filteredTabs: [ProviderDetailTab] {
+//        provider.type == .openai ? ProviderDetailTab.allCases : ProviderDetailTab.allCases.filter { $0 != .image && $0 != .tts }
+//    }
+    
     private var picker: some View {
         Picker("Tabs", selection: $selectedTab) {
-            ForEach(filteredTabs) { tab in
-                Text(tab.name).tag(tab)
+            ForEach(ProviderDetailTab.allCases, id: \.self) { tab in
+                tab.name.tag(tab)
+                    .labelStyle(.iconOnly)
             }
         }
         .pickerStyle(.segmented)
@@ -62,20 +57,20 @@ enum ProviderDetailTab: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     
     case general
-    case models
+    case chat
     case image
     case tts
     
-    var name: String {
+    var name: some View {
         switch self {
         case .general:
-            return "General"
-        case .models:
-            return "Chat"
+            Label("General", systemImage: "info.circle")
+        case .chat:
+            Label("Chat", systemImage: "quote.bubble")
         case .image:
-            return "Image"
+            Label("Image", systemImage: "photo")
         case .tts:
-            return "STT"
+            Label("TTS", systemImage: "waveform")
         }
     }
 }
