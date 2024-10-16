@@ -156,9 +156,7 @@ final class ChatSession {
         
         streamingTask = Task {
             try await handleStreamingTask(regenContent: regenContent, assistantGroup: assistantGroup)
-            Task {
-                await self.refreshTokens()
-            }
+            self.refreshTokens()
         }
         
         // TODO: create func for this
@@ -247,9 +245,7 @@ final class ChatSession {
             }
         }
         
-        Task {
-            await self.refreshTokens()
-        }
+        self.refreshTokens()
     }
     
     @MainActor
@@ -263,7 +259,7 @@ final class ChatSession {
         }
     }
     
-    func refreshTokens() async {
+    func refreshTokens() {
         let messageTokens = adjustedGroups.reduce(0) { $0 + $1.tokenCount}
         let sysPromptTokens = countTokensFromText(config.systemPrompt)
         let toolTokens = config.tools.tokenCount
@@ -341,10 +337,7 @@ final class ChatSession {
                 self.modelContext?.delete(conversationGroup)
             }
         }
-        
-        Task {
-            await self.refreshTokens()
-        }
+        self.refreshTokens()
     }
 
     
@@ -357,10 +350,7 @@ final class ChatSession {
         }
         
         errorMessage = ""
-        
-        Task {
-            await self.refreshTokens()
-        }
+        self.refreshTokens()
     }
     
     private func unsetResetMarker(group: ConversationGroup) {

@@ -36,8 +36,8 @@ struct ConversationList: View {
                 }
             }
             .onChange(of: sessionVM.chatSelections) {
-                Task {
-                    await sessionVM.chatSelections.first?.refreshTokens()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    sessionVM.chatSelections.first?.refreshTokens()
                 }
                 
                 #if os(macOS)
@@ -97,17 +97,15 @@ struct ConversationList: View {
             #else
             .toolbarTitleDisplayMode(.inline)
             .navigationTitle(session.config.model.name)
-            .toolbarTitleMenu {
-                Section("\(session.tokenCount.formatToK()) tokens") {
-                    Button {
-                        Task {
-                            await session.refreshTokens()
-                        }
-                    } label: {
-                        Label("Refresh Tokens", systemImage: "arrow.clockwise")
-                    }
-                }
-            }
+//            .toolbarTitleMenu {
+//                Section("\(session.tokenCount.formatToK()) tokens") {
+//                    Button {
+//                        session.refreshTokens()
+//                    } label: {
+//                        Label("Refresh Tokens", systemImage: "arrow.clockwise")
+//                    }
+//                }
+//            }
             #if !os(visionOS)
             .scrollDismissesKeyboard(.immediately)
             #endif
