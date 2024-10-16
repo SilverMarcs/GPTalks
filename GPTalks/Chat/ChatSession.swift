@@ -268,7 +268,7 @@ final class ChatSession {
         self.tokenCount = (messageTokens + sysPromptTokens + toolTokens + inputTokens)
     }
     
-    func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) -> ChatSession {
+    func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) async -> ChatSession {
         let newSession = ChatSession(config: config.copy(purpose: purpose))
         let leading: String
         

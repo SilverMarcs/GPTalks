@@ -18,6 +18,7 @@ struct ConversationMenu: View {
     var toggleTextSelection: (() -> Void)? = nil
     
     @State var isCopied = false
+    @State var isForking = false
 
     var body: some View {
         #if os(macOS)
@@ -90,10 +91,20 @@ struct ConversationMenu: View {
         }
     }
 
+    @ViewBuilder
     var forkSession: some View {
-        HoverScaleButton(icon: "arrow.branch", label: "Fork Session") {
-            if let newSession = group.session?.copy(from: group, purpose: .chat) {
-                sessionVM.fork(newSession: newSession)
+        if isForking {
+            ProgressView()
+                .controlSize(.small)
+        } else {
+            HoverScaleButton(icon: "arrow.branch", label: "Fork Session") {
+                isForking = true
+                Task {
+                    if let newSession = await group.session?.copy(from: group, purpose: .chat) {
+                        sessionVM.fork(newSession: newSession)
+                        isForking = false
+                    }
+                }
             }
         }
     }
@@ -180,12 +191,6 @@ struct ConversationMenu: View {
                 }
                 .disabled(!shouldShowButtons || !canNavigateLeft)
                 .help("Previous")
-                
-//                Text(
-//                    "\(group.activeConversationIndex + 1)/\(group.conversations.count)"
-//                )
-//                .foregroundStyle(.secondary)
-//                .frame(width: 30)
                 
                 HoverScaleButton(icon: "chevron.right", label: "Next") {
                     group.setActiveToRight()

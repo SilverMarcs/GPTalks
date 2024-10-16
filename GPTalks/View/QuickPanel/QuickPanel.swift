@@ -182,13 +182,15 @@ struct QuickPanel: View {
         NSApp.activate(ignoringOtherApps: true)
         NSApp.keyWindow?.makeKeyAndOrderFront(nil)
         
-        let newSession = session.copy(purpose: .quick)
-        sessionVM.fork(newSession: newSession)
-        resetChat()
-        
-        showAdditionalContent = false
-        dismissWindow(id: "quick")
-        openWindow(id: "main")
+        Task {
+            let newSession = await session.copy(purpose: .quick)
+            sessionVM.fork(newSession: newSession)
+            resetChat()
+            
+            showAdditionalContent = false
+            dismissWindow(id: "quick")
+            openWindow(id: "main")
+        }
     }
     
     private func send() {
