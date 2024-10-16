@@ -1,5 +1,5 @@
 {
-  "originHash" : "8be40d0e05d3b87c26a0bac2cedeb70ff5f1dffc17ae4e340344c1f7ce00ac12",
+  "originHash" : "d21dc5b113060de7b51486d7df66abfc511e66154ba82a54b9f28ac0074f0768",
   "pins" : [
     {
       "identity" : "fuzi",
@@ -43,7 +43,7 @@
       "location" : "https://github.com/SilverMarcs/markdown-webview",
       "state" : {
         "branch" : "master",
-        "revision" : "fda3c84242a5aa0c29d94b6208db45911b45be98"
+        "revision" : "4bebd23be8379f984b84f2ee4a8b0ff6671c8169"
       }
     },
     {

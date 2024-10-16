@@ -24,11 +24,12 @@ struct MarkdownView: View {
         
         switch provider {
             case .webview:
-                MarkdownWebView(conversation.content,
-                                baseURL: "GPTalks Web Content",
-                                highlightString: highlightString,
-                                customStylesheet: config.markdownTheme,
-                                fontSize: CGFloat(config.fontSize))
+                MarkdownWebView(conversation.content)
+                    .markdownBaseURL("GPTalks Web Content")
+                    .markdownHighlightString(highlightString)
+                    .markdownTheme(config.markdownTheme)
+                    .markdownFontSize(CGFloat(config.fontSize))
+
             case .native:
                 Text(LocalizedStringKey(conversation.content))
                     .font(.system(size: config.fontSize))
