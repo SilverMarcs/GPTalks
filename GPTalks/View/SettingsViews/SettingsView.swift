@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct SettingsView: View {
+    @Environment(ChatSessionVM.self) private var sessionVM
     @Environment(\.dismiss) var dismiss
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
@@ -19,6 +20,7 @@ struct SettingsView: View {
     #endif
     
     @State private var columnVisibility = NavigationSplitViewVisibility.automatic
+    @State var selections: Set<ChatSession> = []
     
     @Query var providerDefaults: [ProviderDefaults]
     
@@ -87,6 +89,13 @@ struct SettingsView: View {
                 case .none:
                     Text("Select an option from the sidebar")
                 }
+            }
+            .onAppear {
+                selections = sessionVM.chatSelections
+                sessionVM.chatSelections = []
+            }
+            .onDisappear {
+                sessionVM.chatSelections = selections
             }
             .scrollContentBackground(.visible)
             .onChange(of: columnVisibility, initial: true) { oldVal, newVal in

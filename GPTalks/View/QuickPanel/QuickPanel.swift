@@ -18,7 +18,6 @@ struct QuickPanel: View {
     @Bindable var session: ChatSession
     @Binding var showAdditionalContent: Bool
     
-    @State var prompt: String = ""
     @FocusState private var isFocused: Bool
     
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
@@ -29,13 +28,6 @@ struct QuickPanel: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ZStack {
-//                Button("Paste Image") {
-//                    session.inputManager.handlePaste(pasteboardItems: [], supportedFileTypes: session.config.provider.type.supportedFileTypes)
-//                    showAdditionalContent = true
-//                }
-//                .hidden()
-//                .keyboardShortcut("b")
-                
                 Button("Focus Field") {
                     isFocused = true
                 }
@@ -65,9 +57,10 @@ struct QuickPanel: View {
                 bottomView
             }
         }
+        .toolbarVisibility(.hidden, for: .windowToolbar)
         .onAppear {
             selections = sessionVM.chatSelections
-            sessionVM.chatSelections = []
+            sessionVM.chatSelections = [self.session]
             isFocused = true
             if !session.groups.isEmpty {
                 showAdditionalContent = true
@@ -110,7 +103,7 @@ struct QuickPanel: View {
             }
             .buttonStyle(.plain)
             
-            TextField("Ask Anything...", text: $prompt, axis: .vertical)
+            TextField("Ask Anything...", text: $session.inputManager.prompt, axis: .vertical)
                 .focused($isFocused)
                 .font(.system(size: 25))
                 .textFieldStyle(.plain)
@@ -199,7 +192,7 @@ struct QuickPanel: View {
     }
     
     private func send() {
-        if prompt.isEmpty {
+        if session.inputManager.prompt.isEmpty {
             return
         }
         
@@ -207,13 +200,9 @@ struct QuickPanel: View {
         
         showAdditionalContent = true
         
-        session.inputManager.prompt = prompt
-        
         Task {
             await session.sendInput(forQuick: true)
         }
-        
-        prompt = ""
     }
 }
 
