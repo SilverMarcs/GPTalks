@@ -11,10 +11,14 @@ import OpenAI
 
 struct ImageInspector: View {
     @Bindable var session: ImageSession
-    @Query(filter: #Predicate { $0.isEnabled && $0.supportsImage }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
     @Binding var showingInspector: Bool
+    
+    var filteredProviders: [Provider] {
+        providers.filter { !$0.imageModels.isEmpty }
+    }
     
     var body: some View {
         NavigationStack {

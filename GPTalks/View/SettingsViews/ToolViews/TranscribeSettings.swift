@@ -11,10 +11,14 @@ import SwiftData
 struct TranscribeSettings: View {
     @ObservedObject var config = ToolConfigDefaults.shared
     
-    @Query(filter: #Predicate { $0.isEnabled && $0.supportsSTT }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
     @Bindable var providerDefaults: ProviderDefaults
+    
+    var filteredProviders: [Provider] {
+        providers.filter { !$0.sttModels.isEmpty }
+    }
     
     var body: some View {
         Section("General") {
@@ -22,7 +26,7 @@ struct TranscribeSettings: View {
         }
         
         Section("Defaults") {
-            ProviderPicker(provider: $providerDefaults.toolSTTProvider, providers: providers)
+            ProviderPicker(provider: $providerDefaults.toolSTTProvider, providers: filteredProviders)
             
             ModelPicker(model: $providerDefaults.toolSTTProvider.sttModel, models: providerDefaults.toolSTTProvider.sttModels, label: "STT Model")
         }

@@ -35,7 +35,7 @@ struct IOSWindow: Scene {
                     if let imageSession = imageVM.activeImageSession {
                         ImageGenerationList(session: imageSession)
                     } else {
-                        Text("^[\(imageVM.imageSelections.count) Image Session](inflect: true) Selected")
+                        Text("^[\(imageVM.selections.count) Image Session](inflect: true) Selected")
                     }
                 }
             }

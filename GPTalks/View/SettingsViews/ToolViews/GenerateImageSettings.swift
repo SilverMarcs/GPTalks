@@ -11,8 +11,12 @@ import SwiftData
 struct GenerateImageSettings: View {
     @ObservedObject var config = ToolConfigDefaults.shared
     
-    @Query(filter: #Predicate { $0.isEnabled && $0.supportsImage }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
+    
+    var filteredProviders: [Provider] {
+        providers.filter { !$0.imageModels.isEmpty }
+    }
     
     @Bindable var providerDefaults: ProviderDefaults
     
@@ -22,7 +26,7 @@ struct GenerateImageSettings: View {
         }
         
         Section("Defaults") {            
-            ProviderPicker(provider: $providerDefaults.imageProvider, providers: providers)
+            ProviderPicker(provider: $providerDefaults.imageProvider, providers: filteredProviders)
             
             ModelPicker(model: $providerDefaults.imageProvider.imageModel, models: providerDefaults.imageProvider.imageModels, label: "Image Model")
         }

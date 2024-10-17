@@ -9,27 +9,63 @@ import SwiftUI
 import SwiftData
 
 struct ImageSessionToolbar: ToolbarContent {
-    @Environment(ImageSessionVM.self) var sessionVM
+    @Environment(ImageSessionVM.self) var imageVM
     @Environment(\.modelContext) var modelContext
     
-    @Query(filter: #Predicate { $0.isEnabled && $0.supportsImage }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @ObservedObject var config = AppConfig.shared
+    
+    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
-    var body: some ToolbarContent {
-        SessionToolbar(
-            providers: providers,
-            addItemAction: { provider in
-                sessionVM.addImageSession(modelContext: modelContext, provider: provider)
-            },
-            getDefaultProvider: { providers in
-                let fetchDefaults = FetchDescriptor<ProviderDefaults>()
-                let defaults = try! modelContext.fetch(fetchDefaults)
-                
-                let defaultProvider = defaults.first!.imageProvider
-                return defaultProvider
-            }
-        )
+    var filteredProviders: [Provider] {
+        providers.filter { !$0.imageModels.isEmpty }
     }
+    
+    var body: some ToolbarContent {
+        #if !os(macOS)
+        iosParts
+        #endif
+        
+        ToolbarItem { Spacer() }
+        
+        ToolbarItem(placement: .automatic) {
+            Menu {
+                ForEach(providers) { provider in
+                    Button(provider.name) {
+                        imageVM.createNewSession(provider: provider)
+                    }
+                    .keyboardShortcut(.none)
+                }
+            } label: {
+                Label("Add Item", systemImage: "square.and.pencil")
+            } primaryAction: {
+                imageVM.createNewSession()
+            }
+            .menuIndicator(.hidden)
+            .popoverTip(NewSessionTip())
+        }
+    }
+    
+    #if !os(macOS)
+    @State private var showSettings = false
+    
+    @ToolbarContentBuilder
+    var iosParts: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            Menu {
+                Button(action: { showSettings.toggle() }) {
+                    Label("Settings", systemImage: "gear")
+                }
+            } label: {
+                Label("More", systemImage: "ellipsis.circle")
+                    .labelStyle(.titleOnly)
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
+            }
+        }
+    }
+    #endif
 }
 
 #Preview {

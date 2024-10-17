@@ -141,7 +141,6 @@
 		08B8DE132C97F3550041A690 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE122C97F3550041A690 /* MarkdownView.swift */; };
 		08B8DE162C97F39B0041A690 /* ChatSessionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE152C97F39B0041A690 /* ChatSessionToolbar.swift */; };
 		08B8DE192C97F3AC0041A690 /* ImageSessionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE182C97F3AC0041A690 /* ImageSessionToolbar.swift */; };
-		08B8DE1D2C97F3BF0041A690 /* SessionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE1C2C97F3BF0041A690 /* SessionToolbar.swift */; };
 		08B8DE1F2C97F3D10041A690 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE1E2C97F3D10041A690 /* AppConfig.swift */; };
 		08B8DE212C97F3E10041A690 /* SessionConfigDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE202C97F3E10041A690 /* SessionConfigDefaults.swift */; };
 		08B8DE232C97F4EA0041A690 /* ToolMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE222C97F4EA0041A690 /* ToolMessage.swift */; };
@@ -350,7 +349,6 @@
 		08B8DE122C97F3550041A690 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
 		08B8DE152C97F39B0041A690 /* ChatSessionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionToolbar.swift; sourceTree = "<group>"; };
 		08B8DE182C97F3AC0041A690 /* ImageSessionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSessionToolbar.swift; sourceTree = "<group>"; };
-		08B8DE1C2C97F3BF0041A690 /* SessionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionToolbar.swift; sourceTree = "<group>"; };
 		08B8DE1E2C97F3D10041A690 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		08B8DE202C97F3E10041A690 /* SessionConfigDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionConfigDefaults.swift; sourceTree = "<group>"; };
 		08B8DE222C97F4EA0041A690 /* ToolMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolMessage.swift; sourceTree = "<group>"; };
@@ -754,7 +752,6 @@
 		08B8DE142C97F3830041A690 /* Sidebar */ = {
 			isa = PBXGroup;
 			children = (
-				08B8DE1C2C97F3BF0041A690 /* SessionToolbar.swift */,
 				08B8DE182C97F3AC0041A690 /* ImageSessionToolbar.swift */,
 				08B8DE152C97F39B0041A690 /* ChatSessionToolbar.swift */,
 			);
@@ -1117,7 +1114,6 @@
 				08A3134D2C4AE7B800C3E578 /* CommonCompactRow.swift in Sources */,
 				08F8152F2C97F60B00B49355 /* URLScrape.swift in Sources */,
 				088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */,
-				08B8DE1D2C97F3BF0041A690 /* SessionToolbar.swift in Sources */,
 				08F815322C97F63E00B49355 /* AdvancedChatInspector.swift in Sources */,
 				08A222BE2C2ABDB400D76C8B /* InputManager.swift in Sources */,
 				08F840062C9AA26C000CB498 /* CameraView.swift in Sources */,

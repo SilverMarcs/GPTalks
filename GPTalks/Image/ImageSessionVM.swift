@@ -11,7 +11,7 @@ import Foundation
 
 @Observable class ImageSessionVM {
     var searchText: String = ""
-    var imageSelections: Set<ImageSession> = []
+    var selections: Set<ImageSession> = []
     
     var modelContext: ModelContext
     
@@ -20,8 +20,8 @@ import Foundation
     }
     
     public var activeImageSession: ImageSession? {
-        guard imageSelections.count == 1 else { return nil }
-        return imageSelections.first
+        guard selections.count == 1 else { return nil }
+        return selections.first
     }
     
     func sendImageGenerationRequest() {
@@ -39,7 +39,7 @@ import Foundation
     }
     
     @discardableResult
-    func addImageSession(modelContext: ModelContext, provider: Provider? = nil) -> ImageSession? {
+    func createNewSession(provider: Provider? = nil) -> ImageSession? {
         let config: ImageConfig
         
         if let providedProvider = provider {
@@ -56,20 +56,10 @@ import Foundation
         }
         
         let newItem = ImageSession(config: config)
-        
-        var fetchSessions = FetchDescriptor<ImageSession>()
-        fetchSessions.sortBy = [SortDescriptor(\.order)]
-        let fetchedSessions = try! modelContext.fetch(fetchSessions)
-        
-        for session in fetchedSessions {
-            session.order += 1
-        }
-        
-        newItem.order = 0
         modelContext.insert(newItem)
         try? modelContext.save()
         
-        self.imageSelections = [newItem]
+        self.selections = [newItem]
         
         return newItem
     }

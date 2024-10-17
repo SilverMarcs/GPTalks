@@ -105,9 +105,8 @@ import SwiftUI
         }
         
         let newItem = ChatSession(config: config)
-        try? modelContext.save()
-        
         modelContext.insert(newItem)
+        try? modelContext.save()
         
         chatSelections = [newItem]
         

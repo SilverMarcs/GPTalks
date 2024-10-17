@@ -27,8 +27,6 @@ class Provider {
     
     var color: String = "#00947A"
     var isEnabled: Bool = true
-    var supportsImage: Bool = false
-    var supportsSTT: Bool = false
     
     @Relationship(deleteRule: .cascade)
     var chatModel: ChatModel
@@ -61,8 +59,6 @@ class Provider {
                 scheme: HTTPScheme,
                 color: String,
                 isEnabled: Bool,
-                supportsImage: Bool,
-                supportsSTT: Bool,
                 chatModel: ChatModel,
                 quickChatModel: ChatModel,
                 titleModel: ChatModel,
@@ -82,8 +78,6 @@ class Provider {
         self.scheme = scheme
         self.color = color
         self.isEnabled = isEnabled
-        self.supportsImage = supportsImage
-        self.supportsSTT = supportsSTT
         self.chatModel = chatModel
         self.quickChatModel = quickChatModel
         self.titleModel = titleModel
@@ -113,8 +107,6 @@ class Provider {
             scheme: type.scheme,
             color: type.defaultColor,
             isEnabled: !isDummy,
-            supportsImage: type == .openai,
-            supportsSTT: type == .openai,
             chatModel: chatModels.first!,
             quickChatModel: chatModels.first!,
             titleModel: chatModels.first!,

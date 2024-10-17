@@ -26,7 +26,7 @@ struct ImageGenerationList: View {
                     .listRowSeparator(.hidden)
             }
             .listStyle(.plain)
-            .onChange(of: imageVM.imageSelections) {
+            .onChange(of: imageVM.selections) {
                 session.proxy = proxy
                 scrollToBottom(proxy: proxy)
             }

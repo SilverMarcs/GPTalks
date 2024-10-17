@@ -26,7 +26,7 @@ struct ImageSessionList: View {
         #endif
         
         ScrollViewReader { proxy in
-            List(selection: $imageVM.imageSelections) {
+            List(selection: $imageVM.selections) {
                 SessionListCards(sessionCount: "↗", imageSessionsCount: String(sessions.count))
                 
                 if !imageVM.searchText.isEmpty && sessions.isEmpty {
@@ -51,8 +51,8 @@ struct ImageSessionList: View {
             .searchable(text: $imageVM.searchText)
             #endif
             .task {
-                if imageVM.imageSelections.isEmpty, let first = sessions.first, !(horizontalSizeClass == .compact) {
-                    imageVM.imageSelections = [first]
+                if imageVM.selections.isEmpty, let first = sessions.first, !(horizontalSizeClass == .compact) {
+                    imageVM.selections = [first]
                 }
             }
         }

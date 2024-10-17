@@ -20,7 +20,7 @@ struct ImageContentView: View {
             if let imageSession = sessionVM.activeImageSession {
                 ImageGenerationList(session: imageSession)
             } else {
-                Text("^[\(sessionVM.imageSelections.count) Image Session](inflect: true) Selected")
+                Text("^[\(sessionVM.selections.count) Image Session](inflect: true) Selected")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(.background)
                     .font(.title)
