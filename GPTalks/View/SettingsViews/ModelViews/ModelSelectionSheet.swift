@@ -18,7 +18,9 @@ struct ModelSelectionSheet: View {
         NavigationStack {
             if isLoading {
                 ProgressView("Loading models...")
-                    .onAppear(perform: loadModels)
+                    .task {
+                        await loadModels()
+                    }
             } else {
                 Form {
                     List($refreshedModels) { $selectableModel in
@@ -60,11 +62,9 @@ struct ModelSelectionSheet: View {
         #endif
     }
     
-    private func loadModels() {
-        Task {
-            refreshedModels = await provider.refreshModels()
-            isLoading = false
-        }
+    private func loadModels() async {
+        refreshedModels = await provider.refreshModels()
+        isLoading = false
     }
     
     private func addSelectedModels() {

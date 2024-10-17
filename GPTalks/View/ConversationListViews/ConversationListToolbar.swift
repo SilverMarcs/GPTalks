@@ -35,6 +35,10 @@ struct ConversationListToolbar: CustomizableToolbarContent {
         .customizationBehavior(.disabled)
         
         #if os(macOS)
+//        ToolbarItem(id: "shortcuts-popover", placement: .primaryAction) {
+//            Button
+//        }
+        
         ToolbarItem(id: "shortcuts-popover", placement: .primaryAction) {
             Button {
                 showingShortcuts.toggle()

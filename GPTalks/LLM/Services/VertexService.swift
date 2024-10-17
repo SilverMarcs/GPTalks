@@ -230,8 +230,12 @@ struct VertexService: AIService {
         let token = try await GoogleAuthManager.shared.getValidAccessToken()
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
-        let messages: [[String: Any]] = conversations.map { conversation in
+        var messages: [[String: Any]] = conversations.map { conversation in
             return convert(conversation: conversation)
+        }
+        
+        if !config.systemPrompt.isEmpty {
+            messages.insert(["role": "user", "content": [["type": "text", "text": config.systemPrompt]]], at: 0)
         }
         
         var body: [String: Any] = [
@@ -241,6 +245,7 @@ struct VertexService: AIService {
             "temperature": config.temperature ?? 1.0,
             "stream": config.stream
         ]
+        
         let tools = config.tools.enabledTools.map { $0.vertex }
         if !tools.isEmpty {
             body["tools"] = tools

@@ -22,6 +22,7 @@ struct ProviderImage: View {
                 .frame(width: frame, height: frame)
 
             Image(provider.type.imageName)
+                .foregroundStyle(provider.type == .ollama ? .black : .white)
                 .imageScale(scale)
         }
     }

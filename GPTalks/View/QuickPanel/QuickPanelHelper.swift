@@ -21,7 +21,7 @@ struct QuickPanelHelper: View {
         } else {
             Text("Something went wrong")
             .padding()
-            .onAppear {
+            .task {
                 fetchQuickSession()
             }
         }

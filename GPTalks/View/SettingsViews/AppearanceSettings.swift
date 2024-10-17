@@ -38,7 +38,7 @@ struct AppearanceSettings: View {
 
             Section("View Customisation") {
                 Toggle("Compact List Row", isOn: $config.compactList)
-                    .onAppear {
+                    .task {
                         fetchSession()
                     }
                 

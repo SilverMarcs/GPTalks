@@ -31,10 +31,10 @@ struct UserMessage: View {
                     .font(.system(size: config.fontSize))
                     .lineLimit(!isExpanded ? lineLimit : nil)
                     .padding(5)
-                    .background(
-                            (conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
-                    )
             }
+            .background(
+                    (conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
+            )
             
     #if os(macOS)
             contextMenu

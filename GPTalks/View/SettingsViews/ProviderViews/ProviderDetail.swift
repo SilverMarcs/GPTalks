@@ -10,9 +10,9 @@ import SwiftUI
 struct ProviderDetail: View {
     @Bindable var provider: Provider
     var reorderProviders: () -> Void
-    
+
     @State private var selectedTab: ProviderDetailTab = .general
-    
+
     var body: some View {
         Group {
             switch selectedTab {
@@ -35,11 +35,13 @@ struct ProviderDetail: View {
             }
         }
     }
-    
-//    private var filteredTabs: [ProviderDetailTab] {
-//        provider.type == .openai ? ProviderDetailTab.allCases : ProviderDetailTab.allCases.filter { $0 != .image && $0 != .tts }
-//    }
-    
+
+    private var filteredTabs: [ProviderDetailTab] {
+        (provider.type == .vertex || provider.type == .google || provider.type == .anthropic
+        ? [.general, .chat]
+        : [.general, .chat, .image, .tts])
+    }
+
     private var picker: some View {
         Picker("Tabs", selection: $selectedTab) {
             ForEach(ProviderDetailTab.allCases, id: \.self) { tab in
@@ -52,15 +54,14 @@ struct ProviderDetail: View {
     }
 }
 
-
 enum ProviderDetailTab: String, CaseIterable, Identifiable {
     var id: String { rawValue }
-    
+
     case general
     case chat
     case image
     case tts
-    
+
     var name: some View {
         switch self {
         case .general:
