@@ -13,10 +13,9 @@ struct ConversationStatusBar: View {
     @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
     var providers: [Provider]
     
-    
     var body: some View {
         HStack {
-            ProviderImage(provider: session.config.provider, radius: 6, frame: 18, scale: .small)
+            ProviderImage(provider: session.config.provider, radius: 5, frame: 14, scale: .small)
             
             ProviderPicker(provider: $session.config.provider, providers: providers) { provider in
                 session.config.model = provider.chatModel
@@ -30,28 +29,26 @@ struct ConversationStatusBar: View {
                 .buttonStyle(.borderless)
                 .fixedSize()
             
-            HStack(spacing: 2) {
-                Image(systemName: session.config.tools.enabledTools.isEmpty ? "hammer": "hammer.fill")
-                    .contentTransition(.symbolEffect(.replace))
-                    .foregroundStyle(.teal)
-                
-                Menu {
-                    ToolsController(tools: $session.config.tools)
-                } label: {
-                    Text("^[\(session.config.tools.enabledTools.count) Plugin](inflect: true)")
-                }
-                .menuStyle(.button)
-                .buttonStyle(.borderless)
-                .fixedSize()
-            }
-            
             Spacer()
+            
+            Label("Tools", systemImage: session.config.tools.enabledTools.isEmpty ? "hammer": "hammer.fill")
+                .labelStyle(.titleOnly)
+                .contentTransition(.symbolEffect(.replace))
+
+            ControlGroup {
+                ForEach(Array(session.config.tools.toolStates.keys), id: \.self) { tool in
+                    Toggle(isOn: Binding(
+                        get: { session.config.tools.isToolEnabled(tool) },
+                        set: { newValue in
+                            session.config.tools.setTool(tool, enabled: newValue)
+                        }
+                    )) {
+                        Label(tool.displayName, systemImage: tool.icon)
+                    }
+                }
+            }
+            .fixedSize()
         }
-        .foregroundStyle(.secondary) // not working
-        .opacity(0.8)
-        .padding(.horizontal)
-        .padding(.vertical, 7)
-        .background(.background)
     }
 }
 

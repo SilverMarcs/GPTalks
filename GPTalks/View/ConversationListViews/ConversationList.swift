@@ -53,6 +53,7 @@ struct ConversationList: View {
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
                     ChatInputView(session: session)
+                        .modifier(CommonInputStyling())
                 }
             }
             .onChange(of: session.groups.last?.activeConversation.content) {
@@ -88,7 +89,7 @@ struct ConversationList: View {
             }
             .navigationTitle(navTitle)
             #if os(macOS)
-            .navigationSubtitle("Tokens: \(session.tokenCount.formatToK()) • \(session.config.systemPrompt.prefix(60))")
+            .navigationSubtitle("Tokens: \(session.tokenCount.formatToK()) • \(session.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 if config.conversationListStyle == .list && session.isReplying {
                     hasUserScrolled = true

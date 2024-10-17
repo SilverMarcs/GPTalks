@@ -141,7 +141,6 @@
 		08B8DE132C97F3550041A690 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE122C97F3550041A690 /* MarkdownView.swift */; };
 		08B8DE162C97F39B0041A690 /* ChatSessionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE152C97F39B0041A690 /* ChatSessionToolbar.swift */; };
 		08B8DE192C97F3AC0041A690 /* ImageSessionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE182C97F3AC0041A690 /* ImageSessionToolbar.swift */; };
-		08B8DE1B2C97F3B60041A690 /* SessionListSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE1A2C97F3B60041A690 /* SessionListSidebar.swift */; };
 		08B8DE1D2C97F3BF0041A690 /* SessionToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE1C2C97F3BF0041A690 /* SessionToolbar.swift */; };
 		08B8DE1F2C97F3D10041A690 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE1E2C97F3D10041A690 /* AppConfig.swift */; };
 		08B8DE212C97F3E10041A690 /* SessionConfigDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE202C97F3E10041A690 /* SessionConfigDefaults.swift */; };
@@ -351,7 +350,6 @@
 		08B8DE122C97F3550041A690 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
 		08B8DE152C97F39B0041A690 /* ChatSessionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionToolbar.swift; sourceTree = "<group>"; };
 		08B8DE182C97F3AC0041A690 /* ImageSessionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSessionToolbar.swift; sourceTree = "<group>"; };
-		08B8DE1A2C97F3B60041A690 /* SessionListSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListSidebar.swift; sourceTree = "<group>"; };
 		08B8DE1C2C97F3BF0041A690 /* SessionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionToolbar.swift; sourceTree = "<group>"; };
 		08B8DE1E2C97F3D10041A690 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		08B8DE202C97F3E10041A690 /* SessionConfigDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionConfigDefaults.swift; sourceTree = "<group>"; };
@@ -757,7 +755,6 @@
 			isa = PBXGroup;
 			children = (
 				08B8DE1C2C97F3BF0041A690 /* SessionToolbar.swift */,
-				08B8DE1A2C97F3B60041A690 /* SessionListSidebar.swift */,
 				08B8DE182C97F3AC0041A690 /* ImageSessionToolbar.swift */,
 				08B8DE152C97F39B0041A690 /* ChatSessionToolbar.swift */,
 			);
@@ -1107,7 +1104,6 @@
 				08E195692C6FB36900BA9506 /* MarkdownSettings.swift in Sources */,
 				082F09EB2CB3617200B7860A /* ProviderDefaults.swift in Sources */,
 				08DA5B0D2C72CE7700A7FE82 /* InputViewTips.swift in Sources */,
-				08B8DE1B2C97F3B60041A690 /* SessionListSidebar.swift in Sources */,
 				089DB5182CA8EC140013E5C3 /* ImageViewerData.swift in Sources */,
 				082181662C38CBAE00171BF3 /* PlusButton.swift in Sources */,
 				08B5D7B82C77A64000D1F100 /* ChatWindow.swift in Sources */,

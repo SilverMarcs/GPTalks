@@ -49,7 +49,6 @@ struct ChatSessionList: View {
             .toolbar(id: "chat-session-toolbar") {
                 ChatSessionToolbar()
             }
-            .toolbarRole(.editor)
             .navigationTitle("Chats")
             #if !os(macOS)
             .searchable(text: $sessionVM.searchText)

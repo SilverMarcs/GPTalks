@@ -50,8 +50,6 @@ struct ChatInputView: View {
             }
         }
         .padding(.vertical, 1)
-//        .transaction { $0.animation = nil }
-        .modifier(CommonInputStyling())
     }
 
     var plusButton: some View {

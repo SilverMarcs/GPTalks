@@ -32,9 +32,9 @@ struct AppearanceSettings: View {
                 }
             }
             
-//            Section("Status Bar") {
-//                Toggle("Show Status Bar", isOn: $config.showStatusBar)
-//            }
+            Section("Status Bar") {
+                Toggle("Show Status Bar", isOn: $config.showStatusBar)
+            }
 
             Section("View Customisation") {
                 Toggle("Compact List Row", isOn: $config.compactList)
