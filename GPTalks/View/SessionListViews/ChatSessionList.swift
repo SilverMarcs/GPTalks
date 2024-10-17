@@ -34,23 +34,17 @@ struct ChatSessionList: View {
                     ContentUnavailableView.search(text: sessionVM.searchText)
                 } else {
                     ForEach(filteredSessions) { session in
-                        NavigationLink(value: session) {
-                            SessionListRow(session: session)
-                                .deleteDisabled(session.isQuick || session.isStarred)
-                                .tag(session)
-                                .listRowSeparator(.visible)
-                                .listRowSeparatorTint(Color.gray.opacity(0.2))
-                                #if !os(macOS)
-                                .listSectionSeparator(.hidden)
-                                #endif
-                        }
+                        SessionListRow(session: session)
+                            .deleteDisabled(session.isQuick || session.isStarred)
+                            .tag(session)
+                            .listRowSeparator(.visible)
+                            .listRowSeparatorTint(Color.gray.opacity(0.2))
+                            #if !os(macOS)
+                            .listSectionSeparator(.hidden)
+                            #endif
                     }
                     .onDelete(perform: deleteItems)
                 }
-            }
-            .navigationDestination(for: ChatSession.self) { session in
-                ConversationList(session: session)
-                    .id(session.id)
             }
             .toolbar(id: "chat-session-toolbar") {
                 ChatSessionToolbar()
@@ -60,7 +54,7 @@ struct ChatSessionList: View {
             .searchable(text: $sessionVM.searchText)
             #endif
             .task {
-                if let first = sessions.first, sessionVM.chatSelections.isEmpty, horizontalSizeClass != .compact {
+                if let first = sessions.first, sessionVM.chatSelections.isEmpty, !(horizontalSizeClass == .compact) {
                     sessionVM.chatSelections = [first]
                 }
             }

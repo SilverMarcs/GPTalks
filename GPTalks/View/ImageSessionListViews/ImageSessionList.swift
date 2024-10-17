@@ -51,7 +51,7 @@ struct ImageSessionList: View {
             .searchable(text: $imageVM.searchText)
             #endif
             .task {
-                if imageVM.selections.isEmpty, let first = sessions.first, horizontalSizeClass != .compact {
+                if imageVM.selections.isEmpty, let first = sessions.first, !(horizontalSizeClass == .compact) {
                     imageVM.selections = [first]
                 }
             }

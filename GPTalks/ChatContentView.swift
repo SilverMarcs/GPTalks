@@ -16,11 +16,15 @@ struct ChatContentView: View {
         NavigationSplitView {
             ChatSessionList()
         } detail: {
-            Text("^[\(sessionVM.chatSelections.count) Chat Session](inflect: true) Selected")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(.background)
-                .font(.title)
-                .toolbarBackground(.hidden)
+            if let chatSession = sessionVM.activeSession, !chatSession.isQuick {
+                ConversationList(session: chatSession)
+            } else {
+                Text("^[\(sessionVM.chatSelections.count) Chat Session](inflect: true) Selected")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(.background)
+                    .font(.title)
+                    .toolbarBackground(.hidden)
+            }
         }
         .pasteHandler()
     }

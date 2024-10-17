@@ -33,8 +33,7 @@ struct MacInputEditor: View {
         }
         .font(.body)
         .modifier(RoundedRectangleOverlayModifier(radius: 18))
-        .onAppear {
-            guard sessionVM.chatSelections.count == 1 else { return }
+        .onChange(of: sessionVM.chatSelections) {
             isFocused = true
         }
         .toolbar {
