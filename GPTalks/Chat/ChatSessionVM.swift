@@ -108,7 +108,9 @@ import SwiftUI
         modelContext.insert(newItem)
         try? modelContext.save()
         
-        chatSelections = [newItem]
+        DispatchQueue.main.async {
+            self.chatSelections = [newItem]
+        }
         
         return newItem
     }

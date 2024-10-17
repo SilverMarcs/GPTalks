@@ -35,10 +35,10 @@ struct ConversationList: View {
                     }
                 }
             }
-            .onChange(of: sessionVM.chatSelections) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    sessionVM.chatSelections.first?.refreshTokens()
-                }
+            .onAppear {
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                    sessionVM.chatSelections.first?.refreshTokens()
+//                }
                 
                 #if os(macOS)
                 scrollToBottom(proxy: proxy, delay: 0.2)
