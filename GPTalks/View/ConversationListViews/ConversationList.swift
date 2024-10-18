@@ -89,7 +89,7 @@ struct ConversationList: View {
             }
             .navigationTitle(navTitle)
             #if os(macOS)
-            .navigationSubtitle("Tokens: \(session.tokenCount.formatToK()) • \(session.config.systemPrompt.prefix(70))")
+            .navigationSubtitle("\(session.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 if config.conversationListStyle == .list && session.isReplying {
                     hasUserScrolled = true

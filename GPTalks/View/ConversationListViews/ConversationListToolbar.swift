@@ -34,11 +34,14 @@ struct ConversationListToolbar: CustomizableToolbarContent {
         }
         .customizationBehavior(.disabled)
         
-        #if os(macOS)
-//        ToolbarItem(id: "shortcuts-popover", placement: .primaryAction) {
-//            Button
-//        }
+        if horizontalSizeClass != .compact {
+            ToolbarItem(id: "token-count", placement: .primaryAction) {
+                Button("Tokens: \(session.tokenCount.formatToK())") { }
+                .allowsHitTesting(false)
+            }
+        }
         
+        #if os(macOS)
         ToolbarItem(id: "shortcuts-popover", placement: .primaryAction) {
             Button {
                 showingShortcuts.toggle()

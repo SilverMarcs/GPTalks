@@ -50,10 +50,18 @@ struct ModelList<M: ModelType>: View {
         if horizontalSizeClass == .compact {
             List {
                 ForEach($models) { $model in
-                    VStack {
-                        TextField("Name", text: $model.name)
+                    HStack {
+                        VStack {
+                            TextField("Name", text: $model.name)
                             
-                        TextField("Code", text: $model.code)
+                            TextField("Code", text: $model.code)
+                        }
+                        
+                        Spacer()
+                        
+                        if let _ = model as? ChatModel {
+                            ModelTester(provider: provider, model: $model)
+                        }
                     }
                 }
                 .onDelete(perform: { indexSet in
