@@ -32,9 +32,11 @@ struct AppearanceSettings: View {
                 }
             }
             
+            #if os(macOS)
             Section("Status Bar") {
                 Toggle("Show Status Bar", isOn: $config.showStatusBar)
             }
+            #endif
 
             Section("View Customisation") {
                 Toggle("Compact List Row", isOn: $config.compactList)

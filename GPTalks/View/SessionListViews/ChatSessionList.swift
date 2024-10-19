@@ -34,13 +34,13 @@ struct ChatSessionList: View {
                     ContentUnavailableView.search(text: sessionVM.searchText)
                 } else {
                     ForEach(filteredSessions) { session in
-                        NavigationLink(value: session) {
-                            SessionListRow(session: session)
-                        }
-                        .listRowSeparator(.visible)
-                        .listRowSeparatorTint(Color.gray.opacity(0.2))
-                        .deleteDisabled(session.isQuick || session.isStarred)
-                        .tag(session)
+                        SessionListRow(session: session)
+                            .tag(session)
+                            .deleteDisabled(session.isQuick || session.isStarred)
+                        #if os(macOS)
+                            .listRowSeparator(.visible)
+                            .listRowSeparatorTint(Color.gray.opacity(0.2))
+                        #endif
                     }
                     .onDelete(perform: deleteItems)
                 }
@@ -54,11 +54,7 @@ struct ChatSessionList: View {
                     sessionVM.chatSelections = [first]
                 }
             }
-            #if os(macOS)
-            .navigationDestination(for: ChatSession.self) {
-                ConversationList(session: $0).id($0.id)
-            }
-            #else
+            #if !os(macOS)
             .searchable(text: $sessionVM.searchText)
             #endif
         }

@@ -133,16 +133,16 @@ struct SessionListRow: View {
     
     var swipeActionsTrailing: some View {
         Button(role: .destructive) {
-            if session.isStarred || session.isQuick {
-                return
-            }
-            
-            if sessionVM.chatSelections.contains(session) {
-                sessionVM.chatSelections.remove(session)
-            }
-            
-            modelContext.delete(session)
-            try? modelContext.save()
+        if session.isStarred || session.isQuick {
+            return
+        }
+        
+        if sessionVM.chatSelections.contains(session) {
+            sessionVM.chatSelections.remove(session)
+        }
+        
+        modelContext.delete(session)
+        try? modelContext.save()
         } label: {
             Label("Delete", systemImage: "trash")
         }

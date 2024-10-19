@@ -25,12 +25,12 @@ struct UserMessage: View {
             
             GroupBox {
                 HighlightedText(text: conversation.content, highlightedText: sessionVM.searchText.count > 3 ? sessionVM.searchText : nil)
-#if os(macOS)
-                    .lineSpacing(2)
-#endif
                     .font(.system(size: config.fontSize))
                     .lineLimit(!isExpanded ? lineLimit : nil)
+                    #if os(macOS)
+                    .lineSpacing(2)
                     .padding(5)
+                    #endif
             }
             .background(
                     (conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
