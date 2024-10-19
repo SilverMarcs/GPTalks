@@ -11,7 +11,6 @@ import SwiftData
 struct SettingsView: View {
     @Environment(ChatSessionVM.self) private var sessionVM
     @Environment(\.dismiss) var dismiss
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     #if os(macOS)
     @State private var selectedSidebarItem: SidebarItem? = .general
@@ -54,13 +53,15 @@ struct SettingsView: View {
                 Label("Backup", systemImage: "opticaldiscdrive")
                     .tag(SidebarItem.backup)
             }
+            #if !os(visionOS)
             .navigationTitle("Settings")
+            #endif
             .toolbar(removing: .sidebarToggle)
             .toolbar{
                 Spacer()
-                if horizontalSizeClass == .compact {
+                #if !os(macOS)
                     DismissButton()
-                }
+                #endif
             }
             .navigationSplitViewColumnWidth(min: 190, ideal: 190, max: 190)
         } detail: {

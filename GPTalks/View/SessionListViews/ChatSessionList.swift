@@ -36,21 +36,18 @@ struct ChatSessionList: View {
                     ForEach(filteredSessions) { session in
                         NavigationLink(value: session) {
                             SessionListRow(session: session)
-                                .deleteDisabled(session.isQuick || session.isStarred)
-                                .tag(session)
-                                .listRowSeparator(.visible)
-                                .listRowSeparatorTint(Color.gray.opacity(0.2))
-#if !os(macOS)
-                                .listSectionSeparator(.hidden)
-#endif
                         }
+                        .deleteDisabled(session.isQuick || session.isStarred)
+                        .tag(session)
                     }
                     .onDelete(perform: deleteItems)
                 }
             }
+            #if os(macOS)
             .navigationDestination(for: ChatSession.self) {
                 ConversationList(session: $0).id($0.id)
             }
+            #endif
             .toolbar {
                 ChatSessionToolbar()
             }
