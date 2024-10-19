@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ConversationListToolbar: CustomizableToolbarContent {
+struct ConversationListToolbar: ToolbarContent {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ChatSessionVM.self) private var sessionVM
     @ObservedObject var config = AppConfig.shared
@@ -18,8 +18,8 @@ struct ConversationListToolbar: CustomizableToolbarContent {
     @State var showingInspector: Bool = false
     @State var showingShortcuts = false
     
-    var body: some CustomizableToolbarContent {
-        ToolbarItem(id: "chat-inspector-toggle", placement: horizontalSizeClass == .compact ? .primaryAction : .navigation) {
+    var body: some ToolbarContent {
+        ToolbarItem(placement: horizontalSizeClass == .compact ? .primaryAction : .navigation) {
             Button {
                 toggleInspector()
             } label: {
@@ -32,17 +32,17 @@ struct ConversationListToolbar: CustomizableToolbarContent {
                     .presentationDragIndicator(.hidden)
             }
         }
-        .customizationBehavior(.disabled)
+//        .customizationBehavior(.disabled)
         
         if horizontalSizeClass != .compact {
-            ToolbarItem(id: "token-count", placement: .primaryAction) {
+            ToolbarItem(placement: .primaryAction) {
                 Button("Tokens: \(session.tokenCount.formatToK())") { }
                 .allowsHitTesting(false)
             }
         }
         
         #if os(macOS)
-        ToolbarItem(id: "shortcuts-popover", placement: .primaryAction) {
+        ToolbarItem(placement: .primaryAction) {
             Button {
                 showingShortcuts.toggle()
             } label: {
@@ -52,10 +52,10 @@ struct ConversationListToolbar: CustomizableToolbarContent {
                 ConversationShortcuts()
             }
         }
-        .defaultCustomization(.visible)
+//        .defaultCustomization(.visible)
         
         if config.showStatusBar {
-            ToolbarItem(id: "status-bar", placement: .favoritesBar) {
+            ToolbarItem(placement: .favoritesBar) {
                 ConversationStatusBar(session: session)
                     .padding(.horizontal, 5)
             }

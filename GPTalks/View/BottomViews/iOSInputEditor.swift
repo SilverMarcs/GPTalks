@@ -35,7 +35,7 @@ struct iOSInputEditor: View {
                     }
             }
         }
-        .onChange(of: sessionVM.chatSelections) {
+        .task {
             if let session = sessionVM.activeSession, session.groups.isEmpty {
                 isFocused = true
             }

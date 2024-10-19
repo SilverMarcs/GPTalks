@@ -48,7 +48,6 @@ struct SettingsView: View {
                 Label("Image Gen", systemImage: "photo")
                     .tag(SidebarItem.image)
                 
-                
                 Label("Providers", systemImage: "cpu")
                     .tag(SidebarItem.providers)
                 

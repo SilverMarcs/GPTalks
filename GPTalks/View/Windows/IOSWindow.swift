@@ -24,20 +24,20 @@ struct IOSWindow: Scene {
                     ImageSessionList()
                 }
             } detail: {
-                switch listStateVM.state {
-                case .chats:
-                    if let chatSession = chatVM.activeSession {
-                        ConversationList(session: chatSession)
-                    } else {
-                        Text("^[\(chatVM.chatSelections.count) Chat Session](inflect: true) Selected")
-                    }
-                case .images:
-                    if let imageSession = imageVM.activeImageSession {
-                        ImageGenerationList(session: imageSession)
-                    } else {
-                        Text("^[\(imageVM.selections.count) Image Session](inflect: true) Selected")
-                    }
-                }
+//                switch listStateVM.state {
+//                case .chats:
+//                    if let chatSession = chatVM.activeSession {
+//                        ConversationList(session: chatSession)
+//                    } else {
+//                        Text("^[\(chatVM.chatSelections.count) Chat Session](inflect: true) Selected")
+//                    }
+//                case .images:
+//                    if let imageSession = imageVM.activeImageSession {
+//                        ImageGenerationList(session: imageSession)
+//                    } else {
+//                        Text("^[\(imageVM.selections.count) Image Session](inflect: true) Selected")
+//                    }
+//                }
             }
         }
     }

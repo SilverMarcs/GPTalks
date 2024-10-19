@@ -104,6 +104,7 @@
 		0891D5892C96A0DE00BA428F /* Bubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0891D5882C96A0DE00BA428F /* Bubble.swift */; };
 		0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2012C3955CC00D4D501 /* CustomSearchField.swift */; };
 		0893B2062C39810900D4D501 /* SessionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2052C39810900D4D501 /* SessionConfig.swift */; };
+		0899B5ED2CC31A62004E01CD /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0899B5EC2CC31A62004E01CD /* LazyView.swift */; };
 		089B22412C393BCB00E248FE /* ConversationGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089B22402C393BCB00E248FE /* ConversationGroup.swift */; };
 		089C7E102C4058CF005E3BE9 /* FloatingSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E0F2C4058CF005E3BE9 /* FloatingSetup.swift */; };
 		089C7E122C405904005E3BE9 /* QuickPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E112C405904005E3BE9 /* QuickPanel.swift */; };
@@ -310,6 +311,7 @@
 		0891D5882C96A0DE00BA428F /* Bubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bubble.swift; sourceTree = "<group>"; };
 		0893B2012C3955CC00D4D501 /* CustomSearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchField.swift; sourceTree = "<group>"; };
 		0893B2052C39810900D4D501 /* SessionConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionConfig.swift; sourceTree = "<group>"; };
+		0899B5EC2CC31A62004E01CD /* LazyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyView.swift; sourceTree = "<group>"; };
 		089B22402C393BCB00E248FE /* ConversationGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationGroup.swift; sourceTree = "<group>"; };
 		089C7E0F2C4058CF005E3BE9 /* FloatingSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingSetup.swift; sourceTree = "<group>"; };
 		089C7E112C405904005E3BE9 /* QuickPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanel.swift; sourceTree = "<group>"; };
@@ -468,6 +470,7 @@
 		0821816B2C39011100171BF3 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				0899B5EC2CC31A62004E01CD /* LazyView.swift */,
 				082F09DC2CB275BF00B7860A /* RuntimeError.swift */,
 				08C49FD72C502EC90085792F /* FileHelper.swift */,
 				082A63312C551108003996B7 /* ChatSessionBackupUtils.swift */,
@@ -1226,6 +1229,7 @@
 				082F09DD2CB275BF00B7860A /* RuntimeError.swift in Sources */,
 				08A3134F2C4AF56200C3E578 /* NamedImage.swift in Sources */,
 				08F52EF42C52C3AB00E4482C /* ProviderBackup.swift in Sources */,
+				0899B5ED2CC31A62004E01CD /* LazyView.swift in Sources */,
 				08B8DE162C97F39B0041A690 /* ChatSessionToolbar.swift in Sources */,
 				086E620E2C39C73F00AB4110 /* ContextResetDivider.swift in Sources */,
 				0891D5822C968B3A00BA428F /* ToolConfigDefaults.swift in Sources */,

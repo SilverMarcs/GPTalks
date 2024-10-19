@@ -34,19 +34,24 @@ struct ChatSessionList: View {
                     ContentUnavailableView.search(text: sessionVM.searchText)
                 } else {
                     ForEach(filteredSessions) { session in
-                        SessionListRow(session: session)
-                            .deleteDisabled(session.isQuick || session.isStarred)
-                            .tag(session)
-                            .listRowSeparator(.visible)
-                            .listRowSeparatorTint(Color.gray.opacity(0.2))
-                            #if !os(macOS)
-                            .listSectionSeparator(.hidden)
-                            #endif
+                        NavigationLink(value: session) {
+                            SessionListRow(session: session)
+                                .deleteDisabled(session.isQuick || session.isStarred)
+                                .tag(session)
+                                .listRowSeparator(.visible)
+                                .listRowSeparatorTint(Color.gray.opacity(0.2))
+#if !os(macOS)
+                                .listSectionSeparator(.hidden)
+#endif
+                        }
                     }
                     .onDelete(perform: deleteItems)
                 }
             }
-            .toolbar(id: "chat-session-toolbar") {
+            .navigationDestination(for: ChatSession.self) {
+                ConversationList(session: $0).id($0.id)
+            }
+            .toolbar {
                 ChatSessionToolbar()
             }
             .navigationTitle("Chats")

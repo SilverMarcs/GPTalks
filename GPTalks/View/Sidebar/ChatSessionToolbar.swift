@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ChatSessionToolbar: CustomizableToolbarContent {
+struct ChatSessionToolbar: ToolbarContent {
     @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
@@ -17,9 +17,9 @@ struct ChatSessionToolbar: CustomizableToolbarContent {
     
     @State private var showSettings = false
     
-    var body: some CustomizableToolbarContent {
+    var body: some ToolbarContent {
         #if !os(macOS)
-        ToolbarItem(id: "settings", placement: .topBarLeading) {
+        ToolbarItem(placement: .topBarLeading) {
             Menu {
                 Button(action: { showSettings.toggle() }) {
                     Label("Settings", systemImage: "gear")
@@ -32,12 +32,11 @@ struct ChatSessionToolbar: CustomizableToolbarContent {
                 SettingsView()
             }
         }
-        .customizationBehavior(.disabled)
         #endif
         
-        ToolbarItem(id: "spacer") { Spacer() }
+        ToolbarItem { Spacer() }
         
-        ToolbarItem(id: "add-chat-session") {
+        ToolbarItem {
             Menu {
                 ForEach(providers) { provider in
                     Button(provider.name) {
@@ -53,7 +52,7 @@ struct ChatSessionToolbar: CustomizableToolbarContent {
             .menuIndicator(.hidden)
             .popoverTip(NewSessionTip())
         }
-        .customizationBehavior(.disabled)
+//        .customizationBehavior(.disabled)
     }
 }
 

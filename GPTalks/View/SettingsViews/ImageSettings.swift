@@ -104,6 +104,7 @@ struct ImageSettings: View {
         }
         .formStyle(.grouped)
         .navigationTitle("Image Gen")
+        .toolbarTitleDisplayMode(.inline)
     }
 }
 

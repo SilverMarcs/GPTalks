@@ -35,9 +35,9 @@ struct ConversationList: View {
                     }
                 }
             }
-            .onChange(of: sessionVM.chatSelections) {
+            .task {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    sessionVM.chatSelections.first?.refreshTokens()
+                    session.refreshTokens()
                 }
                 
                 #if os(macOS)
@@ -46,10 +46,9 @@ struct ConversationList: View {
                 session.proxy = proxy
                 scrollToBottom(proxy: proxy, delay: 0.4)
             }
-            .toolbar(id: "conversation-list-toolbar") {
+            .toolbar {
                 ConversationListToolbar(session: session)
             }
-            .toolbarRole(horizontalSizeClass == .compact ? .automatic : .editor)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
                     ChatInputView(session: session)
