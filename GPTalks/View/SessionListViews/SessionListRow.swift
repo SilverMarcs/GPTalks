@@ -133,11 +133,16 @@ struct SessionListRow: View {
     
     var swipeActionsTrailing: some View {
         Button(role: .destructive) {
-            // TODO: remove form vm selection if it is in it
-            if !session.isStarred && !session.isQuick {
-                modelContext.delete(session)
-                try? modelContext.save()
+            if session.isStarred || session.isQuick {
+                return
             }
+            
+            if sessionVM.chatSelections.contains(session) {
+                sessionVM.chatSelections.remove(session)
+            }
+            
+            modelContext.delete(session)
+            try? modelContext.save()
         } label: {
             Label("Delete", systemImage: "trash")
         }
