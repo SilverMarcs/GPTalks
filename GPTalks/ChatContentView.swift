@@ -16,7 +16,7 @@ struct ChatContentView: View {
         NavigationSplitView {
             ChatSessionList()
         } detail: {
-            if let session = sessionVM.activeSession {
+            if let session = sessionVM.activeSession, !session.isQuick {
                 ConversationList(session: session)
                     .id(session.id)
             } else {

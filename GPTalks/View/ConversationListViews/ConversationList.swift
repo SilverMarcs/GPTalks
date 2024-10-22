@@ -36,7 +36,7 @@ struct ConversationList: View {
                 }
             }
             .task {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     session.refreshTokens()
                 }
                 

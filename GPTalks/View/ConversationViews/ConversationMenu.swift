@@ -26,6 +26,7 @@ struct ConversationMenu: View {
                 buttons
                     .labelStyle(.iconOnly)
             }
+            .frame(height: 20)
         #else
             buttons
         #endif
