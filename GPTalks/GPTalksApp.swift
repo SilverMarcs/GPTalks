@@ -25,7 +25,7 @@ struct GPTalksApp: App {
             ChatWindow()
             ImageWindow()
             SettingsWindow()
-            QuickPanelWindow()
+//            QuickPanelWindow()
             #else
             IOSWindow()
             #endif

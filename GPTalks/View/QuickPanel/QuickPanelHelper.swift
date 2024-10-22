@@ -10,14 +10,14 @@ import SwiftData
 #if os(macOS)
 struct QuickPanelHelper: View {
     @Environment(\.modelContext) var modelContext
-    @Environment(ChatSessionVM.self) var sessionVM
     
     @State private var session: ChatSession?
+    @Binding var isPresented: Bool
     @Binding var showAdditionalContent: Bool
     
     var body: some View {
         if let session = session {
-            QuickPanel(session: session, showAdditionalContent: $showAdditionalContent)
+            QuickPanel(session: session, isPresented: $isPresented, showAdditionalContent: $showAdditionalContent)
         } else {
             Text("Something went wrong")
             .padding()

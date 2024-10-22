@@ -85,7 +85,7 @@ import SwiftUI
         }
         #endif
         
-        try? modelContext.save()
+//        try? modelContext.save()
     }
     
     @discardableResult

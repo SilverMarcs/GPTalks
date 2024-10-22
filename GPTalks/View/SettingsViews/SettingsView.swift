@@ -92,7 +92,7 @@ struct SettingsView: View {
             .scrollContentBackground(.visible)
             .onChange(of: columnVisibility, initial: true) { oldVal, newVal in
                 if newVal == .detailOnly {
-                    DispatchQueue.main.asyncAfter(deadline: .now()) {
+                    DispatchQueue.main.async {
                         columnVisibility = .all
                     }
                 }

@@ -11,11 +11,10 @@ import SwiftData
 #if os(macOS)
 struct QuickPanel: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.dismissWindow) var dismissWindow
-    @Environment(\.openWindow) var openWindow
     @Environment(ChatSessionVM.self) private var sessionVM
     
     @Bindable var session: ChatSession
+    @Binding var isPresented: Bool
     @Binding var showAdditionalContent: Bool
     
     @FocusState private var isFocused: Bool
@@ -57,17 +56,34 @@ struct QuickPanel: View {
                 bottomView
             }
         }
+        .frame(width: 650)
         .toolbarVisibility(.hidden, for: .windowToolbar)
-        .onAppear {
-            selections = sessionVM.chatSelections
-            sessionVM.chatSelections = [self.session]
-            isFocused = true
-            if !session.groups.isEmpty {
-                showAdditionalContent = true
+//        .onAppear {
+//            selections = sessionVM.chatSelections
+//            sessionVM.chatSelections = [self.session]
+//            isFocused = true
+//            if !session.groups.isEmpty {
+//                showAdditionalContent = true
+//            }
+//        }
+//        .onDisappear {
+//            sessionVM.chatSelections = selections
+//        }
+            
+        .onChange(of: isPresented) {
+            if isPresented {
+            
+                selections = sessionVM.chatSelections
+                sessionVM.chatSelections = [self.session]
+                isFocused = true
+                if !session.groups.isEmpty {
+                    showAdditionalContent = true
+                }
+            } else {
+                DispatchQueue.main.async {
+                    sessionVM.chatSelections = selections
+                }
             }
-        }
-        .onDisappear {
-            sessionVM.chatSelections = selections
         }
         .onChange(of: isFocused) {
             isFocused = true
@@ -188,8 +204,14 @@ struct QuickPanel: View {
             resetChat()
             
             showAdditionalContent = false
-            dismissWindow(id: "quick")
-            openWindow(id: "main")
+            isPresented = false
+            
+//            DispatchQueue.main.async {
+                if let mainWindow = NSApp.windows.first(where: { $0.identifier?.rawValue == "chats" }) {
+                    mainWindow.makeKeyAndOrderFront(nil)
+                }
+                NSApp.activate(ignoringOtherApps: true)
+//            }
         }
     }
     
@@ -200,11 +222,10 @@ struct QuickPanel: View {
         
         session.config.systemPrompt = AppConfig.shared.quickSystemPrompt
         
-//        showAdditionalContent = true
-        
         Task {
             await session.sendInput(forQuick: true)
         }
+        
         showAdditionalContent = true
     }
 }
@@ -213,6 +234,6 @@ struct QuickPanel: View {
     let quickSesion = ChatSession.mockChatSession
     quickSesion.isQuick = true
     
-    return QuickPanel(session: quickSesion, showAdditionalContent: .constant(true))
+    return QuickPanel(session: quickSesion, isPresented: .constant(true), showAdditionalContent: .constant(true))
 }
 #endif
