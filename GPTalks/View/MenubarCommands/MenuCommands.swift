@@ -16,7 +16,7 @@ struct MenuCommands: Commands {
         
         InspectorCommands()
         
-        ToolbarCommands()
+//        ToolbarCommands()
         
         CommandGroup(before: .appSettings) {
             Button("Settings") {

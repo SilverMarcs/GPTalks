@@ -15,7 +15,7 @@ struct ModelList<M: ModelType>: View {
 
     @State private var showAdder = false
     @State private var showModelSelectionSheet = false
-
+    @State private var selections: Set<M.ID> = []
         
     var body: some View {
         Group {
@@ -69,7 +69,7 @@ struct ModelList<M: ModelType>: View {
                 })
             }
         } else {
-            Table($models) {
+            Table($models, selection: $selections) {
                 TableColumn("Code") { $model in
                     TextField("Code", text: $model.code)
                 }
@@ -96,6 +96,9 @@ struct ModelList<M: ModelType>: View {
                     }
                 }
                 .alignment(.trailing)
+            }
+            .onDeleteCommand {
+                models.removeAll(where: { selections.contains($0.id) })
             }
         }
     }
