@@ -26,6 +26,7 @@ import SwiftUI
     
     func sendMessage() async {
         guard let session = activeSession else { return }
+        guard !session.isQuick else { return }
         await session.sendInput()
     }
     
@@ -84,8 +85,6 @@ import SwiftUI
             self.chatSelections = [newSession]
         }
         #endif
-        
-//        try? modelContext.save()
     }
     
     @discardableResult

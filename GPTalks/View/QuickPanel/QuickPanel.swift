@@ -31,16 +31,16 @@ struct QuickPanel: View {
                 .padding(.leading, 1)
                 .frame(height: 57)
             
+            if !session.inputManager.dataFiles.isEmpty {
+                DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
+                    .safeAreaPadding(.horizontal)
+                    .safeAreaPadding(.vertical, 10)
+            }
+            
             if session.groups.isEmpty {
                 Spacer()
             } else {
                 Divider()
-                
-                if !session.inputManager.dataFiles.isEmpty {
-                    DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
-                        .safeAreaPadding(.horizontal)
-                        .safeAreaPadding(.vertical, 10)
-                }
                 
                 ConversationList(session: session)
                     .scrollContentBackground(.hidden)
@@ -66,6 +66,13 @@ struct QuickPanel: View {
         }
         .onChange(of: isFocused) {
             isFocused = true
+        }
+        .onChange(of: session.inputManager.dataFiles.isEmpty) {
+            if $0 {
+                showAdditionalContent = false
+            } else {
+                showAdditionalContent = true
+            }
         }
     }
     
@@ -193,10 +200,6 @@ struct QuickPanel: View {
     }
     
     private func send() {
-        #if DEBUG
-        showAdditionalContent.toggle()
-        #endif
-        
         if session.inputManager.prompt.isEmpty {
             return
         }

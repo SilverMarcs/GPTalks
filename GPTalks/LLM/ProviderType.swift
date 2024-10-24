@@ -93,8 +93,8 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     
     var supportedFileTypes: [UTType] {
         switch self {
-        case .google: [.audio, .image, .pdf, .commaSeparatedText, .text]
-        default: [.image, .pdf, .audio]
+        case .google: [.audio, .image, .pdf, .commaSeparatedText, .text, .sourceCode]
+        default: [.image, .pdf, .audio, .sourceCode]
         }
     }
     
