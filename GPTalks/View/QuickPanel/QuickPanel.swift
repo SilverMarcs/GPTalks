@@ -26,50 +26,29 @@ struct QuickPanel: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ZStack {
-                Button("Focus Field") {
-                    isFocused = true
-                }
-                .hidden()
-                .keyboardShortcut("l")
-                
-                textfieldView
-                    .padding(15)
-                    .padding(.leading, 1)
-            }
+            textfieldView
+                .padding(15)
+                .padding(.leading, 1)
+                .frame(height: 57)
             
-            if showAdditionalContent {
+            if session.groups.isEmpty {
+                Spacer()
+            } else {
                 Divider()
                 
                 if !session.inputManager.dataFiles.isEmpty {
                     DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
                         .safeAreaPadding(.horizontal)
                         .safeAreaPadding(.vertical, 10)
-                } else {
-                    EmptyView()
                 }
                 
                 ConversationList(session: session)
-                    .navigationTitle("Quick Panel")
                     .scrollContentBackground(.hidden)
                 
                 bottomView
             }
         }
         .frame(width: 650)
-        .toolbarVisibility(.hidden, for: .windowToolbar)
-//        .onAppear {
-//            selections = sessionVM.chatSelections
-//            sessionVM.chatSelections = [self.session]
-//            isFocused = true
-//            if !session.groups.isEmpty {
-//                showAdditionalContent = true
-//            }
-//        }
-//        .onDisappear {
-//            sessionVM.chatSelections = selections
-//        }
-            
         .onChange(of: isPresented) {
             if isPresented {
             
@@ -206,16 +185,18 @@ struct QuickPanel: View {
             showAdditionalContent = false
             isPresented = false
             
-//            DispatchQueue.main.async {
-                if let mainWindow = NSApp.windows.first(where: { $0.identifier?.rawValue == "chats" }) {
-                    mainWindow.makeKeyAndOrderFront(nil)
-                }
-                NSApp.activate(ignoringOtherApps: true)
-//            }
+            if let mainWindow = NSApp.windows.first(where: { $0.identifier?.rawValue == "chats" }) {
+                mainWindow.makeKeyAndOrderFront(nil)
+            }
+            NSApp.activate(ignoringOtherApps: true)
         }
     }
     
     private func send() {
+        #if DEBUG
+        showAdditionalContent.toggle()
+        #endif
+        
         if session.inputManager.prompt.isEmpty {
             return
         }

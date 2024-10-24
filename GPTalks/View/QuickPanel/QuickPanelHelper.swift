@@ -20,7 +20,9 @@ struct QuickPanelHelper: View {
             QuickPanel(session: session, isPresented: $isPresented, showAdditionalContent: $showAdditionalContent)
         } else {
             Text("Something went wrong")
+                .font(.title)
             .padding()
+            .frame(minHeight: 57)
             .task {
                 fetchQuickSession()
             }

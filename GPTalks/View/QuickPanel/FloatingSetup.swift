@@ -95,10 +95,18 @@ class QuickPanelWindow2<Content: View>: NSPanel {
         // Ensure the new frame is within the screen bounds
         let adjustedFrame = NSIntersectionRect(newFrame, screenFrame)
         
-        heightConstraint?.constant = height
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = 0.3
+            context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            
+            self.animator().setFrame(adjustedFrame, display: true)
+            self.contentView?.animator().setFrameSize(NSSize(width: adjustedFrame.width, height: height))
+            
+            heightConstraint?.animator().constant = height
+        }
+        
         self.contentMinSize.height = height
         self.contentMaxSize.height = height
-        self.setFrame(adjustedFrame, display: true, animate: false)
     }
 }
 
