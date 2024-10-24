@@ -13,6 +13,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     case openai
     case openrouter
     case groq
+    case xai
     case mistral
     case perplexity
     case togetherai
@@ -37,6 +38,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "OpenAI"
         case .openrouter: "OpenRouter"
         case .groq: "Groq"
+        case .xai: "xAI"
         case .mistral: "MistralAI"
         case .perplexity: "PerplexityAI"
         case .togetherai: "TogetherAI"
@@ -69,6 +71,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .ollama: "ollamahost:11434"
         case .perplexity: "api.perplexity.ai"
         case .groq: "api.groq.com/openai"
+        case .xai: "api.x.ai"
         case .openrouter: "openrouter.ai/api"
         case .mistral: "api.mistral.ai"
         case .togetherai: "api.together.xyz"
@@ -108,7 +111,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     
     func getService() -> any AIService.Type {
         switch self {
-        case .openai, .ollama, .openrouter, .groq, .mistral, .perplexity, .togetherai, .lmstudio, .custom:
+        case .openai, .ollama, .openrouter, .groq, .xai, .mistral, .perplexity, .togetherai, .lmstudio, .custom:
             OpenAIService.self
         case .anthropic:
             ClaudeService.self
