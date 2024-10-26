@@ -24,7 +24,7 @@ struct ImageSettings: View {
     var body: some View {
         Form {
             Section {
-                ProviderPicker(provider: $providerDefaults.toolSTTProvider, providers: providers)
+                ProviderPicker(provider: $providerDefaults.imageProvider, providers: filteredProviders)
                 
                 ModelPicker(model: $providerDefaults.imageProvider.imageModel, models: providerDefaults.imageProvider.imageModels, label: "Image Model")
                 

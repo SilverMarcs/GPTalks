@@ -97,9 +97,11 @@ struct ModelList<M: ModelType>: View {
                 }
                 .alignment(.trailing)
             }
+            #if os(macOS)
             .onDeleteCommand {
                 models.removeAll(where: { selections.contains($0.id) })
             }
+            #endif
         }
     }
     
