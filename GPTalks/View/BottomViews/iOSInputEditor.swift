@@ -35,11 +35,11 @@ struct iOSInputEditor: View {
                     }
             }
         }
-        .task {
-            if let session = sessionVM.activeSession, session.groups.isEmpty {
-                isFocused = true
-            }
-        }
+//        .task {
+//            if let session = sessionVM.activeSession {
+//                isFocused = true
+//            }
+//        }
     }
     
     var placeHolder: String {

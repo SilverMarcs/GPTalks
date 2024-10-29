@@ -32,7 +32,6 @@ struct ConversationListToolbar: ToolbarContent {
                     .presentationDragIndicator(.hidden)
             }
         }
-//        .customizationBehavior(.disabled)
         
         if horizontalSizeClass != .compact {
             ToolbarItem(placement: .primaryAction) {
@@ -52,7 +51,6 @@ struct ConversationListToolbar: ToolbarContent {
                 ConversationShortcuts()
             }
         }
-//        .defaultCustomization(.visible)
         
         if config.showStatusBar {
             ToolbarItem(placement: .favoritesBar) {
