@@ -14,6 +14,20 @@ struct ToolSettings: View {
     var body: some View {
         NavigationStack {
             Form {
+                NavigationLink {
+                    Form {
+                        Toggle(isOn: $config.googleCodeExecution) {
+                            Text("Enabled for new chats")
+                            Text("Only available for Google Generative AI Provider")
+                        }
+                    }
+                    .navigationTitle("Code Execution")
+                    .formStyle(.grouped)
+                    .scrollContentBackground(.visible)
+                } label: {
+                    Label("Code Execution", systemImage: "curlybraces")
+                }
+                
                 ForEach(ChatTool.allCases, id: \.self) { tool in
                     NavigationLink(value: tool) {
                         Label(tool.displayName, systemImage: tool.icon)

@@ -16,6 +16,8 @@ class ToolConfigDefaults: ObservableObject {
     @AppStorage("imageGenerate") var imageGenerate: Bool = false
     @AppStorage("transcribe") var transcribe: Bool = false
     @AppStorage("pdfReader") var pdfReader: Bool = false
+    // Google Service only
+    @AppStorage("googleCodeExecution") var googleCodeExecution: Bool = false
     
     // url scrape
     @AppStorage("urlMaxContentLength") var urlMaxContentLength: Int = 10000

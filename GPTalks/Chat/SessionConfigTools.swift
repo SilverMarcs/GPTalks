@@ -9,6 +9,7 @@ import Foundation
 
 struct SessionConfigTools: Codable {
     var toolStates: [ChatTool: Bool]
+    var googleCodeExecution: Bool = ToolConfigDefaults.shared.googleCodeExecution
     
     init(isTitle: Bool = false) {
         if isTitle {
@@ -38,10 +39,24 @@ struct SessionConfigTools: Codable {
         return enabledTools.reduce(0) { $0 + $1.tokenCount }
     }
     
+    mutating func setGoogleCodeExecution(_ enabled: Bool) {
+        googleCodeExecution = enabled
+        if enabled {
+            disableAllTools()
+        }
+    }
+
     mutating func setTool(_ tool: ChatTool, enabled: Bool) {
         toolStates[tool] = enabled
+        if enabled {
+            googleCodeExecution = false
+        }
     }
-    
+
+    mutating func disableAllTools() {
+        toolStates = toolStates.mapValues { _ in false }
+    }
+
     func isToolEnabled(_ tool: ChatTool) -> Bool {
         return toolStates[tool] ?? false
     }

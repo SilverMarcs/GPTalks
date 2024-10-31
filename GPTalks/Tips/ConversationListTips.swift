@@ -12,3 +12,9 @@ struct GenerateTitleTip: Tip {
         Text("Generate Title")
     }
 }
+
+struct GoogleCodeExecutionTip: Tip {
+    var title: Text {
+        Text("Code Execution cannnot be used with other tools enabled")
+    }
+}

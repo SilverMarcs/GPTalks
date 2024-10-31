@@ -65,7 +65,11 @@ struct GoogleService: AIService {
             maxOutputTokens: config.maxTokens
         )
         
-        let tools = config.tools.enabledTools.map { $0.google }
+        var tools = config.tools.enabledTools.map { $0.google }
+        
+        if config.tools.googleCodeExecution {
+            tools.append(Tool(codeExecution: .init()))
+        }
         
         let model = GenerativeModel(
             name: config.model.code,
@@ -86,19 +90,31 @@ struct GoogleService: AIService {
                     let responseStream = model.generateContentStream(messages)
                     
                     for try await response in responseStream {
-                        if let content = response.text {
-                            continuation.yield(.content(content))
-                        }
-                        
-                        let content = response.functionCalls
-                        if !content.isEmpty {
-                            let functionCalls = response.functionCalls
-                            
-                            let calls: [ChatToolCall] = functionCalls.map {
-                                ChatToolCall(toolCallId: "", tool: ChatTool(rawValue: $0.name)!, arguments: encodeJSONObjectToString($0.args))
+                        if let candidate = response.candidates.first {
+                            for part in candidate.content.parts {
+                                switch part {
+                                case .executableCode(let executableCode):
+                                    let codeBlockLanguage = executableCode.language == "LANGUAGE_UNSPECIFIED" ? "" : executableCode.language.lowercased()
+                                    let formattedCode = "**Code to execute:**\n```\(codeBlockLanguage)\(executableCode.code)```\n"
+                                    continuation.yield(.content(formattedCode))
+                                case .codeExecutionResult(let codeExecutionResult):
+                                    if !codeExecutionResult.output.isEmpty {
+                                        let formattedOutput = "**Code Output:**\n```\n\(codeExecutionResult.output)```\n"
+                                        continuation.yield(.content(formattedOutput))
+                                    }
+                                case .functionCall(let functionCall):
+                                    print("Function call: \(functionCall.name)")
+                                    let call = ChatToolCall(toolCallId: "",
+                                                            tool: ChatTool(rawValue: functionCall.name)!,
+                                                            arguments: encodeJSONObjectToString(functionCall.args))
+                                    continuation.yield(.toolCalls([call]))
+                                case .text(let text):
+                                    continuation.yield(.content(text))
+                                case .data, .fileData, .functionResponse:
+                                    print("Data, file data, and function response are not supported")
+                                    break
+                                }
                             }
-
-                            continuation.yield(.toolCalls(calls))
                         }
                     }
                     
@@ -113,7 +129,6 @@ struct GoogleService: AIService {
     static private func nonStreamingGoogleResponse(model: GenerativeModel, messages: [ModelContent]) async throws -> StreamResponse {
         let response = try await model.generateContent(messages)
         return .content(response.text ?? "")
-//        return response.text ?? ""
     }
     
     static func testModel(provider: Provider, model: any ModelType) async -> Bool {

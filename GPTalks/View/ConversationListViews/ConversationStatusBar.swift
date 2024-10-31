@@ -36,16 +36,19 @@ struct ConversationStatusBar: View {
                 .contentTransition(.symbolEffect(.replace))
 
             ControlGroup {
-                ForEach(Array(session.config.tools.toolStates.keys), id: \.self) { tool in
-                    Toggle(isOn: Binding(
-                        get: { session.config.tools.isToolEnabled(tool) },
-                        set: { newValue in
-                            session.config.tools.setTool(tool, enabled: newValue)
-                        }
-                    )) {
-                        Label(tool.displayName, systemImage: tool.icon)
-                    }
-                }
+//                if session.config.provider.type == .google {
+//                    Toggle(isOn: Binding(
+//                        get: { session.config.tools.googleCodeExecution },
+//                        set: { newValue in
+//                            session.config.tools.setGoogleCodeExecution(newValue)
+//                        }
+//                    )) {
+//                        Label("Code Execution", systemImage: "curlybraces")
+//                    }
+//                    .popoverTip(GoogleCodeExecutionTip())
+//                }
+
+                ToolsController(tools: $session.config.tools, showGoogleCodeExecution: session.config.provider.type == .google)
             }
             .fixedSize()
         }
