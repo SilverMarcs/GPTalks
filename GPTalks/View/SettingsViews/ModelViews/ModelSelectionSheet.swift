@@ -50,8 +50,17 @@ struct ModelSelectionSheet: View {
                 .navigationTitle("Select models to add")
                 .toolbarTitleDisplayMode(.inline)
                 .toolbar {
-                    Button("Add") {
-                        addSelectedModels()
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel", role: .cancel) {
+                            dismiss()
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Add") {
+                            addSelectedModels()
+                        }
+                        .disabled(refreshedModels.filter { $0.isSelected }.isEmpty)
                     }
                 }
             }

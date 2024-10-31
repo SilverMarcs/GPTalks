@@ -35,7 +35,7 @@ struct AddModelSheet<M: ModelType>: View {
                 TextField("Model Code", text: $modelCode)
             }
             .formStyle(.grouped)
-            .navigationTitle("Add \(selectedModelType.rawValue.capitalized) Model")
+            .navigationTitle("Add \(selectedModelType.rawValue.uppercased()) Model")
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
