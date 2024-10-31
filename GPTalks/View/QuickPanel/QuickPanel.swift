@@ -68,7 +68,7 @@ struct QuickPanel: View {
             isFocused = true
         }
         .onChange(of: session.inputManager.dataFiles.isEmpty) {
-            if $0 {
+            if session.inputManager.dataFiles.isEmpty {
                 showAdditionalContent = false
             } else {
                 showAdditionalContent = true

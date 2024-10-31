@@ -18,16 +18,12 @@ struct ProviderList: View {
     var body: some View {
         Group {
             #if os(macOS)
-            NavigationStack {
-                Form {
-                    content
-                }
-                .formStyle(.grouped)
-            }
-            #else
-            NavigationStack {
+            Form {
                 content
             }
+            .formStyle(.grouped)
+            #else
+            content
             #endif
         }
         .toolbar {
@@ -93,9 +89,7 @@ struct ProviderList: View {
             Label("Create Provider", systemImage: "plus")
         }
     }
-}
 
-extension ProviderList {
     private func addProvider(type: ProviderType) {
         let newProvider = Provider.factory(type: type)
         

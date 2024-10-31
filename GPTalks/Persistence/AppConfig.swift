@@ -26,9 +26,9 @@ class AppConfig: ObservableObject {
     #endif
     
     #if os(macOS)
-    @AppStorage("compactList") var compactList: Bool = true
+    @AppStorage("sidebarIconSize") var sidebarIconSize: SidebarIconSize = .system
     #else
-    @AppStorage("compactList") var compactList: Bool = false
+    @AppStorage("sidebarIconSize") var sidebarIconSize: SidebarIconSize = .medium
     #endif
     
     #if os(macOS)
@@ -61,6 +61,12 @@ class AppConfig: ObservableObject {
         fontSize = 18
         #endif
     }
+}
+
+enum SidebarIconSize: String, Codable, CaseIterable {
+    case system
+    case medium
+    case large
 }
 
 enum ConversationListStyle: String, Codable, CaseIterable {

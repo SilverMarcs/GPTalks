@@ -71,7 +71,7 @@ struct BackupSettings: View {
         Button {
             action()
         } label: {
-            Label("Import", systemImage: "square.and.arrow.down")
+            Label("Restore", systemImage: "square.and.arrow.down")
         }
     }
 }

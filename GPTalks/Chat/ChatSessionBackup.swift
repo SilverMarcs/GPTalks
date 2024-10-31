@@ -48,7 +48,6 @@ extension ChatSessionBackup {
     
     func toSession() -> ChatSession {
         var session: ChatSession
-        let provider: Provider
         
         let modelContext = DatabaseService.shared.modelContext
         

@@ -39,13 +39,20 @@ struct AppearanceSettings: View {
             #endif
 
             Section("View Customisation") {
-                Toggle("Compact List Row", isOn: $config.compactList)
+                Picker(selection: $config.sidebarIconSize) {
+                    ForEach(SidebarIconSize.allCases, id: \.self) { size in
+                        Text(size.rawValue.capitalized)
+                    }
+                } label: {
+                    Text("Sidebar Icon Size")
+                    Text("System will follow value in MacOS ppearance settings. No effect on iOS.")
+                }
                     .task {
                         fetchSession()
                     }
                 
                     if let session = session {
-                        HStack {
+                        HStack(alignment: .top) {
                             Text("Demo")
                             
                             Spacer()

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SessionListRow: View {
     @Environment(\.modelContext) var modelContext
+    @Environment(\.sidebarRowSize) private var sidebarRowSize
     @Environment(ChatSessionVM.self) private var sessionVM
     
     @ObservedObject var config = AppConfig.shared
@@ -17,10 +18,20 @@ struct SessionListRow: View {
     
     var body: some View {
         Group {
-            if config.compactList {
-                small
-            } else {
+            switch config.sidebarIconSize {
+            case .large:
                 large
+            case .medium:
+                small
+            case .system:
+                switch sidebarRowSize {
+                case .large:
+                    large
+                case .medium:
+                    small
+                default:
+                    small
+                }
             }
         }
         .swipeActions(edge: .leading) {

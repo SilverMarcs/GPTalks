@@ -65,7 +65,7 @@ struct SettingsView: View {
             }
             .navigationSplitViewColumnWidth(min: 190, ideal: 190, max: 190)
         } detail: {
-            Group {
+            NavigationStack {
                 switch selectedSidebarItem {
                 case .general:
                     GeneralSettings()

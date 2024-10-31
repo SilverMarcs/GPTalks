@@ -24,7 +24,7 @@ class PasteWindow: NSWindow {
                     print("File detected in clipboard")
                     print(fileURL)
                     return true
-                } else if let text = item.data(forType: .string) {
+                } else if let _ = item.data(forType: .string) {
                     return false
                 }
             }
