@@ -32,6 +32,7 @@ struct UserMessage: View {
                     .padding(5)
                     #endif
             }
+            .groupBoxStyle(PlatformSpecificGroupBoxStyle())
             .background(
                     (conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
             )

@@ -72,7 +72,9 @@ struct ImageSettings: View {
                 IntegerStepper(value: $imageConfig.chatImageWidth, label: "Image Width", step: 30, range: 80...300)
                 
                 HStack(alignment: .top) {
+                    #if os(macOS)
                     Text("Only applies to images in Chat Session")
+                    #endif
                     
                     Spacer()
                     
@@ -90,7 +92,9 @@ struct ImageSettings: View {
                 IntegerStepper(value: $imageConfig.imageWidth, label: "Image Width", step: 50, range: 50...500)
                 
                 HStack(alignment: .top) {
+                    #if os(macOS)
                     Text("Only applies to images from Image Generation Session")
+                    #endif
                     
                     Spacer()
                     

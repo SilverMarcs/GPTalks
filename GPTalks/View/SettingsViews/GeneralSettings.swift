@@ -24,7 +24,7 @@ struct GeneralSettings: View {
             Section("Search") {
                 Toggle(isOn: $config.expensiveSearch) {
                     Text("Expensive Search")
-                    Text("Expensives search searches all messages but may cause UI responsiveness issues")
+                    Text("Search all messages but may cause UI responsiveness issues")
                 }
             }
             

@@ -28,7 +28,7 @@ class AppConfig: ObservableObject {
     #if os(macOS)
     @AppStorage("sidebarIconSize") var sidebarIconSize: SidebarIconSize = .system
     #else
-    @AppStorage("sidebarIconSize") var sidebarIconSize: SidebarIconSize = .medium
+    @AppStorage("sidebarIconSize") var sidebarIconSize: SidebarIconSize = .large
     #endif
     
     #if os(macOS)

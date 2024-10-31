@@ -11,18 +11,23 @@ struct EmptyConversationList: View {
     @Bindable var session: ChatSession
     
     var body: some View {
-        VStack(alignment: .center) {
-            Image(session.config.provider.type.imageName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
-                .foregroundStyle(.quaternary)
+        ScrollView {
+            ZStack {
+                // Reserve space matching the scroll view's frame
+                Spacer().containerRelativeFrame([.horizontal, .vertical])
+
+                VStack {
+                    Image(session.config.provider.type.imageName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .foregroundStyle(.quaternary)
+                }
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .scrollBounceBehavior(.basedOnSize) // disables bounce if the content fits
+        .scrollContentBackground(.visible)
         .background(.background)
-        #if os(macOS)
-        .toolbarBackground(.hidden, for: .windowToolbar)
-        #endif
     }
 }
 

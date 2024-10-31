@@ -17,18 +17,19 @@ struct AppearanceSettings: View {
     var body: some View {
         Form {
             Section("Font Size") {
-                Slider(value: $config.fontSize, in: 8...25, step: 1) {
-                    HStack {
-                        Button("Reset") {
-                            config.resetFontSize()
-                        }
+                HStack {
+                    Button("Reset") {
+                        config.resetFontSize()
                     }
-                } minimumValueLabel: {
-                    Text("")
-                        .monospacedDigit()
-                } maximumValueLabel: {
-                    Text(String(config.fontSize))
-                        .monospacedDigit()
+                    Slider(value: $config.fontSize, in: 8...25, step: 1) {
+                        Text("Font Size")
+                    } minimumValueLabel: {
+                        Text("")
+                            .monospacedDigit()
+                    } maximumValueLabel: {
+                        Text(String(config.fontSize))
+                            .monospacedDigit()
+                    }
                 }
             }
             
@@ -45,7 +46,7 @@ struct AppearanceSettings: View {
                     }
                 } label: {
                     Text("Sidebar Icon Size")
-                    Text("System will follow value in MacOS ppearance settings. No effect on iOS.")
+                    Text("System will follow value in MacOS ppearance settings")
                 }
                     .task {
                         fetchSession()
@@ -62,6 +63,7 @@ struct AppearanceSettings: View {
                                     .padding(6)
                             }
                             .frame(maxWidth: 220)
+                            .groupBoxStyle(PlatformSpecificGroupBoxStyle())
                         }
                     }
 
