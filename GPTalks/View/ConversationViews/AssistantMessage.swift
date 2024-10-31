@@ -17,10 +17,10 @@ struct AssistantMessage: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: spacing) {
-            Image(conversation.group?.session?.config.provider.type.imageName ?? "brain.SFSymbol")
+            Image(conversation.provider?.type.imageName ?? "brain.SFSymbol")
                 .resizable()
                 .frame(width: 17, height: 17)
-                .foregroundStyle(Color(hex: conversation.group?.session?.config.provider.color ?? "#00947A").gradient)
+                .foregroundStyle(Color(hex: conversation.provider?.color  ?? "#00947A").gradient)
             
             VStack(alignment: .leading, spacing: 7) {
                 if let model = conversation.model {

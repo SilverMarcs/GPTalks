@@ -119,7 +119,7 @@ struct StreamHandler {
         if let session = assistant.group?.session {
             for toolCall in assistant.toolCalls {
                 let toolResponse = ToolResponse(toolCallId: toolCall.toolCallId, tool: toolCall.tool, processedContent: "", processedData: [])
-                let tool = Conversation(role: .tool, model: config.model, toolResponse: toolResponse, isReplying: true)
+                let tool = Conversation(role: .tool, provider: config.provider, model: config.model, toolResponse: toolResponse, isReplying: true)
                 session.addConversationGroup(conversation: tool)
                 
                 let toolData = try await toolCall.tool.process(arguments: toolCall.arguments)
@@ -133,7 +133,7 @@ struct StreamHandler {
                 }
             }
             
-            let newAssistant = Conversation(role: .assistant, model: config.model, isReplying: true)
+            let newAssistant = Conversation(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
             session.addConversationGroup(conversation: newAssistant)
             if let proxy = newAssistant.group?.session?.proxy {
                 scrollToBottom(proxy: proxy)

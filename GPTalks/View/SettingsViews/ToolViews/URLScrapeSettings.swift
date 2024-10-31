@@ -15,12 +15,12 @@ struct URLScrapeSettings: View {
             Toggle("Enabled for new chats", isOn: $config.urlScrape)
         }
         
-        Section {
-            IntegerStepper(value: $config.urlMaxContentLength,
-                           label: "Content Length",
-                           secondaryLabel: "Number of prefix characters to return from each url",
-                           step: 500, range: 1000...100000)
-        }
+//        Section {
+//            IntegerStepper(value: $config.urlMaxContentLength,
+//                           label: "Content Length",
+//                           secondaryLabel: "Number of prefix characters to return from each url",
+//                           step: 500, range: 1000...100000)
+//        }
     }
 }
 

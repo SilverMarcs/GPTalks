@@ -108,7 +108,7 @@ final class ChatSession {
         if let assistantGroup = assistantGroup {
             return assistantGroup.conversations.last!
         } else {
-            let assistant = Conversation(role: .assistant, content: "", model: config.model)
+            let assistant = Conversation(role: .assistant, content: "", provider: config.provider, model: config.model)
             addConversationGroup(conversation: assistant)
             return assistant
         }
@@ -209,7 +209,7 @@ final class ChatSession {
         let userGroup = groups[index - 1]
         let userContent = userGroup.activeConversation.content
         
-        let newAssistantConversation = Conversation(role: .assistant, content: "", model: config.model)
+        let newAssistantConversation = Conversation(role: .assistant, content: "", provider: config.provider, model: config.model)
         group.addConversation(newAssistantConversation)
         
         groups.removeSubrange((index + 1)...)

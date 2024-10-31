@@ -96,7 +96,7 @@ class QuickPanelWindow2<Content: View>: NSPanel {
         let adjustedFrame = NSIntersectionRect(newFrame, screenFrame)
         
         NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.3
+            context.duration = 0.25
             context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
             
             self.animator().setFrame(adjustedFrame, display: true)

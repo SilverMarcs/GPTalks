@@ -77,18 +77,26 @@ extension String {
     """
     
     static let codeBlock = """
-    This is a code block
+    - Sorts a list and prints the sorted list
+    - Profit
     
-    ```swift
-    struct ContentView: View {
-        var body: some View {
-            Text("Hello, World!")
-        }
-    }
+    ```python
+    def quick_sort(arr):
+        if len(arr) <= 1:
+            return arr
+        else:
+            pivot = arr[0]
+            less_than_pivot = [x for x in arr[1:] if x <= pivot]
+            greater_than_pivot = [x for x in arr[1:] if x > pivot]
+            return quick_sort(less_than_pivot) + [pivot] + quick_sort(greater_than_pivot)
+
+    # Example usage
+    my_list = [3, 6, 8, 10, 1, 2, 1]
+    sorted_list = quick_sort(my_list)
+    print(sorted_list)
     ```
-    
-    Thank you for using me.
-    
+    1. Sort a list and print the sorted list
+    2. Profit
     """
     
     static let shortContent = """
