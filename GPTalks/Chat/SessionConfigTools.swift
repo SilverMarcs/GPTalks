@@ -18,7 +18,7 @@ struct SessionConfigTools: Codable {
                 .urlScrape: false,
                 .imageGenerator: false,
                 .transcribe: false,
-                .pdfReader: false
+                .fileReader: false
             ]
         } else {
             toolStates = [
@@ -26,7 +26,7 @@ struct SessionConfigTools: Codable {
                 .urlScrape: ToolConfigDefaults.shared.urlScrape,
                 .imageGenerator: ToolConfigDefaults.shared.imageGenerate,
                 .transcribe: ToolConfigDefaults.shared.transcribe,
-                .pdfReader: ToolConfigDefaults.shared.pdfReader
+                .fileReader: ToolConfigDefaults.shared.fileReader
             ]
         }
     }

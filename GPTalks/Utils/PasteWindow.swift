@@ -12,7 +12,6 @@ import SwiftUI
 class PasteWindow: NSWindow {
     override func performKeyEquivalent(with event: NSEvent) -> Bool {
         if event.modifierFlags.contains(.command) && event.charactersIgnoringModifiers == "v" {
-            print("Command-V")
             let pasteboard = NSPasteboard.general
             guard let pasteboardItems = pasteboard.pasteboardItems else {
                 return false
@@ -21,8 +20,6 @@ class PasteWindow: NSWindow {
             for item in pasteboardItems {
                 if let fileURLData = item.data(forType: .fileURL),
                    let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
-                    print("File detected in clipboard")
-                    print(fileURL)
                     return true
                 } else if let _ = item.data(forType: .string) {
                     return false

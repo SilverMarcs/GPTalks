@@ -49,6 +49,9 @@ struct PasteHandler: ViewModifier {
             } else if item.types.contains(.png) || item.types.contains(.tiff) {
                 session.inputManager.handlePaste(pasteboardItem: item)
                 handledFiles = true
+            } else if item.types.contains(.pdf) {
+                session.inputManager.handlePaste(pasteboardItem: item)
+                handledFiles = true
             } else if item.types.contains(.string) {
                 containsText = true
             }

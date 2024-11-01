@@ -1,5 +1,5 @@
 //
-//  PDFReader.swift
+//  FileReader.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 06/10/2024.
@@ -10,21 +10,20 @@ import SwiftData
 import OpenAI
 import GoogleGenerativeAI
 import PDFKit
+import UniformTypeIdentifiers
 
-struct PDFReader: ToolProtocol {
-    static let toolName = "pdfReader"
-    static let displayName: String = "PDF Reader"
+struct FileReader: ToolProtocol {
+    static let toolName = "fileReader"
+    static let displayName: String = "File Reader"
     static let icon: String = "doc.text"
     
-    struct PDFArgs: Codable {
+    struct FileArgs: Codable {
         let conversationID: String
         let fileNames: [String]
     }
     
     static func process(arguments: String) async throws -> ToolData {
-        print("arguments \(arguments)")
-        var totalContent: String = ""
-        let args = try PDFReader.getFileIds(from: arguments)
+        let args = try FileReader.getFileIds(from: arguments)
         
         let modelContext = DatabaseService.shared.modelContext
         let uuid = UUID(uuidString: args.conversationID)!
@@ -38,10 +37,17 @@ struct PDFReader: ToolProtocol {
         let conversations = try modelContext.fetch(fetchDescriptor)
         
         if let conversation = conversations.first {
+            var totalContent: String = ""
+            
             for name in args.fileNames {
                 if let typedData = conversation.dataFiles.first(where: { $0.fileName == name }) {
-                    let pdfContent = readPDF(from: typedData.data)
-                    totalContent += pdfContent.prefix(ToolConfigDefaults.shared.pdfMaxContentLength) + "\n"
+                    let fileContent: String
+                    if isPDF(data: typedData.data) {
+                        fileContent = readPDF(from: typedData.data)
+                    } else {
+                        fileContent = readTextFile(from: typedData.data)
+                    }
+                    totalContent += fileContent + "\n"
                 }
             }
             
@@ -51,10 +57,23 @@ struct PDFReader: ToolProtocol {
         }
     }
 
-    private static func getFileIds(from jsonString: String) throws -> PDFArgs {
+    private static func getFileIds(from jsonString: String) throws -> FileArgs {
         let jsonData = jsonString.data(using: .utf8)!
-        let pdfArgs = try JSONDecoder().decode(PDFArgs.self, from: jsonData)
-        return pdfArgs
+        let fileArgs = try JSONDecoder().decode(FileArgs.self, from: jsonData)
+        return fileArgs
+    }
+    
+    private static func isPDF(data: Data) -> Bool {
+        let pdfHeader: [UInt8] = [0x25, 0x50, 0x44, 0x46] // PDF header bytes
+        guard data.count >= pdfHeader.count else { return false }
+        
+        for i in 0..<pdfHeader.count {
+            if data[i] != pdfHeader[i] {
+                return false
+            }
+        }
+        
+        return true
     }
     
     private static func readPDF(from data: Data) -> String {
@@ -65,7 +84,7 @@ struct PDFReader: ToolProtocol {
         let pageCount = document.pageCount
         var content = ""
         
-        for i in 0 ..< pageCount {
+        for i in 0..<pageCount {
             guard let page = document.page(at: i) else { continue }
             guard let pageContent = page.string else { continue }
             content += pageContent
@@ -74,10 +93,19 @@ struct PDFReader: ToolProtocol {
         return content
     }
     
+    private static func readTextFile(from data: Data) -> String {
+        if let text = String(data: data, encoding: .utf8) {
+            return text
+        } else {
+            return "Unable to read file content"
+        }
+    }
+    
     static let tokenCount = countTokensFromText(description)
     
     static let description: String = """
-        You can open and access contents of pdf files. Just respond with a list of file names without file extensions
+        You can open and access contents of both PDF files and text-based files. Just respond with a list of file names without file extensions.
+        The file names you call with must not contain file extension. Just provide the file name
         """
     
     static var openai: ChatQuery.ChatCompletionToolParam {
@@ -97,7 +125,7 @@ struct PDFReader: ToolProtocol {
                                 "fileNames":
                                     .init(
                                         type: .array,
-                                        description: "The array of pdf file names without extension to access",
+                                        description: "The array of file names without extension to access",
                                         items: .init(type: .string)
                                     )
                             ]
@@ -118,7 +146,7 @@ struct PDFReader: ToolProtocol {
                     ),
                     "fileNames": Schema(
                         type: .array,
-                        description: "The array of pdf file names without extension to access",
+                        description: "The array of file names without extension to access",
                         items: Schema(type: .string)
                     )
                 ],
@@ -140,7 +168,7 @@ struct PDFReader: ToolProtocol {
                     ],
                     "fileNames": [
                         "type": "array",
-                        "description": "The array of pdf file names without extension to access",
+                        "description": "The array of file names without extension to access",
                         "items": [
                             "type": "string"
                         ],
