@@ -27,9 +27,6 @@ struct ChatInputView: View {
             }
             
             plusButton
-            #if os(macOS)
-                .popoverTip(ChatCommandsTip())
-            #endif
             
             VStack(alignment: .leading, spacing: 8) {
                 if !session.inputManager.dataFiles.isEmpty {
@@ -124,11 +121,11 @@ struct ChatInputView: View {
     }
     
     var verticalPadding: CGFloat {
-#if os(macOS)
+        #if os(macOS)
         14
-#else
+        #else
         9
-#endif
+        #endif
     }
     
     var imageSize: CGFloat {

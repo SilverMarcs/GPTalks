@@ -52,6 +52,9 @@ struct SettingsView: View {
                 
                 Label("Backup", systemImage: "opticaldiscdrive")
                     .tag(SidebarItem.backup)
+                
+                Label("Guides", systemImage: "book")
+                    .tag(SidebarItem.guides)
             }
             #if !os(visionOS)
             .navigationTitle("Settings")
@@ -85,8 +88,16 @@ struct SettingsView: View {
                     ProviderList()
                 case .backup:
                     BackupSettings()
-                case .none:
-                    Text("Select an option from the sidebar")
+                case .guides:
+                    VStack {
+                        Text("Guides")
+                            .font(.title).bold()
+                        Text("Coming Soon")
+                            .font(.title2)
+                    }
+                    
+                default:
+                    EmptyView()
                 }
             }
             .scrollContentBackground(.visible)
@@ -110,6 +121,7 @@ struct SettingsView: View {
         case image
         case providers
         case backup
+        case guides
     }
 
 }

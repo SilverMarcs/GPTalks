@@ -15,7 +15,8 @@ struct ConversationStatusBar: View {
     
     var body: some View {
         HStack {
-            ProviderImage(provider: session.config.provider, radius: 5, frame: 14, scale: .small)
+            ProviderImage(provider: session.config.provider, radius: 4, frame: 12, scale: .small)
+                .padding(.leading, 6)
             
             ProviderPicker(provider: $session.config.provider, providers: providers) { provider in
                 session.config.model = provider.chatModel
