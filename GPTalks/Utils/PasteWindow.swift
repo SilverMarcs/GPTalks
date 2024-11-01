@@ -19,7 +19,7 @@ class PasteWindow: NSWindow {
             
             for item in pasteboardItems {
                 if let fileURLData = item.data(forType: .fileURL),
-                   let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
+                   let _ = URL(dataRepresentation: fileURLData, relativeTo: nil) {
                     return true
                 } else if let _ = item.data(forType: .string) {
                     return false

@@ -46,12 +46,10 @@ struct ChatCommands: Commands {
         }
         
         CommandMenu("Chat") {
-//            Button("Send Prompt") {
-//                Task { @MainActor in
-//                    await sessionVM.sendMessage()
-//                }
-//            }
-//            .keyboardShortcut(.return, modifiers: .command)
+            Button("Search") {
+                sessionVM.hasFocus.toggle()
+            }
+            .keyboardShortcut("f", modifiers: .command)
             
             Button("Stop Streaming") {
                 Task { @MainActor in

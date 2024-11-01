@@ -17,12 +17,21 @@ struct ChatSessionList: View {
     @Query(filter: #Predicate { !$0.isQuick }, sort: [SortDescriptor(\ChatSession.date, order: .reverse)], animation: .default)
     var sessions: [ChatSession]
     
+    @FocusState private var isSearchFieldFocused: Bool
+    
     var body: some View {
         @Bindable var sessionVM = sessionVM
         
         #if os(macOS)
         CustomSearchField("Search", text: $sessionVM.searchText)
+            .focused($isSearchFieldFocused)
             .padding(.horizontal, 10)
+            .onChange(of: sessionVM.hasFocus) {
+                isSearchFieldFocused = sessionVM.hasFocus
+            }
+            .onChange(of: isSearchFieldFocused) {
+                sessionVM.hasFocus = isSearchFieldFocused
+            }
         #endif
         
         ScrollViewReader { proxy in

@@ -10,6 +10,8 @@ import SwiftData
 import SwiftUI
 
 @Observable class ChatSessionVM {
+    var hasFocus: Bool = false
+    
     var chatSelections: Set<ChatSession> = []
     var searchText: String = ""
     
