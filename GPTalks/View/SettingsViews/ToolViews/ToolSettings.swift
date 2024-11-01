@@ -21,11 +21,11 @@ struct ToolSettings: View {
                             Text("Only available for Google Generative AI Provider")
                         }
                     }
-                    .navigationTitle("Code Execution")
+                    .navigationTitle("Google Code Execution")
                     .formStyle(.grouped)
                     .scrollContentBackground(.visible)
                 } label: {
-                    Label("Code Execution", systemImage: "curlybraces")
+                    Label("Google Code Execution", systemImage: "curlybraces")
                 }
                 
                 NavigationLink {

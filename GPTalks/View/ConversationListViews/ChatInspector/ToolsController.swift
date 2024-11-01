@@ -14,7 +14,7 @@ struct ToolsController: View {
     var body: some View {
         if isGoogle {
             Toggle(
-                "Code Execution",
+                "Google Code Execution",
                 systemImage: "curlybraces",
                 isOn: Binding(
                     get: { tools.googleCodeExecution },
@@ -31,7 +31,11 @@ struct ToolsController: View {
                         tools.setGoogleSearchRetrieval(newValue)
                     })
             ) {
-                Image("google.SFSymbol")
+                Label {
+                    Text("Google Search Retrieval")
+                } icon: {
+                    Image("google.SFSymbol")
+                }
             }
         }
         
