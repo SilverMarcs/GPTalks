@@ -22,7 +22,7 @@ struct AdvancedChatInspector: View {
             }
             
             Section("Tools") {
-                ToolsController(tools: $session.config.tools, showGoogleCodeExecution: session.config.provider.type == .google)
+                ToolsController(tools: $session.config.tools, isGoogle: session.config.provider.type == .google)
             }
             
             Section("Export") {

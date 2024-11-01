@@ -36,19 +36,7 @@ struct ConversationStatusBar: View {
                 .contentTransition(.symbolEffect(.replace))
 
             ControlGroup {
-//                if session.config.provider.type == .google {
-//                    Toggle(isOn: Binding(
-//                        get: { session.config.tools.googleCodeExecution },
-//                        set: { newValue in
-//                            session.config.tools.setGoogleCodeExecution(newValue)
-//                        }
-//                    )) {
-//                        Label("Code Execution", systemImage: "curlybraces")
-//                    }
-//                    .popoverTip(GoogleCodeExecutionTip())
-//                }
-
-                ToolsController(tools: $session.config.tools, showGoogleCodeExecution: session.config.provider.type == .google)
+                ToolsController(tools: $session.config.tools, isGoogle: session.config.provider.type == .google)
             }
             .fixedSize()
         }

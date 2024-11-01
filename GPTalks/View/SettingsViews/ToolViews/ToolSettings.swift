@@ -28,6 +28,24 @@ struct ToolSettings: View {
                     Label("Code Execution", systemImage: "curlybraces")
                 }
                 
+                NavigationLink {
+                    Form {
+                        Toggle(isOn: $config.googleSearchRetrieval) {
+                            Text("Enabled for new chats")
+                            Text("Only available for Google Generative AI Provider")
+                        }
+                    }
+                    .navigationTitle("Google Search Retrieval")
+                    .formStyle(.grouped)
+                    .scrollContentBackground(.visible)
+                } label: {
+                    Label {
+                        Text("Google Search Retrieval")
+                    } icon: {
+                        Image("google.SFSymbol")
+                    }
+                }
+                
                 ForEach(ChatTool.allCases, id: \.self) { tool in
                     NavigationLink(value: tool) {
                         Label(tool.displayName, systemImage: tool.icon)

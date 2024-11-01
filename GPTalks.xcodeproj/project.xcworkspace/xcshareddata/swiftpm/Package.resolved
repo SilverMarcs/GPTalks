@@ -16,7 +16,7 @@
       "location" : "https://github.com/SilverMarcs/generative-ai-swift",
       "state" : {
         "branch" : "main",
-        "revision" : "b73b2c2644e1969334639865fad793403f2d89d5"
+        "revision" : "102f6e6ab6bd41bfb1c1eddc85ff939c512327b1"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
       "state" : {
-        "revision" : "09e4a10ed6b65b3a40fe07b6bf0c84809313efc4",
-        "version" : "2.0.0"
+        "revision" : "9203a8de359dc64259bdb28cc44af32c15b3fc5b",
+        "version" : "2.2.1"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
       "state" : {
-        "revision" : "a624abcf464117a0c113043d0b94f294b4bed4d1",
-        "version" : "1.8.2"
+        "revision" : "f0c746648f0c393ebe7ae6349f35bf8dfde6a108",
+        "version" : "1.8.4"
       }
     },
     {

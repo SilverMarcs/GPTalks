@@ -10,6 +10,7 @@ import Foundation
 struct SessionConfigTools: Codable {
     var toolStates: [ChatTool: Bool]
     var googleCodeExecution: Bool = ToolConfigDefaults.shared.googleCodeExecution
+    var googleSearchRetrieval: Bool = ToolConfigDefaults.shared.googleSearchRetrieval
     
     init(isTitle: Bool = false) {
         if isTitle {
@@ -43,6 +44,15 @@ struct SessionConfigTools: Codable {
         googleCodeExecution = enabled
         if enabled {
             disableAllTools()
+            googleSearchRetrieval = false
+        }
+    }
+    
+    mutating func setGoogleSearchRetrieval(_ enabled: Bool) {
+        googleSearchRetrieval = enabled
+        if enabled {
+            disableAllTools()
+            googleCodeExecution = false
         }
     }
 
@@ -50,6 +60,7 @@ struct SessionConfigTools: Codable {
         toolStates[tool] = enabled
         if enabled {
             googleCodeExecution = false
+            googleSearchRetrieval = false
         }
     }
 

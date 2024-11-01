@@ -12,7 +12,9 @@ struct GoogleSearchSettings: View {
     
     var body: some View {
         Section("General") {
-            Toggle("Enabled for new chats", isOn: $config.googleSearch)
+            Toggle(isOn: $config.googleSearch) {
+                Text("Enabled for new chats")
+            }
 
             IntegerStepper(value: $config.gSearchCount, label: "Search Result Count", step: 1, range: 1...10)
         }

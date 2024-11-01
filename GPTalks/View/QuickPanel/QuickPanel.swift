@@ -91,7 +91,7 @@ struct QuickPanel: View {
                 ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
                 
                 Menu {
-                    ToolsController(tools: $session.config.tools, showGoogleCodeExecution: session.config.provider.type == .google)
+                    ToolsController(tools: $session.config.tools, isGoogle: session.config.provider.type == .google)
                 } label: {
                     Label("Tools", systemImage: "hammer")
                 }

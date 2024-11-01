@@ -9,10 +9,10 @@ import SwiftUI
 
 struct ToolsController: View {
     @Binding var tools: SessionConfigTools
-    let showGoogleCodeExecution: Bool
+    let isGoogle: Bool
     
     var body: some View {
-        if showGoogleCodeExecution {
+        if isGoogle {
             Toggle(
                 "Code Execution",
                 systemImage: "curlybraces",
@@ -23,6 +23,16 @@ struct ToolsController: View {
                     })
             )
             .popoverTip(GoogleCodeExecutionTip())
+
+            Toggle(
+                isOn: Binding(
+                    get: { tools.googleSearchRetrieval },
+                    set: { newValue in
+                        tools.setGoogleSearchRetrieval(newValue)
+                    })
+            ) {
+                Image("google.SFSymbol")
+            }
         }
         
         ForEach(ChatTool.allCases, id: \.self) { tool in

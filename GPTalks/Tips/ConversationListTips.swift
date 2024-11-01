@@ -15,6 +15,6 @@ struct GenerateTitleTip: Tip {
 
 struct GoogleCodeExecutionTip: Tip {
     var title: Text {
-        Text("Code Execution cannnot be used with other tools enabled")
+        Text("Code Execution or Google Search Retrieval cannnot be used with other tools enabled")
     }
 }
