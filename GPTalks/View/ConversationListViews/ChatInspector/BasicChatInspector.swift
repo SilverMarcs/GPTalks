@@ -11,7 +11,7 @@ import SwiftData
 struct BasicChatInspector: View {
     @Bindable var session: ChatSession
     
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
     
     @State var isGeneratingTtile: Bool = false
@@ -39,7 +39,7 @@ struct BasicChatInspector: View {
                 ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
             }
             
-            Section("Basic") {
+            Section("Parameters") {
                 Toggle("Stream", isOn: $session.config.stream)
                 TemperatureSlider(temperature: $session.config.temperature, shortLabel: true)
                 MaxTokensPicker(value: $session.config.maxTokens)

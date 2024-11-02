@@ -11,7 +11,7 @@ import SwiftData
 struct GenerateImageSettings: View {
     @ObservedObject var config = ToolConfigDefaults.shared
     
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
     
     var filteredProviders: [Provider] {

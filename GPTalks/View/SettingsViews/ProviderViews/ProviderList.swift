@@ -10,46 +10,32 @@ import SwiftData
 
 struct ProviderList: View {
     @Environment(\.modelContext) var modelContext
-    @Query(sort: \Provider.order) var providers: [Provider]
+    @Query var providers: [Provider]
     @Query var providerDefaults: [ProviderDefaults]
     
     @State var selectedProvider: Provider?
     
     var body: some View {
-        Group {
-            #if os(macOS)
-            Form {
-                content
-            }
-            .formStyle(.grouped)
-            #else
-            content
-            #endif
-        }
-        .toolbar {
-            addButton
-        }
-    }
-    
-    var content: some View {
-        List(selection: $selectedProvider) {
-            ForEach(reorderedProviders, id: \.self) { provider in
-                NavigationLink(destination: ProviderDetail(provider: provider, reorderProviders: { self.reorderProviders() })) {
-                    ProviderRow(provider: provider)
+        Form {
+            List(selection: $selectedProvider) {
+                ForEach(providers, id: \.self) { provider in
+                    NavigationLink(value: provider) {
+                        ProviderRow(provider: provider)
+                    }
+                    .deleteDisabled(provider.isPersistent)
                 }
-                .deleteDisabled(provider.isPersistent)
+                .onDelete(perform: deleteProviders)
             }
-            .onDelete(perform: deleteProviders)
-            .onMove(perform: move)
+        }
+        .formStyle(.grouped)
+        .navigationDestination(for: Provider.self) { provider in
+            ProviderDetail(provider: provider)
         }
         .navigationTitle("Providers")
         .toolbarTitleDisplayMode(.inline)
-    }
-    
-    private var reorderedProviders: [Provider] {
-        let enabled = providers.filter { $0.isEnabled }.sorted { $0.order < $1.order }
-        let disabled = providers.filter { !$0.isEnabled }.sorted { $0.order < $1.order }
-        return enabled + disabled
+        .toolbar {
+            addButton
+        }
     }
     
     private var addButton: some View {
@@ -95,7 +81,6 @@ struct ProviderList: View {
         
         withAnimation {
             modelContext.insert(newProvider)
-            reorderProviders()
         } completion: {
             DispatchQueue.main.async {
                 selectedProvider = newProvider
@@ -115,7 +100,7 @@ struct ProviderList: View {
         let defaultProvider = providerDefaults.first!.defaultProvider
         
         for index in offsets {
-            let providerToDelete = reorderedProviders[index]
+            let providerToDelete = providers[index]
             
             if providerToDelete.isPersistent || providerToDelete == defaultProvider {
                 providersToDelete.remove(index)
@@ -128,24 +113,7 @@ struct ProviderList: View {
         }
         
         for index in providersToDelete {
-            modelContext.delete(reorderedProviders[index])
-        }
-        
-        reorderProviders()
-    }
-    
-    private func move(from source: IndexSet, to destination: Int) {
-        var updatedProviders = reorderedProviders
-        updatedProviders.move(fromOffsets: source, toOffset: destination)
-        reorderProviders(updatedProviders)
-    }
-    
-    private func reorderProviders(_ customOrder: [Provider]? = nil) {
-        let providersToReorder = customOrder ?? reorderedProviders
-        for (index, provider) in providersToReorder.enumerated() {
-            withAnimation {
-                provider.order = index
-            }
+            modelContext.delete(providers[index])
         }
     }
 }

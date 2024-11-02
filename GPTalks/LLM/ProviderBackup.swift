@@ -13,7 +13,6 @@ import UniformTypeIdentifiers
 struct ProviderBackup: Codable {
     var id: UUID
     var date: Date
-    var order: Int
     var name: String
     var host: String
     var apiKey: String
@@ -46,7 +45,6 @@ extension ProviderBackup {
     init(from provider: Provider) {
         self.id = UUID()
         self.date = Date()
-        self.order = provider.order
         self.name = provider.name
         self.host = provider.host
         self.apiKey = provider.apiKey
@@ -69,7 +67,6 @@ extension ProviderBackup {
         return Provider(
             id: UUID(),
             date: Date(),
-            order: self.order,
             name: self.name,
             host: self.host,
             apiKey: self.apiKey,

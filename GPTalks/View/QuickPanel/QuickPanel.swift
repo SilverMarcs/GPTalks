@@ -19,7 +19,7 @@ struct QuickPanel: View {
     
     @FocusState private var isFocused: Bool
     
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
     
     @State var selections: Set<ChatSession> = []

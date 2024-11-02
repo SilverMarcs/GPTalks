@@ -10,7 +10,6 @@ import SwiftData
 
 struct ProviderGeneral: View {
     @Bindable var provider: Provider
-    var reorderProviders: () -> Void
     
     @State var showKey: Bool = false
     @State var showPopover: Bool = false
@@ -104,15 +103,9 @@ struct ProviderGeneral: View {
         }
         .formStyle(.grouped)
         .toolbar {
-            Toggle("Enabled", isOn: Binding(
-                get: { provider.isEnabled },
-                set: { newValue in
-                    provider.isEnabled = newValue
-                    reorderProviders()
-                }
-            ))
-            .toggleStyle(.switch)
-            .labelsHidden()
+            Toggle("Enabled", isOn: $provider.isEnabled)
+                .toggleStyle(.switch)
+                .labelsHidden()
         }
     }
     
@@ -174,7 +167,7 @@ struct ProviderGeneral: View {
 }
 
 #Preview {
-    return ProviderGeneral(provider: .openAIProvider) {}
+    ProviderGeneral(provider: .openAIProvider)
         .padding()
         .frame(width: 500, height: 600)
 }

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ProviderDetail: View {
     @Bindable var provider: Provider
-    var reorderProviders: () -> Void
 
     @State private var selectedTab: ProviderDetailTab = .general
 
@@ -17,7 +16,7 @@ struct ProviderDetail: View {
         Group {
             switch selectedTab {
             case .general:
-                ProviderGeneral(provider: provider, reorderProviders: reorderProviders)
+                ProviderGeneral(provider: provider)
             case .chat:
                 ModelList<ChatModel>(provider: provider, models: $provider.chatModels)
             case .image:
@@ -77,5 +76,5 @@ enum ProviderDetailTab: String, CaseIterable, Identifiable {
 }
 
 #Preview {
-    ProviderDetail(provider: .openAIProvider) {}
+    ProviderDetail(provider: .openAIProvider)
 }

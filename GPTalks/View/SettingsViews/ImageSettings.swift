@@ -12,7 +12,7 @@ import OpenAI
 struct ImageSettings: View {
     @ObservedObject var imageConfig = ImageConfigDefaults.shared
     
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
 
     @Bindable var providerDefaults: ProviderDefaults

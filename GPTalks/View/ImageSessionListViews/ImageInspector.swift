@@ -11,7 +11,7 @@ import OpenAI
 
 struct ImageInspector: View {
     @Bindable var session: ImageSession
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
     
     @Binding var showingInspector: Bool

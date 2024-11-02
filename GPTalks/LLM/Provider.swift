@@ -13,7 +13,6 @@ import GoogleGenerativeAI
 class Provider {
     var id: UUID = UUID()
     var date: Date = Date()
-    var order: Int = 0
     
     var name: String = ""
     var host: String = ""
@@ -51,7 +50,6 @@ class Provider {
 
     public init(id: UUID = UUID(),
                 date: Date = Date(),
-                order: Int = 0,
                 name: String,
                 host: String,
                 apiKey: String,
@@ -70,7 +68,6 @@ class Provider {
                 sttModels: [STTModel] = []) {
         self.id = id
         self.date = date
-        self.order = order
         self.name = name
         self.host = host
         self.apiKey = apiKey

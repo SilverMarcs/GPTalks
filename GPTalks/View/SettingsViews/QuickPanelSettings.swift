@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 struct QuickPanelSettings: View {
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
     @ObservedObject var config = AppConfig.shared
 

@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ProviderRow: View {
-    var provider: Provider
+    @Bindable var provider: Provider
     @Query var providerDefaults: [ProviderDefaults]
     
     var body: some View {
@@ -29,9 +29,13 @@ struct ProviderRow: View {
         }
         #if os(macOS)
         .padding(5)
-        .contentShape(Rectangle())
         #endif
         .opacity(provider.isEnabled ? 1 : 0.5)
+        .swipeActions(edge: .leading) {
+            Button(action: { provider.isEnabled.toggle() }) {
+                Label("Toggle Enabled", systemImage: "power")
+            }
+        }
     }
     
     private var size: CGFloat {

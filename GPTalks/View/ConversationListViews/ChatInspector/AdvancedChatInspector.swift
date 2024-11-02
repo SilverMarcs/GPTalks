@@ -15,7 +15,7 @@ struct AdvancedChatInspector: View {
     
     var body: some View {
         Form {
-            Section("Advanced Settings") {
+            Section("Parameters") {
                 TopPSlider(topP: $session.config.topP, shortLabel: true)
                 FrequencyPenaltySlider(penalty: $session.config.frequencyPenalty, shortLabel: true)
                 PresencePenaltySlider(penalty: $session.config.presencePenalty, shortLabel: true)

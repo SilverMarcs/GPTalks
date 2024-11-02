@@ -12,7 +12,7 @@ struct ChatSessionToolbar: ToolbarContent {
     @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
     
-    @Query(filter: #Predicate { $0.isEnabled }, sort: [SortDescriptor(\Provider.order, order: .forward)])
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
     
     @State private var showSettings = false
