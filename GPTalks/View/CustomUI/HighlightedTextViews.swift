@@ -7,113 +7,77 @@
 
 import SwiftUI
 
-struct HighlightAttribute: TextAttribute {}
-
-extension Text.Layout {
-    /// A helper function for easier access to all runs in a layout.
-    var flattenedRuns: some RandomAccessCollection<Text.Layout.Run> {
-        self.flatMap { line in
-            line
-        }
-    }
-}
-
-struct HighlightTextRenderer: TextRenderer {
-    private let style: any ShapeStyle
-    
-    init(style: any ShapeStyle = .yellow) {
-        self.style = style
-    }
-    
-    func draw(layout: Text.Layout, in context: inout GraphicsContext) {
-        for run in layout.flattenedRuns {
-            if run[HighlightAttribute.self] != nil {
-                let rect = run.typographicBounds.rect
-                let copy = context
-                let shape = RoundedRectangle(cornerRadius: 3, style: .continuous).path(in: rect)
-                copy.fill(shape, with: .style(style))
-                copy.draw(run)
-            } else {
-                let copy = context
-                copy.draw(run)
-            }
-        }
-    }
-}
-
-extension String {
-    func ranges(of substring: String, options: CompareOptions = [], locale: Locale? = nil) -> [Range<Index>] {
-        var ranges: [Range<Index>] = []
-        while let range = range(of: substring, options: options, range: (ranges.last?.upperBound ?? self.startIndex)..<self.endIndex, locale: locale) {
-            ranges.append(range)
-        }
-        return ranges
-    }
-    
-    func remainingRanges(from ranges: [Range<Index>]) -> [Range<Index>] {
-        var result = [Range<Index>]()
-        let sortedRanges = ranges.sorted { $0.lowerBound < $1.lowerBound }
-        var currentIndex = self.startIndex
-        
-        for range in sortedRanges {
-            if currentIndex < range.lowerBound {
-                result.append(currentIndex..<range.lowerBound)
-            }
-            currentIndex = range.upperBound
-        }
-        
-        if currentIndex < self.endIndex {
-            result.append(currentIndex..<self.endIndex)
-        }
-        
-        return result
-    }
-}
-
 struct HighlightedText: View {
-    private let text: String
-    private let highlightedText: String?
-    private let shapeStyle: (any ShapeStyle)?
-    private let selectable: Bool
+    let text: String
+    let highlightedText: String?
+    var selectable: Bool = true
     
-    init(text: String, highlightedText: String? = nil, shapeStyle: (any ShapeStyle)? = nil, selectable: Bool = true) {
-        self.text = text
-        self.highlightedText = highlightedText
-        self.shapeStyle = shapeStyle
-        self.selectable = selectable
+    var body: some View {
+        if selectable {
+            comprised
+                .textSelection(.enabled)
+        } else {
+            comprised
+                .textSelection(.disabled)
+        }
+    }
+    
+    @ViewBuilder
+    var comprised: some View {
+        if let highlightedText, !highlightedText.isEmpty {
+            AttributedText(
+                text: text,
+                highlightText: highlightedText
+            )
+        } else {
+            Text(text)
+        }
+    }
+}
+
+struct AttributedText: View {
+    let attributedString: NSAttributedString
+    
+    init(text: String, highlightText: String) {
+        let attributedString = NSMutableAttributedString(string: text)
+        let nsString = text as NSString
+        let _ = (highlightText as NSString).length
+        let stringLength = nsString.length
+        
+        var searchRange = NSRange(location: 0, length: stringLength)
+        
+        while searchRange.location < stringLength {
+            let foundRange = nsString.range(
+                of: highlightText,
+                options: .caseInsensitive,
+                range: searchRange
+            )
+            
+            if foundRange.location == NSNotFound {
+                break
+            }
+            
+            attributedString.addAttribute(
+                .backgroundColor,
+                value: PlatformColor.yellow.withAlphaComponent(0.4),
+                range: foundRange
+            )
+            
+            searchRange.location = foundRange.location + 1
+            searchRange.length = stringLength - searchRange.location
+        }
+        
+        self.attributedString = attributedString
     }
     
     var body: some View {
-        if let highlightedText, !highlightedText.isEmpty {
-            let text = highlightedTextComponent(from: highlightedText).reduce(Text("")) { partialResult, component in
-                return partialResult + component.text
-            }
-            text.textRenderer(HighlightTextRenderer(style: shapeStyle ?? .yellow.opacity(0.4)))
-        } else {
-            if selectable {
-                Text(text)
-                    .textSelection(.enabled)
-            } else {
-                Text(text)
-            }   
-        }
-    }
-    
-    private func highlightedTextComponent(from highlight: String) -> [HighlightedTextComponent] {
-        let highlightRanges: [HighlightedTextComponent] = text
-            .ranges(of: highlight, options: .caseInsensitive)
-            .map { HighlightedTextComponent(text: Text(text[$0]).customAttribute(HighlightAttribute()), range: $0)  }
-        
-        let remainingRanges = text
-            .remainingRanges(from: highlightRanges.map(\.range))
-            .map { HighlightedTextComponent(text: Text(text[$0]), range: $0)  }
-        
-        return (highlightRanges + remainingRanges).sorted(by: { $0.range.lowerBound < $1.range.lowerBound  } )
+        Text(AttributedString(attributedString))
     }
 }
 
-fileprivate struct HighlightedTextComponent {
-    let text: Text
-    let range: Range<String.Index>
-}
+#if os(macOS)
+typealias PlatformColor = NSColor
+#else
+typealias PlatformColor = UIColor
+#endif
 

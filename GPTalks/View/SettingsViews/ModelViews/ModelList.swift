@@ -87,10 +87,10 @@ struct ModelList<M: ModelType>: View {
                             ModelTester(provider: provider, model: $model)
                         }
                         
-                        Button {
+                        Button(role: .destructive) {
                             models.removeAll(where: { $0.id == model.id })
                         } label: {
-                            Image(systemName: "minus.circle.fill")
+                            Image(systemName: "trash")
                                 .foregroundStyle(.red)
                         }
                     }

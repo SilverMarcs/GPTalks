@@ -120,7 +120,7 @@ import SwiftUI
     var searching: Bool = false
     
     private var searchTask: Task<Void, Never>?
-    private let debounceInterval: TimeInterval = 1.0 // 500 milliseconds
+    private let debounceInterval: TimeInterval = 0.5 // 500 milliseconds
     
     func debouncedSearch(sessions: [ChatSession]) {
         searching = true

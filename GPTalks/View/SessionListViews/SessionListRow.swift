@@ -49,7 +49,7 @@ struct SessionListRow: View {
             
             VStack(alignment: .leading) {
                 HStack {
-                    HighlightedText(text: session.title, highlightedText: sessionVM.searchText, shapeStyle: .yellow.opacity(0.5), selectable: false)
+                    HighlightedText(text: session.title, highlightedText: sessionVM.searchText, selectable: false)
                         .lineLimit(1)
                         .font(.headline)
                         .fontWeight(.semibold)
@@ -92,7 +92,7 @@ struct SessionListRow: View {
                 .symbolEffect(.bounce, options: .speed(0.5), isActive: session.isReplying)
             
 //            Text(session.title)
-            HighlightedText(text: session.title, highlightedText: sessionVM.searchText, shapeStyle: .yellow.opacity(0.5), selectable: false)
+            HighlightedText(text: session.title, highlightedText: sessionVM.searchText, selectable: false)
                 .lineLimit(1)
             #if os(macOS)
                 .font(.headline)

@@ -26,8 +26,9 @@ struct SearchResultRow: View {
                     Image(systemName: "arrow.right")
                         .bold()
                         .imageScale(.large)
+                        .foregroundStyle(.accent)
                 }
-                .buttonStyle(.link)
+                .buttonStyle(.plain)
             }
     }
 }
