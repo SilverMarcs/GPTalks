@@ -21,12 +21,12 @@ struct GeneralSettings: View {
                 }
             }
             
-            Section("Search") {
-                Toggle(isOn: $config.expensiveSearch) {
-                    Text("Expensive Search")
-                    Text("Search all messages but may cause UI responsiveness issues")
-                }
-            }
+//            Section("Search") {
+//                Toggle(isOn: $config.expensiveSearch) {
+//                    Text("Expensive Search")
+//                    Text("Search all messages but may cause UI responsiveness issues")
+//                }
+//            }
             
             #if os(macOS)
             Section("Windows") {

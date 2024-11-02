@@ -45,7 +45,7 @@ class AppConfig: ObservableObject {
     
     // General
     @AppStorage("autogenTitle") var autogenTitle: Bool = true
-    @AppStorage("expensiveSearch") var expensiveSearch: Bool = true
+//    @AppStorage("expensiveSearch") var expensiveSearch: Bool = true
     @AppStorage("hideDock") var hideDock = false
     @AppStorage("onlyOneWindow") var onlyOneWindow = false
     @AppStorage("showStatusBar") var showStatusBar = false

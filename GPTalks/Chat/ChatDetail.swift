@@ -46,6 +46,7 @@ struct ChatDetail: View {
                 }
             }
             .listRowSeparator(.hidden)
+            .listSectionSeparator(.visible)
             
             Text("End of Search Results")
                 .font(.callout)

@@ -21,6 +21,10 @@ struct DismissButton: View {
         } label: {
             #if os(visionOS)
             Image(systemName: "xmark")
+            #elseif os(macOS)
+            Image(systemName: "xmark.circle.fill")
+                .foregroundStyle(.gray, .gray.opacity(0.3))
+                .imageScale(.large)
             #else
             Image(systemName: "xmark.circle.fill")
                 .foregroundStyle(.gray, .gray.opacity(0.3))

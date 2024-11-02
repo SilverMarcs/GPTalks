@@ -32,7 +32,7 @@ struct ImageSessionList: View {
                 if !imageVM.searchText.isEmpty && sessions.isEmpty {
                     ContentUnavailableView.search(text: imageVM.searchText)
                 } else {
-                    ForEach(filteredSessions) { session in
+                    ForEach(Array(sessions.prefix(config.listCount))) { session in
                         ImageListRow(session: session)
                             .tag(session)
                             .deleteDisabled(session.isStarred)
@@ -79,26 +79,6 @@ struct ImageSessionList: View {
         
         for (index, session) in updatedSessions.enumerated() {
             session.order = index
-        }
-    }
-    
-    var filteredSessions: [ImageSession] {
-        // Return early if search text is empty
-        guard !imageVM.searchText.isEmpty else {
-            if config.truncateList {
-                return Array(sessions.prefix(config.listCount))
-            } else {
-                return sessions
-            }
-        }
-        
-        // Perform filtering if search text is not empty
-        return sessions.filter { session in
-            session.title.localizedStandardContains(imageVM.searchText) ||
-            (AppConfig.shared.expensiveSearch &&
-             session.imageGenerations.contains { generation in
-                generation.config.prompt.localizedStandardContains(imageVM.searchText)
-             })
         }
     }
 }
