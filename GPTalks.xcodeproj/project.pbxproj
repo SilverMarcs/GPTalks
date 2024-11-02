@@ -92,6 +92,10 @@
 		0881BB412CBADBEA0002D6C0 /* ScrollUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0881BB402CBADBEA0002D6C0 /* ScrollUtils.swift */; };
 		088475342CAE8E57006C04F0 /* AppIconMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088475332CAE8E57006C04F0 /* AppIconMenu.swift */; };
 		0886D8202C8707190058700F /* VertexService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886D81F2C8707190058700F /* VertexService.swift */; };
+		0888C5832CD55BB900A1EA5E /* SearchedConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0888C5822CD55BB900A1EA5E /* SearchedConversation.swift */; };
+		0888C5852CD5686100A1EA5E /* ChatDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0888C5842CD5686100A1EA5E /* ChatDetail.swift */; };
+		0888C5872CD568E000A1EA5E /* SearchResultRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0888C5862CD568E000A1EA5E /* SearchResultRow.swift */; };
+		0888C5892CD5E92B00A1EA5E /* SessionWithMatches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0888C5882CD5E92B00A1EA5E /* SessionWithMatches.swift */; };
 		088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A09F22C55C7740055B567 /* TextSelectionView.swift */; };
 		088CDD372CBF9C6500E5FB41 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 088CDD362CBF9C6500E5FB41 /* GoogleGenerativeAI */; };
 		088CDD3D2CBF9FF600E5FB41 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 088CDD3C2CBF9FF600E5FB41 /* MarkdownWebView */; };
@@ -303,6 +307,10 @@
 		0881BB402CBADBEA0002D6C0 /* ScrollUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollUtils.swift; sourceTree = "<group>"; };
 		088475332CAE8E57006C04F0 /* AppIconMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconMenu.swift; sourceTree = "<group>"; };
 		0886D81F2C8707190058700F /* VertexService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexService.swift; sourceTree = "<group>"; };
+		0888C5822CD55BB900A1EA5E /* SearchedConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedConversation.swift; sourceTree = "<group>"; };
+		0888C5842CD5686100A1EA5E /* ChatDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetail.swift; sourceTree = "<group>"; };
+		0888C5862CD568E000A1EA5E /* SearchResultRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultRow.swift; sourceTree = "<group>"; };
+		0888C5882CD5E92B00A1EA5E /* SessionWithMatches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionWithMatches.swift; sourceTree = "<group>"; };
 		088A09F22C55C7740055B567 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
 		088DA8F82CA752EF006C017E /* IOSWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSWindow.swift; sourceTree = "<group>"; };
 		08915D932C373340008ADE27 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
@@ -672,6 +680,7 @@
 		08A222BC2C2ABD9E00D76C8B /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				0888C5862CD568E000A1EA5E /* SearchResultRow.swift */,
 				08A222862C2AB4FD00D76C8B /* ChatSession.swift */,
 				08A222BD2C2ABDAF00D76C8B /* InputManager.swift */,
 				0893B2052C39810900D4D501 /* SessionConfig.swift */,
@@ -679,6 +688,7 @@
 				08C800422C36C045009581C5 /* ChatSessionVM.swift */,
 				082A632D2C54EADF003996B7 /* ChatSessionBackup.swift */,
 				0869A3EA2C958A4C009BF9F2 /* SessionConfigTools.swift */,
+				0888C5842CD5686100A1EA5E /* ChatDetail.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -686,6 +696,8 @@
 		08A222BF2C2ABE4300D76C8B /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
+				0888C5882CD5E92B00A1EA5E /* SessionWithMatches.swift */,
+				0888C5822CD55BB900A1EA5E /* SearchedConversation.swift */,
 				082F09DA2CB2715A00B7860A /* Conversation.swift */,
 				08C65E172C9295120013AE1F /* ContentHelper.swift */,
 				0834E77A2C71A42F007CB294 /* TypedData.swift */,
@@ -1153,6 +1165,7 @@
 				0805DEF12C58CB2A00A8354A /* ClaudeService.swift in Sources */,
 				082F09DF2CB2890C00B7860A /* FileReader.swift in Sources */,
 				085276C02C98794C009184D2 /* ToolCallView.swift in Sources */,
+				0888C5832CD55BB900A1EA5E /* SearchedConversation.swift in Sources */,
 				08C1ACE42C54BCA600B86D37 /* FrequencyPenaltySlider.swift in Sources */,
 				0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */,
 				08B8DE192C97F3AC0041A690 /* ImageSessionToolbar.swift in Sources */,
@@ -1163,6 +1176,7 @@
 				085361112C4938C4007DAB62 /* ImageGenerationList.swift in Sources */,
 				08C800492C36C521009581C5 /* AssistantMessage.swift in Sources */,
 				08B82C1F2C74EAFD00DC0183 /* FileViewer.swift in Sources */,
+				0888C5892CD5E92B00A1EA5E /* SessionWithMatches.swift in Sources */,
 				08CD009B2CBA20E900A96425 /* PasteHandler.swift in Sources */,
 				085524E22C4ED2A400CBB827 /* MenuCommands.swift in Sources */,
 				082F09CF2CB25EF500B7860A /* ModelType.swift in Sources */,
@@ -1188,6 +1202,7 @@
 				0881BB3D2CBAC4FF0002D6C0 /* ConversationStatusBar.swift in Sources */,
 				08B82C1D2C74EA9400DC0183 /* ImageViewer.swift in Sources */,
 				085361052C491BF0007DAB62 /* ImageSession.swift in Sources */,
+				0888C5872CD568E000A1EA5E /* SearchResultRow.swift in Sources */,
 				08F815342C97F64E00B49355 /* BasicChatInspector.swift in Sources */,
 				08D174C62C3DC2A8000257EF /* DateUtils.swift in Sources */,
 				08A222832C2AB4FD00D76C8B /* GPTalksApp.swift in Sources */,
@@ -1226,6 +1241,7 @@
 				08C5C72B2C9A139F004992A4 /* GoogleSignIn.swift in Sources */,
 				085276BE2C98706E009184D2 /* MacInputEditor.swift in Sources */,
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,
+				0888C5852CD5686100A1EA5E /* ChatDetail.swift in Sources */,
 				08C65E182C9295120013AE1F /* ContentHelper.swift in Sources */,
 				08149A572C3E5E5B004485AC /* ConversationRole.swift in Sources */,
 				0853611F2C4A38C9007DAB62 /* GenericSlider.swift in Sources */,

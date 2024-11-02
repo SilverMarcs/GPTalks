@@ -28,7 +28,7 @@ struct MarkdownSettings: View {
 //            }
             
             Section("Demo") {
-                MarkdownView(conversation: Conversation.mockAssistantConversation)
+                MarkdownView(content: Conversation.mockAssistantConversation.content)
             }
         }
         .formStyle(.grouped)

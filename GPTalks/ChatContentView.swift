@@ -16,16 +16,7 @@ struct ChatContentView: View {
         NavigationSplitView {
             ChatSessionList()
         } detail: {
-            if let session = sessionVM.activeSession, !session.isQuick {
-                ConversationList(session: session)
-                    .id(session.id)
-            } else {
-                Text("^[\(sessionVM.chatSelections.count) Chat Session](inflect: true) Selected")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(.background)
-                    .font(.title)
-                    .toolbarBackground(.hidden)
-            }
+            ChatDetail()
         }
         .pasteHandler()
     }

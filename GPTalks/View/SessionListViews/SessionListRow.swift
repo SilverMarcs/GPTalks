@@ -91,7 +91,8 @@ struct SessionListRow: View {
             ProviderImage(provider: session.config.provider, radius: 8, frame: 23, scale: .medium)
                 .symbolEffect(.bounce, options: .speed(0.5), isActive: session.isReplying)
             
-            Text(session.title)
+//            Text(session.title)
+            HighlightedText(text: session.title, highlightedText: sessionVM.searchText, shapeStyle: .yellow.opacity(0.5), selectable: false)
                 .lineLimit(1)
             #if os(macOS)
                 .font(.headline)

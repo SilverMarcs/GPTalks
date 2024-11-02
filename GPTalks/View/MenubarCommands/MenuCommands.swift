@@ -16,6 +16,8 @@ struct MenuCommands: Commands {
         
         InspectorCommands()
         
+        TextEditingCommands()
+        
 //        ToolbarCommands()
         
         CommandGroup(before: .appSettings) {

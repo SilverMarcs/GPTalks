@@ -69,4 +69,21 @@ extension String {
         
         return prettyString
     }
+    
+    func extractRelevantText(matching searchText: String) -> String? {
+        guard self.range(of: searchText, options: .caseInsensitive) != nil else {
+            return nil
+        }
+        
+        let lines = self.components(separatedBy: .newlines)
+        guard let matchedLineIndex = lines.firstIndex(where: { $0.range(of: searchText, options: .caseInsensitive) != nil }) else {
+            return nil
+        }
+        
+        let startIndex = max(0, matchedLineIndex - 5)
+        let endIndex = min(lines.count - 1, matchedLineIndex + 5)
+        
+        let relevantLines = Array(lines[startIndex...endIndex])
+        return relevantLines.joined(separator: "\n")
+    }
 }

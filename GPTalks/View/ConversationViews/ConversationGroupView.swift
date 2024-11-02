@@ -13,31 +13,12 @@ struct ConversationGroupView: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            if shouldShowMessage() {
-                Group {
-                    switch group.role {
-                    case .user:
-                        UserMessage(conversation: group.activeConversation)
-                            .padding(.top, 5)
-                    case .assistant:
-                        if group.activeConversation.toolCalls.isEmpty {
-                            AssistantMessage(conversation: group.activeConversation)
-                                .padding(.top, 5)
-                        } else {
-                            ToolCallView(conversation: group.activeConversation)
-                                .padding(.top, 5)
-                        }
-                    case .tool:
-                        ToolMessage(conversation: group.activeConversation)
-                            .padding(.vertical, 5)
-                    default:
-                        Text("Unknown role")
-                    }
-                }
+            ConversationView(conversation: group.activeConversation)
+                .padding(.top, 5)
+                .environment(\.isSearch, false)
                 #if os(iOS)
                 .opacity(0.9)
                 #endif
-            }
             
             if group.session?.groups.firstIndex(where: { $0 == group }) == group.session?.resetMarker {
                 ContextResetDivider() {
@@ -47,12 +28,26 @@ struct ConversationGroupView: View {
             }
         }
     }
+}
+
+struct ConversationView: View {
+    var conversation: Conversation
     
-    private func shouldShowMessage() -> Bool {
-        if sessionVM.searchText.isEmpty {
-            return true
+    var body: some View {
+        switch conversation.role {
+        case .user:
+            UserMessage(conversation: conversation)
+        case .assistant:
+            if conversation.toolCalls.isEmpty {
+                AssistantMessage(conversation: conversation)
+            } else {
+                ToolCallView(conversation: conversation)
+            }
+        case .tool:
+            ToolMessage(conversation: conversation)
+        default:
+            Text("Unknown role")
         }
-        return group.activeConversation.content.lowercased().contains(sessionVM.searchText.lowercased())
     }
 }
 

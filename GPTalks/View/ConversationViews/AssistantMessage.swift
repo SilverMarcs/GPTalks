@@ -33,7 +33,7 @@ struct AssistantMessage: View {
                         #endif
                 }
                 
-                MarkdownView(conversation: conversation)
+                MarkdownView(content: conversation.content)
                 
                 if !conversation.dataFiles.isEmpty {
                     DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false, edge: .leading)

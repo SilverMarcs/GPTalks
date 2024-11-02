@@ -39,20 +39,19 @@ struct ChatSessionList: View {
                 SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "↗")
                     .id(String.topID)
                 
-                if !sessionVM.searchText.isEmpty && filteredSessions.isEmpty {
-                    ContentUnavailableView.search(text: sessionVM.searchText)
-                } else {
-                    ForEach(filteredSessions) { session in
-                        SessionListRow(session: session)
-                            .tag(session)
-                            .deleteDisabled(session.isQuick || session.isStarred)
-                        #if os(macOS)
-                            .listRowSeparator(.visible)
-                            .listRowSeparatorTint(Color.gray.opacity(0.2))
-                        #endif
-                    }
-                    .onDelete(perform: deleteItems)
+                ForEach(Array(sessions.prefix(config.listCount))) { session in
+                    SessionListRow(session: session)
+                        .tag(session)
+                        .deleteDisabled(session.isQuick || session.isStarred)
+                    #if os(macOS)
+                        .listRowSeparator(.visible)
+                        .listRowSeparatorTint(Color.gray.opacity(0.2))
+                    #endif
                 }
+                .onDelete(perform: deleteItems)
+            }
+            .onChange(of: sessionVM.searchText) { _, _ in
+                sessionVM.debouncedSearch(sessions: sessions)
             }
             .navigationTitle("Chats")
             .toolbar {
@@ -74,27 +73,6 @@ struct ChatSessionList: View {
     private func deleteItems(offsets: IndexSet) {
         for index in offsets {
             modelContext.delete(sessions[index])
-        }
-    }
-    
-    
-    var filteredSessions: [ChatSession] {
-        // Return early if search text is empty
-        guard !sessionVM.searchText.isEmpty else {
-            if config.truncateList {
-                return Array(sessions.prefix(config.listCount))
-            } else {
-                return sessions
-            }
-        }
-        
-        // Perform filtering if search text is not empty
-        return sessions.filter { session in
-            session.title.localizedStandardContains(sessionVM.searchText) ||
-            (AppConfig.shared.expensiveSearch &&
-             session.unorderedGroups.contains { group in
-                 group.activeConversation.content.localizedCaseInsensitiveContains(sessionVM.searchText)
-             })
         }
     }
 }

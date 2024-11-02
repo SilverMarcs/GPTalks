@@ -13,7 +13,7 @@ struct MarkdownView: View {
     @Environment(ChatSessionVM.self) private var sessionVM
     
     @ObservedObject var config = AppConfig.shared
-    var conversation: Conversation
+    var content: String
     
     var highlightString: String? {
         sessionVM.searchText.count > 3 ? sessionVM.searchText : nil
@@ -24,21 +24,21 @@ struct MarkdownView: View {
         
         switch provider {
             case .webview:
-                MarkdownWebView(conversation.content)
+                MarkdownWebView(content)
                     .markdownBaseURL("GPTalks Web Content")
                     .markdownHighlightString(highlightString)
                     .markdownTheme(config.markdownTheme)
                     .markdownFontSize(CGFloat(config.fontSize))
 
             case .native:
-                Text(LocalizedStringKey(conversation.content))
+                Text(LocalizedStringKey(content))
                     .font(.system(size: config.fontSize))
                     .textSelection(.enabled)
                     #if os(macOS)
                     .lineSpacing(2)
                     #endif
             case .disabled:
-                Text(conversation.content)
+                Text(content)
                     .font(.system(size: config.fontSize))
                     .textSelection(.enabled)
                     #if os(macOS)
@@ -51,7 +51,7 @@ struct MarkdownView: View {
 
 
 #Preview {
-    MarkdownView(conversation: .mockAssistantConversation)
+    MarkdownView(content: Conversation.mockAssistantConversation.content)
         .frame(width: 600, height: 500)
         .padding()
 }

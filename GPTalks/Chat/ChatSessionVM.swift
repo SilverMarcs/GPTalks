@@ -10,10 +10,7 @@ import SwiftData
 import SwiftUI
 
 @Observable class ChatSessionVM {
-    var hasFocus: Bool = false
-    
     var chatSelections: Set<ChatSession> = []
-    var searchText: String = ""
     
     var modelContext: ModelContext
     
@@ -110,8 +107,60 @@ import SwiftUI
         modelContext.insert(newItem)
         try? modelContext.save()
         
+        self.searchText = ""
         self.chatSelections = [newItem]
         
         return newItem
+    }
+    
+    // MARK: - Search
+    var searchText: String = ""
+    var hasFocus: Bool = false
+    var sessionsWithMatches: [SessionWithMatches] = []
+    var searching: Bool = false
+    
+    private var searchTask: Task<Void, Never>?
+    private let debounceInterval: TimeInterval = 1.0 // 500 milliseconds
+    
+    func debouncedSearch(sessions: [ChatSession]) {
+        searching = true
+        searchTask?.cancel()
+        searchTask = Task {
+            do {
+                try await Task.sleep(for: .seconds(debounceInterval))
+                if !Task.isCancelled {
+                    await updateMatchingConversations(sessions: sessions)
+                }
+            } catch {}
+        }
+    }
+    
+    func updateMatchingConversations(sessions: [ChatSession]) async {
+        guard !searchText.isEmpty else {
+            sessionsWithMatches = []
+            searching = false
+            return
+        }
+        
+        let searchText = self.searchText
+        searching = true
+        
+        let results = await Task.detached(priority: .userInitiated) {
+            sessions.compactMap { session in
+                let matchingConversations = session.unorderedGroups.compactMap { group in
+                    let content = group.activeConversation.content
+                    if content.localizedCaseInsensitiveContains(searchText) {
+                        return SearchedConversation(conversation: group.activeConversation, session: session)
+                    }
+                    return nil
+                }
+                return matchingConversations.isEmpty ? nil : SessionWithMatches(session: session, matchingConversations: matchingConversations)
+            }
+        }.value
+        
+        await MainActor.run {
+            sessionsWithMatches = results
+            searching = false
+        }
     }
 }

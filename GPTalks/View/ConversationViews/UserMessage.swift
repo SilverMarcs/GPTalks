@@ -10,6 +10,7 @@ import SwiftUI
 struct UserMessage: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(\.isSearch) var isSearch
     @ObservedObject var config = AppConfig.shared
     
     @Bindable var conversation: Conversation
@@ -26,7 +27,7 @@ struct UserMessage: View {
             GroupBox {
                 HighlightedText(text: conversation.content, highlightedText: sessionVM.searchText.count > 3 ? sessionVM.searchText : nil)
                     .font(.system(size: config.fontSize))
-                    .lineLimit(!isExpanded ? lineLimit : nil)
+                    .lineLimit(!isExpanded && !isSearch ? lineLimit : nil)
                     #if os(macOS)
                     .lineSpacing(2)
                     .padding(5)
