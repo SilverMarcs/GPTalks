@@ -81,16 +81,7 @@ struct FileReader: ToolProtocol {
             return "Unable to load PDF from data"
         }
         
-        let pageCount = document.pageCount
-        var content = ""
-        
-        for i in 0..<pageCount {
-            guard let page = document.page(at: i) else { continue }
-            guard let pageContent = page.string else { continue }
-            content += pageContent
-        }
-        
-        return content
+        return document.string ?? "Unable to read PDF content"
     }
     
     private static func readTextFile(from data: Data) -> String {
@@ -105,7 +96,7 @@ struct FileReader: ToolProtocol {
     
     static let description: String = """
         You can open and access contents of both PDF files and text-based files. Just respond with a list of file names without file extensions.
-        The file names you call with must not contain file extension. Just provide the file name
+        The file names you call with must not contain file extension. Just provide the file name. Only use this tool when user explicitly provide files
         """
     
     static var openai: ChatQuery.ChatCompletionToolParam {

@@ -25,9 +25,8 @@ struct UserMessage: View {
             }
             
             GroupBox {
-                HighlightedText(text: conversation.content, highlightedText: sessionVM.searchText.count > 3 ? sessionVM.searchText : nil)
+                HighlightedText(text: String(conversation.content.prefix(isExpanded || isSearch ? .max : 400)), highlightedText: sessionVM.searchText.count > 3 ? sessionVM.searchText : nil)
                     .font(.system(size: config.fontSize))
-                    .lineLimit(!isExpanded && !isSearch ? lineLimit : nil)
                     #if os(macOS)
                     .lineSpacing(2)
                     .padding(5)
