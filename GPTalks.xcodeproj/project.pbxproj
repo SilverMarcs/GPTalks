@@ -465,6 +465,7 @@
 		0819479F2C48DCE50061227B /* ImageSessionListViews */ = {
 			isa = PBXGroup;
 			children = (
+				08B8DE182C97F3AC0041A690 /* ImageSessionToolbar.swift */,
 				089DB5172CA8EC140013E5C3 /* ImageViewerData.swift */,
 				0819479D2C48DCDB0061227B /* ImageSessionList.swift */,
 				085361102C4938C4007DAB62 /* ImageGenerationList.swift */,
@@ -652,8 +653,6 @@
 				0821816B2C39011100171BF3 /* Utils */,
 				089DB5142CA865780013E5C3 /* Preview */,
 				08A222822C2AB4FD00D76C8B /* GPTalksApp.swift */,
-				08A222842C2AB4FD00D76C8B /* ChatContentView.swift */,
-				087906882CA6E22900E5DCAD /* ImageContentView.swift */,
 				08A222882C2AB4FE00D76C8B /* Assets.xcassets */,
 				08A2228A2C2AB4FE00D76C8B /* GPTalks.entitlements */,
 			);
@@ -710,7 +709,6 @@
 		08A222C22C2AC6A800D76C8B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				08B8DE142C97F3830041A690 /* Sidebar */,
 				08B82C1B2C74EA8300DC0183 /* DataFileViews */,
 				085524E02C4ED29400CBB827 /* MenubarCommands */,
 				08915D922C373332008ADE27 /* CustomUI */,
@@ -767,15 +765,6 @@
 			path = DataFileViews;
 			sourceTree = "<group>";
 		};
-		08B8DE142C97F3830041A690 /* Sidebar */ = {
-			isa = PBXGroup;
-			children = (
-				08B8DE182C97F3AC0041A690 /* ImageSessionToolbar.swift */,
-				08B8DE152C97F39B0041A690 /* ChatSessionToolbar.swift */,
-			);
-			path = Sidebar;
-			sourceTree = "<group>";
-		};
 		08C5C7272C9A138E004992A4 /* GoogleAuth */ = {
 			isa = PBXGroup;
 			children = (
@@ -819,6 +808,7 @@
 		08C8003F2C36BD7B009581C5 /* SessionListViews */ = {
 			isa = PBXGroup;
 			children = (
+				08B8DE152C97F39B0041A690 /* ChatSessionToolbar.swift */,
 				08AAFB9B2C3D01A6002C04E0 /* SessionListCards.swift */,
 				08C800312C36AE1D009581C5 /* ChatSessionList.swift */,
 				08C800362C36B8CC009581C5 /* SessionListRow.swift */,
@@ -884,6 +874,8 @@
 				08F3C9FD2C70483800A800F9 /* QuickPanelWindow.swift */,
 				08F3CA032C705B3300A800F9 /* SettingsWindow.swift */,
 				088475332CAE8E57006C04F0 /* AppIconMenu.swift */,
+				08A222842C2AB4FD00D76C8B /* ChatContentView.swift */,
+				087906882CA6E22900E5DCAD /* ImageContentView.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
