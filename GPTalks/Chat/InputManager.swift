@@ -179,8 +179,6 @@ extension InputManager {
                             return
                         }
                         
-                        print("Processing dropped file: \(url.lastPathComponent)")
-                        
                         DispatchQueue.main.async {
                             if let data = try? Data(contentsOf: url) {
                                 let fileType = UTType(filenameExtension: url.pathExtension) ?? .data

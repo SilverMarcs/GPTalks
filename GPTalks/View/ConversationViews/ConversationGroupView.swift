@@ -12,20 +12,11 @@ struct ConversationGroupView: View {
     var group: ConversationGroup
 
     var body: some View {
-        VStack(alignment: .center, spacing: 0) {
-            ConversationView(conversation: group.activeConversation)
-                .environment(\.isSearch, false)
-                #if os(iOS)
-                .opacity(0.9)
-                #endif
-            
-            if group.session?.groups.firstIndex(where: { $0 == group }) == group.session?.resetMarker {
-                ContextResetDivider() {
-                    group.session?.resetMarker = nil
-                }
-                .padding(.vertical)
-            }
-        }
+        ConversationView(conversation: group.activeConversation)
+            .environment(\.isSearch, false)
+            #if os(iOS)
+            .opacity(0.9)
+            #endif
     }
 }
 

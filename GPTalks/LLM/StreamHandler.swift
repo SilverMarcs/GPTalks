@@ -140,7 +140,7 @@ struct StreamHandler {
             }
                           
             if toolDatas.isEmpty {
-                session.streamer = StreamHandler(conversations: session.adjustedGroups.map { $0.activeConversation }.dropLast(), config: config, assistant: newAssistant)
+                session.streamer = StreamHandler(conversations: session.groups.map { $0.activeConversation }.dropLast(), config: config, assistant: newAssistant)
                 if let streamer = session.streamer {
                     if config.stream {
                         try await streamer.handleStream()

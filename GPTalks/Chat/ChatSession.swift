@@ -15,7 +15,6 @@ final class ChatSession {
     var title: String = "Chat Session"
     var isStarred: Bool = false
     var errorMessage: String = ""
-    var resetMarker: Int?
     var isQuick: Bool = false
     var tokenCount: Int = 0
     
@@ -29,14 +28,6 @@ final class ChatSession {
     var groups: [ConversationGroup] {
         get {return unorderedGroups.sorted(by: {$0.date < $1.date})}
         set { unorderedGroups = newValue }
-    }
-    
-    var adjustedGroups: [ConversationGroup] {
-        if let resetMarker = resetMarker {
-            return Array(groups.suffix(from: resetMarker + 1))
-        } else {
-            return groups
-        }
     }
     
     @Transient
@@ -115,7 +106,7 @@ final class ChatSession {
     }
     
     private func prepareConversations(regenContent: String?) -> [Conversation] {
-        var conversations = adjustedGroups.map { $0.activeConversation }
+        var conversations = groups.map { $0.activeConversation }
         
         if let regenContent = regenContent {
             if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
@@ -182,7 +173,7 @@ final class ChatSession {
         if let editingIndex = inputManager.editingIndex,
            editingIndex < groups.count,
            groups[editingIndex].activeConversation.role == .user {
-            unsetResetMarker(group: groups[editingIndex])
+
             
             groups[editingIndex].activeConversation.content = inputManager.prompt
             groups[editingIndex].activeConversation.dataFiles = inputManager.dataFiles
@@ -200,7 +191,6 @@ final class ChatSession {
     
     @MainActor
     func regenerate(group: ConversationGroup) async {
-        unsetResetMarker(group: group)
         guard group.role == .assistant else { return }
         
         guard let index = groups.firstIndex(where: { $0.id == group.id }),
@@ -231,36 +221,19 @@ final class ChatSession {
         }
     }
     
-    func resetContext(at group: ConversationGroup) {
-        if let index = groups.firstIndex(where: { $0 == group }) {
-            let newResetMarker = (resetMarker == index) ? nil : index
-            
-            if index == groups.count - 1 {
-                resetMarker = newResetMarker
-                if let proxy = proxy {
-                    scrollToBottom(proxy: proxy)
-                }
-            } else {
-                resetMarker = newResetMarker
-            }
-        }
-        
-        self.refreshTokens()
-    }
-    
     @MainActor
     func generateTitle(forced: Bool = false) async {
         if isQuick { return }
         
-        if forced || adjustedGroups.count == 1 || adjustedGroups.count == 2 {
-            if let newTitle = await TitleGenerator.generateTitle(adjustedGroups: adjustedGroups, provider: config.provider) {
+        if forced || groups.count == 1 || groups.count == 2 {
+            if let newTitle = await TitleGenerator.generateTitle(adjustedGroups: groups, provider: config.provider) {
                 self.title = newTitle
             }
         }
     }
     
     func refreshTokens() {
-        let messageTokens = adjustedGroups.reduce(0) { $0 + $1.tokenCount}
+        let messageTokens = groups.reduce(0) { $0 + $1.tokenCount}
         let sysPromptTokens = countTokensFromText(config.systemPrompt)
         let toolTokens = config.tools.tokenCount
         let inputTokens = countTokensFromText(inputManager.prompt)
@@ -303,9 +276,8 @@ final class ChatSession {
         return group
     }
     
+    // TODO: make async
     func deleteConversationGroup(_ conversationGroup: ConversationGroup) {
-        unsetResetMarker(group: conversationGroup)
-        
         guard !groups.isEmpty else {
             errorMessage = ""
             return
@@ -325,7 +297,9 @@ final class ChatSession {
                 }
                 
                 // Remove the groups from the array
-                groups.removeAll(where: { groupsToDelete.contains($0) })
+                withAnimation {
+                    groups.removeAll(where: { groupsToDelete.contains($0) })
+                }
                 
                 // Delete the groups from the model context
                 for group in groupsToDelete {
@@ -333,7 +307,9 @@ final class ChatSession {
                 }
             } else {
                 // If it's not an assistant role, just delete the single group
-                groups.removeAll(where: { $0 == conversationGroup })
+                withAnimation {
+                    groups.removeAll(where: { $0 == conversationGroup })
+                }
                 self.modelContext?.delete(conversationGroup)
             }
         }
@@ -342,8 +318,6 @@ final class ChatSession {
 
     
     func deleteAllConversations() {
-        resetMarker = nil
-        
         // Remove all conversation groups from the groups array and modelContext
         while let conversationGroup = groups.popLast() {
             self.modelContext?.delete(conversationGroup)
@@ -351,15 +325,5 @@ final class ChatSession {
         
         errorMessage = ""
         self.refreshTokens()
-    }
-    
-    private func unsetResetMarker(group: ConversationGroup) {
-        guard let index = groups.firstIndex(where: { $0 == group }) else {
-            return // Group not found, nothing to delete
-        }
-        
-        if let resetMarker = resetMarker, index < resetMarker + 1 {
-            self.resetMarker = nil
-        }
     }
 }

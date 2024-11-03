@@ -77,12 +77,7 @@ struct ChatCommands: Commands {
             }
             
             Section {
-                Button("Reset Context") {
-                    sessionVM.resetLastContext()
-                }
-                .keyboardShortcut("k", modifiers: .command)
-                
-                Button("Delete Last Message") {
+                Button("Delete Last Message", role: .destructive) {
                     sessionVM.deleteLastMessage()
                 }
                 .keyboardShortcut(.delete, modifiers: .command)

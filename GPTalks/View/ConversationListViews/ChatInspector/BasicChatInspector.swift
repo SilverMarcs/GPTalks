@@ -50,8 +50,6 @@ struct BasicChatInspector: View {
             }
             
             Section {
-                resetContext
-                
                 deleteAllMessages
             }
         }
@@ -88,19 +86,6 @@ struct BasicChatInspector: View {
         }
         .buttonStyle(.plain)
         .foregroundStyle(.mint.gradient)
-    }
-    
-    private var resetContext: some View {
-        Button {
-            if session.isStreaming { return }
-            if let last = session.groups.last {
-                session.resetContext(at: last)
-            }
-        } label: {
-            Text("Reset Context")
-        }
-        .foregroundStyle(.orange)
-        .buttonStyle(ClickHighlightButton())
     }
     
     private var deleteAllMessages: some View {

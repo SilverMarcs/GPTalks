@@ -37,7 +37,6 @@ extension ChatSessionBackup {
         self.title = session.title
         self.isStarred = session.isStarred
         self.errorMessage = session.errorMessage
-        self.resetMarker = session.resetMarker
         self.groups = session.unorderedGroups.map { group in
             ConversationGroupBackup(
                 date: group.date,
@@ -66,7 +65,6 @@ extension ChatSessionBackup {
         session.title = self.title
         session.isStarred = self.isStarred
         session.errorMessage = self.errorMessage
-        session.resetMarker = self.resetMarker
         session.unorderedGroups = self.groups.map { groupBackup in
             let group = ConversationGroup(conversation: groupBackup.conversation.toConversation())
             group.date = groupBackup.date

@@ -114,12 +114,6 @@ struct ChatInputView: View {
     }
     #endif
     
-    func resetContext() {
-        if let lastGroup = session.groups.last {
-            session.resetContext(at: lastGroup)
-        }
-    }
-    
     var verticalPadding: CGFloat {
         #if os(macOS)
         14

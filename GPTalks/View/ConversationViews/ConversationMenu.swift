@@ -44,15 +44,11 @@ struct ConversationMenu: View {
     
         Section {
             copyText
+            
+            forkSession
             #if !os(macOS)
             selectText
             #endif
-        }
-
-        Section {
-            resetContext
-            
-            forkSession
         }
         
         Section {
@@ -83,12 +79,6 @@ struct ConversationMenu: View {
             }
             .contentTransition(.symbolEffect(.replace))
             .help("Expand")
-        }
-    }
-
-    var resetContext: some View {
-        HoverScaleButton(icon: "eraser", label: "Reset Context") {
-            group.resetContext()
         }
     }
 

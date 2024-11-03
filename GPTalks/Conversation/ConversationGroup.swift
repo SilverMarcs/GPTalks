@@ -99,11 +99,7 @@ final class ConversationGroup {
     func deleteSelf() {
         session?.deleteConversationGroup(self)
     }
-    
-    func resetContext() {
-        session?.resetContext(at: self)
-    }
-    
+
     func setupEditing() {
         session?.inputManager.setupEditing(for: self)
         withAnimation {

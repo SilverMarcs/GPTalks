@@ -33,23 +33,17 @@ struct PasteHandler: ViewModifier {
     }
 
     private func handleCommandV() -> Bool {
-        let pasteboard = NSPasteboard.general
-        guard let pasteboardItems = pasteboard.pasteboardItems,
+        guard let pasteboardItems = NSPasteboard.general.pasteboardItems,
               let session = sessionVM.activeSession else {
             return false
         }
 
+        let handledTypes: Set<NSPasteboard.PasteboardType> = [.fileURL, .png, .tiff, .pdf]
         var handledFiles = false
         var containsText = false
 
         for item in pasteboardItems {
-            if let _ = item.data(forType: .fileURL) {
-                session.inputManager.handlePaste(pasteboardItem: item)
-                handledFiles = true
-            } else if item.types.contains(.png) || item.types.contains(.tiff) {
-                session.inputManager.handlePaste(pasteboardItem: item)
-                handledFiles = true
-            } else if item.types.contains(.pdf) {
+            if Set(item.types).intersection(handledTypes).isEmpty == false {
                 session.inputManager.handlePaste(pasteboardItem: item)
                 handledFiles = true
             } else if item.types.contains(.string) {
@@ -57,14 +51,7 @@ struct PasteHandler: ViewModifier {
             }
         }
 
-        if handledFiles {
-            return true // We handled at least one file
-        } else if containsText {
-            // Text in clipboard, let default behavior occur
-            return false
-        }
-
-        return false // If we didn't handle anything, return false
+        return handledFiles || (containsText ? false : false)
     }
 }
 
