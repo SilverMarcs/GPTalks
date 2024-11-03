@@ -94,8 +94,7 @@ enum InputState {
 // MARK: - Pasting
 #if os(macOS)
 extension InputManager {
-    // Define supported image types
-    private static let supportedImageTypes: Set<UTType> = [.png, .tiff, .jpeg, .gif]
+    private static let supportedImageTypes: Set<UTType> = [.png, .tiff, .jpeg]
 
     func handlePaste(pasteboardItem: NSPasteboardItem) {
         Task {
@@ -104,109 +103,61 @@ extension InputManager {
                    let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
                     try await processFile(at: fileURL)
                 } else if let imageData = pasteboardItem.data(forType: .png) ?? pasteboardItem.data(forType: .tiff) {
-                    try await processImageData(imageData)
+                    try await processData(imageData, fileType: .png, fileName: "Pasted Image")
                 }
             } catch {
                 print("Error processing paste: \(error)")
             }
         }
     }
+}
+#endif
 
-    private func processImageData(_ imageData: Data) async throws {
+// MARK: - Drag and Drop
+extension InputManager {
+    private func processData(_ data: Data, fileType: UTType? = nil, fileName: String? = nil, url: URL? = nil) async throws {
         await MainActor.run {
-            let fileName = "Pasted Image"
-            let fileSize = imageData.count.formatFileSize()
-            let fileExtension = "png"
+            let fileURL = url ?? URL(fileURLWithPath: fileName ?? "Unknown")
+            let fileType = fileType ?? (try? fileURL.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier).flatMap { UTType($0) } ?? .data
+            let fileName = fileName ?? fileURL.deletingPathExtension().lastPathComponent
+            let fileSize = data.count.formatFileSize()
+            let fileExtension = url?.pathExtension.lowercased() ?? (fileType == .png ? "png" : "")
 
             let typedData = TypedData(
-                data: imageData,
-                fileType: .png,
+                data: data,
+                fileType: fileType,
                 fileName: fileName,
                 fileSize: fileSize,
                 fileExtension: fileExtension
             )
 
             self.dataFiles.append(typedData)
-        }
-    }
-
-    private func processFile(at url: URL) async throws {
-        let data = try Data(contentsOf: url)
-        
-        await MainActor.run {
-            appendTypedData(data: data, url: url)
+            print("Added file to dataFiles array. Current count: \(self.dataFiles.count)")
         }
     }
     
-    private func appendTypedData(data: Data, url: URL) {
-        let fileName = url.deletingPathExtension().lastPathComponent
-        let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
-        let fileSize = (attributes?[.size] as? Int ?? data.count).formatFileSize()
-        let fileExtension = url.pathExtension.lowercased()
-        
-        guard let fileUTType = try? url.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier,
-              let fileType = UTType(fileUTType) else {
-            return
-        }
-
-        let typedData = TypedData(
-            data: data,
-            fileType: fileType,
-            fileName: fileName,
-            fileSize: fileSize,
-            fileExtension: fileExtension
-        )
-
-        dataFiles.append(typedData)
+    private func processFile(at url: URL) async throws {
+        let data = try Data(contentsOf: url)
+        try await processData(data, url: url)
     }
-}
-#endif
-
-
-// MARK: - Drag and Drop
-extension InputManager {
-    func handleDrop(_ providers: [NSItemProvider], supportedTypes: [UTType]) -> Bool {
-        print("Handling drop with supported types: \(supportedTypes)")
-        
+    
+    func handleDrop(_ providers: [NSItemProvider]) -> Bool {
         for provider in providers {
-            for type in supportedTypes {
-                if provider.hasItemConformingToTypeIdentifier(type.identifier) {
-                    provider.loadFileRepresentation(forTypeIdentifier: type.identifier) { url, error in
-                        guard let url = url else {
-                            if let error = error {
-                                print("Error loading file representation: \(error.localizedDescription)")
-                            }
-                            return
-                        }
-                        
-                        DispatchQueue.main.async {
-                            if let data = try? Data(contentsOf: url) {
-                                let fileType = UTType(filenameExtension: url.pathExtension) ?? .data
-                                let fileName = url.deletingPathExtension().lastPathComponent
-                                let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
-                                let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
-                                let fileExtension = url.pathExtension.lowercased()
-                                let typedData = TypedData(
-                                    data: data,
-                                    fileType: fileType,
-                                    fileName: fileName,
-                                    fileSize: fileSize,
-                                    fileExtension: fileExtension
-                                )
-                                
-                                self.dataFiles.append(typedData)
-                                print("Added file to dataFiles array. Current count: \(self.dataFiles.count)")
-                            } else {
-                                print("Failed to read data from file: \(url.lastPathComponent)")
-                            }
-                        }
+            provider.loadFileRepresentation(forTypeIdentifier: UTType.data.identifier) { url, error in
+                guard let url = url else {
+                    return
+                }
+                
+                Task {
+                    do {
+                        try await self.processFile(at: url)
+                    } catch {
+                        print("Failed to process file: \(url.lastPathComponent). Error: \(error)")
                     }
-                    return true
                 }
             }
         }
         
-        print("No compatible files found in the drop")
-        return false
+        return !providers.isEmpty
     }
 }

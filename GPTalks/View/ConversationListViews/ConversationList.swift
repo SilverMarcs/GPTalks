@@ -85,8 +85,8 @@ struct ConversationList: View {
                     scrollToBottom(proxy: proxy)
                 }
             }
-            .onDrop(of: session.config.provider.type.supportedFileTypes, isTargeted: nil) { providers in
-                session.inputManager.handleDrop(providers, supportedTypes: session.config.provider.type.supportedFileTypes)
+            .onDrop(of: [.item], isTargeted: nil) { providers in
+                session.inputManager.handleDrop(providers)
             }
             .navigationTitle(navTitle)
             #if os(macOS)

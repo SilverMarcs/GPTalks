@@ -44,7 +44,9 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     let session = chatVM.createNewSession()
                     if let session = session {
-                        session.showCamera.toggle()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            session.showCamera.toggle()
+                        }
                     }
                 }
             }

@@ -13,7 +13,7 @@ final class ChatSession {
     var id: UUID = UUID()
     var date: Date = Date()
     var title: String = "Chat Session"
-    var isStarred: Bool = false
+    var isStarred: Bool = false // TODO: enum for archive and recently deleted
     var errorMessage: String = ""
     var isQuick: Bool = false
     var tokenCount: Int = 0
