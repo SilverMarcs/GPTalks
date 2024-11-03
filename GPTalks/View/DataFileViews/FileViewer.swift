@@ -22,13 +22,13 @@ struct FileViewer: View {
                         .frame(width: 38, height: 38)
                     
                     VStack(alignment: .leading) {
-                        Text(typedData.fileName.truncateText())
+                        Text((typedData.fileName as NSString).deletingPathExtension.truncateText())
                             .font(.callout)
                             .fontWeight(.bold)
                             .lineLimit(1)
                             .truncationMode(.middle)
                         
-                        Text("\(typedData.fileExtension.uppercased()) • \(typedData.fileSize)")
+                        Text("\(typedData.fileType.fileExtension.uppercased())")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

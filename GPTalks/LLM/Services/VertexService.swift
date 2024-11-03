@@ -53,7 +53,7 @@ struct VertexService: AIService {
                 contentObjects.append(imageContent)
             } else {
                 let warning = "Notify the user if a file has been added but the assistant could not find a compatible plugin to read that file type."
-                let detail = "Conversation ID: \(conversation.id)\nFile: \(data.fileName).\(data.fileExtension)\n\(warning)"
+                let detail = "Conversation ID: \(conversation.id)\nFile: \(data.fileName)\n\(warning)"
                 
                 contentObjects.append([
                     "type": "text",

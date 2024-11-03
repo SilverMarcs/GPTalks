@@ -15,8 +15,6 @@ struct TypedData: Codable, Identifiable, Hashable {
     var data: Data
     var fileType: UTType
     var fileName: String
-    var fileSize: String
-    var fileExtension: String
     
     var mimeType: String {
         return fileType.preferredMIMEType ?? "application/octet-stream"
@@ -31,9 +29,25 @@ struct TypedData: Codable, Identifiable, Hashable {
     }
 }
 
+extension UTType {
+    var fileExtension: String {
+        self.preferredFilenameExtension ?? "dat"
+    }
+}
+
+
 extension TypedData {
     var derivedFileType: AudioTranscriptionQuery.FileType? {
-        // Use the fileExtension property to find the corresponding FileType; this assumes your TypedData is using a String for file extensions.
-        return AudioTranscriptionQuery.FileType(rawValue: fileExtension)
+        switch fileType {
+        case .mp3, .mpeg4Audio:
+            return .mp3
+        case .wav:
+            return .wav
+        case .mpeg4Movie:
+            return .mp4
+        default:
+            // For any other types not explicitly handled
+            return nil
+        }
     }
 }

@@ -40,7 +40,7 @@ struct OpenAIService: AIService {
                     contents.append(.init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: url, detail: .low))))
                 } else {
                     let warning = "Notify the user if a file has been added but the assistant could not find a compatible plugin to read that file type."
-                    contents.append(.init(chatCompletionContentPartTextParam: .init(text: "Conversation ID: \(conversation.id)\nFile: \(data.fileName).\(data.fileExtension)\n\(warning)")))
+                    contents.append(.init(chatCompletionContentPartTextParam: .init(text: "Conversation ID: \(conversation.id)\nFile: \(data.fileName)\n\(warning)")))
                 }
             }
             

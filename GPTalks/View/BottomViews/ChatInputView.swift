@@ -50,19 +50,19 @@ struct ChatInputView: View {
     }
 
     var plusButton: some View {
-        #if os(macOS)
-        macosPlus
-        #else
-        iosPlus
-        #endif
+        Group {
+            #if os(macOS)
+            macosPlus
+            #else
+            iosPlus
+            #endif
+        }
+        .multipleFileImporter(isPresented: $isFilePickerPresented, inputManager: session.inputManager)
     }
     
     var macosPlus: some View {
         PlusButton(size: imageSize) {
             isFilePickerPresented = true
-        }
-        .multipleFileImporter(isPresented: $isFilePickerPresented, supportedFileTypes: session.config.provider.type.supportedFileTypes) { typedData in
-            session.inputManager.dataFiles.append(typedData)
         }
     }
     
@@ -99,13 +99,10 @@ struct ChatInputView: View {
             }
             .ignoresSafeArea()
         }
-        .multipleFileImporter(isPresented:  $isFilePickerPresented, supportedFileTypes: session.config.provider.type.supportedFileTypes) { typedData in
-            session.inputManager.dataFiles.append(typedData)
-        }
         .photosPicker(isPresented: $showPhotosPicker, selection: $selectedPhotos, matching: .images, photoLibrary: .shared())
         .onChange(of: selectedPhotos) {
             Task {
-                await loadTransferredPhotos(from: selectedPhotos)
+                await session.inputManager.loadTransferredPhotos(from: selectedPhotos)
                 DispatchQueue.main.async {
                     selectedPhotos.removeAll()
                 }
@@ -136,28 +133,6 @@ struct ChatInputView: View {
         #endif
         Task { @MainActor in
             await session.sendInput()
-        }
-    }
-    
-    private func loadTransferredPhotos(from selectedPhotos: [PhotosPickerItem]) async {
-        for photo in selectedPhotos {
-            if let data = try? await photo.loadTransferable(type: Data.self) {
-                let fileName = "photo_\(UUID().uuidString)"
-                let fileExtension = "jpg"
-                let fileSize = data.count.formatFileSize()
-                
-                let typedData = TypedData(
-                    data: data,
-                    fileType: .image,
-                    fileName: fileName,
-                    fileSize: fileSize,
-                    fileExtension: fileExtension
-                )
-                
-                DispatchQueue.main.async {
-                    session.inputManager.dataFiles.append(typedData)
-                }
-            }
         }
     }
 }

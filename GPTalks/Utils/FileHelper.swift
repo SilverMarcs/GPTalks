@@ -30,7 +30,7 @@ struct FileHelper {
     
     static func createTemporaryURL(for typedData: TypedData) -> URL? {
         let tempDirectoryURL = FileManager.default.temporaryDirectory
-        let fileName = typedData.fileName + "." + typedData.fileExtension
+        let fileName = typedData.fileName + "." + typedData.fileType.fileExtension
         let fileURL = tempDirectoryURL.appendingPathComponent(fileName)
 
         do {
@@ -79,39 +79,22 @@ struct FileHelper {
     }
 }
 
-
 extension View {
     @ViewBuilder
-    func multipleFileImporter(isPresented: Binding<Bool>, supportedFileTypes: [UTType], onDataAppend: @escaping (TypedData) -> Void) -> some View {
+    func multipleFileImporter(isPresented: Binding<Bool>, inputManager: InputManager) -> some View {
         self.fileImporter(
             isPresented: isPresented,
-            allowedContentTypes: supportedFileTypes,
+            allowedContentTypes: [.item],
             allowsMultipleSelection: true
         ) { result in
             switch result {
             case .success(let urls):
-                DispatchQueue.global(qos: .userInitiated).async {
+                Task {
                     for url in urls {
-                        autoreleasepool {
-                            if let data = try? Data(contentsOf: url) {
-                                let fileType = UTType(filenameExtension: url.pathExtension) ?? .data
-                                let fileName = url.deletingPathExtension().lastPathComponent
-                                let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
-                                let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
-                                let fileExtension = url.pathExtension.lowercased()
-                                
-                                let typedData = TypedData(
-                                    data: data,
-                                    fileType: fileType,
-                                    fileName: fileName,
-                                    fileSize: fileSize,
-                                    fileExtension: fileExtension
-                                )
-                                
-                                DispatchQueue.main.async {
-                                    onDataAppend(typedData)
-                                }
-                            }
+                        do {
+                            try await inputManager.processFile(at: url)
+                        } catch {
+                            print("Failed to process file: \(url.lastPathComponent). Error: \(error)")
                         }
                     }
                 }
@@ -121,4 +104,5 @@ extension View {
         }
     }
 }
+
 

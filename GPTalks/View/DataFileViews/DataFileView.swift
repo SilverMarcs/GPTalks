@@ -30,7 +30,7 @@ struct DataFileView: View {
     
     @ViewBuilder
     private func fileItemView(for typedData: TypedData) -> some View {
-        ZStack(alignment: .topLeading) {
+        ZStack(alignment: .bottomTrailing) {
             fileView(for: typedData)
             
             if isCrossable {
@@ -39,7 +39,7 @@ struct DataFileView: View {
                     dataFiles.removeAll(where: { $0.id == typedData.id })
                 }
                 .shadow(radius: 5)
-                .padding(.leading, 5)
+                .padding(.bottom, 5)
                 #else
                 Button {
                     dataFiles.removeAll(where: { $0.id == typedData.id })

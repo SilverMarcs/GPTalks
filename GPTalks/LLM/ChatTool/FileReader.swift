@@ -95,8 +95,8 @@ struct FileReader: ToolProtocol {
     static let tokenCount = countTokensFromText(description)
     
     static let description: String = """
-        You can open and access contents of both PDF files and text-based files. Just respond with a list of file names without file extensions.
-        The file names you call with must not contain file extension. Just provide the file name. Only use this tool when user explicitly provide files
+        You can open and access contents of both PDF files and text-based files. Just respond with a list of file names with file extensions.
+        Only use this tool when user explicitly provide files
         """
     
     static var openai: ChatQuery.ChatCompletionToolParam {
@@ -116,7 +116,7 @@ struct FileReader: ToolProtocol {
                                 "fileNames":
                                     .init(
                                         type: .array,
-                                        description: "The array of file names without extension to access",
+                                        description: "The array of file names with extension to access",
                                         items: .init(type: .string)
                                     )
                             ]
@@ -137,7 +137,7 @@ struct FileReader: ToolProtocol {
                     ),
                     "fileNames": Schema(
                         type: .array,
-                        description: "The array of file names without extension to access",
+                        description: "The array of file names with extension to access",
                         items: Schema(type: .string)
                     )
                 ],
@@ -159,7 +159,7 @@ struct FileReader: ToolProtocol {
                     ],
                     "fileNames": [
                         "type": "array",
-                        "description": "The array of file names without extension to access",
+                        "description": "The array of file names with extension to access",
                         "items": [
                             "type": "string"
                         ],

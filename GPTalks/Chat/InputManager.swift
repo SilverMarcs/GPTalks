@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import PhotosUI
 
 enum InputState {
     case normal
@@ -90,45 +91,18 @@ enum InputState {
     }
 }
 
-
-// MARK: - Pasting
-#if os(macOS)
-extension InputManager {
-    private static let supportedImageTypes: Set<UTType> = [.png, .tiff, .jpeg]
-
-    func handlePaste(pasteboardItem: NSPasteboardItem) {
-        Task {
-            do {
-                if let fileURLData = pasteboardItem.data(forType: .fileURL),
-                   let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
-                    try await processFile(at: fileURL)
-                } else if let imageData = pasteboardItem.data(forType: .png) ?? pasteboardItem.data(forType: .tiff) {
-                    try await processData(imageData, fileType: .png, fileName: "Pasted Image")
-                }
-            } catch {
-                print("Error processing paste: \(error)")
-            }
-        }
-    }
-}
-#endif
-
 // MARK: - Drag and Drop
 extension InputManager {
-    private func processData(_ data: Data, fileType: UTType? = nil, fileName: String? = nil, url: URL? = nil) async throws {
+    func processData(_ data: Data, fileType: UTType? = nil, fileName: String? = nil, url: URL? = nil) async throws {
         await MainActor.run {
             let fileURL = url ?? URL(fileURLWithPath: fileName ?? "Unknown")
             let fileType = fileType ?? (try? fileURL.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier).flatMap { UTType($0) } ?? .data
-            let fileName = fileName ?? fileURL.deletingPathExtension().lastPathComponent
-            let fileSize = data.count.formatFileSize()
-            let fileExtension = url?.pathExtension.lowercased() ?? (fileType == .png ? "png" : "")
+            let fileName = fileName ?? fileURL.deletingPathExtension().lastPathComponent + "." + fileType.fileExtension
 
             let typedData = TypedData(
                 data: data,
                 fileType: fileType,
-                fileName: fileName,
-                fileSize: fileSize,
-                fileExtension: fileExtension
+                fileName: fileName
             )
 
             self.dataFiles.append(typedData)
@@ -136,7 +110,7 @@ extension InputManager {
         }
     }
     
-    private func processFile(at url: URL) async throws {
+    func processFile(at url: URL) async throws {
         let data = try Data(contentsOf: url)
         try await processData(data, url: url)
     }
@@ -160,4 +134,40 @@ extension InputManager {
         
         return !providers.isEmpty
     }
+    
+    func loadTransferredPhotos(from selectedPhotos: [PhotosPickerItem]) async {
+        for photo in selectedPhotos {
+            if let data = try? await photo.loadTransferable(type: Data.self) {
+                let fileName = "photo_\(UUID().uuidString).jpg"
+                
+                do {
+                    try await self.processData(data, fileType: .jpeg, fileName: fileName)
+                } catch {
+                    print("Failed to process photo: \(fileName). Error: \(error)")
+                }
+            }
+        }
+    }
 }
+
+// MARK: - Pasting
+#if os(macOS)
+extension InputManager {
+    private static let supportedImageTypes: Set<UTType> = [.png, .tiff, .jpeg]
+
+    func handlePaste(pasteboardItem: NSPasteboardItem) {
+        Task {
+            do {
+                if let fileURLData = pasteboardItem.data(forType: .fileURL),
+                   let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
+                    try await processFile(at: fileURL)
+                } else if let imageData = pasteboardItem.data(forType: .png) ?? pasteboardItem.data(forType: .tiff) {
+                    try await processData(imageData, fileType: .png, fileName: "Pasted Image")
+                }
+            } catch {
+                print("Error processing paste: \(error)")
+            }
+        }
+    }
+}
+#endif

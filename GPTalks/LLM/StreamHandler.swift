@@ -153,9 +153,7 @@ struct StreamHandler {
                     TypedData(
                         data: data,
                         fileType: .image,
-                        fileName: "image",
-                        fileSize: "\(data.count) bytes",
-                        fileExtension: "png"
+                        fileName: "image"
                     )
                 }
                 newAssistant.dataFiles = typedDataFiles

@@ -44,7 +44,7 @@ enum TitleGenerator {
             }.joined(separator: "\n")
             
             let dataFiles = convo.dataFiles.map { dataFile in
-                "Data file: \(dataFile.fileName).\(dataFile.fileExtension)"
+                "Data file: \(dataFile.fileName)"
             }.joined(separator: "\n")
             
             if let response = convo.toolResponse {
