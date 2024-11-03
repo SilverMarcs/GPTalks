@@ -14,11 +14,7 @@ struct MarkdownView: View {
     
     @ObservedObject var config = AppConfig.shared
     var content: String
-    
-    var highlightString: String? {
-        sessionVM.searchText.count > 3 ? sessionVM.searchText : nil
-    }
-    
+
     var body: some View {
         let provider = isQuick ? config.quickMarkdownProvider : config.markdownProvider
         
@@ -26,8 +22,7 @@ struct MarkdownView: View {
             case .webview:
                 MarkdownWebView(content)
                     .markdownBaseURL("GPTalks Web Content")
-                    .markdownHighlightString(highlightString)
-                    .markdownTheme(config.markdownTheme)
+                    .markdownHighlightString(sessionVM.searchText)
                     .markdownFontSize(CGFloat(config.fontSize))
 
             case .native:

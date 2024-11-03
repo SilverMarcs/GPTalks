@@ -107,7 +107,11 @@ final class ConversationGroup {
     func setupEditing() {
         session?.inputManager.setupEditing(for: self)
         withAnimation {
-            session?.proxy?.scrollTo(self, anchor: .top)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation {
+                    self.session?.proxy?.scrollTo(self, anchor: .top)
+                }
+            }
         }
     }
     

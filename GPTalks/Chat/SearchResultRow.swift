@@ -14,14 +14,16 @@ struct SearchResultRow: View {
     let conversation: SearchedConversation
     
     var body: some View {
-
             HStack {
                 ConversationView(conversation: conversation.conversation)
                     .environment(\.isSearch, true)
                 
                 Button {
-                    chatVM.searchText = ""
+                    chatVM.sessionsWithMatches = []
                     chatVM.chatSelections = [conversation.session]
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        conversation.session.proxy?.scrollTo(conversation.conversation.group, anchor: .top)
+                    }
                 } label: {
                     Image(systemName: "arrow.right")
                         .bold()

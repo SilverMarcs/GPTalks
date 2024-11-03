@@ -40,11 +40,13 @@ struct ConversationList: View {
                     session.refreshTokens()
                 }
                 
-                #if os(macOS)
-                scrollToBottom(proxy: proxy, delay: 0.2)
-                #endif
                 session.proxy = proxy
-                scrollToBottom(proxy: proxy, delay: 0.4)
+                
+                #if os(macOS)
+                scrollToBottom(proxy: proxy, animated: false)
+                #endif
+                
+                scrollToBottom(proxy: proxy, delay: 0.2)
             }
             .toolbar {
                 ConversationListToolbar(session: session)
@@ -134,23 +136,41 @@ struct ConversationList: View {
     
     var listView: some View {
         List {
-            VStack(spacing: 3) {
-                ForEach(session.groups) { group in
-                    ConversationGroupView(group: group)
-                }
-                .transaction { $0.animation = nil }
-
-                ErrorMessageView(session: session)
+            ForEach(session.groups, id: \.self) { group in
+                ConversationGroupView(group: group)
             }
             .listRowSeparator(.hidden)
-            .transaction { $0.animation = nil }
-            
+
+            ErrorMessageView(session: session)
+        
             Color.clear
                 .id(String.bottomID)
                 .listRowSeparator(.hidden)
-                .transaction { $0.animation = nil }
         }
+        #if !os(macOS)
+        .listStyle(.plain)
+        #endif
     }
+    
+//    var listView: some View {
+//        List {
+//            VStack(spacing: 3) {
+//                ForEach(session.groups) { group in
+//                    ConversationGroupView(group: group)
+//                }
+//                .transaction { $0.animation = nil }
+//
+//                ErrorMessageView(session: session)
+//            }
+//            .listRowSeparator(.hidden)
+//            .transaction { $0.animation = nil }
+//            
+//            Color.clear
+//                .id(String.bottomID)
+//                .listRowSeparator(.hidden)
+//                .transaction { $0.animation = nil }
+//        }
+//    }
     
     var colorSpacer: some View {
         Color.clear

@@ -16,20 +16,26 @@ struct ProviderList: View {
     @State var selectedProvider: Provider?
     
     var body: some View {
+        #if os(macOS)
         Form {
-            List(selection: $selectedProvider) {
-                ForEach(providers, id: \.self) { provider in
-                    NavigationLink(value: provider) {
-                        ProviderRow(provider: provider)
-                    }
-                    .deleteDisabled(provider.isPersistent)
-                }
-                .onDelete(perform: deleteProviders)
-            }
+            content
         }
         .formStyle(.grouped)
-        .navigationDestination(for: Provider.self) { provider in
-            ProviderDetail(provider: provider)
+        #else
+        content
+        #endif
+    }
+    
+    
+    var content: some View {
+        List(selection: $selectedProvider) {
+            ForEach(providers, id: \.self) { provider in
+                NavigationLink(destination: ProviderGeneral(provider: provider)) {
+                    ProviderRow(provider: provider)
+                }
+                .deleteDisabled(provider.isPersistent)
+            }
+            .onDelete(perform: deleteProviders)
         }
         .navigationTitle("Providers")
         .toolbarTitleDisplayMode(.inline)

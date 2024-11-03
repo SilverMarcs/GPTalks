@@ -11,7 +11,7 @@ struct ChatDetail: View {
     @Environment(ChatSessionVM.self) var chatVM
     
     var body: some View {
-        if !chatVM.searchText.isEmpty {
+        if !chatVM.searchText.isEmpty && !chatVM.sessionsWithMatches.isEmpty {
             searchResultsView
                 .navigationTitle("Search Results")
         } else {

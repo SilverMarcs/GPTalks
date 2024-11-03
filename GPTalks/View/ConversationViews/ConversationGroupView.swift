@@ -14,7 +14,6 @@ struct ConversationGroupView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             ConversationView(conversation: group.activeConversation)
-                .padding(.top, 5)
                 .environment(\.isSearch, false)
                 #if os(iOS)
                 .opacity(0.9)

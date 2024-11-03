@@ -39,7 +39,7 @@ struct ChatSessionList: View {
                 SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "↗")
                     .id(String.topID)
                 
-                ForEach(Array(sessions.prefix(config.listCount))) { session in
+                ForEach(sessions) { session in
                     SessionListRow(session: session)
                         .tag(session)
                         .deleteDisabled(session.isQuick || session.isStarred)

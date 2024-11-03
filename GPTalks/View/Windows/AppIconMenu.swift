@@ -41,14 +41,18 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
         switch shortcutItem.type {
         case "camera":
             if let chatVM = AppDelegate.shared.chatVM {
-                let session = chatVM.createNewSession()
-                if let session = session {
-                    session.showCamera.toggle()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    let session = chatVM.createNewSession()
+                    if let session = session {
+                        session.showCamera.toggle()
+                    }
                 }
             }
         case "newchat":
-            if let chatVM = AppDelegate.shared.chatVM {
-                chatVM.createNewSession()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                if let chatVM = AppDelegate.shared.chatVM {
+                    chatVM.createNewSession()
+                }
             }
         default:
             break
