@@ -103,6 +103,7 @@ struct ProviderGeneral: View {
         }
         .navigationTitle(provider.name)
         .formStyle(.grouped)
+        .scrollContentBackground(.visible)
         .toolbar {
             Toggle("Enabled", isOn: $provider.isEnabled)
                 .toggleStyle(.switch)

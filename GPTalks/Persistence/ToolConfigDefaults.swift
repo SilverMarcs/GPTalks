@@ -15,7 +15,7 @@ class ToolConfigDefaults: ObservableObject {
     @AppStorage("urlScrape") var urlScrape: Bool = false
     @AppStorage("imageGenerate") var imageGenerate: Bool = false
     @AppStorage("transcribe") var transcribe: Bool = false
-    @AppStorage("fileReader") var fileReader: Bool = false
+    @AppStorage("pdfReader") var pdfReader: Bool = false
     
     // Google Service only
     @AppStorage("googleCodeExecution") var googleCodeExecution: Bool = false

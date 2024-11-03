@@ -19,7 +19,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
     case googleSearch = "googleSearch"
     case imageGenerator = "imageGenerator"
     case transcribe = "transcribe"
-    case fileReader = "fileReader"
+    case pdfReader = "pdfReader"
     
     var toolType: ToolProtocol.Type {
         switch self {
@@ -27,7 +27,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
         case .googleSearch: return GoogleSearch.self
         case .imageGenerator: return ImageGenerator.self
         case .transcribe: return TranscribeTool.self
-        case .fileReader: return FileReader.self
+        case .pdfReader: return PDFReader.self
         }
     }
     
@@ -70,7 +70,7 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
             GenerateImageSettings(providerDefaults: providerDefaults)
         case .transcribe:
             TranscribeSettings(providerDefaults: providerDefaults)
-        case .fileReader:
+        case .pdfReader:
             FileReaderSettings()
         }
     }

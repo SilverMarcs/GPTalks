@@ -16,6 +16,16 @@ struct TypedData: Codable, Identifiable, Hashable {
     var fileType: UTType
     var fileName: String
     
+    var textContent: String? {
+        guard fileType.conforms(to: .text) else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+    
+    var formattedTextContent: String? {
+        guard let content = textContent else { return nil }
+        return "\(fileName)\n\(content)"
+    }
+    
     var mimeType: String {
         return fileType.preferredMIMEType ?? "application/octet-stream"
     }
@@ -27,16 +37,7 @@ struct TypedData: Codable, Identifiable, Hashable {
         PlatformImage(systemName: "doc.on.doc.fill")!
         #endif
     }
-}
 
-extension UTType {
-    var fileExtension: String {
-        self.preferredFilenameExtension ?? "dat"
-    }
-}
-
-
-extension TypedData {
     var derivedFileType: AudioTranscriptionQuery.FileType? {
         switch fileType {
         case .mp3, .mpeg4Audio:
@@ -49,5 +50,11 @@ extension TypedData {
             // For any other types not explicitly handled
             return nil
         }
+    }
+}
+
+extension UTType {
+    var fileExtension: String {
+        self.preferredFilenameExtension ?? "dat"
     }
 }

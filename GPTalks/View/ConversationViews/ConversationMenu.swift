@@ -72,10 +72,8 @@ struct ConversationMenu: View {
     var expandHeight: some View {
         if group.role == .user {
             HoverScaleButton(icon: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right", label: isExpanded ? "Collapse" : "Expand") {
-                withAnimation {
-                    isExpanded.toggle()
-                    group.session?.proxy?.scrollTo(group, anchor: .top)
-                }
+                isExpanded.toggle()
+                group.session?.proxy?.scrollTo(group, anchor: .bottom)
             }
             .contentTransition(.symbolEffect(.replace))
             .help("Expand")

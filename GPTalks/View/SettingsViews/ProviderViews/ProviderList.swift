@@ -16,14 +16,19 @@ struct ProviderList: View {
     @State var selectedProvider: Provider?
     
     var body: some View {
-        #if os(macOS)
-        Form {
+        Group {
+            #if os(macOS)
+            Form {
+                content
+            }
+            .formStyle(.grouped)
+            #else
             content
+            #endif
         }
-        .formStyle(.grouped)
-        #else
-        content
-        #endif
+        .toolbar {
+            addButton
+        }
     }
     
     
@@ -39,9 +44,9 @@ struct ProviderList: View {
         }
         .navigationTitle("Providers")
         .toolbarTitleDisplayMode(.inline)
-        .toolbar {
-            addButton
-        }
+//        .toolbar {
+//            addButton
+//        }
     }
     
     private var addButton: some View {

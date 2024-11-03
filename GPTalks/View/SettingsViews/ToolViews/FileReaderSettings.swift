@@ -12,7 +12,7 @@ struct FileReaderSettings: View {
     
     var body: some View {
         Section("General") {
-            Toggle("Enabled for new chats", isOn: $config.fileReader)
+            Toggle("Enabled for new chats", isOn: $config.pdfReader)
         }
         
 //        Section {

@@ -1,5 +1,5 @@
 //
-//  FileReader.swift
+//  PDFReader.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 06/10/2024.
@@ -12,18 +12,18 @@ import GoogleGenerativeAI
 import PDFKit
 import UniformTypeIdentifiers
 
-struct FileReader: ToolProtocol {
-    static let toolName = "fileReader"
-    static let displayName: String = "File Reader"
+struct PDFReader: ToolProtocol {
+    static let toolName = "pdfReader"
+    static let displayName: String = "PDF Reader"
     static let icon: String = "doc.text"
     
-    struct FileArgs: Codable {
+    struct PDFArgs: Codable {
         let conversationID: String
-        let fileNames: [String]
+        let pdfNames: [String]
     }
     
     static func process(arguments: String) async throws -> ToolData {
-        let args = try FileReader.getFileIds(from: arguments)
+        let args = try PDFReader.getPDFIds(from: arguments)
         
         let modelContext = DatabaseService.shared.modelContext
         let uuid = UUID(uuidString: args.conversationID)!
@@ -39,15 +39,13 @@ struct FileReader: ToolProtocol {
         if let conversation = conversations.first {
             var totalContent: String = ""
             
-            for name in args.fileNames {
+            for name in args.pdfNames {
                 if let typedData = conversation.dataFiles.first(where: { $0.fileName == name }) {
-                    let fileContent: String
-                    if isPDF(data: typedData.data) {
-                        fileContent = readPDF(from: typedData.data)
-                    } else {
-                        fileContent = readTextFile(from: typedData.data)
+                    guard typedData.fileType == .pdf else {
+                        throw RuntimeError("File is not a PDF: \(name)")
                     }
-                    totalContent += fileContent + "\n"
+                    let pdfContent = readPDF(from: typedData.data)
+                    totalContent += pdfContent + "\n"
                 }
             }
             
@@ -57,23 +55,10 @@ struct FileReader: ToolProtocol {
         }
     }
 
-    private static func getFileIds(from jsonString: String) throws -> FileArgs {
+    private static func getPDFIds(from jsonString: String) throws -> PDFArgs {
         let jsonData = jsonString.data(using: .utf8)!
-        let fileArgs = try JSONDecoder().decode(FileArgs.self, from: jsonData)
-        return fileArgs
-    }
-    
-    private static func isPDF(data: Data) -> Bool {
-        let pdfHeader: [UInt8] = [0x25, 0x50, 0x44, 0x46] // PDF header bytes
-        guard data.count >= pdfHeader.count else { return false }
-        
-        for i in 0..<pdfHeader.count {
-            if data[i] != pdfHeader[i] {
-                return false
-            }
-        }
-        
-        return true
+        let pdfArgs = try JSONDecoder().decode(PDFArgs.self, from: jsonData)
+        return pdfArgs
     }
     
     private static func readPDF(from data: Data) -> String {
@@ -84,19 +69,11 @@ struct FileReader: ToolProtocol {
         return document.string ?? "Unable to read PDF content"
     }
     
-    private static func readTextFile(from data: Data) -> String {
-        if let text = String(data: data, encoding: .utf8) {
-            return text
-        } else {
-            return "Unable to read file content"
-        }
-    }
-    
     static let tokenCount = countTokensFromText(description)
     
     static let description: String = """
-        You can open and access contents of both PDF files and text-based files. Just respond with a list of file names with file extensions.
-        Only use this tool when user explicitly provide files
+        You can open and access contents of PDF files. Just respond with a list of PDF file names with .pdf extension.
+        Only use this tool when user explicitly provides PDF files.
         """
     
     static var openai: ChatQuery.ChatCompletionToolParam {
@@ -113,10 +90,10 @@ struct FileReader: ToolProtocol {
                                             type: .string,
                                             description: "The conversation ID"
                                         ),
-                                "fileNames":
+                                "pdfNames":
                                     .init(
                                         type: .array,
-                                        description: "The array of file names with extension to access",
+                                        description: "The array of PDF file names with .pdf extension to access",
                                         items: .init(type: .string)
                                     )
                             ]
@@ -135,13 +112,13 @@ struct FileReader: ToolProtocol {
                         type: .string,
                         description: "The conversation ID"
                     ),
-                    "fileNames": Schema(
+                    "pdfNames": Schema(
                         type: .array,
-                        description: "The array of file names with extension to access",
+                        description: "The array of PDF file names with .pdf extension to access",
                         items: Schema(type: .string)
                     )
                 ],
-                requiredParameters: ["conversationID", "fileNames"]
+                requiredParameters: ["conversationID", "pdfNames"]
             )
         ])
     }
@@ -157,16 +134,16 @@ struct FileReader: ToolProtocol {
                         "type": "string",
                         "description": "The conversation ID"
                     ],
-                    "fileNames": [
+                    "pdfNames": [
                         "type": "array",
-                        "description": "The array of file names with extension to access",
+                        "description": "The array of PDF file names with .pdf extension to access",
                         "items": [
                             "type": "string"
                         ],
                         "maxItems": 5
                     ]
                 ],
-                "required": ["conversationID", "fileNames"]
+                "required": ["conversationID", "pdfNames"]
             ]
         ]
     }

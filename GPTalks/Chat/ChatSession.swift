@@ -106,7 +106,19 @@ final class ChatSession {
     }
     
     private func prepareConversations(regenContent: String?) -> [Conversation] {
-        var conversations = groups.map { $0.activeConversation }
+        var conversations = groups.map { group -> Conversation in
+            let conversation = group.activeConversation
+            
+            let textContent = conversation.dataFiles
+                .compactMap { $0.formattedTextContent }
+                .joined(separator: "\n\n")
+            
+            if !textContent.isEmpty {
+                conversation.content = textContent + "\n\n" + conversation.content
+            }
+            
+            return conversation
+        }
         
         if let regenContent = regenContent {
             if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
@@ -120,6 +132,7 @@ final class ChatSession {
         
         return conversations
     }
+
     
     @MainActor
     func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil, forQuick: Bool = false) async {
