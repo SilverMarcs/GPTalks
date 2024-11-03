@@ -145,11 +145,14 @@ import SwiftUI
         let searchText = self.searchText
         searching = true
         
+        let cleanedSearchText = cleanMarkdown(searchText)
+        
         let results = await Task.detached(priority: .userInitiated) {
             sessions.compactMap { session in
                 let matchingConversations = session.unorderedGroups.compactMap { group in
                     let content = group.activeConversation.content
-                    if content.localizedCaseInsensitiveContains(searchText) {
+                    let cleanedContent = self.cleanMarkdown(content)
+                    if cleanedContent.localizedCaseInsensitiveContains(cleanedSearchText) {
                         return SearchedConversation(conversation: group.activeConversation, session: session)
                     }
                     return nil
@@ -163,4 +166,14 @@ import SwiftUI
             searching = false
         }
     }
+
+    func cleanMarkdown(_ text: String) -> String {
+        // Remove common markdown characters
+//        let markdownCharacters = CharacterSet(charactersIn: "#*_`[]()!:.^")
+        let markdownCharacters = CharacterSet(charactersIn: "#*_`!:.^")
+        let cleanedText = text.components(separatedBy: markdownCharacters).joined()
+        
+        return cleanedText
+    }
+
 }
