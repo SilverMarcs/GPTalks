@@ -49,7 +49,7 @@ struct ChatCommands: Commands {
             Button("Search") {
                 sessionVM.hasFocus.toggle()
             }
-            .keyboardShortcut("f", modifiers: [.command, .shift])
+            .keyboardShortcut("f", modifiers: [.command])
             
             Button("Stop Streaming") {
                 Task { @MainActor in

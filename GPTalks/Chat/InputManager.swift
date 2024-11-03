@@ -105,8 +105,12 @@ extension InputManager {
                 fileName: fileName
             )
 
+            // Remove existing file with the same name, if any
+            if let existingIndex = self.dataFiles.firstIndex(where: { $0.fileName == fileName }) {
+                self.dataFiles.remove(at: existingIndex)
+            }
+
             self.dataFiles.append(typedData)
-            print("Added file to dataFiles array. Current count: \(self.dataFiles.count)")
         }
     }
     

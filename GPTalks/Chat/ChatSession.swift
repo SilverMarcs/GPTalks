@@ -310,9 +310,8 @@ final class ChatSession {
                 }
                 
                 // Remove the groups from the array
-                withAnimation {
-                    groups.removeAll(where: { groupsToDelete.contains($0) })
-                }
+                groups.removeAll(where: { groupsToDelete.contains($0) })
+                
                 
                 // Delete the groups from the model context
                 for group in groupsToDelete {
@@ -320,9 +319,8 @@ final class ChatSession {
                 }
             } else {
                 // If it's not an assistant role, just delete the single group
-                withAnimation {
-                    groups.removeAll(where: { $0 == conversationGroup })
-                }
+                groups.removeAll(where: { $0 == conversationGroup })
+                
                 self.modelContext?.delete(conversationGroup)
             }
         }

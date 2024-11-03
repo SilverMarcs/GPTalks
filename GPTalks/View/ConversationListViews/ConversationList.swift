@@ -152,26 +152,6 @@ struct ConversationList: View {
         #endif
     }
     
-//    var listView: some View {
-//        List {
-//            VStack(spacing: 3) {
-//                ForEach(session.groups) { group in
-//                    ConversationGroupView(group: group)
-//                }
-//                .transaction { $0.animation = nil }
-//
-//                ErrorMessageView(session: session)
-//            }
-//            .listRowSeparator(.hidden)
-//            .transaction { $0.animation = nil }
-//            
-//            Color.clear
-//                .id(String.bottomID)
-//                .listRowSeparator(.hidden)
-//                .transaction { $0.animation = nil }
-//        }
-//    }
-    
     var colorSpacer: some View {
         Color.clear
             .frame(height: spacerHeight)

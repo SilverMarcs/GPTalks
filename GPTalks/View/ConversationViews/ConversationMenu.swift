@@ -9,8 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct ConversationMenu: View {
-    @Environment(ChatSessionVM.self) var sessionVM
-    @Environment(\.isQuick) var isQuick
+    @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(\.isQuick) private var isQuick
     
     var group: ConversationGroup
     

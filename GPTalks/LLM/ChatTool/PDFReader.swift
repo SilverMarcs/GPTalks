@@ -73,7 +73,8 @@ struct PDFReader: ToolProtocol {
     
     static let description: String = """
         You can open and access contents of PDF files. Just respond with a list of PDF file names with .pdf extension.
-        Only use this tool when user explicitly provides PDF files.
+        Only use this tool when user explicitly provides PDF files. Do not invoke it for other file types even if it seems
+        somewhat plausible to use it unless it is explicitly a PDF File.
         """
     
     static var openai: ChatQuery.ChatCompletionToolParam {
