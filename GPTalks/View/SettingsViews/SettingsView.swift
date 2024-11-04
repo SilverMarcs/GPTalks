@@ -31,13 +31,11 @@ struct SettingsView: View {
                 Label("Appearance", systemImage: "paintbrush")
                     .tag(SidebarItem.appearance)
                 
-                Label("Markdown", systemImage: "ellipsis.curlybraces")
-                    .tag(SidebarItem.markdown)
-                
-#if os(macOS)
+                #if os(macOS)
                 Label("Quick Panel", systemImage: "bolt.fill")
                     .tag(SidebarItem.quickPanel)
-#endif
+                #endif
+                
                 Label("Plugins", systemImage: "hammer")
                     .tag(SidebarItem.tools)
                 
@@ -74,8 +72,6 @@ struct SettingsView: View {
                     GeneralSettings()
                 case .appearance:
                     AppearanceSettings()
-                case .markdown:
-                    MarkdownSettings()
                 case .quickPanel:
                     QuickPanelSettings(providerDefaults: providerDefaults.first!)
                 case .tools:
@@ -114,7 +110,6 @@ struct SettingsView: View {
     enum SidebarItem {
         case general
         case appearance
-        case markdown
         case quickPanel
         case tools
         case parameters

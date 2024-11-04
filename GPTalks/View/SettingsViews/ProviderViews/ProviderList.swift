@@ -35,7 +35,7 @@ struct ProviderList: View {
     var content: some View {
         List(selection: $selectedProvider) {
             ForEach(providers, id: \.self) { provider in
-                NavigationLink(destination: ProviderGeneral(provider: provider)) {
+                NavigationLink(destination: ProviderDetail(provider: provider)) {
                     ProviderRow(provider: provider)
                 }
                 .deleteDisabled(provider.isPersistent)

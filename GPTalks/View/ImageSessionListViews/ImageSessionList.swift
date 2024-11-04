@@ -29,19 +29,15 @@ struct ImageSessionList: View {
             List(selection: $imageVM.selections) {
                 SessionListCards(sessionCount: "↗", imageSessionsCount: String(sessions.count))
                 
-                if !imageVM.searchText.isEmpty && sessions.isEmpty {
-                    ContentUnavailableView.search(text: imageVM.searchText)
-                } else {
-                    ForEach(Array(sessions.prefix(config.listCount))) { session in
-                        ImageListRow(session: session)
-                            .tag(session)
-                            .deleteDisabled(session.isStarred)
-                            .listRowSeparator(.visible)
-                            .listRowSeparatorTint(Color.gray.opacity(0.2))
-                    }
-                    .onDelete(perform: deleteItems)
-                    .onMove(perform: move)
+                ForEach(sessions) { session in
+                    ImageListRow(session: session)
+                        .tag(session)
+                        .deleteDisabled(session.isStarred)
+                        .listRowSeparator(.visible)
+                        .listRowSeparatorTint(Color.gray.opacity(0.2))
                 }
+                .onDelete(perform: deleteItems)
+                .onMove(perform: move)
             }
             .toolbar {
                 ImageSessionToolbar()

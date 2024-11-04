@@ -110,6 +110,9 @@ struct QuickPanel: View {
                 .font(.system(size: 25))
                 .textFieldStyle(.plain)
                 .allowsHitTesting(false)
+                .onSubmit {
+                    send()
+                }
             
             ActionButton(size: 28, isStop: session.isReplying) {
                 session.isReplying ? session.stopStreaming() : send()
@@ -178,7 +181,7 @@ struct QuickPanel: View {
         NSApp.keyWindow?.makeKeyAndOrderFront(nil)
         
         Task {
-            let newSession = await session.copy(purpose: .quick)
+            let newSession = await session.copy(purpose: .chat)
             sessionVM.fork(newSession: newSession)
             resetChat()
             

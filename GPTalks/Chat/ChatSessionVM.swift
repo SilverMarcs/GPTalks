@@ -113,6 +113,12 @@ import SwiftUI
     private let debounceInterval: TimeInterval = 0.5 // 500 milliseconds
     
     func debouncedSearch(sessions: [ChatSession]) {
+        guard searchText.count >= 3 else {
+            sessionsWithMatches = []
+            searching = false
+            return
+        }
+        
         searching = true
         searchTask?.cancel()
         searchTask = Task {
@@ -121,9 +127,12 @@ import SwiftUI
                 if !Task.isCancelled {
                     await updateMatchingConversations(sessions: sessions)
                 }
-            } catch {}
+            } catch {
+                print("Error debouncing search: \(error.localizedDescription)")
+            }
         }
     }
+
     
     func updateMatchingConversations(sessions: [ChatSession]) async {
         guard !searchText.isEmpty else {

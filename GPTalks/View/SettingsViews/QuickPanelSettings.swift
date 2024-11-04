@@ -57,14 +57,6 @@ struct QuickPanelSettings: View {
                 
                 ModelPicker(model: $providerDefaults.quickProvider.quickChatModel, models: providerDefaults.quickProvider.chatModels)
             }
-
-            Section("View") {
-                Picker("Markdown Provider", selection: $config.quickMarkdownProvider) {
-                    ForEach(MarkdownProvider.allCases, id: \.self) { provider in
-                        Text(provider.name)
-                    }
-                }
-            }
                 
             Section("System Prompt") {
                 TextEditor(text: $config.quickSystemPrompt)

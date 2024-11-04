@@ -50,7 +50,7 @@ struct ChatSessionList: View {
                 }
                 .onDelete(perform: deleteItems)
             }
-            .onChange(of: sessionVM.searchText) { _, _ in
+            .onChange(of: sessionVM.searchText) {
                 sessionVM.debouncedSearch(sessions: sessions)
             }
             .navigationTitle("Chats")

@@ -18,21 +18,11 @@ struct SessionListRow: View {
     
     var body: some View {
         Group {
-            switch config.sidebarIconSize {
-            case .large:
-                large
-            case .medium:
-                small
-            case .system:
-                switch sidebarRowSize {
-                case .large:
-                    large
-                case .medium:
-                    small
-                default:
-                    small
-                }
-            }
+            #if os(macOS)
+            small
+            #else
+            large
+            #endif
         }
         .swipeActions(edge: .leading) {
             swipeActionsLeading
@@ -65,11 +55,7 @@ struct SessionListRow: View {
                 
                 HStack {
                     Text(subText)
-                    #if os(macOS)
-                        .font(.callout)
-                    #else
                         .font(.footnote)
-                    #endif
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                     
@@ -79,11 +65,7 @@ struct SessionListRow: View {
                 }
             }
         }
-        #if os (macOS)
-        .padding(5)
-        #else
         .padding(3)
-        #endif
     }
     
     var small: some View {
@@ -94,13 +76,8 @@ struct SessionListRow: View {
 //            Text(session.title)
             HighlightedText(text: session.title, highlightedText: sessionVM.searchText, selectable: false)
                 .lineLimit(1)
-            #if os(macOS)
                 .font(.headline)
                 .fontWeight(.regular)
-            #else
-                .font(.subheadline)
-                .fontWeight(.semibold)
-            #endif
                 .opacity(0.9)
             
             Spacer()

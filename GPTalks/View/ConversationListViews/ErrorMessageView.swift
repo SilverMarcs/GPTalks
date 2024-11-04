@@ -8,28 +8,27 @@
 import SwiftUI
 
 struct ErrorMessageView: View {
-    var session: ChatSession
+    @Binding var message: String
     
     var body: some View {
-        if !session.errorMessage.isEmpty {
-            HStack {
-                Text(session.errorMessage)
-                    .textSelection(.enabled)
-                
-                Button(role: .destructive) {
-                    withAnimation {
-                        session.errorMessage = ""
-                    }
-                } label: {
-                    Image(systemName: "delete.backward")
+        HStack {
+            Text(message)
+                .textSelection(.enabled)
+            
+            Button(role: .destructive) {
+                withAnimation {
+                    message = ""
                 }
-                .buttonStyle(.plain)
+            } label: {
+                Image(systemName: "delete.backward")
             }
-            .foregroundStyle(.red)
+            .buttonStyle(.plain)
         }
+        .foregroundStyle(.red)
+        .opacity(message.isEmpty ? 0 : 1)
     }
 }
 
 #Preview {
-    ErrorMessageView(session: .mockChatSession)
+    ErrorMessageView(message: .constant("No message"))
 }

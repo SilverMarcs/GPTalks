@@ -14,41 +14,45 @@ struct ToolSettings: View {
     var body: some View {
         NavigationStack {
             Form {
-                NavigationLink {
-                    Form {
-                        Toggle(isOn: $config.googleCodeExecution) {
-                            Text("Enabled for new chats")
-                            Text("Only available for Google Generative AI Provider")
+                Section("Gemini Plugins") {
+                    NavigationLink {
+                        Form {
+                            Toggle(isOn: $config.googleCodeExecution) {
+                                Text("Enabled for new chats")
+                                Text("Only available for Google AI Provider")
+                            }
+                        }
+                        .navigationTitle("Google Code Execution")
+                        .formStyle(.grouped)
+                        .scrollContentBackground(.visible)
+                    } label: {
+                        Label("Code Execution", systemImage: "curlybraces")
+                    }
+                    
+                    NavigationLink {
+                        Form {
+                            Toggle(isOn: $config.googleSearchRetrieval) {
+                                Text("Enabled for new chats")
+                                Text("Only available for Google AI Provider")
+                            }
+                        }
+                        .navigationTitle("Search Retrieval")
+                        .formStyle(.grouped)
+                        .scrollContentBackground(.visible)
+                    } label: {
+                        Label {
+                            Text("Search Retrieval")
+                        } icon: {
+                            Image("google.SFSymbol")
                         }
                     }
-                    .navigationTitle("Google Code Execution")
-                    .formStyle(.grouped)
-                    .scrollContentBackground(.visible)
-                } label: {
-                    Label("Google Code Execution", systemImage: "curlybraces")
                 }
                 
-                NavigationLink {
-                    Form {
-                        Toggle(isOn: $config.googleSearchRetrieval) {
-                            Text("Enabled for new chats")
-                            Text("Only available for Google Generative AI Provider")
+                Section("General Plugins") {
+                    ForEach(ChatTool.allCases, id: \.self) { tool in
+                        NavigationLink(value: tool) {
+                            Label(tool.displayName, systemImage: tool.icon)
                         }
-                    }
-                    .navigationTitle("Google Search Retrieval")
-                    .formStyle(.grouped)
-                    .scrollContentBackground(.visible)
-                } label: {
-                    Label {
-                        Text("Google Search Retrieval")
-                    } icon: {
-                        Image("google.SFSymbol")
-                    }
-                }
-                
-                ForEach(ChatTool.allCases, id: \.self) { tool in
-                    NavigationLink(value: tool) {
-                        Label(tool.displayName, systemImage: tool.icon)
                     }
                 }
             }
