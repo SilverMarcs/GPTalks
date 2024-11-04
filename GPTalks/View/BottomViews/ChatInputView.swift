@@ -45,6 +45,7 @@ struct ChatInputView: View {
                     sendInput()
                 }
             }
+            .padding(.bottom, 1)
         }
         .padding(.vertical, 1)
     }
@@ -70,7 +71,7 @@ struct ChatInputView: View {
     var iosPlus: some View {
         Menu {
             Button {
-                session.showCamera.toggle()
+                session.showCamera = true
             } label: {
                 Label("Open Camera", systemImage: "camera")
             }
@@ -81,7 +82,12 @@ struct ChatInputView: View {
                 Label("Add Files", systemImage: "doc")
             }
         } label: {
-            PlusImage()
+            Image(systemName: "plus.circle.fill")
+                .resizable()
+                .frame(width: imageSize + 1, height: imageSize + 1)
+                .foregroundStyle(.secondary, .regularMaterial)
+                .buttonStyle(.plain)
+                
         } primaryAction: {
             showPhotosPicker = true
         }
@@ -90,10 +96,8 @@ struct ChatInputView: View {
         .menuIndicator(.hidden)
         .accentColor(.primary)
         .fullScreenCover(isPresented: $session.showCamera) {
-            CameraView { typedData in
-                session.inputManager.dataFiles.append(typedData)
-            }
-            .ignoresSafeArea()
+            CameraView(session: session)
+                .ignoresSafeArea()
         }
         .photosPicker(isPresented: $showPhotosPicker, selection: $selectedPhotos, matching: .images, photoLibrary: .shared())
         .onChange(of: selectedPhotos) {
@@ -116,10 +120,10 @@ struct ChatInputView: View {
     }
     
     var imageSize: CGFloat {
-      #if os(macOS)
+        #if os(macOS)
         23
         #else
-        30
+        31
         #endif
     }
     

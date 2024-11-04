@@ -22,7 +22,7 @@ struct iOSInputEditor: View {
         ZStack(alignment: .bottomTrailing) {
             TextField(placeHolder, text: $prompt, axis: .vertical)
                 .focused($isFocused)
-                .padding(6)
+                .padding(8)
                 .padding(.leading, 5)
                 .lineLimit(10)
                 .modifier(RoundedRectangleOverlayModifier(radius: 18))

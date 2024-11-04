@@ -17,11 +17,15 @@ struct IOSWindow: Scene {
     var body: some Scene {
         WindowGroup("Chats", id: "chats") {
             NavigationSplitView {
-                switch listStateVM.state {
-                case .chats:
-                    ChatSessionList()
-                case .images:
-                    ImageSessionList()
+                if !chatVM.sessionsWithMatches.isEmpty {
+                    ChatDetail()
+                } else {
+                    switch listStateVM.state {
+                    case .chats:
+                        ChatSessionList()
+                    case .images:
+                        ImageSessionList()
+                    }
                 }
             } detail: {
                 switch listStateVM.state {

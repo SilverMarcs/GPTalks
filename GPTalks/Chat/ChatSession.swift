@@ -40,7 +40,7 @@ final class ChatSession {
     
     @Transient
     var proxy: ScrollViewProxy?
-    @Transient
+    @Attribute(.ephemeral)
     var showCamera: Bool = false
     
     @Transient

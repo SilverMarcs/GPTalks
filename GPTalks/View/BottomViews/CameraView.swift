@@ -10,9 +10,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct CameraView: UIViewControllerRepresentable {
-    
-    var onDataAppend: (TypedData) -> Void
-    @Environment(\.presentationMode) var isPresented
+    var session: ChatSession
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
@@ -29,22 +27,22 @@ struct CameraView: UIViewControllerRepresentable {
     }
 
     func makeCoordinator() -> Coordinator {
-        return Coordinator(picker: self, onDataAppend: onDataAppend)
+        return Coordinator(picker: self, session: session)
     }
 }
 
 class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     var picker: CameraView
-    var onDataAppend: (TypedData) -> Void
+    var session: ChatSession
     
-    init(picker: CameraView, onDataAppend: @escaping (TypedData) -> Void) {
+    init(picker: CameraView, session: ChatSession) {
         self.picker = picker
-        self.onDataAppend = onDataAppend
+        self.session = session
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let selectedImage = info[.originalImage] as? UIImage,
-              let imageData = selectedImage.jpegData(compressionQuality: 1.0) else { return }
+              let imageData = selectedImage.jpegData(compressionQuality: 0.7) else { return }
         
         let fileType = UTType.image
         let fileName = "Camera_\(UUID().uuidString)"
@@ -55,8 +53,12 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
             fileName: fileName
         )
         
-        self.onDataAppend(typedData)
-        self.picker.isPresented.wrappedValue.dismiss()
+        self.session.inputManager.dataFiles.append(typedData)
+        self.session.showCamera = false
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.session.showCamera = false
     }
 }
 #endif
