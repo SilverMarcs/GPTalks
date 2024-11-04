@@ -85,7 +85,12 @@ import AuthenticationServices
         #if os(macOS)
         return NSApplication.shared.keyWindow ?? ASPresentationAnchor()
         #else
-        return UIApplication.shared.windows.first ?? ASPresentationAnchor()
+        UIApplication
+            .shared
+            .connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+            .last ?? ASPresentationAnchor()
+//        return UIApplication.shared.windows.first ?? ASPresentationAnchor()
         #endif
     }
     

@@ -19,15 +19,3 @@ struct SearchedConversation: Identifiable, Hashable {
         self.session = session
     }
 }
-
-private struct IsSearchKey: EnvironmentKey {
-    static let defaultValue: Bool = false
-}
-
-extension EnvironmentValues {
-    var isSearch: Bool {
-        get { self[IsSearchKey.self] }
-        set { self[IsSearchKey.self] = newValue }
-    }
-}
-

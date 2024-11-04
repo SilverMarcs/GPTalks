@@ -69,10 +69,6 @@ struct ChatInputView: View {
     #if !os(macOS)
     var iosPlus: some View {
         Menu {
-            Button(action: resetContext) {
-                Label("Reset Context", systemImage: "eraser")
-            }
-            
             Button {
                 session.showCamera.toggle()
             } label: {

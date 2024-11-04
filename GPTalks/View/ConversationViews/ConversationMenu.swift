@@ -139,6 +139,7 @@ struct ConversationMenu: View {
     }
 
     var regenGroup: some View {
+        #if os(macOS)
         Menu {
             ForEach(providers) { provider in
                 Menu {
@@ -162,55 +163,30 @@ struct ConversationMenu: View {
             regen()
         }
         .menuStyle(HoverScaleMenuStyle())
+        #else
+        Button {
+            regen()
+        } label: {
+            Label("Regenerate", systemImage: "arrow.2.circlepath")
+        }
+        #endif
     }
         
-        func regen() {
-            if group.role == .assistant {
-                Task { @MainActor in
-                    await group.session?.regenerate(group: group)
-                }
-            } else if group.role == .user {
-                group.setupEditing()
-                Task { @MainActor in
-                    await group.session?.sendInput()
-                }
+    func regen() {
+        if group.role == .assistant {
+            Task { @MainActor in
+                await group.session?.regenerate(group: group)
+            }
+        } else if group.role == .user {
+            group.setupEditing()
+            Task { @MainActor in
+                await group.session?.sendInput()
             }
         }
+    }
 
     @ViewBuilder
     var navigate: some View {
-//        var canNavigateLeft: Bool {
-//            guard let session = group.session else { return false }
-//            let groups = session.groups
-//            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }) {
-//                if groups.count >= 2 && indexOfCurrentGroup >= groups.count - 2 {
-//                    return group.conversations.count > 1 && group.canGoLeft
-//                }
-//            }
-//            return false
-//        }
-//        
-//        var canNavigateRight: Bool {
-//            guard let session = group.session else { return false }
-//            let groups = session.groups
-//            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }) {
-//                if groups.count >= 2 && indexOfCurrentGroup >= groups.count - 2 {
-//                    return group.conversations.count > 1 && group.canGoRight
-//                }
-//            }
-//            return false
-//        }
-//        
-//        var shouldShowButtons: Bool {
-//            guard let session = group.session else { return false }
-//            let groups = session.groups
-//            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }) {
-//                return groups.count >= 2 && indexOfCurrentGroup >= groups.count - 2
-//            }
-//            return false
-//        }
-        
-//        return Group {
         #if os(macOS)
         if group.conversations.count > 1 && group.role == .assistant {
             Button {
@@ -218,7 +194,6 @@ struct ConversationMenu: View {
             } label: {
                 Label("Previous", systemImage: "chevron.left")
             }
-//                .disabled(!shouldShowButtons || !canNavigateLeft)
             .help("Previous")
             
             Button {
@@ -226,7 +201,6 @@ struct ConversationMenu: View {
             } label: {
                 Label("Next", systemImage: "chevron.right")
             }
-//                .disabled(!shouldShowButtons || !canNavigateRight)
             .help("Next")
         }
         #else
@@ -237,14 +211,12 @@ struct ConversationMenu: View {
                 } label: {
                     Label("Previous", systemImage: "chevron.left")
                 }
-//                    .disabled(!shouldShowButtons || !canNavigateLeft)
                 
                 Button {
                     group.setActiveToRight()
                 } label: {
                     Label("Next", systemImage: "chevron.right")
                 }
-//                    .disabled(!shouldShowButtons || !canNavigateRight)
             }
         }
         #endif

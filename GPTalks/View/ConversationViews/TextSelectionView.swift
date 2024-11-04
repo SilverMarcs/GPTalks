@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MarkdownWebView
 
 struct TextSelectionView: View {
     @Environment(\.dismiss) var dismiss
@@ -14,10 +15,9 @@ struct TextSelectionView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                TextEditor(text: .constant(content))
-                    .scrollDisabled(true)
-                    .padding(.horizontal)
+                MarkdownWebView(content)
             }
+            .safeAreaPadding(.horizontal)
             .navigationTitle("Select Text")
             .toolbarTitleDisplayMode(.inline)
             .toolbar {

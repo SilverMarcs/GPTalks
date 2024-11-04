@@ -24,14 +24,3 @@ struct ChatWindow: Scene {
 }
 #endif
 
-private struct ProviderKey: EnvironmentKey {
-    static let defaultValue: [Provider] = []
-}
-
-extension EnvironmentValues {
-    var providers: [Provider] {
-        get { self[ProviderKey.self] }
-        set { self[ProviderKey.self] = newValue }
-    }
-}
-

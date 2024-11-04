@@ -47,16 +47,12 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
               let imageData = selectedImage.jpegData(compressionQuality: 1.0) else { return }
         
         let fileType = UTType.image
-        let fileName = UUID().uuidString
-        let fileSize = ByteCountFormatter.string(fromByteCount: Int64(imageData.count), countStyle: .file)
-        let fileExtension = "jpeg"
+        let fileName = "Camera_\(UUID().uuidString)"
         
         let typedData = TypedData(
             data: imageData,
             fileType: fileType,
-            fileName: fileName,
-            fileSize: fileSize,
-            fileExtension: fileExtension
+            fileName: fileName
         )
         
         self.onDataAppend(typedData)

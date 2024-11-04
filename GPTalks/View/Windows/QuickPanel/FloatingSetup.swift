@@ -110,19 +110,6 @@ class QuickPanelWindow2<Content: View>: NSPanel {
     }
 }
 
-
-
-private struct FloatingPanelKey: EnvironmentKey {
-    static let defaultValue: NSPanel? = nil
-}
-
-extension EnvironmentValues {
-    var floatingPanel: NSPanel? {
-        get { self[FloatingPanelKey.self] }
-        set { self[FloatingPanelKey.self] = newValue }
-    }
-}
-
 fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
     @Binding var isPresented: Bool
     @Binding var showAdditionalContent: Bool

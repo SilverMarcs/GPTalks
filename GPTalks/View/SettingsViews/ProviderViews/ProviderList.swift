@@ -44,9 +44,6 @@ struct ProviderList: View {
         }
         .navigationTitle("Providers")
         .toolbarTitleDisplayMode(.inline)
-//        .toolbar {
-//            addButton
-//        }
     }
     
     private var addButton: some View {
@@ -113,7 +110,7 @@ struct ProviderList: View {
         for index in offsets {
             let providerToDelete = providers[index]
             
-            if providerToDelete.isPersistent || providerToDelete == defaultProvider {
+            if providerToDelete == defaultProvider {
                 providersToDelete.remove(index)
             } else {
                 for sessionConfig in allSessionConfigs where sessionConfig.provider == providerToDelete {
