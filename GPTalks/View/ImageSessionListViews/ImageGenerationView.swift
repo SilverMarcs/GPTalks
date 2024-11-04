@@ -15,9 +15,9 @@ struct ImageGenerationView: View {
         VStack(spacing: 10) {
             HStack {
                 Spacer()
-                
+
                 if generation.state == .generating {
-                    StopButton {
+                    ActionButton(isStop: true) {
                         generation.stopGenerating()
                     }
                 }

@@ -110,7 +110,9 @@ extension InputManager {
                 self.dataFiles.remove(at: existingIndex)
             }
 
-            self.dataFiles.append(typedData)
+            withAnimation {
+                self.dataFiles.append(typedData)
+            }
         }
     }
     

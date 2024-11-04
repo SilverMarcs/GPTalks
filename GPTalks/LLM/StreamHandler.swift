@@ -161,10 +161,4 @@ struct StreamHandler {
             }
         }
     }
-
-    private func scrollToBottom(proxy: ScrollViewProxy) {
-        withAnimation {
-            proxy.scrollTo("Bottom")
-        }
-    }
 }

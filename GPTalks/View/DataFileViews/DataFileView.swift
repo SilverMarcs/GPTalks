@@ -36,7 +36,9 @@ struct DataFileView: View {
             if isCrossable {
                 #if os(macOS)
                 Button {
-                    dataFiles.removeAll(where: { $0.id == typedData.id })
+                    withAnimation {
+                        dataFiles.removeAll(where: { $0.id == typedData.id })
+                    }
                 } label: {
                     Label("Remove", systemImage: "xmark.circle.fill")
                         

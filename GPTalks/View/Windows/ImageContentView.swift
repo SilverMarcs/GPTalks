@@ -19,6 +19,7 @@ struct ImageContentView: View {
         } detail: {
             if let imageSession = sessionVM.activeImageSession {
                 ImageGenerationList(session: imageSession)
+                    .id(imageSession.id)
             } else {
                 Text("^[\(sessionVM.selections.count) Image Session](inflect: true) Selected")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)

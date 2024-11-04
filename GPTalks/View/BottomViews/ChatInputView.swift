@@ -21,37 +21,47 @@ struct ChatInputView: View {
     @FocusState private var isFocused: Bool
     
     var body: some View {
-        HStack(alignment: .bottom, spacing: 0) {
-            Group {
-                if session.inputManager.state == .editing {
-                    CrossButton(size: imageSize) {
+        VStack(alignment: .leading, spacing: 0) {
+            if session.inputManager.state == .editing {
+                HStack(spacing: 5) {
+                    CrossButton {
                         session.inputManager.resetEditing()
                     }
+                    
+                    Text("Editing")
+                        .foregroundStyle(.secondary)
                 }
+                .padding(.horizontal, 5)
+                .padding(5)
                 
-                plusButton
+                Divider()
             }
-            .padding(.trailing, -3)
             
-            VStack(alignment: .leading, spacing: 0) {
-                Spacer(minLength: 0)
+            HStack(alignment: .bottom, spacing: 0) {
+                plusButton
+                    .padding(.trailing, -3)
                 
-                if !session.inputManager.dataFiles.isEmpty {
-                    DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true, edge: .leading)
+                VStack(alignment: .leading, spacing: 0) {
+                    Spacer(minLength: 0)
+                    
+                    if !session.inputManager.dataFiles.isEmpty {
+                        DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true, edge: .leading)
+                            .padding(.bottom, 5)
+                    }
+                    
+                    InputEditor(prompt: $session.inputManager.prompt,
+                                provider: session.config.provider, isFocused: _isFocused)
+                    
+                    Spacer(minLength: 0)
                 }
                 
-                InputEditor(prompt: $session.inputManager.prompt,
-                            provider: session.config.provider, isFocused: _isFocused)
-                
-                Spacer(minLength: 0)
+                ActionButton(size: imageSize, isStop: session.isReplying) {
+                    session.isReplying ? session.stopStreaming() : sendInput()
+                }
             }
-
-            ActionButton(size: imageSize, isStop: session.isReplying) {
-                session.isReplying ? session.stopStreaming() : sendInput()
-            }
+            .padding(6)
         }
-        .padding(6)
-        .roundedRectangleOverlay(radius: 20)
+        .roundedRectangleOverlay(radius: 18)
         .modifier(CommonInputStyling())
     }
 

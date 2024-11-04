@@ -25,8 +25,10 @@ struct ImageGenerationList: View {
                     .id(String.bottomID)
                     .listRowSeparator(.hidden)
             }
+            #if !os(macOS)
             .listStyle(.plain)
-            .onChange(of: imageVM.selections) {
+            #endif
+            .task {
                 session.proxy = proxy
                 scrollToBottom(proxy: proxy)
             }
