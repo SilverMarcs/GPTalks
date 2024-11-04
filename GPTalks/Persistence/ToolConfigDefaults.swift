@@ -22,7 +22,7 @@ class ToolConfigDefaults: ObservableObject {
     @AppStorage("googleSearchRetrieval") var googleSearchRetrieval: Bool = false
     
     // url scrape
-    @AppStorage("urlMaxContentLength") var urlMaxContentLength: Int = 10000
+    @AppStorage("rapidApiKey") var rapidApiKey: String = "<Enter RapidAPI Key>"
     
     // pdf reader
     @AppStorage("pdfMaxContentLength") var pdfMaxContentLength: Int = 10000

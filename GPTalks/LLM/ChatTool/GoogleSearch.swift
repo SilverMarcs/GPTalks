@@ -17,9 +17,8 @@ struct GoogleSearch: ToolProtocol {
         let apiKey = ToolConfigDefaults.shared.googleApiKey
         let googleSearchEngineId = ToolConfigDefaults.shared.googleSearchEngineId
         
-        // if the private values are not set, throw an error
         guard !apiKey.isEmpty, !googleSearchEngineId.isEmpty else {
-            throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "API key and/or search engine ID not set"])
+            throw RuntimeError("API key and/or search engine ID not set")
         }
         
         let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""

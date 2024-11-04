@@ -20,8 +20,12 @@ struct GoogleSearchSettings: View {
         }
         
         Section("Secrets") {
-            TextField("Google Search API Key", text: $config.googleApiKey)
             TextField("Google Search Engine ID", text: $config.googleSearchEngineId)
+            TextField(text: $config.googleApiKey) {
+                Text("Google Search API Key")
+                Text("Follow [this](https://coda.io/@jon-dallas/google-image-search-pack-example/search-engine-id-and-google-api-key-3) guide to get your credentials")
+                
+            }
         }
     }
 }

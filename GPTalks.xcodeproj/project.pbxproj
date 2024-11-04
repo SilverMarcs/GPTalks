@@ -102,7 +102,6 @@
 		088DA8F92CA752EF006C017E /* IOSWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DA8F82CA752EF006C017E /* IOSWindow.swift */; };
 		08915D942C373340008ADE27 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D932C373340008ADE27 /* ProviderImage.swift */; };
 		08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D982C37C648008ADE27 /* ProviderDetail.swift */; };
-		0891AC0D2C846B2B001379C0 /* Reeeed in Frameworks */ = {isa = PBXBuildFile; productRef = 0891AC0C2C846B2B001379C0 /* Reeeed */; };
 		0891D5732C96796100BA428F /* ImageConfigDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0891D5722C96796100BA428F /* ImageConfigDefaults.swift */; };
 		0891D5752C967A9700BA428F /* ImageSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0891D5742C967A9700BA428F /* ImageSettings.swift */; };
 		0891D5822C968B3A00BA428F /* ToolConfigDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0891D5812C968B3A00BA428F /* ToolConfigDefaults.swift */; };
@@ -419,7 +418,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0891AC0D2C846B2B001379C0 /* Reeeed in Frameworks */,
 				088CDD3D2CBF9FF600E5FB41 /* MarkdownWebView in Frameworks */,
 				08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */,
 				0854A1912CB36C350055344E /* SwiftAnthropic in Frameworks */,
@@ -934,7 +932,6 @@
 			packageProductDependencies = (
 				08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */,
 				08AAFBA02C3D1086002C04E0 /* GPTEncoder */,
-				0891AC0C2C846B2B001379C0 /* Reeeed */,
 				0854A1902CB36C350055344E /* SwiftAnthropic */,
 				08C219CA2CB80D5F0062BF1B /* OpenAI */,
 				088CDD362CBF9C6500E5FB41 /* GoogleGenerativeAI */,
@@ -1017,7 +1014,6 @@
 				08AAFB942C3CF0DD002C04E0 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				08AAFB9F2C3D1086002C04E0 /* XCRemoteSwiftPackageReference "GPTEncoder" */,
 				086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
-				0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */,
 				08C219C92CB80D5F0062BF1B /* XCRemoteSwiftPackageReference "OpenAI" */,
 				088CDD3B2CBF9FF600E5FB41 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 			);
@@ -1641,14 +1637,6 @@
 				kind = branch;
 			};
 		};
-		0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/nate-parrott/reeeed";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.1;
-			};
-		};
 		08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jamesrochabrun/SwiftAnthropic";
@@ -1698,11 +1686,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 088CDD3B2CBF9FF600E5FB41 /* XCRemoteSwiftPackageReference "markdown-webview" */;
 			productName = MarkdownWebView;
-		};
-		0891AC0C2C846B2B001379C0 /* Reeeed */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0891AC0B2C846B2B001379C0 /* XCRemoteSwiftPackageReference "reeeed" */;
-			productName = Reeeed;
 		};
 		08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;
