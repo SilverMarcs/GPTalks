@@ -18,7 +18,7 @@ struct DataFileView: View {
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack {
+            LazyHStack {
                 ForEach(dataFiles) { dataFile in
                     fileItemView(for: dataFile)
                 }
@@ -34,32 +34,21 @@ struct DataFileView: View {
             fileView(for: typedData)
             
             if isCrossable {
-                #if os(macOS)
                 Button {
                     withAnimation {
                         dataFiles.removeAll(where: { $0.id == typedData.id })
                     }
                 } label: {
                     Label("Remove", systemImage: "xmark.circle.fill")
-                        
+                        #if !os(macOS)
+                        .padding(10) // Increase padding for better touch area
+                        .contentShape(.rect)
+                        #endif
                 }
                 .buttonStyle(HoverScaleButtonStyle())
                 .shadow(radius: 5)
                 .padding(.bottom, 5)
                 .padding(.trailing, 5)
-                #else
-                Button {
-                    dataFiles.removeAll(where: { $0.id == typedData.id })
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.background, .primary)
-                        .padding(10) // Increase padding for better touch area
-                        .contentShape(.rect)
-                }
-                .shadow(radius: 5)
-                .buttonStyle(.plain)
-                .padding(3)
-                #endif
             }
         }
     }
