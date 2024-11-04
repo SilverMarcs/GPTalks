@@ -8,34 +8,39 @@
 import SwiftUI
 import PhotosUI
 import UniformTypeIdentifiers
+import SwiftData
 
 struct ChatInputView: View {
     @Environment(\.colorScheme) var colorScheme
     @Bindable var session: ChatSession
     
     @State private var isFilePickerPresented: Bool = false
-
     @State private var showPhotosPicker = false
     @State private var selectedPhotos = [PhotosPickerItem]()
     
     @FocusState private var isFocused: Bool
     
     var body: some View {
-        HStack(alignment: .bottom, spacing: 15) {
+        HStack(alignment: .bottom, spacing: 0) {
             if session.inputManager.state == .editing {
                 CrossButton(size: imageSize) { session.inputManager.resetEditing() }
             }
             
             plusButton
+                .padding(6)
+                .padding(.trailing, -6)
             
             VStack(alignment: .leading, spacing: 8) {
+                Spacer(minLength: 0)
+                
                 if !session.inputManager.dataFiles.isEmpty {
                     DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true, edge: .leading)
                 }
                 
                 InputEditor(prompt: $session.inputManager.prompt,
                             provider: session.config.provider, isFocused: _isFocused)
-                .padding(.vertical, -2)
+                
+                Spacer(minLength: 0)
             }
 
             ActionButton(size: imageSize, isStop: session.isReplying) {
@@ -45,9 +50,9 @@ struct ChatInputView: View {
                     sendInput()
                 }
             }
-            .padding(.bottom, 1)
+            .padding(6)
         }
-        .padding(.vertical, 1)
+        .modifier(RoundedRectangleOverlayModifier(radius: 20))
     }
 
     var plusButton: some View {
@@ -85,7 +90,7 @@ struct ChatInputView: View {
             Image(systemName: "plus.circle.fill")
                 .resizable()
                 .frame(width: imageSize + 1, height: imageSize + 1)
-                .foregroundStyle(.secondary, .regularMaterial)
+                .foregroundStyle(.secondary, .clear)
                 .buttonStyle(.plain)
                 
         } primaryAction: {
@@ -138,6 +143,8 @@ struct ChatInputView: View {
 }
 
 #Preview {
-    ChatInputView(session: .mockChatSession)
-        .padding()
+//    ChatInputView(session: .mockChatSession)
+    ConversationList(session: .mockChatSession)
+        .environment(ChatSessionVM(modelContext: try! ModelContainer(for: ChatSession.self).mainContext))
+//        .padding()
 }

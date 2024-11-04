@@ -19,8 +19,7 @@ struct MacInputEditor: View {
         ZStack(alignment: .leading) {
             if prompt.isEmpty {
                 Text(placeHolder)
-                    .padding(6)
-                    .padding(.leading, 6)
+                    .padding(.leading, 5)
                     .foregroundStyle(.placeholder)
             }
             
@@ -29,10 +28,8 @@ struct MacInputEditor: View {
                 .frame(maxHeight: 400)
                 .fixedSize(horizontal: false, vertical: true)
                 .scrollContentBackground(.hidden)
-                .padding(6)
         }
         .font(.body)
-        .modifier(RoundedRectangleOverlayModifier(radius: 18))
         .task {
             guard sessionVM.chatSelections.count == 1 else { return }
             isFocused = true

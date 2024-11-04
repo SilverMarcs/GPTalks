@@ -166,7 +166,7 @@ extension InputManager {
                    let fileURL = URL(dataRepresentation: fileURLData, relativeTo: nil) {
                     try await processFile(at: fileURL)
                 } else if let imageData = pasteboardItem.data(forType: .png) ?? pasteboardItem.data(forType: .tiff) {
-                    try await processData(imageData, fileType: .png, fileName: "Pasted Image")
+                    try await processData(imageData, fileType: .png, fileName: "Pasted_Image_\(UUID().uuidString).png")
                 }
             } catch {
                 print("Error processing paste: \(error)")

@@ -18,7 +18,7 @@ struct PlusButton: View {
             Image(systemName: "plus.circle.fill")
                 .resizable()
                 .frame(width: size, height: size)
-                .foregroundStyle(.secondary, .quinary)
+                .foregroundStyle(.primary, .clear)
         }
         .keyboardShortcut("i", modifiers: .command)
         .buttonStyle(.plain)

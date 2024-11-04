@@ -19,27 +19,9 @@ struct iOSInputEditor: View {
     @State private var showPopover: Bool = false
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
             TextField(placeHolder, text: $prompt, axis: .vertical)
                 .focused($isFocused)
-                .padding(8)
-                .padding(.leading, 5)
-                .lineLimit(10)
-                .modifier(RoundedRectangleOverlayModifier(radius: 18))
-
-            if prompt.count > 25 {
-                ExpandButton(size: 25) { showPopover.toggle() }
-                    .padding(5)
-                    .sheet(isPresented: $showPopover) {
-                        ExpandedTextField(prompt: $prompt)
-                    }
-            }
-        }
-//        .task {
-//            if let session = sessionVM.activeSession {
-//                isFocused = true
-//            }
-//        }
+                .lineLimit(10, reservesSpace: false)
     }
     
     var placeHolder: String {
