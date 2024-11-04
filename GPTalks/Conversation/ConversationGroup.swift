@@ -82,7 +82,9 @@ final class ConversationGroup {
         if activeConversationIndex < conversations.count - 1 {
             activeConversationIndex += 1
         }
-        session?.proxy?.scrollTo(self, anchor: .bottom)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.session?.proxy?.scrollTo(self, anchor: .bottom)
+        }
     }
     
     var canGoLeft: Bool {
@@ -93,7 +95,9 @@ final class ConversationGroup {
         if activeConversationIndex > 0 {
             activeConversationIndex -= 1
         }
-        session?.proxy?.scrollTo(self, anchor: .bottom)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.session?.proxy?.scrollTo(self, anchor: .bottom)
+        }
     }
     
     func deleteSelf() {

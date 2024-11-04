@@ -37,9 +37,9 @@ struct UserMessage: View {
                     (conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
             )
             
-    #if os(macOS)
+            #if os(macOS)
             contextMenu
-    #endif
+            #endif
         }
         .padding(.leading, leadingPadding)
         #if !os(macOS)

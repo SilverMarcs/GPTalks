@@ -11,6 +11,7 @@ import SwiftData
 struct ConversationMenu: View {
     @Environment(ChatSessionVM.self) private var sessionVM
     @Environment(\.isQuick) private var isQuick
+    @Environment(\.providers) var providers
     
     var group: ConversationGroup
     
@@ -24,7 +25,7 @@ struct ConversationMenu: View {
         #if os(macOS)
             HStack {
                 buttons
-                    .labelStyle(.iconOnly)
+                    .buttonStyle(HoverScaleButtonStyle())
             }
             .frame(height: 20)
         #else
@@ -61,8 +62,10 @@ struct ConversationMenu: View {
     @ViewBuilder
     var editGroup: some View {
         if !isQuick && group.role == .user {
-            HoverScaleButton(icon: "pencil.and.outline", label: "Edit") {
+            Button {
                 group.setupEditing()
+            } label: {
+                Label("Edit", systemImage: "pencil.and.outline")
             }
             .help("Edit")
         }
@@ -71,9 +74,11 @@ struct ConversationMenu: View {
     @ViewBuilder
     var expandHeight: some View {
         if group.role == .user {
-            HoverScaleButton(icon: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right", label: isExpanded ? "Collapse" : "Expand") {
+            Button {
                 isExpanded.toggle()
                 group.session?.proxy?.scrollTo(group, anchor: .bottom)
+            } label: {
+                Label(isExpanded ? "Collapse" : "Expand", systemImage: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right")
             }
             .contentTransition(.symbolEffect(.replace))
             .help("Expand")
@@ -86,7 +91,7 @@ struct ConversationMenu: View {
             ProgressView()
                 .controlSize(.small)
         } else {
-            HoverScaleButton(icon: "arrow.branch", label: "Fork Session") {
+            Button {
                 isForking = true
                 Task {
                     if let newSession = await group.session?.copy(from: group, purpose: .chat) {
@@ -94,18 +99,23 @@ struct ConversationMenu: View {
                         isForking = false
                     }
                 }
+            } label: {
+                Label("Fork Session", systemImage: "arrow.branch")
             }
+            .help("Fork Session")
         }
     }
 
     var copyText: some View {
-        HoverScaleButton(icon: isCopied ? "checkmark" : "paperclip", label: "Copy Text") {
+        Button {
             group.activeConversation.content.copyToPasteboard()
             
             isCopied = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 isCopied = false
             }
+        } label: {
+            Label(isCopied ? "Copied" : "Copy Text", systemImage: isCopied ? "checkmark" : "paperclip")
         }
         .contentTransition(.symbolEffect(.replace))
     }
@@ -115,18 +125,46 @@ struct ConversationMenu: View {
             toggleTextSelection?()
         } label: {
             Label("Select Text", systemImage: "text.cursor")
-                .help("Select Text")
         }
+        .help("Select Text")
     }
 
     var deleteGroup: some View {
-        HoverScaleButton(icon: "minus.circle", label: "Delete") {
+        Button {
             group.deleteSelf()
+        } label: {
+            Label("Delete", systemImage: "minus.circle")
         }
+        .help("Delete")
     }
 
     var regenGroup: some View {
-        HoverScaleButton(icon: "arrow.2.circlepath", label: "Regenerate") {
+        Menu {
+            ForEach(providers) { provider in
+                Menu {
+                    ForEach(provider.chatModels) { model in
+                        Button {
+                            group.session?.config.provider = provider
+                            group.session?.config.model = model
+                            
+                            regen()
+                        } label: {
+                            Text(model.name)
+                        }
+                    }
+                } label: {
+                    Text(provider.name)
+                }
+            }
+        } label: {
+            Label("Regenerate", systemImage: "arrow.2.circlepath")
+        } primaryAction: {
+            regen()
+        }
+        .menuStyle(HoverScaleMenuStyle())
+    }
+        
+        func regen() {
             if group.role == .assistant {
                 Task { @MainActor in
                     await group.session?.regenerate(group: group)
@@ -138,71 +176,79 @@ struct ConversationMenu: View {
                 }
             }
         }
-    }
 
+    @ViewBuilder
     var navigate: some View {
-        var canNavigateLeft: Bool {
-            guard let session = group.session else { return false }
-            let groups = session.groups
-            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }) {
-                if groups.count >= 2 && indexOfCurrentGroup >= groups.count - 2 {
-                    return group.conversations.count > 1 && group.canGoLeft
-                }
-            }
-            return false
-        }
+//        var canNavigateLeft: Bool {
+//            guard let session = group.session else { return false }
+//            let groups = session.groups
+//            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }) {
+//                if groups.count >= 2 && indexOfCurrentGroup >= groups.count - 2 {
+//                    return group.conversations.count > 1 && group.canGoLeft
+//                }
+//            }
+//            return false
+//        }
+//        
+//        var canNavigateRight: Bool {
+//            guard let session = group.session else { return false }
+//            let groups = session.groups
+//            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }) {
+//                if groups.count >= 2 && indexOfCurrentGroup >= groups.count - 2 {
+//                    return group.conversations.count > 1 && group.canGoRight
+//                }
+//            }
+//            return false
+//        }
+//        
+//        var shouldShowButtons: Bool {
+//            guard let session = group.session else { return false }
+//            let groups = session.groups
+//            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }) {
+//                return groups.count >= 2 && indexOfCurrentGroup >= groups.count - 2
+//            }
+//            return false
+//        }
         
-        var canNavigateRight: Bool {
-            guard let session = group.session else { return false }
-            let groups = session.groups
-            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }) {
-                if groups.count >= 2 && indexOfCurrentGroup >= groups.count - 2 {
-                    return group.conversations.count > 1 && group.canGoRight
-                }
+//        return Group {
+        #if os(macOS)
+        if group.conversations.count > 1 && group.role == .assistant {
+            Button {
+                group.setActiveToLeft()
+            } label: {
+                Label("Previous", systemImage: "chevron.left")
             }
-            return false
-        }
-        
-        var shouldShowButtons: Bool {
-            guard let session = group.session else { return false }
-            let groups = session.groups
-            if let indexOfCurrentGroup = groups.firstIndex(where: { $0.id == group.id }) {
-                return groups.count >= 2 && indexOfCurrentGroup >= groups.count - 2
+//                .disabled(!shouldShowButtons || !canNavigateLeft)
+            .help("Previous")
+            
+            Button {
+                group.setActiveToRight()
+            } label: {
+                Label("Next", systemImage: "chevron.right")
             }
-            return false
+//                .disabled(!shouldShowButtons || !canNavigateRight)
+            .help("Next")
         }
-        
-        return Group {
-            #if os(macOS)
-            if group.conversations.count > 1 && group.role == .assistant {
-                HoverScaleButton(icon: "chevron.left", label: "Previous") {
+        #else
+        if group.conversations.count > 1 && group.role == .assistant {
+            Section("Iterations: \(group.activeConversationIndex + 1)/\(group.conversations.count)") {
+                Button {
                     group.setActiveToLeft()
+                } label: {
+                    Label("Previous", systemImage: "chevron.left")
                 }
-                .disabled(!shouldShowButtons || !canNavigateLeft)
-                .help("Previous")
+//                    .disabled(!shouldShowButtons || !canNavigateLeft)
                 
-                HoverScaleButton(icon: "chevron.right", label: "Next") {
+                Button {
                     group.setActiveToRight()
+                } label: {
+                    Label("Next", systemImage: "chevron.right")
                 }
-                .disabled(!shouldShowButtons || !canNavigateRight)
-                .help("Next")
+//                    .disabled(!shouldShowButtons || !canNavigateRight)
             }
-            #else
-            if group.conversations.count > 1 && group.role == .assistant {
-                Section("Iterations: \(group.activeConversationIndex + 1)/\(group.conversations.count)") {
-                    HoverScaleButton(icon: "chevron.left", label: "Previous") {
-                        group.setActiveToLeft()
-                    }
-                    .disabled(!shouldShowButtons || !canNavigateLeft)
-                    
-                    HoverScaleButton(icon: "chevron.right", label: "Next") {
-                        group.setActiveToRight()
-                    }
-                    .disabled(!shouldShowButtons || !canNavigateRight)
-                }
-            }
-            #endif
         }
+        #endif
+        
     }
 }
 

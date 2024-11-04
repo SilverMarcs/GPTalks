@@ -10,6 +10,7 @@ import SwiftUI
 import SwiftData
 
 struct QuickPanelSettings: View {
+    @Environment(\.modelContext) var modelContext
     @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
     @ObservedObject var config = AppConfig.shared
@@ -37,7 +38,22 @@ struct QuickPanelSettings: View {
             }
             
             Section("LLM") {
-                ProviderPicker(provider: $providerDefaults.quickProvider, providers: providers)
+                ProviderPicker(provider: $providerDefaults.quickProvider, providers: providers) { provider in
+                    var descriptor = FetchDescriptor<ChatSession>(
+                        predicate: #Predicate { $0.isQuick == true }
+                    )
+                    
+                    descriptor.fetchLimit = 1
+                    
+                    do {
+                        let quickSessions = try modelContext.fetch(descriptor)
+                        let session = quickSessions.first
+                        session?.config.provider = provider
+                        session?.config.model = provider.quickChatModel
+                    } catch {
+                        print("Error fetching quick session: \(error)")
+                    }
+                }
                 
                 ModelPicker(model: $providerDefaults.quickProvider.quickChatModel, models: providerDefaults.quickProvider.chatModels)
             }

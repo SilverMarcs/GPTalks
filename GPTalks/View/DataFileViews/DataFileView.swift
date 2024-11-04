@@ -35,9 +35,13 @@ struct DataFileView: View {
             
             if isCrossable {
                 #if os(macOS)
-                HoverScaleButton(icon: "xmark.circle.fill", label: "") {
+                Button {
                     dataFiles.removeAll(where: { $0.id == typedData.id })
+                } label: {
+                    Label("Remove", systemImage: "xmark.circle.fill")
+                        
                 }
+                .buttonStyle(HoverScaleButtonStyle())
                 .shadow(radius: 5)
                 .padding(.bottom, 5)
                 #else

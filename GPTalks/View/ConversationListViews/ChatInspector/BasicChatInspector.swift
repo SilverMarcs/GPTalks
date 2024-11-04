@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct BasicChatInspector: View {
     @Bindable var session: ChatSession
     
-    @Query(filter: #Predicate<Provider> { $0.isEnabled })
-    var providers: [Provider]
+//    @Query(filter: #Predicate<Provider> { $0.isEnabled })
+//    var providers: [Provider]
+    
+    @Environment(\.providers) var providers
     
     @State var isGeneratingTtile: Bool = false
     @State var showingDeleteConfirmation: Bool = false

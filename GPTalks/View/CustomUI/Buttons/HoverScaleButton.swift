@@ -7,20 +7,21 @@
 
 import SwiftUI
 
-struct HoverScaleButton: View {
-    let icon: String // SF Symbol name
-    let label: String
-    let action: () -> Void
-    @State var hovering = false
+struct HoverScaleButtonStyle: ButtonStyle {
+    @State private var isHovering = false
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .buttonStyle(.plain)
+            .onHover { isHovering = $0 }
+            .symbolEffect(.scale.up, isActive: isHovering)
+            .labelStyle(.iconOnly)
+    }
+}
 
-    var body: some View {
-        Button(action: {
-            action()
-        }) {
-            Label(label, systemImage: icon)
-        }
-        .buttonStyle(.plain)
-        .onHover { hovering = $0 }
-        .symbolEffect(.scale.up, isActive: hovering)
+struct HoverScaleMenuStyle: MenuStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Menu(configuration)
+            .buttonStyle(HoverScaleButtonStyle())
     }
 }

@@ -6,14 +6,11 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ChatSessionToolbar: ToolbarContent {
     @Environment(ChatSessionVM.self) var sessionVM
     @Environment(\.modelContext) var modelContext
-    
-    @Query(filter: #Predicate<Provider> { $0.isEnabled })
-    var providers: [Provider]
+    @Environment(\.providers) var providers
     
     @State private var showSettings = false
     

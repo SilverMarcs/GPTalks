@@ -6,12 +6,10 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ConversationStatusBar: View {
+    @Environment(\.providers) var providers
     @Bindable var session: ChatSession
-    @Query(filter: #Predicate<Provider> { $0.isEnabled })
-    var providers: [Provider]
     
     var body: some View {
         HStack {

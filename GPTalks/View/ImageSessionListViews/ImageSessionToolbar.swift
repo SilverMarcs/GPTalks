@@ -6,16 +6,14 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ImageSessionToolbar: ToolbarContent {
     @Environment(ImageSessionVM.self) var imageVM
     @Environment(\.modelContext) var modelContext
+    @Environment(\.providers) var providers
     
     @ObservedObject var config = AppConfig.shared
     
-    @Query(filter: #Predicate<Provider> { $0.isEnabled })
-    var providers: [Provider]
     
     var filteredProviders: [Provider] {
         providers.filter { !$0.imageModels.isEmpty }
