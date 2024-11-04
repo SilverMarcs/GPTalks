@@ -23,7 +23,6 @@
 		082181602C3880F700171BF3 /* RoundedRectangleOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0821815F2C3880F700171BF3 /* RoundedRectangleOverlay.swift */; };
 		082181622C38C76E00171BF3 /* InputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181612C38C76E00171BF3 /* InputEditor.swift */; };
 		082181642C38C92E00171BF3 /* SendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181632C38C92E00171BF3 /* SendButton.swift */; };
-		082181662C38CBAE00171BF3 /* PlusButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181652C38CBAE00171BF3 /* PlusButton.swift */; };
 		0821816A2C39001B00171BF3 /* ProviderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181692C39001B00171BF3 /* ProviderRow.swift */; };
 		0821816D2C39013400171BF3 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0821816C2C39013400171BF3 /* StringExtensions.swift */; };
 		0821816F2C39082900171BF3 /* ConversationGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0821816E2C39082900171BF3 /* ConversationGroupView.swift */; };
@@ -242,7 +241,6 @@
 		0821815F2C3880F700171BF3 /* RoundedRectangleOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedRectangleOverlay.swift; sourceTree = "<group>"; };
 		082181612C38C76E00171BF3 /* InputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputEditor.swift; sourceTree = "<group>"; };
 		082181632C38C92E00171BF3 /* SendButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendButton.swift; sourceTree = "<group>"; };
-		082181652C38CBAE00171BF3 /* PlusButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusButton.swift; sourceTree = "<group>"; };
 		082181692C39001B00171BF3 /* ProviderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderRow.swift; sourceTree = "<group>"; };
 		0821816C2C39013400171BF3 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		0821816E2C39082900171BF3 /* ConversationGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationGroupView.swift; sourceTree = "<group>"; };
@@ -753,7 +751,6 @@
 				081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */,
 				08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */,
 				082181632C38C92E00171BF3 /* SendButton.swift */,
-				082181652C38CBAE00171BF3 /* PlusButton.swift */,
 				08AAFB922C3C88D9002C04E0 /* StopButton.swift */,
 				08D174BF2C3D901A000257EF /* CrossButton.swift */,
 				087928342C48CF6F008646CD /* ExpandButton.swift */,
@@ -1123,7 +1120,6 @@
 				082F09EB2CB3617200B7860A /* ProviderDefaults.swift in Sources */,
 				08DA5B0D2C72CE7700A7FE82 /* InputViewTips.swift in Sources */,
 				089DB5182CA8EC140013E5C3 /* ImageViewerData.swift in Sources */,
-				082181662C38CBAE00171BF3 /* PlusButton.swift in Sources */,
 				08B5D7B82C77A64000D1F100 /* ChatWindow.swift in Sources */,
 				085361072C492282007DAB62 /* ImageGeneration.swift in Sources */,
 				08C800502C36F667009581C5 /* Provider.swift in Sources */,

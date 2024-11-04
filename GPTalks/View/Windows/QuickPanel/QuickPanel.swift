@@ -111,15 +111,8 @@ struct QuickPanel: View {
                 .textFieldStyle(.plain)
                 .allowsHitTesting(false)
             
-            if session.isReplying {
-                StopButton(size: 28) {
-                    session.stopStreaming()
-                }
-            } else {
-                SendButton(size: 28) {
-                    send()
-                }
-                .keyboardShortcut(.defaultAction)
+            ActionButton(size: 28, isStop: session.isReplying) {
+                session.isReplying ? session.stopStreaming() : send()
             }
         }
     }

@@ -44,6 +44,7 @@ struct DataFileView: View {
                 .buttonStyle(HoverScaleButtonStyle())
                 .shadow(radius: 5)
                 .padding(.bottom, 5)
+                .padding(.trailing, 5)
                 #else
                 Button {
                     dataFiles.removeAll(where: { $0.id == typedData.id })

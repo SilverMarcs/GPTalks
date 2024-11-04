@@ -22,15 +22,18 @@ struct ChatInputView: View {
     
     var body: some View {
         HStack(alignment: .bottom, spacing: 0) {
-            if session.inputManager.state == .editing {
-                CrossButton(size: imageSize) { session.inputManager.resetEditing() }
+            Group {
+                if session.inputManager.state == .editing {
+                    CrossButton(size: imageSize) {
+                        session.inputManager.resetEditing()
+                    }
+                }
+                
+                plusButton
             }
+            .padding(.trailing, -3)
             
-            plusButton
-                .padding(6)
-                .padding(.trailing, -6)
-            
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 0) {
                 Spacer(minLength: 0)
                 
                 if !session.inputManager.dataFiles.isEmpty {
@@ -44,83 +47,50 @@ struct ChatInputView: View {
             }
 
             ActionButton(size: imageSize, isStop: session.isReplying) {
-                if session.isReplying {
-                    session.stopStreaming()
-                } else {
-                    sendInput()
-                }
+                session.isReplying ? session.stopStreaming() : sendInput()
             }
-            .padding(6)
         }
-        .modifier(RoundedRectangleOverlayModifier(radius: 20))
+        .padding(6)
+        .roundedRectangleOverlay(radius: 20)
+        .modifier(CommonInputStyling())
     }
 
     var plusButton: some View {
-        Group {
-            #if os(macOS)
-            macosPlus
-            #else
-            iosPlus
-            #endif
-        }
-        .multipleFileImporter(isPresented: $isFilePickerPresented, inputManager: session.inputManager)
-    }
-    
-    var macosPlus: some View {
-        PlusButton(size: imageSize) {
-            isFilePickerPresented = true
-        }
-    }
-    
-    #if !os(macOS)
-    var iosPlus: some View {
         Menu {
-            Button {
-                session.showCamera = true
-            } label: {
+            #if !os(macOS)
+            Button(action: {session.showCamera = true}) {
                 Label("Open Camera", systemImage: "camera")
             }
+            #endif
             
-            Button {
-                isFilePickerPresented = true
-            } label: {
-                Label("Add Files", systemImage: "doc")
+            Button(action: { isFilePickerPresented = true }) {
+                Label("Attach Files", systemImage: "paperclip")
             }
         } label: {
             Image(systemName: "plus.circle.fill")
                 .resizable()
-                .frame(width: imageSize + 1, height: imageSize + 1)
-                .foregroundStyle(.secondary, .clear)
-                .buttonStyle(.plain)
-                
+                .foregroundStyle(.primary, .clear)
+                .frame(width: imageSize, height: imageSize)
+            
         } primaryAction: {
             showPhotosPicker = true
         }
         .popoverTip(PlusButtonTip())
-        .menuStyle(.borderlessButton)
+        .menuStyle(.button)
+        .buttonStyle(.plain)
         .menuIndicator(.hidden)
-        .accentColor(.primary)
+        .fixedSize()
+        .multipleFileImporter(isPresented: $isFilePickerPresented, inputManager: session.inputManager)
+        .photosPicker(isPresented: $showPhotosPicker, selection: $selectedPhotos, matching: .images)
+        .task(id: selectedPhotos) {
+            await session.inputManager.loadTransferredPhotos(from: selectedPhotos)
+            selectedPhotos.removeAll()
+        }
+        #if !os(macOS)
         .fullScreenCover(isPresented: $session.showCamera) {
             CameraView(session: session)
                 .ignoresSafeArea()
         }
-        .photosPicker(isPresented: $showPhotosPicker, selection: $selectedPhotos, matching: .images, photoLibrary: .shared())
-        .onChange(of: selectedPhotos) {
-            Task {
-                await session.inputManager.loadTransferredPhotos(from: selectedPhotos)
-                DispatchQueue.main.async {
-                    selectedPhotos.removeAll()
-                }
-            }
-        }
-    }
-    #endif
-    
-    var verticalPadding: CGFloat {
-        #if os(macOS)
-        14
-        #else
-        9
         #endif
     }
     
@@ -143,8 +113,6 @@ struct ChatInputView: View {
 }
 
 #Preview {
-//    ChatInputView(session: .mockChatSession)
     ConversationList(session: .mockChatSession)
         .environment(ChatSessionVM(modelContext: try! ModelContainer(for: ChatSession.self).mainContext))
-//        .padding()
 }

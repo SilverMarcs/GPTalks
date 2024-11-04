@@ -130,10 +130,16 @@ struct ConversationMenu: View {
     }
 
     var deleteGroup: some View {
-        Button {
+        Button(role: .destructive) {
             group.deleteSelf()
         } label: {
-            Label("Delete", systemImage: "minus.circle")
+            #if os(macOS)
+            Image(systemName: "trash")
+                .resizable()
+                .frame(width: 11, height: 13)
+            #else
+            Label("Delete", systemImage: "trash")
+            #endif
         }
         .help("Delete")
     }

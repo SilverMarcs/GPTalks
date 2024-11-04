@@ -49,9 +49,5 @@ struct MacInputEditor: View {
     var placeHolder: String {
         "Send a prompt • \(provider.name)"
     }
-    
-    var leadingPadding: CGFloat {
-        return 0
-    }
 }
 #endif

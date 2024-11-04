@@ -12,14 +12,17 @@ struct ImageInputView: View {
     @FocusState private var isFocused: Bool
     
     var body: some View {
-        HStack(alignment: .bottom, spacing: 15) {
+        HStack(alignment: .center, spacing: 15) {
             InputEditor(prompt: $session.prompt,
                         provider: session.config.provider,
                         isFocused: _isFocused)
             
-            SendButton(size: imageSize, send: sendInput)
-                .offset(y: -2.4)
+            ActionButton(size: imageSize, isStop: false) {
+                sendInput()
+            }
         }
+        .padding(6)
+        .roundedRectangleOverlay(radius: 20)
         .modifier(CommonInputStyling())
     }
     
@@ -33,10 +36,10 @@ struct ImageInputView: View {
     }
     
     var imageSize: CGFloat {
-      #if os(macOS)
+        #if os(macOS)
         23
         #else
-        30
+        31
         #endif
     }
 }

@@ -7,16 +7,10 @@
 
 import SwiftUI
 
-
 struct iOSInputEditor: View {
-    @Environment(ChatSessionVM.self) private var sessionVM
-    
-    @Environment(\.colorScheme) var colorScheme
     @Binding var prompt: String
-    var provider: Provider
     @FocusState var isFocused: Bool
-    
-    @State private var showPopover: Bool = false
+    var provider: Provider
     
     var body: some View {
             TextField(placeHolder, text: $prompt, axis: .vertical)

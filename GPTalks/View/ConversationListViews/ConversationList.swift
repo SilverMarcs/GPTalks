@@ -54,7 +54,6 @@ struct ConversationList: View {
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
                     ChatInputView(session: session)
-                        .modifier(CommonInputStyling())
                 }
             }
             .onChange(of: session.groups.last?.activeConversation.content) {
