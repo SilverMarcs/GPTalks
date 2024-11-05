@@ -27,7 +27,6 @@ struct ImageContentView: View {
                     .font(.title)
             }
         }
-
         .inspector(isPresented: $showingInspector) {
             if let imageSession = sessionVM.activeImageSession {
                 ImageInspector(session: imageSession, showingInspector: $showingInspector)

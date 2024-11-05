@@ -1,5 +1,5 @@
 //
-//  ConversationStatusBar.swift
+//  ThreadStatusBar.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 27/09/2024.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct ConversationStatusBar: View {
+struct ThreadStatusBar: View {
     @Environment(\.providers) var providers
-    @Bindable var session: ChatSession
+    @Bindable var session: Chat
     
     var body: some View {
         HStack {

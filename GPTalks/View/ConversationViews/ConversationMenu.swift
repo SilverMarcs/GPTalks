@@ -1,5 +1,5 @@
 //
-//  ConversationMenu.swift
+//  ThreadMenu.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 04/07/2024.
@@ -8,12 +8,12 @@
 import SwiftUI
 import SwiftData
 
-struct ConversationMenu: View {
-    @Environment(ChatSessionVM.self) private var sessionVM
+struct ThreadMenu: View {
+    @Environment(ChatVM.self) private var sessionVM
     @Environment(\.isQuick) private var isQuick
     @Environment(\.providers) var providers
     
-    var group: ConversationGroup
+    var group: ThreadGroup
     
     @Binding var isExpanded: Bool
     var toggleTextSelection: (() -> Void)? = nil
@@ -108,7 +108,7 @@ struct ConversationMenu: View {
 
     var copyText: some View {
         Button {
-            group.activeConversation.content.copyToPasteboard()
+            group.activeThread.content.copyToPasteboard()
             
             isCopied = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -211,7 +211,7 @@ struct ConversationMenu: View {
         }
         #else
         if group.conversations.count > 1 && group.role == .assistant {
-            Section("Iterations: \(group.activeConversationIndex + 1)/\(group.conversations.count)") {
+            Section("Iterations: \(group.activeThreadIndex + 1)/\(group.conversations.count)") {
                 Button {
                     group.setActiveToLeft()
                 } label: {
@@ -232,8 +232,8 @@ struct ConversationMenu: View {
 
 #Preview {
     VStack {
-        ConversationMenu(group: .mockUserConversationGroup, isExpanded: .constant(true))
-        ConversationMenu(group: .mockAssistantConversationGroup, isExpanded: .constant(true))
+        ThreadMenu(group: .mockUserThreadGroup, isExpanded: .constant(true))
+        ThreadMenu(group: .mockAssistantThreadGroup, isExpanded: .constant(true))
     }
     .frame(width: 500)
     .padding()

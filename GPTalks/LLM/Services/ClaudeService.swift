@@ -12,7 +12,7 @@ import SwiftAnthropic
 struct ClaudeService: AIService {
     typealias ConvertedType = MessageParameter.Message
     
-    static func convert(conversation: Conversation) -> MessageParameter.Message {
+    static func convert(conversation: Thread) -> MessageParameter.Message {
         let processedContents = ContentHelper.processDataFiles(conversation.dataFiles, conversationContent: conversation.content)
         
         // Convert processed contents into Claude's format
@@ -46,17 +46,17 @@ struct ClaudeService: AIService {
         }
     }
     
-    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<StreamResponse, Error> {
+    static func streamResponse(from conversations: [Thread], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let parameters = createParameters(from: conversations, config: config, stream: true)
         return streamClaudeResponse(parameters: parameters, config: config)
     }
     
-    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> StreamResponse {
+    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> StreamResponse {
         let parameters = createParameters(from: conversations, config: config, stream: false)
         return try await nonStreamingClaudeResponse(parameters: parameters, config: config)
     }
     
-    static private func createParameters(from conversations: [Conversation], config: SessionConfig, stream: Bool) -> MessageParameter {
+    static private func createParameters(from conversations: [Thread], config: ChatConfig, stream: Bool) -> MessageParameter {
         let messages = conversations.map { convert(conversation: $0) }
         let systemPrompt = MessageParameter.System.text(config.systemPrompt)
         
@@ -71,7 +71,7 @@ struct ClaudeService: AIService {
         )
     }
     
-    static private func streamClaudeResponse(parameters: MessageParameter, config: SessionConfig) -> AsyncThrowingStream<StreamResponse, Error> {
+    static private func streamClaudeResponse(parameters: MessageParameter, config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,
@@ -94,7 +94,7 @@ struct ClaudeService: AIService {
         }
     }
     
-    static private func nonStreamingClaudeResponse(parameters: MessageParameter, config: SessionConfig) async throws -> StreamResponse {
+    static private func nonStreamingClaudeResponse(parameters: MessageParameter, config: ChatConfig) async throws -> StreamResponse {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: config.provider.apiKey,

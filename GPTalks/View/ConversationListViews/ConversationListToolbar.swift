@@ -1,5 +1,5 @@
 //
-//  ConversationListToolbar.swift
+//  ThreadListToolbar.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 23/07/2024.
@@ -8,12 +8,12 @@
 import SwiftUI
 import SwiftData
 
-struct ConversationListToolbar: ToolbarContent {
+struct ThreadListToolbar: ToolbarContent {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var sessionVM
     @ObservedObject var config = AppConfig.shared
     
-    @Bindable var session: ChatSession
+    @Bindable var session: Chat
     
     @State var showingInspector: Bool = false
     
@@ -46,7 +46,7 @@ struct ConversationListToolbar: ToolbarContent {
         
         if config.showStatusBar {
             ToolbarItem(placement: .favoritesBar) {
-                ConversationStatusBar(session: session)
+                ThreadStatusBar(session: session)
                     .padding(.horizontal, 5)
             }
         }
@@ -67,7 +67,7 @@ struct ConversationListToolbar: ToolbarContent {
     }
     .frame(width: 700, height: 300)
     .toolbar {
-        ConversationListToolbar(session: .mockChatSession)
+        ThreadListToolbar(session: .mockChat)
     }
 }
 

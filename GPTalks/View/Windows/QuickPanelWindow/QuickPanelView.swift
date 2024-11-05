@@ -1,5 +1,5 @@
 //
-//  QuickPanel.swift
+//  QuickPanelView.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 12/07/2024.
@@ -9,11 +9,11 @@ import SwiftUI
 import SwiftData
 
 #if os(macOS)
-struct QuickPanel: View {
+struct QuickPanelView: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var sessionVM
     
-    @Bindable var session: ChatSession
+    @Bindable var session: Chat
     @Binding var isPresented: Bool
     @Binding var showAdditionalContent: Bool
     
@@ -22,7 +22,7 @@ struct QuickPanel: View {
     @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
     
-    @State var selections: Set<ChatSession> = []
+    @State var selections: Set<Chat> = []
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -42,7 +42,7 @@ struct QuickPanel: View {
             } else {
                 Divider()
                 
-                ConversationList(session: session)
+                ThreadList(session: session)
                     .scrollContentBackground(.hidden)
                 
                 bottomView
@@ -163,7 +163,7 @@ struct QuickPanel: View {
     
     private func resetChat() {
         showAdditionalContent = false
-        session.deleteAllConversations()
+        session.deleteAllThreads()
         session.inputManager.dataFiles.removeAll()
         let oldConfig = session.config
 
@@ -211,9 +211,9 @@ struct QuickPanel: View {
 }
 
 #Preview {
-    let quickSesion = ChatSession.mockChatSession
+    let quickSesion = Chat.mockChat
     quickSesion.isQuick = true
     
-    return QuickPanel(session: quickSesion, isPresented: .constant(true), showAdditionalContent: .constant(true))
+    return QuickPanelView(session: quickSesion, isPresented: .constant(true), showAdditionalContent: .constant(true))
 }
 #endif

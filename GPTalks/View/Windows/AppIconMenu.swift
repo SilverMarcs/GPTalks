@@ -10,7 +10,7 @@ import SwiftUI
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     static let shared = AppDelegate()
-    var chatVM: ChatSessionVM?
+    var chatVM: ChatVM?
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         let sceneConfig = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)

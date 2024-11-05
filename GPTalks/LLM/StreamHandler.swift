@@ -9,13 +9,13 @@ import Foundation
 import SwiftUI
 
 struct StreamHandler {
-    private let conversations: [Conversation]
-    private let session: ChatSession
-    private let assistant: Conversation
+    private let conversations: [Thread]
+    private let session: Chat
+    private let assistant: Thread
     
     static let uiUpdateInterval: TimeInterval = Float.UIIpdateInterval
 
-    init(conversations: [Conversation], session: ChatSession, assistant: Conversation) {
+    init(conversations: [Thread], session: Chat, assistant: Thread) {
         self.conversations = conversations
         self.session = session
         self.assistant = assistant
@@ -111,8 +111,8 @@ struct StreamHandler {
         if let session = assistant.group?.session {
             for toolCall in assistant.toolCalls {
                 let toolResponse = ToolResponse(toolCallId: toolCall.toolCallId, tool: toolCall.tool, processedContent: "", processedData: [])
-                let tool = Conversation(role: .tool, provider: session.config.provider, model: session.config.model, toolResponse: toolResponse, isReplying: true)
-                session.addConversationGroup(conversation: tool)
+                let tool = Thread(role: .tool, provider: session.config.provider, model: session.config.model, toolResponse: toolResponse, isReplying: true)
+                session.addThreadGroup(conversation: tool)
                 
                 let toolData = try await toolCall.tool.process(arguments: toolCall.arguments)
                 toolDatas.append(contentsOf: toolData.data)
@@ -123,11 +123,11 @@ struct StreamHandler {
                 session.scrollBottom()
             }
             
-            let newAssistant = Conversation(role: .assistant, provider: session.config.provider, model: session.config.model, isReplying: true)
-            session.addConversationGroup(conversation: newAssistant)
+            let newAssistant = Thread(role: .assistant, provider: session.config.provider, model: session.config.model, isReplying: true)
+            session.addThreadGroup(conversation: newAssistant)
                           
             if toolDatas.isEmpty {
-                session.streamer = StreamHandler(conversations: session.groups.map { $0.activeConversation }.dropLast(), session: session, assistant: newAssistant)
+                session.streamer = StreamHandler(conversations: session.groups.map { $0.activeThread }.dropLast(), session: session, assistant: newAssistant)
                 if let streamer = session.streamer {
                     if session.config.stream {
                         try await streamer.handleStream()

@@ -1,5 +1,5 @@
 //
-//  SessionConfigDefaults.swift
+//  ChatConfigDefaults.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 27/07/2024.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-class SessionConfigDefaults: ObservableObject {
-    static let shared = SessionConfigDefaults()
+class ChatConfigDefaults: ObservableObject {
+    static let shared = ChatConfigDefaults()
     private init() {}
     
     @AppStorage("temperature") private var storedTemperature: Double?

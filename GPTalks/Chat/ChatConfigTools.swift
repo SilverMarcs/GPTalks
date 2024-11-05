@@ -1,5 +1,5 @@
 //
-//  SessionConfigTools.swift
+//  ChatConfigTools.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 14/09/2024.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SessionConfigTools: Codable {
+struct ChatConfigTools: Codable {
     var toolStates: [ChatTool: Bool]
     var googleCodeExecution: Bool = ToolConfigDefaults.shared.googleCodeExecution
     var googleSearchRetrieval: Bool = ToolConfigDefaults.shared.googleSearchRetrieval

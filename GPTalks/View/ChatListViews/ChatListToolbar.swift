@@ -1,5 +1,5 @@
 //
-//  ChatSessionToolbar.swift
+//  ChatListToolbar.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 8/13/24.
@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-struct ChatSessionToolbar: ToolbarContent {
-    @Environment(ChatSessionVM.self) var sessionVM
-    @Environment(\.modelContext) var modelContext
-    @Environment(\.providers) var providers
+struct ChatListToolbar: ToolbarContent {
+    @Environment(ChatVM.self) private var chatVM
+    @Environment(\.providers) private var providers
     
     @State private var showSettings = false
     
@@ -37,14 +36,14 @@ struct ChatSessionToolbar: ToolbarContent {
             Menu {
                 ForEach(providers) { provider in
                     Button(provider.name) {
-                        sessionVM.createNewSession(provider: provider)
+                        chatVM.createNewSession(provider: provider)
                     }
                     .keyboardShortcut(.none)
                 }
             } label: {
                 Label("Add Item", systemImage: "square.and.pencil")
             } primaryAction: {
-                sessionVM.createNewSession()
+                chatVM.createNewSession()
             }
             .menuIndicator(.hidden)
             .popoverTip(NewSessionTip())
@@ -56,6 +55,6 @@ struct ChatSessionToolbar: ToolbarContent {
     VStack {
         Text("Hi")
     }.toolbar  {
-        ChatSessionToolbar()
+        ChatListToolbar()
     }
 }

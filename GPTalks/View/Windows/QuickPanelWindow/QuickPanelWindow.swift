@@ -1,5 +1,5 @@
 //
-//  FloatingSetup.swift
+//  QuickPanelWindow.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 12/07/2024.
@@ -8,7 +8,7 @@
 #if os(macOS)
 import SwiftUI
 
-class QuickPanelWindow2<Content: View>: NSPanel {
+class QuickPanelWindow<Content: View>: NSPanel {
     @Binding var isPresented: Bool
     private var heightConstraint: NSLayoutConstraint?
     
@@ -110,17 +110,17 @@ class QuickPanelWindow2<Content: View>: NSPanel {
     }
 }
 
-fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
+fileprivate struct FloatingPanelModifierAux<PanelContent: View>: ViewModifier {
     @Binding var isPresented: Bool
     @Binding var showAdditionalContent: Bool
     var contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 57)
     @ViewBuilder let view: () -> PanelContent
-    @State var panel: QuickPanelWindow2<PanelContent>?
+    @State var panel: QuickPanelWindow<PanelContent>?
     
     func body(content: Content) -> some View {
         content
             .onAppear {
-                panel = QuickPanelWindow2(view: view, contentRect: contentRect, isPresented: $isPresented)
+                panel = QuickPanelWindow(view: view, contentRect: contentRect, isPresented: $isPresented)
                 panel?.center()
                 if isPresented {
                     present()
@@ -149,13 +149,12 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
     }
 }
 
-
 extension View {
     func floatingPanel<Content: View>(isPresented: Binding<Bool>,
                                       showAdditionalContent: Binding<Bool>,
                                       contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 57),
                                       @ViewBuilder content: @escaping () -> Content) -> some View {
-        self.modifier(FloatingPanelModifier(isPresented: isPresented, showAdditionalContent: showAdditionalContent, contentRect: contentRect, view: content))
+        self.modifier(FloatingPanelModifierAux(isPresented: isPresented, showAdditionalContent: showAdditionalContent, contentRect: contentRect, view: content))
     }
 }
 

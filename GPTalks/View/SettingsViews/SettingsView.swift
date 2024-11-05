@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct SettingsView: View {
-    @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var sessionVM
     @Environment(\.dismiss) var dismiss
     
     #if os(macOS)

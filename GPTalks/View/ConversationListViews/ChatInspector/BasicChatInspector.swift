@@ -8,12 +8,9 @@
 import SwiftUI
 
 struct BasicChatInspector: View {
-    @Bindable var session: ChatSession
-    
-//    @Query(filter: #Predicate<Provider> { $0.isEnabled })
-//    var providers: [Provider]
-    
     @Environment(\.providers) var providers
+    
+    @Bindable var session: Chat
     
     @State var isGeneratingTtile: Bool = false
     @State var showingDeleteConfirmation: Bool = false
@@ -111,7 +108,7 @@ struct BasicChatInspector: View {
         .listRowInsets(EdgeInsets())
         .confirmationDialog("Are you sure you want to delete all messages?", isPresented: $showingDeleteConfirmation) {
             Button("Delete All", role: .destructive) {
-                session.deleteAllConversations()
+                session.deleteAllThreads()
             }
             Button("Cancel", role: .cancel) {}
         }

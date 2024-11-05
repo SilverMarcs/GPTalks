@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ToolMessage: View {
-    var conversation: Conversation
+    var conversation: Thread
     @State private var showPopover = false
     
     var body: some View {
@@ -85,5 +85,5 @@ struct ToolMessage: View {
 }
 
 #Preview {
-    ToolMessage(conversation: .mockToolConversation)
+    ToolMessage(conversation: .mockToolThread)
 }

@@ -9,11 +9,11 @@ import SwiftUI
 
 struct UserMessage: View {
     @Environment(\.colorScheme) var colorScheme
-    @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var sessionVM
     @Environment(\.isSearch) var isSearch
     @ObservedObject var config = AppConfig.shared
     
-    @Bindable var conversation: Conversation
+    @Bindable var conversation: Thread
     @State var isHovered: Bool = false
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
@@ -34,7 +34,7 @@ struct UserMessage: View {
             }
             .groupBoxStyle(PlatformSpecificGroupBoxStyle())
             .background(
-                    (conversation.group?.session?.inputManager.editingIndex == indexOfConversationGroup ? Color.accentColor.opacity(0.1) : .clear)
+                    (conversation.group?.session?.inputManager.editingIndex == indexOfThreadGroup ? Color.accentColor.opacity(0.1) : .clear)
             )
             
             #if os(macOS)
@@ -45,7 +45,7 @@ struct UserMessage: View {
         #if !os(macOS)
         .contextMenu {
             if let group = conversation.group {
-                ConversationMenu(group: group, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
+                ThreadMenu(group: group, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
             }
         } preview: {
             Text("User Message")
@@ -65,7 +65,7 @@ struct UserMessage: View {
     @ViewBuilder
     var contextMenu: some View {
         if let group = conversation.group {
-            ConversationMenu(group: group, isExpanded: $isExpanded)
+            ThreadMenu(group: group, isExpanded: $isExpanded)
                 .symbolEffect(.appear, isActive: !isHovered)
         }
     }
@@ -90,7 +90,7 @@ struct UserMessage: View {
         #endif
     }
     
-    var indexOfConversationGroup: Int {
+    var indexOfThreadGroup: Int {
         conversation.group?.session?.groups.firstIndex(where: { $0 == conversation.group }) ?? 0
     }
     
@@ -100,6 +100,6 @@ struct UserMessage: View {
 }
 
 #Preview {
-    UserMessage(conversation: .mockUserConversation)
+    UserMessage(conversation: .mockUserThread)
         .frame(width: 500, height: 300)
 }

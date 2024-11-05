@@ -104,30 +104,30 @@ extension String {
         """
 }
 
-extension Conversation {
-    static let mockAssistantConversation = Conversation(role: .assistant, content: String.codeBlock)
+extension Thread {
+    static let mockAssistantThread = Thread(role: .assistant, content: String.codeBlock)
     
-    static let mockAssistantTolCallConversation = Conversation(role: .assistant, toolCalls: [.init(toolCallId: "HEX", tool: .urlScrape, arguments: "url: https://www.google.com")])
+    static let mockAssistantTolCallThread = Thread(role: .assistant, toolCalls: [.init(toolCallId: "HEX", tool: .urlScrape, arguments: "url: https://www.google.com")])
     
-    static var mockUserConversation: Conversation {
-        Conversation(role: .user, content: String.shortContent)
+    static var mockUserThread: Thread {
+        Thread(role: .user, content: String.shortContent)
     }
     
-    static var mockToolConversation: Conversation {
-        Conversation(role: .tool, toolResponse: .init(toolCallId: "HEX", tool: .urlScrape, processedContent: "This is what I got"))
+    static var mockToolThread: Thread {
+        Thread(role: .tool, toolResponse: .init(toolCallId: "HEX", tool: .urlScrape, processedContent: "This is what I got"))
     }
 }
 
-extension SessionConfig {
-    static var mockChatConfig = SessionConfig(provider: .openAIProvider, purpose: .chat)
+extension ChatConfig {
+    static var mockChatConfig = ChatConfig(provider: .openAIProvider, purpose: .chat)
 }
 
 extension ImageConfig {
     static var mockImageConfig = ImageConfig(prompt: "New York City", provider: .openAIProvider, model: .dalle)
 }
 
-extension ChatSession {
-    static var mockChatSession = ChatSession(config: .mockChatConfig)
+extension Chat {
+    static var mockChat = Chat(config: .mockChatConfig)
 }
 
 extension ImageSession {
@@ -138,22 +138,22 @@ extension ImageGeneration {
     static var mockImageGeneration: ImageGeneration = .init(config: .mockImageConfig, session: .mockImageSession)
 }
 
-extension ConversationGroup {
-    static var mockUserConversationGroup: ConversationGroup {
-        let userConversation = Conversation.mockUserConversation
-        let session = ChatSession.mockChatSession
-        return ConversationGroup(conversation: userConversation, session: session)
+extension ThreadGroup {
+    static var mockUserThreadGroup: ThreadGroup {
+        let userThread = Thread.mockUserThread
+        let session = Chat.mockChat
+        return ThreadGroup(conversation: userThread, session: session)
     }
     
-    static var mockAssistantConversationGroup: ConversationGroup {
-        let assistantConversation = Conversation.mockAssistantConversation
-        let session = ChatSession.mockChatSession
-        return ConversationGroup(conversation: assistantConversation, session: session)
+    static var mockAssistantThreadGroup: ThreadGroup {
+        let assistantThread = Thread.mockAssistantThread
+        let session = Chat.mockChat
+        return ThreadGroup(conversation: assistantThread, session: session)
     }
 }
 
-extension ChatSessionVM {
-    static var mockSessionVM = ChatSessionVM(modelContext: DatabaseService.shared.modelContext)
+extension ChatVM {
+    static var mockSessionVM = ChatVM(modelContext: DatabaseService.shared.modelContext)
 }
 
 extension ImageSessionVM {

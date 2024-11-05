@@ -1,5 +1,5 @@
 //
-//  ConversationGroup.swift
+//  ThreadGroup.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 06/07/2024.
@@ -11,76 +11,76 @@ import OpenAI
 import SwiftUI
 
 @Model
-final class ConversationGroup {
+final class ThreadGroup {
     var id: UUID = UUID()
     var date: Date = Date()
-    var session: ChatSession?
+    var session: Chat?
     
-    var activeConversationIndex: Int = 0
+    var activeThreadIndex: Int = 0
     
-    @Relationship(deleteRule: .cascade, inverse: \Conversation.group)
-    var conversationsUnsorted: [Conversation] = []
+    @Relationship(deleteRule: .cascade, inverse: \Thread.group)
+    var conversationsUnsorted: [Thread] = []
     
-    var role: ConversationRole {
-        get { return activeConversation.role }
-        set { activeConversation.role = newValue }
+    var role: ThreadRole {
+        get { return activeThread.role }
+        set { activeThread.role = newValue }
     }
     
-    var conversations: [Conversation] {
+    var conversations: [Thread] {
         get { return conversationsUnsorted.sorted(by: { $0.date < $1.date }) }
         set { conversationsUnsorted = newValue }
     }
     
     #warning("find better way to do this")
-    var activeConversation: Conversation {
-        if let conversation = conversations[safe: activeConversationIndex] {
+    var activeThread: Thread {
+        if let conversation = conversations[safe: activeThreadIndex] {
             return conversation
         }
         
-        return dummyConversation
+        return dummyThread
     }
     
     var tokenCount: Int {
-        return activeConversation.tokenCount
+        return activeThread.tokenCount
     }
     
-    init(role: ConversationRole) {
+    init(role: ThreadRole) {
         self.role = role
     }
     
-    init(conversation: Conversation) {
+    init(conversation: Thread) {
         self.conversations = [conversation]
         self.role = conversation.role
     }
     
-    init(conversation: Conversation, session: ChatSession) {
+    init(conversation: Thread, session: Chat) {
         self.conversations = [conversation]
         self.role = conversation.role
         self.session = session
         conversation.group = self
     }
     
-    func addConversation(_ conversation: Conversation) {
+    func addThread(_ conversation: Thread) {
         conversations.append(conversation)
-        activeConversationIndex = conversations.count - 1
+        activeThreadIndex = conversations.count - 1
     }
     
-    func deleteConversation(_ conversation: Conversation) {
+    func deleteThread(_ conversation: Thread) {
         conversations.removeAll(where: { $0 == conversation })
         
         if conversations.count < 1 {
-            session?.deleteConversationGroup(self)
+            session?.deleteThreadGroup(self)
             return
         }
     }
     
     var canGoRight: Bool {
-        return activeConversationIndex < conversations.count - 1
+        return activeThreadIndex < conversations.count - 1
     }
     
     func setActiveToRight() {
-        if activeConversationIndex < conversations.count - 1 {
-            activeConversationIndex += 1
+        if activeThreadIndex < conversations.count - 1 {
+            activeThreadIndex += 1
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.session?.proxy?.scrollTo(self, anchor: .bottom)
@@ -88,12 +88,12 @@ final class ConversationGroup {
     }
     
     var canGoLeft: Bool {
-        return activeConversationIndex > 0
+        return activeThreadIndex > 0
     }
     
     func setActiveToLeft() {
-        if activeConversationIndex > 0 {
-            activeConversationIndex -= 1
+        if activeThreadIndex > 0 {
+            activeThreadIndex -= 1
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.session?.proxy?.scrollTo(self, anchor: .bottom)
@@ -101,7 +101,7 @@ final class ConversationGroup {
     }
     
     func deleteSelf() {
-        session?.deleteConversationGroup(self)
+        session?.deleteThreadGroup(self)
     }
 
     func setupEditing() {
@@ -115,9 +115,9 @@ final class ConversationGroup {
         }
     }
     
-    func copy() -> ConversationGroup{
-        return ConversationGroup(conversation: activeConversation.copy())
+    func copy() -> ThreadGroup{
+        return ThreadGroup(conversation: activeThread.copy())
     }
 }
 
-let dummyConversation = Conversation(role: .user, content: "")
+let dummyThread = Thread(role: .user, content: "")

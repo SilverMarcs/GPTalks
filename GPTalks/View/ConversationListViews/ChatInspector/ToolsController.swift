@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ToolsController: View {
-    @Binding var tools: SessionConfigTools
+    @Binding var tools: ChatConfigTools
     let isGoogle: Bool
     
     var body: some View {

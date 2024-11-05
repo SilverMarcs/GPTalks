@@ -1,5 +1,5 @@
 //
-//  SessionListCards.swift
+//  ChatListCards.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 09/07/2024.
@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct SessionListCards: View {
+struct ChatListCards: View {
     @Environment(\.openWindow) var openWindow
     @Environment(\.dismissWindow) var dismissWindow
     @Environment(ListStateVM.self) private var listStateVM
@@ -79,6 +79,6 @@ struct SessionListCards: View {
 }
 
 #Preview {
-    SessionListCards(sessionCount: "5", imageSessionsCount: "?")
-        .environment(ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext))
+    ChatListCards(sessionCount: "5", imageSessionsCount: "?")
+        .environment(ChatVM(modelContext: DatabaseService.shared.container.mainContext))
 }

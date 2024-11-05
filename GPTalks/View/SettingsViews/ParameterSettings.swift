@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ParameterSettings: View {
-    @ObservedObject var config = SessionConfigDefaults.shared
+    @ObservedObject var config = ChatConfigDefaults.shared
     @State var expandAdvanced: Bool = true
 
     var body: some View {

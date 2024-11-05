@@ -1,5 +1,5 @@
 //
-//  EmptyConversationList.swift
+//  EmptyThreadList.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 25/09/2024.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct EmptyConversationList: View {
-    @Bindable var session: ChatSession
+struct EmptyThreadList: View {
+    @Bindable var session: Chat
     
     var body: some View {
         Image(session.config.provider.type.imageName)
@@ -21,5 +21,5 @@ struct EmptyConversationList: View {
 }
 
 #Preview {
-    EmptyConversationList(session: .mockChatSession)
+    EmptyThreadList(session: .mockChat)
 }

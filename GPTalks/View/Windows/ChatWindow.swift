@@ -15,6 +15,7 @@ struct ChatWindow: Scene {
     var body: some Scene {
         Window("Chats", id: "chats") {
             ChatContentView()
+                .pasteHandler()
                 .withFloatingPanel(isPresented: $isPresented, showAdditionalContent: $showAdditionalContent)
         }
         .commands {

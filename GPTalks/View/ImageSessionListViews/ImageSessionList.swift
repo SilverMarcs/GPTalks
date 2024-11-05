@@ -20,14 +20,9 @@ struct ImageSessionList: View {
     var body: some View {
         @Bindable var imageVM = imageVM
         
-//        #if os(macOS)
-//        CustomSearchField("Search", text: $imageVM.searchText)
-//            .padding(.horizontal, 10)
-//        #endif
-        
         ScrollViewReader { proxy in
             List(selection: $imageVM.selections) {
-                SessionListCards(sessionCount: "↗", imageSessionsCount: String(sessions.count))
+                ChatListCards(sessionCount: "↗", imageSessionsCount: String(sessions.count))
                 
                 ForEach(sessions) { session in
                     ImageListRow(session: session)

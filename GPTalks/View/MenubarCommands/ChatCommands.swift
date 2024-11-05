@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ChatCommands: Commands {
     @ObservedObject var config = AppConfig.shared
-    @Environment(ChatSessionVM.self) var sessionVM
+    @Environment(ChatVM.self) var sessionVM
     
     var body: some Commands {
         CommandGroup(replacing: .newItem) {

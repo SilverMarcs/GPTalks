@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ChatDetail: View {
-    @Environment(ChatSessionVM.self) var chatVM
+    @Environment(ChatVM.self) var chatVM
     
     var body: some View {
         if !chatVM.searchText.isEmpty || !chatVM.searchResults.isEmpty || chatVM.searching {
@@ -39,8 +39,8 @@ struct ChatDetail: View {
             ForEach(chatVM.searchResults) { result in
                 Section("Session: \(result.session.title)") {
                     VStack(spacing: 0) {
-                        ForEach(result.matchedConversations) { matchedConversation in
-                            SearchResultRow(matchedConversation: matchedConversation)
+                        ForEach(result.matchedThreads) { matchedThread in
+                            SearchResultRow(matchedThread: matchedThread)
                         }
                     }
                 }
@@ -59,7 +59,7 @@ struct ChatDetail: View {
     @ViewBuilder
     private var chatSessionView: some View {
         if let session = chatVM.activeSession, !session.isQuick {
-            ConversationList(session: session)
+            ThreadList(session: session)
                 .id(session.id)
         } else {
             Text("^[\(chatVM.chatSelections.count) Chat Session](inflect: true) Selected")

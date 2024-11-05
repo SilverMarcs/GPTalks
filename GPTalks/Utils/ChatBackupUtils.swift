@@ -1,5 +1,5 @@
 //
-//  ChatSessionExporting.swift
+//  ChatExporting.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 27/07/2024.
@@ -12,7 +12,7 @@ import UniformTypeIdentifiers
 // MARK: - JSON Exporting
 struct SessionFileExporterModifier: ViewModifier {
     @Binding var isExporting: Bool
-    let sessions: [ChatSession]
+    let sessions: [Chat]
     
     func body(content: Content) -> some View {
         content
@@ -35,7 +35,7 @@ struct SessionFileExporterModifier: ViewModifier {
 struct SessionFileImporterModifier: ViewModifier {
     @Binding var isImporting: Bool
     let modelContext: ModelContext
-    let existingSessions: [ChatSession]
+    let existingSessions: [Chat]
     
     func body(content: Content) -> some View {
         content
@@ -65,11 +65,11 @@ struct SessionFileImporterModifier: ViewModifier {
 }
 
 extension View {
-    func sessionExporter(isExporting: Binding<Bool>, sessions: [ChatSession]) -> some View {
+    func sessionExporter(isExporting: Binding<Bool>, sessions: [Chat]) -> some View {
         self.modifier(SessionFileExporterModifier(isExporting: isExporting, sessions: sessions))
     }
     
-    func sessionImporter(isImporting: Binding<Bool>, modelContext: ModelContext, existingSessions: [ChatSession]) -> some View {
+    func sessionImporter(isImporting: Binding<Bool>, modelContext: ModelContext, existingSessions: [Chat]) -> some View {
         self.modifier(SessionFileImporterModifier(isImporting: isImporting, modelContext: modelContext, existingSessions: existingSessions))
     }
 }
@@ -99,19 +99,19 @@ struct MarkdownFile: FileDocument {
     }
 }
 
-private func generateMarkdown(for session: ChatSession) -> String {
+private func generateMarkdown(for session: Chat) -> String {
     var markdown = "# Session: \(session.title)\n\n"
     
     for group in session.groups {
-        let activeConversation = group.activeConversation
-        markdown += "## \(activeConversation.role.rawValue.capitalized)\n"
-        markdown += "\(activeConversation.content)\n\n\n"
+        let activeThread = group.activeThread
+        markdown += "## \(activeThread.role.rawValue.capitalized)\n"
+        markdown += "\(activeThread.content)\n\n\n"
     }
         
     return markdown
 }
     
-private func exportMarkdown(session: ChatSession) {
+private func exportMarkdown(session: Chat) {
     let markdown = generateMarkdown(for: session)
     
     let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(session.title).md")
@@ -123,7 +123,7 @@ private func exportMarkdown(session: ChatSession) {
 }
 
 extension View {
-    func markdownSessionExporter(isExporting: Binding<Bool>, session: ChatSession) -> some View {
+    func markdownSessionExporter(isExporting: Binding<Bool>, session: Chat) -> some View {
         let markdown = generateMarkdown(for: session)
         return self.fileExporter(
             isPresented: isExporting,

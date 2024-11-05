@@ -10,7 +10,7 @@ import MarkdownWebView
 
 struct AssistantMessage: View {
     @ObservedObject var config = AppConfig.shared
-    @Bindable var conversation: Conversation
+    @Bindable var conversation: Thread
     
     @State private var isHovering: Bool = false
     @State private var showingTextSelection = false
@@ -50,7 +50,7 @@ struct AssistantMessage: View {
     #if !os(macOS)
     .contextMenu {
         if let group = conversation.group, !conversation.isReplying {
-            ConversationMenu(group: group, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
+            ThreadMenu(group: group, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
         }
     } preview: {
         Text("Assistant Message")
@@ -72,7 +72,7 @@ struct AssistantMessage: View {
     var conversationMenuView: some View {
         #if os(macOS)
         if let group = conversation.group, let session = group.session {
-            ConversationMenu(group: group, isExpanded: .constant(true))
+            ThreadMenu(group: group, isExpanded: .constant(true))
                 .symbolEffect(.appear, isActive: !isHovering)
                 .opacity(session.isReplying ? 0 : 1)
         }
@@ -93,7 +93,7 @@ struct AssistantMessage: View {
 }
 
 #Preview {
-    return AssistantMessage(conversation: .mockAssistantConversation)
+    return AssistantMessage(conversation: .mockAssistantThread)
         .frame(width: 500, height: 300)
 }
 

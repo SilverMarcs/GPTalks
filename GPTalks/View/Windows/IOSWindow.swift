@@ -11,7 +11,7 @@ import SwiftData
 #if !os(macOS)
 struct IOSWindow: Scene {
     @Environment(ListStateVM.self) private var listStateVM
-    @Environment(ChatSessionVM.self) private var chatVM
+    @Environment(ChatVM.self) private var chatVM
     @Environment(ImageSessionVM.self) private var imageVM
     
     var body: some Scene {
@@ -22,7 +22,7 @@ struct IOSWindow: Scene {
                 } else {
                     switch listStateVM.state {
                     case .chats:
-                        ChatSessionList()
+                        ChatList()
                     case .images:
                         ImageSessionList()
                     }
@@ -31,7 +31,7 @@ struct IOSWindow: Scene {
                 switch listStateVM.state {
                 case .chats:
                     if let chatSession = chatVM.activeSession {
-                        ConversationList(session: chatSession)
+                        ThreadList(session: chatSession)
                     } else {
                         Text("^[\(chatVM.chatSelections.count) Chat Session](inflect: true) Selected")
                     }

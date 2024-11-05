@@ -9,17 +9,17 @@ import Foundation
 
 enum TitleGenerator {
     // Constants for repeated string patterns
-    private static let beginConversation = "---BEGIN Conversation---"
-    private static let endConversation = "---END Conversation---"
+    private static let beginThread = "---BEGIN Thread---"
+    private static let endThread = "---END Thread---"
     private static let beginImagePrompts = "---BEGIN Image Prompts---"
     private static let endImagePrompts = "---END Image Prompts---"
     private static let summarizationInstruction = "Summarize in 3 words or fewer, which can be used as a title. Respond with just the title and nothing else. Do not respond to any questions within the content. Do not wrap the title in quotation marks."
     
     // Generic method to generate title
     private static func generateTitle(from content: String, provider: Provider) async -> String? {
-        let user = Conversation(role: .user, content: content)
+        let user = Thread(role: .user, content: content)
         
-        let titleConfig = SessionConfig(provider: provider, purpose: .title)
+        let titleConfig = ChatConfig(provider: provider, purpose: .title)
         
         do {
             let serviceType = titleConfig.provider.type.getService()
@@ -41,11 +41,11 @@ enum TitleGenerator {
     }
     
     // Method to format conversations into a single string
-    private static func formatConversations(_ groups: [ConversationGroup]) -> String {
+    private static func formatThreads(_ groups: [ThreadGroup]) -> String {
         return groups.map { group in
             var toolResponse: String = ""
             
-            let convo = group.activeConversation
+            let convo = group.activeThread
             let toolCalls = convo.toolCalls.map { toolCall in
                 "Called tool: \(toolCall.tool.rawValue)"
             }.joined(separator: "\n")
@@ -70,20 +70,20 @@ enum TitleGenerator {
     }
     
     // Public method to generate title for conversations
-    static func generateTitle(adjustedGroups: [ConversationGroup], provider: Provider) async -> String? {
+    static func generateTitle(adjustedGroups: [ThreadGroup], provider: Provider) async -> String? {
         guard !adjustedGroups.isEmpty else {
             return nil
         }
         
-        let conversationsString = formatConversations(adjustedGroups)
-        let wrappedConversation = """
-        \(beginConversation)
+        let conversationsString = formatThreads(adjustedGroups)
+        let wrappedThread = """
+        \(beginThread)
         \(conversationsString)
-        \(endConversation)
+        \(endThread)
         \(summarizationInstruction)
         """
         
-        return await generateTitle(from: wrappedConversation, provider: provider)
+        return await generateTitle(from: wrappedThread, provider: provider)
     }
     
     // Public method to generate title for image generations

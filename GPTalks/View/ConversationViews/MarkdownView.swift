@@ -10,7 +10,7 @@ import MarkdownWebView
 
 struct MarkdownView: View {
     @Environment(\.isQuick) var isQuick
-    @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var sessionVM
     
     @ObservedObject var config = AppConfig.shared
     var content: String
@@ -26,7 +26,7 @@ struct MarkdownView: View {
 
 
 #Preview {
-    MarkdownView(content: Conversation.mockAssistantConversation.content)
+    MarkdownView(content: Thread.mockAssistantThread.content)
         .frame(width: 600, height: 500)
         .padding()
 }

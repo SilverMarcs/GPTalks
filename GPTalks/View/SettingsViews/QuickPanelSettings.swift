@@ -39,7 +39,7 @@ struct QuickPanelSettings: View {
             
             Section("LLM") {
                 ProviderPicker(provider: $providerDefaults.quickProvider, providers: providers) { provider in
-                    var descriptor = FetchDescriptor<ChatSession>(
+                    var descriptor = FetchDescriptor<Chat>(
                         predicate: #Predicate { $0.isQuick == true }
                     )
                     

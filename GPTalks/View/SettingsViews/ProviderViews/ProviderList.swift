@@ -49,7 +49,7 @@ struct ProviderList: View {
     private var addButton: some View {
         Menu {
             Section(header: Text("Primary Providers")) {
-                ForEach([ProviderType.openai, .google, .anthropic, .vertex], id: \.self) { type in
+                ForEach([ProviderType.openai, .google, .anthropic], id: \.self) { type in
                     Button(action: { addProvider(type: type) }) {
                         Label(type.name, image: type.imageName)
                     }
@@ -57,7 +57,7 @@ struct ProviderList: View {
             }
             
             Section(header: Text("Other Providers")) {
-                ForEach([ProviderType.openrouter, .groq, .xai, .mistral, .perplexity, .togetherai], id: \.self) { type in
+                ForEach([ProviderType.vertex, .openrouter, .groq, .xai, .mistral, .perplexity, .togetherai], id: \.self) { type in
                     Button(action: { addProvider(type: type) }) {
                         Label(type.name, image: type.imageName)
                     }
@@ -99,9 +99,9 @@ struct ProviderList: View {
     private func deleteProviders(offsets: IndexSet) {
         var providersToDelete = offsets
         
-        let fetchDescriptor = FetchDescriptor<SessionConfig>()
-        guard let allSessionConfigs = try? modelContext.fetch(fetchDescriptor) else {
-            print("Failed to fetch SessionConfigs")
+        let fetchDescriptor = FetchDescriptor<ChatConfig>()
+        guard let allChatConfigs = try? modelContext.fetch(fetchDescriptor) else {
+            print("Failed to fetch ChatConfigs")
             return
         }
         
@@ -113,7 +113,7 @@ struct ProviderList: View {
             if providerToDelete == defaultProvider {
                 providersToDelete.remove(index)
             } else {
-                for sessionConfig in allSessionConfigs where sessionConfig.provider == providerToDelete {
+                for sessionConfig in allChatConfigs where sessionConfig.provider == providerToDelete {
                     sessionConfig.provider = defaultProvider
                     sessionConfig.model = sessionConfig.provider.chatModel
                 }

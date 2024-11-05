@@ -1,5 +1,5 @@
 //
-//  ChatSessionVM.swift
+//  ChatVM.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 04/07/2024.
@@ -9,8 +9,8 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-@Observable class ChatSessionVM {
-    var chatSelections: Set<ChatSession> = []
+@Observable class ChatVM {
+    var chatSelections: Set<Chat> = []
     
     var modelContext: ModelContext
     
@@ -18,7 +18,7 @@ import SwiftUI
         self.modelContext = modelContext
     }
     
-    public var activeSession: ChatSession? {
+    public var activeSession: Chat? {
         guard chatSelections.count == 1 else { return nil }
         return chatSelections.first
     }
@@ -51,7 +51,7 @@ import SwiftUI
         guard let session = activeSession, !session.isStreaming else { return }
         
         if let lastGroup = session.groups.last {
-            session.deleteConversationGroup(lastGroup)
+            session.deleteThreadGroup(lastGroup)
         }
     }
 
@@ -64,7 +64,7 @@ import SwiftUI
     }
     
     // must provide new session, not the one to be forked
-    func fork(newSession: ChatSession) {
+    func fork(newSession: Chat) {
         modelContext.insert(newSession)
         #if os(macOS)
         self.chatSelections = [newSession]
@@ -77,12 +77,12 @@ import SwiftUI
     }
     
     @discardableResult
-    func createNewSession(provider: Provider? = nil) -> ChatSession? {
-        let config: SessionConfig
+    func createNewSession(provider: Provider? = nil) -> Chat? {
+        let config: ChatConfig
         
         if let providedProvider = provider {
             // Use the provided provider
-            config = SessionConfig(provider: providedProvider, purpose: .chat)
+            config = ChatConfig(provider: providedProvider, purpose: .chat)
         } else {
             // Use the default provider
             let fetchDefaults = FetchDescriptor<ProviderDefaults>()
@@ -90,10 +90,10 @@ import SwiftUI
             
             let defaultProvider = defaults.first!.defaultProvider
             
-            config = SessionConfig(provider: defaultProvider, purpose: .chat)
+            config = ChatConfig(provider: defaultProvider, purpose: .chat)
         }
         
-        let newItem = ChatSession(config: config)
+        let newItem = Chat(config: config)
         modelContext.insert(newItem)
         try? modelContext.save()
         
@@ -106,13 +106,13 @@ import SwiftUI
     // MARK: - Search
     var searchText: String = ""
     var hasFocus: Bool = false
-    var searchResults: [SessionWithMatches] = []
+    var searchResults: [MatchedSession] = []
     var searching: Bool = false
     
     private var searchTask: Task<Void, Never>?
     private let debounceInterval: TimeInterval = 0.5 // 500 milliseconds
     
-    func debouncedSearch(sessions: [ChatSession]) {
+    func debouncedSearch(sessions: [Chat]) {
         searching = true
         searchTask?.cancel()
         
@@ -120,7 +120,7 @@ import SwiftUI
             do {
                 try await Task.sleep(for: .seconds(debounceInterval))
                 if !Task.isCancelled {
-                    await updateMatchingConversations(sessions: sessions)
+                    await updateMatchingThreads(sessions: sessions)
                 }
             } catch {
                 print("Error debouncing search: \(error.localizedDescription)")
@@ -129,7 +129,7 @@ import SwiftUI
     }
 
     
-    func updateMatchingConversations(sessions: [ChatSession]) async {
+    func updateMatchingThreads(sessions: [Chat]) async {
         guard !searchText.isEmpty else {
             searchResults = []
             searching = false
@@ -143,15 +143,15 @@ import SwiftUI
         
         let results = await Task.detached(priority: .userInitiated) {
             sessions.compactMap { session in
-                let matchingConversations = session.unorderedGroups.compactMap { group in
-                    let content = group.activeConversation.content
+                let matchingThreads = session.unorderedGroups.compactMap { group in
+                    let content = group.activeThread.content
                     let cleanedContent = self.cleanMarkdown(content)
                     if cleanedContent.localizedCaseInsensitiveContains(cleanedSearchText) {
-                        return MatchedConversation(conversation: group.activeConversation, session: session)
+                        return MatchedThread(conversation: group.activeThread, session: session)
                     }
                     return nil
                 }
-                return matchingConversations.isEmpty ? nil : SessionWithMatches(session: session, matchedConversations: matchingConversations)
+                return matchingThreads.isEmpty ? nil : MatchedSession(session: session, matchedThreads: matchingThreads)
             }
         }.value
         
@@ -162,8 +162,6 @@ import SwiftUI
     }
 
     func cleanMarkdown(_ text: String) -> String {
-        // Remove common markdown characters
-//        let markdownCharacters = CharacterSet(charactersIn: "#*_`[]()!:.^")
         let markdownCharacters = CharacterSet(charactersIn: "#*_`!:.^")
         let cleanedText = text.components(separatedBy: markdownCharacters).joined()
         

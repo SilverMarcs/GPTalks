@@ -12,7 +12,7 @@ import SwiftData
 
 struct ChatInputView: View {
     @Environment(\.colorScheme) var colorScheme
-    @Bindable var session: ChatSession
+    @Bindable var session: Chat
     
     @State private var isFilePickerPresented: Bool = false
     @State private var showPhotosPicker = false
@@ -133,6 +133,6 @@ struct ChatInputView: View {
 }
 
 #Preview {
-    ConversationList(session: .mockChatSession)
-        .environment(ChatSessionVM(modelContext: try! ModelContainer(for: ChatSession.self).mainContext))
+    ThreadList(session: .mockChat)
+        .environment(ChatVM(modelContext: try! ModelContainer(for: Chat.self).mainContext))
 }

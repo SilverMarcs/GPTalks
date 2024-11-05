@@ -10,7 +10,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct CameraView: UIViewControllerRepresentable {
-    var session: ChatSession
+    var session: Chat
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
@@ -33,9 +33,9 @@ struct CameraView: UIViewControllerRepresentable {
 
 class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     var picker: CameraView
-    var session: ChatSession
+    var session: Chat
     
-    init(picker: CameraView, session: ChatSession) {
+    init(picker: CameraView, session: Chat) {
         self.picker = picker
         self.session = session
     }

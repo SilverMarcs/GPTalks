@@ -16,7 +16,7 @@ struct VertexService: AIService {
         }
     }
     
-    static func convert(conversation: Conversation) -> [String: Any] {
+    static func convert(conversation: Thread) -> [String: Any] {
         let role = conversation.role.toVertexRole()
         
         var contentObjects: [[String: Any]] = []
@@ -53,7 +53,7 @@ struct VertexService: AIService {
                 contentObjects.append(imageContent)
             } else {
                 let warning = "Notify the user if a file has been added but the assistant could not find a compatible plugin to read that file type."
-                let detail = "Conversation ID: \(conversation.id)\nFile: \(data.fileName)\n\(warning)"
+                let detail = "Thread ID: \(conversation.id)\nFile: \(data.fileName)\n\(warning)"
                 
                 contentObjects.append([
                     "type": "text",
@@ -90,7 +90,7 @@ struct VertexService: AIService {
         return finalContent
     }
     
-    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<StreamResponse, any Error> {
+    static func streamResponse(from conversations: [Thread], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, any Error> {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
@@ -169,7 +169,7 @@ struct VertexService: AIService {
         }
     }
 
-    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> StreamResponse {
+    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> StreamResponse {
         let request = try await createRequest(from: conversations, config: config)
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -213,7 +213,7 @@ struct VertexService: AIService {
         return .content(text)
     }
 
-    static func createRequest(from conversations: [Conversation], config: SessionConfig) async throws -> URLRequest {
+    static func createRequest(from conversations: [Thread], config: ChatConfig) async throws -> URLRequest {
         let modelID = config.model.code
         let projectID = config.provider.host
         let location = "us-east5"
@@ -257,7 +257,7 @@ struct VertexService: AIService {
     }
     
     static func testModel(provider: Provider, model: AIModel) async -> Bool {
-        let testConversation = Conversation(role: .user, content: String.testPrompt)
+        let testThread = Thread(role: .user, content: String.testPrompt)
         let location = "us-east5"  // Assuming this is the default location
         let apiUrl = "https://\(location)-aiplatform.googleapis.com/v1/projects/\(provider.host)/locations/\(location)/publishers/anthropic/models/\(model.code):streamRawPredict"
         
@@ -273,7 +273,7 @@ struct VertexService: AIService {
             let token = try await GoogleAuthManager.shared.getValidAccessToken()
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             
-            let message = convert(conversation: testConversation)
+            let message = convert(conversation: testThread)
             
             let body: [String: Any] = [
                 "anthropic_version": "vertex-2023-10-16",

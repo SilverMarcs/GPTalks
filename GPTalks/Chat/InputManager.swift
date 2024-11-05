@@ -68,14 +68,14 @@ enum InputState {
         }
     }
     
-    func setupEditing(for group: ConversationGroup) {
+    func setupEditing(for group: ThreadGroup) {
         tempNormalPrompt = normalPrompt
         tempNormalDataFiles = normalDataFiles
         
         state = .editing
-        prompt = group.activeConversation.content
+        prompt = group.activeThread.content
 
-        dataFiles = group.activeConversation.dataFiles
+        dataFiles = group.activeThread.dataFiles
         editingIndex = group.session?.groups.firstIndex(of: group)
     }
     

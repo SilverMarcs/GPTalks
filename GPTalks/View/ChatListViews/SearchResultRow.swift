@@ -9,20 +9,20 @@ import SwiftUI
 import MarkdownWebView
 
 struct SearchResultRow: View {
-    @Environment(ChatSessionVM.self) var chatVM
+    @Environment(ChatVM.self) var chatVM
     
-    let matchedConversation: MatchedConversation
+    let matchedThread: MatchedThread
     
     var body: some View {
             HStack {
-                ConversationView(conversation: matchedConversation.conversation)
+                ThreadView(conversation: matchedThread.conversation)
                     .environment(\.isSearch, true)
                 
                 Button {
                     chatVM.searchResults = []
-                    chatVM.chatSelections = [matchedConversation.session]
+                    chatVM.chatSelections = [matchedThread.session]
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        matchedConversation.session.proxy?.scrollTo(matchedConversation.conversation.group, anchor: .top)
+                        matchedThread.session.proxy?.scrollTo(matchedThread.conversation.group, anchor: .top)
                     }
                 } label: {
                     Image(systemName: "arrow.right")

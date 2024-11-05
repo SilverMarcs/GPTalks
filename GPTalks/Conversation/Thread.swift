@@ -1,5 +1,5 @@
 //
-//  Conversation.swift
+//  Thread.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 25/06/2024.
@@ -12,11 +12,11 @@ import GoogleGenerativeAI
 import SwiftAnthropic
 
 @Model
-final class Conversation {
+final class Thread {
     var id: UUID = UUID()
     var date: Date = Date()
     
-    var group: ConversationGroup?
+    var group: ThreadGroup?
     
     @Relationship(deleteRule: .nullify)
     var provider: Provider?
@@ -27,7 +27,7 @@ final class Conversation {
 
     @Relationship(deleteRule: .cascade)
     var dataFiles: [TypedData] = []
-    var role: ConversationRole
+    var role: ThreadRole
     
     @Attribute(.ephemeral)
     var isReplying: Bool = false
@@ -35,7 +35,7 @@ final class Conversation {
     var toolCalls: [ChatToolCall] = []
     var toolResponse: ToolResponse?
     
-    init(role: ConversationRole, content: String = "", group: ConversationGroup? = nil, provider: Provider? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
+    init(role: ThreadRole, content: String = "", group: ThreadGroup? = nil, provider: Provider? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
         self.role = role
         self.content = content
         self.group = group
@@ -56,11 +56,11 @@ final class Conversation {
     }
     
     func deleteSelf() {
-        group?.deleteConversation(self)
+        group?.deleteThread(self)
     }
     
-    func copy() -> Conversation {
-        return Conversation(
+    func copy() -> Thread {
+        return Thread(
             role: role,
             content: content,
             group: group,

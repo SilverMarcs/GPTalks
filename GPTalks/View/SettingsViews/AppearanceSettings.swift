@@ -12,7 +12,7 @@ struct AppearanceSettings: View {
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
     
-    @State var session: ChatSession?
+    @State var session: Chat?
 
     var body: some View {
         Form {

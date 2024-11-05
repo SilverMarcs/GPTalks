@@ -1,5 +1,5 @@
 //
-//  SessionList.swift
+//  ChatList.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 04/07/2024.
@@ -8,13 +8,15 @@
 import SwiftData
 import SwiftUI
 
-struct ChatSessionList: View {
+struct ChatList: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(ChatSessionVM.self) var chatVM
+    @Environment(ChatVM.self) var chatVM
     @Environment(\.modelContext) var modelContext
     
-    @Query(filter: #Predicate { !$0.isQuick }, sort: [SortDescriptor(\ChatSession.date, order: .reverse)], animation: .default)
-    var sessions: [ChatSession]
+    @Query(filter: #Predicate { !$0.isQuick },
+           sort: [SortDescriptor(\Chat.date, order: .reverse)],
+           animation: .default)
+    var sessions: [Chat]
     
     @FocusState private var isSearchFieldFocused: Bool
     
@@ -22,11 +24,11 @@ struct ChatSessionList: View {
         @Bindable var chatVM = chatVM
 
         List(selection: $chatVM.chatSelections) {
-            SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "↗")
+            ChatListCards(sessionCount: String(sessions.count), imageSessionsCount: "↗")
                 .id(String.topID)
             
             ForEach(sessions) { session in
-                SessionListRow(session: session)
+                ChatRow(session: session)
                     .tag(session)
                     .deleteDisabled(session.isQuick || session.isStarred)
                     #if os(macOS)
@@ -41,7 +43,7 @@ struct ChatSessionList: View {
         }
         .navigationTitle("Chats")
         .toolbar {
-            ChatSessionToolbar()
+            ChatListToolbar()
             
             ToolbarItem(placement: .keyboard) {
                 Button("Search") {
@@ -75,7 +77,7 @@ struct ChatSessionList: View {
 }
 
 #Preview {
-    ChatSessionList()
+    ChatList()
     .frame(width: 400)
-    .environment(ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext))
+    .environment(ChatVM(modelContext: DatabaseService.shared.container.mainContext))
 }

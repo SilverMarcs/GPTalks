@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-final class ChatSession {
+final class Chat {
     var id: UUID = UUID()
     var date: Date = Date()
     var title: String = "Chat Session"
@@ -18,14 +18,14 @@ final class ChatSession {
     var isQuick: Bool = false
     var tokenCount: Int = 0
     
-    @Relationship(deleteRule: .cascade, inverse: \ConversationGroup.session)
-    var unorderedGroups =  [ConversationGroup]()
+    @Relationship(deleteRule: .cascade, inverse: \ThreadGroup.session)
+    var unorderedGroups =  [ThreadGroup]()
     
     @Relationship(deleteRule: .cascade)
-    var config: SessionConfig
+    var config: ChatConfig
     
     @Transient
-    var groups: [ConversationGroup] {
+    var groups: [ThreadGroup] {
         get {return unorderedGroups.sorted(by: {$0.date < $1.date})}
         set { unorderedGroups = newValue }
     }
@@ -49,7 +49,7 @@ final class ChatSession {
     
 //    @Transient
     var isReplying: Bool {
-        groups.last?.activeConversation.isReplying ?? false
+        groups.last?.activeThread.isReplying ?? false
     }
     
     @Transient
@@ -58,12 +58,12 @@ final class ChatSession {
     @Transient
     var inputManager = InputManager()
     
-    init(config: SessionConfig) {
+    init(config: ChatConfig) {
         self.config = config
     }
     
     @MainActor
-    private func handleStreamingTask(regenContent: String?, assistantGroup: ConversationGroup?) async throws {
+    private func handleStreamingTask(regenContent: String?, assistantGroup: ThreadGroup?) async throws {
         try await processRequest(regenContent: regenContent, assistantGroup: assistantGroup)
         
         streamingTask?.cancel()
@@ -76,19 +76,19 @@ final class ChatSession {
         hasUserScrolled = false
         
         DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
-            if let lastGroup = self.groups.last, lastGroup.activeConversation.content.isEmpty {
-                lastGroup.deleteConversation(lastGroup.activeConversation)
+            if let lastGroup = self.groups.last, lastGroup.activeThread.content.isEmpty {
+                lastGroup.deleteThread(lastGroup.activeThread)
                 if !lastGroup.conversations.isEmpty {
-                    lastGroup.activeConversationIndex -= 1
+                    lastGroup.activeThreadIndex -= 1
                 }
             }
         }
     }
     
     @MainActor
-    private func processRequest(regenContent: String?, assistantGroup: ConversationGroup?) async throws {
-        let conversations = prepareConversations(regenContent: regenContent)
-        let assistant = prepareAssistantConversation(assistantGroup: assistantGroup)
+    private func processRequest(regenContent: String?, assistantGroup: ThreadGroup?) async throws {
+        let conversations = prepareThreads(regenContent: regenContent)
+        let assistant = prepareAssistantThread(assistantGroup: assistantGroup)
         
         self.streamer = StreamHandler(conversations: conversations, session: self, assistant: assistant)
         if let streamer = streamer {
@@ -96,35 +96,23 @@ final class ChatSession {
         }
     }
     
-    private func prepareAssistantConversation(assistantGroup: ConversationGroup?) -> Conversation {
+    private func prepareAssistantThread(assistantGroup: ThreadGroup?) -> Thread {
         if let assistantGroup = assistantGroup {
             return assistantGroup.conversations.last!
         } else {
-            let assistant = Conversation(role: .assistant, content: "", provider: config.provider, model: config.model)
-            addConversationGroup(conversation: assistant)
+            let assistant = Thread(role: .assistant, content: "", provider: config.provider, model: config.model)
+            addThreadGroup(conversation: assistant)
             return assistant
         }
     }
     
-    private func prepareConversations(regenContent: String?) -> [Conversation] {
-        var conversations = groups.map { group -> Conversation in
-            let conversation = group.activeConversation
-            
-            let textContent = conversation.dataFiles
-                .compactMap { $0.formattedTextContent }
-                .joined(separator: "\n\n")
-            
-            if !textContent.isEmpty {
-                conversation.content = textContent + "\n\n" + conversation.content
-            }
-            
-            return conversation
-        }
+    private func prepareThreads(regenContent: String?) -> [Thread] {
+        var conversations = groups.map { $0.activeThread }
         
         if let regenContent = regenContent {
             if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
                 let existingDataFiles = conversations[lastUserIndex].dataFiles
-                conversations[lastUserIndex] = Conversation(role: .user, content: regenContent, dataFiles: existingDataFiles)
+                conversations[lastUserIndex] = Thread(role: .user, content: regenContent, dataFiles: existingDataFiles)
             }
             if let lastAssistantIndex = conversations.lastIndex(where: { $0.role == .assistant }) {
                 conversations.remove(at: lastAssistantIndex)
@@ -136,7 +124,7 @@ final class ChatSession {
 
     
     @MainActor
-    func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ConversationGroup? = nil, forQuick: Bool = false) async {
+    func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ThreadGroup? = nil, forQuick: Bool = false) async {
         errorMessage = ""
         self.date = Date()
         
@@ -150,8 +138,8 @@ final class ChatSession {
                 let dataFiles = inputManager.dataFiles
                 inputManager.reset()
                 
-                let user = Conversation(role: .user, content: content, dataFiles: dataFiles)
-                addConversationGroup(conversation: user)
+                let user = Thread(role: .user, content: content, dataFiles: dataFiles)
+                addThreadGroup(conversation: user)
             }
         }
         
@@ -186,11 +174,11 @@ final class ChatSession {
     private func handleEditingMode() {
         if let editingIndex = inputManager.editingIndex,
            editingIndex < groups.count,
-           groups[editingIndex].activeConversation.role == .user {
+           groups[editingIndex].activeThread.role == .user {
 
             
-            groups[editingIndex].activeConversation.content = inputManager.prompt
-            groups[editingIndex].activeConversation.dataFiles = inputManager.dataFiles
+            groups[editingIndex].activeThread.content = inputManager.prompt
+            groups[editingIndex].activeThread.dataFiles = inputManager.dataFiles
             
             groups.removeSubrange((editingIndex + 1)...)
             
@@ -204,17 +192,17 @@ final class ChatSession {
     }
     
     @MainActor
-    func regenerate(group: ConversationGroup) async {
+    func regenerate(group: ThreadGroup) async {
         guard group.role == .assistant else { return }
         
         guard let index = groups.firstIndex(where: { $0.id == group.id }),
               index > 0 else { return }
         
         let userGroup = groups[index - 1]
-        let userContent = userGroup.activeConversation.content
+        let userContent = userGroup.activeThread.content
         
-        let newAssistantConversation = Conversation(role: .assistant, content: "", provider: config.provider, model: config.model)
-        group.addConversation(newAssistantConversation)
+        let newAssistantThread = Thread(role: .assistant, content: "", provider: config.provider, model: config.model)
+        group.addThread(newAssistantThread)
         
         groups.removeSubrange((index + 1)...)
         
@@ -228,10 +216,10 @@ final class ChatSession {
         streamingTask = nil
         
         if let last = groups.last {
-            if last.activeConversation.content.isEmpty {
-                deleteConversationGroup(last)
+            if last.activeThread.content.isEmpty {
+                deleteThreadGroup(last)
             } else {
-                last.activeConversation.isReplying = false
+                last.activeThread.isReplying = false
             }
         }
     }
@@ -256,8 +244,8 @@ final class ChatSession {
         self.tokenCount = (messageTokens + sysPromptTokens + toolTokens + inputTokens)
     }
     
-    func copy(from group: ConversationGroup? = nil, purpose: SessionConfigPurpose) async -> ChatSession {
-        let newSession = ChatSession(config: config.copy(purpose: purpose))
+    func copy(from group: ThreadGroup? = nil, purpose: ChatConfigPurpose) async -> Chat {
+        let newSession = Chat(config: config.copy(purpose: purpose))
         let leading: String
         
         switch purpose {
@@ -281,8 +269,8 @@ final class ChatSession {
     }
     
     @discardableResult
-    func addConversationGroup(conversation: Conversation) -> ConversationGroup {
-        let group = ConversationGroup(conversation: conversation, session: self)
+    func addThreadGroup(conversation: Thread) -> ThreadGroup {
+        let group = ThreadGroup(conversation: conversation, session: self)
         
         groups.append(group)
         
@@ -300,7 +288,7 @@ final class ChatSession {
     }
     
     // TODO: make async
-    func deleteConversationGroup(_ conversationGroup: ConversationGroup) {
+    func deleteThreadGroup(_ conversationGroup: ThreadGroup) {
         guard !groups.isEmpty else {
             errorMessage = ""
             return
@@ -338,7 +326,7 @@ final class ChatSession {
     }
 
     
-    func deleteAllConversations() {
+    func deleteAllThreads() {
         // Remove all conversation groups from the groups array and modelContext
         while let conversationGroup = groups.popLast() {
             self.modelContext?.delete(conversationGroup)

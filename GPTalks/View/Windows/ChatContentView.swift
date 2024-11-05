@@ -10,21 +10,20 @@ import SwiftUI
 import SwiftData
 
 struct ChatContentView: View {
-    @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var sessionVM
     
     var body: some View {
         NavigationSplitView {
-            ChatSessionList()
+            ChatList()
         } detail: {
             ChatDetail()
         }
-        .pasteHandler()
     }
 }
 
 #Preview {
     ChatContentView()
-        .modelContainer(for: ChatSession.self, inMemory: true)
-        .environment(ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext))
+        .modelContainer(for: Chat.self, inMemory: true)
+        .environment(ChatVM(modelContext: DatabaseService.shared.container.mainContext))
 }
 #endif

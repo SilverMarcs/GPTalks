@@ -1,5 +1,5 @@
 //
-//  SessionListRow.swift
+//  ChatRow.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 04/07/2024.
@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct SessionListRow: View {
+struct ChatRow: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.sidebarRowSize) private var sidebarRowSize
-    @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var sessionVM
     
     @ObservedObject var config = AppConfig.shared
     
-    @Bindable var session: ChatSession
+    @Bindable var session: Chat
     
     var body: some View {
         Group {
@@ -107,7 +107,7 @@ struct SessionListRow: View {
         if session.isReplying {
             return "Generating…"
         }
-        let lastMessage = session.groups.last?.activeConversation.content ?? ""
+        let lastMessage = session.groups.last?.activeThread.content ?? ""
         return lastMessage.isEmpty ? "Start a conversation" : lastMessage
     }
 
@@ -140,8 +140,8 @@ struct SessionListRow: View {
 
 #Preview {
     List {
-        SessionListRow(session: .mockChatSession)
-            .environment(ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext))
+        ChatRow(session: .mockChat)
+            .environment(ChatVM(modelContext: DatabaseService.shared.container.mainContext))
     }
     .frame(width: 250)
 }

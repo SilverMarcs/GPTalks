@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 
 struct PasteHandler: ViewModifier {
     @State private var eventMonitor: Any?
-    @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var sessionVM
 
     func body(content: Content) -> some View {
         content

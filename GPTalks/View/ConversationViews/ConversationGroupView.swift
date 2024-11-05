@@ -1,5 +1,5 @@
 //
-//  ConversationGroupView.swift
+//  ThreadGroupView.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 06/07/2024.
@@ -7,20 +7,20 @@
 
 import SwiftUI
 
-struct ConversationGroupView: View {
-    @Environment(ChatSessionVM.self) var sessionVM
-    var group: ConversationGroup
+struct ThreadGroupView: View {
+    @Environment(ChatVM.self) var sessionVM
+    var group: ThreadGroup
 
     var body: some View {
-        ConversationView(conversation: group.activeConversation)
+        ThreadView(conversation: group.activeThread)
             #if os(iOS)
             .opacity(0.9)
             #endif
     }
 }
 
-struct ConversationView: View {
-    var conversation: Conversation
+struct ThreadView: View {
+    var conversation: Thread
     
     var body: some View {
         switch conversation.role {
@@ -43,8 +43,8 @@ struct ConversationView: View {
 
 #Preview {
     VStack {
-        ConversationGroupView(group: .mockUserConversationGroup)
-        ConversationGroupView(group: .mockAssistantConversationGroup)
+        ThreadGroupView(group: .mockUserThreadGroup)
+        ThreadGroupView(group: .mockAssistantThreadGroup)
     }
     .frame(width: 400)
     .padding()

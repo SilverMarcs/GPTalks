@@ -1,5 +1,5 @@
 //
-//  ConversationList.swift
+//  ThreadList.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 25/06/2024.
@@ -8,22 +8,22 @@
 import SwiftUI
 import SwiftData
 
-struct ConversationList: View {
+struct ThreadList: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.isQuick) var isQuick
     
-    @Bindable var session: ChatSession
+    @Bindable var session: Chat
     
     @ObservedObject var config: AppConfig = AppConfig.shared
     
     @Environment(\.modelContext) var modelContext
-    @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var sessionVM
     
     var body: some View {
         ScrollViewReader { proxy in
             List {
                 ForEach(session.groups, id: \.self) { group in
-                    ConversationGroupView(group: group)
+                    ThreadGroupView(group: group)
                 }
                 .listRowSeparator(.hidden)
 
@@ -44,7 +44,7 @@ struct ConversationList: View {
                 scrollToBottom(proxy: proxy, delay: 0.2)
             }
             .toolbar {
-                ConversationListToolbar(session: session)
+                ThreadListToolbar(session: session)
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
@@ -86,6 +86,6 @@ struct ConversationList: View {
 }
 
 #Preview {
-    ConversationList(session: .mockChatSession)
-        .environment(ChatSessionVM.mockSessionVM)
+    ThreadList(session: .mockChat)
+        .environment(ChatVM.mockSessionVM)
 }

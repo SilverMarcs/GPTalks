@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ToolCallView: View {
-    var conversation: Conversation
+    var conversation: Thread
     @State private var showArguments = false
     
     var body: some View {
@@ -70,7 +70,7 @@ struct ToolCallView: View {
 }
 
 #Preview {
-    return AssistantMessage(conversation: .mockAssistantTolCallConversation)
+    return AssistantMessage(conversation: .mockAssistantTolCallThread)
         .frame(width: 500, height: 300)
 }
 

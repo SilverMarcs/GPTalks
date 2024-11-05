@@ -1,5 +1,5 @@
 //
-//  QuickPanelHelper.swift
+//  QuickPanelLoader.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 28/07/2024.
@@ -8,16 +8,16 @@ import SwiftUI
 import SwiftData
 
 #if os(macOS)
-struct QuickPanelHelper: View {
+struct QuickPanelLoader: View {
     @Environment(\.modelContext) var modelContext
     
-    @State private var session: ChatSession?
+    @State private var session: Chat?
     @Binding var isPresented: Bool
     @Binding var showAdditionalContent: Bool
     
     var body: some View {
         if let session = session {
-            QuickPanel(session: session, isPresented: $isPresented, showAdditionalContent: $showAdditionalContent)
+            QuickPanelView(session: session, isPresented: $isPresented, showAdditionalContent: $showAdditionalContent)
         } else {
             Text("Something went wrong")
                 .font(.title)
@@ -30,7 +30,7 @@ struct QuickPanelHelper: View {
     }
     
     private func fetchQuickSession() {
-        var descriptor = FetchDescriptor<ChatSession>(
+        var descriptor = FetchDescriptor<Chat>(
             predicate: #Predicate { $0.isQuick == true }
         )
         

@@ -1,5 +1,5 @@
 //
-//  ChatSessionBackup.swift
+//  ChatBackup.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 27/07/2024.
@@ -9,44 +9,44 @@ import SwiftUI
 import SwiftData
 import UniformTypeIdentifiers
 
-struct ChatSessionBackup: Codable {
+struct ChatBackup: Codable {
     var id: UUID
     var date: Date
     var title: String
     var isStarred: Bool
     var errorMessage: String
     var resetMarker: Int?
-    var groups: [ConversationGroupBackup]
+    var groups: [ThreadGroupBackup]
     
-    struct ConversationGroupBackup: Codable {
+    struct ThreadGroupBackup: Codable {
         var date: Date
-        var conversation: ConversationBackup
+        var conversation: ThreadBackup
     }
     
-    struct ConversationBackup: Codable {
+    struct ThreadBackup: Codable {
         var date: Date
         var content: String
-        var role: ConversationRole
+        var role: ThreadRole
     }
 }
 
-extension ChatSessionBackup {
-    init(from session: ChatSession) {
+extension ChatBackup {
+    init(from session: Chat) {
         self.id = session.id
         self.date = session.date
         self.title = session.title
         self.isStarred = session.isStarred
         self.errorMessage = session.errorMessage
         self.groups = session.unorderedGroups.map { group in
-            ConversationGroupBackup(
+            ThreadGroupBackup(
                 date: group.date,
-                conversation: ConversationBackup(from: group.activeConversation)
+                conversation: ThreadBackup(from: group.activeThread)
             )
         }
     }
     
-    func toSession() -> ChatSession {
-        var session: ChatSession
+    func toSession() -> Chat {
+        var session: Chat
         
         let modelContext = DatabaseService.shared.modelContext
         
@@ -54,10 +54,10 @@ extension ChatSessionBackup {
         fetchDefaults.fetchLimit = 1
         
         if let fetchedProviders = try? modelContext.fetch(fetchDefaults), let provider = fetchedProviders.first?.defaultProvider {
-            session = ChatSession(config: SessionConfig(provider: provider, purpose: .chat))
+            session = Chat(config: ChatConfig(provider: provider, purpose: .chat))
         } else {
             print("Should not reach here")
-            session = ChatSession(config: .mockChatConfig)
+            session = Chat(config: .mockChatConfig)
         }
         
         session.id = self.id
@@ -66,7 +66,7 @@ extension ChatSessionBackup {
         session.isStarred = self.isStarred
         session.errorMessage = self.errorMessage
         session.unorderedGroups = self.groups.map { groupBackup in
-            let group = ConversationGroup(conversation: groupBackup.conversation.toConversation())
+            let group = ThreadGroup(conversation: groupBackup.conversation.toThread())
             group.date = groupBackup.date
             return group
         }
@@ -75,15 +75,15 @@ extension ChatSessionBackup {
 }
 
 
-extension ChatSessionBackup.ConversationBackup {
-    init(from conversation: Conversation) {
+extension ChatBackup.ThreadBackup {
+    init(from conversation: Thread) {
         self.date = conversation.date
         self.content = conversation.content
         self.role = conversation.role
     }
     
-    func toConversation() -> Conversation {
-        let conversation = Conversation(role: self.role, content: self.content)
+    func toThread() -> Thread {
+        let conversation = Thread(role: self.role, content: self.content)
         conversation.date = self.date
         return conversation
     }
@@ -92,9 +92,9 @@ extension ChatSessionBackup.ConversationBackup {
 struct SessionsDocument: FileDocument {
     static var readableContentTypes: [UTType] { [.json] }
     
-    var sessions: [ChatSession]
+    var sessions: [Chat]
     
-    init(sessions: [ChatSession]) {
+    init(sessions: [Chat]) {
         self.sessions = sessions.filter { !$0.isQuick }
     }
     
@@ -102,18 +102,18 @@ struct SessionsDocument: FileDocument {
         guard let data = configuration.file.regularFileContents else {
             throw CocoaError(.fileReadCorruptFile)
         }
-        self.sessions = try JSONDecoder().decode([ChatSessionBackup].self, from: data).map { $0.toSession() }
+        self.sessions = try JSONDecoder().decode([ChatBackup].self, from: data).map { $0.toSession() }
     }
     
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
-        let data = try encoder.encode(sessions.filter { !$0.isQuick }.map { ChatSessionBackup(from: $0) })
+        let data = try encoder.encode(sessions.filter { !$0.isQuick }.map { ChatBackup(from: $0) })
         return FileWrapper(regularFileWithContents: data)
     }
 }
 
-func restoreSessions(from url: URL) throws -> [ChatSession] {
+func restoreSessions(from url: URL) throws -> [Chat] {
     guard url.startAccessingSecurityScopedResource() else {
         throw NSError(domain: "FileAccessError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to access the security-scoped resource."])
     }
@@ -123,7 +123,7 @@ func restoreSessions(from url: URL) throws -> [ChatSession] {
     
     do {
         let data = try Data(contentsOf: url)
-        let backups = try JSONDecoder().decode([ChatSessionBackup].self, from: data)
+        let backups = try JSONDecoder().decode([ChatBackup].self, from: data)
         return backups.map { $0.toSession() }
     } catch {
         print("Error reading or decoding file: \(error)")

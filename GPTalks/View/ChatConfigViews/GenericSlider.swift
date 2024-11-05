@@ -74,18 +74,18 @@ struct GenericSlider: View {
                 .buttonStyle(.plain)
                 .foregroundStyle(.secondary)
                 .popover(isPresented: $showPopover) {
-#if os(macOS)
+                    #if os(macOS)
                     HStack {
                         popoverContent
                     }
                     .padding(10)
-#else
+                    #else
                     VStack(spacing: 15) {
                         popoverContent
                     }
                     .padding()
                     .presentationCompactAdaptation(.popover)
-#endif
+                    #endif
                 }
             }
         }

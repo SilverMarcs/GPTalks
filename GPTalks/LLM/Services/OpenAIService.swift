@@ -26,7 +26,7 @@ struct OpenAIService: AIService {
         }
     }
     
-    static func convert(conversation: Conversation) -> ConvertedType {
+    static func convert(conversation: Thread) -> ConvertedType {
         let role = conversation.role.toOpenAIRole()
 
         switch role {
@@ -40,7 +40,7 @@ struct OpenAIService: AIService {
                     contents.append(.init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: url, detail: .low))))
                 } else {
                     let warning = "Notify the user if a file has been added but the assistant could not find a compatible plugin to read that file type."
-                    contents.append(.init(chatCompletionContentPartTextParam: .init(text: "Conversation ID: \(conversation.id)\nFile: \(data.fileName)\n\(warning)")))
+                    contents.append(.init(chatCompletionContentPartTextParam: .init(text: "Thread ID: \(conversation.id)\nFile: \(data.fileName)\n\(warning)")))
                 }
             }
             
@@ -93,20 +93,20 @@ struct OpenAIService: AIService {
         }
     }
     
-    static func streamResponse(from conversations: [Conversation], config: SessionConfig) -> AsyncThrowingStream<StreamResponse, Error> {
+    static func streamResponse(from conversations: [Thread], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let query = createQuery(from: conversations, config: config, stream: config.stream)
         return streamOpenAIResponse(query: query, config: config)
     }
     
-    static func nonStreamingResponse(from conversations: [Conversation], config: SessionConfig) async throws -> StreamResponse {
+    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> StreamResponse {
         let query = createQuery(from: conversations, config: config, stream: config.stream)
         return try await nonStreamingOpenAIResponse(query: query, config: config)
     }
     
-    static func createQuery(from conversations: [Conversation], config: SessionConfig, stream: Bool) -> ChatQuery {
+    static func createQuery(from conversations: [Thread], config: ChatConfig, stream: Bool) -> ChatQuery {
         var messages = conversations.map { convert(conversation: $0) }
         if !config.systemPrompt.isEmpty {
-            let systemPrompt = Conversation(role: .system, content: config.systemPrompt)
+            let systemPrompt = Thread(role: .system, content: config.systemPrompt)
             messages.insert(convert(conversation: systemPrompt), at: 0)
         }
         
@@ -125,7 +125,7 @@ struct OpenAIService: AIService {
         )
     }
     
-    static func streamOpenAIResponse(query: ChatQuery, config: SessionConfig) -> AsyncThrowingStream<StreamResponse, Error> {
+    static func streamOpenAIResponse(query: ChatQuery, config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let service = getService(provider: config.provider)
         
         return AsyncThrowingStream { continuation in
@@ -173,7 +173,7 @@ struct OpenAIService: AIService {
         }
     }
     
-    static func nonStreamingOpenAIResponse(query: ChatQuery, config: SessionConfig) async throws -> StreamResponse {
+    static func nonStreamingOpenAIResponse(query: ChatQuery, config: ChatConfig) async throws -> StreamResponse {
         let service = getService(provider: config.provider)
         
         let result = try await service.chats(query: query)
@@ -195,7 +195,7 @@ struct OpenAIService: AIService {
     static func testModel(provider: Provider, model: AIModel) async -> Bool {
         let service = getService(provider: provider)
         
-        let messages = [convert(conversation: Conversation(role: .user, content: String.testPrompt))]
+        let messages = [convert(conversation: Thread(role: .user, content: String.testPrompt))]
         let query = ChatQuery(messages: messages, model: model.code)
         
         do {

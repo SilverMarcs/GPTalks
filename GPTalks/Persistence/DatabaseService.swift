@@ -14,10 +14,10 @@ class DatabaseService {
     
     var container: ModelContainer = {
         let schema = Schema([
-            ChatSession.self,
-            SessionConfig.self,
-            Conversation.self,
-            ConversationGroup.self,
+            Chat.self,
+            ChatConfig.self,
+            Thread.self,
+            ThreadGroup.self,
             Provider.self,
             AIModel.self,
             ImageGeneration.self,
@@ -42,12 +42,12 @@ class DatabaseService {
     
     func initialSetup(modelContext: ModelContext) {
         // Fetch the quick session from the modelContext
-        var fetchQuickSession = FetchDescriptor<ChatSession>()
+        var fetchQuickSession = FetchDescriptor<Chat>()
         fetchQuickSession.predicate = #Predicate { $0.isQuick == true }
         fetchQuickSession.fetchLimit = 1
         
         if let quickSession = try? modelContext.fetch(fetchQuickSession).first {
-            quickSession.deleteAllConversations()
+            quickSession.deleteAllThreads()
         }
         
         var fetchProviders = FetchDescriptor<Provider>()
@@ -67,18 +67,18 @@ class DatabaseService {
         modelContext.insert(anthropic)
         modelContext.insert(google)
         
-        let config = SessionConfig(provider: openAI, purpose: .quick)
-        let session = ChatSession(config: config)
+        let config = ChatConfig(provider: openAI, purpose: .quick)
+        let session = Chat(config: config)
         session.isQuick = true
         session.title = "(↯) Quick Session"
         modelContext.insert(session)
         
-        let normalSessionConfig = SessionConfig(provider: openAI, purpose: .chat)
-        let normalSession = ChatSession(config: normalSessionConfig)
+        let normalChatConfig = ChatConfig(provider: openAI, purpose: .chat)
+        let normalSession = Chat(config: normalChatConfig)
         modelContext.insert(normalSession)
         
-        let imageSessionConfig = ImageConfig(prompt: "", provider: openAI)
-        let imageSession = ImageSession(config: imageSessionConfig)
+        let imageChatConfig = ImageConfig(prompt: "", provider: openAI)
+        let imageSession = ImageSession(config: imageChatConfig)
         modelContext.insert(imageSession)
         
         let providerDefaults = ProviderDefaults(defaultProvider: openAI,

@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct MacInputEditor: View {
-    @Environment(ChatSessionVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var sessionVM
     
     @Binding var prompt: String
     var provider: Provider
