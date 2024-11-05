@@ -30,6 +30,7 @@ struct ConversationList: View {
                 .listRowSeparator(.hidden)
 
                 ErrorMessageView(message: $session.errorMessage)
+                    .listRowSeparator(.hidden)
             
                 Color.clear
                     .id(String.bottomID)

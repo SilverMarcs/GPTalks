@@ -90,15 +90,25 @@ struct BasicChatInspector: View {
     }
     
     private var deleteAllMessages: some View {
-        Button(role: .destructive) {
-            if session.isStreaming { return }
-            
-            showingDeleteConfirmation.toggle()
-        } label: {
-            Text("Delete All Messages")
+        Button(action: {}) {
+            Button(role: .destructive) {
+                if session.isStreaming { return }
+                
+                showingDeleteConfirmation.toggle()
+            } label: {
+                Text("Delete All Messages")
+                    .frame(maxWidth: .infinity)
+            }
+            .foregroundStyle(.red)
+            #if os(macOS)
+            .buttonStyle(ClickHighlightButton())
+            #else
+            .buttonStyle(.bordered)
+            #endif
         }
-        .foregroundStyle(.red)
-        .buttonStyle(ClickHighlightButton())
+        .buttonStyle(.plain)
+        .listRowBackground(EmptyView())
+        .listRowInsets(EdgeInsets())
         .confirmationDialog("Are you sure you want to delete all messages?", isPresented: $showingDeleteConfirmation) {
             Button("Delete All", role: .destructive) {
                 session.deleteAllConversations()

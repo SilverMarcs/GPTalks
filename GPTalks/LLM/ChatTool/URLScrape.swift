@@ -8,7 +8,6 @@
 import Foundation
 import OpenAI
 import GoogleGenerativeAI
-import Reeeed
 
 struct URLScrape: ToolProtocol {
     static let toolName = "urlScrape"
