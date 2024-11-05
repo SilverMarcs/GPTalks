@@ -33,7 +33,7 @@ struct ModelSelectionSheet: View {
                             Spacer()
                             
                             Picker("Model Type", selection: $selectableModel.selectedModelType) {
-                                ForEach(ModelTypeOption.allCases, id: \.self) { option in
+                                ForEach(ModelType.allCases, id: \.self) { option in
                                     Image(systemName: option.icon)
                                         .tag(option)
                                 }
@@ -80,17 +80,7 @@ struct ModelSelectionSheet: View {
         let selectedModels = refreshedModels.filter { $0.isSelected }
         
         for selectableModel in selectedModels {
-            switch selectableModel.selectedModelType {
-            case .chat:
-                let chatModel = ChatModel(code: selectableModel.code, name: selectableModel.name)
-                provider.chatModels.append(chatModel)
-            case .image:
-                let imageModel = ImageModel(code: selectableModel.code, name: selectableModel.name)
-                provider.imageModels.append(imageModel)
-            case .stt:
-                let sttModel = STTModel(code: selectableModel.code, name: selectableModel.name)
-                provider.sttModels.append(sttModel )
-            }
+            provider.addModel(selectableModel)
         }
         
         dismiss()

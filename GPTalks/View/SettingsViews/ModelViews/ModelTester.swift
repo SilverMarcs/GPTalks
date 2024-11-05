@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct ModelTester<M: ModelType>: View {
+struct ModelTester: View {
     var provider: Provider
-    @Binding var model: M
+    var model: AIModel
     
     @State var isTesting = false
     

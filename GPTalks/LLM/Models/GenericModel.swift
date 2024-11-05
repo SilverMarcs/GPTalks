@@ -12,5 +12,5 @@ struct GenericModel: Identifiable, Hashable {
     var code: String
     var name: String
     var isSelected: Bool = false
-    var selectedModelType: ModelTypeOption = .chat
+    var selectedModelType: ModelType = .chat
 }

@@ -115,7 +115,7 @@ struct ClaudeService: AIService {
         return .content(content)
     }
     
-    static func testModel(provider: Provider, model: any ModelType) async -> Bool {
+    static func testModel(provider: Provider, model: AIModel) async -> Bool {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         let service = AnthropicServiceFactory.service(
             apiKey: provider.apiKey,

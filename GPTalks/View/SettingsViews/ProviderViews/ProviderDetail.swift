@@ -18,11 +18,11 @@ struct ProviderDetail: View {
             case .general:
                 ProviderGeneral(provider: provider)
             case .chat:
-                ModelList<ChatModel>(provider: provider, models: $provider.chatModels)
+                ModelList(provider: provider, models: $provider.chatModels)
             case .image:
-                ModelList<ImageModel>(provider: provider, models: $provider.imageModels)
-            case .tts:
-                ModelList<STTModel>(provider: provider, models: $provider.sttModels)
+                ModelList(provider: provider, models: $provider.imageModels)
+            case .stt:
+                ModelList(provider: provider, models: $provider.sttModels)
             }
         }
         .scrollContentBackground(.visible)
@@ -35,11 +35,11 @@ struct ProviderDetail: View {
         }
     }
 
-    private var filteredTabs: [ProviderDetailTab] {
-        (provider.type == .vertex || provider.type == .google || provider.type == .anthropic
-        ? [.general, .chat]
-        : [.general, .chat, .image, .tts])
-    }
+//    private var filteredTabs: [ProviderDetailTab] {
+//        (provider.type == .vertex || provider.type == .google || provider.type == .anthropic
+//        ? [.general, .chat]
+//        : [.general, .chat, .image, .stt])
+//    }
 
     private var picker: some View {
         Picker("Tabs", selection: $selectedTab) {
@@ -59,7 +59,7 @@ enum ProviderDetailTab: String, CaseIterable, Identifiable {
     case general
     case chat
     case image
-    case tts
+    case stt
 
     var name: some View {
         switch self {
@@ -69,8 +69,8 @@ enum ProviderDetailTab: String, CaseIterable, Identifiable {
             Label("Chat", systemImage: "quote.bubble")
         case .image:
             Label("Image", systemImage: "photo")
-        case .tts:
-            Label("TTS", systemImage: "waveform")
+        case .stt:
+            Label("STT", systemImage: "waveform")
         }
     }
 }

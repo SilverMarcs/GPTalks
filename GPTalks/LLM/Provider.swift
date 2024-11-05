@@ -28,25 +28,25 @@ class Provider {
     var isEnabled: Bool = true
     
     @Relationship(deleteRule: .cascade)
-    var chatModel: ChatModel
+    var chatModel: AIModel
     @Relationship(deleteRule: .cascade)
-    var quickChatModel: ChatModel
+    var quickChatModel: AIModel
     @Relationship(deleteRule: .cascade)
-    var titleModel: ChatModel
+    var titleModel: AIModel
     @Relationship(deleteRule: .cascade)
-    var chatModels: [ChatModel] = []
+    var chatModels: [AIModel] = []
     
     @Relationship(deleteRule: .cascade)
-    var imageModel: ImageModel
+    var imageModel: AIModel
     @Relationship(deleteRule: .cascade)
-    var toolImageModel: ImageModel
+    var toolImageModel: AIModel
     @Relationship(deleteRule: .cascade)
-    var imageModels: [ImageModel] = []
+    var imageModels: [AIModel] = []
     
     @Relationship(deleteRule: .cascade)
-    var sttModel: STTModel
+    var sttModel: AIModel
     @Relationship(deleteRule: .cascade)
-    var sttModels: [STTModel] = []
+    var sttModels: [AIModel] = []
 
     public init(id: UUID = UUID(),
                 date: Date = Date(),
@@ -57,15 +57,15 @@ class Provider {
                 scheme: HTTPScheme,
                 color: String,
                 isEnabled: Bool,
-                chatModel: ChatModel,
-                quickChatModel: ChatModel,
-                titleModel: ChatModel,
-                imageModel: ImageModel,
-                toolImageModel: ImageModel,
-                chatModels: [ChatModel] = [],
-                imageModels: [ImageModel] = [],
-                sttModel: STTModel,
-                sttModels: [STTModel] = []) {
+                chatModel: AIModel,
+                quickChatModel: AIModel,
+                titleModel: AIModel,
+                imageModel: AIModel,
+                toolImageModel: AIModel,
+                chatModels: [AIModel] = [],
+                imageModels: [AIModel] = [],
+                sttModel: AIModel,
+                sttModels: [AIModel] = []) {
         self.id = id
         self.date = date
         self.name = name
@@ -88,12 +88,12 @@ class Provider {
     
     
     static func factory(type: ProviderType, isDummy: Bool = false) -> Provider {
-        let demoImageModel = ImageModel.dalle
-        let demoTTSModel = STTModel.whisper
+        let demoImageModel = AIModel.dalle
+        let demoTTSModel = AIModel.whisper
         
         let chatModels = type.getDefaultModels()
-        let imageModels = type == .openai ? ImageModel.getOpenImageModels() : []
-        let ttsModels = type == .openai ? STTModel.getOpenAITTSModels() : []
+        let imageModels = type == .openai ? AIModel.getOpenImageModels() : []
+        let ttsModels = type == .openai ? AIModel.getOpenAITTSModels() : []
         
         
         let provider = Provider(
@@ -125,6 +125,17 @@ class Provider {
         
         return provider
     }
+    
+    func addModel(_ model: GenericModel) {
+        switch model.selectedModelType {
+        case .chat:
+            chatModels.append(AIModel(code: model.code, name: model.name, type: .chat))
+        case .image:
+            imageModels.append(AIModel(code: model.code, name: model.name, type: .image))
+        case .stt:
+            sttModels.append(AIModel(code: model.code, name: model.name, type: .stt))
+        }
+    }
 }
 
 enum HTTPScheme: String, Codable, CaseIterable {
@@ -144,7 +155,7 @@ extension Provider {
         }
     }
     
-    func testModel(model: any ModelType) async -> Bool {
+    func testModel(model: AIModel) async -> Bool {
         let service = type.getService()
         let result = await service.testModel(provider: self, model: model)
         return result

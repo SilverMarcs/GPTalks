@@ -60,7 +60,7 @@ struct TranscribeTool: ToolProtocol {
         return audioArgs
     }
     
-    private static func transcribeText(provider: Provider, model: STTModel, typedData: TypedData) async throws -> String {
+    private static func transcribeText(provider: Provider, model: AIModel, typedData: TypedData) async throws -> String {
         let service = OpenAIService.getService(provider: provider)
 
         

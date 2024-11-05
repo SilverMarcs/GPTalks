@@ -19,6 +19,7 @@ class DatabaseService {
             Conversation.self,
             ConversationGroup.self,
             Provider.self,
+            AIModel.self,
             ImageGeneration.self,
             ImageConfig.self,
             ProviderDefaults.self,

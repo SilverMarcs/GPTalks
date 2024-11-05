@@ -17,7 +17,7 @@ class ImageConfig {
     @Relationship(deleteRule: .nullify)
     var provider: Provider
     @Relationship(deleteRule: .nullify)
-    var model: ImageModel
+    var model: AIModel
     
     var prompt: String
     var numImages: Int = ImageConfigDefaults.shared.numImages
@@ -31,7 +31,7 @@ class ImageConfig {
         self.model = provider.imageModel
     }
     
-    init(prompt: String = "", provider: Provider, model: ImageModel) {
+    init(prompt: String = "", provider: Provider, model: AIModel) {
         self.prompt = prompt
         self.provider = provider
         self.model = model

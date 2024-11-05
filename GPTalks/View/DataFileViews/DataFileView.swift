@@ -18,7 +18,7 @@ struct DataFileView: View {
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack {
+            HStack {
                 ForEach(dataFiles) { dataFile in
                     fileItemView(for: dataFile)
                 }

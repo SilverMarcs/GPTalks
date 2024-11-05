@@ -135,7 +135,7 @@ struct GoogleService: AIService {
         return .content(response.text ?? "")
     }
     
-    static func testModel(provider: Provider, model: any ModelType) async -> Bool {
+    static func testModel(provider: Provider, model: AIModel) async -> Bool {
         let model = GenerativeModel(name: model.code, apiKey: provider.apiKey)
         
         do {

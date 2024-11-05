@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct ModelPicker<T: ModelType>: View {
-    @Binding var model: T
-    var models: [T]
+struct ModelPicker: View {
+    @Binding var model: AIModel
+    var models: [AIModel]
     var label: String = "Model"
     
     var body: some View {

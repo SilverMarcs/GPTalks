@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ModelTypeOption: String, CaseIterable {
+enum ModelType: String, CaseIterable, Codable {
     case chat
     case image
     case stt

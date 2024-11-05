@@ -41,6 +41,22 @@ struct FileHelper {
             return nil
         }
     }
+    
+    static func createTemporaryURL(for data: Data) -> URL? {
+        let tempDirectoryURL = FileManager.default.temporaryDirectory
+        let fileName = "temp_file_\(UUID().uuidString)"
+        let fileExtension = inferFileExtension(from: data)
+        let fullFileName = fileName + "." + fileExtension
+        let fileURL = tempDirectoryURL.appendingPathComponent(fullFileName)
+
+        do {
+            try data.write(to: fileURL)
+            return fileURL
+        } catch {
+            print("Error creating temporary file: \(error)")
+            return nil
+        }
+    }
 
     private static func inferFileExtension(from data: Data) -> String {
         // Check the first few bytes of the data to infer the file type

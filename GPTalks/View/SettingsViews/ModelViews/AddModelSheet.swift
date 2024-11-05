@@ -7,35 +7,27 @@
 
 import SwiftUI
 
-struct AddModelSheet<M: ModelType>: View {
+struct AddModelSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var models: [M]
+    var provider: Provider
     
     @State private var modelName: String = ""
     @State private var modelCode: String = ""
-    @State private var selectedModelType: ModelTypeOption
-
-    init(models: Binding<[M]>) {
-        self._models = models
-        if M.self == ChatModel.self {
-            self._selectedModelType = State(initialValue: .chat)
-        } else if M.self == ImageModel.self {
-            self._selectedModelType = State(initialValue: .image)
-        } else if M.self == STTModel.self {
-            self._selectedModelType = State(initialValue: .stt)
-        } else {
-            fatalError("Unsupported model type")
-        }
-    }
+    @State private var selectedModelType: ModelType = .chat
 
     var body: some View {
         NavigationStack {
             Form {
                 TextField("Model Name", text: $modelName)
                 TextField("Model Code", text: $modelCode)
+                Picker("Model Type", selection: $selectedModelType) {
+                    ForEach(ModelType.allCases, id: \.self) { type in
+                        Text(type.rawValue.capitalized).tag(type)
+                    }
+                }
             }
             .formStyle(.grouped)
-            .navigationTitle("Add \(selectedModelType.rawValue.uppercased()) Model")
+            .navigationTitle("Add Model")
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -54,7 +46,7 @@ struct AddModelSheet<M: ModelType>: View {
     }
     
     private func addModel() {
-        let newModel = M(code: modelCode, name: modelName)
-        models.append(newModel)
+        let newModel = GenericModel(code: modelCode, name: modelName, selectedModelType: selectedModelType)
+        provider.addModel(newModel)
     }
 }

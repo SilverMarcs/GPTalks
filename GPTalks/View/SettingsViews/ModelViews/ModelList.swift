@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-struct ModelList<M: ModelType>: View {
+struct ModelList: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Bindable var provider: Provider
-    @Binding var models: [M]
+    @Binding var models: [AIModel]
 
     @State private var showAdder = false
     @State private var showModelSelectionSheet = false
-    @State private var selections: Set<M.ID> = []
-        
+    @State private var selections: Set<AIModel.ID> = []
+    
     var body: some View {
         Group {
 #if os(macOS)
@@ -38,7 +38,7 @@ struct ModelList<M: ModelType>: View {
             }
         }
         .sheet(isPresented: $showAdder) {
-            AddModelSheet<M>(models: $models)
+            AddModelSheet(provider: provider)
         }
         .sheet(isPresented: $showModelSelectionSheet) {
             ModelSelectionSheet(provider: provider)
@@ -59,11 +59,10 @@ struct ModelList<M: ModelType>: View {
                         
                         Spacer()
                         
-                        if let _ = model as? ChatModel {
-                            ModelTester(provider: provider, model: $model)
+                        if model.type == .chat {
+                            ModelTester(provider: provider, model: model)
                         }
-                    }
-                }
+                    }                }
                 .onDelete(perform: { indexSet in
                     models.remove(atOffsets: indexSet)
                 })
@@ -83,8 +82,8 @@ struct ModelList<M: ModelType>: View {
                 
                 TableColumn("Actions") { $model in
                     HStack {
-                        if let _ = model as? ChatModel {
-                            ModelTester(provider: provider, model: $model)
+                        if model.type == .chat {
+                            ModelTester(provider: provider, model: model)
                         }
                         
                         Button(role: .destructive) {

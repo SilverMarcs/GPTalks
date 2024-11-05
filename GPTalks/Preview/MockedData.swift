@@ -25,16 +25,16 @@ extension ProviderDefaults {
     static var mockProviderDefaults = ProviderDefaults(defaultProvider: .openAIProvider, quickProvider: .openAIProvider, imageProvider: .openAIProvider, toolImageProvider: .openAIProvider, toolSTTProvider: .openAIProvider)
 }
 
-extension ChatModel {
-    static var gpt4 = ChatModel(code: "gpt", name: "GPT-4")
+extension AIModel {
+    static var gpt4 = AIModel(code: "gpt", name: "GPT-4", type: .chat)
 }
 
-extension ImageModel {
-    static var dalle = ImageModel(code: "dall-e-3", name: "DALL-E-3")
+extension AIModel {
+    static var dalle = AIModel(code: "dall-e-3", name: "DALL-E-3", type: .image)
 }
 
-extension STTModel {
-    static var whisper = STTModel(code: "whisper-1", name: "Whisper-1")
+extension AIModel {
+    static var whisper = AIModel(code: "whisper-1", name: "Whisper-1", type: .stt)
 }
 
 extension String {

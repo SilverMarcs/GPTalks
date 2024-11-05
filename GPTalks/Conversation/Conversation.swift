@@ -21,7 +21,7 @@ final class Conversation {
     @Relationship(deleteRule: .nullify)
     var provider: Provider?
     @Relationship(deleteRule: .nullify)
-    var model: ChatModel?
+    var model: AIModel?
     
     var content: String
 
@@ -35,7 +35,7 @@ final class Conversation {
     var toolCalls: [ChatToolCall] = []
     var toolResponse: ToolResponse?
     
-    init(role: ConversationRole, content: String = "", group: ConversationGroup? = nil, provider: Provider? = nil, model: ChatModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
+    init(role: ConversationRole, content: String = "", group: ConversationGroup? = nil, provider: Provider? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
         self.role = role
         self.content = content
         self.group = group

@@ -26,18 +26,14 @@ struct ProviderBackup: Codable {
     var imageModelCode: String
     var toolImageModelCode: String
     var chatModels: [AIModelBackup]
-    var imageModels: [ImageModelBackup]
+    var imageModels: [AIModelBackup]
+    var sttModels: [AIModelBackup]
     
     struct AIModelBackup: Codable {
         var id: UUID
         var code: String
         var name: String
-    }
-    
-    struct ImageModelBackup: Codable {
-        var id: UUID
-        var code: String
-        var name: String
+        var type: ModelType
     }
 }
 
@@ -58,12 +54,14 @@ extension ProviderBackup {
         self.imageModelCode = provider.imageModel.code
         self.toolImageModelCode = provider.toolImageModel.code
         self.chatModels = provider.chatModels.map { AIModelBackup(from: $0) }
-        self.imageModels = provider.imageModels.map { ImageModelBackup(from: $0) }
+        self.imageModels = provider.imageModels.map { AIModelBackup(from: $0) }
+        self.sttModels = provider.sttModels.map { AIModelBackup(from: $0) }
     }
 
     func toProvider() -> Provider {
         let chatModels = self.chatModels.map { $0.toAIModel() }
         let imageModels = self.imageModels.map { $0.toAIModel() }
+        let sttModels = self.sttModels.map { $0.toAIModel() }
         return Provider(
             id: UUID(),
             date: Date(),
@@ -74,45 +72,32 @@ extension ProviderBackup {
             scheme: self.schema,
             color: self.color,
             isEnabled: self.isEnabled,
-            chatModel: chatModels.first(where: { $0.code == self.chatModelCode }) ?? ChatModel(code: self.chatModelCode, name: ""),
-            quickChatModel: chatModels.first(where: { $0.code == self.quickChatModelCode }) ?? ChatModel(code: self.quickChatModelCode, name: ""),
-            titleModel: chatModels.first(where: { $0.code == self.titleModelCode }) ?? ChatModel(code: self.titleModelCode, name: ""),
-            imageModel: imageModels.first(where: { $0.code == self.imageModelCode }) ?? ImageModel(code: self.imageModelCode, name: ""),
-            toolImageModel: imageModels.first(where: { $0.code == self.toolImageModelCode }) ?? ImageModel(code: self.toolImageModelCode, name: ""),
+            chatModel: chatModels.first(where: { $0.code == self.chatModelCode }) ?? AIModel(code: self.chatModelCode, name: "", type: .chat),
+            quickChatModel: chatModels.first(where: { $0.code == self.quickChatModelCode }) ?? AIModel(code: self.quickChatModelCode, name: "", type: .chat),
+            titleModel: chatModels.first(where: { $0.code == self.titleModelCode }) ?? AIModel(code: self.titleModelCode, name: "", type: .chat),
+            imageModel: imageModels.first(where: { $0.code == self.imageModelCode }) ?? AIModel(code: self.imageModelCode, name: "", type: .image),
+            toolImageModel: imageModels.first(where: { $0.code == self.toolImageModelCode }) ?? AIModel(code: self.toolImageModelCode, name: "", type: .image),
             chatModels: chatModels,
             imageModels: imageModels,
-            sttModel: STTModel(code: "", name: ""),
-            sttModels: []
+            sttModel: sttModels.first(where: { $0.code == self.toolImageModelCode }) ?? AIModel(code: self.toolImageModelCode, name: "", type: .stt),
+            sttModels: sttModels
         )
     }
 }
 
 extension ProviderBackup.AIModelBackup {
-    init(from model: ChatModel) {
+    init(from model: AIModel) {
         self.id = model.id
         self.code = model.code
         self.name = model.name
+        self.type = model.type
     }
 
-    func toAIModel() -> ChatModel {
-        ChatModel(
+    func toAIModel() -> AIModel {
+        AIModel(
             code: self.code,
-            name: self.name
-        )
-    }
-}
-
-extension ProviderBackup.ImageModelBackup {
-    init(from model: ImageModel) {
-        self.id = model.id
-        self.code = model.code
-        self.name = model.name
-    }
-    
-    func toAIModel() -> ImageModel {
-        ImageModel(
-            code: self.code,
-            name: self.name
+            name: self.name,
+            type: self.type
         )
     }
 }

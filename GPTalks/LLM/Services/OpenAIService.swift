@@ -192,7 +192,7 @@ struct OpenAIService: AIService {
         }
     }
     
-    static func testModel(provider: Provider, model: any ModelType) async -> Bool {
+    static func testModel(provider: Provider, model: AIModel) async -> Bool {
         let service = getService(provider: provider)
         
         let messages = [convert(conversation: Conversation(role: .user, content: String.testPrompt))]

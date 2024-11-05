@@ -98,14 +98,14 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         }
     }
     
-    func getDefaultModels() -> [ChatModel] {
+    func getDefaultModels() -> [AIModel] {
         switch self {
-        case .openai: ChatModel.getOpenaiModels()
-        case .anthropic: ChatModel.getAnthropicModels()
-        case .google: ChatModel.getGoogleModels()
-        case .vertex: ChatModel.getVertexModels()
-        case .ollama: ChatModel.getLocalModels()
-        default: ChatModel.getOpenaiModels()
+        case .openai: AIModel.getOpenaiModels()
+        case .anthropic: AIModel.getAnthropicModels()
+        case .google: AIModel.getGoogleModels()
+        case .vertex: AIModel.getVertexModels()
+        case .ollama: AIModel.getLocalModels()
+        default: AIModel.getOpenaiModels()
         }
     }
     
