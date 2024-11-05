@@ -49,8 +49,7 @@ struct ChatInputView: View {
                             .padding(.bottom, 5)
                     }
                     
-                    InputEditor(prompt: $session.inputManager.prompt,
-                                provider: session.config.provider, isFocused: _isFocused)
+                    InputEditor(prompt: $session.inputManager.prompt, provider: session.config.provider, isFocused: _isFocused)
                     
                     Spacer(minLength: 0)
                 }

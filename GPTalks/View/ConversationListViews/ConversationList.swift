@@ -19,8 +19,6 @@ struct ConversationList: View {
     @Environment(\.modelContext) var modelContext
     @Environment(ChatSessionVM.self) private var sessionVM
     
-    @State private var hasUserScrolled = false
-    
     var body: some View {
         ScrollViewReader { proxy in
             List {
@@ -36,9 +34,6 @@ struct ConversationList: View {
                     .id(String.bottomID)
                     .listRowSeparator(.hidden)
             }
-            #if !os(macOS)
-            .listStyle(.plain)
-            #endif
             .task {
                 session.proxy = proxy
                 
@@ -56,29 +51,6 @@ struct ConversationList: View {
                     ChatInputView(session: session)
                 }
             }
-            .onChange(of: session.groups.last?.activeConversation.content) {
-                if !hasUserScrolled && session.isStreaming {
-                    scrollToBottom(proxy: proxy)
-                }
-            }
-            .onChange(of: session.groups.last?.activeConversation.toolCalls) {
-                if !hasUserScrolled && session.isStreaming {
-                    scrollToBottom(proxy: proxy)
-                }
-            }
-            .onChange(of: session.groups.last?.activeConversation.toolResponse) {
-                if !hasUserScrolled && session.isStreaming {
-                    scrollToBottom(proxy: proxy)
-                }
-            }
-            .onChange(of: session.isStreaming) {
-                if !session.isStreaming  {
-                    if !hasUserScrolled {
-                        scrollToBottom(proxy: proxy)
-                    }
-                    hasUserScrolled = false
-                }
-            }
             .onChange(of: session.inputManager.prompt) {
                 if session.inputManager.state == .normal {
                     scrollToBottom(proxy: proxy)
@@ -92,10 +64,11 @@ struct ConversationList: View {
             .navigationSubtitle("\(session.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 if session.isReplying {
-                    hasUserScrolled = true
+                    session.hasUserScrolled = true
                 }
             }
             #else
+            .listStyle(.plain)
             .toolbarTitleDisplayMode(.inline)
             #if !os(visionOS)
             .scrollDismissesKeyboard(.immediately)

@@ -33,7 +33,7 @@ final class ChatSession {
     @Transient
     var streamingTask: Task<Void, Error>?
     
-    @Transient
+//    @Transient
     var isStreaming: Bool {
         streamingTask != nil
     }
@@ -47,7 +47,7 @@ final class ChatSession {
     @Attribute(.ephemeral)
     var showCamera: Bool = false
     
-    @Transient
+//    @Transient
     var isReplying: Bool {
         groups.last?.activeConversation.isReplying ?? false
     }
@@ -71,8 +71,9 @@ final class ChatSession {
     }
     
     private func handleError(_ error: Error) {
-        print("Error: \(error)")
         errorMessage = error.localizedDescription
+        scrollBottom()
+        hasUserScrolled = false
         
         DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
             if let lastGroup = self.groups.last, lastGroup.activeConversation.content.isEmpty {
@@ -80,10 +81,6 @@ final class ChatSession {
                 if !lastGroup.conversations.isEmpty {
                     lastGroup.activeConversationIndex -= 1
                 }
-            }
-            
-            if let proxy = self.proxy {
-                scrollToBottom(proxy: proxy)
             }
         }
     }
@@ -226,6 +223,7 @@ final class ChatSession {
     
     @MainActor
     func stopStreaming() {
+        hasUserScrolled = false
         streamingTask?.cancel()
         streamingTask = nil
         
@@ -288,9 +286,17 @@ final class ChatSession {
         
         groups.append(group)
         
+        scrollBottom()
+        
         try? modelContext?.save()
         
         return group
+    }
+    
+    func scrollBottom() {
+        if let proxy = self.proxy, !hasUserScrolled {
+            scrollToBottom(proxy: proxy)
+        }
     }
     
     // TODO: make async

@@ -44,11 +44,12 @@ struct StreamHandler {
             switch response {
             case .content(let content):
                 streamText += content
-                let currentTime = Date()
                 
+                let currentTime = Date()
                 if currentTime.timeIntervalSince(lastUIUpdateTime) >= Self.uiUpdateInterval {
                     assistant.content = streamText
                     lastUIUpdateTime = currentTime
+                    session.scrollBottom()
                 }
             case .toolCalls(let calls):
                 pendingToolCalls.append(contentsOf: calls)
@@ -90,15 +91,18 @@ struct StreamHandler {
             }
         }
         
+//        if !session.hasUserScrolled {
+            session.scrollBottom()
+            session.hasUserScrolled = false
+//        }
+        
         try? assistant.modelContext?.save()
     }
 
     @MainActor
     private func handleToolCalls(_ toolCalls: [ChatToolCall]) async throws {
         assistant.toolCalls = toolCalls
-        if let proxy = assistant.group?.session?.proxy {
-            scrollToBottom(proxy: proxy)
-        }
+        session.scrollBottom()
         
         assistant.isReplying = false
 
@@ -116,16 +120,11 @@ struct StreamHandler {
                 tool.toolResponse?.processedData = toolData.data    
                 tool.isReplying = false
                 
-                if let proxy = tool.group?.session?.proxy {
-                    scrollToBottom(proxy: proxy)
-                }
+                session.scrollBottom()
             }
             
             let newAssistant = Conversation(role: .assistant, provider: session.config.provider, model: session.config.model, isReplying: true)
             session.addConversationGroup(conversation: newAssistant)
-            if let proxy = newAssistant.group?.session?.proxy {
-                scrollToBottom(proxy: proxy)
-            }
                           
             if toolDatas.isEmpty {
                 session.streamer = StreamHandler(conversations: session.groups.map { $0.activeConversation }.dropLast(), session: session, assistant: newAssistant)
