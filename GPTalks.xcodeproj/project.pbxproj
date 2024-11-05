@@ -39,8 +39,6 @@
 		082F09D52CB2690800B7860A /* GenericModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09D42CB2690800B7860A /* GenericModel.swift */; };
 		082F09DB2CB2715A00B7860A /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09DA2CB2715A00B7860A /* Conversation.swift */; };
 		082F09DD2CB275BF00B7860A /* RuntimeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09DC2CB275BF00B7860A /* RuntimeError.swift */; };
-		082F09DF2CB2890C00B7860A /* PDFReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09DE2CB2890C00B7860A /* PDFReader.swift */; };
-		082F09E12CB34DD100B7860A /* FileReaderSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09E02CB34DD100B7860A /* FileReaderSettings.swift */; };
 		082F09E32CB3545600B7860A /* ToolProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09E22CB3545600B7860A /* ToolProtocol.swift */; };
 		082F09E52CB354FF00B7860A /* TranscribeTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09E42CB354FF00B7860A /* TranscribeTool.swift */; };
 		082F09E92CB35BC000B7860A /* STTModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082F09E82CB35BC000B7860A /* STTModel.swift */; };
@@ -246,8 +244,6 @@
 		082F09D42CB2690800B7860A /* GenericModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericModel.swift; sourceTree = "<group>"; };
 		082F09DA2CB2715A00B7860A /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		082F09DC2CB275BF00B7860A /* RuntimeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeError.swift; sourceTree = "<group>"; };
-		082F09DE2CB2890C00B7860A /* PDFReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFReader.swift; sourceTree = "<group>"; };
-		082F09E02CB34DD100B7860A /* FileReaderSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReaderSettings.swift; sourceTree = "<group>"; };
 		082F09E22CB3545600B7860A /* ToolProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolProtocol.swift; sourceTree = "<group>"; };
 		082F09E42CB354FF00B7860A /* TranscribeTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscribeTool.swift; sourceTree = "<group>"; };
 		082F09E82CB35BC000B7860A /* STTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTModel.swift; sourceTree = "<group>"; };
@@ -862,7 +858,6 @@
 				08F815212C97F58800B49355 /* GoogleSearchSettings.swift */,
 				08F8153B2C97F72200B49355 /* TranscribeSettings.swift */,
 				08F8153D2C97F75700B49355 /* GenerateImageSettings.swift */,
-				082F09E02CB34DD100B7860A /* FileReaderSettings.swift */,
 			);
 			path = ToolViews;
 			sourceTree = "<group>";
@@ -878,7 +873,6 @@
 				08F8152E2C97F60B00B49355 /* URLScrape.swift */,
 				08F8152C2C97F60100B49355 /* GoogleSearch.swift */,
 				08F8152A2C97F5FA00B49355 /* ImageGenerator.swift */,
-				082F09DE2CB2890C00B7860A /* PDFReader.swift */,
 				082F09E42CB354FF00B7860A /* TranscribeTool.swift */,
 			);
 			path = ChatTool;
@@ -1125,14 +1119,12 @@
 				082B88172CD36CD80092C4D0 /* PlatformSpecificGroupBoxStyle.swift in Sources */,
 				085361132C4939C5007DAB62 /* ImageGenerationView.swift in Sources */,
 				0805DEF12C58CB2A00A8354A /* ClaudeService.swift in Sources */,
-				082F09DF2CB2890C00B7860A /* PDFReader.swift in Sources */,
 				085276C02C98794C009184D2 /* ToolCallView.swift in Sources */,
 				0888C5832CD55BB900A1EA5E /* SearchedConversation.swift in Sources */,
 				08C1ACE42C54BCA600B86D37 /* FrequencyPenaltySlider.swift in Sources */,
 				0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */,
 				08B8DE192C97F3AC0041A690 /* ImageSessionToolbar.swift in Sources */,
 				085524EA2C4EDEC400CBB827 /* ModelList.swift in Sources */,
-				082F09E12CB34DD100B7860A /* FileReaderSettings.swift in Sources */,
 				08A3134B2C4ADEA000C3E578 /* ImageListRow.swift in Sources */,
 				087928372C48CFFB008646CD /* ExpandedTextField.swift in Sources */,
 				085361112C4938C4007DAB62 /* ImageGenerationList.swift in Sources */,

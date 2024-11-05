@@ -7,6 +7,7 @@
 
 import SwiftData
 import SwiftUI
+import PDFKit
 import UniformTypeIdentifiers
 import OpenAI
 
@@ -16,9 +17,13 @@ struct TypedData: Codable, Identifiable, Hashable {
     var fileType: UTType
     var fileName: String
     
-    var textContent: String? {
-        guard fileType.conforms(to: .text) else { return nil }
-        return String(data: data, encoding: .utf8)
+    private var textContent: String? {
+        if fileType.conforms(to: .text) {
+            return String(data: data, encoding: .utf8) ?? "Unable to read text file content"
+        } else if fileType.conforms(to: .pdf) {
+            return PDFDocument(data: data)?.string ?? "Unable to read PDF content"
+        }
+        return nil
     }
     
     var formattedTextContent: String? {
