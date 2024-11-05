@@ -158,6 +158,7 @@
 		08CF5B892C68980B0079D5EE /* HighlightedTextViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF5B882C68980B0079D5EE /* HighlightedTextViews.swift */; };
 		08D913EC2CD9CAF7002E4E53 /* AIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D913EB2CD9CAF7002E4E53 /* AIModel.swift */; };
 		08D913F02CDA1F75002E4E53 /* ProviderTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D913EF2CDA1F75002E4E53 /* ProviderTab.swift */; };
+		08D913F42CDA4798002E4E53 /* QueryThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D913F32CDA4798002E4E53 /* QueryThread.swift */; };
 		08DA5B0D2C72CE7700A7FE82 /* InputViewTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DA5B0C2C72CE7100A7FE82 /* InputViewTips.swift */; };
 		08F0EF1E2C6C2DFD00900ED0 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */; };
 		08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F369E22C3C278E002E4A35 /* ProviderType.swift */; };
@@ -351,6 +352,7 @@
 		08CF5B882C68980B0079D5EE /* HighlightedTextViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightedTextViews.swift; sourceTree = "<group>"; };
 		08D913EB2CD9CAF7002E4E53 /* AIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModel.swift; sourceTree = "<group>"; };
 		08D913EF2CDA1F75002E4E53 /* ProviderTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderTab.swift; sourceTree = "<group>"; };
+		08D913F32CDA4798002E4E53 /* QueryThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryThread.swift; sourceTree = "<group>"; };
 		08DA5B0C2C72CE7100A7FE82 /* InputViewTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputViewTips.swift; sourceTree = "<group>"; };
 		08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		08F369E22C3C278E002E4A35 /* ProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderType.swift; sourceTree = "<group>"; };
@@ -593,7 +595,6 @@
 				0841391E2C7169B90049E3B2 /* Tips */,
 				08C8004E2C36F648009581C5 /* LLM */,
 				08A222C22C2AC6A800D76C8B /* View */,
-				08A222BF2C2ABE4300D76C8B /* Conversation */,
 				08A222BC2C2ABD9E00D76C8B /* Chat */,
 				085361032C491BE5007DAB62 /* Image */,
 				08A77CCA2C65AA5D0087D0F3 /* Persistence */,
@@ -626,6 +627,7 @@
 		08A222BC2C2ABD9E00D76C8B /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				08A222BF2C2ABE4300D76C8B /* Thread */,
 				08A222862C2AB4FD00D76C8B /* Chat.swift */,
 				0893B2052C39810900D4D501 /* ChatConfig.swift */,
 				0869A3EA2C958A4C009BF9F2 /* ChatConfigTools.swift */,
@@ -637,18 +639,19 @@
 			path = Chat;
 			sourceTree = "<group>";
 		};
-		08A222BF2C2ABE4300D76C8B /* Conversation */ = {
+		08A222BF2C2ABE4300D76C8B /* Thread */ = {
 			isa = PBXGroup;
 			children = (
-				0888C5882CD5E92B00A1EA5E /* MatchedSession.swift */,
-				0888C5822CD55BB900A1EA5E /* MatchedThread.swift */,
 				082F09DA2CB2715A00B7860A /* Thread.swift */,
 				08149A562C3E5E5B004485AC /* ThreadRole.swift */,
 				089B22402C393BCB00E248FE /* ThreadGroup.swift */,
 				08C65E172C9295120013AE1F /* ContentHelper.swift */,
 				0834E77A2C71A42F007CB294 /* TypedData.swift */,
+				0888C5882CD5E92B00A1EA5E /* MatchedSession.swift */,
+				0888C5822CD55BB900A1EA5E /* MatchedThread.swift */,
+				08D913F32CDA4798002E4E53 /* QueryThread.swift */,
 			);
-			path = Conversation;
+			path = Thread;
 			sourceTree = "<group>";
 		};
 		08A222C22C2AC6A800D76C8B /* View */ = {
@@ -1128,6 +1131,7 @@
 				0805DEF32C58CB3D00A8354A /* GoogleService.swift in Sources */,
 				08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */,
 				08C800322C36AE1D009581C5 /* ChatList.swift in Sources */,
+				08D913F42CDA4798002E4E53 /* QueryThread.swift in Sources */,
 				0891D5732C96796100BA428F /* ImageConfigDefaults.swift in Sources */,
 				08A77CC52C65A0B70087D0F3 /* AppearanceSettings.swift in Sources */,
 				08D913F02CDA1F75002E4E53 /* ProviderTab.swift in Sources */,
