@@ -16,7 +16,6 @@ struct ConversationListToolbar: ToolbarContent {
     @Bindable var session: ChatSession
     
     @State var showingInspector: Bool = false
-    @State var showingShortcuts = false
     
     var body: some ToolbarContent {
         ToolbarItem(placement: horizontalSizeClass == .compact ? .primaryAction : .navigation) {
@@ -41,17 +40,6 @@ struct ConversationListToolbar: ToolbarContent {
         }
         
         #if os(macOS)
-        ToolbarItem(placement: .primaryAction) {
-            Button {
-                showingShortcuts.toggle()
-            } label: {
-                Label("Show Inspector", systemImage: "info.circle")
-            }
-            .popover(isPresented: $showingShortcuts) {
-                ConversationShortcuts()
-            }
-        }
-        
         if config.showStatusBar {
             ToolbarItem(placement: .favoritesBar) {
                 ConversationStatusBar(session: session)

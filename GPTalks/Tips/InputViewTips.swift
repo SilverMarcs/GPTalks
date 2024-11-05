@@ -8,12 +8,6 @@
 import SwiftUI
 import TipKit
 
-struct ChatCommandsTip: Tip {
-    var title: Text {
-        Text("Check Chat Commans in Menubar for useful shortcuts")
-    }
-}
-
 struct PlusButtonTip: Tip {
     var title: Text {
         Text("Long Press the plus button to see more options")
