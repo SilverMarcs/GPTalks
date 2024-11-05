@@ -10,20 +10,20 @@ import SwiftUI
 
 struct StreamHandler {
     private let conversations: [Conversation]
-    private let config: SessionConfig
+    private let session: ChatSession
     private let assistant: Conversation
     
     static let uiUpdateInterval: TimeInterval = Float.UIIpdateInterval
 
-    init(conversations: [Conversation], config: SessionConfig, assistant: Conversation) {
+    init(conversations: [Conversation], session: ChatSession, assistant: Conversation) {
         self.conversations = conversations
-        self.config = config
+        self.session = session
         self.assistant = assistant
     }
 
     @MainActor
     func handleRequest() async throws {
-        if config.stream {
+        if session.config.stream {
             try await handleStream()
         } else {
             try await handleNonStreamingResponse()
@@ -36,11 +36,11 @@ struct StreamHandler {
         var lastUIUpdateTime = Date()
         var pendingToolCalls: [ChatToolCall] = []
         
-        let serviceType = config.provider.type.getService()
+        let serviceType = session.config.provider.type.getService()
 
         assistant.isReplying = true
 
-        for try await response in serviceType.streamResponse(from: conversations, config: config) {
+        for try await response in serviceType.streamResponse(from: conversations, config: session.config) {
             switch response {
             case .content(let content):
                 streamText += content
@@ -65,8 +65,8 @@ struct StreamHandler {
     @MainActor
     private func handleNonStreamingResponse() async throws {
         assistant.isReplying = true
-        let serviceType = config.provider.type.getService()
-        let response = try await serviceType.nonStreamingResponse(from: conversations, config: config)
+        let serviceType = session.config.provider.type.getService()
+        let response = try await serviceType.nonStreamingResponse(from: conversations, config: session.config)
         
         switch response {
         case .content(let content):
@@ -77,18 +77,6 @@ struct StreamHandler {
         
         if assistant.toolCalls.isEmpty {
             assistant.isReplying = false
-        }
-    }
-    
-    func handleTitleGeneration() async throws -> String {
-        let serviceType = config.provider.type.getService()
-        let response = try await serviceType.nonStreamingResponse(from: conversations, config: config)
-        
-        switch response {
-        case .content(let content):
-            return content
-        case .toolCalls:
-            throw NSError(domain: "UnexpectedResponse", code: 1001, userInfo: [NSLocalizedDescriptionKey: "Expected content but got tool calls"])
         }
     }
 
@@ -119,7 +107,7 @@ struct StreamHandler {
         if let session = assistant.group?.session {
             for toolCall in assistant.toolCalls {
                 let toolResponse = ToolResponse(toolCallId: toolCall.toolCallId, tool: toolCall.tool, processedContent: "", processedData: [])
-                let tool = Conversation(role: .tool, provider: config.provider, model: config.model, toolResponse: toolResponse, isReplying: true)
+                let tool = Conversation(role: .tool, provider: session.config.provider, model: session.config.model, toolResponse: toolResponse, isReplying: true)
                 session.addConversationGroup(conversation: tool)
                 
                 let toolData = try await toolCall.tool.process(arguments: toolCall.arguments)
@@ -133,16 +121,16 @@ struct StreamHandler {
                 }
             }
             
-            let newAssistant = Conversation(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
+            let newAssistant = Conversation(role: .assistant, provider: session.config.provider, model: session.config.model, isReplying: true)
             session.addConversationGroup(conversation: newAssistant)
             if let proxy = newAssistant.group?.session?.proxy {
                 scrollToBottom(proxy: proxy)
             }
                           
             if toolDatas.isEmpty {
-                session.streamer = StreamHandler(conversations: session.groups.map { $0.activeConversation }.dropLast(), config: config, assistant: newAssistant)
+                session.streamer = StreamHandler(conversations: session.groups.map { $0.activeConversation }.dropLast(), session: session, assistant: newAssistant)
                 if let streamer = session.streamer {
-                    if config.stream {
+                    if session.config.stream {
                         try await streamer.handleStream()
                     } else {
                         try await streamer.handleNonStreamingResponse()

@@ -40,6 +40,10 @@ final class ChatSession {
     
     @Transient
     var proxy: ScrollViewProxy?
+    
+    @Attribute(.ephemeral)
+    var hasUserScrolled: Bool = false
+    
     @Attribute(.ephemeral)
     var showCamera: Bool = false
     
@@ -89,7 +93,7 @@ final class ChatSession {
         let conversations = prepareConversations(regenContent: regenContent)
         let assistant = prepareAssistantConversation(assistantGroup: assistantGroup)
         
-        self.streamer = StreamHandler(conversations: conversations, config: config, assistant: assistant)
+        self.streamer = StreamHandler(conversations: conversations, session: self, assistant: assistant)
         if let streamer = streamer {
             try await streamer.handleRequest()
         }

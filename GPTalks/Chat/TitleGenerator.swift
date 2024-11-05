@@ -19,13 +19,20 @@ enum TitleGenerator {
     private static func generateTitle(from content: String, provider: Provider) async -> String? {
         let user = Conversation(role: .user, content: content)
         
-        // TOOD: avoid dependency on streamhandler.
         let titleConfig = SessionConfig(provider: provider, purpose: .title)
         
         do {
-            let streamer = StreamHandler(conversations: [user], config: titleConfig, assistant: user)
+            let serviceType = titleConfig.provider.type.getService()
+            let response = try await serviceType.nonStreamingResponse(from: [user], config: titleConfig)
+            let title: String
             
-            let title = try await streamer.handleTitleGeneration()
+            switch response {
+            case .content(let content):
+                title = content
+            case .toolCalls:
+                title = "Error Generating Title"
+            }
+            
             return title.trimmingCharacters(in: .whitespacesAndNewlines)
         } catch {
             print("Error: \(error)")
