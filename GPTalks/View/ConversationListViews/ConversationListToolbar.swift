@@ -32,12 +32,12 @@ struct ConversationListToolbar: ToolbarContent {
             }
         }
         
-        if horizontalSizeClass != .compact {
-            ToolbarItem(placement: .primaryAction) {
-                Button("Tokens: \(session.tokenCount.formatToK())") { }
-                .allowsHitTesting(false)
-            }
-        }
+//        if horizontalSizeClass != .compact {
+//            ToolbarItem(placement: .primaryAction) {
+//                Button("Tokens: \(session.tokenCount.formatToK())") { }
+//                .allowsHitTesting(false)
+//            }
+//        }
         
         #if os(macOS)
         if config.showStatusBar {

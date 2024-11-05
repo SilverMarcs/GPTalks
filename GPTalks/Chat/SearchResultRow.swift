@@ -11,18 +11,18 @@ import MarkdownWebView
 struct SearchResultRow: View {
     @Environment(ChatSessionVM.self) var chatVM
     
-    let conversation: SearchedConversation
+    let matchedConversation: MatchedConversation
     
     var body: some View {
             HStack {
-                ConversationView(conversation: conversation.conversation)
+                ConversationView(conversation: matchedConversation.conversation)
                     .environment(\.isSearch, true)
                 
                 Button {
-                    chatVM.sessionsWithMatches = []
-                    chatVM.chatSelections = [conversation.session]
+                    chatVM.searchResults = []
+                    chatVM.chatSelections = [matchedConversation.session]
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        conversation.session.proxy?.scrollTo(conversation.conversation.group, anchor: .top)
+                        matchedConversation.session.proxy?.scrollTo(matchedConversation.conversation.group, anchor: .top)
                     }
                 } label: {
                     Image(systemName: "arrow.right")

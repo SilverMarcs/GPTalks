@@ -21,18 +21,7 @@ struct ChatSessionList: View {
     
     var body: some View {
         @Bindable var sessionVM = sessionVM
-        
-        #if os(macOS)
-        CustomSearchField("Search", text: $sessionVM.searchText)
-            .focused($isSearchFieldFocused)
-            .padding(.horizontal, 10)
-            .onChange(of: sessionVM.hasFocus) {
-                isSearchFieldFocused = sessionVM.hasFocus
-            }
-            .onChange(of: isSearchFieldFocused) {
-                sessionVM.hasFocus = isSearchFieldFocused
-            }
-        #endif
+
         
         ScrollViewReader { proxy in
             List(selection: $sessionVM.chatSelections) {
@@ -43,10 +32,10 @@ struct ChatSessionList: View {
                     SessionListRow(session: session)
                         .tag(session)
                         .deleteDisabled(session.isQuick || session.isStarred)
-                    #if os(macOS)
+                        #if os(macOS)
                         .listRowSeparator(.visible)
                         .listRowSeparatorTint(Color.gray.opacity(0.2))
-                    #endif
+                        #endif
                 }
                 .onDelete(perform: deleteItems)
             }
@@ -58,16 +47,20 @@ struct ChatSessionList: View {
                 ChatSessionToolbar()
             }
             .task {
-                if let first = sessions.first, sessionVM.chatSelections.isEmpty, !(horizontalSizeClass == .compact) {
-                    DispatchQueue.main.async {
-                        sessionVM.chatSelections = [first]
-                    }
+                if let first = sessions.first, sessionVM.chatSelections.isEmpty, horizontalSizeClass != .compact {
+                    sessionVM.chatSelections = [first]
                 }
             }
-            #if !os(macOS)
-            .searchable(text: $sessionVM.searchText)
-            #endif
+            .searchable(text: $sessionVM.searchText, placement: searchPlacement)
         }
+    }
+    
+    private var searchPlacement: SearchFieldPlacement {
+        #if os(macOS)
+        return .sidebar
+        #else
+        return .automatic
+        #endif
     }
 
     private func deleteItems(offsets: IndexSet) {
@@ -82,3 +75,6 @@ struct ChatSessionList: View {
     .frame(width: 400)
     .environment(ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext))
 }
+
+
+

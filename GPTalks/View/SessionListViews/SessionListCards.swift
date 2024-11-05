@@ -17,7 +17,7 @@ struct SessionListCards: View {
     var imageSessionsCount: String
     
     var body: some View {
-        Section {
+//        Section {
             HStack(spacing: spacing) {
                 ListCard(
                     icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
@@ -34,14 +34,14 @@ struct SessionListCards: View {
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
             #if os(macOS)
-                .listRowInsets(EdgeInsets(top: 0, leading: -5, bottom: 8, trailing: -5))
+            .listRowInsets(EdgeInsets(top: 6, leading: -5, bottom: 8, trailing: -5))
             #else
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             #endif
-        }
-        #if !os(macOS)
-        .listSectionSpacing(15)
-        #endif
+//        }
+//        #if !os(macOS)
+//        .listSectionSpacing(15)
+//        #endif
     }
     
     func handleChatPress() {

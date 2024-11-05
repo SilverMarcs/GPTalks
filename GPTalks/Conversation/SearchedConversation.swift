@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct SearchedConversation: Identifiable, Hashable {
+struct MatchedConversation: Identifiable, Hashable {
     let id: UUID
     let conversation: Conversation
     let session: ChatSession

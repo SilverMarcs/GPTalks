@@ -20,10 +20,10 @@ struct ImageSessionList: View {
     var body: some View {
         @Bindable var imageVM = imageVM
         
-        #if os(macOS)
-        CustomSearchField("Search", text: $imageVM.searchText)
-            .padding(.horizontal, 10)
-        #endif
+//        #if os(macOS)
+//        CustomSearchField("Search", text: $imageVM.searchText)
+//            .padding(.horizontal, 10)
+//        #endif
         
         ScrollViewReader { proxy in
             List(selection: $imageVM.selections) {
@@ -43,15 +43,21 @@ struct ImageSessionList: View {
                 ImageSessionToolbar()
             }
             .navigationTitle("Images")
-            #if !os(macOS)
-            .searchable(text: $imageVM.searchText)
-            #endif
+            .searchable(text: $imageVM.searchText, placement: searchPlacement)
             .task {
                 if imageVM.selections.isEmpty, let first = sessions.first, !(horizontalSizeClass == .compact) {
                     imageVM.selections = [first]
                 }
             }
         }
+    }
+    
+    private var searchPlacement: SearchFieldPlacement {
+        #if os(macOS)
+        return .sidebar
+        #else
+        return .automatic
+        #endif
     }
 
     private func deleteItems(offsets: IndexSet) {

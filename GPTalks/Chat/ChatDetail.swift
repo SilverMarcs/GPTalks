@@ -11,7 +11,7 @@ struct ChatDetail: View {
     @Environment(ChatSessionVM.self) var chatVM
     
     var body: some View {
-        if !chatVM.searchText.isEmpty && !chatVM.sessionsWithMatches.isEmpty {
+        if !chatVM.searchText.isEmpty && !chatVM.searchResults.isEmpty {
             searchResultsView
                 .navigationTitle("Search Results")
         } else {
@@ -26,7 +26,7 @@ struct ChatDetail: View {
                 .controlSize(.large)
                 .navigationTitle("Searching")
                 .fullScreenBackground()
-        } else if chatVM.sessionsWithMatches.isEmpty {
+        } else if chatVM.searchResults.isEmpty {
             ContentUnavailableView.search(text: chatVM.searchText)
                 .fullScreenBackground()
         } else {
@@ -36,11 +36,11 @@ struct ChatDetail: View {
     
     private var searchResultsList: some View {
         List {
-            ForEach(chatVM.sessionsWithMatches) { sessionWithMatches in
-                Section("Session: \(sessionWithMatches.session.title)") {
+            ForEach(chatVM.searchResults) { result in
+                Section("Session: \(result.session.title)") {
                     VStack(spacing: 0) {
-                        ForEach(sessionWithMatches.matchingConversations) { conversation in
-                            SearchResultRow(conversation: conversation)
+                        ForEach(result.matchedConversations) { matchedConversation in
+                            SearchResultRow(matchedConversation: matchedConversation)
                         }
                     }
                 }

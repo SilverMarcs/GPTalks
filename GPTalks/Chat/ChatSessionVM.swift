@@ -106,7 +106,7 @@ import SwiftUI
     // MARK: - Search
     var searchText: String = ""
     var hasFocus: Bool = false
-    var sessionsWithMatches: [SessionWithMatches] = []
+    var searchResults: [SessionWithMatches] = []
     var searching: Bool = false
     
     private var searchTask: Task<Void, Never>?
@@ -114,7 +114,7 @@ import SwiftUI
     
     func debouncedSearch(sessions: [ChatSession]) {
         guard searchText.count >= 3 else {
-            sessionsWithMatches = []
+            searchResults = []
             searching = false
             return
         }
@@ -136,7 +136,7 @@ import SwiftUI
     
     func updateMatchingConversations(sessions: [ChatSession]) async {
         guard !searchText.isEmpty else {
-            sessionsWithMatches = []
+            searchResults = []
             searching = false
             return
         }
@@ -152,16 +152,16 @@ import SwiftUI
                     let content = group.activeConversation.content
                     let cleanedContent = self.cleanMarkdown(content)
                     if cleanedContent.localizedCaseInsensitiveContains(cleanedSearchText) {
-                        return SearchedConversation(conversation: group.activeConversation, session: session)
+                        return MatchedConversation(conversation: group.activeConversation, session: session)
                     }
                     return nil
                 }
-                return matchingConversations.isEmpty ? nil : SessionWithMatches(session: session, matchingConversations: matchingConversations)
+                return matchingConversations.isEmpty ? nil : SessionWithMatches(session: session, matchedConversations: matchingConversations)
             }
         }.value
         
         await MainActor.run {
-            sessionsWithMatches = results
+            searchResults = results
             searching = false
         }
     }

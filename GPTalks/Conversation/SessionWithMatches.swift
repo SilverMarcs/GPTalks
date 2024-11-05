@@ -10,11 +10,11 @@ import Foundation
 struct SessionWithMatches: Identifiable {
     let id: UUID
     let session: ChatSession
-    var matchingConversations: [SearchedConversation]
+    var matchedConversations: [MatchedConversation]
 
-    init(session: ChatSession, matchingConversations: [SearchedConversation]) {
+    init(session: ChatSession, matchedConversations: [MatchedConversation]) {
         self.id = UUID()
         self.session = session
-        self.matchingConversations = matchingConversations
+        self.matchedConversations = matchedConversations
     }
 }
