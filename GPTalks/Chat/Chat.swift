@@ -107,7 +107,19 @@ final class Chat {
     }
     
     private func prepareThreads(regenContent: String?) -> [Thread] {
-        var conversations = groups.map { $0.activeThread }
+        var conversations = groups.map { group -> Thread in
+            let conversation = group.activeThread
+            
+            let textContent = conversation.dataFiles
+                .compactMap { $0.formattedTextContent }
+                .joined(separator: "\n\n")
+            
+            if !textContent.isEmpty {
+                conversation.content = textContent + "\n\n" + conversation.content
+            }
+            
+            return conversation
+        }
         
         if let regenContent = regenContent {
             if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
