@@ -41,22 +41,6 @@ struct FileHelper {
             return nil
         }
     }
-    
-    static func createTemporaryURL(for data: Data) -> URL? {
-        let tempDirectoryURL = FileManager.default.temporaryDirectory
-        let fileName = "temp_file_\(UUID().uuidString)"
-        let fileExtension = inferFileExtension(from: data)
-        let fullFileName = fileName + "." + fileExtension
-        let fileURL = tempDirectoryURL.appendingPathComponent(fullFileName)
-
-        do {
-            try data.write(to: fileURL)
-            return fileURL
-        } catch {
-            print("Error creating temporary file: \(error)")
-            return nil
-        }
-    }
 
     private static func inferFileExtension(from data: Data) -> String {
         // Check the first few bytes of the data to infer the file type
@@ -91,11 +75,18 @@ extension View {
             case .success(let urls):
                 Task {
                     for url in urls {
+                        guard url.startAccessingSecurityScopedResource() else {
+                            print("Failed to access security scoped resource for: \(url.lastPathComponent)")
+                            continue
+                        }
+                        
                         do {
                             try await inputManager.processFile(at: url)
                         } catch {
                             print("Failed to process file: \(url.lastPathComponent). Error: \(error)")
                         }
+                        
+                        url.stopAccessingSecurityScopedResource()
                     }
                 }
             case .failure(let error):
@@ -104,5 +95,3 @@ extension View {
         }
     }
 }
-
-
