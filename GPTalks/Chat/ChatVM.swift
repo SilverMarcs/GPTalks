@@ -10,6 +10,7 @@ import SwiftData
 import SwiftUI
 
 @Observable class ChatVM {
+    // TODO: rename
     var chatSelections: Set<Chat> = []
     
     var modelContext: ModelContext
@@ -18,49 +19,35 @@ import SwiftUI
         self.modelContext = modelContext
     }
     
-    public var activeSession: Chat? {
+    public var activeChat: Chat? {
         guard chatSelections.count == 1 else { return nil }
         return chatSelections.first
     }
     
-    func sendMessage() async {
-        guard let session = activeSession else { return }
-        guard !session.isQuick else { return }
-        await session.sendInput()
+    private var activeChatAndLastThread: (Chat, Thread)? {
+        guard let chat = activeChat, !chat.isStreaming,
+              let lastThread = chat.threads.last else { return nil }
+        return (chat, lastThread)
     }
     
-    func stopStreaming() async {
-        guard let session = activeSession, session.isStreaming else { return }
-        await session.stopStreaming()
+    func stopStreaming() {
+        activeChat?.stopStreaming()
     }
     
     func regenLastMessage() async {
-        guard let session = activeSession, !session.isStreaming else { return }
-        
-        if let lastGroup = session.groups.last {
-            if lastGroup.role == .user {
-                lastGroup.setupEditing()
-                await lastGroup.session?.sendInput()
-            } else if lastGroup.role == .assistant {
-                await session.regenerate(group: lastGroup)
-            }
-        }
+        guard let (chat, lastThread) = activeChatAndLastThread else { return }
+        await chat.regenerate(thread: lastThread)
     }
     
     func deleteLastMessage() {
-        guard let session = activeSession, !session.isStreaming else { return }
-        
-        if let lastGroup = session.groups.last {
-            session.deleteThreadGroup(lastGroup)
-        }
+        guard let (chat, lastThread) = activeChatAndLastThread else { return }
+        chat.deleteThread(lastThread)
     }
 
     func editLastMessage() {
-        guard let session = activeSession else { return }
-        
-        if let lastUserGroup = session.groups.last(where: { $0.role == .user }) {
-            lastUserGroup.setupEditing()
-        }
+        guard let (chat, _) = activeChatAndLastThread else { return }
+        guard let lastUserThread = chat.threads.last(where: { $0.role == .user }) else { return }
+        chat.inputManager.setupEditing(thread: lastUserThread)
     }
     
     // must provide new session, not the one to be forked
@@ -112,7 +99,7 @@ import SwiftUI
     private var searchTask: Task<Void, Never>?
     private let debounceInterval: TimeInterval = 0.5 // 500 milliseconds
     
-    func debouncedSearch(sessions: [Chat]) {
+    func debouncedSearch(chats: [Chat]) {
         searching = true
         searchTask?.cancel()
         
@@ -120,7 +107,7 @@ import SwiftUI
             do {
                 try await Task.sleep(for: .seconds(debounceInterval))
                 if !Task.isCancelled {
-                    await updateMatchingThreads(sessions: sessions)
+                    await updateMatchingThreads(chats: chats)
                 }
             } catch {
                 print("Error debouncing search: \(error.localizedDescription)")
@@ -129,7 +116,7 @@ import SwiftUI
     }
 
     
-    func updateMatchingThreads(sessions: [Chat]) async {
+    func updateMatchingThreads(chats: [Chat]) async {
         guard !searchText.isEmpty else {
             searchResults = []
             searching = false
@@ -142,16 +129,16 @@ import SwiftUI
         let cleanedSearchText = cleanMarkdown(searchText)
         
         let results = await Task.detached(priority: .userInitiated) {
-            sessions.compactMap { session in
-                let matchingThreads = session.unorderedGroups.compactMap { group in
-                    let content = group.activeThread.content
+            chats.compactMap { chat in
+                let matchingThreads = chat.unorderedThreads.compactMap { thread in
+                    let content = thread.content
                     let cleanedContent = self.cleanMarkdown(content)
                     if cleanedContent.localizedCaseInsensitiveContains(cleanedSearchText) {
-                        return MatchedThread(conversation: group.activeThread, session: session)
+                        return MatchedThread(thread: thread, chat: chat)
                     }
                     return nil
                 }
-                return matchingThreads.isEmpty ? nil : MatchedSession(session: session, matchedThreads: matchingThreads)
+                return matchingThreads.isEmpty ? nil : MatchedSession(chat: chat, matchedThreads: matchingThreads)
             }
         }.value
         

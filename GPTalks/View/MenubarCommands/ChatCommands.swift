@@ -47,12 +47,12 @@ struct ChatCommands: Commands {
         
         CommandMenu("Chat") {
             Button("Stop Streaming") {
-                Task { @MainActor in
-                    await sessionVM.stopStreaming()
-                }
+//                Task { @MainActor in
+                    sessionVM.stopStreaming()
+//                }
             }
             .keyboardShortcut("d", modifiers: .command)
-            .disabled(!(sessionVM.activeSession?.isReplying ?? false))
+            .disabled(!(sessionVM.activeChat?.isReplying ?? false))
             
             Section {
                 Button("Edit Last Message") {
@@ -61,7 +61,7 @@ struct ChatCommands: Commands {
                     }
                 }
                 .keyboardShortcut("e", modifiers: .command)
-                .disabled(sessionVM.activeSession?.isQuick ?? true)
+                .disabled(sessionVM.activeChat?.isQuick ?? true)
                 
                 Button("Regen Last Message") {
                     Task {

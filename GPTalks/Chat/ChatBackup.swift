@@ -16,7 +16,7 @@ struct ChatBackup: Codable {
     var isStarred: Bool
     var errorMessage: String
     var resetMarker: Int?
-    var groups: [ThreadGroupBackup]
+//    var groups: [ThreadGroupBackup]
     
     struct ThreadGroupBackup: Codable {
         var date: Date
@@ -37,12 +37,12 @@ extension ChatBackup {
         self.title = session.title
         self.isStarred = session.isStarred
         self.errorMessage = session.errorMessage
-        self.groups = session.unorderedGroups.map { group in
-            ThreadGroupBackup(
-                date: group.date,
-                conversation: ThreadBackup(from: group.activeThread)
-            )
-        }
+//        self.groups = session.unorderedGroups.map { group in
+//            ThreadGroupBackup(
+//                date: group.date,
+//                conversation: ThreadBackup(from: group.activeThread)
+//            )
+//        }
     }
     
     func toSession() -> Chat {
@@ -65,11 +65,11 @@ extension ChatBackup {
         session.title = self.title
         session.isStarred = self.isStarred
         session.errorMessage = self.errorMessage
-        session.unorderedGroups = self.groups.map { groupBackup in
-            let group = ThreadGroup(conversation: groupBackup.conversation.toThread())
-            group.date = groupBackup.date
-            return group
-        }
+//        session.unorderedGroups = self.groups.map { groupBackup in
+//            let group = ThreadGroup(conversation: groupBackup.conversation.toThread())
+//            group.date = groupBackup.date
+//            return group
+//        }
         return session
     }
 }

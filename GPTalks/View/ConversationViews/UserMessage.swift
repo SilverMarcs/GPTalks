@@ -13,19 +13,19 @@ struct UserMessage: View {
     @Environment(\.isSearch) var isSearch
     @ObservedObject var config = AppConfig.shared
     
-    @Bindable var conversation: Thread
+    @Bindable var thread: Thread
     @State var isHovered: Bool = false
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 7) {
-            if !conversation.dataFiles.isEmpty {
-                DataFilesView(dataFiles: $conversation.dataFiles, isCrossable: false)
+            if !thread.dataFiles.isEmpty {
+                DataFilesView(dataFiles: $thread.dataFiles, isCrossable: false)
             }
             
             GroupBox {
-                HighlightedText(text: String(conversation.content.prefix(isExpanded || isSearch ? .max : 400)), highlightedText: sessionVM.searchText.count > 3 ? sessionVM.searchText : nil)
+                HighlightedText(text: String(thread.content.prefix(isExpanded || isSearch ? .max : 400)), highlightedText: sessionVM.searchText.count > 3 ? sessionVM.searchText : nil)
                     .font(.system(size: config.fontSize))
                     #if os(macOS)
                     .lineSpacing(2)
@@ -33,9 +33,9 @@ struct UserMessage: View {
                     #endif
             }
             .groupBoxStyle(PlatformSpecificGroupBoxStyle())
-            .background(
-                    (conversation.group?.session?.inputManager.editingIndex == indexOfThreadGroup ? Color.accentColor.opacity(0.1) : .clear)
-            )
+//            .background(
+//                    (thread.chat?.inputManager.editingIndex == indexOfThread ? Color.accentColor.opacity(0.1) : .clear)
+//            )
             
             #if os(macOS)
             contextMenu
@@ -44,7 +44,7 @@ struct UserMessage: View {
         .padding(.leading, leadingPadding)
         #if !os(macOS)
         .contextMenu {
-            if let group = conversation.group {
+            if let group = thread.group {
                 ThreadMenu(group: group, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
             }
         } preview: {
@@ -52,7 +52,7 @@ struct UserMessage: View {
                 .padding()
         }
         .sheet(isPresented: $showingTextSelection) {
-            TextSelectionView(content: conversation.content)
+            TextSelectionView(content: thread.content)
         }
         #else
         .onHover { isHovered in
@@ -64,10 +64,8 @@ struct UserMessage: View {
     
     @ViewBuilder
     var contextMenu: some View {
-        if let group = conversation.group {
-            ThreadMenu(group: group, isExpanded: $isExpanded)
-                .symbolEffect(.appear, isActive: !isHovered)
-        }
+        ThreadMenu(thread: thread, isExpanded: $isExpanded)
+            .symbolEffect(.appear, isActive: !isHovered)
     }
     
     func toggleTextSelection() {
@@ -90,9 +88,9 @@ struct UserMessage: View {
         #endif
     }
     
-    var indexOfThreadGroup: Int {
-        conversation.group?.session?.groups.firstIndex(where: { $0 == conversation.group }) ?? 0
-    }
+//    var indexOfThread: Int {
+//        thread.chat?.threads.firstIndex(where: { $0 == thread }) ?? 0
+//    }
     
     private var maxImageSize: CGFloat {
         300
@@ -100,6 +98,6 @@ struct UserMessage: View {
 }
 
 #Preview {
-    UserMessage(conversation: .mockUserThread)
+    UserMessage(thread: .mockUserThread)
         .frame(width: 500, height: 300)
 }

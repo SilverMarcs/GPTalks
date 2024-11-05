@@ -16,7 +16,7 @@ final class Thread {
     var id: UUID = UUID()
     var date: Date = Date()
     
-    var group: ThreadGroup?
+    var chat: Chat?
     
     @Relationship(deleteRule: .nullify)
     var provider: Provider?
@@ -35,16 +35,23 @@ final class Thread {
     var toolCalls: [ChatToolCall] = []
     var toolResponse: ToolResponse?
     
-    init(role: ThreadRole, content: String = "", group: ThreadGroup? = nil, provider: Provider? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
+    init(role: ThreadRole, content: String = "", chat: Chat? = nil, provider: Provider? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
         self.role = role
         self.content = content
-        self.group = group
+        self.chat = chat
         self.provider = provider
         self.model = model
         self.dataFiles = dataFiles
         self.toolCalls = toolCalls
         self.toolResponse = toolResponse
         self.isReplying = isReplying
+    }
+    
+    init(toolResponse: ToolResponse) {
+        self.role = .tool
+        self.content = ""
+        self.toolResponse = toolResponse
+        self.isReplying = true
     }
     
     var tokenCount: Int {
@@ -54,16 +61,12 @@ final class Thread {
         // TODO: Count image tokens
         return textToken + toolResponseToken + toolCallTokens
     }
-    
-    func deleteSelf() {
-        group?.deleteThread(self)
-    }
-    
+
     func copy() -> Thread {
         return Thread(
             role: role,
             content: content,
-            group: group,
+            chat: chat,
             provider: provider,
             model: model,
             dataFiles: dataFiles,

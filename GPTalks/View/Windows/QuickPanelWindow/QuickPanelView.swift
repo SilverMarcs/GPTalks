@@ -37,7 +37,7 @@ struct QuickPanelView: View {
                     .safeAreaPadding(.vertical, 10)
             }
             
-            if session.groups.isEmpty {
+            if session.threads.isEmpty {
                 Spacer()
             } else {
                 Divider()
@@ -55,7 +55,7 @@ struct QuickPanelView: View {
                 selections = sessionVM.chatSelections
                 sessionVM.chatSelections = [self.session]
                 isFocused = true
-                if !session.groups.isEmpty {
+                if !session.threads.isEmpty {
                     showAdditionalContent = true
                 }
             } else {
@@ -150,7 +150,7 @@ struct QuickPanelView: View {
                     Image(systemName: "plus.square.on.square")
                         .imageScale(.medium)
                 }
-                .disabled(session.groups.isEmpty)
+                .disabled(session.threads.isEmpty)
                 .keyboardShortcut("N", modifiers: [.command])
                 
             }
@@ -203,7 +203,7 @@ struct QuickPanelView: View {
         session.config.systemPrompt = AppConfig.shared.quickSystemPrompt
         
         Task {
-            await session.sendInput(forQuick: true)
+            await session.sendInput()
         }
         
         showAdditionalContent = true

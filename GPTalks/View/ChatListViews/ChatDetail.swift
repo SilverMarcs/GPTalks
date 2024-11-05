@@ -37,7 +37,7 @@ struct ChatDetail: View {
     private var searchResultsList: some View {
         List {
             ForEach(chatVM.searchResults) { result in
-                Section("Session: \(result.session.title)") {
+                Section("Session: \(result.chat.title)") {
                     VStack(spacing: 0) {
                         ForEach(result.matchedThreads) { matchedThread in
                             SearchResultRow(matchedThread: matchedThread)
@@ -58,7 +58,7 @@ struct ChatDetail: View {
     
     @ViewBuilder
     private var chatSessionView: some View {
-        if let session = chatVM.activeSession, !session.isQuick {
+        if let session = chatVM.activeChat, !session.isQuick {
             ThreadList(session: session)
                 .id(session.id)
         } else {

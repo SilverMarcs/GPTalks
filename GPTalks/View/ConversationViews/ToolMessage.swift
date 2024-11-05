@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ToolMessage: View {
-    var conversation: Thread
+    var thread: Thread
     @State private var showPopover = false
     
     var body: some View {
@@ -17,13 +17,13 @@ struct ToolMessage: View {
                 .opacity(0)
                 .frame(width: size, height: size)
                 
-            if !conversation.content.isEmpty {
-                Text(conversation.content)
+            if !thread.content.isEmpty {
+                Text(thread.content)
             }
             
             button
                 .popover(isPresented: $showPopover, arrowEdge: .leading) {
-                    if let toolResponse = conversation.toolResponse {
+                    if let toolResponse = thread.toolResponse {
                         popoverContent(content: toolResponse.processedContent)
                     }
                 }
@@ -49,14 +49,14 @@ struct ToolMessage: View {
         Button(action: { showPopover.toggle() }) {
             GroupBox {
                 HStack(spacing: 4) {
-                    Text(conversation.isReplying ? "Using" : "Used")
+                    Text(thread.isReplying ? "Using" : "Used")
                         .foregroundStyle(.secondary)
                     
-                    if let tool = conversation.toolResponse?.tool {
+                    if let tool = thread.toolResponse?.tool {
                         Text(tool.displayName)
                             .fontWeight(.semibold)
                         
-                        if conversation.isReplying {
+                        if thread.isReplying {
                             ProgressView()
                                 .controlSize(.mini)
                         } else {
@@ -85,5 +85,5 @@ struct ToolMessage: View {
 }
 
 #Preview {
-    ToolMessage(conversation: .mockToolThread)
+    ToolMessage(thread: .mockToolThread)
 }

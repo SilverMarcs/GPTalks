@@ -17,7 +17,6 @@ class DatabaseService {
             Chat.self,
             ChatConfig.self,
             Thread.self,
-            ThreadGroup.self,
             Provider.self,
             AIModel.self,
             ImageGeneration.self,

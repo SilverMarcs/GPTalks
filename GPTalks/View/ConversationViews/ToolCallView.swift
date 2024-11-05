@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ToolCallView: View {
-    var conversation: Thread
+    var thread: Thread
     @State private var showArguments = false
     
     var body: some View {
@@ -19,17 +19,27 @@ struct ToolCallView: View {
                 .frame(width: 18, height: 18)
                 .foregroundStyle(.teal)
                 .opacity(0.9)
+                .transaction { $0.animation = nil }
             
-            VStack(alignment: .leading, spacing: 7) {
+            VStack(alignment: .leading) {
                 Button {
-                    showArguments.toggle()
+                    withAnimation {
+                        showArguments.toggle()
+                    }
                 } label: {
                     HStack {
-                        Text("^[\(conversation.toolCalls.count) Tool](inflect: true)")
+//                        Image(systemName: "hammer")
+//                            .resizable()
+//                            .fontWeight(.semibold)
+//                            .frame(width: 18, height: 18)
+//                            .foregroundStyle(.teal)
+//                            .opacity(0.9)
+                        
+                        Text("^[\(thread.toolCalls.count) Tool](inflect: true)")
                             .foregroundStyle(.secondary)
 //                            .fontWeight(.semibold)
                         
-                        if conversation.isReplying {
+                        if thread.isReplying {
                             ProgressView()
                                 .controlSize(.mini)
                         } else {
@@ -39,6 +49,8 @@ struct ToolCallView: View {
                     }
                     .contentShape(Rectangle())
                 }
+//                .animation(nil)
+                .transaction { $0.animation = nil }
                 .buttonStyle(.plain)
                 
                 if showArguments {
@@ -49,7 +61,7 @@ struct ToolCallView: View {
                             .padding(.trailing, 8)
                         
                         VStack(alignment: .leading, spacing: 10) {
-                            ForEach(conversation.toolCalls) { toolCall in
+                            ForEach(thread.toolCalls) { toolCall in
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(toolCall.tool.displayName)
                                     Text(toolCall.arguments.prettyPrintJSON())
@@ -63,14 +75,12 @@ struct ToolCallView: View {
                     .padding(.leading, 4)
                 }
             }
-            
-            Spacer()
         }
     }
 }
 
 #Preview {
-    return AssistantMessage(conversation: .mockAssistantTolCallThread)
+    AssistantMessage(thread: .mockAssistantTolCallThread)
         .frame(width: 500, height: 300)
 }
 

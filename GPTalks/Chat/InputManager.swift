@@ -68,15 +68,18 @@ enum InputState {
         }
     }
     
-    func setupEditing(for group: ThreadGroup) {
+    func setupEditing(thread: Thread) {
+        editingIndex = thread.chat?.threads.firstIndex(of: thread)
         tempNormalPrompt = normalPrompt
         tempNormalDataFiles = normalDataFiles
         
         state = .editing
-        prompt = group.activeThread.content
-
-        dataFiles = group.activeThread.dataFiles
-        editingIndex = group.session?.groups.firstIndex(of: group)
+        
+        prompt = thread.content
+        dataFiles = thread.dataFiles
+        withAnimation {
+            thread.chat?.proxy?.scrollTo(thread, anchor: .top)
+        }
     }
     
     func resetEditing() {

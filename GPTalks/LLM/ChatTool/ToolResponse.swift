@@ -11,6 +11,6 @@ struct ToolResponse: Identifiable, Codable, Equatable {
     var id: UUID = UUID()
     var toolCallId: String
     var tool: ChatTool
-    var processedContent: String
+    var processedContent: String = ""
     var processedData: [Data] = []
 }

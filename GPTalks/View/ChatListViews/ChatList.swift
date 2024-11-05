@@ -16,7 +16,7 @@ struct ChatList: View {
     @Query(filter: #Predicate { !$0.isQuick },
            sort: [SortDescriptor(\Chat.date, order: .reverse)],
            animation: .default)
-    var sessions: [Chat]
+    var chats: [Chat]
     
     @FocusState private var isSearchFieldFocused: Bool
     
@@ -24,10 +24,10 @@ struct ChatList: View {
         @Bindable var chatVM = chatVM
 
         List(selection: $chatVM.chatSelections) {
-            ChatListCards(sessionCount: String(sessions.count), imageSessionsCount: "↗")
+            ChatListCards(sessionCount: String(chats.count), imageSessionsCount: "↗")
                 .id(String.topID)
             
-            ForEach(sessions) { session in
+            ForEach(chats) { session in
                 ChatRow(session: session)
                     .tag(session)
                     .deleteDisabled(session.isQuick || session.isStarred)
@@ -39,7 +39,7 @@ struct ChatList: View {
             .onDelete(perform: deleteItems)
         }
         .onChange(of: chatVM.searchText) {
-            chatVM.debouncedSearch(sessions: sessions)
+            chatVM.debouncedSearch(chats: chats)
         }
         .navigationTitle("Chats")
         .toolbar {
@@ -53,7 +53,7 @@ struct ChatList: View {
             }
         }
         .task {
-            if let first = sessions.first, chatVM.chatSelections.isEmpty, horizontalSizeClass != .compact {
+            if let first = chats.first, chatVM.chatSelections.isEmpty, horizontalSizeClass != .compact {
                 chatVM.chatSelections = [first]
             }
         }
@@ -71,7 +71,7 @@ struct ChatList: View {
 
     private func deleteItems(offsets: IndexSet) {
         for index in offsets {
-            modelContext.delete(sessions[index])
+            modelContext.delete(chats[index])
         }
     }
 }

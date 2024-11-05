@@ -34,7 +34,7 @@ struct PasteHandler: ViewModifier {
 
     private func handleCommandV() -> Bool {
         guard let pasteboardItems = NSPasteboard.general.pasteboardItems,
-              let session = sessionVM.activeSession else {
+              let session = sessionVM.activeChat else {
             return false
         }
 

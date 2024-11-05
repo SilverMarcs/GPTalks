@@ -107,7 +107,7 @@ struct ChatRow: View {
         if session.isReplying {
             return "Generating…"
         }
-        let lastMessage = session.groups.last?.activeThread.content ?? ""
+        let lastMessage = session.threads.last?.content ?? ""
         return lastMessage.isEmpty ? "Start a conversation" : lastMessage
     }
 

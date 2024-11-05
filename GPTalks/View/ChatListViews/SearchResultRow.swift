@@ -15,14 +15,14 @@ struct SearchResultRow: View {
     
     var body: some View {
             HStack {
-                ThreadView(conversation: matchedThread.conversation)
+                ThreadView(thread: matchedThread.thread)
                     .environment(\.isSearch, true)
                 
                 Button {
                     chatVM.searchResults = []
-                    chatVM.chatSelections = [matchedThread.session]
+                    chatVM.chatSelections = [matchedThread.chat]
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        matchedThread.session.proxy?.scrollTo(matchedThread.conversation.group, anchor: .top)
+                        matchedThread.chat.proxy?.scrollTo(matchedThread.thread, anchor: .top)
                     }
                 } label: {
                     Image(systemName: "arrow.right")

@@ -29,8 +29,6 @@ struct VertexService: AIService {
                 "tool_use_id": toolResponse.toolCallId,
             ]
             contentObjects.append(toolResponseContent)
-            
-            print(toolResponse)
         }
         
         if !conversation.content.isEmpty {

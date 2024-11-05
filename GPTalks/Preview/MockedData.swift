@@ -138,20 +138,6 @@ extension ImageGeneration {
     static var mockImageGeneration: ImageGeneration = .init(config: .mockImageConfig, session: .mockImageSession)
 }
 
-extension ThreadGroup {
-    static var mockUserThreadGroup: ThreadGroup {
-        let userThread = Thread.mockUserThread
-        let session = Chat.mockChat
-        return ThreadGroup(conversation: userThread, session: session)
-    }
-    
-    static var mockAssistantThreadGroup: ThreadGroup {
-        let assistantThread = Thread.mockAssistantThread
-        let session = Chat.mockChat
-        return ThreadGroup(conversation: assistantThread, session: session)
-    }
-}
-
 extension ChatVM {
     static var mockSessionVM = ChatVM(modelContext: DatabaseService.shared.modelContext)
 }

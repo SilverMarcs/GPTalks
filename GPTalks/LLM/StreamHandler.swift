@@ -9,16 +9,15 @@ import Foundation
 import SwiftUI
 
 struct StreamHandler {
-    private let conversations: [Thread]
     private let session: Chat
-    private let assistant: Thread
+    private var assistant: Thread // TODO: maybe need ot fidn diff way of getting setting assistant
     
     static let uiUpdateInterval: TimeInterval = Float.UIIpdateInterval
 
-    init(conversations: [Thread], session: Chat, assistant: Thread) {
-        self.conversations = conversations
+    init(session: Chat) {
         self.session = session
-        self.assistant = assistant
+        self.assistant = Thread(role: .assistant, provider: session.config.provider, model: session.config.model, isReplying: true)
+        session.addThread(assistant)
     }
 
     @MainActor
@@ -26,7 +25,7 @@ struct StreamHandler {
         if session.config.stream {
             try await handleStream()
         } else {
-            try await handleNonStreamingResponse()
+            try await handleNonStream()
         }
     }
     
@@ -36,11 +35,9 @@ struct StreamHandler {
         var lastUIUpdateTime = Date()
         var pendingToolCalls: [ChatToolCall] = []
         
-        let serviceType = session.config.provider.type.getService()
+        let service = session.config.provider.type.getService()
 
-        assistant.isReplying = true
-
-        for try await response in serviceType.streamResponse(from: conversations, config: session.config) {
+        for try await response in service.streamResponse(from: session.threads, config: session.config) {
             switch response {
             case .content(let content):
                 streamText += content
@@ -64,43 +61,34 @@ struct StreamHandler {
     }
 
     @MainActor
-    private func handleNonStreamingResponse() async throws {
-        assistant.isReplying = true
-        let serviceType = session.config.provider.type.getService()
-        let response = try await serviceType.nonStreamingResponse(from: conversations, config: session.config)
+    private func handleNonStream() async throws {
+        let service = session.config.provider.type.getService()
+        let response = try await service.nonStreamingResponse(from: session.threads, config: session.config)
         
         switch response {
         case .content(let content):
             assistant.content = content
+            assistant.isReplying = false
         case .toolCalls(let calls):
             try await handleToolCalls(calls)
-        }
-        
-        if assistant.toolCalls.isEmpty {
-            assistant.isReplying = false
         }
     }
 
     @MainActor
     private func finalizeStream(streamText: String, toolCalls: [ChatToolCall]) {
-        assistant.toolCalls = toolCalls
-        if !streamText.isEmpty {
-            DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiUpdateInterval) {
-                self.assistant.content = streamText
-                self.assistant.isReplying = false
-            }
-        }
-        
-//        if !session.hasUserScrolled {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiUpdateInterval) {
+            assistant.toolCalls = toolCalls
+            assistant.content = streamText
+            assistant.isReplying = false
             session.scrollBottom()
             session.hasUserScrolled = false
-//        }
-        
-        try? assistant.modelContext?.save()
+            try? assistant.modelContext?.save()
+        }
     }
 
     @MainActor
     private func handleToolCalls(_ toolCalls: [ChatToolCall]) async throws {
+        // DO NOT call this when assitant.toolCalls is already populated. this func does it for you
         assistant.toolCalls = toolCalls
         session.scrollBottom()
         
@@ -108,44 +96,37 @@ struct StreamHandler {
 
         var toolDatas: [Data] = []
         
-        if let session = assistant.group?.session {
-            for toolCall in assistant.toolCalls {
-                let toolResponse = ToolResponse(toolCallId: toolCall.toolCallId, tool: toolCall.tool, processedContent: "", processedData: [])
-                let tool = Thread(role: .tool, provider: session.config.provider, model: session.config.model, toolResponse: toolResponse, isReplying: true)
-                session.addThreadGroup(conversation: tool)
-                
-                let toolData = try await toolCall.tool.process(arguments: toolCall.arguments)
-                toolDatas.append(contentsOf: toolData.data)
-                tool.toolResponse?.processedContent = toolData.string
-                tool.toolResponse?.processedData = toolData.data    
-                tool.isReplying = false
-                
-                session.scrollBottom()
-            }
+        for call in assistant.toolCalls {
+            let toolResponse = ToolResponse(toolCallId: call.toolCallId, tool: call.tool)
+            let tool = Thread(toolResponse: toolResponse)
+            session.addThread(tool) // TODO: use single response thread insetad of multiple tool threads
             
-            let newAssistant = Thread(role: .assistant, provider: session.config.provider, model: session.config.model, isReplying: true)
-            session.addThreadGroup(conversation: newAssistant)
-                          
-            if toolDatas.isEmpty {
-                session.streamer = StreamHandler(conversations: session.groups.map { $0.activeThread }.dropLast(), session: session, assistant: newAssistant)
-                if let streamer = session.streamer {
-                    if session.config.stream {
-                        try await streamer.handleStream()
-                    } else {
-                        try await streamer.handleNonStreamingResponse()
-                    }
-                }
-            } else {
-                let typedDataFiles = toolDatas.map { data in
-                    TypedData(
-                        data: data,
-                        fileType: .image,
-                        fileName: "image"
-                    )
-                }
-                newAssistant.dataFiles = typedDataFiles
-                newAssistant.isReplying = false
+            let toolData = try await call.tool.process(arguments: call.arguments)
+            toolDatas.append(contentsOf: toolData.data)
+            tool.toolResponse?.processedContent = toolData.string
+            tool.toolResponse?.processedData = toolData.data
+            tool.isReplying = false
+            
+            session.scrollBottom()
+        }
+        
+        // TODO: already doing this in init. why duplicate? maybe do this in handleRequest()
+        session.streamer = StreamHandler(session: session)
+                      
+        if toolDatas.isEmpty {
+            try await session.streamer?.handleRequest()
+        } else {
+            // when assistant returns a data file, we handle differently
+            let typedDataFiles = toolDatas.map { data in
+                TypedData(
+                    data: data,
+                    fileType: .image,
+                    fileName: "image"
+                )
             }
+            let newAssistant = Thread(role: .assistant, provider: session.config.provider, model: session.config.model, isReplying: true)
+            newAssistant.dataFiles = typedDataFiles
+            newAssistant.isReplying = false
         }
     }
 }

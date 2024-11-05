@@ -41,24 +41,23 @@ enum TitleGenerator {
     }
     
     // Method to format conversations into a single string
-    private static func formatThreads(_ groups: [ThreadGroup]) -> String {
-        return groups.map { group in
+    private static func formatThreads(_ threads: [Thread]) -> String {
+        return threads.map { thread in
             var toolResponse: String = ""
             
-            let convo = group.activeThread
-            let toolCalls = convo.toolCalls.map { toolCall in
+            let toolCalls = thread.toolCalls.map { toolCall in
                 "Called tool: \(toolCall.tool.rawValue)"
             }.joined(separator: "\n")
             
-            let dataFiles = convo.dataFiles.map { dataFile in
+            let dataFiles = thread.dataFiles.map { dataFile in
                 "Data file: \(dataFile.fileName)"
             }.joined(separator: "\n")
             
-            if let response = convo.toolResponse {
+            if let response = thread.toolResponse {
                 toolResponse = "Tool response: \(response)"
             }
             
-            return "--- \(convo.role.rawValue.capitalized) ---\n\(convo.content)\n\(toolCalls)\n\(dataFiles)\n\(toolResponse)"
+            return "--- \(thread.role.rawValue.capitalized) ---\n\(thread.content)\n\(toolCalls)\n\(dataFiles)\n\(toolResponse)"
         }.joined(separator: "\n\n")
     }
     
@@ -70,12 +69,12 @@ enum TitleGenerator {
     }
     
     // Public method to generate title for conversations
-    static func generateTitle(adjustedGroups: [ThreadGroup], provider: Provider) async -> String? {
-        guard !adjustedGroups.isEmpty else {
+    public static func generateTitle(threads: [Thread], provider: Provider) async -> String? {
+        guard !threads.isEmpty else {
             return nil
         }
         
-        let conversationsString = formatThreads(adjustedGroups)
+        let conversationsString = formatThreads(threads)
         let wrappedThread = """
         \(beginThread)
         \(conversationsString)
@@ -87,7 +86,7 @@ enum TitleGenerator {
     }
     
     // Public method to generate title for image generations
-    static func generateImageTitle(generations: [ImageGeneration], provider: Provider) async -> String? {
+    public static func generateImageTitle(generations: [ImageGeneration], provider: Provider) async -> String? {
         guard !generations.isEmpty else {
             return nil
         }

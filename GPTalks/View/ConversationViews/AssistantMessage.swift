@@ -10,21 +10,21 @@ import MarkdownWebView
 
 struct AssistantMessage: View {
     @ObservedObject var config = AppConfig.shared
-    @Bindable var conversation: Thread
+    @Bindable var thread: Thread
     
     @State private var isHovering: Bool = false
     @State private var showingTextSelection = false
     
     var body: some View {
         HStack(alignment: .top, spacing: spacing) {
-            Image(conversation.provider?.type.imageName ?? "brain.SFSymbol")
+            Image(thread.provider?.type.imageName ?? "brain.SFSymbol")
                 .resizable()
                 .frame(width: 17, height: 17)
-                .foregroundStyle(Color(hex: conversation.provider?.color  ?? "#00947A").gradient)
+                .foregroundStyle(Color(hex: thread.provider?.color  ?? "#00947A").gradient)
             
             VStack(alignment: .leading, spacing: 7) {
-                if let model = conversation.model {
-                    Text(conversation.dataFiles.isEmpty ? model.name : conversation.group?.session?.config.provider.imageModel.name ?? "")
+                if let model = thread.model {
+                    Text(thread.dataFiles.isEmpty ? model.name : thread.chat?.config.provider.toolImageModel.name ?? "")
                         .font(.subheadline)
                         .bold()
                         .foregroundStyle(.secondary)
@@ -33,23 +33,25 @@ struct AssistantMessage: View {
                         #endif
                 }
                 
-                MarkdownView(content: conversation.content)
+                MarkdownView(content: thread.content)
                 
-                if !conversation.dataFiles.isEmpty {
-                    DataFilesView(dataFiles: $conversation.dataFiles, isCrossable: false, edge: .leading)
+                if !thread.dataFiles.isEmpty {
+                    DataFilesView(dataFiles: $thread.dataFiles, isCrossable: false, edge: .leading)
                 }
                 
-                if conversation.isReplying {
+                if thread.isReplying {
                     ProgressView()
                         .controlSize(.small)
                 }
                 
-                conversationMenuView
+                #if os(macOS)
+                threadMenuView
+                #endif
             }
         }
     #if !os(macOS)
     .contextMenu {
-        if let group = conversation.group, !conversation.isReplying {
+        if let group = thread.group, !thread.isReplying {
             ThreadMenu(group: group, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
         }
     } preview: {
@@ -57,7 +59,7 @@ struct AssistantMessage: View {
             .padding()
     }
     .sheet(isPresented: $showingTextSelection) {
-        TextSelectionView(content: conversation.content)
+        TextSelectionView(content: thread.content)
     }
     #else
     .onHover { isHovered in
@@ -69,13 +71,11 @@ struct AssistantMessage: View {
     }
 
     @ViewBuilder
-    var conversationMenuView: some View {
+    var threadMenuView: some View {
         #if os(macOS)
-        if let group = conversation.group, let session = group.session {
-            ThreadMenu(group: group, isExpanded: .constant(true))
-                .symbolEffect(.appear, isActive: !isHovering)
-                .opacity(session.isReplying ? 0 : 1)
-        }
+        ThreadMenu(thread: thread, isExpanded: .constant(true))
+            .symbolEffect(.appear, isActive: !isHovering)
+            .opacity(thread.isReplying ? 0 : 1)
         #endif
     }
     
@@ -93,7 +93,7 @@ struct AssistantMessage: View {
 }
 
 #Preview {
-    return AssistantMessage(conversation: .mockAssistantThread)
+    AssistantMessage(thread: .mockAssistantThread)
         .frame(width: 500, height: 300)
 }
 

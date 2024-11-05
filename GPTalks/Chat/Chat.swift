@@ -18,25 +18,18 @@ final class Chat {
     var isQuick: Bool = false
     var tokenCount: Int = 0
     
-    @Relationship(deleteRule: .cascade, inverse: \ThreadGroup.session)
-    var unorderedGroups =  [ThreadGroup]()
+//    , inverse: \Thread.session
+    @Relationship(deleteRule: .cascade)
+    var unorderedThreads =  [Thread]()
+    
+//    @Transient
+    var threads: [Thread] {
+        get {return unorderedThreads.sorted(by: {$0.date < $1.date})}
+        set { unorderedThreads = newValue }
+    }
     
     @Relationship(deleteRule: .cascade)
     var config: ChatConfig
-    
-    @Transient
-    var groups: [ThreadGroup] {
-        get {return unorderedGroups.sorted(by: {$0.date < $1.date})}
-        set { unorderedGroups = newValue }
-    }
-    
-    @Transient
-    var streamingTask: Task<Void, Error>?
-    
-//    @Transient
-    var isStreaming: Bool {
-        streamingTask != nil
-    }
     
     @Transient
     var proxy: ScrollViewProxy?
@@ -47,9 +40,17 @@ final class Chat {
     @Attribute(.ephemeral)
     var showCamera: Bool = false
     
-//    @Transient
+    @Transient
     var isReplying: Bool {
-        groups.last?.activeThread.isReplying ?? false
+        threads.last?.isReplying ?? false
+    }
+    
+    @Transient
+    var streamingTask: Task<Void, Error>?
+    
+    @Transient
+    var isStreaming: Bool {
+        streamingTask != nil
     }
     
     @Transient
@@ -62,109 +63,30 @@ final class Chat {
         self.config = config
     }
     
-    @MainActor
-    private func handleStreamingTask(regenContent: String?, assistantGroup: ThreadGroup?) async throws {
-        try await processRequest(regenContent: regenContent, assistantGroup: assistantGroup)
-        
-        streamingTask?.cancel()
-        streamingTask = nil
-    }
-    
     private func handleError(_ error: Error) {
         errorMessage = error.localizedDescription
         scrollBottom()
         hasUserScrolled = false
         
         DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
-            if let lastGroup = self.groups.last, lastGroup.activeThread.content.isEmpty {
-                lastGroup.deleteThread(lastGroup.activeThread)
-                if !lastGroup.conversations.isEmpty {
-                    lastGroup.activeThreadIndex -= 1
-                }
+            if let lastThread = self.threads.last, lastThread.content.isEmpty {
+                self.deleteThread(lastThread)
             }
         }
-    }
-    
-    @MainActor
-    private func processRequest(regenContent: String?, assistantGroup: ThreadGroup?) async throws {
-        let conversations = prepareThreads(regenContent: regenContent)
-        let assistant = prepareAssistantThread(assistantGroup: assistantGroup)
-        
-        self.streamer = StreamHandler(conversations: conversations, session: self, assistant: assistant)
-        if let streamer = streamer {
-            try await streamer.handleRequest()
-        }
-    }
-    
-    private func prepareAssistantThread(assistantGroup: ThreadGroup?) -> Thread {
-        if let assistantGroup = assistantGroup {
-            return assistantGroup.conversations.last!
-        } else {
-            let assistant = Thread(role: .assistant, content: "", provider: config.provider, model: config.model)
-            addThreadGroup(conversation: assistant)
-            return assistant
-        }
-    }
-    
-    private func prepareThreads(regenContent: String?) -> [Thread] {
-        var conversations = groups.map { group -> Thread in
-            let conversation = group.activeThread
-            
-            let textContent = conversation.dataFiles
-                .compactMap { $0.formattedTextContent }
-                .joined(separator: "\n\n")
-            
-            if !textContent.isEmpty {
-                conversation.content = textContent + "\n\n" + conversation.content
-            }
-            
-            return conversation
-        }
-        
-        if let regenContent = regenContent {
-            if let lastUserIndex = conversations.lastIndex(where: { $0.role == .user }) {
-                let existingDataFiles = conversations[lastUserIndex].dataFiles
-                conversations[lastUserIndex] = Thread(role: .user, content: regenContent, dataFiles: existingDataFiles)
-            }
-            if let lastAssistantIndex = conversations.lastIndex(where: { $0.role == .assistant }) {
-                conversations.remove(at: lastAssistantIndex)
-            }
-        }
-        
-        return conversations
     }
 
-    
     @MainActor
-    func sendInput(isRegen: Bool = false, regenContent: String? = nil, assistantGroup: ThreadGroup? = nil, forQuick: Bool = false) async {
-        errorMessage = ""
-        self.date = Date()
-        
-        if !isRegen {
-            if inputManager.state == .editing {
-                handleEditingMode()
-            } else {
-                guard !inputManager.prompt.isEmpty else { return }
-                
-                let content = inputManager.prompt
-                let dataFiles = inputManager.dataFiles
-                inputManager.reset()
-                
-                let user = Thread(role: .user, content: content, dataFiles: dataFiles)
-                addThreadGroup(conversation: user)
-            }
-        }
-        
-        if AppConfig.shared.autogenTitle {
-            Task { await generateTitle() }
-        }
-        
+    func processRequest() async {
         streamingTask = Task {
-            try await handleStreamingTask(regenContent: regenContent, assistantGroup: assistantGroup)
-            self.refreshTokens()
+            streamer = .init(session: self)
+            try await streamer?.handleRequest()
+            
+            // will the following lines only be executed after processRequest is done?
+            streamingTask?.cancel()
+            streamingTask = nil
+//            self.refreshTokens() // TODO: make async
         }
         
-        // TODO: create func for this
         do {
             #if os(macOS)
             try await streamingTask?.value
@@ -183,72 +105,64 @@ final class Chat {
         }
     }
     
-    private func handleEditingMode() {
-        if let editingIndex = inputManager.editingIndex,
-           editingIndex < groups.count,
-           groups[editingIndex].activeThread.role == .user {
+    @MainActor
+    func sendInput() async {
+        errorMessage = ""
+        self.date = Date()
 
-            
-            groups[editingIndex].activeThread.content = inputManager.prompt
-            groups[editingIndex].activeThread.dataFiles = inputManager.dataFiles
-            
-            groups.removeSubrange((editingIndex + 1)...)
-            
-            inputManager.resetEditing()
-        } else {
-            errorMessage = "Error: Invalid editing state"
-            if let proxy = proxy {
-                scrollToBottom(proxy: proxy)
-            }
+        guard !inputManager.prompt.isEmpty else { return }
+
+        let user = Thread(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
+        addThread(user)
+        
+        inputManager.reset()
+        
+        if AppConfig.shared.autogenTitle {
+            Task { await generateTitle() }
         }
+        
+        await processRequest()
     }
     
     @MainActor
-    func regenerate(group: ThreadGroup) async {
-        guard group.role == .assistant else { return }
+    func regenerate(thread: Thread) async {
+        #warning("This may crash if dataFiles only copied by reference")
         
-        guard let index = groups.firstIndex(where: { $0.id == group.id }),
-              index > 0 else { return }
+        guard let index = threads.firstIndex(where: { $0 == thread }) else { return }
+        threads.removeSubrange(thread.role == .assistant ? index... : (index + 1)...) // if assistant, remove the assistant thread as well
         
-        let userGroup = groups[index - 1]
-        let userContent = userGroup.activeThread.content
+        // at this point the last thread is always the user thread
         
-        let newAssistantThread = Thread(role: .assistant, content: "", provider: config.provider, model: config.model)
-        group.addThread(newAssistantThread)
-        
-        groups.removeSubrange((index + 1)...)
-        
-        await sendInput(isRegen: true, regenContent: userContent, assistantGroup: group)
+        await processRequest()
     }
     
-    @MainActor
     func stopStreaming() {
         hasUserScrolled = false
         streamingTask?.cancel()
         streamingTask = nil
         
-        if let last = groups.last {
-            if last.activeThread.content.isEmpty {
-                deleteThreadGroup(last)
-            } else {
-                last.activeThread.isReplying = false
+        if let last = threads.last {
+            last.isReplying = false
+            if last.content.isEmpty {
+                deleteThread(last)
             }
+        } else {
+            threads.last.map(deleteThread)
         }
     }
     
-    @MainActor
+//    @MainActor
     func generateTitle(forced: Bool = false) async {
-        if isQuick { return }
+        guard !isQuick else { return }
+        guard forced || threads.count <= 2 else { return }
         
-        if forced || groups.count == 1 || groups.count == 2 {
-            if let newTitle = await TitleGenerator.generateTitle(adjustedGroups: groups, provider: config.provider) {
-                self.title = newTitle
-            }
+        if let newTitle = await TitleGenerator.generateTitle(threads: threads, provider: config.provider) {
+            self.title = newTitle
         }
     }
     
     func refreshTokens() {
-        let messageTokens = groups.reduce(0) { $0 + $1.tokenCount}
+        let messageTokens = threads.reduce(0) { $0 + $1.tokenCount}
         let sysPromptTokens = countTokensFromText(config.systemPrompt)
         let toolTokens = config.tools.tokenCount
         let inputTokens = countTokensFromText(inputManager.prompt)
@@ -256,41 +170,38 @@ final class Chat {
         self.tokenCount = (messageTokens + sysPromptTokens + toolTokens + inputTokens)
     }
     
-    func copy(from group: ThreadGroup? = nil, purpose: ChatConfigPurpose) async -> Chat {
+    func copy(from thread: Thread? = nil, purpose: ChatConfigPurpose) async -> Chat {
         let newSession = Chat(config: config.copy(purpose: purpose))
-        let leading: String
         
-        switch purpose {
-            case .chat: leading = "(Ψ)"
-            case .quick: leading = "↯"
-            case .title: leading = "T"
+        let leading = switch purpose {
+            case .chat: "Ψ"
+            case .quick: "↯"
+            case .title: "T"
         }
         
-        newSession.title = leading + " " + self.title
+        newSession.title = "\(leading) \(self.title)"
         
-        if let group = group, let index = groups.firstIndex(of: group) {
-            // Scenario 1: Fork from a particular group
-            let groupsToCopy = groups.prefix(through: index)
-            newSession.groups = groupsToCopy.map { $0.copy()}
+        if let thread = thread, let index = threads.firstIndex(of: thread) {
+            newSession.threads = threads.prefix(through: index).map { $0.copy() }
         } else {
-            // Scenario 2: Fork all groups
-            newSession.groups = groups.map { $0.copy()}
+            newSession.threads = threads.map { $0.copy() }
         }
         
         return newSession
     }
+
     
-    @discardableResult
-    func addThreadGroup(conversation: Thread) -> ThreadGroup {
-        let group = ThreadGroup(conversation: conversation, session: self)
+    func addThread(_ thread: Thread) {
+        if thread.role == .assistant {
+            thread.isReplying = true
+        }
         
-        groups.append(group)
+        thread.chat = self
         
+        threads.append(thread)
         scrollBottom()
         
         try? modelContext?.save()
-        
-        return group
     }
     
     func scrollBottom() {
@@ -300,48 +211,45 @@ final class Chat {
     }
     
     // TODO: make async
-    func deleteThreadGroup(_ conversationGroup: ThreadGroup) {
-        guard !groups.isEmpty else {
-            errorMessage = ""
-            return
-        }
-        
-        if let index = groups.firstIndex(of: conversationGroup) {
-            if conversationGroup.role == .assistant {
-                var groupsToDelete = [conversationGroup]
-                
-                // Iterate backwards from the index of the group to be deleted
-                for i in stride(from: index - 1, through: 0, by: -1) {
-                    let previousGroup = groups[i]
-                    if previousGroup.role == .user {
-                        break // Stop when we encounter a user role
-                    }
-                    groupsToDelete.append(previousGroup)
-                }
-                
-                // Remove the groups from the array
-                groups.removeAll(where: { groupsToDelete.contains($0) })
-                
-                
-                // Delete the groups from the model context
-                for group in groupsToDelete {
-                    self.modelContext?.delete(group)
-                }
-            } else {
-                // If it's not an assistant role, just delete the single group
-                groups.removeAll(where: { $0 == conversationGroup })
-                
-                self.modelContext?.delete(conversationGroup)
-            }
-        }
+    func deleteThread(_ thread: Thread) {
+        threads.removeAll(where: { $0 == thread })
+        // TOOD: put all in single thread.
+//
+//        if let index = groups.firstIndex(of: conversationGroup) {
+//            if conversationGroup.role == .assistant {
+//                var groupsToDelete = [conversationGroup]
+//                
+//                // Iterate backwards from the index of the group to be deleted
+//                for i in stride(from: index - 1, through: 0, by: -1) {
+//                    let previousGroup = groups[i]
+//                    if previousGroup.role == .user {
+//                        break // Stop when we encounter a user role
+//                    }
+//                    groupsToDelete.append(previousGroup)
+//                }
+//                
+//                // Remove the groups from the array
+//                groups.removeAll(where: { groupsToDelete.contains($0) })
+//                
+//                
+//                // Delete the groups from the model context
+//                for group in groupsToDelete {
+//                    self.modelContext?.delete(group)
+//                }
+//            } else {
+//                // If it's not an assistant role, just delete the single group
+//                groups.removeAll(where: { $0 == conversationGroup })
+//                
+//                self.modelContext?.delete(conversationGroup)
+//            }
+//        }
         self.refreshTokens()
     }
 
     
     func deleteAllThreads() {
-        // Remove all conversation groups from the groups array and modelContext
-        while let conversationGroup = groups.popLast() {
-            self.modelContext?.delete(conversationGroup)
+        while let thread = threads.popLast() {
+            self.modelContext?.delete(thread)
         }
         
         errorMessage = ""

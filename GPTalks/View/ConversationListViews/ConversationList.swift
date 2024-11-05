@@ -22,15 +22,20 @@ struct ThreadList: View {
     var body: some View {
         ScrollViewReader { proxy in
             List {
-                ForEach(session.groups, id: \.self) { group in
-                    ThreadGroupView(group: group)
+                ForEach(session.threads, id: \.self) { thread in
+                    ThreadView(thread: thread)
+                        #if os(iOS)
+                        .opacity(0.9)
+                        #endif
                 }
                 .listRowSeparator(.hidden)
 
                 ErrorMessageView(message: $session.errorMessage)
                     .listRowSeparator(.hidden)
+                    .transaction { $0.animation = nil }
             
                 Color.clear
+                    .transaction { $0.animation = nil }
                     .id(String.bottomID)
                     .listRowSeparator(.hidden)
             }

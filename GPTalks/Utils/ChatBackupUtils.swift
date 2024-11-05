@@ -102,10 +102,9 @@ struct MarkdownFile: FileDocument {
 private func generateMarkdown(for session: Chat) -> String {
     var markdown = "# Session: \(session.title)\n\n"
     
-    for group in session.groups {
-        let activeThread = group.activeThread
-        markdown += "## \(activeThread.role.rawValue.capitalized)\n"
-        markdown += "\(activeThread.content)\n\n\n"
+    for thread in session.threads {
+        markdown += "## \(thread.role.rawValue.capitalized)\n"
+        markdown += "\(thread.content)\n\n\n"
     }
         
     return markdown

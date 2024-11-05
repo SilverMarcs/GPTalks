@@ -13,7 +13,7 @@ struct ThreadMenu: View {
     @Environment(\.isQuick) private var isQuick
     @Environment(\.providers) var providers
     
-    var group: ThreadGroup
+    var thread: Thread
     
     @Binding var isExpanded: Bool
     var toggleTextSelection: (() -> Void)? = nil
@@ -55,15 +55,13 @@ struct ThreadMenu: View {
         Section {
             deleteGroup
         }
-        
-        navigate
     }
     
     @ViewBuilder
     var editGroup: some View {
-        if !isQuick && group.role == .user {
+        if !isQuick && thread.role == .user {
             Button {
-                group.setupEditing()
+                thread.chat?.inputManager.setupEditing(thread: thread)
             } label: {
                 Label("Edit", systemImage: "pencil.and.outline")
             }
@@ -73,10 +71,10 @@ struct ThreadMenu: View {
     
     @ViewBuilder
     var expandHeight: some View {
-        if group.role == .user {
+        if thread.role == .user {
             Button {
                 isExpanded.toggle()
-                group.session?.proxy?.scrollTo(group, anchor: .bottom)
+                thread.chat?.proxy?.scrollTo(thread, anchor: .bottom)
             } label: {
                 Label(isExpanded ? "Collapse" : "Expand", systemImage: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right")
             }
@@ -94,7 +92,7 @@ struct ThreadMenu: View {
             Button {
                 isForking = true
                 Task {
-                    if let newSession = await group.session?.copy(from: group, purpose: .chat) {
+                    if let newSession = await thread.chat?.copy(from: thread, purpose: .chat) {
                         sessionVM.fork(newSession: newSession)
                         isForking = false
                     }
@@ -108,7 +106,7 @@ struct ThreadMenu: View {
 
     var copyText: some View {
         Button {
-            group.activeThread.content.copyToPasteboard()
+            thread.content.copyToPasteboard()
             
             isCopied = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -131,7 +129,7 @@ struct ThreadMenu: View {
 
     var deleteGroup: some View {
         Button(role: .destructive) {
-            group.deleteSelf()
+            thread.chat?.deleteThread(thread)
         } label: {
             #if os(macOS)
             Image(systemName: "trash")
@@ -151,8 +149,8 @@ struct ThreadMenu: View {
                 Menu {
                     ForEach(provider.chatModels) { model in
                         Button {
-                            group.session?.config.provider = provider
-                            group.session?.config.model = model
+                            thread.chat?.config.provider = provider
+                            thread.chat?.config.model = model
                             
                             regen()
                         } label: {
@@ -177,63 +175,18 @@ struct ThreadMenu: View {
         }
         #endif
     }
-        
+    
     func regen() {
-        if group.role == .assistant {
-            Task { @MainActor in
-                await group.session?.regenerate(group: group)
-            }
-        } else if group.role == .user {
-            group.setupEditing()
-            Task { @MainActor in
-                await group.session?.sendInput()
-            }
+        Task {
+            await thread.chat?.regenerate(thread: thread)
         }
-    }
-
-    @ViewBuilder
-    var navigate: some View {
-        #if os(macOS)
-        if group.conversations.count > 1 && group.role == .assistant {
-            Button {
-                group.setActiveToLeft()
-            } label: {
-                Label("Previous", systemImage: "chevron.left")
-            }
-            .help("Previous")
-            
-            Button {
-                group.setActiveToRight()
-            } label: {
-                Label("Next", systemImage: "chevron.right")
-            }
-            .help("Next")
-        }
-        #else
-        if group.conversations.count > 1 && group.role == .assistant {
-            Section("Iterations: \(group.activeThreadIndex + 1)/\(group.conversations.count)") {
-                Button {
-                    group.setActiveToLeft()
-                } label: {
-                    Label("Previous", systemImage: "chevron.left")
-                }
-                
-                Button {
-                    group.setActiveToRight()
-                } label: {
-                    Label("Next", systemImage: "chevron.right")
-                }
-            }
-        }
-        #endif
-        
     }
 }
 
 #Preview {
     VStack {
-        ThreadMenu(group: .mockUserThreadGroup, isExpanded: .constant(true))
-        ThreadMenu(group: .mockAssistantThreadGroup, isExpanded: .constant(true))
+        ThreadMenu(thread: .mockUserThread, isExpanded: .constant(true))
+        ThreadMenu(thread: .mockAssistantThread, isExpanded: .constant(true))
     }
     .frame(width: 500)
     .padding()
