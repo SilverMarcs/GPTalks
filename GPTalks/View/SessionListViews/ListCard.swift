@@ -56,7 +56,6 @@ struct ListCard: View {
                         : AnyShapeStyle(.background))
             #endif
             .cornerRadius(radius)
-            // TODO: use and customise .groupboxstyle()
         }
         .buttonStyle(.plain)
     }

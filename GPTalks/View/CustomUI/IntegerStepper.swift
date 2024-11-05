@@ -15,7 +15,6 @@ struct IntegerStepper: View {
     let range: ClosedRange<Int>
     
     
-    // TODO: use secondary text for subtitle
     var body: some View {
         Stepper(
             value: Binding<Double>(

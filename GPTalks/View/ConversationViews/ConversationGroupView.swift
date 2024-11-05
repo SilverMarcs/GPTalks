@@ -13,7 +13,6 @@ struct ConversationGroupView: View {
 
     var body: some View {
         ConversationView(conversation: group.activeConversation)
-            .environment(\.isSearch, false)
             #if os(iOS)
             .opacity(0.9)
             #endif

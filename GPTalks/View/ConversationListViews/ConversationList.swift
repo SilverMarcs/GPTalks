@@ -63,7 +63,7 @@ struct ConversationList: View {
             #if os(macOS)
             .navigationSubtitle("\(session.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-                if session.isReplying {
+                if session.isReplying {  // TODO: use isstreamong here.
                     session.hasUserScrolled = true
                 }
             }

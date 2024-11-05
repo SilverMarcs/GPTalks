@@ -17,7 +17,7 @@ struct IOSWindow: Scene {
     var body: some Scene {
         WindowGroup("Chats", id: "chats") {
             NavigationSplitView {
-                if !chatVM.sessionsWithMatches.isEmpty {
+                if !chatVM.searchResults.isEmpty {
                     ChatDetail()
                 } else {
                     switch listStateVM.state {
