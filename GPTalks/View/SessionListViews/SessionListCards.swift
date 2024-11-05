@@ -17,31 +17,34 @@ struct SessionListCards: View {
     var imageSessionsCount: String
     
     var body: some View {
-//        Section {
-            HStack(spacing: spacing) {
-                ListCard(
-                    icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
-                    count: sessionCount) {
-                        handleChatPress()
-                    }
-                
-                ListCard(
-                    icon: "photo.circle.fill", iconColor: .indigo, title: "Images",
-                    count: imageSessionsCount) {
-                        handleImagePress()
-                    }
-            }
-            .listRowSeparator(.hidden)
-            .listRowBackground(Color.clear)
-            #if os(macOS)
+        #if os(macOS)
+        content
             .listRowInsets(EdgeInsets(top: spacing - 1, leading: -5, bottom: spacing, trailing: -5))
-            #else
-            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-            #endif
-//        }
-//        #if !os(macOS)
-//        .listSectionSpacing(15)
-//        #endif
+        #else
+        Section {
+            content
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+        }
+        .listSectionSpacing(15)
+        #endif
+    }
+    
+    var content: some View {
+        HStack(spacing: spacing) {
+            ListCard(
+                icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
+                count: sessionCount) {
+                    handleChatPress()
+                }
+            
+            ListCard(
+                icon: "photo.circle.fill", iconColor: .indigo, title: "Images",
+                count: imageSessionsCount) {
+                    handleImagePress()
+                }
+        }
+        .listRowSeparator(.hidden)
+        .listRowBackground(Color.clear)
     }
     
     func handleChatPress() {
