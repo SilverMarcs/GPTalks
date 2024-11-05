@@ -34,7 +34,7 @@ struct SessionListCards: View {
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
             #if os(macOS)
-            .listRowInsets(EdgeInsets(top: 6, leading: -5, bottom: 8, trailing: -5))
+            .listRowInsets(EdgeInsets(top: spacing - 1, leading: -5, bottom: spacing, trailing: -5))
             #else
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             #endif
@@ -68,7 +68,7 @@ struct SessionListCards: View {
     
     private var spacing: CGFloat {
         #if os(macOS)
-        return 9
+        return 8
         #else
         return 13
         #endif

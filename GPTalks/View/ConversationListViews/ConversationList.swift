@@ -40,10 +40,6 @@ struct ConversationList: View {
             .listStyle(.plain)
             #endif
             .task {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    session.refreshTokens()
-                }
-                
                 session.proxy = proxy
                 
                 #if os(macOS)

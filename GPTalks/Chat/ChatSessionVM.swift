@@ -113,14 +113,9 @@ import SwiftUI
     private let debounceInterval: TimeInterval = 0.5 // 500 milliseconds
     
     func debouncedSearch(sessions: [ChatSession]) {
-        guard searchText.count >= 3 else {
-            searchResults = []
-            searching = false
-            return
-        }
-        
         searching = true
         searchTask?.cancel()
+        
         searchTask = Task {
             do {
                 try await Task.sleep(for: .seconds(debounceInterval))
@@ -174,5 +169,4 @@ import SwiftUI
         
         return cleanedText
     }
-
 }

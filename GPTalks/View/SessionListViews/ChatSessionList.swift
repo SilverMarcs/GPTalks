@@ -10,9 +10,8 @@ import SwiftUI
 
 struct ChatSessionList: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(ChatSessionVM.self) var sessionVM
+    @Environment(ChatSessionVM.self) var chatVM
     @Environment(\.modelContext) var modelContext
-    @ObservedObject var config = AppConfig.shared
     
     @Query(filter: #Predicate { !$0.isQuick }, sort: [SortDescriptor(\ChatSession.date, order: .reverse)], animation: .default)
     var sessions: [ChatSession]
@@ -20,39 +19,44 @@ struct ChatSessionList: View {
     @FocusState private var isSearchFieldFocused: Bool
     
     var body: some View {
-        @Bindable var sessionVM = sessionVM
+        @Bindable var chatVM = chatVM
 
-        
-        ScrollViewReader { proxy in
-            List(selection: $sessionVM.chatSelections) {
-                SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "↗")
-                    .id(String.topID)
-                
-                ForEach(sessions) { session in
-                    SessionListRow(session: session)
-                        .tag(session)
-                        .deleteDisabled(session.isQuick || session.isStarred)
-                        #if os(macOS)
-                        .listRowSeparator(.visible)
-                        .listRowSeparatorTint(Color.gray.opacity(0.2))
-                        #endif
-                }
-                .onDelete(perform: deleteItems)
+        List(selection: $chatVM.chatSelections) {
+            SessionListCards(sessionCount: String(sessions.count), imageSessionsCount: "↗")
+                .id(String.topID)
+            
+            ForEach(sessions) { session in
+                SessionListRow(session: session)
+                    .tag(session)
+                    .deleteDisabled(session.isQuick || session.isStarred)
+                    #if os(macOS)
+                    .listRowSeparator(.visible)
+                    .listRowSeparatorTint(Color.gray.opacity(0.2))
+                    #endif
             }
-            .onChange(of: sessionVM.searchText) {
-                sessionVM.debouncedSearch(sessions: sessions)
-            }
-            .navigationTitle("Chats")
-            .toolbar {
-                ChatSessionToolbar()
-            }
-            .task {
-                if let first = sessions.first, sessionVM.chatSelections.isEmpty, horizontalSizeClass != .compact {
-                    sessionVM.chatSelections = [first]
-                }
-            }
-            .searchable(text: $sessionVM.searchText, placement: searchPlacement)
+            .onDelete(perform: deleteItems)
         }
+        .onChange(of: chatVM.searchText) {
+            chatVM.debouncedSearch(sessions: sessions)
+        }
+        .navigationTitle("Chats")
+        .toolbar {
+            ChatSessionToolbar()
+            
+            ToolbarItem(placement: .keyboard) {
+                Button("Search") {
+                    isSearchFieldFocused.toggle()
+                }
+                .keyboardShortcut("f")
+            }
+        }
+        .task {
+            if let first = sessions.first, chatVM.chatSelections.isEmpty, horizontalSizeClass != .compact {
+                chatVM.chatSelections = [first]
+            }
+        }
+        .searchable(text: $chatVM.searchText, placement: searchPlacement)
+        .searchFocused($isSearchFieldFocused, equals: true)
     }
     
     private var searchPlacement: SearchFieldPlacement {
@@ -75,6 +79,3 @@ struct ChatSessionList: View {
     .frame(width: 400)
     .environment(ChatSessionVM(modelContext: DatabaseService.shared.container.mainContext))
 }
-
-
-

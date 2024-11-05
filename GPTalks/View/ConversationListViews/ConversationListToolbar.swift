@@ -32,14 +32,18 @@ struct ConversationListToolbar: ToolbarContent {
             }
         }
         
-//        if horizontalSizeClass != .compact {
-//            ToolbarItem(placement: .primaryAction) {
-//                Button("Tokens: \(session.tokenCount.formatToK())") { }
-//                .allowsHitTesting(false)
-//            }
-//        }
-        
         #if os(macOS)
+        ToolbarItem(placement: .primaryAction) {
+            Button("Tokens: \(session.tokenCount.formatToK())") { }
+            .allowsHitTesting(false)
+            .task {
+                Task {
+                    try await Task.sleep(nanoseconds: 500_000_000)
+                    session.refreshTokens()
+                }
+            }
+        }
+        
         if config.showStatusBar {
             ToolbarItem(placement: .favoritesBar) {
                 ConversationStatusBar(session: session)

@@ -46,11 +46,6 @@ struct ChatCommands: Commands {
         }
         
         CommandMenu("Chat") {
-            Button("Search") {
-                sessionVM.hasFocus.toggle()
-            }
-            .keyboardShortcut("f", modifiers: [.command])
-            
             Button("Stop Streaming") {
                 Task { @MainActor in
                     await sessionVM.stopStreaming()
