@@ -45,7 +45,7 @@ struct ImageSettings: View {
                     step: 1,
                     format: .number
                 )
-
+                
                 
                 Picker("Size", selection: $imageConfig.size) {
                     ForEach(ImagesQuery.Size.allCases, id: \.self) { size in
@@ -63,26 +63,6 @@ struct ImageSettings: View {
                     ForEach(ImagesQuery.Style.allCases, id: \.self) { style in
                         Text(style.rawValue.capitalized)
                     }
-                }
-            }
-            
-            Section("Chat Image Size") {
-                IntegerStepper(value: $imageConfig.chatImageHeight, label: "Image Height", step: 30, range: 40...300)
-                
-                IntegerStepper(value: $imageConfig.chatImageWidth, label: "Image Width", step: 30, range: 80...300)
-                
-                HStack(alignment: .top) {
-                    #if os(macOS)
-                    Text("Only applies to images in Chat Session")
-                    #endif
-                    
-                    Spacer()
-                    
-                    Image("sample")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: CGFloat(imageConfig.chatImageWidth), height: CGFloat(imageConfig.chatImageHeight))
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
             }
             

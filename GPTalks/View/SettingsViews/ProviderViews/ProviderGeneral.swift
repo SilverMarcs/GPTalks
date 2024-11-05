@@ -11,9 +11,8 @@ import SwiftData
 struct ProviderGeneral: View {
     @Bindable var provider: Provider
     
-    @State var showKey: Bool = false
-    @State var showPopover: Bool = false
-
+    @State private var showKey: Bool = false
+    @State private var showPopover: Bool = false
     @State private var color = Color(.sRGB, red: 1, green: 1, blue: 1)
     
     @Query var providerDefaults: [ProviderDefaults]
@@ -157,7 +156,7 @@ struct ProviderGeneral: View {
         }
     }
     
-    // This sud come form extarContexr in provider type or provider itself
+    // TODO: This should come form extarContext in provider type
     private var popoverText: String {
         switch provider.type {
         case .vertex:

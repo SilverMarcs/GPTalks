@@ -1,5 +1,5 @@
 //
-//  ToolSettings.swift
+//  PluginSettings.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 14/09/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ToolSettings: View {
+struct PluginSettings: View {
     @ObservedObject var config = ToolConfigDefaults.shared
     var providerDefaults: ProviderDefaults
     
@@ -73,5 +73,5 @@ struct ToolSettings: View {
 }
 
 #Preview {
-    ToolSettings(providerDefaults: .mockProviderDefaults)
+    PluginSettings(providerDefaults: .mockProviderDefaults)
 }

@@ -61,7 +61,7 @@ struct SettingsView: View {
             .toolbar{
                 Spacer()
                 #if !os(macOS)
-                    DismissButton()
+                DismissButton()
                 #endif
             }
             .navigationSplitViewColumnWidth(min: 190, ideal: 190, max: 190)
@@ -75,7 +75,7 @@ struct SettingsView: View {
                 case .quickPanel:
                     QuickPanelSettings(providerDefaults: providerDefaults.first!)
                 case .tools:
-                    ToolSettings(providerDefaults: providerDefaults.first!)
+                    PluginSettings(providerDefaults: providerDefaults.first!)
                 case .parameters:
                     ParameterSettings()
                 case .image:

@@ -37,14 +37,6 @@ struct ProviderRow: View {
             }
         }
     }
-    
-    private var size: CGFloat {
-        #if os(macOS)
-        return 16
-        #else
-        return 25
-        #endif
-    }
 }
 
 #Preview {

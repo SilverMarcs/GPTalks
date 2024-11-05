@@ -9,7 +9,7 @@ import SwiftUI
 import QuickLook
 import UniformTypeIdentifiers
 
-struct DataFileView: View {
+struct DataFilesView: View {
     @Binding var dataFiles: [TypedData]
     var isCrossable: Bool
     var edge: UnitPoint = .trailing
@@ -53,18 +53,18 @@ struct DataFileView: View {
         }
     }
     
-    @ViewBuilder
     func fileView(for typedData: TypedData) -> some View {
-        if typedData.fileType.conforms(to: .image) {
-            ImageViewer(typedData: typedData, onTap: { presentQuickLook(for: typedData) })
-        } else {
-            FileViewer(typedData: typedData, onTap: { presentQuickLook(for: typedData) })
+        Button {
+            if let url = FileHelper.createTemporaryURL(for: typedData) {
+                selectedFileURL = url
+            }
+        } label: {
+            if typedData.fileType.conforms(to: .image) {
+                ImageViewer(typedData: typedData)
+            } else {
+                FileViewer(typedData: typedData)
+            }
         }
-    }
-    
-    func presentQuickLook(for typedData: TypedData) {
-        if let url = FileHelper.createTemporaryURL(for: typedData) {
-            selectedFileURL = url
-        }
+        .buttonStyle(.plain)
     }
 }

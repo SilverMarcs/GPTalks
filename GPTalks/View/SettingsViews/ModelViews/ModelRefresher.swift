@@ -1,5 +1,5 @@
 //
-//  ModelSelectionSheet.swift
+//  ModelRefresher.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 06/10/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ModelSelectionSheet: View {
+struct ModelRefresher: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var refreshedModels: [GenericModel] = []

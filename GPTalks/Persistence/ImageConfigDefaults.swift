@@ -19,7 +19,4 @@ class ImageConfigDefaults: ObservableObject {
     
     @AppStorage("imageWidth") var imageWidth: Int = 250
     @AppStorage("imageHeight") var imageHeight: Int = 250
-    
-    @AppStorage("chatImageWidth") var chatImageWidth: Int = 100
-    @AppStorage("chatImageHeight") var chatImageHeight: Int = 48
 }

@@ -32,7 +32,7 @@ struct QuickPanel: View {
                 .frame(height: 57)
             
             if !session.inputManager.dataFiles.isEmpty {
-                DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
+                DataFilesView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
                     .safeAreaPadding(.horizontal)
                     .safeAreaPadding(.vertical, 10)
             }

@@ -23,18 +23,7 @@ struct ChatInputView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if session.inputManager.state == .editing {
-                HStack(spacing: 5) {
-                    CrossButton {
-                        session.inputManager.resetEditing()
-                    }
-                    
-                    Text("Editing")
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.horizontal, 5)
-                .padding(5)
-                
-                Divider()
+                cancelEditing
             }
             
             HStack(alignment: .bottom, spacing: 0) {
@@ -45,7 +34,7 @@ struct ChatInputView: View {
                     Spacer(minLength: 0)
                     
                     if !session.inputManager.dataFiles.isEmpty {
-                        DataFileView(dataFiles: $session.inputManager.dataFiles, isCrossable: true, edge: .leading)
+                        DataFilesView(dataFiles: $session.inputManager.dataFiles, isCrossable: true, edge: .leading)
                             .padding(.bottom, 5)
                     }
                     
@@ -101,6 +90,28 @@ struct ChatInputView: View {
                 .ignoresSafeArea()
         }
         #endif
+    }
+    
+    @ViewBuilder
+    var cancelEditing: some View {
+        HStack(spacing: 5) {
+            Button {
+                session.inputManager.resetEditing()
+            } label: {
+                Image(systemName: "xmark")
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+            }
+            .keyboardShortcut(.cancelAction)
+            .buttonStyle(.plain)
+            
+            Text("Editing")
+                .foregroundStyle(.secondary)
+        }
+        .padding(.horizontal, 5)
+        .padding(5)
+        
+        Divider()
     }
     
     var imageSize: CGFloat {

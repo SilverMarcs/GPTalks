@@ -45,3 +45,10 @@ extension KeyboardShortcuts.Name {
     static let togglePanel = Self("togglePanel")
 }
 #endif
+
+// MARK: - Platform Color
+#if os(macOS)
+typealias PlatformColor = NSColor
+#else
+typealias PlatformColor = UIColor
+#endif

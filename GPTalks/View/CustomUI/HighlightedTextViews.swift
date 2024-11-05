@@ -74,10 +74,3 @@ struct AttributedText: View {
         Text(AttributedString(attributedString))
     }
 }
-
-#if os(macOS)
-typealias PlatformColor = NSColor
-#else
-typealias PlatformColor = UIColor
-#endif
-

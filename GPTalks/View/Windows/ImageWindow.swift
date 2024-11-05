@@ -13,9 +13,6 @@ struct ImageWindow: Scene {
         Window("Images", id: "images") {
             ImageContentView()
         }
-        .commands {
-            ImageCommands()
-        }
     }
 }
 #endif

@@ -10,7 +10,7 @@ import SwiftUI
 struct ProviderDetail: View {
     @Bindable var provider: Provider
 
-    @State private var selectedTab: ProviderDetailTab = .general
+    @State private var selectedTab: ProviderTab = .general
 
     var body: some View {
         Group {
@@ -34,44 +34,16 @@ struct ProviderDetail: View {
             }
         }
     }
-
-//    private var filteredTabs: [ProviderDetailTab] {
-//        (provider.type == .vertex || provider.type == .google || provider.type == .anthropic
-//        ? [.general, .chat]
-//        : [.general, .chat, .image, .stt])
-//    }
-
+    
     private var picker: some View {
         Picker("Tabs", selection: $selectedTab) {
-            ForEach(ProviderDetailTab.allCases, id: \.self) { tab in
+            ForEach(ProviderTab.allCases, id: \.self) { tab in
                 tab.name.tag(tab)
                     .labelStyle(.iconOnly)
             }
         }
         .pickerStyle(.segmented)
         .fixedSize()
-    }
-}
-
-enum ProviderDetailTab: String, CaseIterable, Identifiable {
-    var id: String { rawValue }
-
-    case general
-    case chat
-    case image
-    case stt
-
-    var name: some View {
-        switch self {
-        case .general:
-            Label("General", systemImage: "info.circle")
-        case .chat:
-            Label("Chat", systemImage: "quote.bubble")
-        case .image:
-            Label("Image", systemImage: "photo")
-        case .stt:
-            Label("STT", systemImage: "waveform")
-        }
     }
 }
 

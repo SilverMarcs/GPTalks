@@ -36,7 +36,7 @@ struct AssistantMessage: View {
                 MarkdownView(content: conversation.content)
                 
                 if !conversation.dataFiles.isEmpty {
-                    DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false, edge: .leading)
+                    DataFilesView(dataFiles: $conversation.dataFiles, isCrossable: false, edge: .leading)
                 }
                 
                 if conversation.isReplying {

@@ -21,7 +21,7 @@ struct UserMessage: View {
     var body: some View {
         VStack(alignment: .trailing, spacing: 7) {
             if !conversation.dataFiles.isEmpty {
-                DataFileView(dataFiles: $conversation.dataFiles, isCrossable: false)
+                DataFilesView(dataFiles: $conversation.dataFiles, isCrossable: false)
             }
             
             GroupBox {

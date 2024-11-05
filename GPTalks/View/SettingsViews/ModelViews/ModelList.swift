@@ -19,15 +19,15 @@ struct ModelList: View {
     
     var body: some View {
         Group {
-#if os(macOS)
+            #if os(macOS)
             Form {
                 table
             }
             .formStyle(.grouped)
             .labelsHidden()
-#else
-            table
-#endif
+            #else
+            list
+            #endif
         }
         .toolbar {
             Menu {
@@ -38,72 +38,75 @@ struct ModelList: View {
             }
         }
         .sheet(isPresented: $showAdder) {
-            AddModelSheet(provider: provider)
+            ModelAdder(provider: provider)
         }
         .sheet(isPresented: $showModelSelectionSheet) {
-            ModelSelectionSheet(provider: provider)
-        }
-    }
-
-    @ViewBuilder
-    var table: some View {
-        if horizontalSizeClass == .compact {
-            List {
-                ForEach($models) { $model in
-                    HStack {
-                        VStack {
-                            TextField("Name", text: $model.name)
-                            
-                            TextField("Code", text: $model.code)
-                        }
-                        
-                        Spacer()
-                        
-                        if model.type == .chat {
-                            ModelTester(provider: provider, model: model)
-                        }
-                    }                }
-                .onDelete(perform: { indexSet in
-                    models.remove(atOffsets: indexSet)
-                })
-            }
-        } else {
-            Table($models, selection: $selections) {
-                TableColumn("Code") { $model in
-                    TextField("Code", text: $model.code)
-                }
-                .width(250)
-                .alignment(.leading)
-                
-                TableColumn("Name") { $model in
-                    TextField("Name", text: $model.name)
-                }
-                .width(200)
-                
-                TableColumn("Actions") { $model in
-                    HStack {
-                        if model.type == .chat {
-                            ModelTester(provider: provider, model: model)
-                        }
-                        
-                        Button(role: .destructive) {
-                            models.removeAll(where: { $0.id == model.id })
-                        } label: {
-                            Image(systemName: "trash")
-                                .foregroundStyle(.red)
-                        }
-                    }
-                }
-                .alignment(.trailing)
-            }
-            #if os(macOS)
-            .onDeleteCommand {
-                models.removeAll(where: { selections.contains($0.id) })
-            }
-            #endif
+            ModelRefresher(provider: provider)
         }
     }
     
+    #if !os(macOS)
+    var list: some View {
+        List {
+            ForEach($models) { $model in
+                HStack {
+                    VStack {
+                        TextField("Name", text: $model.name)
+                            
+                        TextField("Code", text: $model.code)
+                    }
+                    .labelStyle(.titleOnly)
+                    
+                    Spacer()
+                    
+                    if model.type == .chat {
+                        ModelTester(provider: provider, model: model)
+                    }
+                }
+            }
+            .onDelete(perform: { indexSet in
+                models.remove(atOffsets: indexSet)
+            })
+        }
+    }
+    #endif
+    
+    #if os(macOS)
+    var table: some View {
+        Table($models, selection: $selections) {
+            TableColumn("Code") { $model in
+                TextField("Code", text: $model.code)
+            }
+            .width(250)
+            .alignment(.leading)
+            
+            TableColumn("Name") { $model in
+                TextField("Name", text: $model.name)
+            }
+            .width(200)
+            
+            TableColumn("Actions") { $model in
+                HStack {
+                    if model.type == .chat {
+                        ModelTester(provider: provider, model: model)
+                    }
+                    
+                    Button(role: .destructive) {
+                        models.removeAll(where: { $0.id == model.id })
+                    } label: {
+                        Image(systemName: "trash")
+                            .foregroundStyle(.red)
+                    }
+                }
+            }
+            .alignment(.trailing)
+        }
+        .onDeleteCommand {
+            models.removeAll(where: { selections.contains($0.id) })
+        }
+    }
+    #endif
+
     var addButton: some View {
         Button(action: { showAdder = true }) {
             Label("Add Model", systemImage: "plus")
