@@ -47,9 +47,7 @@ struct ChatCommands: Commands {
         
         CommandMenu("Chat") {
             Button("Stop Streaming") {
-//                Task { @MainActor in
-                    sessionVM.stopStreaming()
-//                }
+                sessionVM.stopStreaming()
             }
             .keyboardShortcut("d", modifiers: .command)
             .disabled(!(sessionVM.activeChat?.isReplying ?? false))

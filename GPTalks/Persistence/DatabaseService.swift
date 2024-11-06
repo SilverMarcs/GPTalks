@@ -39,6 +39,12 @@ class DatabaseService {
         modelContext = ModelContext(container)
     }
     
+    func getDefaultProvider() -> Provider {
+        let fetchDefaults = FetchDescriptor<ProviderDefaults>()
+        let defaults = try! modelContext.fetch(fetchDefaults)
+        return defaults.first!.defaultProvider
+    }
+    
     func initialSetup(modelContext: ModelContext) {
         // Fetch the quick session from the modelContext
         var fetchQuickSession = FetchDescriptor<Chat>()

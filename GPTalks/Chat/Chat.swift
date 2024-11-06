@@ -13,16 +13,14 @@ final class Chat {
     var id: UUID = UUID()
     var date: Date = Date()
     var title: String = "Chat Session"
-    var isStarred: Bool = false // TODO: enum for archive and recently deleted
+    var isStarred: Bool = false // TODO: enum for archive and recently deleted and quick
     var errorMessage: String = ""
     var isQuick: Bool = false
     var tokenCount: Int = 0
     
-//    , inverse: \Thread.session
     @Relationship(deleteRule: .cascade)
     var unorderedThreads =  [Thread]()
     
-//    @Transient
     var threads: [Thread] {
         get {return unorderedThreads.sorted(by: {$0.date < $1.date})}
         set { unorderedThreads = newValue }

@@ -148,13 +148,11 @@ struct ThreadMenu: View {
             ForEach(providers) { provider in
                 Menu {
                     ForEach(provider.chatModels) { model in
-                        Button {
+                        Button(model.name) {
                             thread.chat?.config.provider = provider
                             thread.chat?.config.model = model
                             
                             regen()
-                        } label: {
-                            Text(model.name)
                         }
                     }
                 } label: {

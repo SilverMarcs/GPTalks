@@ -111,7 +111,7 @@ struct VertexService: AIService {
                                     
                                     if let jsonData = jsonString.data(using: .utf8),
                                        let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-//                                        print("Parsed JSON object: \(jsonObject)")
+                                        print("Parsed JSON object: \(jsonObject)")
                                         
                                         if let type = jsonObject["type"] as? String {
                                             switch type {

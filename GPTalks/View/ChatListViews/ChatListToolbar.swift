@@ -35,10 +35,15 @@ struct ChatListToolbar: ToolbarContent {
         ToolbarItem {
             Menu {
                 ForEach(providers) { provider in
-                    Button(provider.name) {
-                        chatVM.createNewSession(provider: provider)
+                    Menu {
+                        ForEach(provider.chatModels) { model in
+                            Button(model.name) {
+                                chatVM.createNewSession(provider: provider, model: model)
+                            }
+                        }
+                    } label: {
+                        Label(provider.name, systemImage: "cpu")
                     }
-                    .keyboardShortcut(.none)
                 }
             } label: {
                 Label("Add Item", systemImage: "square.and.pencil")

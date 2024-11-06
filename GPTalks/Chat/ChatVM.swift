@@ -64,30 +64,22 @@ import SwiftUI
     }
     
     @discardableResult
-    func createNewSession(provider: Provider? = nil) -> Chat? {
-        let config: ChatConfig
+    func createNewSession(provider: Provider? = nil, model: AIModel? = nil) -> Chat? {
+        let provider = provider ?? DatabaseService.shared.getDefaultProvider()
+        let config = ChatConfig(provider: provider, purpose: .chat)
         
-        if let providedProvider = provider {
-            // Use the provided provider
-            config = ChatConfig(provider: providedProvider, purpose: .chat)
-        } else {
-            // Use the default provider
-            let fetchDefaults = FetchDescriptor<ProviderDefaults>()
-            let defaults = try! modelContext.fetch(fetchDefaults)
-            
-            let defaultProvider = defaults.first!.defaultProvider
-            
-            config = ChatConfig(provider: defaultProvider, purpose: .chat)
+        if let model = model {
+            config.model = model
         }
         
-        let newItem = Chat(config: config)
-        modelContext.insert(newItem)
+        let newChat = Chat(config: config)
+        modelContext.insert(newChat)
+        
+        searchText = ""
+        chatSelections = [newChat]
         try? modelContext.save()
         
-        self.searchText = ""
-        self.chatSelections = [newItem]
-        
-        return newItem
+        return newChat
     }
     
     // MARK: - Search
