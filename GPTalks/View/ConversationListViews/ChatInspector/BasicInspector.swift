@@ -72,7 +72,7 @@ struct BasicInspector: View {
     
     private var generateTitle: some View {
         Button {
-            if chat.isStreaming { return }
+            if chat.isReplying { return }
             isGeneratingTtile.toggle()
             Task {
                 await chat.generateTitle(forced: true)
@@ -89,7 +89,7 @@ struct BasicInspector: View {
     private var deleteAllMessages: some View {
         Button(action: {}) {
             Button(role: .destructive) {
-                if chat.isStreaming { return }
+                if chat.isReplying { return }
                 
                 showingDeleteConfirmation.toggle()
             } label: {

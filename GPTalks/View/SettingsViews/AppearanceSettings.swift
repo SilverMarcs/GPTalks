@@ -32,12 +32,6 @@ struct AppearanceSettings: View {
                     }
                 }
             }
-            
-            #if os(macOS)
-            Section("Status Bar") {
-                Toggle("Show Status Bar", isOn: $config.showStatusBar)
-            }
-            #endif
         }
         .formStyle(.grouped)
         .navigationTitle("Appearance")

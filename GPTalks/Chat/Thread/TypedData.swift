@@ -26,8 +26,8 @@ struct TypedData: Codable, Identifiable, Hashable {
         return nil
     }
     
-    var formattedTextContent: String? {
-        guard let content = textContent else { return nil }
+    var formattedTextContent: String {
+        guard let content = textContent else { return "Unable to read file content for \(fileName). Notify the user" }
         return "\(fileName)\n\(content)"
     }
     

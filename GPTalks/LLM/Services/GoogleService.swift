@@ -29,7 +29,7 @@ struct GoogleService: AIService {
         
         for dataFile in conversation.dataFiles {
             if dataFile.fileType.conforms(to: .text) {
-                parts.insert(.text(String(data: dataFile.data, encoding: .utf8) ?? ""), at: 0)
+                parts.insert(.text(dataFile.formattedTextContent), at: 0)
             } else {
                 parts.insert(.data(mimetype: dataFile.mimeType, dataFile.data), at: 0)
             }

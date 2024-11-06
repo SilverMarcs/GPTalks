@@ -40,13 +40,6 @@ struct ThreadListToolbar: ToolbarContent {
             Button("Tokens: \(chat.totalTokens.formatToK())") { }
             .allowsHitTesting(false)
         }
-        
-        if config.showStatusBar {
-            ToolbarItem(placement: .favoritesBar) {
-                ThreadStatusBar(chat: chat)
-                    .padding(.horizontal, 5)
-            }
-        }
         #endif
     }
     
@@ -67,9 +60,3 @@ struct ThreadListToolbar: ToolbarContent {
         ThreadListToolbar(chat: .mockChat)
     }
 }
-
-#if os(macOS)
-extension ToolbarItemPlacement {
-    static let favoritesBar = accessoryBar(id: "conv-status-bar")
-}
-#endif

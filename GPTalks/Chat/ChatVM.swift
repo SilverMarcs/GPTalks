@@ -25,7 +25,7 @@ import SwiftUI
     }
     
     private var activeChatAndLastThread: (Chat, Thread)? {
-        guard let chat = activeChat, !chat.isStreaming,
+        guard let chat = activeChat, !chat.isReplying,
               let lastThread = chat.threads.last else { return nil }
         return (chat, lastThread)
     }

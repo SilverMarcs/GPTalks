@@ -26,7 +26,6 @@ class AppConfig: ObservableObject {
     @AppStorage("autogenTitle") var autogenTitle: Bool = true
     @AppStorage("hideDock") var hideDock = false
     @AppStorage("onlyOneWindow") var onlyOneWindow = false
-    @AppStorage("showStatusBar") var showStatusBar = false
     
     // Quick
     @AppStorage("quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."

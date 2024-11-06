@@ -47,11 +47,6 @@ final class Chat {
     var streamingTask: Task<Void, Error>?
     
     @Transient
-    var isStreaming: Bool {
-        streamingTask != nil
-    }
-    
-    @Transient
     var inputManager = InputManager()
     
     init(config: ChatConfig) {
@@ -164,16 +159,7 @@ final class Chat {
             self.title = newTitle
         }
     }
-    
-//    func refreshTokens() {
-//        let messageTokens = threads.reduce(0) { $0 + $1.tokenCount}
-//        let sysPromptTokens = countTokensFromText(config.systemPrompt)
-//        let toolTokens = config.tools.tokenCount
-//        let inputTokens = countTokensFromText(inputManager.prompt)
-//        
-//        self.tokenCount = (messageTokens + sysPromptTokens + toolTokens + inputTokens)
-//    }
-    
+
     func addThread(_ thread: Thread) {
         if thread.role == .assistant {
             thread.isReplying = true
