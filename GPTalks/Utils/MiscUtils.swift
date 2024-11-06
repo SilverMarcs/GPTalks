@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-import GPTEncoder
 
 extension ModelContext {
     var sqliteCommand: String {
@@ -26,14 +25,6 @@ func isIPadOS() -> Bool {
     #else
     return UIDevice.current.userInterfaceIdiom == .pad
     #endif
-}
-
-
-// MARK: - Token Counting
-let sharedEncoder = GPTEncoder()
-func countTokensFromText(_ text: String) -> Int {
-    let encoded = sharedEncoder.encode(text: text)
-    return encoded.count
 }
 
 // MARK: - Keyboard Shortcuts

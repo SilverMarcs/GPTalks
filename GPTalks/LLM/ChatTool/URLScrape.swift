@@ -87,8 +87,6 @@ struct URLScrape: ToolProtocol {
         return attributedString.string
     }
     
-    static let tokenCount = countTokensFromText(description)
-    
     static let description: String = """
         You can open a URL directly if one is provided by the user.
         If you need more context or info, you may also call this with URLs returned by the googleSearch function.

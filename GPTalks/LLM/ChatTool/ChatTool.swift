@@ -41,10 +41,6 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
         toolType.vertex
     }
     
-    var tokenCount: Int {
-        toolType.tokenCount
-    }
-    
     func process(arguments: String) async throws -> ToolData {
         try await toolType.process(arguments: arguments)
     }

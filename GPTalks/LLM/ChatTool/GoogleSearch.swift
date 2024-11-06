@@ -77,8 +77,6 @@ struct GoogleSearch: ToolProtocol {
         let snippet: String
     }
     
-    static let tokenCount = countTokensFromText(description)
-    
     static let description = """
         Use this when
         - User is asking about current events or something that requires real-time information (weather, sports scores, etc.)

@@ -34,10 +34,6 @@ struct ChatConfigTools: Codable {
         return toolStates.filter { $0.value }.map { $0.key }
     }
     
-    var tokenCount: Int {
-        return enabledTools.reduce(0) { $0 + $1.tokenCount }
-    }
-    
     mutating func setGoogleCodeExecution(_ enabled: Bool) {
         googleCodeExecution = enabled
         if enabled {

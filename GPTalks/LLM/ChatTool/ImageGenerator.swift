@@ -79,8 +79,6 @@ struct ImageGenerator: ToolProtocol {
         return parameters
     }
     
-    static let tokenCount = countTokensFromText(description)
-    
     static let description = """
         If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. You may also specify the number of images to generate based on users request. If the user did not specify number, generate one image only.
         """

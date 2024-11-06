@@ -1,5 +1,5 @@
 {
-  "originHash" : "fa13da83b2289bb58d2edb043cf4d776a8955f62c867af3865c7bb262f44439a",
+  "originHash" : "6c21f911cf6dd184948ae39b4865bfed7915d3529c72a4f0f1f03946e2a41b2f",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -8,15 +8,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "102f6e6ab6bd41bfb1c1eddc85ff939c512327b1"
-      }
-    },
-    {
-      "identity" : "gptencoder",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/alfianlosari/GPTEncoder.git",
-      "state" : {
-        "revision" : "a86968867ab4380e36b904a14c42215f71efe8b4",
-        "version" : "1.0.4"
       }
     },
     {
@@ -43,7 +34,7 @@
       "location" : "https://github.com/SilverMarcs/OpenAI",
       "state" : {
         "branch" : "cancellable",
-        "revision" : "b878939669491a3f154e1a49849876cd7d7c4505"
+        "revision" : "06742165993db2aec8537d1a10087d6c8c90aae0"
       }
     },
     {

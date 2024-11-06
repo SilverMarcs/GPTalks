@@ -53,14 +53,6 @@ final class Thread {
         self.toolResponse = toolResponse
         self.isReplying = true
     }
-    
-    var tokenCount: Int {
-        let textToken = countTokensFromText(content)
-        let toolResponseToken = countTokensFromText(toolResponse?.processedContent ?? "")
-        let toolCallTokens = toolCalls.reduce(0) { $0 + countTokensFromText($1.arguments) }
-        // TODO: Count image tokens
-        return textToken + toolResponseToken + toolCallTokens
-    }
 
     func copy() -> Thread {
         return Thread(

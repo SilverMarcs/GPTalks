@@ -74,8 +74,6 @@ struct TranscribeTool: ToolProtocol {
         
     }
     
-    static let tokenCount = countTokensFromText(description)
-    
     static let description: String = """
         You can open and access contents of audio files. Just respond with a list of file names without file extensions
         """

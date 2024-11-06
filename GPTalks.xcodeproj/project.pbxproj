@@ -120,7 +120,6 @@
 		08AAFB962C3CF0DD002C04E0 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */; };
 		08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB992C3D0017002C04E0 /* ListCard.swift */; };
 		08AAFB9C2C3D01A6002C04E0 /* ChatListCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9B2C3D01A6002C04E0 /* ChatListCards.swift */; };
-		08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFBA02C3D1086002C04E0 /* GPTEncoder */; };
 		08B3AE9D2CDB58AB00D7231E /* NonStreamResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B3AE9C2CDB58AB00D7231E /* NonStreamResponse.swift */; };
 		08B5D7B82C77A64000D1F100 /* ChatWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B5D7B72C77A64000D1F100 /* ChatWindow.swift */; };
 		08B82C1D2C74EA9400DC0183 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B82C1C2C74EA9400DC0183 /* ImageViewer.swift */; };
@@ -381,7 +380,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				088CDD3D2CBF9FF600E5FB41 /* MarkdownWebView in Frameworks */,
-				08AAFBA12C3D1086002C04E0 /* GPTEncoder in Frameworks */,
 				0854A1912CB36C350055344E /* SwiftAnthropic in Frameworks */,
 				088CDD372CBF9C6500E5FB41 /* GoogleGenerativeAI in Frameworks */,
 				08C219CB2CB80D5F0062BF1B /* OpenAI in Frameworks */,
@@ -874,7 +872,6 @@
 			name = GPTalks;
 			packageProductDependencies = (
 				08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */,
-				08AAFBA02C3D1086002C04E0 /* GPTEncoder */,
 				0854A1902CB36C350055344E /* SwiftAnthropic */,
 				08C219CA2CB80D5F0062BF1B /* OpenAI */,
 				088CDD362CBF9C6500E5FB41 /* GoogleGenerativeAI */,
@@ -955,7 +952,6 @@
 			packageReferences = (
 				08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
 				08AAFB942C3CF0DD002C04E0 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
-				08AAFB9F2C3D1086002C04E0 /* XCRemoteSwiftPackageReference "GPTEncoder" */,
 				086783102C5CF16800BB768F /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 				08C219C92CB80D5F0062BF1B /* XCRemoteSwiftPackageReference "OpenAI" */,
 				088CDD3B2CBF9FF600E5FB41 /* XCRemoteSwiftPackageReference "markdown-webview" */,
@@ -1577,14 +1573,6 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		08AAFB9F2C3D1086002C04E0 /* XCRemoteSwiftPackageReference "GPTEncoder" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/alfianlosari/GPTEncoder.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.4;
-			};
-		};
 		08C219C92CB80D5F0062BF1B /* XCRemoteSwiftPackageReference "OpenAI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/OpenAI";
@@ -1615,11 +1603,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 08AAFB942C3CF0DD002C04E0 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
-		};
-		08AAFBA02C3D1086002C04E0 /* GPTEncoder */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08AAFB9F2C3D1086002C04E0 /* XCRemoteSwiftPackageReference "GPTEncoder" */;
-			productName = GPTEncoder;
 		};
 		08C219CA2CB80D5F0062BF1B /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
