@@ -51,9 +51,17 @@ struct GoogleService: AIService {
         return streamGoogleResponse(model: model, messages: messages)
     }
     
-    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> StreamResponse {
+    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> NonStreamResponse {
         let (model, messages) = createModelAndMessages(from: conversations, config: config)
-        return try await nonStreamingGoogleResponse(model: model, messages: messages)
+        let response = try await model.generateContent(messages)
+        let toolCalls = response.functionCalls.map {
+            ChatToolCall(toolCallId: "",
+                         tool: ChatTool(rawValue: $0.name)!,
+                         arguments: encodeJSONObjectToString($0.args))
+        }
+        
+        // TODO: do token count
+        return NonStreamResponse(content: response.text, toolCalls: toolCalls, inputTokens: 0, outputTokens: 0)
     }
     
     static private func createModelAndMessages(from conversations: [Thread], config: ChatConfig) -> (GenerativeModel, [ModelContent]) {

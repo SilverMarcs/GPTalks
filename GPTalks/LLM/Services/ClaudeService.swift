@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 import SwiftAnthropic
 
+
+// TODO: refactor and combiine common variabels into static props
 struct ClaudeService: AIService {
     typealias ConvertedType = MessageParameter.Message
     
@@ -51,9 +53,22 @@ struct ClaudeService: AIService {
         return streamClaudeResponse(parameters: parameters, config: config)
     }
     
-    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> StreamResponse {
+    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> NonStreamResponse {
         let parameters = createParameters(from: conversations, config: config, stream: false)
-        return try await nonStreamingClaudeResponse(parameters: parameters, config: config)
+        let service = getService(provider: config.provider)
+        
+        let message = try await service.createMessage(parameters)
+        // Extract the text content from the message
+        let content = message.content.compactMap { content -> String? in
+            switch content {
+            case .text(let text):
+                return text
+            case .toolUse:
+                return nil // TODO: claude toolCalls
+            }
+        }.joined()
+        
+        return NonStreamResponse(content: content, toolCalls: nil, inputTokens: 0, outputTokens: 0)
     }
     
     static private func createParameters(from conversations: [Thread], config: ChatConfig, stream: Bool) -> MessageParameter {
@@ -111,7 +126,6 @@ struct ClaudeService: AIService {
             }
         }.joined()
         
-//        return content
         return .content(content)
     }
     
@@ -134,5 +148,12 @@ struct ClaudeService: AIService {
         } catch {
             return false
         }
+    }
+    
+    static func getService(provider: Provider) -> AnthropicService {
+        let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
+        return AnthropicServiceFactory.service(
+            apiKey: provider.apiKey,
+            basePath: provider.scheme.rawValue + "://" + provider.host, betaHeaders: betaHeaders)
     }
 }

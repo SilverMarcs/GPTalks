@@ -16,7 +16,7 @@ final class Chat {
     var isStarred: Bool = false // TODO: enum for archive and recently deleted and quick
     var errorMessage: String = ""
     var isQuick: Bool = false
-    var tokenCount: Int = 0
+    var totalTokens: Int = 0
     
     @Relationship(deleteRule: .cascade)
     var unorderedThreads =  [Thread]()
@@ -72,6 +72,7 @@ final class Chat {
 
     @MainActor
     func processRequest() async {
+        self.date = Date()
         streamingTask = Task {
             let streamer = StreamHandler(session: self)
             
@@ -105,8 +106,7 @@ final class Chat {
     @MainActor
     func sendInput() async {
         errorMessage = ""
-        self.date = Date()
-
+        
         guard !inputManager.prompt.isEmpty else { return }
 
         if inputManager.state == .editing {
@@ -165,14 +165,14 @@ final class Chat {
         }
     }
     
-    func refreshTokens() {
-        let messageTokens = threads.reduce(0) { $0 + $1.tokenCount}
-        let sysPromptTokens = countTokensFromText(config.systemPrompt)
-        let toolTokens = config.tools.tokenCount
-        let inputTokens = countTokensFromText(inputManager.prompt)
-        
-        self.tokenCount = (messageTokens + sysPromptTokens + toolTokens + inputTokens)
-    }
+//    func refreshTokens() {
+//        let messageTokens = threads.reduce(0) { $0 + $1.tokenCount}
+//        let sysPromptTokens = countTokensFromText(config.systemPrompt)
+//        let toolTokens = config.tools.tokenCount
+//        let inputTokens = countTokensFromText(inputManager.prompt)
+//        
+//        self.tokenCount = (messageTokens + sysPromptTokens + toolTokens + inputTokens)
+//    }
     
     func addThread(_ thread: Thread) {
         if thread.role == .assistant {
@@ -218,6 +218,7 @@ final class Chat {
         }
         
         newSession.title = "\(leading) \(self.title)"
+        newSession.totalTokens = self.totalTokens
         
         if let thread = thread, let index = threads.firstIndex(of: thread) {
             newSession.threads = threads.prefix(through: index).map { $0.copy() }

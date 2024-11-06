@@ -49,6 +49,14 @@ struct VertexService: AIService {
                     ]
                 ]
                 contentObjects.append(imageContent)
+            } else if data.fileType.conforms(to: .text) {
+                // TODO: make this universal for all `aiservices`
+                if let extracted = data.formattedTextContent {
+                    contentObjects.append([
+                        "type": "text",
+                        "text": extracted
+                    ])
+                }
             } else {
                 let warning = "Notify the user if a file has been added but the assistant could not find a compatible plugin to read that file type."
                 let detail = "Thread ID: \(conversation.id)\nFile: \(data.fileName)\n\(warning)"
@@ -92,6 +100,9 @@ struct VertexService: AIService {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
+                    var inputTokens = 0
+                    var outputTokens = 0
+                    
                     let request = try await createRequest(from: conversations, config: config)
                     let (asyncBytes, _) = try await URLSession.shared.bytes(for: request)
                     
@@ -121,19 +132,29 @@ struct VertexService: AIService {
                                                     isToolUse = true
                                                     toolCalls.append(contentBlock)
                                                 }
+                                            case "message_start":
+                                                if let message = jsonObject["message"] as? [String: Any],
+                                                   let usage = message["usage"] as? [String: Any],
+                                                   let inputTokenCount = usage["input_tokens"] as? Int {
+                                                    inputTokens = inputTokenCount
+                                                    continuation.yield(.inputTokens(inputTokens))
+                                                }
                                             case "content_block_delta":
-                                                if isToolUse {
-                                                    if let delta = jsonObject["delta"] as? [String: Any],
-                                                       let partialJson = delta["partial_json"] as? String {
-                                                        toolCalls[toolCalls.count - 1]["input"] = (toolCalls[toolCalls.count - 1]["input"] as? String ?? "") + partialJson
-                                                    }
-                                                } else if let delta = jsonObject["delta"] as? [String: Any],
-                                                          let text = delta["text"] as? String {
+                                                if !isToolUse, let delta = jsonObject["delta"] as? [String: Any],
+                                                   let text = delta["text"] as? String {
                                                     continuation.yield(.content(text))
                                                 }
                                             case "content_block_stop":
                                                 if isToolUse {
                                                     isToolUse = false
+                                                }
+                                            case "message_delta":
+                                                print("Message delta: \(jsonObject)")
+                                                if let usage = jsonObject["usage"] as? [String: Any],
+                                                   let outputTokenCount = usage["output_tokens"] as? Int {
+                                                    outputTokens = outputTokenCount
+                                                    continuation.yield(.outputTokens(outputTokens))
+                                                    print("Output tokens: \(outputTokens)")
                                                 }
                                             case "message_stop":
                                                 if !toolCalls.isEmpty {
@@ -167,7 +188,7 @@ struct VertexService: AIService {
         }
     }
 
-    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> StreamResponse {
+    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> NonStreamResponse {
         let request = try await createRequest(from: conversations, config: config)
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -186,29 +207,35 @@ struct VertexService: AIService {
         }
 
         guard let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-              let contentArray = jsonObject["content"] as? [[String: Any]] else {
+              let contentArray = jsonObject["content"] as? [[String: Any]],
+              let usage = jsonObject["usage"] as? [String: Int] else {
             throw RuntimeError("Failed to parse JSON response")
         }
         
         let toolCalls = contentArray.filter { $0["type"] as? String == "tool_use" }
-        if !toolCalls.isEmpty {
-            let calls: [ChatToolCall] = toolCalls.compactMap { toolCall in
-                guard let id = toolCall["id"] as? String,
-                      let name = toolCall["name"] as? String,
-                      let tool = ChatTool(rawValue: name),
-                      let input = toolCall["input"] as? [String: Any],
-                      let inputJson = try? JSONSerialization.data(withJSONObject: input),
-                      let inputString = String(data: inputJson, encoding: .utf8) else {
-                    return nil
-                }
-                return ChatToolCall(toolCallId: id, tool: tool, arguments: inputString)
+        let calls: [ChatToolCall] = toolCalls.compactMap { toolCall in
+            guard let id = toolCall["id"] as? String,
+                  let name = toolCall["name"] as? String,
+                  let tool = ChatTool(rawValue: name),
+                  let input = toolCall["input"] as? [String: Any],
+                  let inputJson = try? JSONSerialization.data(withJSONObject: input),
+                  let inputString = String(data: inputJson, encoding: .utf8) else {
+                return nil
             }
-            return .toolCalls(calls)
+            return ChatToolCall(toolCallId: id, tool: tool, arguments: inputString)
         }
         
-        // If no tool calls, return the text content
         let text = contentArray.compactMap { $0["text"] as? String }.joined(separator: " ")
-        return .content(text)
+        
+        let inputTokens = usage["input_tokens"] ?? 0
+        let outputTokens = usage["output_tokens"] ?? 0
+        
+        return NonStreamResponse(
+            content: text.isEmpty ? nil : text,
+            toolCalls: calls.isEmpty ? nil : calls,
+            inputTokens: inputTokens,
+            outputTokens: outputTokens
+        )
     }
 
     static func createRequest(from conversations: [Thread], config: ChatConfig) async throws -> URLRequest {

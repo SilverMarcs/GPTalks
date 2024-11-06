@@ -10,4 +10,6 @@ import Foundation
 enum StreamResponse {
     case content(String)
     case toolCalls([ChatToolCall])
+    case inputTokens(Int)
+    case outputTokens(Int)
 }

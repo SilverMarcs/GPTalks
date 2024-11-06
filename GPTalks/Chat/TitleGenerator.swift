@@ -24,14 +24,7 @@ enum TitleGenerator {
         do {
             let serviceType = titleConfig.provider.type.getService()
             let response = try await serviceType.nonStreamingResponse(from: [user], config: titleConfig)
-            let title: String
-            
-            switch response {
-            case .content(let content):
-                title = content
-            case .toolCalls:
-                title = "Error Generating Title"
-            }
+            let title = response.content ?? "Error generating title"
             
             return title.trimmingCharacters(in: .whitespacesAndNewlines)
         } catch {

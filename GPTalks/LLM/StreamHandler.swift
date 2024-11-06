@@ -34,6 +34,8 @@ struct StreamHandler {
         var streamText = ""
         var lastUIUpdateTime = Date()
         var pendingToolCalls: [ChatToolCall] = []
+        var inputTokens = 0
+        var outputTokens = 0
         
         let service = session.config.provider.type.getService()
 
@@ -50,6 +52,10 @@ struct StreamHandler {
                 }
             case .toolCalls(let calls):
                 pendingToolCalls.append(contentsOf: calls)
+            case .inputTokens(let tokens):
+                inputTokens = tokens
+            case .outputTokens(let tokens):
+                outputTokens = tokens
             }
         }
 
@@ -57,27 +63,9 @@ struct StreamHandler {
             try await handleToolCalls(pendingToolCalls)
         }
 
-        finalizeStream(streamText: streamText, toolCalls: pendingToolCalls)
-    }
-
-    @MainActor
-    private func handleNonStream() async throws {
-        let service = session.config.provider.type.getService()
-        let response = try await service.nonStreamingResponse(from: session.threads, config: session.config)
-        
-        switch response {
-        case .content(let content):
-            assistant.content = content
-            assistant.isReplying = false
-        case .toolCalls(let calls):
-            try await handleToolCalls(calls)
-        }
-    }
-
-    @MainActor
-    private func finalizeStream(streamText: String, toolCalls: [ChatToolCall]) {
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiUpdateInterval) {
-            assistant.toolCalls = toolCalls
+            session.totalTokens = inputTokens + outputTokens
+            assistant.toolCalls = pendingToolCalls
             assistant.content = streamText
             assistant.isReplying = false
             session.scrollBottom()
@@ -85,6 +73,40 @@ struct StreamHandler {
             try? assistant.modelContext?.save()
         }
     }
+
+    @MainActor
+    private func handleNonStream() async throws {
+        let service = session.config.provider.type.getService()
+        let response = try await service.nonStreamingResponse(from: session.threads, config: session.config)
+        
+        if let content = response.content {
+            assistant.content = content
+        }
+        
+        if let calls = response.toolCalls {
+            try await handleToolCalls(calls)
+        }
+        
+        session.totalTokens = response.inputTokens + response.outputTokens
+        assistant.isReplying = false
+        session.scrollBottom()
+        session.hasUserScrolled = false
+        try? assistant.modelContext?.save()
+    }
+
+
+//    @MainActor
+//    private func finalizeStream(streamText: String, toolCalls: [ChatToolCall], totalTokens: Int) {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiUpdateInterval) {
+//            session.totalTokens = totalTokens
+//            assistant.toolCalls = toolCalls
+//            assistant.content = streamText
+//            assistant.isReplying = false
+//            session.scrollBottom()
+//            session.hasUserScrolled = false
+//            try? assistant.modelContext?.save()
+//        }
+//    }
 
     @MainActor
     private func handleToolCalls(_ toolCalls: [ChatToolCall]) async throws {

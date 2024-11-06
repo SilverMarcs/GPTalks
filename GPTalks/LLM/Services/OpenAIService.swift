@@ -38,6 +38,10 @@ struct OpenAIService: AIService {
                 if data.fileType.conforms(to: .image) {
                     let url = "data:image/jpeg;base64,\(data.data.base64EncodedString())"
                     contents.append(.init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: url, detail: .low))))
+                } else if data.fileType.conforms(to: .text) {
+                    if let extracted = data.formattedTextContent {   
+                        contents.append(.init(chatCompletionContentPartTextParam: .init(text: extracted)))
+                    }
                 } else {
                     let warning = "Notify the user if a file has been added but the assistant could not find a compatible plugin to read that file type."
                     contents.append(.init(chatCompletionContentPartTextParam: .init(text: "Thread ID: \(conversation.id)\nFile: \(data.fileName)\n\(warning)")))
@@ -95,37 +99,6 @@ struct OpenAIService: AIService {
     
     static func streamResponse(from conversations: [Thread], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let query = createQuery(from: conversations, config: config, stream: config.stream)
-        return streamOpenAIResponse(query: query, config: config)
-    }
-    
-    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> StreamResponse {
-        let query = createQuery(from: conversations, config: config, stream: config.stream)
-        return try await nonStreamingOpenAIResponse(query: query, config: config)
-    }
-    
-    static func createQuery(from conversations: [Thread], config: ChatConfig, stream: Bool) -> ChatQuery {
-        var messages = conversations.map { convert(conversation: $0) }
-        if !config.systemPrompt.isEmpty {
-            let systemPrompt = Thread(role: .system, content: config.systemPrompt)
-            messages.insert(convert(conversation: systemPrompt), at: 0)
-        }
-        
-        let tools = config.tools.enabledTools.map { $0.openai }
-    
-        return ChatQuery(
-            messages: messages,
-            model: config.model.code,
-            frequencyPenalty: config.frequencyPenalty,
-            maxTokens: config.maxTokens,
-            presencePenalty: config.presencePenalty,
-            temperature: config.temperature,
-            tools: tools.isEmpty ? nil : tools,
-            topP: config.topP,
-            stream: stream
-        )
-    }
-    
-    static func streamOpenAIResponse(query: ChatQuery, config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let service = getService(provider: config.provider)
         
         return AsyncThrowingStream { continuation in
@@ -173,23 +146,49 @@ struct OpenAIService: AIService {
         }
     }
     
-    static func nonStreamingOpenAIResponse(query: ChatQuery, config: ChatConfig) async throws -> StreamResponse {
+    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> NonStreamResponse {
+        let query = createQuery(from: conversations, config: config, stream: config.stream)
         let service = getService(provider: config.provider)
         
         let result = try await service.chats(query: query)
-        if let content = result.choices.first?.message.content?.string {
-            return .content(content)
-        } else if let tools = result.choices.first?.message.toolCalls, tools.count > 0 {
-            // Create toolCalls from tools
-            let toolCalls = tools.map { tool in
+        
+        let content = result.choices.first?.message.content?.string
+        var toolCalls: [ChatToolCall]? = nil
+        
+        if let tools = result.choices.first?.message.toolCalls, !tools.isEmpty {
+            toolCalls = tools.map { tool in
                 ChatToolCall(toolCallId: tool.id, tool: ChatTool(rawValue: tool.function.name)!, arguments: tool.function.arguments)
             }
-            
-            return .toolCalls(toolCalls)
-        } else {
-            // Add a default return statement to handle all cases
-            return .content("No content or tool calls available.")
         }
+        
+        return NonStreamResponse(
+            content: content,
+            toolCalls: toolCalls,
+            inputTokens: result.usage?.promptTokens ?? 0,
+            outputTokens: result.usage?.completionTokens ?? 0
+        )
+    }
+    
+    static func createQuery(from conversations: [Thread], config: ChatConfig, stream: Bool) -> ChatQuery {
+        var messages = conversations.map { convert(conversation: $0) }
+        if !config.systemPrompt.isEmpty {
+            let systemPrompt = Thread(role: .system, content: config.systemPrompt)
+            messages.insert(convert(conversation: systemPrompt), at: 0)
+        }
+        
+        let tools = config.tools.enabledTools.map { $0.openai }
+    
+        return ChatQuery(
+            messages: messages,
+            model: config.model.code,
+            frequencyPenalty: config.frequencyPenalty,
+            maxTokens: config.maxTokens,
+            presencePenalty: config.presencePenalty,
+            temperature: config.temperature,
+            tools: tools.isEmpty ? nil : tools,
+            topP: config.topP,
+            stream: stream
+        )
     }
     
     static func testModel(provider: Provider, model: AIModel) async -> Bool {

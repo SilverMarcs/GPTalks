@@ -37,14 +37,8 @@ struct ThreadListToolbar: ToolbarContent {
         
         #if os(macOS)
         ToolbarItem(placement: .primaryAction) {
-            Button("Tokens: \(chat.tokenCount.formatToK())") { }
+            Button("Tokens: \(chat.totalTokens.formatToK())") { }
             .allowsHitTesting(false)
-            .task {
-                Task {
-                    try await Task.sleep(nanoseconds: 500_000_000)
-                    chat.refreshTokens()
-                }
-            }
         }
         
         if config.showStatusBar {

@@ -14,7 +14,7 @@ struct ChatList: View {
     @Environment(\.modelContext) var modelContext
     
     @Query(filter: #Predicate { !$0.isQuick },
-           sort: [SortDescriptor(\Chat.date, order: .reverse)])
+           sort: [SortDescriptor(\Chat.date, order: .reverse)]) // TODO: animation
     var chats: [Chat]
     
     @FocusState private var isSearchFieldFocused: Bool
