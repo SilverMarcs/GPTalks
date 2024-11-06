@@ -1,15 +1,6 @@
 {
-  "originHash" : "6c21f911cf6dd184948ae39b4865bfed7915d3529c72a4f0f1f03946e2a41b2f",
+  "originHash" : "c7c375b9c47cf326b6c82aa83e87bb83c9574bcec0051484b12666586f262d75",
   "pins" : [
-    {
-      "identity" : "generative-ai-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/generative-ai-swift",
-      "state" : {
-        "branch" : "main",
-        "revision" : "102f6e6ab6bd41bfb1c1eddc85ff939c512327b1"
-      }
-    },
     {
       "identity" : "keyboardshortcuts",
       "kind" : "remoteSourceControl",
