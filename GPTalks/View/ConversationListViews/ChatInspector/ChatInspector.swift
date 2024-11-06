@@ -10,14 +10,13 @@ import SwiftData
 
 struct ChatInspector: View {
     @Environment(\.dismiss) var dismiss
-    var session: Chat
+    var chat: Chat
     
     @State private var selectedTab: Tab = .basic
     
     var body: some View {
         #if os(macOS)
         macos
-            .frame(height: 625)
         #else
         ios
         #endif
@@ -65,9 +64,9 @@ struct ChatInspector: View {
         Group {
             switch selectedTab {
             case .basic:
-                BasicChatInspector(session: session)
+                BasicInspector(chat: chat)
             case .advanced:
-                AdvancedChatInspector(session: session)
+                AdvancedInspector(chat: chat)
             }
         }
     }
@@ -91,6 +90,6 @@ struct ChatInspector: View {
 
 
 #Preview {
-    ChatInspector(session: .mockChat)
+    ChatInspector(chat: .mockChat)
         .frame(width: 400, height: 700)
 }

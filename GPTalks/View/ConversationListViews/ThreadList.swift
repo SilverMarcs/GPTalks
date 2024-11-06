@@ -12,35 +12,35 @@ struct ThreadList: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.isQuick) var isQuick
     
-    @Bindable var session: Chat
+    @Bindable var chat: Chat
     
     @ObservedObject var config: AppConfig = AppConfig.shared
     
     @Environment(\.modelContext) var modelContext
-    @Environment(ChatVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var chatVM
     
     var body: some View {
         ScrollViewReader { proxy in
             List {
-                ForEach(session.threads, id: \.self) { thread in
+                ForEach(chat.threads, id: \.self) { thread in
                     ThreadView(thread: thread)
                         #if os(iOS)
                         .opacity(0.9)
                         #endif
                 }
                 .listRowSeparator(.hidden)
-
-                ErrorMessageView(message: $session.errorMessage)
+                
+                ErrorMessageView(message: $chat.errorMessage)
                     .listRowSeparator(.hidden)
                     .transaction { $0.animation = nil }
-            
+                
                 Color.clear
                     .transaction { $0.animation = nil }
                     .id(String.bottomID)
                     .listRowSeparator(.hidden)
             }
             .task {
-                session.proxy = proxy
+                chat.proxy = proxy
                 
                 #if os(macOS)
                 scrollToBottom(proxy: proxy, animated: false)
@@ -49,27 +49,27 @@ struct ThreadList: View {
                 scrollToBottom(proxy: proxy, delay: 0.2)
             }
             .toolbar {
-                ThreadListToolbar(session: session)
+                ThreadListToolbar(chat: chat)
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
-                    ChatInputView(session: session)
+                    ChatInputView(chat: chat)
                 }
             }
-            .onChange(of: session.inputManager.prompt) {
-                if session.inputManager.state == .normal {
+            .onChange(of: chat.inputManager.prompt) {
+                if chat.inputManager.state == .normal {
                     scrollToBottom(proxy: proxy)
                 }
             }
             .onDrop(of: [.item], isTargeted: nil) { providers in
-                session.inputManager.handleDrop(providers)
+                chat.inputManager.handleDrop(providers)
             }
             .navigationTitle(navTitle)
             #if os(macOS)
-            .navigationSubtitle("\(session.config.systemPrompt.prefix(70))")
+            .navigationSubtitle("\(chat.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-                if session.isReplying {  // TODO: use isstreamong here.
-                    session.hasUserScrolled = true
+                if chat.isReplying {  // TODO: use isstreamong here.
+                    chat.hasUserScrolled = true
                 }
             }
             #else
@@ -86,11 +86,11 @@ struct ThreadList: View {
     }
     
     var navTitle: String {
-        horizontalSizeClass == .compact ? session.config.model.name : session.title
+        horizontalSizeClass == .compact ? chat.config.model.name : chat.title
     }
 }
 
 #Preview {
-    ThreadList(session: .mockChat)
+    ThreadList(chat: .mockChat)
         .environment(ChatVM.mockSessionVM)
 }

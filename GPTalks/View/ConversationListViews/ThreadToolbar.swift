@@ -10,10 +10,10 @@ import SwiftData
 
 struct ThreadListToolbar: ToolbarContent {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(ChatVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var chatVM
     @ObservedObject var config = AppConfig.shared
     
-    @Bindable var session: Chat
+    @Bindable var chat: Chat
     
     @State var showingInspector: Bool = false
     
@@ -26,7 +26,10 @@ struct ThreadListToolbar: ToolbarContent {
             }
             .keyboardShortcut(".")
             .sheet(isPresented: $showingInspector) {
-                ChatInspector(session: session)
+                ChatInspector(chat: chat)
+                    #if os(macOS)
+                    .frame(height: 625)
+                    #endif
                     .presentationDetents(horizontalSizeClass == .compact ? [.medium, .large] : [.large])
                     .presentationDragIndicator(.hidden)
             }
@@ -34,19 +37,19 @@ struct ThreadListToolbar: ToolbarContent {
         
         #if os(macOS)
         ToolbarItem(placement: .primaryAction) {
-            Button("Tokens: \(session.tokenCount.formatToK())") { }
+            Button("Tokens: \(chat.tokenCount.formatToK())") { }
             .allowsHitTesting(false)
             .task {
                 Task {
                     try await Task.sleep(nanoseconds: 500_000_000)
-                    session.refreshTokens()
+                    chat.refreshTokens()
                 }
             }
         }
         
         if config.showStatusBar {
             ToolbarItem(placement: .favoritesBar) {
-                ThreadStatusBar(session: session)
+                ThreadStatusBar(chat: chat)
                     .padding(.horizontal, 5)
             }
         }
@@ -67,7 +70,7 @@ struct ThreadListToolbar: ToolbarContent {
     }
     .frame(width: 700, height: 300)
     .toolbar {
-        ThreadListToolbar(session: .mockChat)
+        ThreadListToolbar(chat: .mockChat)
     }
 }
 

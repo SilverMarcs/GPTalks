@@ -12,7 +12,7 @@ import SwiftData
 
 struct ChatInputView: View {
     @Environment(\.colorScheme) var colorScheme
-    @Bindable var session: Chat
+    @Bindable var chat: Chat
     
     @State private var isFilePickerPresented: Bool = false
     @State private var showPhotosPicker = false
@@ -22,7 +22,7 @@ struct ChatInputView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if session.inputManager.state == .editing {
+            if chat.inputManager.state == .editing {
                 cancelEditing
             }
             
@@ -33,18 +33,18 @@ struct ChatInputView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Spacer(minLength: 0)
                     
-                    if !session.inputManager.dataFiles.isEmpty {
-                        DataFilesView(dataFiles: $session.inputManager.dataFiles, isCrossable: true, edge: .leading)
+                    if !chat.inputManager.dataFiles.isEmpty {
+                        DataFilesView(dataFiles: $chat.inputManager.dataFiles, isCrossable: true, edge: .leading)
                             .padding(.bottom, 5)
                     }
                     
-                    InputEditor(prompt: $session.inputManager.prompt, provider: session.config.provider, isFocused: _isFocused)
+                    InputEditor(prompt: $chat.inputManager.prompt, provider: chat.config.provider, isFocused: _isFocused)
                     
                     Spacer(minLength: 0)
                 }
                 
-                ActionButton(size: imageSize, isStop: session.isReplying) {
-                    session.isReplying ? session.stopStreaming() : sendInput()
+                ActionButton(size: imageSize, isStop: chat.isReplying) {
+                    chat.isReplying ? chat.stopStreaming() : sendInput()
                 }
             }
             .padding(6)
@@ -56,7 +56,7 @@ struct ChatInputView: View {
     var plusButton: some View {
         Menu {
             #if !os(macOS)
-            Button(action: {session.showCamera = true}) {
+            Button(action: {chat.showCamera = true}) {
                 Label("Open Camera", systemImage: "camera")
             }
             #endif
@@ -78,15 +78,15 @@ struct ChatInputView: View {
         .buttonStyle(.plain)
         .menuIndicator(.hidden)
         .fixedSize()
-        .multipleFileImporter(isPresented: $isFilePickerPresented, inputManager: session.inputManager)
+        .multipleFileImporter(isPresented: $isFilePickerPresented, inputManager: chat.inputManager)
         .photosPicker(isPresented: $showPhotosPicker, selection: $selectedPhotos, matching: .images)
         .task(id: selectedPhotos) {
-            await session.inputManager.loadTransferredPhotos(from: selectedPhotos)
+            await chat.inputManager.loadTransferredPhotos(from: selectedPhotos)
             selectedPhotos.removeAll()
         }
         #if !os(macOS)
-        .fullScreenCover(isPresented: $session.showCamera) {
-            CameraView(session: session)
+        .fullScreenCover(isPresented: $chat.showCamera) {
+            CameraView(chat: chat)
                 .ignoresSafeArea()
         }
         #endif
@@ -96,7 +96,7 @@ struct ChatInputView: View {
     var cancelEditing: some View {
         HStack(spacing: 5) {
             Button {
-                session.inputManager.resetEditing()
+                chat.inputManager.resetEditing()
             } label: {
                 Image(systemName: "xmark")
                     .fontWeight(.semibold)
@@ -127,12 +127,12 @@ struct ChatInputView: View {
         isFocused = false
         #endif
         Task { @MainActor in
-            await session.sendInput()
+            await chat.sendInput()
         }
     }
 }
 
 #Preview {
-    ThreadList(session: .mockChat)
+    ThreadList(chat: .mockChat)
         .environment(ChatVM(modelContext: try! ModelContainer(for: Chat.self).mainContext))
 }

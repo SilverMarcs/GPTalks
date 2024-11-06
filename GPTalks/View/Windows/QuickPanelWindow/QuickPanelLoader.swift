@@ -11,13 +11,13 @@ import SwiftData
 struct QuickPanelLoader: View {
     @Environment(\.modelContext) var modelContext
     
-    @State private var session: Chat?
+    @State private var chat: Chat?
     @Binding var isPresented: Bool
     @Binding var showAdditionalContent: Bool
     
     var body: some View {
-        if let session = session {
-            QuickPanelView(session: session, isPresented: $isPresented, showAdditionalContent: $showAdditionalContent)
+        if let chat = chat {
+            QuickPanelView(chat: chat, isPresented: $isPresented, showAdditionalContent: $showAdditionalContent)
         } else {
             Text("Something went wrong")
                 .font(.title)
@@ -38,7 +38,7 @@ struct QuickPanelLoader: View {
         
         do {
             let quickSessions = try modelContext.fetch(descriptor)
-            session = quickSessions.first
+            chat = quickSessions.first
         } catch {
             print("Error fetching quick session: \(error)")
         }

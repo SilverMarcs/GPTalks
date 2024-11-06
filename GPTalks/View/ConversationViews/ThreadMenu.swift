@@ -92,8 +92,8 @@ struct ThreadMenu: View {
             Button {
                 isForking = true
                 Task {
-                    if let newSession = await thread.chat?.copy(from: thread, purpose: .chat) {
-                        sessionVM.fork(newSession: newSession)
+                    if let newChat = await thread.chat?.copy(from: thread, purpose: .chat) {
+                        sessionVM.fork(newChat: newChat)
                         isForking = false
                     }
                 }

@@ -51,10 +51,10 @@ import SwiftUI
     }
     
     // must provide new session, not the one to be forked
-    func fork(newSession: Chat) {
-        modelContext.insert(newSession)
+    func fork(newChat: Chat) {
+        modelContext.insert(newChat)
         #if os(macOS)
-        self.chatSelections = [newSession]
+        self.chatSelections = [newChat]
         #else
         self.chatSelections = []
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

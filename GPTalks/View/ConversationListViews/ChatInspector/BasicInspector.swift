@@ -1,5 +1,5 @@
 //
-//  BasicChatInspector.swift
+//  BasicInspector.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 15/09/2024.
@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct BasicChatInspector: View {
+struct BasicInspector: View {
     @Environment(\.providers) var providers
     
-    @Bindable var session: Chat
+    @Bindable var chat: Chat
     
     @State var isGeneratingTtile: Bool = false
     @State var showingDeleteConfirmation: Bool = false
@@ -27,20 +27,20 @@ struct BasicChatInspector: View {
             
             Section("Models") {
                 ProviderPicker(
-                    provider: $session.config.provider,
+                    provider: $chat.config.provider,
                     providers: providers,
                     onChange: { newProvider in
-                        session.config.model = newProvider.chatModel
+                        chat.config.model = newProvider.chatModel
                     }
                 )
                 
-                ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
+                ModelPicker(model: $chat.config.model, models: chat.config.provider.chatModels, label: "Model")
             }
             
             Section("Parameters") {
-                Toggle("Stream", isOn: $session.config.stream)
-                TemperatureSlider(temperature: $session.config.temperature, shortLabel: true)
-                MaxTokensPicker(value: $session.config.maxTokens)
+                Toggle("Stream", isOn: $chat.config.stream)
+                TemperatureSlider(temperature: $chat.config.temperature, shortLabel: true)
+                MaxTokensPicker(value: $chat.config.maxTokens)
             }
             
             Section("System Prompt") {
@@ -55,13 +55,13 @@ struct BasicChatInspector: View {
     }
     
     private var title: some View {
-        TextField("Title", text: $session.title)
+        TextField("Title", text: $chat.title)
             .lineLimit(1)
             .labelsHidden()
     }
     
     private var sysPrompt: some View {
-        TextField("System Prompt", text: $session.config.systemPrompt, axis: .vertical)
+        TextField("System Prompt", text: $chat.config.systemPrompt, axis: .vertical)
             #if os(macOS)
             .lineLimit(6, reservesSpace: true)
             #else
@@ -72,10 +72,10 @@ struct BasicChatInspector: View {
     
     private var generateTitle: some View {
         Button {
-            if session.isStreaming { return }
+            if chat.isStreaming { return }
             isGeneratingTtile.toggle()
             Task {
-                await session.generateTitle(forced: true)
+                await chat.generateTitle(forced: true)
                 isGeneratingTtile.toggle()
             }
         } label: {
@@ -89,7 +89,7 @@ struct BasicChatInspector: View {
     private var deleteAllMessages: some View {
         Button(action: {}) {
             Button(role: .destructive) {
-                if session.isStreaming { return }
+                if chat.isStreaming { return }
                 
                 showingDeleteConfirmation.toggle()
             } label: {
@@ -108,7 +108,7 @@ struct BasicChatInspector: View {
         .listRowInsets(EdgeInsets())
         .confirmationDialog("Are you sure you want to delete all messages?", isPresented: $showingDeleteConfirmation) {
             Button("Delete All", role: .destructive) {
-                session.deleteAllThreads()
+                chat.deleteAllThreads()
             }
             Button("Cancel", role: .cancel) {}
         }

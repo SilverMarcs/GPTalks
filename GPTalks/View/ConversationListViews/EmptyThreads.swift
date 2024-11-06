@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct EmptyThreadList: View {
-    @Bindable var session: Chat
+    @Bindable var chat: Chat
     
     var body: some View {
-        Image(session.config.provider.type.imageName)
+        Image(chat.config.provider.type.imageName)
             .resizable()
             .scaledToFit()
             .frame(width: 100, height: 100)
@@ -21,5 +21,5 @@ struct EmptyThreadList: View {
 }
 
 #Preview {
-    EmptyThreadList(session: .mockChat)
+    EmptyThreadList(chat: .mockChat)
 }

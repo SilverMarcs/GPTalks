@@ -11,9 +11,9 @@ import SwiftData
 #if os(macOS)
 struct QuickPanelView: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(ChatVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var chatVM
     
-    @Bindable var session: Chat
+    @Bindable var chat: Chat
     @Binding var isPresented: Bool
     @Binding var showAdditionalContent: Bool
     
@@ -31,18 +31,18 @@ struct QuickPanelView: View {
                 .padding(.leading, 1)
                 .frame(height: 57)
             
-            if !session.inputManager.dataFiles.isEmpty {
-                DataFilesView(dataFiles: $session.inputManager.dataFiles, isCrossable: true)
+            if !chat.inputManager.dataFiles.isEmpty {
+                DataFilesView(dataFiles: $chat.inputManager.dataFiles, isCrossable: true)
                     .safeAreaPadding(.horizontal)
                     .safeAreaPadding(.vertical, 10)
             }
             
-            if session.threads.isEmpty {
+            if chat.threads.isEmpty {
                 Spacer()
             } else {
                 Divider()
                 
-                ThreadList(session: session)
+                ThreadList(chat: chat)
                     .scrollContentBackground(.hidden)
                 
                 bottomView
@@ -52,23 +52,23 @@ struct QuickPanelView: View {
         .onChange(of: isPresented) {
             if isPresented {
             
-                selections = sessionVM.chatSelections
-                sessionVM.chatSelections = [self.session]
+                selections = chatVM.chatSelections
+                chatVM.chatSelections = [self.chat]
                 isFocused = true
-                if !session.threads.isEmpty {
+                if !chat.threads.isEmpty {
                     showAdditionalContent = true
                 }
             } else {
                 DispatchQueue.main.async {
-                    sessionVM.chatSelections = selections
+                    chatVM.chatSelections = selections
                 }
             }
         }
         .onChange(of: isFocused) {
             isFocused = true
         }
-        .onChange(of: session.inputManager.dataFiles.isEmpty) {
-            if session.inputManager.dataFiles.isEmpty {
+        .onChange(of: chat.inputManager.dataFiles.isEmpty) {
+            if chat.inputManager.dataFiles.isEmpty {
                 showAdditionalContent = false
             } else {
                 showAdditionalContent = true
@@ -81,17 +81,17 @@ struct QuickPanelView: View {
         HStack(spacing: 12) {
             Menu {
                 ProviderPicker(
-                    provider: $session.config.provider,
+                    provider: $chat.config.provider,
                     providers: providers,
                     onChange: { newProvider in
-                        session.config.model = newProvider.quickChatModel
+                        chat.config.model = newProvider.quickChatModel
                     }
                 )
 
-                ModelPicker(model: $session.config.model, models: session.config.provider.chatModels, label: "Model")
+                ModelPicker(model: $chat.config.model, models: chat.config.provider.chatModels, label: "Model")
                 
                 Menu {
-                    ToolsController(tools: $session.config.tools, isGoogle: session.config.provider.type == .google)
+                    ToolsController(tools: $chat.config.tools, isGoogle: chat.config.provider.type == .google)
                 } label: {
                     Label("Tools", systemImage: "hammer")
                 }
@@ -105,7 +105,7 @@ struct QuickPanelView: View {
             }
             .buttonStyle(.plain)
             
-            TextField("Ask Anything...", text: $session.inputManager.prompt, axis: .vertical)
+            TextField("Ask Anything...", text: $chat.inputManager.prompt, axis: .vertical)
                 .focused($isFocused)
                 .font(.system(size: 25))
                 .textFieldStyle(.plain)
@@ -114,8 +114,8 @@ struct QuickPanelView: View {
                     send()
                 }
             
-            ActionButton(size: 28, isStop: session.isReplying) {
-                session.isReplying ? session.stopStreaming() : send()
+            ActionButton(size: 28, isStop: chat.isReplying) {
+                chat.isReplying ? chat.stopStreaming() : send()
             }
         }
     }
@@ -132,11 +132,11 @@ struct QuickPanelView: View {
                 .keyboardShortcut(.delete, modifiers: [.command, .shift])
                 
                 Group {
-                    Text(session.config.provider.name.uppercased())
+                    Text(chat.config.provider.name.uppercased())
                     
-                    Text(session.config.model.name)
+                    Text(chat.config.model.name)
                     
-                    ForEach(session.config.tools.enabledTools) { tool in
+                    ForEach(chat.config.tools.enabledTools) { tool in
                         Image(systemName: tool.icon)
                     }
                 }
@@ -150,7 +150,7 @@ struct QuickPanelView: View {
                     Image(systemName: "plus.square.on.square")
                         .imageScale(.medium)
                 }
-                .disabled(session.threads.isEmpty)
+                .disabled(chat.threads.isEmpty)
                 .keyboardShortcut("N", modifiers: [.command])
                 
             }
@@ -163,15 +163,15 @@ struct QuickPanelView: View {
     
     private func resetChat() {
         showAdditionalContent = false
-        session.deleteAllThreads()
-        session.inputManager.dataFiles.removeAll()
-        let oldConfig = session.config
+        chat.deleteAllThreads()
+        chat.inputManager.dataFiles.removeAll()
+        let oldConfig = chat.config
 
         let fetchDefaults = FetchDescriptor<ProviderDefaults>()
         let defaults = try! modelContext.fetch(fetchDefaults)
         
         let quickProvider = defaults.first!.quickProvider
-        session.config = .init(provider: quickProvider, purpose: .quick)
+        chat.config = .init(provider: quickProvider, purpose: .quick)
         
         modelContext.delete(oldConfig)
     }
@@ -181,8 +181,8 @@ struct QuickPanelView: View {
         NSApp.keyWindow?.makeKeyAndOrderFront(nil)
         
         Task {
-            let newSession = await session.copy(purpose: .chat)
-            sessionVM.fork(newSession: newSession)
+            let newChat = await chat.copy(purpose: .chat)
+            chatVM.fork(newChat: newChat)
             resetChat()
             
             showAdditionalContent = false
@@ -196,14 +196,14 @@ struct QuickPanelView: View {
     }
     
     private func send() {
-        if session.inputManager.prompt.isEmpty {
+        if chat.inputManager.prompt.isEmpty {
             return
         }
         
-        session.config.systemPrompt = AppConfig.shared.quickSystemPrompt
+        chat.config.systemPrompt = AppConfig.shared.quickSystemPrompt
         
         Task {
-            await session.sendInput()
+            await chat.sendInput()
         }
         
         showAdditionalContent = true
@@ -214,6 +214,6 @@ struct QuickPanelView: View {
     let quickSesion = Chat.mockChat
     quickSesion.isQuick = true
     
-    return QuickPanelView(session: quickSesion, isPresented: .constant(true), showAdditionalContent: .constant(true))
+    return QuickPanelView(chat: quickSesion, isPresented: .constant(true), showAdditionalContent: .constant(true))
 }
 #endif
