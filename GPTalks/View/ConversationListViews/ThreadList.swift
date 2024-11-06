@@ -56,12 +56,11 @@ struct ThreadList: View {
                     ChatInputView(chat: chat)
                 }
             }
-            .onChange(of: chat.inputManager.prompt) {
-                if chat.inputManager.state == .normal {
-                    scrollToBottom(proxy: proxy)
-                }
-            }
-
+//            .onChange(of: chat.inputManager.prompt) {
+//                if chat.inputManager.state == .normal {
+//                    scrollToBottom(proxy: proxy)
+//                }
+//            }
             .onDrop(of: [.item], isTargeted: nil) { providers in
                 chat.inputManager.handleDrop(providers)
             }

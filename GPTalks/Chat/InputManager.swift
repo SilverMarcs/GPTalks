@@ -26,7 +26,7 @@ enum InputState {
     var editingIndex: Int?
     
     var normalDataFiles: [TypedData] = []
-    var tempNormalDataFiles: [TypedData] = []
+    var tempNormalDataFiles: [TypedData]? = []
     
     init() { }
     
@@ -85,6 +85,7 @@ enum InputState {
     func reset() {
         state = .normal
         editingIndex = nil
+        dataFiles = tempNormalDataFiles ?? []
         prompt = tempNormalPrompt ?? ""
     }
 }

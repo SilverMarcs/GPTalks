@@ -21,34 +21,36 @@ struct ChatInputView: View {
     @FocusState private var isFocused: Bool
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            if chat.inputManager.state == .editing {
-                cancelEditing
-            }
-            
-            HStack(alignment: .bottom, spacing: 0) {
+        HStack(alignment: .bottom, spacing: 0) {
+            VStack {
+                if chat.inputManager.state == .editing {
+                    cancelEditing
+                    
+                    Spacer()
+                }
+                
                 plusButton
                     .padding(.trailing, -3)
-                
-                VStack(alignment: .leading, spacing: 0) {
-                    Spacer(minLength: 0)
-                    
-                    if !chat.inputManager.dataFiles.isEmpty {
-                        DataFilesView(dataFiles: $chat.inputManager.dataFiles, isCrossable: true, edge: .leading)
-                            .padding(.bottom, 5)
-                    }
-                    
-                    InputEditor(prompt: $chat.inputManager.prompt, provider: chat.config.provider, isFocused: _isFocused)
-                    
-                    Spacer(minLength: 0)
-                }
-                
-                ActionButton(size: imageSize, isStop: chat.isReplying) {
-                    chat.isReplying ? chat.stopStreaming() : sendInput()
-                }
             }
-            .padding(6)
+            
+            VStack(alignment: .leading, spacing: 0) {
+                Spacer(minLength: 0)
+                
+                if !chat.inputManager.dataFiles.isEmpty {
+                    DataFilesView(dataFiles: $chat.inputManager.dataFiles, isCrossable: true, edge: .leading)
+                        .padding(.bottom, 5)
+                }
+                
+                InputEditor(prompt: $chat.inputManager.prompt, provider: chat.config.provider, isFocused: _isFocused)
+                
+                Spacer(minLength: 0)
+            }
+            
+            ActionButton(size: imageSize, isStop: chat.isReplying) {
+                chat.isReplying ? chat.stopStreaming() : sendInput()
+            }
         }
+        .padding(6)
         .roundedRectangleOverlay(radius: 18)
         .modifier(CommonInputStyling())
     }
@@ -94,29 +96,22 @@ struct ChatInputView: View {
     
     @ViewBuilder
     var cancelEditing: some View {
-        HStack(spacing: 5) {
-            Button {
-                chat.inputManager.reset()
-            } label: {
-                Image(systemName: "xmark")
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-            }
-            .keyboardShortcut(.cancelAction)
-            .buttonStyle(.plain)
-            
-            Text("Editing")
-                .foregroundStyle(.secondary)
+        Button {
+            chat.inputManager.reset()
+        } label: {
+            Image(systemName: "xmark.circle.fill")
+                .resizable()
+                .frame(width: imageSize, height: imageSize)
+                .fontWeight(.semibold)
+                .foregroundStyle(.red)
         }
-        .padding(.horizontal, 5)
-        .padding(5)
-        
-        Divider()
+        .keyboardShortcut(.cancelAction)
+        .buttonStyle(.plain)
     }
     
     var imageSize: CGFloat {
         #if os(macOS)
-        23
+        20
         #else
         31
         #endif

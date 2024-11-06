@@ -48,54 +48,7 @@ struct GoogleService: AIService {
     
     static func streamResponse(from conversations: [Thread], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let (model, messages) = createModelAndMessages(from: conversations, config: config)
-        return streamGoogleResponse(model: model, messages: messages)
-    }
-    
-    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> NonStreamResponse {
-        let (model, messages) = createModelAndMessages(from: conversations, config: config)
-        let response = try await model.generateContent(messages)
-        let toolCalls = response.functionCalls.map {
-            ChatToolCall(toolCallId: "",
-                         tool: ChatTool(rawValue: $0.name)!,
-                         arguments: encodeJSONObjectToString($0.args))
-        }
         
-        // TODO: do token count
-        return NonStreamResponse(content: response.text, toolCalls: toolCalls, inputTokens: 0, outputTokens: 0)
-    }
-    
-    static private func createModelAndMessages(from conversations: [Thread], config: ChatConfig) -> (GenerativeModel, [ModelContent]) {
-        let systemPrompt = ModelContent(role: "system", parts: [.text(config.systemPrompt)])
-        
-        let genConfig = GenerationConfig(
-            temperature: config.temperature.map { Float($0) },
-            topP: config.topP.map { Float($0) },
-            maxOutputTokens: config.maxTokens
-        )
-        
-        var tools = config.tools.enabledTools.map { $0.google }
-        
-        if config.tools.googleCodeExecution {
-            tools.append(Tool(codeExecution: .init()))
-        }
-        
-        if config.tools.googleSearchRetrieval {
-            tools.append(Tool(googleSearchRetrieval: .init()))
-        }
-        
-        let model = GenerativeModel(
-            name: config.model.code,
-            apiKey: config.provider.apiKey,
-            generationConfig: genConfig,
-            tools: tools.isEmpty ? nil : tools,
-            systemInstruction: systemPrompt)
-        
-        let messages = conversations.map { convert(conversation: $0) }
-        
-        return (model, messages)
-    }
-    
-    static private func streamGoogleResponse(model: GenerativeModel, messages: [ModelContent]) -> AsyncThrowingStream<StreamResponse, Error> {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
@@ -128,6 +81,10 @@ struct GoogleService: AIService {
                                 }
                             }
                         }
+                        
+                        if let usageMetadata = response.usageMetadata {
+                            continuation.yield(.outputTokens(usageMetadata.totalTokenCount))
+                        }
                     }
                     
                     continuation.finish()
@@ -138,9 +95,48 @@ struct GoogleService: AIService {
         }
     }
     
-    static private func nonStreamingGoogleResponse(model: GenerativeModel, messages: [ModelContent]) async throws -> StreamResponse {
+    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> NonStreamResponse {
+        let (model, messages) = createModelAndMessages(from: conversations, config: config)
         let response = try await model.generateContent(messages)
-        return .content(response.text ?? "")
+        let toolCalls = response.functionCalls.map {
+            ChatToolCall(toolCallId: "",
+                         tool: ChatTool(rawValue: $0.name)!,
+                         arguments: encodeJSONObjectToString($0.args))
+        }
+        let totalTokens = response.usageMetadata?.totalTokenCount ?? 0
+        
+        return NonStreamResponse(content: response.text, toolCalls: toolCalls, inputTokens: 0, outputTokens: totalTokens)
+    }
+    
+    static private func createModelAndMessages(from conversations: [Thread], config: ChatConfig) -> (GenerativeModel, [ModelContent]) {
+        let systemPrompt = ModelContent(role: "system", parts: [.text(config.systemPrompt)])
+        
+        let genConfig = GenerationConfig(
+            temperature: config.temperature.map { Float($0) },
+            topP: config.topP.map { Float($0) },
+            maxOutputTokens: config.maxTokens
+        )
+        
+        var tools = config.tools.enabledTools.map { $0.google }
+        
+        if config.tools.googleCodeExecution {
+            tools.append(Tool(codeExecution: .init()))
+        }
+        
+        if config.tools.googleSearchRetrieval {
+            tools.append(Tool(googleSearchRetrieval: .init()))
+        }
+        
+        let model = GenerativeModel(
+            name: config.model.code,
+            apiKey: config.provider.apiKey,
+            generationConfig: genConfig,
+            tools: tools.isEmpty ? nil : tools,
+            systemInstruction: systemPrompt)
+        
+        let messages = conversations.map { convert(conversation: $0) }
+        
+        return (model, messages)
     }
     
     static func testModel(provider: Provider, model: AIModel) async -> Bool {
