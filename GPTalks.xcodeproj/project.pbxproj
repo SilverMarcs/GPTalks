@@ -27,6 +27,7 @@
 		082181712C39099D00171BF3 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181702C39099D00171BF3 /* ArrayExtensions.swift */; };
 		082181752C39258500171BF3 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181742C39258500171BF3 /* ImageUtils.swift */; };
 		0823550D2CDBB74900388273 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0823550C2CDBB74900388273 /* GoogleGenerativeAI */; };
+		082355152CDBBB2B00388273 /* SwiftMarkdownView in Frameworks */ = {isa = PBXBuildFile; productRef = 082355142CDBBB2B00388273 /* SwiftMarkdownView */; };
 		082A632E2C54EADF003996B7 /* ChatBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082A632D2C54EADF003996B7 /* ChatBackup.swift */; };
 		082A63302C54F862003996B7 /* BackupSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082A632F2C54F862003996B7 /* BackupSettings.swift */; };
 		082A63322C551108003996B7 /* ChatBackupUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082A63312C551108003996B7 /* ChatBackupUtils.swift */; };
@@ -86,7 +87,6 @@
 		0888C5872CD568E000A1EA5E /* SearchResultRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0888C5862CD568E000A1EA5E /* SearchResultRow.swift */; };
 		0888C5892CD5E92B00A1EA5E /* SearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0888C5882CD5E92B00A1EA5E /* SearchResults.swift */; };
 		088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A09F22C55C7740055B567 /* TextSelectionView.swift */; };
-		088CDD3D2CBF9FF600E5FB41 /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 088CDD3C2CBF9FF600E5FB41 /* MarkdownWebView */; };
 		088DA8F92CA752EF006C017E /* IOSWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DA8F82CA752EF006C017E /* IOSWindow.swift */; };
 		08915D942C373340008ADE27 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D932C373340008ADE27 /* ProviderImage.swift */; };
 		08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D982C37C648008ADE27 /* ProviderDetail.swift */; };
@@ -380,7 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0823550D2CDBB74900388273 /* GoogleGenerativeAI in Frameworks */,
-				088CDD3D2CBF9FF600E5FB41 /* MarkdownWebView in Frameworks */,
+				082355152CDBBB2B00388273 /* SwiftMarkdownView in Frameworks */,
 				0854A1912CB36C350055344E /* SwiftAnthropic in Frameworks */,
 				08C219CB2CB80D5F0062BF1B /* OpenAI in Frameworks */,
 				08AAFB962C3CF0DD002C04E0 /* KeyboardShortcuts in Frameworks */,
@@ -874,8 +874,8 @@
 				08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */,
 				0854A1902CB36C350055344E /* SwiftAnthropic */,
 				08C219CA2CB80D5F0062BF1B /* OpenAI */,
-				088CDD3C2CBF9FF600E5FB41 /* MarkdownWebView */,
 				0823550C2CDBB74900388273 /* GoogleGenerativeAI */,
+				082355142CDBBB2B00388273 /* SwiftMarkdownView */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -953,8 +953,8 @@
 				08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
 				08AAFB942C3CF0DD002C04E0 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				08C219C92CB80D5F0062BF1B /* XCRemoteSwiftPackageReference "OpenAI" */,
-				088CDD3B2CBF9FF600E5FB41 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				0823550B2CDBB74900388273 /* XCLocalSwiftPackageReference "../generative-ai-swift" */,
+				082355132CDBBB2B00388273 /* XCLocalSwiftPackageReference "../markdown-webview" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1545,17 +1545,13 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../generative-ai-swift";
 		};
+		082355132CDBBB2B00388273 /* XCLocalSwiftPackageReference "../markdown-webview" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../markdown-webview";
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		088CDD3B2CBF9FF600E5FB41 /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/markdown-webview";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jamesrochabrun/SwiftAnthropic";
@@ -1587,15 +1583,14 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = GoogleGenerativeAI;
 		};
+		082355142CDBBB2B00388273 /* SwiftMarkdownView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftMarkdownView;
+		};
 		0854A1902CB36C350055344E /* SwiftAnthropic */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 08AAFB8E2C3C735A002C04E0 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */;
 			productName = SwiftAnthropic;
-		};
-		088CDD3C2CBF9FF600E5FB41 /* MarkdownWebView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 088CDD3B2CBF9FF600E5FB41 /* XCRemoteSwiftPackageReference "markdown-webview" */;
-			productName = MarkdownWebView;
 		};
 		08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;

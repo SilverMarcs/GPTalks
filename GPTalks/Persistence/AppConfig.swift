@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import MarkdownWebView
 
 class AppConfig: ObservableObject {
     static let shared = AppConfig()
@@ -18,9 +17,6 @@ class AppConfig: ObservableObject {
     #else
     @AppStorage("fontSize") var fontSize: Double = 18
     #endif
-    
-    // Markdown
-    @AppStorage("markdownTheme") var markdownTheme: MarkdownTheme = .atom
     
     // General
     @AppStorage("autogenTitle") var autogenTitle: Bool = true

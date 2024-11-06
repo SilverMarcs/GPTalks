@@ -1,5 +1,5 @@
 {
-  "originHash" : "c7c375b9c47cf326b6c82aa83e87bb83c9574bcec0051484b12666586f262d75",
+  "originHash" : "e13e28aed6683a3fb24394d63d485bc42490f38adfbaca14b3114187366b62fe",
   "pins" : [
     {
       "identity" : "keyboardshortcuts",
@@ -8,15 +8,6 @@
       "state" : {
         "revision" : "c3c361f409b8dbe1eab186078b41c330a6a82c9a",
         "version" : "2.2.2"
-      }
-    },
-    {
-      "identity" : "markdown-webview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/markdown-webview",
-      "state" : {
-        "branch" : "master",
-        "revision" : "9e9a20d700873d5f39e385e2ad62b2bd97b041dd"
       }
     },
     {

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import MarkdownWebView
 
 struct SearchResultRow: View {
     @Environment(ChatVM.self) var chatVM

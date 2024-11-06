@@ -6,17 +6,16 @@
 //
 
 import SwiftUI
-import MarkdownWebView
+import SwiftMarkdownView
 
 struct MarkdownView: View {
-    @Environment(\.isQuick) var isQuick
     @Environment(ChatVM.self) private var sessionVM
     
     @ObservedObject var config = AppConfig.shared
     var content: String
 
     var body: some View {
-        MarkdownWebView(content)
+        SwiftMarkdownView(content)
             .markdownBaseURL("GPTalks Web Content")
             .markdownHighlightString(sessionVM.searchText)
             .markdownFontSize(CGFloat(config.fontSize))

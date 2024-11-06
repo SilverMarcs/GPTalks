@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import MarkdownWebView
 
 struct TextSelectionView: View {
     @Environment(\.dismiss) var dismiss
@@ -15,7 +14,7 @@ struct TextSelectionView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                MarkdownWebView(content)
+                MarkdownView(content: content)
             }
             .safeAreaPadding(.horizontal)
             .navigationTitle("Select Text")

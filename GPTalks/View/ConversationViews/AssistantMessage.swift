@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import MarkdownWebView
 
 struct AssistantMessage: View {
     @ObservedObject var config = AppConfig.shared
