@@ -22,10 +22,10 @@ struct RoundedRectangleOverlayModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .background(
-                RoundedRectangle(cornerRadius: radius, style: style)
-                    .fill(.background.secondary.opacity(0.4))
-            )
+//            .background(
+//                RoundedRectangle(cornerRadius: radius, style: style)
+//                    .fill(.background.secondary.opacity(0.4))
+//            )
             .overlay(
                 RoundedRectangle(cornerRadius: radius, style: style)
                 #if os(iOS)

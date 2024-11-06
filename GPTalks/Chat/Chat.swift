@@ -59,7 +59,7 @@ final class Chat {
         hasUserScrolled = false
         
         DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
-            if let lastThread = self.threads.last, lastThread.content.isEmpty {
+            if let lastThread = self.threads.last, lastThread.content.isEmpty, lastThread.role == .assistant {
                 self.deleteThread(lastThread)
             }
         }
@@ -181,7 +181,6 @@ final class Chat {
         modelContext?.delete(thread)
     }
 
-    
     func deleteAllThreads() {
         errorMessage = ""
         while let thread = threads.popLast() {

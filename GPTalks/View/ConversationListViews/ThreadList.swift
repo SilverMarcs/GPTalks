@@ -24,9 +24,12 @@ struct ThreadList: View {
             List {
                 ForEach(chat.threads, id: \.self) { thread in
                     ThreadView(thread: thread)
-#if os(iOS)
+                        #if os(iOS)
                         .opacity(0.9)
-#endif
+                        #endif
+                }
+                .onDelete { indexSet in
+                    chat.threads.remove(atOffsets: indexSet)
                 }
                 .listRowSeparator(.hidden)
                 
@@ -42,9 +45,9 @@ struct ThreadList: View {
             .task {
                 chat.proxy = proxy
                 
-#if os(macOS)
+                #if os(macOS)
                 scrollToBottom(proxy: proxy, animated: false)
-#endif
+                #endif
                 
                 scrollToBottom(proxy: proxy, delay: 0.2)
             }

@@ -68,7 +68,6 @@ struct GoogleService: AIService {
                                         continuation.yield(.content(formattedOutput))
                                     }
                                 case .functionCall(let functionCall):
-                                    print("Function call: \(functionCall.name)")
                                     let call = ChatToolCall(toolCallId: "",
                                                             tool: ChatTool(rawValue: functionCall.name)!,
                                                             arguments: encodeJSONObjectToString(functionCall.args))
@@ -76,7 +75,6 @@ struct GoogleService: AIService {
                                 case .text(let text):
                                     continuation.yield(.content(text))
                                 case .data, .fileData, .functionResponse:
-                                    print("Data, file data, and function response are not supported")
                                     break
                                 }
                             }

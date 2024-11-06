@@ -22,7 +22,6 @@ struct VertexService: AIService {
         var contentObjects: [[String: Any]] = []
         
         if let toolResponse = conversation.toolResponse {
-            print("Tool response: \(toolResponse.tool.displayName)")
             let toolResponseContent: [String: Any] = [
                 "type": "tool_result",
                 "content": toolResponse.processedContent,

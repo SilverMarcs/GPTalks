@@ -50,7 +50,7 @@ struct ChatInputView: View {
                 chat.isReplying ? chat.stopStreaming() : sendInput()
             }
         }
-        .padding(6)
+        .padding(5)
         .roundedRectangleOverlay(radius: 18)
         .modifier(CommonInputStyling())
     }
@@ -121,7 +121,7 @@ struct ChatInputView: View {
         #if !os(macOS)
         isFocused = false
         #endif
-        Task {
+        Task { @MainActor in
             await chat.sendInput()
         }
     }
