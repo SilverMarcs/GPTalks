@@ -110,27 +110,39 @@ final class Chat {
 
         guard !inputManager.prompt.isEmpty else { return }
 
-        let user = Thread(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
-        addThread(user)
-        
-        inputManager.reset()
-        
+        if inputManager.state == .editing {
+            await handleEditing()
+        } else {
+            await handleNewInput()
+        }
+
         if AppConfig.shared.autogenTitle {
             Task { await generateTitle() }
         }
-        
+    }
+
+    @MainActor
+    private func handleEditing() async {
+        guard let index = inputManager.editingIndex else { return }
+        let editingMessage = threads[index]
+        editingMessage.content = inputManager.prompt
+        editingMessage.dataFiles = inputManager.dataFiles
+        inputManager.reset()
+        await regenerate(thread: editingMessage)
+    }
+
+    @MainActor
+    private func handleNewInput() async {
+        let user = Thread(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
+        addThread(user)
+        inputManager.reset()
         await processRequest()
     }
     
     @MainActor
     func regenerate(thread: Thread) async {
-        #warning("This may crash if dataFiles only copied by reference")
-        
         guard let index = threads.firstIndex(where: { $0 == thread }) else { return }
-        threads.removeSubrange(thread.role == .assistant ? index... : (index + 1)...) // if assistant, remove the assistant thread as well
-        
-        // at this point the last thread is always the user thread
-        
+        threads.removeSubrange(thread.role == .assistant ? index... : (index + 1)...)
         await processRequest()
     }
     

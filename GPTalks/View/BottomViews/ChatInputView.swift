@@ -96,7 +96,7 @@ struct ChatInputView: View {
     var cancelEditing: some View {
         HStack(spacing: 5) {
             Button {
-                chat.inputManager.resetEditing()
+                chat.inputManager.reset()
             } label: {
                 Image(systemName: "xmark")
                     .fontWeight(.semibold)

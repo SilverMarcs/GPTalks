@@ -82,15 +82,10 @@ enum InputState {
         }
     }
     
-    func resetEditing() {
+    func reset() {
         state = .normal
         editingIndex = nil
         prompt = tempNormalPrompt ?? ""
-    }
-    
-    func reset() {
-        prompt = ""
-        dataFiles = []
     }
 }
 
