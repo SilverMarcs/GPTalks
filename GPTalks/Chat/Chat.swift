@@ -67,7 +67,8 @@ final class Chat {
 
     @MainActor
     func processRequest() async {
-        self.date = Date()
+        errorMessage = ""
+        date = Date()
         streamingTask = Task {
             let streamer = StreamHandler(session: self)
             
@@ -98,7 +99,6 @@ final class Chat {
         }
     }
     
-    @MainActor
     func sendInput() async {
         errorMessage = ""
         
@@ -111,7 +111,6 @@ final class Chat {
         }
     }
 
-    @MainActor
     private func handleEditing() async {
         guard let index = inputManager.editingIndex else { return }
         let editingMessage = threads[index]
@@ -121,7 +120,6 @@ final class Chat {
         await regenerate(thread: editingMessage)
     }
 
-    @MainActor
     private func handleNewInput() async {
         let user = Thread(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
         addThread(user)
@@ -129,7 +127,6 @@ final class Chat {
         await processRequest()
     }
     
-    @MainActor
     func regenerate(thread: Thread) async {
         guard let index = threads.firstIndex(where: { $0 == thread }) else { return }
         threads.removeSubrange(thread.role == .assistant ? index... : (index + 1)...)
@@ -179,7 +176,6 @@ final class Chat {
         }
     }
     
-    // TODO: make async
     func deleteThread(_ thread: Thread) {
         threads.removeAll(where: { $0 == thread })
         modelContext?.delete(thread)

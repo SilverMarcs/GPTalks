@@ -22,8 +22,6 @@ struct MarkdownView: View {
     }
 }
 
-
-
 #Preview {
     MarkdownView(content: Thread.mockAssistantThread.content)
         .frame(width: 600, height: 500)

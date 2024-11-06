@@ -32,7 +32,7 @@ struct URLScrape: ToolProtocol {
     
     static func process(arguments: String) async throws -> ToolData {
         var totalContent: String = ""
-        let urls = URLScrape.getURLs(from: arguments)
+        let urls = try URLScrape.getURLs(from: arguments)
         for url in urls {
             let content = try await URLScrape.retrieveWebContent(from: url)
             totalContent += content
@@ -40,9 +40,9 @@ struct URLScrape: ToolProtocol {
         return .init(string: totalContent)
     }
     
-    private static func getURLs(from jsonString: String) -> [URL] {
+    private static func getURLs(from jsonString: String) throws -> [URL] {
         let jsonData = jsonString.data(using: .utf8)!
-        let urlList = try! JSONDecoder().decode(URLList.self, from: jsonData)
+        let urlList = try JSONDecoder().decode(URLList.self, from: jsonData)
         
         // Convert strings to URL objects
         let urls = urlList.url_list.compactMap { URL(string: $0) }

@@ -119,16 +119,10 @@ struct VertexService: AIService {
                                     
                                     if let jsonData = jsonString.data(using: .utf8),
                                        let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-                                        print("Parsed JSON object: \(jsonObject)")
+//                                        print("Parsed JSON object: \(jsonObject)")
                                         
                                         if let type = jsonObject["type"] as? String {
                                             switch type {
-                                            case "content_block_start":
-                                                if let contentBlock = jsonObject["content_block"] as? [String: Any],
-                                                   contentBlock["type"] as? String == "tool_use" {
-                                                    isToolUse = true
-                                                    toolCalls.append(contentBlock)
-                                                }
                                             case "message_start":
                                                 if let message = jsonObject["message"] as? [String: Any],
                                                    let usage = message["usage"] as? [String: Any],
@@ -136,22 +130,31 @@ struct VertexService: AIService {
                                                     inputTokens = inputTokenCount
                                                     continuation.yield(.inputTokens(inputTokens))
                                                 }
+                                            case "content_block_start":
+                                                if let contentBlock = jsonObject["content_block"] as? [String: Any],
+                                                   contentBlock["type"] as? String == "tool_use" {
+                                                    isToolUse = true
+                                                    toolCalls.append(contentBlock)
+                                                }
                                             case "content_block_delta":
-                                                if !isToolUse, let delta = jsonObject["delta"] as? [String: Any],
-                                                   let text = delta["text"] as? String {
-                                                    continuation.yield(.content(text))
-                                                }
-                                            case "content_block_stop":
                                                 if isToolUse {
-                                                    isToolUse = false
-                                                }
+                                                   if let delta = jsonObject["delta"] as? [String: Any],
+                                                      let partialJson = delta["partial_json"] as? String {
+                                                       toolCalls[toolCalls.count - 1]["input"] = (toolCalls[toolCalls.count - 1]["input"] as? String ?? "") + partialJson
+                                                        }
+                                                   } else if let delta = jsonObject["delta"] as? [String: Any],
+                                                             let text = delta["text"] as? String {
+                                                       continuation.yield(.content(text))
+                                                   }
                                             case "message_delta":
-                                                print("Message delta: \(jsonObject)")
                                                 if let usage = jsonObject["usage"] as? [String: Any],
                                                    let outputTokenCount = usage["output_tokens"] as? Int {
                                                     outputTokens = outputTokenCount
                                                     continuation.yield(.outputTokens(outputTokens))
-                                                    print("Output tokens: \(outputTokens)")
+                                                }
+                                            case "content_block_stop":
+                                                if isToolUse {
+                                                    isToolUse = false
                                                 }
                                             case "message_stop":
                                                 if !toolCalls.isEmpty {

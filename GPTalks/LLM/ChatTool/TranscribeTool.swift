@@ -71,7 +71,6 @@ struct TranscribeTool: ToolProtocol {
         } else {
             throw RuntimeError("Invalid audio/video file type")
         }
-        
     }
     
     static let description: String = """

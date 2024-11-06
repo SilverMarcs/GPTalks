@@ -28,16 +28,8 @@ struct ToolCallView: View {
                     }
                 } label: {
                     HStack {
-//                        Image(systemName: "hammer")
-//                            .resizable()
-//                            .fontWeight(.semibold)
-//                            .frame(width: 18, height: 18)
-//                            .foregroundStyle(.teal)
-//                            .opacity(0.9)
-                        
                         Text("^[\(thread.toolCalls.count) Tool](inflect: true)")
                             .foregroundStyle(.secondary)
-//                            .fontWeight(.semibold)
                         
                         if thread.isReplying {
                             ProgressView()
@@ -49,7 +41,6 @@ struct ToolCallView: View {
                     }
                     .contentShape(Rectangle())
                 }
-//                .animation(nil)
                 .transaction { $0.animation = nil }
                 .buttonStyle(.plain)
                 

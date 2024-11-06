@@ -93,7 +93,7 @@ enum InputState {
 // MARK: - Drag and Drop
 extension InputManager {
     func processData(_ data: Data, fileType: UTType? = nil, fileName: String? = nil, url: URL? = nil) async throws {
-        await MainActor.run {
+
             let fileURL = url ?? URL(fileURLWithPath: fileName ?? "Unknown")
             let fileType = fileType ?? (try? fileURL.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier).flatMap { UTType($0) } ?? .data
             let fileName = fileName ?? fileURL.deletingPathExtension().lastPathComponent + "." + fileType.fileExtension
@@ -103,7 +103,8 @@ extension InputManager {
                 fileType: fileType,
                 fileName: fileName
             )
-
+        
+        await MainActor.run {
             // Remove existing file with the same name, if any
             if let existingIndex = self.dataFiles.firstIndex(where: { $0.fileName == fileName }) {
                 self.dataFiles.remove(at: existingIndex)

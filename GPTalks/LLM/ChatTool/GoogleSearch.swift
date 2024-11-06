@@ -25,12 +25,11 @@ struct GoogleSearch: ToolProtocol {
         let urlString = "https://www.googleapis.com/customsearch/v1?q=\(encodedQuery)&key=\(apiKey)&cx=\(googleSearchEngineId)"
         
         guard let url = URL(string: urlString) else {
-            throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+            throw RuntimeError("Failed to create URL from string: \(urlString)")
         }
         
         let (data, _) = try await URLSession.shared.data(from: url)
         
-        // Decoding the JSON data into a dictionary
         if let jsonResult = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
            let items = jsonResult["items"] as? [[String: Any]] {
             
@@ -46,19 +45,19 @@ struct GoogleSearch: ToolProtocol {
             
             return .init(string: searchResultsString)
         } else {
-            throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to parse search results"])
+            throw RuntimeError("Failed to parse search results")
         }
     }
     
     static func process(arguments: String) async throws -> ToolData {
-        let query = getQuery(from: arguments)
+        let query = try getQuery(from: arguments)
         
         return try await performSearch(query: query)
     }
     
-    private static func getQuery(from jsonString: String) -> String {
+    private static func getQuery(from jsonString: String) throws -> String {
         let jsonData = jsonString.data(using: .utf8)!
-        let query = try! JSONDecoder().decode(Query.self, from: jsonData)
+        let query = try JSONDecoder().decode(Query.self, from: jsonData)
         
         return query.query
     }

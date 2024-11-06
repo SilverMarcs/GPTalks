@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - ModelContext
 extension ModelContext {
     var sqliteCommand: String {
         if let url = container.configurations.first?.url.path(percentEncoded: false) {

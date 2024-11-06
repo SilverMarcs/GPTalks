@@ -39,7 +39,6 @@ struct GPTalksApp: App {
         try? Tips.configure()
 
         #if os(macOS)
-//        NSWindow.allowsAutomaticWindowTabbing = false
         AppConfig.shared.hideDock = false
         #else
         AppDelegate.shared.chatVM = _chatVM.wrappedValue

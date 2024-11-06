@@ -20,7 +20,6 @@ struct StreamHandler {
         session.addThread(assistant)
     }
 
-    @MainActor
     func handleRequest() async throws {
         if session.config.stream {
             try await handleStream()
@@ -29,7 +28,6 @@ struct StreamHandler {
         }
     }
     
-    @MainActor
     private func handleStream() async throws {
         var streamText = ""
         var lastUIUpdateTime = Date()
@@ -62,9 +60,13 @@ struct StreamHandler {
         if !pendingToolCalls.isEmpty {
             try await handleToolCalls(pendingToolCalls)
         }
-
+        
+        finaliseStream(streamText: streamText, pendingToolCalls: pendingToolCalls, totalTokens: inputTokens + outputTokens)
+    }
+    
+    private func finaliseStream(streamText: String = "", pendingToolCalls: [ChatToolCall], totalTokens: Int) {
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiUpdateInterval) {
-            session.totalTokens = inputTokens + outputTokens
+            session.totalTokens = totalTokens
             assistant.toolCalls = pendingToolCalls
             assistant.content = streamText
             assistant.isReplying = false
@@ -74,7 +76,6 @@ struct StreamHandler {
         }
     }
 
-    @MainActor
     private func handleNonStream() async throws {
         let service = session.config.provider.type.getService()
         let response = try await service.nonStreamingResponse(from: session.threads, config: session.config)
@@ -94,27 +95,11 @@ struct StreamHandler {
         try? assistant.modelContext?.save()
     }
 
-
-//    @MainActor
-//    private func finalizeStream(streamText: String, toolCalls: [ChatToolCall], totalTokens: Int) {
-//        DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiUpdateInterval) {
-//            session.totalTokens = totalTokens
-//            assistant.toolCalls = toolCalls
-//            assistant.content = streamText
-//            assistant.isReplying = false
-//            session.scrollBottom()
-//            session.hasUserScrolled = false
-//            try? assistant.modelContext?.save()
-//        }
-//    }
-
-    @MainActor
     private func handleToolCalls(_ toolCalls: [ChatToolCall]) async throws {
         // DO NOT call this when assitant.toolCalls is already populated. this func does it for you
+        assistant.isReplying = false
         assistant.toolCalls = toolCalls
         session.scrollBottom()
-        
-        assistant.isReplying = false
 
         var toolDatas: [Data] = []
         

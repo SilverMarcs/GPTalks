@@ -107,9 +107,6 @@
 		08A222852C2AB4FD00D76C8B /* ChatContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222842C2AB4FD00D76C8B /* ChatContentView.swift */; };
 		08A222872C2AB4FD00D76C8B /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222862C2AB4FD00D76C8B /* Chat.swift */; };
 		08A222892C2AB4FE00D76C8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08A222882C2AB4FE00D76C8B /* Assets.xcassets */; };
-		08A222972C2AB4FE00D76C8B /* GPTalksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222962C2AB4FE00D76C8B /* GPTalksTests.swift */; };
-		08A222A12C2AB4FE00D76C8B /* GPTalksUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222A02C2AB4FE00D76C8B /* GPTalksUITests.swift */; };
-		08A222A32C2AB4FE00D76C8B /* GPTalksUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222A22C2AB4FE00D76C8B /* GPTalksUITestsLaunchTests.swift */; };
 		08A222BE2C2ABDB400D76C8B /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222BD2C2ABDAF00D76C8B /* InputManager.swift */; };
 		08A222C42C2AC6B300D76C8B /* ThreadList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222C32C2AC6B300D76C8B /* ThreadList.swift */; };
 		08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A313462C4AD03300C3E578 /* ImageInputView.swift */; };
@@ -184,23 +181,6 @@
 		08F840062C9AA26C000CB498 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F840052C9AA26C000CB498 /* CameraView.swift */; };
 		08FD455A2CB8EF680046D165 /* ClickHighlightButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08FD45592CB8EF680046D165 /* ClickHighlightButton.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		08A222932C2AB4FE00D76C8B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08A222772C2AB4FD00D76C8B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 08A2227E2C2AB4FD00D76C8B;
-			remoteInfo = GPTalks;
-		};
-		08A2229D2C2AB4FE00D76C8B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08A222772C2AB4FD00D76C8B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 08A2227E2C2AB4FD00D76C8B;
-			remoteInfo = GPTalks;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0805DEEC2C58CB0300A8354A /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
@@ -299,11 +279,6 @@
 		08A222862C2AB4FD00D76C8B /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		08A222882C2AB4FE00D76C8B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		08A2228A2C2AB4FE00D76C8B /* GPTalks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GPTalks.entitlements; sourceTree = "<group>"; };
-		08A222922C2AB4FE00D76C8B /* GPTalksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPTalksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		08A222962C2AB4FE00D76C8B /* GPTalksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTalksTests.swift; sourceTree = "<group>"; };
-		08A2229C2C2AB4FE00D76C8B /* GPTalksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPTalksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		08A222A02C2AB4FE00D76C8B /* GPTalksUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTalksUITests.swift; sourceTree = "<group>"; };
-		08A222A22C2AB4FE00D76C8B /* GPTalksUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTalksUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		08A222BD2C2ABDAF00D76C8B /* InputManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
 		08A222C32C2AC6B300D76C8B /* ThreadList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadList.swift; sourceTree = "<group>"; };
 		08A313462C4AD03300C3E578 /* ImageInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageInputView.swift; sourceTree = "<group>"; };
@@ -390,20 +365,6 @@
 				0823551B2CDBBCCB00388273 /* GoogleGenerativeAI in Frameworks */,
 				082355182CDBBC9A00388273 /* SwiftMarkdownView in Frameworks */,
 				08AAFB962C3CF0DD002C04E0 /* KeyboardShortcuts in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		08A2228F2C2AB4FE00D76C8B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		08A222992C2AB4FE00D76C8B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,8 +533,6 @@
 			isa = PBXGroup;
 			children = (
 				08A222812C2AB4FD00D76C8B /* GPTalks */,
-				08A222952C2AB4FE00D76C8B /* GPTalksTests */,
-				08A2229F2C2AB4FE00D76C8B /* GPTalksUITests */,
 				08A222802C2AB4FD00D76C8B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -582,8 +541,6 @@
 			isa = PBXGroup;
 			children = (
 				08A2227F2C2AB4FD00D76C8B /* GPTalks.app */,
-				08A222922C2AB4FE00D76C8B /* GPTalksTests.xctest */,
-				08A2229C2C2AB4FE00D76C8B /* GPTalksUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -605,23 +562,6 @@
 				08A2228A2C2AB4FE00D76C8B /* GPTalks.entitlements */,
 			);
 			path = GPTalks;
-			sourceTree = "<group>";
-		};
-		08A222952C2AB4FE00D76C8B /* GPTalksTests */ = {
-			isa = PBXGroup;
-			children = (
-				08A222962C2AB4FE00D76C8B /* GPTalksTests.swift */,
-			);
-			path = GPTalksTests;
-			sourceTree = "<group>";
-		};
-		08A2229F2C2AB4FE00D76C8B /* GPTalksUITests */ = {
-			isa = PBXGroup;
-			children = (
-				08A222A02C2AB4FE00D76C8B /* GPTalksUITests.swift */,
-				08A222A22C2AB4FE00D76C8B /* GPTalksUITestsLaunchTests.swift */,
-			);
-			path = GPTalksUITests;
 			sourceTree = "<group>";
 		};
 		08A222BC2C2ABD9E00D76C8B /* Chat */ = {
@@ -890,42 +830,6 @@
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
 			productType = "com.apple.product-type.application";
 		};
-		08A222912C2AB4FE00D76C8B /* GPTalksTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 08A222A92C2AB4FE00D76C8B /* Build configuration list for PBXNativeTarget "GPTalksTests" */;
-			buildPhases = (
-				08A2228E2C2AB4FE00D76C8B /* Sources */,
-				08A2228F2C2AB4FE00D76C8B /* Frameworks */,
-				08A222902C2AB4FE00D76C8B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				08A222942C2AB4FE00D76C8B /* PBXTargetDependency */,
-			);
-			name = GPTalksTests;
-			productName = GPTalksTests;
-			productReference = 08A222922C2AB4FE00D76C8B /* GPTalksTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		08A2229B2C2AB4FE00D76C8B /* GPTalksUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 08A222AC2C2AB4FE00D76C8B /* Build configuration list for PBXNativeTarget "GPTalksUITests" */;
-			buildPhases = (
-				08A222982C2AB4FE00D76C8B /* Sources */,
-				08A222992C2AB4FE00D76C8B /* Frameworks */,
-				08A2229A2C2AB4FE00D76C8B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				08A2229E2C2AB4FE00D76C8B /* PBXTargetDependency */,
-			);
-			name = GPTalksUITests;
-			productName = GPTalksUITests;
-			productReference = 08A2229C2C2AB4FE00D76C8B /* GPTalksUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -938,14 +842,6 @@
 				TargetAttributes = {
 					08A2227E2C2AB4FD00D76C8B = {
 						CreatedOnToolsVersion = 16.0;
-					};
-					08A222912C2AB4FE00D76C8B = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = 08A2227E2C2AB4FD00D76C8B;
-					};
-					08A2229B2C2AB4FE00D76C8B = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = 08A2227E2C2AB4FD00D76C8B;
 					};
 				};
 			};
@@ -970,8 +866,6 @@
 			projectRoot = "";
 			targets = (
 				08A2227E2C2AB4FD00D76C8B /* GPTalks */,
-				08A222912C2AB4FE00D76C8B /* GPTalksTests */,
-				08A2229B2C2AB4FE00D76C8B /* GPTalksUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -982,20 +876,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				08A222892C2AB4FE00D76C8B /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		08A222902C2AB4FE00D76C8B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		08A2229A2C2AB4FE00D76C8B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1173,37 +1053,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		08A2228E2C2AB4FE00D76C8B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				08A222972C2AB4FE00D76C8B /* GPTalksTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		08A222982C2AB4FE00D76C8B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				08A222A12C2AB4FE00D76C8B /* GPTalksUITests.swift in Sources */,
-				08A222A32C2AB4FE00D76C8B /* GPTalksUITestsLaunchTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		08A222942C2AB4FE00D76C8B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 08A2227E2C2AB4FD00D76C8B /* GPTalks */;
-			targetProxy = 08A222932C2AB4FE00D76C8B /* PBXContainerItemProxy */;
-		};
-		08A2229E2C2AB4FE00D76C8B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 08A2227E2C2AB4FD00D76C8B /* GPTalks */;
-			targetProxy = 08A2229D2C2AB4FE00D76C8B /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		08A222A42C2AB4FE00D76C8B /* Debug */ = {
@@ -1414,100 +1264,6 @@
 			};
 			name = Release;
 		};
-		08A222AA2C2AB4FE00D76C8B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = J52QUTREBS;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalksTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GPTalks.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GPTalks";
-				XROS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Debug;
-		};
-		08A222AB2C2AB4FE00D76C8B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = J52QUTREBS;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalksTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GPTalks.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GPTalks";
-				XROS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Release;
-		};
-		08A222AD2C2AB4FE00D76C8B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = J52QUTREBS;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalksUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = GPTalks;
-				XROS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Debug;
-		};
-		08A222AE2C2AB4FE00D76C8B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = J52QUTREBS;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zabir.GPTalksUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = GPTalks;
-				XROS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1525,24 +1281,6 @@
 			buildConfigurations = (
 				08A222A72C2AB4FE00D76C8B /* Debug */,
 				08A222A82C2AB4FE00D76C8B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		08A222A92C2AB4FE00D76C8B /* Build configuration list for PBXNativeTarget "GPTalksTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				08A222AA2C2AB4FE00D76C8B /* Debug */,
-				08A222AB2C2AB4FE00D76C8B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		08A222AC2C2AB4FE00D76C8B /* Build configuration list for PBXNativeTarget "GPTalksUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				08A222AD2C2AB4FE00D76C8B /* Debug */,
-				08A222AE2C2AB4FE00D76C8B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
