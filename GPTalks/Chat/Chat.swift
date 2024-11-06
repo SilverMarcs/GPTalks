@@ -52,9 +52,6 @@ final class Chat {
     }
     
     @Transient
-    var streamer: StreamHandler?
-    
-    @Transient
     var inputManager = InputManager()
     
     init(config: ChatConfig) {
@@ -76,30 +73,32 @@ final class Chat {
     @MainActor
     func processRequest() async {
         streamingTask = Task {
-            streamer = .init(session: self)
-            try await streamer?.handleRequest()
+            let streamer = StreamHandler(session: self)
             
-            // will the following lines only be executed after processRequest is done?
-            streamingTask?.cancel()
-            streamingTask = nil
-//            self.refreshTokens() // TODO: make async
-        }
-        
-        do {
-            #if os(macOS)
-            try await streamingTask?.value
-            #else
-            let application = UIApplication.shared
-            let taskId = application.beginBackgroundTask {
-                // Handle expiration of background task here
+            // Request background task before starting network operations
+            #if !os(macOS)
+            let backgroundTaskId = UIApplication.shared.beginBackgroundTask { [weak self] in
+                self?.streamingTask?.cancel()
             }
             
-            try await streamingTask?.value
-            
-            application.endBackgroundTask(taskId)
+            defer {
+                // Ensure we end the background task when done
+                UIApplication.shared.endBackgroundTask(backgroundTaskId)
+            }
             #endif
-        } catch {
-            handleError(error)
+            
+            do {
+                try await streamer.handleRequest()
+            } catch {
+                handleError(error)
+            }
+            
+            streamingTask?.cancel()
+            streamingTask = nil
+        }
+        
+        if AppConfig.shared.autogenTitle {
+            Task { await generateTitle() }
         }
     }
     
@@ -114,10 +113,6 @@ final class Chat {
             await handleEditing()
         } else {
             await handleNewInput()
-        }
-
-        if AppConfig.shared.autogenTitle {
-            Task { await generateTitle() }
         }
     }
 
@@ -161,7 +156,6 @@ final class Chat {
         }
     }
     
-//    @MainActor
     func generateTitle(forced: Bool = false) async {
         guard !isQuick else { return }
         guard forced || threads.count <= 2 else { return }
@@ -179,27 +173,6 @@ final class Chat {
         
         self.tokenCount = (messageTokens + sysPromptTokens + toolTokens + inputTokens)
     }
-    
-    func copy(from thread: Thread? = nil, purpose: ChatConfigPurpose) async -> Chat {
-        let newSession = Chat(config: config.copy(purpose: purpose))
-        
-        let leading = switch purpose {
-            case .chat: "Ψ"
-            case .quick: "↯"
-            case .title: "T"
-        }
-        
-        newSession.title = "\(leading) \(self.title)"
-        
-        if let thread = thread, let index = threads.firstIndex(of: thread) {
-            newSession.threads = threads.prefix(through: index).map { $0.copy() }
-        } else {
-            newSession.threads = threads.map { $0.copy() }
-        }
-        
-        return newSession
-    }
-
     
     func addThread(_ thread: Thread) {
         if thread.role == .assistant {
@@ -223,46 +196,35 @@ final class Chat {
     // TODO: make async
     func deleteThread(_ thread: Thread) {
         threads.removeAll(where: { $0 == thread })
-        // TOOD: put all in single thread.
-//
-//        if let index = groups.firstIndex(of: conversationGroup) {
-//            if conversationGroup.role == .assistant {
-//                var groupsToDelete = [conversationGroup]
-//                
-//                // Iterate backwards from the index of the group to be deleted
-//                for i in stride(from: index - 1, through: 0, by: -1) {
-//                    let previousGroup = groups[i]
-//                    if previousGroup.role == .user {
-//                        break // Stop when we encounter a user role
-//                    }
-//                    groupsToDelete.append(previousGroup)
-//                }
-//                
-//                // Remove the groups from the array
-//                groups.removeAll(where: { groupsToDelete.contains($0) })
-//                
-//                
-//                // Delete the groups from the model context
-//                for group in groupsToDelete {
-//                    self.modelContext?.delete(group)
-//                }
-//            } else {
-//                // If it's not an assistant role, just delete the single group
-//                groups.removeAll(where: { $0 == conversationGroup })
-//                
-//                self.modelContext?.delete(conversationGroup)
-//            }
-//        }
-        self.refreshTokens()
+        modelContext?.delete(thread)
     }
 
     
     func deleteAllThreads() {
+        errorMessage = ""
         while let thread = threads.popLast() {
-            self.modelContext?.delete(thread)
+            modelContext?.delete(thread)
+        }
+    }
+    
+    
+    func copy(from thread: Thread? = nil, purpose: ChatConfigPurpose) async -> Chat {
+        let newSession = Chat(config: config.copy(purpose: purpose))
+        
+        let leading = switch purpose {
+            case .chat: "Ψ"
+            case .quick: "↯"
+            case .title: "T"
         }
         
-        errorMessage = ""
-        self.refreshTokens()
+        newSession.title = "\(leading) \(self.title)"
+        
+        if let thread = thread, let index = threads.firstIndex(of: thread) {
+            newSession.threads = threads.prefix(through: index).map { $0.copy() }
+        } else {
+            newSession.threads = threads.map { $0.copy() }
+        }
+        
+        return newSession
     }
 }

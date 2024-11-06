@@ -44,9 +44,7 @@ struct UserMessage: View {
         .padding(.leading, leadingPadding)
         #if !os(macOS)
         .contextMenu {
-            if let group = thread.group {
-                ThreadMenu(group: group, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
-            }
+            ThreadMenu(thread: thread, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
         } preview: {
             Text("User Message")
                 .padding()

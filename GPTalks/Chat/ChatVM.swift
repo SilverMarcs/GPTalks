@@ -58,7 +58,7 @@ import SwiftUI
         #else
         self.chatSelections = []
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.chatSelections = [newSession]
+            self.chatSelections = [newChat]
         }
         #endif
     }

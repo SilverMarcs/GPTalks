@@ -10,7 +10,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct CameraView: UIViewControllerRepresentable {
-    var session: Chat
+    var chat: Chat
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
@@ -27,17 +27,17 @@ struct CameraView: UIViewControllerRepresentable {
     }
 
     func makeCoordinator() -> Coordinator {
-        return Coordinator(picker: self, session: session)
+        return Coordinator(picker: self, chat: chat)
     }
 }
 
 class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     var picker: CameraView
-    var session: Chat
+    var chat: Chat
     
-    init(picker: CameraView, session: Chat) {
+    init(picker: CameraView, chat: Chat) {
         self.picker = picker
-        self.session = session
+        self.chat = chat
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -53,12 +53,12 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
             fileName: fileName
         )
         
-        self.session.inputManager.dataFiles.append(typedData)
-        self.session.showCamera = false
+        chat.inputManager.dataFiles.append(typedData)
+        chat.showCamera = false
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.session.showCamera = false
+        chat.showCamera = false
     }
 }
 #endif

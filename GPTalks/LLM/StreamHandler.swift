@@ -111,10 +111,10 @@ struct StreamHandler {
         }
         
         // TODO: already doing this in init. why duplicate? maybe do this in handleRequest()
-        session.streamer = StreamHandler(session: session)
+        let streamer = StreamHandler(session: session)
                       
         if toolDatas.isEmpty {
-            try await session.streamer?.handleRequest()
+            try await streamer.handleRequest()
         } else {
             // when assistant returns a data file, we handle differently
             let typedDataFiles = toolDatas.map { data in

@@ -30,8 +30,8 @@ struct IOSWindow: Scene {
             } detail: {
                 switch listStateVM.state {
                 case .chats:
-                    if let chatSession = chatVM.activeSession {
-                        ThreadList(session: chatSession)
+                    if let chat = chatVM.activeChat {
+                        ThreadList(chat: chat)
                     } else {
                         Text("^[\(chatVM.chatSelections.count) Chat Session](inflect: true) Selected")
                     }

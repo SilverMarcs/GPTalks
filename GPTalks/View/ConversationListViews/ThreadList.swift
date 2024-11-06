@@ -24,9 +24,9 @@ struct ThreadList: View {
             List {
                 ForEach(chat.threads, id: \.self) { thread in
                     ThreadView(thread: thread)
-                        #if os(iOS)
+#if os(iOS)
                         .opacity(0.9)
-                        #endif
+#endif
                 }
                 .listRowSeparator(.hidden)
                 
@@ -42,9 +42,9 @@ struct ThreadList: View {
             .task {
                 chat.proxy = proxy
                 
-                #if os(macOS)
+#if os(macOS)
                 scrollToBottom(proxy: proxy, animated: false)
-                #endif
+#endif
                 
                 scrollToBottom(proxy: proxy, delay: 0.2)
             }
@@ -61,6 +61,7 @@ struct ThreadList: View {
                     scrollToBottom(proxy: proxy)
                 }
             }
+
             .onDrop(of: [.item], isTargeted: nil) { providers in
                 chat.inputManager.handleDrop(providers)
             }
@@ -75,12 +76,17 @@ struct ThreadList: View {
             #else
             .listStyle(.plain)
             .toolbarTitleDisplayMode(.inline)
-            #if !os(visionOS)
-            .scrollDismissesKeyboard(.immediately)
-            #endif
+            .onScrollPhaseChange { oldPhase, newPhase in  // this sint working on macos
+                if newPhase == .tracking || newPhase.isScrolling {
+                    chat.hasUserScrolled = true
+                }
+            }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)) { _ in
                 scrollToBottom(proxy: proxy, delay: 0.1)
             }
+            #if !os(visionOS)
+            .scrollDismissesKeyboard(.immediately)
+            #endif
             #endif
         }
     }
