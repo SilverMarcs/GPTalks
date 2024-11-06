@@ -131,6 +131,8 @@ struct OpenAIService: AIService {
                             }
                         } else if let content = result.choices.first?.delta.content, !content.isEmpty {
                             continuation.yield(.content(content))
+                        } else if let usage = result.usage {
+                            continuation.yield(.outputTokens(usage.totalTokens))
                         }
                     }
                     
