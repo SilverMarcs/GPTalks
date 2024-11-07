@@ -70,6 +70,19 @@ extension AIModel {
         ]
     }
     
+    static func getXaiModels() -> [AIModel] {
+        return [
+            AIModel(code: "grok-beta", name: "Grok", type: .chat),
+        ]
+    }
+    
+    static func getOpenrouterModels() -> [AIModel] {
+        return [
+            AIModel(code: "openai/gpt-4o-mini", name: "GPT-4om", type: .chat),
+            AIModel(code: "openai/gpt-4o", name: "GPT-4o", type: .chat),
+        ]
+    }
+    
     static func getLocalModels() -> [AIModel] {
         return [
             AIModel(code: "dummy-model", name: "Dummy", type: .chat),

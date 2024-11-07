@@ -122,13 +122,13 @@ private func exportMarkdown(session: Chat) {
 }
 
 extension View {
-    func markdownSessionExporter(isExporting: Binding<Bool>, session: Chat) -> some View {
-        let markdown = generateMarkdown(for: session)
+    func markdownSessionExporter(isExporting: Binding<Bool>, chat: Chat) -> some View {
+        let markdown = generateMarkdown(for: chat)
         return self.fileExporter(
             isPresented: isExporting,
             document: MarkdownFile(initialText: markdown),
             contentType: .plainText,
-            defaultFilename: "\(session.title).md"
+            defaultFilename: "\(chat.title).md"
         ) { result in
             switch result {
             case .success(let url):

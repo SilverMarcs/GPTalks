@@ -37,7 +37,7 @@ struct VertexService: AIService {
             ])
         }
         
-        for data in conversation.dataFiles {
+        for data in conversation.dataFiles where conversation.role == .user {
             if data.fileType.conforms(to: .image) {
                 let imageContent: [String: Any] = [
                     "type": "image",

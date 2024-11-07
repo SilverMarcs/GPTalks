@@ -104,6 +104,8 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .anthropic: AIModel.getAnthropicModels()
         case .google: AIModel.getGoogleModels()
         case .vertex: AIModel.getVertexModels()
+        case .xai: AIModel.getXaiModels()
+        case .openrouter: AIModel.getOpenrouterModels()
         case .ollama: AIModel.getLocalModels()
         default: AIModel.getOpenaiModels()
         }

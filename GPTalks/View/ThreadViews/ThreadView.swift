@@ -21,7 +21,7 @@ struct ThreadView: View {
                 ToolCallView(thread: thread)
             }
         case .tool:
-            ToolMessage(thread: thread)
+            ToolResponseView(thread: thread)
         default:
             Text("Unknown role")
         }

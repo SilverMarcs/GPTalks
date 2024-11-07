@@ -21,7 +21,7 @@ struct ToolCallView: View {
                 .opacity(0.9)
                 .transaction { $0.animation = nil }
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 5) {
                 Button {
                     withAnimation {
                         showArguments.toggle()
@@ -44,6 +44,13 @@ struct ToolCallView: View {
                 .transaction { $0.animation = nil }
                 .buttonStyle(.plain)
                 
+                if !thread.content.isEmpty {
+                    Text(thread.content)
+                        .lineSpacing(3)
+                        .textSelection(.enabled)
+                        .transaction { $0.animation = nil }
+                }
+                    
                 if showArguments {
                     HStack(alignment: .center) {
                         Rectangle()

@@ -13,7 +13,7 @@ struct UserMessage: View {
     @Environment(\.isSearch) var isSearch
     @ObservedObject var config = AppConfig.shared
     
-    @Bindable var thread: Thread
+    var thread: Thread
     @State var isHovered: Bool = false
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
@@ -21,7 +21,7 @@ struct UserMessage: View {
     var body: some View {
         VStack(alignment: .trailing, spacing: 7) {
             if !thread.dataFiles.isEmpty {
-                DataFilesView(dataFiles: $thread.dataFiles, isCrossable: false)
+                DataFilesView(dataFiles: thread.dataFiles)
             }
             
             GroupBox {

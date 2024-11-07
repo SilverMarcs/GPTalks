@@ -8,6 +8,6 @@
 import Foundation
 
 struct ToolData: Codable {
-    var string: String = ""
-    var data: [Data] = []
+    var string: String
+    var data: [TypedData] = []
 }

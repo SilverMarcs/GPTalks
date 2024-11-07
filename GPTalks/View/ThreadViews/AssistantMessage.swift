@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AssistantMessage: View {
     @ObservedObject var config = AppConfig.shared
-    @Bindable var thread: Thread
+    var thread: Thread
     
     @State private var isHovering: Bool = false
     @State private var showingTextSelection = false
@@ -22,20 +22,19 @@ struct AssistantMessage: View {
                 .foregroundStyle(Color(hex: thread.provider?.color  ?? "#00947A").gradient)
             
             VStack(alignment: .leading, spacing: 7) {
-                if let model = thread.model {
-                    Text(thread.dataFiles.isEmpty ? model.name : thread.chat?.config.provider.toolImageModel.name ?? "")
-                        .font(.subheadline)
-                        .bold()
-                        .foregroundStyle(.secondary)
-                        #if os(macOS)
-                        .padding(.top, 2)
-                        #endif
-                }
+                Text(thread.model?.name ?? "Assistant")
+                    .font(.subheadline)
+                    .bold()
+                    .foregroundStyle(.secondary)
+                    #if os(macOS)
+                    .padding(.top, 2)
+                    #endif
                 
                 MarkdownView(content: thread.content)
+                    .transaction { $0.animation = nil }
                 
                 if !thread.dataFiles.isEmpty {
-                    DataFilesView(dataFiles: $thread.dataFiles, isCrossable: false, edge: .leading)
+                    DataFilesView(dataFiles: thread.dataFiles, edge: .leading)
                 }
                 
                 if thread.isReplying {

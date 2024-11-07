@@ -11,6 +11,7 @@ struct ToolResponse: Identifiable, Codable, Equatable {
     var id: UUID = UUID()
     var toolCallId: String
     var tool: ChatTool
-    var processedContent: String = ""
-    var processedData: [Data] = []
+    // unify the two into tooldata TODO: unify
+    var processedContent: String = "Tool Processed Image"
+    var processedData: [TypedData] = []
 }

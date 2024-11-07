@@ -21,7 +21,7 @@ struct GenerateImageSettings: View {
         }
         
         Section("Defaults") {            
-            ProviderPicker(provider: $providerDefaults.imageProvider, providers: providers)
+            ProviderPicker(provider: $providerDefaults.toolImageProvider, providers: providers)
             
             ModelPicker(model: $providerDefaults.imageProvider.toolImageModel, models: providerDefaults.imageProvider.imageModels, label: "Image Model")
         }

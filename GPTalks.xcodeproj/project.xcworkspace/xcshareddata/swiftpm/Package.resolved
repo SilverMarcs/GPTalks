@@ -1,5 +1,5 @@
 {
-  "originHash" : "dc10ab95750033ec7038896af96e9043ddd393e032683fd359cd6c01445b7ff7",
+  "originHash" : "d3351fd7f9e73842a4c8fbd2cc7f692ba777c3397c7269f3963857019991b0a6",
   "pins" : [
     {
       "identity" : "googlegenerativeai",
@@ -26,15 +26,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "76b664eb66d48b08b71b586f06bd884d9998a94b"
-      }
-    },
-    {
-      "identity" : "openai",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/OpenAI",
-      "state" : {
-        "branch" : "main",
-        "revision" : "06742165993db2aec8537d1a10087d6c8c90aae0"
       }
     },
     {

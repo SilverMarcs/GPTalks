@@ -47,6 +47,7 @@ struct ProviderGeneral: View {
                     HStack {
                         if showKey {
                             TextField("API Key", text: $provider.apiKey)
+                                .monospaced()
                         } else {
                             SecureField("API Key", text: $provider.apiKey)
                         }

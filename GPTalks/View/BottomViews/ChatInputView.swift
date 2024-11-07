@@ -37,8 +37,10 @@ struct ChatInputView: View {
                 Spacer(minLength: 0)
                 
                 if !chat.inputManager.dataFiles.isEmpty {
-                    DataFilesView(dataFiles: $chat.inputManager.dataFiles, isCrossable: true, edge: .leading)
-                        .padding(.bottom, 5)
+                    DataFilesView(dataFiles: chat.inputManager.dataFiles, edge: .leading) { file in
+                        chat.inputManager.dataFiles.removeAll(where: { $0 == file })
+                    }
+                    .padding(.bottom, 5)
                 }
                 
                 InputEditor(prompt: $chat.inputManager.prompt, provider: chat.config.provider, isFocused: _isFocused)

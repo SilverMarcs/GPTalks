@@ -10,9 +10,9 @@ import QuickLook
 import UniformTypeIdentifiers
 
 struct DataFilesView: View {
-    @Binding var dataFiles: [TypedData]
-    var isCrossable: Bool
+    let dataFiles: [TypedData]
     var edge: UnitPoint = .trailing
+    var onDelete: ((TypedData) -> Void)? = nil
     
     @State private var selectedFileURL: URL?
     
@@ -33,15 +33,13 @@ struct DataFilesView: View {
         ZStack(alignment: .bottomTrailing) {
             fileView(for: typedData)
             
-            if isCrossable {
+            if let onDelete {
                 Button {
-                    withAnimation {
-                        dataFiles.removeAll(where: { $0.id == typedData.id })
-                    }
+                    onDelete(typedData)
                 } label: {
                     Label("Remove", systemImage: "xmark.circle.fill")
                         #if !os(macOS)
-                        .padding(10) // Increase padding for better touch area
+                        .padding(10)
                         .contentShape(.rect)
                         #endif
                 }

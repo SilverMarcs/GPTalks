@@ -32,9 +32,11 @@ struct QuickPanelView: View {
                 .frame(height: 57)
             
             if !chat.inputManager.dataFiles.isEmpty {
-                DataFilesView(dataFiles: $chat.inputManager.dataFiles, isCrossable: true)
-                    .safeAreaPadding(.horizontal)
-                    .safeAreaPadding(.vertical, 10)
+                DataFilesView(dataFiles: chat.inputManager.dataFiles) { file in
+                    chat.inputManager.dataFiles.removeAll { $0 == file }
+                }
+                .safeAreaPadding(.horizontal)
+                .safeAreaPadding(.vertical, 10)
             }
             
             if chat.threads.isEmpty {

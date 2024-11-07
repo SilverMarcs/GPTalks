@@ -89,11 +89,11 @@ class Provider {
     
     static func factory(type: ProviderType, isDummy: Bool = false) -> Provider {
         let demoImageModel = AIModel.dalle
-        let demoTTSModel = AIModel.whisper
+        let demoSttModel = AIModel.whisper
         
         let chatModels = type.getDefaultModels()
         let imageModels = type == .openai ? AIModel.getOpenImageModels() : []
-        let ttsModels = type == .openai ? AIModel.getOpenAITTSModels() : []
+        let sttModels = type == .openai ? AIModel.getOpenAITTSModels() : []
         
         
         let provider = Provider(
@@ -111,8 +111,8 @@ class Provider {
             toolImageModel: imageModels.first ?? demoImageModel,
             chatModels: chatModels,
             imageModels: imageModels,
-            sttModel: ttsModels.first ?? demoTTSModel,
-            sttModels: ttsModels
+            sttModel: sttModels.first ?? demoSttModel,
+            sttModels: sttModels
         )
         
         

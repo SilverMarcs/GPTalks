@@ -1,5 +1,5 @@
 //
-//  ToolMessage.swift
+//  ToolResponseView.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 15/09/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ToolMessage: View {
+struct ToolResponseView: View {
     var thread: Thread
     @State private var showPopover = false
     
@@ -36,6 +36,7 @@ struct ToolMessage: View {
         #if os (macOS)
         ScrollView {
             Text(content)
+                .multilineTextAlignment(.leading)
                 .textSelection(.enabled)
                 .padding()
         }
@@ -85,5 +86,5 @@ struct ToolMessage: View {
 }
 
 #Preview {
-    ToolMessage(thread: .mockToolThread)
+    ToolResponseView(thread: .mockToolThread)
 }

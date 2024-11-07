@@ -21,7 +21,7 @@ struct ImageInputView: View {
                 sendInput()
             }
         }
-        .padding(6)
+        .padding(5)
         .roundedRectangleOverlay(radius: 20)
         .modifier(CommonInputStyling())
     }
@@ -37,7 +37,7 @@ struct ImageInputView: View {
     
     var imageSize: CGFloat {
         #if os(macOS)
-        23
+        21
         #else
         31
         #endif

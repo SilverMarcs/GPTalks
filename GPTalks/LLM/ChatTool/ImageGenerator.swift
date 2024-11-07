@@ -33,9 +33,13 @@ struct ImageGenerator: ToolProtocol {
             config: config
         )
         
+        let typedDatas = dataObjects.map {
+            TypedData(data: $0, fileType: .image, fileName: "generated_image.png")
+        }
+        
         return .init(
             string: "Provider: \(toolImageProvider.name)\nModel: \(toolImageProvider.imageModel.name)\nSize: \(config.size)\nQuality: \(config.quality)\nNumber of Images: \(config.numImages)",
-            data: dataObjects
+            data: typedDatas
         )
     }
     

@@ -35,14 +35,14 @@ struct AdvancedInspector: View {
                 .buttonStyle(ClickHighlightButton())
                 .foregroundStyle(.accent)
                 
-//                Button {
-//                    isExportingMarkdown = true
-//                } label: {
-//                    Label("Markdown", systemImage: "richtext.page")
-//                }
-//                .markdownSessionExporter(isExporting: $isExportingMarkdown, chat: chat)
-//                .buttonStyle(ClickHighlightButton())
-//                .foregroundStyle(.accent)
+                Button {
+                    isExportingMarkdown = true
+                } label: {
+                    Label("Markdown", systemImage: "richtext.page")
+                }
+                .markdownSessionExporter(isExporting: $isExportingMarkdown, chat: chat)
+                .buttonStyle(ClickHighlightButton())
+                .foregroundStyle(.accent)
             }
         }
         .formStyle(.grouped)
