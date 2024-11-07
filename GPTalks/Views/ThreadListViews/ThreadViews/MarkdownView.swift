@@ -19,6 +19,7 @@ struct MarkdownView: View {
             .markdownBaseURL("GPTalks Web Content")
             .markdownHighlightString(sessionVM.searchText)
             .markdownFontSize(CGFloat(config.fontSize))
+            .renderSkeleton(config.renderSkeleton)
     }
 }
 

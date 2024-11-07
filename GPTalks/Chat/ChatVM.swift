@@ -31,7 +31,7 @@ import SwiftUI
     }
     
     func sendPrompt() async {
-        guard let (chat, _) = activeChatAndLastThread else { return }
+        guard let chat = activeChat else { return }
         await chat.sendInput()
     }
     
@@ -50,7 +50,7 @@ import SwiftUI
     }
 
     func editLastMessage() {
-        guard let (chat, _) = activeChatAndLastThread else { return }
+        guard let chat = activeChat else { return }
         guard let lastUserThread = chat.threads.last(where: { $0.role == .user }) else { return }
         chat.inputManager.setupEditing(thread: lastUserThread)
     }

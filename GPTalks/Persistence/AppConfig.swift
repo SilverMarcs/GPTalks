@@ -12,6 +12,7 @@ class AppConfig: ObservableObject {
     private init() {}
     
     // Appearance
+    @AppStorage("renderSkeleton") var renderSkeleton: Bool = true
     #if os(macOS)
     @AppStorage("fontSize") var fontSize: Double = 13
     #else
@@ -22,6 +23,7 @@ class AppConfig: ObservableObject {
     @AppStorage("autogenTitle") var autogenTitle: Bool = true
     @AppStorage("hideDock") var hideDock = false
     @AppStorage("onlyOneWindow") var onlyOneWindow = false
+    
     
     // Quick
     @AppStorage("quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."
