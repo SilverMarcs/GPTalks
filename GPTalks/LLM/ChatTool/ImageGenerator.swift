@@ -53,8 +53,14 @@ struct ImageGenerator: ToolProtocol {
                                 quality: config.quality,
                                 size: config.size)
         
+        var imageUrls: [String?] = []
         
-        let imageUrls = try await service.images(query: query).data.map(\.url)
+        do {
+            imageUrls = try await service.images(query: query).data.map(\.url)
+        } catch {
+            throw RuntimeError("Failed to generate images: \(error)")
+        }
+        
         var dataObjects: [Data] = []
 
         for imageUrl in imageUrls {

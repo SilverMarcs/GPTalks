@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+//@MainActor
 struct StreamHandler {
     private let session: Chat
     private var assistant: Thread // TODO: maybe need ot fidn diff way of getting setting assistant

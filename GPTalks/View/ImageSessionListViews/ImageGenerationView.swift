@@ -49,6 +49,7 @@ struct ImageGenerationView: View {
                 
                 if generation.state == .error {
                     Text(generation.errorMessage)
+                        .textSelection(.enabled)
                         .foregroundStyle(.red)
                         .padding(.leading, 5)
                         .padding(.top, 1)

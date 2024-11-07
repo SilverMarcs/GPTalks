@@ -187,7 +187,8 @@ struct OpenAIService: AIService {
             temperature: config.temperature,
             tools: tools.isEmpty ? nil : tools,
             topP: config.topP,
-            stream: stream
+            stream: stream,
+            streamOptions: .init(includeUsage: true)
         )
     }
     
@@ -201,6 +202,7 @@ struct OpenAIService: AIService {
             let result = try await service.chats(query: query)
             return result.choices.first?.message.content?.string != nil
         } catch {
+            print("Model test error: \(error)")
             return false
         }
     }

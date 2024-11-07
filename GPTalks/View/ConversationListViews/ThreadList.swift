@@ -28,9 +28,6 @@ struct ThreadList: View {
                         .opacity(0.9)
                         #endif
                 }
-                .onDelete { indexSet in
-                    chat.threads.remove(atOffsets: indexSet)
-                }
                 .listRowSeparator(.hidden)
                 
                 ErrorMessageView(message: $chat.errorMessage)

@@ -30,7 +30,7 @@ struct GoogleService: AIService {
         for dataFile in conversation.dataFiles {
             if dataFile.fileType.conforms(to: .text) {
                 parts.insert(.text(dataFile.formattedTextContent), at: 0)
-            } else {
+            } else if dataFile.fileType.conforms(to: .image) {
                 parts.insert(.data(mimetype: dataFile.mimeType, dataFile.data), at: 0)
             }
         }
@@ -38,6 +38,12 @@ struct GoogleService: AIService {
         // TODO: see if can send image here
         if let response = conversation.toolResponse {
             parts.append(.functionResponse(.init(name: response.tool.rawValue, response: .init(dictionaryLiteral: ("content", .string(response.processedContent))))))
+            for dataFile in conversation.dataFiles {
+                // not sure if possible to send image here
+                if dataFile.fileType.conforms(to: .image) {
+                    parts.insert(.text(dataFile.formattedTextContent), at: 0)
+                }
+            }
         }
         
         return ModelContent(
