@@ -157,6 +157,7 @@
 		08D913F42CDA4798002E4E53 /* QueryThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D913F32CDA4798002E4E53 /* QueryThread.swift */; };
 		08DA5B0D2C72CE7700A7FE82 /* InputViewTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DA5B0C2C72CE7100A7FE82 /* InputViewTips.swift */; };
 		08DB150B2CDC5B2200DC5B90 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DB150A2CDC5B2200DC5B90 /* OpenAI */; };
+		08DF46222CDC83ED0064E3B5 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DF46212CDC83ED0064E3B5 /* OpenAI */; };
 		08F0EF1E2C6C2DFD00900ED0 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */; };
 		08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F369E22C3C278E002E4A35 /* ProviderType.swift */; };
 		08F3CA042C705B3300A800F9 /* SettingsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F3CA032C705B3300A800F9 /* SettingsWindow.swift */; };
@@ -364,6 +365,7 @@
 				0823551E2CDBC94D00388273 /* SwiftAnthropic in Frameworks */,
 				0823551B2CDBBCCB00388273 /* GoogleGenerativeAI in Frameworks */,
 				082355182CDBBC9A00388273 /* SwiftMarkdownView in Frameworks */,
+				08DF46222CDC83ED0064E3B5 /* OpenAI in Frameworks */,
 				08AAFB962C3CF0DD002C04E0 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -825,6 +827,7 @@
 				0823551D2CDBC94D00388273 /* SwiftAnthropic */,
 				082355202CDBD1F400388273 /* SwiftAnthropic */,
 				08DB150A2CDC5B2200DC5B90 /* OpenAI */,
+				08DF46212CDC83ED0064E3B5 /* OpenAI */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -859,7 +862,7 @@
 				082355162CDBBC9A00388273 /* XCRemoteSwiftPackageReference "markdown-webview" */,
 				082355192CDBBCCB00388273 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */,
 				0823551F2CDBD1F400388273 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
-				08DB15092CDC5B2200DC5B90 /* XCLocalSwiftPackageReference "../OpenAI" */,
+				08DF46202CDC83ED0064E3B5 /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1287,13 +1290,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		08DB15092CDC5B2200DC5B90 /* XCLocalSwiftPackageReference "../OpenAI" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../OpenAI;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		082355162CDBBC9A00388273 /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1325,6 +1321,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.0.0;
+			};
+		};
+		08DF46202CDC83ED0064E3B5 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SilverMarcs/OpenAI";
+			requirement = {
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1364,6 +1368,11 @@
 		};
 		08DB150A2CDC5B2200DC5B90 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = OpenAI;
+		};
+		08DF46212CDC83ED0064E3B5 /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08DF46202CDC83ED0064E3B5 /* XCRemoteSwiftPackageReference "OpenAI" */;
 			productName = OpenAI;
 		};
 /* End XCSwiftPackageProductDependency section */
