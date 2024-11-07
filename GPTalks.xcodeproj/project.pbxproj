@@ -556,7 +556,6 @@
 				08B82C1B2C74EA8300DC0183 /* DataFileViews */,
 				085524E02C4ED29400CBB827 /* MenubarCommands */,
 				08C800512C36F79E009581C5 /* SettingsViews */,
-				08C800402C36BF54009581C5 /* ThreadViews */,
 				08C8003B2C36BC56009581C5 /* ThreadListViews */,
 				08C800382C36BA1E009581C5 /* BottomViews */,
 				08C8003F2C36BD7B009581C5 /* ChatListViews */,
@@ -632,6 +631,7 @@
 		08C8003B2C36BC56009581C5 /* ThreadListViews */ = {
 			isa = PBXGroup;
 			children = (
+				08C800402C36BF54009581C5 /* ThreadViews */,
 				08F815302C97F62B00B49355 /* ChatInspector */,
 				08A222C32C2AC6B300D76C8B /* ThreadList.swift */,
 				085524E72C4ED61F00CBB827 /* ThreadToolbar.swift */,

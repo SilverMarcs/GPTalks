@@ -11,13 +11,11 @@ import SwiftData
 struct ThreadList: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.isQuick) var isQuick
-    
-    @Bindable var chat: Chat
-    
-    @ObservedObject var config: AppConfig = AppConfig.shared
-    
     @Environment(\.modelContext) var modelContext
     @Environment(ChatVM.self) private var chatVM
+    @ObservedObject var config: AppConfig = AppConfig.shared
+    
+    @Bindable var chat: Chat
     
     var body: some View {
         ScrollViewReader { proxy in

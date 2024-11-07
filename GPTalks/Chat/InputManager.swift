@@ -77,8 +77,11 @@ enum InputState {
         
         prompt = thread.content
         dataFiles = thread.dataFiles
-        withAnimation {
-            thread.chat?.proxy?.scrollTo(thread, anchor: .top)
+        thread.chat?.proxy?.scrollTo(thread, anchor: .top)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            withAnimation {
+                thread.chat?.proxy?.scrollTo(thread, anchor: .top)
+            }
         }
     }
     

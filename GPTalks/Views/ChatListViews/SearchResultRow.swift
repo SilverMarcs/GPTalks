@@ -20,6 +20,7 @@ struct SearchResultRow: View {
                 Button {
                     chatVM.searchResults = []
                     chatVM.chatSelections = [matchedThread.chat]
+                    chatVM.searching = false
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         matchedThread.chat.proxy?.scrollTo(matchedThread.thread, anchor: .top)
                     }
