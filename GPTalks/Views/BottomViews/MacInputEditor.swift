@@ -30,7 +30,7 @@ struct MacInputEditor: View {
                 .scrollContentBackground(.hidden)
         }
         .font(.body)
-        .task {
+        .onChange(of: sessionVM.chatSelections) {
             guard sessionVM.chatSelections.count == 1 else { return }
             isFocused = true
         }

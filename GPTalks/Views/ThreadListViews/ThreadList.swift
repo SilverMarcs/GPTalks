@@ -29,22 +29,21 @@ struct ThreadList: View {
                 .listRowSeparator(.hidden)
                 
                 ErrorMessageView(message: $chat.errorMessage)
-                    .listRowSeparator(.hidden)
-                    .transaction { $0.animation = nil }
                 
                 Color.clear
                     .transaction { $0.animation = nil }
                     .id(String.bottomID)
                     .listRowSeparator(.hidden)
             }
-            .task {
+            .scrollBounceBehavior(.basedOnSize)
+            .onChange(of: chatVM.chatSelections) {
                 chat.proxy = proxy
                 
                 #if os(macOS)
                 scrollToBottom(proxy: proxy, animated: false)
+                #else
+                scrollToBottom(proxy: proxy, delay: 0.3)
                 #endif
-                
-                scrollToBottom(proxy: proxy, delay: 0.2)
             }
             .toolbar {
                 ThreadToolbar(chat: chat)
@@ -54,11 +53,6 @@ struct ThreadList: View {
                     ChatInputView(chat: chat)
                 }
             }
-//            .onChange(of: chat.inputManager.prompt) {
-//                if chat.inputManager.state == .normal {
-//                    scrollToBottom(proxy: proxy)
-//                }
-//            }
             .onDrop(of: [.item], isTargeted: nil) { providers in
                 chat.inputManager.handleDrop(providers)
             }

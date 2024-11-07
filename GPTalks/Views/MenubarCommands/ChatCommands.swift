@@ -39,10 +39,18 @@ struct ChatCommands: Commands {
         }
         
         CommandMenu("Chat") {
+            Button("Send Prompt") {
+                Task { @MainActor in
+                    await sessionVM.sendPrompt()
+                }
+            }
+            .keyboardShortcut(.return)
+            .disabled(!(sessionVM.activeChat?.isReplying ?? false) && sessionVM.activeChat?.isQuick ?? false)
+            
             Button("Stop Streaming") {
                 sessionVM.stopStreaming()
             }
-            .keyboardShortcut("d", modifiers: .command)
+            .keyboardShortcut("d")
             .disabled(!(sessionVM.activeChat?.isReplying ?? false))
             
             Section {
@@ -51,22 +59,22 @@ struct ChatCommands: Commands {
                         sessionVM.editLastMessage()
                     }
                 }
-                .keyboardShortcut("e", modifiers: .command)
+                .keyboardShortcut("e")
                 .disabled(sessionVM.activeChat?.isQuick ?? true)
                 
                 Button("Regen Last Message") {
-                    Task {
+                    Task { @MainActor in
                         await sessionVM.regenLastMessage()
                     }
                 }
-                .keyboardShortcut("r", modifiers: .command)
+                .keyboardShortcut("r")
             }
             
             Section {
                 Button("Delete Last Message", role: .destructive) {
                     sessionVM.deleteLastMessage()
                 }
-                .keyboardShortcut(.delete, modifiers: .command)
+                .keyboardShortcut(.delete)
             }
         }
     }

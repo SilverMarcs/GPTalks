@@ -30,6 +30,11 @@ import SwiftUI
         return (chat, lastThread)
     }
     
+    func sendPrompt() async {
+        guard let (chat, _) = activeChatAndLastThread else { return }
+        await chat.sendInput()
+    }
+    
     func stopStreaming() {
         activeChat?.stopStreaming()
     }

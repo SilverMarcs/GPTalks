@@ -26,6 +26,8 @@ struct ErrorMessageView: View {
         }
         .foregroundStyle(.red)
         .opacity(message.isEmpty ? 0 : 1)
+        .listRowSeparator(.hidden)
+        .transaction { $0.animation = nil }
     }
 }
 

@@ -60,7 +60,7 @@ struct ChatDetail: View {
     private var chatSessionView: some View {
         if let chat = chatVM.activeChat, !chat.isQuick {
             ThreadList(chat: chat)
-                .id(chat.id)
+//                .id(chat.id)
         } else {
             Text("^[\(chatVM.chatSelections.count) Chat Session](inflect: true) Selected")
                 .font(.title)
