@@ -48,9 +48,6 @@ struct SettingsView: View {
                 Label("Providers", systemImage: "cpu")
                     .tag(SidebarItem.providers)
                 
-                Label("Backup", systemImage: "opticaldiscdrive")
-                    .tag(SidebarItem.backup)
-                
                 Label("Guides", systemImage: "book")
                     .tag(SidebarItem.guides)
             }
@@ -82,8 +79,6 @@ struct SettingsView: View {
                     ImageSettings(providerDefaults: providerDefaults.first!)
                 case .providers:
                     ProviderList()
-                case .backup:
-                    BackupSettings()
                 case .guides:
                     VStack {
                         Text("Guides")
@@ -115,7 +110,6 @@ struct SettingsView: View {
         case parameters
         case image
         case providers
-        case backup
         case guides
     }
 

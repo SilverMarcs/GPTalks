@@ -19,13 +19,6 @@ struct ContentHelper {
                 )
                 processedContents.append(imageContent)
             }
-//            else if dataFile.fileType.conforms(to: .pdf) {
-//                if let url = FileHelper.createTemporaryURL(for: dataFile) {
-//                    let contents = readPDF(from: url)
-//                    let textContent = ProcessedContent.text("PDF File contents: \n\(contents)\n Respond to the user based on their query.")
-//                    processedContents.append(textContent)
-//                }
-//            }
             else if dataFile.fileType.conforms(to: .text) {
                 if let textContent = String(data: dataFile.data, encoding: .utf8) {
                     processedContents.append(.text("Text File contents: \n\(textContent)\n Respond to the user based on their query."))

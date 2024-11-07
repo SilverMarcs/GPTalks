@@ -27,10 +27,11 @@ struct ProviderList: View {
             #endif
         }
         .toolbar {
+            ProviderBackupSettings()
+                .menuIndicator(.hidden)
             addButton
         }
     }
-    
     
     var content: some View {
         List(selection: $selectedProvider) {

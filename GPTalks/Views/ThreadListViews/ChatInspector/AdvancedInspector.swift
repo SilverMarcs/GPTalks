@@ -25,24 +25,25 @@ struct AdvancedInspector: View {
                 ToolsController(tools: $chat.config.tools, isGoogle: chat.config.provider.type == .google)
             }
             
-            Section("Export") {
-                Button {
-                    isExportingJSON = true
-                } label: {
-                    Label("JSON", systemImage: "ellipsis.curlybraces")
+            Button {
+                isExportingMarkdown = true
+            } label: {
+                Label("Export Markdown", systemImage: "richtext.page")
+            }
+            .buttonStyle(ClickHighlightButton())
+            .foregroundStyle(.accent)
+            .fileExporter(
+                isPresented: $isExportingMarkdown,
+                document: MarkdownFile(chat: chat),
+                contentType: .plainText,
+                defaultFilename: "\(chat.title).md"
+            ) { result in
+                switch result {
+                case .success(let url):
+                    print("Markdown saved to \(url)")
+                case .failure(let error):
+                    print("Error saving markdown: \(error)")
                 }
-                .sessionExporter(isExporting: $isExportingJSON, sessions: [chat])
-                .buttonStyle(ClickHighlightButton())
-                .foregroundStyle(.accent)
-                
-                Button {
-                    isExportingMarkdown = true
-                } label: {
-                    Label("Markdown", systemImage: "richtext.page")
-                }
-                .markdownSessionExporter(isExporting: $isExportingMarkdown, chat: chat)
-                .buttonStyle(ClickHighlightButton())
-                .foregroundStyle(.accent)
             }
         }
         .formStyle(.grouped)

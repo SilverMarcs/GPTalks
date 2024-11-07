@@ -1,14 +1,13 @@
 //
-//  ThreadListToolbar.swift
+//  ThreadToolbar.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 23/07/2024.
 //
 
 import SwiftUI
-import SwiftData
 
-struct ThreadListToolbar: ToolbarContent {
+struct ThreadToolbar: ToolbarContent {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ChatVM.self) private var chatVM
     @ObservedObject var config = AppConfig.shared
@@ -37,8 +36,8 @@ struct ThreadListToolbar: ToolbarContent {
         
         #if os(macOS)
         ToolbarItem(placement: .primaryAction) {
-            Button("Tokens: \(chat.totalTokens.formatToK())") { }
-            .allowsHitTesting(false)
+            Button("Tokens: \(String(format: "%.2fK", chat.totalTokens / 1000))") { }
+                .allowsHitTesting(false)
         }
         #endif
     }
@@ -57,6 +56,6 @@ struct ThreadListToolbar: ToolbarContent {
     }
     .frame(width: 700, height: 300)
     .toolbar {
-        ThreadListToolbar(chat: .mockChat)
+        ThreadToolbar(chat: .mockChat)
     }
 }

@@ -62,7 +62,7 @@ struct ToolCallView: View {
                             ForEach(thread.toolCalls) { toolCall in
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(toolCall.tool.displayName)
-                                    Text(toolCall.arguments.prettyPrintJSON())
+                                    Text(toolCall.arguments)
                                         .foregroundStyle(.secondary)
                                         .textSelection(.enabled)
                                         .monospaced()

@@ -11,8 +11,6 @@ import SwiftUI
 struct StreamHandler {
     private let session: Chat
     private var assistant: Thread // TODO: maybe need ot fidn diff way of getting setting assistant
-    
-    static let uiUpdateInterval: TimeInterval = Float.UIIpdateInterval
 
     init(session: Chat) {
         self.session = session
@@ -45,7 +43,7 @@ struct StreamHandler {
                 streamText += content
                 
                 let currentTime = Date()
-                if currentTime.timeIntervalSince(lastUIUpdateTime) >= Self.uiUpdateInterval {
+                if currentTime.timeIntervalSince(lastUIUpdateTime) >= Float.UIIpdateInterval {
                     assistant.content = streamText
                     lastUIUpdateTime = currentTime
                     session.scrollBottom()
@@ -68,7 +66,7 @@ struct StreamHandler {
     
     @MainActor
     private func finaliseStream(streamText: String = "", pendingToolCalls: [ChatToolCall], totalTokens: Int) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + Self.uiUpdateInterval) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
             session.totalTokens = totalTokens
             assistant.toolCalls = pendingToolCalls
             assistant.content = streamText

@@ -82,7 +82,6 @@ struct ChatInputView: View {
         .buttonStyle(.plain)
         .menuIndicator(.hidden)
         .fixedSize()
-        .multipleFileImporter(isPresented: $isFilePickerPresented, inputManager: chat.inputManager)
         .photosPicker(isPresented: $showPhotosPicker, selection: $selectedPhotos, matching: .images)
         .task(id: selectedPhotos) {
             await chat.inputManager.loadTransferredPhotos(from: selectedPhotos)
@@ -94,6 +93,34 @@ struct ChatInputView: View {
                 .ignoresSafeArea()
         }
         #endif
+        .fileImporter(
+            isPresented: $isFilePickerPresented,
+            allowedContentTypes: [.item],
+            allowsMultipleSelection: true
+        ) { result in
+            switch result {
+            case .success(let urls):
+                Task {
+                    for url in urls {
+                        // TODO: MOVE SEC STUFF TO PROCESSFILE FUNC
+                        guard url.startAccessingSecurityScopedResource() else {
+                            print("Failed to access security scoped resource for: \(url.lastPathComponent)")
+                            continue
+                        }
+                        
+                        do {
+                            try await chat.inputManager.processFile(at: url)
+                        } catch {
+                            print("Failed to process file: \(url.lastPathComponent). Error: \(error)")
+                        }
+                        
+                        url.stopAccessingSecurityScopedResource()
+                    }
+                }
+            case .failure(let error):
+                print("File selection error: \(error.localizedDescription)")
+            }
+        }
     }
     
     @ViewBuilder
@@ -113,7 +140,7 @@ struct ChatInputView: View {
     
     var imageSize: CGFloat {
         #if os(macOS)
-        20
+        21
         #else
         31
         #endif

@@ -49,7 +49,7 @@ struct ThreadList: View {
                 scrollToBottom(proxy: proxy, delay: 0.2)
             }
             .toolbar {
-                ThreadListToolbar(chat: chat)
+                ThreadToolbar(chat: chat)
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {

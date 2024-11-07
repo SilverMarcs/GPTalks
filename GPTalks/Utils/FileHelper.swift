@@ -6,31 +6,11 @@
 //
 
 import Foundation
-import SwiftUI
-import SwiftData
-import UniformTypeIdentifiers
-import QuickLook
 
 struct FileHelper {
-    static func deleteFile(at path: String) {
-        do {
-            #if os(macOS)
-            if let fileURL = URL(string: path) {
-                try Foundation.FileManager.default.removeItem(at: fileURL)
-            }
-            #else
-            let documentsDirectory = try Foundation.FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let fileURL = documentsDirectory.appendingPathComponent(path)
-            try Foundation.FileManager.default.removeItem(at: fileURL)
-            #endif
-        } catch {
-            print("Error deleting file: \(error.localizedDescription)")
-        }
-    }
-    
     static func createTemporaryURL(for typedData: TypedData) -> URL? {
         let tempDirectoryURL = FileManager.default.temporaryDirectory
-        let fileName = typedData.fileName + "." + typedData.fileType.fileExtension
+        let fileName = typedData.fileName
         let fileURL = tempDirectoryURL.appendingPathComponent(fileName)
 
         do {
@@ -44,7 +24,7 @@ struct FileHelper {
     
     static func createTemporaryURL(for data: Data) -> URL? {
         let tempDirectoryURL = FileManager.default.temporaryDirectory
-        let fileName = "temp_file_\(UUID().uuidString)"
+        let fileName = "temp_\(UUID().uuidString)"
         let fileExtension = inferFileExtension(from: data)
         let fullFileName = fileName + "." + fileExtension
         let fileURL = tempDirectoryURL.appendingPathComponent(fullFileName)
@@ -75,39 +55,6 @@ struct FileHelper {
         } else {
             // Default to binary if unable to infer
             return "bin"
-        }
-    }
-}
-
-extension View {
-    @ViewBuilder
-    func multipleFileImporter(isPresented: Binding<Bool>, inputManager: InputManager) -> some View {
-        self.fileImporter(
-            isPresented: isPresented,
-            allowedContentTypes: [.item],
-            allowsMultipleSelection: true
-        ) { result in
-            switch result {
-            case .success(let urls):
-                Task {
-                    for url in urls {
-                        guard url.startAccessingSecurityScopedResource() else {
-                            print("Failed to access security scoped resource for: \(url.lastPathComponent)")
-                            continue
-                        }
-                        
-                        do {
-                            try await inputManager.processFile(at: url)
-                        } catch {
-                            print("Failed to process file: \(url.lastPathComponent). Error: \(error)")
-                        }
-                        
-                        url.stopAccessingSecurityScopedResource()
-                    }
-                }
-            case .failure(let error):
-                print("File selection error: \(error.localizedDescription)")
-            }
         }
     }
 }

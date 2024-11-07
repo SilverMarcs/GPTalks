@@ -1,5 +1,5 @@
 {
-  "originHash" : "d5ac1f644f0c4e611ffc7f98c9727875a03398ed2392dbc17e2e3efd5098a315",
+  "originHash" : "dc10ab95750033ec7038896af96e9043ddd393e032683fd359cd6c01445b7ff7",
   "pins" : [
     {
       "identity" : "googlegenerativeai",
@@ -25,7 +25,7 @@
       "location" : "https://github.com/SilverMarcs/markdown-webview",
       "state" : {
         "branch" : "main",
-        "revision" : "76b664eb66d48b08b71b586f06bd884d9998a94b"
+        "revision" : "ad15dd1e86ed719ff2a3641fb674965d900c9da7"
       }
     },
     {

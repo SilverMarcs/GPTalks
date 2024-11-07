@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftData
 import UniformTypeIdentifiers
 
 struct ProviderBackup: Codable {
@@ -125,22 +126,4 @@ struct ProvidersDocument: FileDocument {
         return FileWrapper(regularFileWithContents: data)
     }
 
-}
-
-func restoreProviders(from url: URL) throws -> [Provider] {
-    guard url.startAccessingSecurityScopedResource() else {
-        throw NSError(domain: "FileAccessError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to access the security-scoped resource."])
-    }
-    defer {
-        url.stopAccessingSecurityScopedResource()
-    }
-
-    do {
-        let data = try Data(contentsOf: url)
-        let backups = try JSONDecoder().decode([ProviderBackup].self, from: data)
-        return backups.map { $0.toProvider() }
-    } catch {
-        print("Error reading or decoding file: \(error)")
-        throw error
-    }
 }
