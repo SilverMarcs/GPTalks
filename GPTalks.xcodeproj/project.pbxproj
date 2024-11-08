@@ -82,6 +82,7 @@
 		087F3F8F2CDDEF79001298B3 /* SettingsSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F8E2CDDEF79001298B3 /* SettingsSidebar.swift */; };
 		087F3F922CDDF00C001298B3 /* ListStateVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F912CDDF00C001298B3 /* ListStateVM.swift */; };
 		087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F932CDE19EC001298B3 /* AboutWindow.swift */; };
+		087F3F962CDE2AA4001298B3 /* ProviderTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F952CDE2AA4001298B3 /* ProviderTips.swift */; };
 		088475342CAE8E57006C04F0 /* AppIconMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088475332CAE8E57006C04F0 /* AppIconMenu.swift */; };
 		0886D8202C8707190058700F /* VertexService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886D81F2C8707190058700F /* VertexService.swift */; };
 		0888C5852CD5686100A1EA5E /* ChatOrSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0888C5842CD5686100A1EA5E /* ChatOrSearchView.swift */; };
@@ -244,6 +245,7 @@
 		087F3F8E2CDDEF79001298B3 /* SettingsSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSidebar.swift; sourceTree = "<group>"; };
 		087F3F912CDDF00C001298B3 /* ListStateVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListStateVM.swift; sourceTree = "<group>"; };
 		087F3F932CDE19EC001298B3 /* AboutWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
+		087F3F952CDE2AA4001298B3 /* ProviderTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderTips.swift; sourceTree = "<group>"; };
 		088475332CAE8E57006C04F0 /* AppIconMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconMenu.swift; sourceTree = "<group>"; };
 		0886D81F2C8707190058700F /* VertexService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexService.swift; sourceTree = "<group>"; };
 		0888C5842CD5686100A1EA5E /* ChatOrSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatOrSearchView.swift; sourceTree = "<group>"; };
@@ -417,6 +419,7 @@
 				08DA5B0C2C72CE7100A7FE82 /* InputViewTips.swift */,
 				0841391F2C7169D50049E3B2 /* SessionListTips.swift */,
 				08BDFE2D2C734DAE0054B36A /* ConversationListTips.swift */,
+				087F3F952CDE2AA4001298B3 /* ProviderTips.swift */,
 			);
 			path = Tips;
 			sourceTree = "<group>";
@@ -1014,6 +1017,7 @@
 				085276BE2C98706E009184D2 /* MacInputEditor.swift in Sources */,
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,
 				0888C5852CD5686100A1EA5E /* ChatOrSearchView.swift in Sources */,
+				087F3F962CDE2AA4001298B3 /* ProviderTips.swift in Sources */,
 				08149A572C3E5E5B004485AC /* ThreadRole.swift in Sources */,
 				0853611F2C4A38C9007DAB62 /* GenericSlider.swift in Sources */,
 				08F8153C2C97F72200B49355 /* TranscribeSettings.swift in Sources */,

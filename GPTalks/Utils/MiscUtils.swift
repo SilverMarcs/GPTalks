@@ -65,6 +65,12 @@ extension String {
         UIPasteboard.general.string = self
 #endif
     }
+    
+    func cleanMarkdown() -> String {
+        let markdownCharacters = CharacterSet(charactersIn: "#*_`!:.^")
+        let cleanedText = self.components(separatedBy: markdownCharacters).joined()
+        return cleanedText
+    }
 }
 
 // MARK: - Scrolling

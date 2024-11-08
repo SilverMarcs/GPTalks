@@ -15,7 +15,7 @@ enum ProviderTab: String, CaseIterable, Identifiable {
     case image
     case stt
 
-    var name: some View {
+    var label: some View {
         switch self {
         case .general:
             Label("General", systemImage: "info.circle")

@@ -37,11 +37,16 @@ struct ProviderDetail: View {
     
     private var picker: some View {
         Picker("Tabs", selection: $selectedTab) {
-            ForEach(ProviderTab.allCases, id: \.self) { tab in
-                tab.name.tag(tab)
+            ForEach(ProviderTab.allCases) { tab in
+                tab.label.tag(tab)
+                    #if os(macOS)
+                    .labelStyle(.titleOnly)
+                    #else
                     .labelStyle(.iconOnly)
+                    #endif
             }
         }
+        .popoverTip(ProviderRefreshTip())
         .pickerStyle(.segmented)
         .fixedSize()
     }
