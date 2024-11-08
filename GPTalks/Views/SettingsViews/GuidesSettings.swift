@@ -55,17 +55,6 @@ struct GuidesSettings: View {
     ]
 }
 
-struct Shortcut {
-    let key: String
-    let action: String
-}
-
-struct Guide: Identifiable {
-    let id = UUID()
-    let title: String
-    let content: String
-}
-
 struct GuideSection: View {
     let guide: Guide
     

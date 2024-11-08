@@ -13,9 +13,9 @@ struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     
     #if os(macOS)
-    @State private var selectedSidebarItem: SidebarItem? = .general
+    @State private var selectedSettingsSidebar: SettingsSidebar? = .general
     #else
-    @State private var selectedSidebarItem: SidebarItem?
+    @State private var selectedSettingsSidebar: SettingsSidebar?
     #endif
     
     @State private var columnVisibility = NavigationSplitViewVisibility.automatic
@@ -24,35 +24,35 @@ struct SettingsView: View {
     
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
-            List(selection: $selectedSidebarItem) {
+            List(selection: $selectedSettingsSidebar) {
                 Label("General", systemImage: "gear")
-                    .tag(SidebarItem.general)
+                    .tag(SettingsSidebar.general)
                 
                 Label("Appearance", systemImage: "paintbrush")
-                    .tag(SidebarItem.appearance)
+                    .tag(SettingsSidebar.appearance)
                 
                 #if os(macOS)
                 Label("Quick Panel", systemImage: "bolt.fill")
-                    .tag(SidebarItem.quickPanel)
+                    .tag(SettingsSidebar.quickPanel)
                 #endif
                 
                 Label("Plugins", systemImage: "hammer")
-                    .tag(SidebarItem.tools)
+                    .tag(SettingsSidebar.tools)
                 
                 Label("Parameters", systemImage: "slider.horizontal.3")
-                    .tag(SidebarItem.parameters)
+                    .tag(SettingsSidebar.parameters)
                 
                 Label("Image Gen", systemImage: "photo")
-                    .tag(SidebarItem.image)
+                    .tag(SettingsSidebar.image)
                 
                 Label("Providers", systemImage: "cpu")
-                    .tag(SidebarItem.providers)
+                    .tag(SettingsSidebar.providers)
                 
                 Label("Guides", systemImage: "book")
-                    .tag(SidebarItem.guides)
+                    .tag(SettingsSidebar.guides)
                 
                 Label("About", systemImage: "info.circle")
-                    .tag(SidebarItem.about)
+                    .tag(SettingsSidebar.about)
                          
             }
             #if !os(visionOS)
@@ -68,7 +68,7 @@ struct SettingsView: View {
             .navigationSplitViewColumnWidth(min: 190, ideal: 190, max: 190)
         } detail: {
             NavigationStack {
-                switch selectedSidebarItem {
+                switch selectedSettingsSidebar {
                 case .general:
                     GeneralSettings()
                 case .appearance:
@@ -101,19 +101,6 @@ struct SettingsView: View {
             }
         }
     }
-    
-    enum SidebarItem {
-        case general
-        case appearance
-        case quickPanel
-        case tools
-        case parameters
-        case image
-        case providers
-        case guides
-        case about
-    }
-
 }
 
 #Preview {

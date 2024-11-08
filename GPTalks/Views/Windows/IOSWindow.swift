@@ -47,14 +47,3 @@ struct IOSWindow: Scene {
     }
 }
 #endif
-
-
-// TODO: this can just be env var instead of class
-@Observable class ListStateVM {
-    var state: ListState = .chats
-    
-    enum ListState: String, CaseIterable {
-        case chats
-        case images
-    }
-}

@@ -77,6 +77,10 @@
 		087B40C02C561DDF00EAFA0A /* QuickPanelLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087B40BF2C561DDF00EAFA0A /* QuickPanelLoader.swift */; };
 		087F3F852CDDD99E001298B3 /* GuidesSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F842CDDD99E001298B3 /* GuidesSettings.swift */; };
 		087F3F872CDDDC3C001298B3 /* AboutSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F862CDDDC3C001298B3 /* AboutSettings.swift */; };
+		087F3F8B2CDDEF4C001298B3 /* Guide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F8A2CDDEF4C001298B3 /* Guide.swift */; };
+		087F3F8D2CDDEF5D001298B3 /* Shortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F8C2CDDEF5D001298B3 /* Shortcut.swift */; };
+		087F3F8F2CDDEF79001298B3 /* SettingsSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F8E2CDDEF79001298B3 /* SettingsSidebar.swift */; };
+		087F3F922CDDF00C001298B3 /* ListStateVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F912CDDF00C001298B3 /* ListStateVM.swift */; };
 		088475342CAE8E57006C04F0 /* AppIconMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088475332CAE8E57006C04F0 /* AppIconMenu.swift */; };
 		0886D8202C8707190058700F /* VertexService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886D81F2C8707190058700F /* VertexService.swift */; };
 		0888C5852CD5686100A1EA5E /* ChatOrSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0888C5842CD5686100A1EA5E /* ChatOrSearchView.swift */; };
@@ -238,6 +242,10 @@
 		087B40BF2C561DDF00EAFA0A /* QuickPanelLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelLoader.swift; sourceTree = "<group>"; };
 		087F3F842CDDD99E001298B3 /* GuidesSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidesSettings.swift; sourceTree = "<group>"; };
 		087F3F862CDDDC3C001298B3 /* AboutSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettings.swift; sourceTree = "<group>"; };
+		087F3F8A2CDDEF4C001298B3 /* Guide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guide.swift; sourceTree = "<group>"; };
+		087F3F8C2CDDEF5D001298B3 /* Shortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcut.swift; sourceTree = "<group>"; };
+		087F3F8E2CDDEF79001298B3 /* SettingsSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSidebar.swift; sourceTree = "<group>"; };
+		087F3F912CDDF00C001298B3 /* ListStateVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListStateVM.swift; sourceTree = "<group>"; };
 		088475332CAE8E57006C04F0 /* AppIconMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconMenu.swift; sourceTree = "<group>"; };
 		0886D81F2C8707190058700F /* VertexService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexService.swift; sourceTree = "<group>"; };
 		0888C5842CD5686100A1EA5E /* ChatOrSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatOrSearchView.swift; sourceTree = "<group>"; };
@@ -391,14 +399,14 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		082F09BD2CB1974000B7860A /* Models */ = {
+		082F09BD2CB1974000B7860A /* AIModels */ = {
 			isa = PBXGroup;
 			children = (
 				08D913EB2CD9CAF7002E4E53 /* AIModel.swift */,
 				082F09D42CB2690800B7860A /* GenericModel.swift */,
 				0854706E2CB4C3A1007FE9DB /* ModelTypeOption.swift */,
 			);
-			path = Models;
+			path = AIModels;
 			sourceTree = "<group>";
 		};
 		082F09CB2CB237A800B7860A /* ModelViews */ = {
@@ -457,6 +465,38 @@
 			path = MenubarCommands;
 			sourceTree = "<group>";
 		};
+		087F3F882CDDEEAA001298B3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				087F3F902CDDEFC5001298B3 /* Auth */,
+				087F3F892CDDEF28001298B3 /* Settings */,
+				08A222BC2C2ABD9E00D76C8B /* Chat */,
+				085361032C491BE5007DAB62 /* Image */,
+				0841391E2C7169B90049E3B2 /* Tips */,
+				08C8004E2C36F648009581C5 /* LLM */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		087F3F892CDDEF28001298B3 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				087F3F912CDDF00C001298B3 /* ListStateVM.swift */,
+				087F3F8E2CDDEF79001298B3 /* SettingsSidebar.swift */,
+				087F3F8C2CDDEF5D001298B3 /* Shortcut.swift */,
+				087F3F8A2CDDEF4C001298B3 /* Guide.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		087F3F902CDDEFC5001298B3 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				08C5C7282C9A1392004992A4 /* GoogleAuthManager.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		08915D922C373332008ADE27 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -479,6 +519,7 @@
 				082181592C382B9B00171BF3 /* ProviderGeneral.swift */,
 				082181692C39001B00171BF3 /* ProviderRow.swift */,
 				082A632F2C54F862003996B7 /* ProviderBackupSettings.swift */,
+				08C5C72A2C9A139F004992A4 /* GoogleSignIn.swift */,
 			);
 			path = ProviderViews;
 			sourceTree = "<group>";
@@ -513,12 +554,8 @@
 		08A222812C2AB4FD00D76C8B /* GPTalks */ = {
 			isa = PBXGroup;
 			children = (
-				08C5C7272C9A138E004992A4 /* GoogleAuth */,
-				0841391E2C7169B90049E3B2 /* Tips */,
-				08C8004E2C36F648009581C5 /* LLM */,
+				087F3F882CDDEEAA001298B3 /* Models */,
 				08A222C22C2AC6A800D76C8B /* Views */,
-				08A222BC2C2ABD9E00D76C8B /* Chat */,
-				085361032C491BE5007DAB62 /* Image */,
 				08A77CCA2C65AA5D0087D0F3 /* Persistence */,
 				0821816B2C39011100171BF3 /* Utils */,
 				08A222822C2AB4FD00D76C8B /* GPTalksApp.swift */,
@@ -608,15 +645,6 @@
 			path = DataFileViews;
 			sourceTree = "<group>";
 		};
-		08C5C7272C9A138E004992A4 /* GoogleAuth */ = {
-			isa = PBXGroup;
-			children = (
-				08C5C72A2C9A139F004992A4 /* GoogleSignIn.swift */,
-				08C5C7282C9A1392004992A4 /* GoogleAuthManager.swift */,
-			);
-			path = GoogleAuth;
-			sourceTree = "<group>";
-		};
 		08C800382C36BA1E009581C5 /* BottomViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -678,7 +706,7 @@
 		08C8004E2C36F648009581C5 /* LLM */ = {
 			isa = PBXGroup;
 			children = (
-				082F09BD2CB1974000B7860A /* Models */,
+				082F09BD2CB1974000B7860A /* AIModels */,
 				08F815272C97F5D400B49355 /* ChatTool */,
 				0805DEEB2C58CAF900A8354A /* Services */,
 				08C8004F2C36F667009581C5 /* Provider.swift */,
@@ -855,6 +883,7 @@
 				08D913EC2CD9CAF7002E4E53 /* AIModel.swift in Sources */,
 				08BDFE2E2C734DAE0054B36A /* ConversationListTips.swift in Sources */,
 				08B8DE132C97F3550041A690 /* MarkdownView.swift in Sources */,
+				087F3F922CDDF00C001298B3 /* ListStateVM.swift in Sources */,
 				08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */,
 				08F815382C97F65E00B49355 /* ToolsController.swift in Sources */,
 				08915D942C373340008ADE27 /* ProviderImage.swift in Sources */,
@@ -880,6 +909,7 @@
 				08C800452C36C10A009581C5 /* ThreadMenu.swift in Sources */,
 				08AAFB9C2C3D01A6002C04E0 /* ChatListCards.swift in Sources */,
 				084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */,
+				087F3F8D2CDDEF5D001298B3 /* Shortcut.swift in Sources */,
 				081AB5A52CD7FF4700273259 /* FloatingPanelModifier.swift in Sources */,
 				08C800372C36B8CC009581C5 /* ChatRow.swift in Sources */,
 				082F09EB2CB3617200B7860A /* ProviderDefaults.swift in Sources */,
@@ -909,10 +939,12 @@
 				08C800572C36F843009581C5 /* SettingsView.swift in Sources */,
 				08C1ACE02C54BC8A00B86D37 /* TemperatureSlider.swift in Sources */,
 				08C1ACE22C54BC9C00B86D37 /* PresencePenaltySlider.swift in Sources */,
+				087F3F8F2CDDEF79001298B3 /* SettingsSidebar.swift in Sources */,
 				0819479E2C48DCDB0061227B /* ImageSessionList.swift in Sources */,
 				085524E42C4ED2B800CBB827 /* ChatCommands.swift in Sources */,
 				08F8153A2C97F69200B49355 /* ImageInspector.swift in Sources */,
 				08C1ACE62C54BCB600B86D37 /* TopPSlider.swift in Sources */,
+				087F3F8B2CDDEF4C001298B3 /* Guide.swift in Sources */,
 				085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */,
 				0853102B2CBF966F0078DD09 /* ModelTester.swift in Sources */,
 				087B40C02C561DDF00EAFA0A /* QuickPanelLoader.swift in Sources */,

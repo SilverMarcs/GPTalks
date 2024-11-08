@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct AboutSettings: View {
+    var showExtra: Bool = false
+    
     var body: some View {
         Form {
             VStack(spacing: 10) {
@@ -50,16 +52,18 @@ struct AboutSettings: View {
                 }
             }
             
-            Section("Acknowledgements") {
-                AcknowledgementRow(name: "MacPaw/OpenAI", description: "Swift community driven package for OpenAI public API", url: "https://github.com/MacPaw/OpenAI")
-                
-                AcknowledgementRow(name: "SwiftAnthropic", description: "An open-source Swift package for interacting with Anthropic's public API.", url: "https://github.com/jamesrochabrun/SwiftAnthropic")
-
-                AcknowledgementRow(name: "GoogleGenerativeAI", description: "The official Swift library for the Google Gemini API", url: "https://github.com/google-gemini/generative-ai-swift")
-                
-                AcknowledgementRow(name: "markdown-webview", description: "A performant SwiftUI Markdown view", url: "https://github.com/tomdai/markdown-webview")
-
-                AcknowledgementRow(name: "KeyboardShortcuts", description: "Add user-customizable global keyboard shortcuts (hotkeys) to your macOS app in minutes", url: "https://github.com/sindresorhus/KeyboardShortcuts")
+            if !showExtra {
+                Section("Acknowledgements") {
+                    AcknowledgementRow(name: "MacPaw/OpenAI", description: "Swift community driven package for OpenAI public API", url: "https://github.com/MacPaw/OpenAI")
+                    
+                    AcknowledgementRow(name: "SwiftAnthropic", description: "An open-source Swift package for interacting with Anthropic's public API.", url: "https://github.com/jamesrochabrun/SwiftAnthropic")
+                    
+                    AcknowledgementRow(name: "GoogleGenerativeAI", description: "The official Swift library for the Google Gemini API", url: "https://github.com/google-gemini/generative-ai-swift")
+                    
+                    AcknowledgementRow(name: "markdown-webview", description: "A performant SwiftUI Markdown view", url: "https://github.com/tomdai/markdown-webview")
+                    
+                    AcknowledgementRow(name: "KeyboardShortcuts", description: "Add user-customizable global keyboard shortcuts (hotkeys) to your macOS app in minutes", url: "https://github.com/sindresorhus/KeyboardShortcuts")
+                }
             }
         }
         .formStyle(.grouped)

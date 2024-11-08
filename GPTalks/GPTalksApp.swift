@@ -15,13 +15,25 @@ struct GPTalksApp: App {
     @State private var imageVM: ImageSessionVM
     @State private var listStateVM: ListStateVM
     
-    #if !os(macOS)
+    #if os(macOS)
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    #else
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     #endif
     
     var body: some Scene {
         WindowScenes()
-            .commands { MenuCommands() }
+            .commands {
+                MenuCommands()
+                
+                CommandGroup(replacing: CommandGroupPlacement.appInfo) {
+                    Button(action: {
+                        appDelegate.showAboutPanel()
+                    }) {
+                        Text("About My App")
+                    }
+                }
+            }
             .environment(chatVM)
             .environment(imageVM)
             .environment(listStateVM)

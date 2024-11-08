@@ -35,7 +35,7 @@ struct AppearanceSettings: View {
             }
 
             Section("Markdown") {
-                Toggle("Skeleon Rendering in markdown view", isOn: $config.renderSkeleton)
+                Toggle("Skeleon Rendering in Markdown View", isOn: $config.renderSkeleton)
             }
         }
         .formStyle(.grouped)
