@@ -36,7 +36,7 @@ struct ChatToolbar: ToolbarContent {
         
         #if os(macOS)
         ToolbarItem(placement: .primaryAction) {
-            Button("Tokens: \(String(format: "%.2fK", chat.totalTokens / 1000))") { }
+            Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
                 .allowsHitTesting(false)
         }
         #endif

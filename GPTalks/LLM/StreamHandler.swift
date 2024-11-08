@@ -64,7 +64,6 @@ struct StreamHandler {
         finaliseStream(streamText: streamText, pendingToolCalls: pendingToolCalls, totalTokens: inputTokens + outputTokens)
     }
     
-    @MainActor
     private func finaliseStream(streamText: String = "", pendingToolCalls: [ChatToolCall], totalTokens: Int) {
         DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
             session.totalTokens = totalTokens
