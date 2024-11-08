@@ -18,6 +18,7 @@ struct WindowScenes: Scene {
             ChatWindow()
             ImageWindow()
             SettingsWindow()
+            AboutWindow()
             #else
             IOSWindow()
             #endif

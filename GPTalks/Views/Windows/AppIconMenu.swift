@@ -5,35 +5,8 @@
 //  Created by Zabir Raihan on 03/10/2024.
 //
 
-import SwiftUI
-
-#if os(macOS)
-class AppDelegate: NSObject, NSApplicationDelegate {
-    private var aboutBoxWindowController: NSWindowController?
-
-    func showAboutPanel() {
-        if aboutBoxWindowController == nil {
-            let styleMask: NSWindow.StyleMask = [.closable, .titled]
-            let window = NSWindow(
-                contentRect: NSRect(x: 100, y: 100, width: 400, height: 403),
-                styleMask: styleMask,
-                backing: .buffered,
-                defer: false
-            )
-            window.title = "About GPTalks"
-            
-            let rootView = AboutSettings(showExtra: false).scrollDisabled(true).scrollContentBackground(.hidden)
-            window.contentView = NSHostingView(rootView: rootView)
-            window.setContentSize(NSSize(width: 400, height: 403))
-            window.titlebarAppearsTransparent = true
-            window.center()
-            aboutBoxWindowController = NSWindowController(window: window)
-        }
-
-        aboutBoxWindowController?.showWindow(aboutBoxWindowController?.window)
-    }
-}
-#else
+#if !os(macOS)
+import UIKit
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     static let shared = AppDelegate()

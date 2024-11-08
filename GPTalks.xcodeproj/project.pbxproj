@@ -81,6 +81,7 @@
 		087F3F8D2CDDEF5D001298B3 /* Shortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F8C2CDDEF5D001298B3 /* Shortcut.swift */; };
 		087F3F8F2CDDEF79001298B3 /* SettingsSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F8E2CDDEF79001298B3 /* SettingsSidebar.swift */; };
 		087F3F922CDDF00C001298B3 /* ListStateVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F912CDDF00C001298B3 /* ListStateVM.swift */; };
+		087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F932CDE19EC001298B3 /* AboutWindow.swift */; };
 		088475342CAE8E57006C04F0 /* AppIconMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088475332CAE8E57006C04F0 /* AppIconMenu.swift */; };
 		0886D8202C8707190058700F /* VertexService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886D81F2C8707190058700F /* VertexService.swift */; };
 		0888C5852CD5686100A1EA5E /* ChatOrSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0888C5842CD5686100A1EA5E /* ChatOrSearchView.swift */; };
@@ -246,6 +247,7 @@
 		087F3F8C2CDDEF5D001298B3 /* Shortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcut.swift; sourceTree = "<group>"; };
 		087F3F8E2CDDEF79001298B3 /* SettingsSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSidebar.swift; sourceTree = "<group>"; };
 		087F3F912CDDF00C001298B3 /* ListStateVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListStateVM.swift; sourceTree = "<group>"; };
+		087F3F932CDE19EC001298B3 /* AboutWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
 		088475332CAE8E57006C04F0 /* AppIconMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconMenu.swift; sourceTree = "<group>"; };
 		0886D81F2C8707190058700F /* VertexService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexService.swift; sourceTree = "<group>"; };
 		0888C5842CD5686100A1EA5E /* ChatOrSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatOrSearchView.swift; sourceTree = "<group>"; };
@@ -746,6 +748,7 @@
 				08B5D7B72C77A64000D1F100 /* ChatWindow.swift */,
 				087906862CA6C73100E5DCAD /* ImageWindow.swift */,
 				08F3CA032C705B3300A800F9 /* SettingsWindow.swift */,
+				087F3F932CDE19EC001298B3 /* AboutWindow.swift */,
 				088475332CAE8E57006C04F0 /* AppIconMenu.swift */,
 				08A222842C2AB4FD00D76C8B /* ChatContentView.swift */,
 				087906882CA6E22900E5DCAD /* ImageContentView.swift */,
@@ -980,6 +983,7 @@
 				08F8152D2C97F60100B49355 /* GoogleSearch.swift in Sources */,
 				08F8152B2C97F5FA00B49355 /* ImageGenerator.swift in Sources */,
 				08F0EF1E2C6C2DFD00900ED0 /* ActionButton.swift in Sources */,
+				087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */,
 				08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */,
 				085910CA2C4F7A720086E493 /* ImageSessionVM.swift in Sources */,
 				08A77CC92C65A3AD0087D0F3 /* SectionFooterView.swift in Sources */,

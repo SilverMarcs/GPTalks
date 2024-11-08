@@ -5,9 +5,9 @@
 //  Created by Zabir Raihan on 27/09/2024.
 //
 
+#if os(macOS)
 import SwiftUI
 
-#if os(macOS)
 struct ImageWindow: Scene {
     var body: some Scene {
         Window("Images", id: "images") {

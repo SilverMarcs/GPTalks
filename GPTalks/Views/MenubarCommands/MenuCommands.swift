@@ -20,6 +20,12 @@ struct MenuCommands: Commands {
         
 //        ToolbarCommands()
         
+        CommandGroup(replacing: CommandGroupPlacement.appInfo) {
+            Button("About GPTalks") {
+                openWindow(id: "about")
+            }
+        }
+        
         CommandGroup(before: .appSettings) {
             Button("Settings") {
                 openWindow(id: "settings")
