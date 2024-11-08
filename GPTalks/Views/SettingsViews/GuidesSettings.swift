@@ -25,7 +25,14 @@ struct GuidesSettings: View {
             #endif
             
             ForEach(Guide.guides) { guide in
-                GuideSection(guide: guide)
+                Section {   
+                    DisclosureGroup {
+                        MarkdownView(content: guide.content)
+                    } label: {
+                        Text(guide.title)
+                            .font(.title3.bold())
+                    }
+                }
             }
         }
         .formStyle(.grouped)
@@ -37,9 +44,19 @@ struct GuideSection: View {
     let guide: Guide
     
     var body: some View {
-        Section(guide.title) {
-            Text(guide.content)
-                .multilineTextAlignment(.leading)
+//        Section(guide.title) {
+//            
+//            Text(LocalizedStringKey(guide.content))
+//                .multilineTextAlignment(.leading)
+//                .textSelection(.enabled)
+//            MarkdownView(content: guide.content)
+//        }
+        
+        DisclosureGroup {
+            MarkdownView(content: guide.content)
+        } label: {
+            Text(guide.title)
+                .font(.title3.bold())
         }
     }
 }

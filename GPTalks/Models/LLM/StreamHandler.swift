@@ -37,7 +37,8 @@ struct StreamHandler {
         
         let service = session.config.provider.type.getService()
 
-        for try await response in service.streamResponse(from: session.threads, config: session.config) {
+        // must do droplast since last is the empty assistant thread
+        for try await response in service.streamResponse(from: session.threads.dropLast(), config: session.config) {
             switch response {
             case .content(let content):
                 streamText += content

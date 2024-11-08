@@ -23,8 +23,12 @@ struct TranscribeSettings: View {
         Section("Defaults") {
             ProviderPicker(provider: $providerDefaults.toolSTTProvider, providers: providers)
             
-            ModelPicker(model: $providerDefaults.toolSTTProvider.sttModel, models: providerDefaults.toolSTTProvider.sttModels, label: "STT Model")
+            ModelPicker(model: $providerDefaults.toolSTTProvider.sttModel, models: providerDefaults.toolSTTProvider.sttModels, label: "Transcription Model")
         }
+        
+//        Section("Schema") {
+////            MarkdownView(
+//        }
     }
 }
 

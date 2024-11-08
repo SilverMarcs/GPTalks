@@ -51,15 +51,18 @@ struct AboutSettings: View {
             }
             
             Section("Acknowledgements") {
-                AcknowledgementRow(name: "MacPaw/OpenAI", description: "Swift community driven package for OpenAI public API", url: "https://github.com/MacPaw/OpenAI")
-                
-                AcknowledgementRow(name: "SwiftAnthropic", description: "An open-source Swift package for interacting with Anthropic's public API.", url: "https://github.com/jamesrochabrun/SwiftAnthropic")
-                
-                AcknowledgementRow(name: "GoogleGenerativeAI", description: "The official Swift library for the Google Gemini API", url: "https://github.com/google-gemini/generative-ai-swift")
-                
-                AcknowledgementRow(name: "markdown-webview", description: "A performant SwiftUI Markdown view", url: "https://github.com/tomdai/markdown-webview")
-                
-                AcknowledgementRow(name: "KeyboardShortcuts", description: "Add user-customizable global keyboard shortcuts (hotkeys) to your macOS app in minutes", url: "https://github.com/sindresorhus/KeyboardShortcuts")
+                ForEach(Acknowledgement.acknowledgements, id: \.name) { acknowledgement in
+                    Link(destination: URL(string: acknowledgement.url)!) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(acknowledgement.name)
+                                .font(.headline)
+                            Text(acknowledgement.description)
+                                .multilineTextAlignment(.leading)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
             }
         }
         .formStyle(.grouped)
@@ -74,25 +77,6 @@ struct AboutSettings: View {
         return "Version Unknown"
     }
 
-}
-
-struct AcknowledgementRow: View {
-    let name: String
-    let description: String
-    let url: String
-    
-    var body: some View {
-        Link(destination: URL(string: url)!) {
-            VStack(alignment: .leading, spacing: 5) {
-                Text(name)
-                    .font(.headline)
-                Text(description)
-                    .multilineTextAlignment(.leading)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-        }
-    }
 }
 
 #Preview {

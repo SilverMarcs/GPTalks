@@ -182,7 +182,9 @@ final class Chat {
     
     func deleteThread(_ thread: Thread) {
         threads.removeAll(where: { $0 == thread })
-        errorMessage = ""
+        if threads.count == 0 {
+            errorMessage = ""
+        }
         modelContext?.delete(thread)
         try? modelContext?.save()
     }

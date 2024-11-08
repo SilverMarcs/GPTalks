@@ -37,8 +37,9 @@ struct ProviderDetail: View {
     
     private var picker: some View {
         Picker("Tabs", selection: $selectedTab) {
-            ForEach(ProviderTab.allCases) { tab in
-                tab.label.tag(tab)
+            ForEach(filteredTabs()) { tab in
+                Text(tab.rawValue.capitalized) // Use Text to represent the label
+                    .tag(tab)
                     #if os(macOS)
                     .labelStyle(.titleOnly)
                     #else
@@ -49,6 +50,17 @@ struct ProviderDetail: View {
         .popoverTip(ProviderRefreshTip())
         .pickerStyle(.segmented)
         .fixedSize()
+    }
+
+    private func filteredTabs() -> [ProviderTab] {
+        switch provider.type {
+        case .google, .anthropic, .vertex:
+            // Only show chat tab
+            return [.chat]
+        default:
+            // Show all tabs
+            return ProviderTab.allCases
+        }
     }
 }
 

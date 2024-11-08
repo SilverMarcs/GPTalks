@@ -32,8 +32,7 @@ struct GoogleService: AIService {
                 parts.insert(.text(dataFile.formattedTextContent), at: 0)
             } else if dataFile.fileType.conforms(to: .image) && conversation.role == .user {
                 parts.insert(.data(mimetype: dataFile.mimeType, dataFile.data), at: 0)
-            } else {
-                // Same as image but we create seperate block for better visibility of intentions
+            } else if conversation.role == .user {
                 parts.insert(.data(mimetype: dataFile.mimeType, dataFile.data), at: 0)
             }
         }
@@ -42,10 +41,10 @@ struct GoogleService: AIService {
             parts.append(.functionResponse(.init(name: response.tool.rawValue, response: .init(dictionaryLiteral: ("content", .string(response.processedContent))))))
         }
         
-        return ModelContent(
-            role: conversation.role.toGoogleRole(),
-            parts: parts
-        )
+        let modelContent = ModelContent(role: conversation.role.toGoogleRole(), parts: parts)
+        print("Model Content: \(modelContent)")
+        
+        return modelContent
     }
     
     static func streamResponse(from conversations: [Thread], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
