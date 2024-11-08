@@ -157,6 +157,6 @@ struct ChatInputView: View {
 }
 
 #Preview {
-    ThreadList(chat: .mockChat)
+    ChatDetail(chat: .mockChat)
         .environment(ChatVM(modelContext: try! ModelContainer(for: Chat.self).mainContext))
 }

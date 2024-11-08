@@ -34,7 +34,7 @@ struct AppearanceSettings: View {
                 }
             }
 
-            Section("Views") {
+            Section("Markdown") {
                 Toggle("Skeleon Rendering in markdown view", isOn: $config.renderSkeleton)
             }
         }

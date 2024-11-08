@@ -18,7 +18,7 @@ struct IOSWindow: Scene {
         WindowGroup("Chats", id: "chats") {
             NavigationSplitView {
                 if !chatVM.searchResults.isEmpty {
-                    ChatDetail()
+                    ChatOrSearchView()
                 } else {
                     switch listStateVM.state {
                     case .chats:
@@ -31,7 +31,7 @@ struct IOSWindow: Scene {
                 switch listStateVM.state {
                 case .chats:
                     if let chat = chatVM.activeChat {
-                        ThreadList(chat: chat)
+                        ChatDetail(chat: chat)
                     } else {
                         Text("^[\(chatVM.chatSelections.count) Chat Session](inflect: true) Selected")
                     }

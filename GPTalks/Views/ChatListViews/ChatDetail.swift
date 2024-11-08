@@ -1,5 +1,5 @@
 //
-//  ChatDetail.swift
+//  ChatOrSearchView.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 02/11/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ChatDetail: View {
+struct ChatOrSearchView: View {
     @Environment(ChatVM.self) var chatVM
     
     var body: some View {
@@ -59,7 +59,7 @@ struct ChatDetail: View {
     @ViewBuilder
     private var chatSessionView: some View {
         if let chat = chatVM.activeChat, !chat.isQuick {
-            ThreadList(chat: chat)
+            ChatDetail(chat: chat)
 //                .id(chat.id)
         } else {
             Text("^[\(chatVM.chatSelections.count) Chat Session](inflect: true) Selected")
@@ -88,5 +88,5 @@ extension View {
 
 
 #Preview {
-    ChatDetail()
+    ChatOrSearchView()
 }

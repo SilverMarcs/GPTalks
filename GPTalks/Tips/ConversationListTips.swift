@@ -1,5 +1,5 @@
 //
-//  ThreadListTips.swift
+//  ChatDetailTips.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 19/08/2024.

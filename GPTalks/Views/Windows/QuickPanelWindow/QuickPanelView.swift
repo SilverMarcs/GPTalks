@@ -44,7 +44,7 @@ struct QuickPanelView: View {
             } else {
                 Divider()
                 
-                ThreadList(chat: chat)
+                ChatDetail(chat: chat)
                     .scrollContentBackground(.hidden)
                 
                 bottomView

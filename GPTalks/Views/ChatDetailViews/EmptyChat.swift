@@ -1,5 +1,5 @@
 //
-//  EmptyThreadList.swift
+//  EmptyChat.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 25/09/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EmptyThreadList: View {
+struct EmptyChat: View {
     @Bindable var chat: Chat
     
     var body: some View {
@@ -21,5 +21,5 @@ struct EmptyThreadList: View {
 }
 
 #Preview {
-    EmptyThreadList(chat: .mockChat)
+    EmptyChat(chat: .mockChat)
 }

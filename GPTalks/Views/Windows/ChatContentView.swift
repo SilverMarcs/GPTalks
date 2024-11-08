@@ -16,7 +16,7 @@ struct ChatContentView: View {
         NavigationSplitView {
             ChatList()
         } detail: {
-            ChatDetail()
+            ChatOrSearchView()
         }
     }
 }

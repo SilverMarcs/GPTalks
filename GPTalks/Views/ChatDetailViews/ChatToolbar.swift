@@ -1,5 +1,5 @@
 //
-//  ThreadToolbar.swift
+//  ChatToolbar.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 23/07/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ThreadToolbar: ToolbarContent {
+struct ChatToolbar: ToolbarContent {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ChatVM.self) private var chatVM
     @ObservedObject var config = AppConfig.shared
@@ -56,6 +56,6 @@ struct ThreadToolbar: ToolbarContent {
     }
     .frame(width: 700, height: 300)
     .toolbar {
-        ThreadToolbar(chat: .mockChat)
+        ChatToolbar(chat: .mockChat)
     }
 }

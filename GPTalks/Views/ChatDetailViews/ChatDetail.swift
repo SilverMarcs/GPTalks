@@ -1,5 +1,5 @@
 //
-//  ThreadList.swift
+//  ChatDetail.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 25/06/2024.
@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ThreadList: View {
+struct ChatDetail: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.isQuick) var isQuick
     @Environment(\.modelContext) var modelContext
@@ -46,7 +46,7 @@ struct ThreadList: View {
                 #endif
             }
             .toolbar {
-                ThreadToolbar(chat: chat)
+                ChatToolbar(chat: chat)
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
@@ -88,6 +88,6 @@ struct ThreadList: View {
 }
 
 #Preview {
-    ThreadList(chat: .mockChat)
+    ChatDetail(chat: .mockChat)
         .environment(ChatVM.mockSessionVM)
 }
