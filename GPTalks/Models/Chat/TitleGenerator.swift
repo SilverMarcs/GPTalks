@@ -67,7 +67,7 @@ enum TitleGenerator {
             return nil
         }
         
-        let conversationsString = formatThreads(threads)
+        let conversationsString = formatThreads(threads.dropLast()) // drop last bc dont wanna send empty assistant message
         let wrappedThread = """
         \(beginThread)
         \(conversationsString)

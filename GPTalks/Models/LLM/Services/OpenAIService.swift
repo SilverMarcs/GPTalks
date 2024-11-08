@@ -186,7 +186,7 @@ struct OpenAIService: AIService {
             tools: tools.isEmpty ? nil : tools,
             topP: config.topP,
             stream: stream,
-            streamOptions: .init(includeUsage: true)
+            streamOptions: config.stream ? .init(includeUsage: true) : nil
         )
     }
     

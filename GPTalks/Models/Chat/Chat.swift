@@ -53,18 +53,6 @@ final class Chat {
         self.config = config
     }
     
-    private func handleError(_ error: Error) {
-        errorMessage = error.localizedDescription
-        scrollBottom()
-        hasUserScrolled = false
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
-            if let lastThread = self.threads.last, lastThread.content.isEmpty, lastThread.role == .assistant {
-                self.deleteThread(lastThread)
-            }
-        }
-    }
-
     @MainActor
     func processRequest() async {
         errorMessage = ""
@@ -149,6 +137,18 @@ final class Chat {
             }
         } else {
             threads.last.map(deleteThread)
+        }
+    }
+    
+    private func handleError(_ error: Error) {
+        errorMessage = error.localizedDescription
+        scrollBottom()
+        hasUserScrolled = false
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
+            if let lastThread = self.threads.last, lastThread.content.isEmpty, lastThread.role == .assistant {
+                self.deleteThread(lastThread)
+            }
         }
     }
     

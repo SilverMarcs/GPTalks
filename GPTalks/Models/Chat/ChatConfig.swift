@@ -49,7 +49,7 @@ final class ChatConfig {
                 self.model = provider.chatModel
                 self.tools = ChatConfigTools()
             case .title:
-                self.systemPrompt = ""
+                self.systemPrompt = "Generate a title based on the content"
                 self.model = provider.titleModel
                 self.stream = false
                 self.tools = ChatConfigTools(isTitle: true)
