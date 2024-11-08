@@ -95,6 +95,27 @@ struct URLScrape: ToolProtocol {
         for a more in-depth response.
         """
     
+    static let jsonSchemaString = """
+    ```
+    {
+      "name": "\(toolName)",
+      "description": "\(description)",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "url_list": {
+            "type": "array",
+            "description": "The array of URLs of the websites to scrape",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+    ```
+    """
+    
     static var openai: ChatQuery.ChatCompletionToolParam {
         .init(function:
                 .init(

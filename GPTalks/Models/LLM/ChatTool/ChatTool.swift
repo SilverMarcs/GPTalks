@@ -45,6 +45,14 @@ enum ChatTool: String, CaseIterable, Codable, Identifiable {
         try await toolType.process(arguments: arguments)
     }
     
+    var jsonSchemaString: String {
+        toolType.jsonSchemaString
+    }
+    
+    var toolName: String {
+        toolType.toolName
+    }
+    
     var displayName: String {
         toolType.displayName
     }

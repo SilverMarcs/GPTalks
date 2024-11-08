@@ -92,6 +92,29 @@ struct ImageGenerator: ToolProtocol {
     static let description = """
         If the user asks to generate an image with a description of the image, create a prompt that dalle, an AI image creator, can use to generate the image(s). You may modify the user's such that dalle can create a more aesthetic and visually pleasing image. You may also specify the number of images to generate based on users request. If the user did not specify number, generate one image only.
         """
+    
+    static let jsonSchemaString = """
+    ```
+    {
+      "name": "\(toolName)",
+      "description": "\(description)",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "The prompt for dalle"
+          },
+          "n": {
+            "type": "integer",
+            "description": "The number of images to generate"
+          }
+        },
+        "required": ["prompt", "n"]
+      }
+    }
+    ```
+    """
 
     static var openai: ChatQuery.ChatCompletionToolParam {
         return .init(

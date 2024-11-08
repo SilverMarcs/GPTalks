@@ -77,6 +77,32 @@ struct TranscribeTool: ToolProtocol {
         You can open and access contents of audio files. Just respond with a list of file names WITH file extensions
         """
     
+    static let jsonSchemaString = """
+    ```
+    {
+      "name": "\(toolName)",
+      "description": "\(description)",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "conversationID": {
+            "type": "string",
+            "description": "The conversation ID"
+          },
+          "fileNames": {
+            "type": "array",
+            "description": "The array of audio file names WITH extension to access",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["fileNames", "conversationID"]
+      }
+    }
+    ```
+    """
+    
     static var openai: ChatQuery.ChatCompletionToolParam {
         .init(function:
                 .init(

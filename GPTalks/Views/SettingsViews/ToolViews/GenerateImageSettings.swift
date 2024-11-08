@@ -25,6 +25,11 @@ struct GenerateImageSettings: View {
             
             ModelPicker(model: $providerDefaults.imageProvider.toolImageModel, models: providerDefaults.imageProvider.imageModels, label: "Image Model")
         }
+        
+        Section("Schema") {
+            MarkdownView(content: ChatTool.imageGenerator.jsonSchemaString)
+                .padding(.bottom, -11)
+        }
     }
 }
 

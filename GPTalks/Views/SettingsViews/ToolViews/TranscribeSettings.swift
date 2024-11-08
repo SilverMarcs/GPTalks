@@ -26,9 +26,10 @@ struct TranscribeSettings: View {
             ModelPicker(model: $providerDefaults.toolSTTProvider.sttModel, models: providerDefaults.toolSTTProvider.sttModels, label: "Transcription Model")
         }
         
-//        Section("Schema") {
-////            MarkdownView(
-//        }
+        Section("Schema") {
+            MarkdownView(content: ChatTool.transcribe.jsonSchemaString)
+                .padding(.bottom, -11)
+        }
     }
 }
 

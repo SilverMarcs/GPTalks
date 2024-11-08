@@ -10,6 +10,7 @@ import OpenAI
 import GoogleGenerativeAI
 
 struct GoogleSearch: ToolProtocol {
+    static let toolName = "googleSearch"
     static let displayName: String = "Google Search"
     static let icon: String = "safari" 
     
@@ -83,10 +84,28 @@ struct GoogleSearch: ToolProtocol {
         - Usually prioritize your pre-existing knowledge before wanting to call this tool
         """
     
+    static let jsonSchemaString = """
+    ```
+    {
+      "name": "\(toolName)",
+      "description": "\(description)",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The search query to search google with"
+          }
+        }
+      }
+    }
+    ```
+    """
+    
     static var openai: ChatQuery.ChatCompletionToolParam {
         .init(function:
                 .init(
-                    name: "googleSearch",
+                    name: toolName,
                     description: description,
                     parameters:
                             .init(type: .object,
@@ -101,7 +120,7 @@ struct GoogleSearch: ToolProtocol {
     static var google: Tool {
         Tool(functionDeclarations: [
             FunctionDeclaration(
-                name: "googleSearch",
+                name: toolName,
                 description: description,
                 parameters: [
                     "query": .init(
@@ -116,7 +135,7 @@ struct GoogleSearch: ToolProtocol {
 
     static var vertex: [String: Any] {
         [
-            "name": "googleSearch",
+            "name": toolName,
             "description": description,
             "input_schema": [
                 "type": "object",
