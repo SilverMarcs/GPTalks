@@ -50,6 +50,10 @@ struct SettingsView: View {
                 
                 Label("Guides", systemImage: "book")
                     .tag(SidebarItem.guides)
+                
+                Label("About", systemImage: "info.circle")
+                    .tag(SidebarItem.about)
+                         
             }
             #if !os(visionOS)
             .navigationTitle("Settings")
@@ -80,13 +84,9 @@ struct SettingsView: View {
                 case .providers:
                     ProviderList()
                 case .guides:
-                    VStack {
-                        Text("Guides")
-                            .font(.title).bold()
-                        Text("Coming Soon")
-                            .font(.title2)
-                    }
-                    
+                    GuidesSettings()
+                case .about:
+                    AboutSettings()
                 default:
                     EmptyView()
                 }
@@ -111,10 +111,13 @@ struct SettingsView: View {
         case image
         case providers
         case guides
+        case about
     }
 
 }
 
 #Preview {
     SettingsView()
+        .modelContainer(for: ProviderDefaults.self, inMemory: true)
+        .environment(ChatVM.mockSessionVM)
 }

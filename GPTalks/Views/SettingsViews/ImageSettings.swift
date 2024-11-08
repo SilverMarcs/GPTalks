@@ -26,10 +26,10 @@ struct ImageSettings: View {
             Section {
                 ProviderPicker(provider: $providerDefaults.imageProvider, providers: filteredProviders)
                 
-                ModelPicker(model: $providerDefaults.imageProvider.imageModel, models: providerDefaults.imageProvider.imageModels, label: "Image Model")
+                ModelPicker(model: $providerDefaults.imageProvider.imageModel, models: providerDefaults.imageProvider.imageModels, label: "Model")
                 
             } header: {
-                Text("Defaults")
+                Text("Models")
             } footer: {
                 SectionFooterView(text: "Check Plugin Settings to configure models for plugin generations")
             }
