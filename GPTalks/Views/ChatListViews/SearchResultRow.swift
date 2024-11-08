@@ -18,12 +18,8 @@ struct SearchResultRow: View {
                     .environment(\.isSearch, true)
                 
                 Button {
-                    chatVM.searchResults = []
                     chatVM.chatSelections = [matchedThread.chat]
-                    chatVM.searching = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        matchedThread.chat.proxy?.scrollTo(matchedThread.thread, anchor: .top)
-                    }
+                    chatVM.resetSearch()
                 } label: {
                     Image(systemName: "arrow.right")
                         .bold()

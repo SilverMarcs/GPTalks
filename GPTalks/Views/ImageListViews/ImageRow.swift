@@ -17,7 +17,7 @@ struct ImageRow: View {
         HStack {
             ProviderImage(provider: session.config.provider, radius: 8, frame: 23, scale: .medium)
             
-            Text(session.title)
+            HighlightedText(text: imageVM.searchText, highlightedText: imageVM.searchText)
                 .lineLimit(1)
                 .font(.headline)
                 .fontWeight(.regular)

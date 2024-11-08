@@ -89,15 +89,25 @@ import SwiftUI
     
     // MARK: - Search
     var searchText: String = ""
-    var hasFocus: Bool = false
     var searchResults: [MatchedSession] = []
-    var searching: Bool = false
+    var isSearching: Bool = false
     
     private var searchTask: Task<Void, Never>?
-    private let debounceInterval: TimeInterval = 0.5 // 500 milliseconds
+    private let debounceInterval: TimeInterval = 0.5 // 0.5sec
+    
+    func resetSearch() {
+        searchText = ""
+        searchResults = []
+    }
     
     func debouncedSearch(chats: [Chat]) {
-        searching = true
+        if searchText.isEmpty {
+            searchResults = []
+            isSearching = false
+            return
+        }
+        
+        isSearching = true
         searchTask?.cancel()
         
         searchTask = Task {
@@ -114,21 +124,14 @@ import SwiftUI
 
     
     func updateMatchingThreads(chats: [Chat]) async {
-        guard !searchText.isEmpty else {
-            searchResults = []
-            searching = false
-            return
-        }
-        
-        let searchText = self.searchText
-        searching = true
+        isSearching = true
         
         let results = await Task.detached(priority: .userInitiated) {
             chats.compactMap { chat in
                 let matchingThreads = chat.unorderedThreads.compactMap { thread in
                     let content = thread.content
                     let cleanedContent = content.cleanMarkdown()
-                    if cleanedContent.localizedCaseInsensitiveContains(searchText) {
+                    if cleanedContent.localizedCaseInsensitiveContains(self.searchText) {
                         return MatchedThread(thread: thread, chat: chat)
                     }
                     return nil
@@ -139,7 +142,7 @@ import SwiftUI
         
         await MainActor.run {
             searchResults = results
-            searching = false
+            isSearching = false
         }
     }
 }

@@ -11,7 +11,7 @@ struct ChatOrSearchView: View {
     @Environment(ChatVM.self) var chatVM
     
     var body: some View {
-        if !chatVM.searchText.isEmpty || !chatVM.searchResults.isEmpty || chatVM.searching {
+        if (chatVM.isSearching || !chatVM.searchResults.isEmpty) || (chatVM.searchResults.isEmpty && !chatVM.searchText.isEmpty) {
             searchResultsView
                 .navigationTitle("Search Results")
         } else {
@@ -21,7 +21,7 @@ struct ChatOrSearchView: View {
     
     @ViewBuilder
     private var searchResultsView: some View {
-        if chatVM.searching {
+        if chatVM.isSearching {
             ProgressView()
                 .controlSize(.large)
                 .navigationTitle("Searching")
