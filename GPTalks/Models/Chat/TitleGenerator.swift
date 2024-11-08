@@ -55,7 +55,7 @@ enum TitleGenerator {
     }
     
     // Method to format image generations into a single string
-    private static func formatImageGenerations(_ generations: [ImageGeneration]) -> String {
+    private static func formatGenerations(_ generations: [Generation]) -> String {
         return generations.map { generation in
             return "--- Image Prompt ---\n\(generation.config.prompt)"
         }.joined(separator: "\n\n")
@@ -79,12 +79,12 @@ enum TitleGenerator {
     }
     
     // Public method to generate title for image generations
-    public static func generateImageTitle(generations: [ImageGeneration], provider: Provider) async -> String? {
+    public static func generateImageTitle(generations: [Generation], provider: Provider) async -> String? {
         guard !generations.isEmpty else {
             return nil
         }
         
-        let promptsString = formatImageGenerations(generations)
+        let promptsString = formatGenerations(generations)
         let wrappedPrompts = """
         \(beginImagePrompts)
         \(promptsString)

@@ -12,7 +12,7 @@ import TipKit
 @main
 struct GPTalksApp: App {
     @State private var chatVM: ChatVM
-    @State private var imageVM: ImageSessionVM
+    @State private var imageVM: ImageVM
     @State private var listStateVM: ListStateVM
     
     #if !os(macOS)
@@ -33,7 +33,7 @@ struct GPTalksApp: App {
         dbService.initialSetup(modelContext: dbService.container.mainContext)
 
         _chatVM = State(initialValue: ChatVM(modelContext: dbService.container.mainContext))
-        _imageVM = State(initialValue: ImageSessionVM(modelContext: dbService.container.mainContext))
+        _imageVM = State(initialValue: ImageVM(modelContext: dbService.container.mainContext))
         _listStateVM = State(initialValue: ListStateVM())
         
         try? Tips.configure()

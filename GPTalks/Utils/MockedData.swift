@@ -134,14 +134,14 @@ extension ImageSession {
     static var mockImageSession = ImageSession(config: .mockImageConfig)
 }
 
-extension ImageGeneration {
-    static var mockImageGeneration: ImageGeneration = .init(config: .mockImageConfig, session: .mockImageSession)
+extension Generation {
+    static var mockGeneration: Generation = .init(config: .mockImageConfig, session: .mockImageSession)
 }
 
 extension ChatVM {
     static var mockSessionVM = ChatVM(modelContext: DatabaseService.shared.modelContext)
 }
 
-extension ImageSessionVM {
-    static var mockImageSessionVM = ImageSessionVM(modelContext: DatabaseService.shared.modelContext)
+extension ImageVM {
+    static var mockImageVM = ImageVM(modelContext: DatabaseService.shared.modelContext)
 }

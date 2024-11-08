@@ -1,5 +1,5 @@
 //
-//  GoogleAuthManager.swift
+//  GoogleAuth.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 17/09/2024.
@@ -8,8 +8,8 @@
 import Foundation
 import AuthenticationServices
 
-@Observable class GoogleAuthManager: NSObject, ASWebAuthenticationPresentationContextProviding {
-    static let shared = GoogleAuthManager()
+@Observable class GoogleAuth: NSObject, ASWebAuthenticationPresentationContextProviding {
+    static let shared = GoogleAuth()
     
     private(set) var accessToken: String = ""
     private var refreshToken: String = ""

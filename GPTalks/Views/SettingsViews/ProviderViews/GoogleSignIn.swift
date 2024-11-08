@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GoogleSignIn: View {
-    private var tokenManager = GoogleAuthManager.shared
+    private var tokenManager = GoogleAuth.shared
     
     @State private var isSigningIn = false
     @State private var errorMessage: String?

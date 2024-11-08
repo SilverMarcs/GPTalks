@@ -73,7 +73,6 @@ struct ChatRow: View {
             ProviderImage(provider: session.config.provider, radius: 8, frame: 23, scale: .medium)
                 .symbolEffect(.bounce, options: .speed(0.5), isActive: session.isReplying)
             
-//            Text(session.title)
             HighlightedText(text: session.title, highlightedText: sessionVM.searchText, selectable: false)
                 .lineLimit(1)
                 .font(.headline)
@@ -122,16 +121,15 @@ struct ChatRow: View {
     
     var swipeActionsTrailing: some View {
         Button(role: .destructive) {
-        if session.isStarred || session.isQuick {
-            return
-        }
-        
-        if sessionVM.chatSelections.contains(session) {
-            sessionVM.chatSelections.remove(session)
-        }
-        
-        modelContext.delete(session)
-        try? modelContext.save()
+            if session.isStarred || session.isQuick {
+                return
+            }
+            
+            if sessionVM.chatSelections.contains(session) {
+                sessionVM.chatSelections.remove(session)
+            }
+            
+            modelContext.delete(session)
         } label: {
             Label("Delete", systemImage: "trash")
         }

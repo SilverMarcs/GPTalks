@@ -1,5 +1,5 @@
 //
-//  ImageGeneration.swift
+//  Generation.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 18/07/2024.
@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-class ImageGeneration {
+class Generation {
     var id: UUID = UUID()
     var date: Date = Date()
     

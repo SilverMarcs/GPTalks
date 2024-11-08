@@ -12,7 +12,9 @@ import SwiftData
 struct IOSWindow: Scene {
     @Environment(ListStateVM.self) private var listStateVM
     @Environment(ChatVM.self) private var chatVM
-    @Environment(ImageSessionVM.self) private var imageVM
+    @Environment(ImageVM.self) private var imageVM
+    
+    @State private var showSettings = false
     
     var body: some Scene {
         WindowGroup("Chats", id: "chats") {
@@ -20,11 +22,16 @@ struct IOSWindow: Scene {
                 if !chatVM.searchResults.isEmpty {
                     ChatOrSearchView()
                 } else {
-                    switch listStateVM.state {
-                    case .chats:
-                        ChatList()
-                    case .images:
-                        ImageSessionList()
+                    Group {
+                        switch listStateVM.state {
+                        case .chats:
+                            ChatList()
+                        case .images:
+                            ImageList()
+                        }
+                    }
+                    .toolbar {
+                        iosToolbar
                     }
                 }
             } detail: {
@@ -37,11 +44,27 @@ struct IOSWindow: Scene {
                     }
                 case .images:
                     if let imageSession = imageVM.activeImageSession {
-                        ImageGenerationList(session: imageSession)
+                        ImageDetail(session: imageSession)
                     } else {
                         Text("^[\(imageVM.selections.count) Image Session](inflect: true) Selected")
                     }
                 }
+            }
+        }
+    }
+    
+    var iosToolbar: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            Menu {
+                Button(action: { showSettings.toggle() }) {
+                    Label("Settings", systemImage: "gear")
+                }
+            } label: {
+                Label("More", systemImage: "ellipsis.circle")
+                    .labelStyle(.titleOnly)
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
             }
         }
     }

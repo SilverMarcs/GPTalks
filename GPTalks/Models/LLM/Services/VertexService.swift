@@ -253,7 +253,7 @@ struct VertexService: AIService {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        let token = try await GoogleAuthManager.shared.getValidAccessToken()
+        let token = try await GoogleAuth.shared.getValidAccessToken()
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let messages: [[String: Any]] = conversations.map { conversation in
@@ -296,7 +296,7 @@ struct VertexService: AIService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         do {
-            let token = try await GoogleAuthManager.shared.getValidAccessToken()
+            let token = try await GoogleAuth.shared.getValidAccessToken()
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             
             let message = convert(conversation: testThread)

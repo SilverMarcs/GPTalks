@@ -1,5 +1,5 @@
 //
-//  ImageSessionList.swift
+//  ImageList.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 18/07/2024.
@@ -8,13 +8,13 @@
 import SwiftUI
 import SwiftData
 
-struct ImageSessionList: View {
+struct ImageList: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(ImageSessionVM.self) var imageVM
+    @Environment(ImageVM.self) var imageVM
     @Environment(\.modelContext) var modelContext
-    @ObservedObject var config = AppConfig.shared
+    @Environment(\.providers) var providers
     
-    @Query(sort: \ImageSession.order, order: .forward, animation: .default)
+    @Query(sort: \ImageSession.date, order: .reverse, animation: .default)
     var sessions: [ImageSession]
     
     var body: some View {
@@ -25,17 +25,16 @@ struct ImageSessionList: View {
                 ChatListCards(sessionCount: "↗", imageSessionsCount: String(sessions.count))
                 
                 ForEach(sessions) { session in
-                    ImageListRow(session: session)
+                    ImageRow(session: session)
                         .tag(session)
                         .deleteDisabled(session.isStarred)
                         .listRowSeparator(.visible)
                         .listRowSeparatorTint(Color.gray.opacity(0.2))
                 }
                 .onDelete(perform: deleteItems)
-                .onMove(perform: move)
             }
             .toolbar {
-                ImageSessionToolbar()
+                toolbar
             }
             .navigationTitle("Images")
             .searchable(text: $imageVM.searchText, placement: searchPlacement)
@@ -44,6 +43,28 @@ struct ImageSessionList: View {
                     imageVM.selections = [first]
                 }
             }
+        }
+    }
+    
+    @ToolbarContentBuilder
+    var toolbar: some ToolbarContent {
+        ToolbarItem { Spacer() }
+        
+        ToolbarItem(placement: .automatic) {
+            Menu {
+                ForEach(providers) { provider in
+                    Button(provider.name) {
+                        imageVM.createNewSession(provider: provider)
+                    }
+                    .keyboardShortcut(.none)
+                }
+            } label: {
+                Label("Add Item", systemImage: "square.and.pencil")
+            } primaryAction: {
+                imageVM.createNewSession()
+            }
+            .menuIndicator(.hidden)
+            .popoverTip(NewSessionTip())
         }
     }
     
@@ -56,31 +77,16 @@ struct ImageSessionList: View {
     }
 
     private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets.sorted().reversed() {
-                modelContext.delete(sessions[index])
+        for index in offsets {
+            if imageVM.selections.contains(sessions[index]) {
+                imageVM.selections.remove(sessions[index])
             }
-            
-            let remainingSessions = sessions.filter { !$0.isDeleted }
-            for (newIndex, session) in remainingSessions.enumerated() {
-                session.order = newIndex
-            }
-        }
-        
-        try? modelContext.save()
-    }
-    
-    private func move(from source: IndexSet, to destination: Int) {
-        var updatedSessions = sessions
-        updatedSessions.move(fromOffsets: source, toOffset: destination)
-        
-        for (index, session) in updatedSessions.enumerated() {
-            session.order = index
+            modelContext.delete(sessions[index])
         }
     }
 }
 
 
 #Preview {
-    ImageSessionList()
+    ImageList()
 }

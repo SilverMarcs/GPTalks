@@ -10,15 +10,15 @@ import SwiftUI
 import SwiftData
 
 struct ImageContentView: View {
-    @Environment(ImageSessionVM.self) private var sessionVM
+    @Environment(ImageVM.self) private var sessionVM
     @State var showingInspector: Bool = true
     
     var body: some View {
         NavigationSplitView {
-            ImageSessionList()
+            ImageList()
         } detail: {
             if let imageSession = sessionVM.activeImageSession {
-                ImageGenerationList(session: imageSession)
+                ImageDetail(session: imageSession)
                     .id(imageSession.id)
             } else {
                 Text("^[\(sessionVM.selections.count) Image Session](inflect: true) Selected")

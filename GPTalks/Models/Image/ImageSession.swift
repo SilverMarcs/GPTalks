@@ -13,14 +13,13 @@ import SwiftUI
 class ImageSession {
     var id: UUID = UUID()
     var date: Date = Date()
-    var order: Int = 0
     var title: String = "Image Session"
     var isStarred: Bool = false
     @Attribute(.ephemeral)
     var prompt: String = ""
 
-    @Relationship(deleteRule: .cascade, inverse: \ImageGeneration.session)
-    var imageGenerations = [ImageGeneration]()
+    @Relationship(deleteRule: .cascade, inverse: \Generation.session)
+    var imageGenerations = [Generation]()
     
     @Relationship(deleteRule: .cascade)
     var config: ImageConfig
@@ -33,12 +32,10 @@ class ImageSession {
     }
     
     @MainActor
-    func send() async {
-        order = 0
-        
+    func send() async {        
         guard !prompt.isEmpty else { return }
         
-        let generation = ImageGeneration(config: config.copy(prompt: prompt), session: self)
+        let generation = Generation(config: config.copy(prompt: prompt), session: self)
 
         imageGenerations.append(generation)
         
@@ -58,7 +55,7 @@ class ImageSession {
         }
     }
     
-    func deleteGeneration(_ generation: ImageGeneration) {
+    func deleteGeneration(_ generation: Generation) {
         withAnimation {
             imageGenerations.removeAll(where: { $0 == generation })
         }

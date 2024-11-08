@@ -1,5 +1,5 @@
 //
-//  ImageSessionVM.swift
+//  ImageVM.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 23/07/2024.
@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 import Foundation
 
-@Observable class ImageSessionVM {
+@Observable class ImageVM {
     var searchText: String = ""
     var selections: Set<ImageSession> = []
     
@@ -24,14 +24,14 @@ import Foundation
         return selections.first
     }
     
-    func sendImageGenerationRequest() {
+    func sendGenerationRequest() {
         guard let session = activeImageSession else { return }
         Task {
             await session.send()
         }
     }
     
-    func deleteLastImageGeneration() {
+    func deleteLastGeneration() {
         guard let session = activeImageSession else { return }
         if let last = session.imageGenerations.last {
             last.deleteSelf()

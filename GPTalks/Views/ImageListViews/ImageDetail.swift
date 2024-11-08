@@ -1,5 +1,5 @@
 //
-//  ImageGenerationList.swift
+//  ImageDetail.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 18/07/2024.
@@ -8,16 +8,16 @@
 import SwiftUI
 import SwiftData
 
-struct ImageGenerationList: View {
-    @Environment(ImageSessionVM.self) var imageVM
+struct ImageDetail: View {
+    @Environment(ImageVM.self) var imageVM
     @Bindable var session: ImageSession
     @State private var showingInspector: Bool = false
     
     var body: some View {
         ScrollViewReader { proxy in
             List {
-                ForEach(session.imageGenerations, id: \.self) { generation in
-                    ImageGenerationView(generation: generation)
+                ForEach(session.imageGenerations) { generation in
+                    GenerationView(generation: generation)
                 }
                 .listRowSeparator(.hidden)
                 
@@ -25,9 +25,6 @@ struct ImageGenerationList: View {
                     .id(String.bottomID)
                     .listRowSeparator(.hidden)
             }
-            #if !os(macOS)
-            .listStyle(.plain)
-            #endif
             .task {
                 session.proxy = proxy
                 scrollToBottom(proxy: proxy)
@@ -38,43 +35,41 @@ struct ImageGenerationList: View {
             #if os(macOS)
             .navigationTitle(session.title)
             .toolbar {
-                ImageGenerationListToolbar()
+                ToolbarItem(placement: .navigation) {
+                    Button(action: {} ) {
+                        Image(systemName: "slider.vertical.3")
+                    }
+                    .menuIndicator(.hidden)
+                }
             }
             #else
             #if !os(visionOS)
             .scrollDismissesKeyboard(.immediately)
             #endif
+            .listStyle(.plain)
             .navigationTitle(session.config.model.name)
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
-                showInspector
+                ToolbarItem {
+                    Button {
+                        showingInspector.toggle()
+                    } label: {
+                        Label("Show Inspector", systemImage: "info.circle")
+                    }
+                }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) { _ in
                 scrollToBottom(proxy: proxy)
             }
-            #endif
-            #if !os(macOS)
             .sheet(isPresented: $showingInspector) {
                 ImageInspector(session: session, showingInspector: $showingInspector)
             }
             #endif
         }
     }
-    
-//    #if !os(macOS)
-    private var showInspector: some ToolbarContent {
-        ToolbarItem {
-            Button {
-                showingInspector.toggle()
-            } label: {
-                Label("Show Inspector", systemImage: "info.circle")
-            }
-        }
-    }
-//    #endif
 }
 
 
 #Preview {
-    ImageGenerationList(session: .mockImageSession)
+    ImageDetail(session: .mockImageSession)
 }

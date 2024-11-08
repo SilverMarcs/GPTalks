@@ -10,7 +10,7 @@ import TipKit
 
 struct NewSessionTip: Tip {
     var title: Text {
-        Text("Long Tap the button to see list of all providers")
+        Text("Long Tap to see list of all providers")
     }
     
 //    var message: Text {

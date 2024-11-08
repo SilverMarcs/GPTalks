@@ -1,5 +1,5 @@
 //
-//  ImageGenerationView.swift
+//  GenerationView.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 18/07/2024.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct ImageGenerationView: View {
+struct GenerationView: View {
     @ObservedObject var imageConfig = ImageConfigDefaults.shared
-    var generation: ImageGeneration
+    var generation: Generation
     
     var body: some View {
         VStack(spacing: 10) {
@@ -109,5 +109,5 @@ struct ImageGenerationView: View {
 
 
 #Preview {
-    ImageGenerationView(generation: .mockImageGeneration)
+    GenerationView(generation: .mockGeneration)
 }

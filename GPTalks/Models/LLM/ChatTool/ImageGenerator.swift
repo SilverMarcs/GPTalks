@@ -18,7 +18,7 @@ struct ImageGenerator: ToolProtocol {
     static func process(arguments: String) async throws -> ToolData {
         let modelContext = DatabaseService.shared.modelContext
         
-        let parameters = getImageGenerationParameters(from: arguments)
+        let parameters = getGenerationParameters(from: arguments)
         
         var fetchDefaults = FetchDescriptor<ProviderDefaults>()
         fetchDefaults.fetchLimit = 1
@@ -43,7 +43,7 @@ struct ImageGenerator: ToolProtocol {
         )
     }
     
-    struct ImageGenerationParameters: Codable {
+    struct GenerationParameters: Codable {
         let prompt: String
         let n: Int
     }
@@ -83,9 +83,9 @@ struct ImageGenerator: ToolProtocol {
         return dataObjects
 
     }
-    private static func getImageGenerationParameters(from jsonString: String) -> ImageGenerationParameters {
+    private static func getGenerationParameters(from jsonString: String) -> GenerationParameters {
         let jsonData = jsonString.data(using: .utf8)!
-        let parameters = try! JSONDecoder().decode(ImageGenerationParameters.self, from: jsonData)
+        let parameters = try! JSONDecoder().decode(GenerationParameters.self, from: jsonData)
         return parameters
     }
     

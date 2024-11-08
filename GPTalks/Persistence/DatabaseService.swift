@@ -19,7 +19,7 @@ class DatabaseService {
             Thread.self,
             Provider.self,
             AIModel.self,
-            ImageGeneration.self,
+            Generation.self,
             ImageConfig.self,
             ProviderDefaults.self,
         ])

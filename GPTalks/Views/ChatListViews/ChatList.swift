@@ -12,6 +12,7 @@ struct ChatList: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ChatVM.self) var chatVM
     @Environment(\.modelContext) var modelContext
+    @Environment(\.providers) private var providers
     
     @Query(filter: #Predicate { !$0.isQuick },
            sort: [SortDescriptor(\Chat.date, order: .reverse)]) // TODO: animation
@@ -42,14 +43,7 @@ struct ChatList: View {
         }
         .navigationTitle("Chats")
         .toolbar {
-            ChatListToolbar()
-            
-            ToolbarItem(placement: .keyboard) {
-                Button("Search") {
-                    isSearchFieldFocused.toggle()
-                }
-                .keyboardShortcut("f")
-            }
+            toolbar
         }
         .task {
             if let first = chats.first, chatVM.chatSelections.isEmpty, horizontalSizeClass != .compact {
@@ -70,7 +64,44 @@ struct ChatList: View {
 
     private func deleteItems(offsets: IndexSet) {
         for index in offsets {
+            if chatVM.chatSelections.contains(chats[index]) {
+                chatVM.chatSelections.remove(chats[index])
+            }
             modelContext.delete(chats[index])
+        }
+    }
+    
+    @ToolbarContentBuilder
+    var toolbar: some ToolbarContent {
+        ToolbarItem { Spacer() }
+        
+        ToolbarItem {
+            Menu {
+                ForEach(providers) { provider in
+                    Menu {
+                        ForEach(provider.chatModels) { model in
+                            Button(model.name) {
+                                chatVM.createNewSession(provider: provider, model: model)
+                            }
+                        }
+                    } label: {
+                        Label(provider.name, systemImage: "cpu")
+                    }
+                }
+            } label: {
+                Label("Add Item", systemImage: "square.and.pencil")
+            } primaryAction: {
+                chatVM.createNewSession()
+            }
+            .menuIndicator(.hidden)
+            .popoverTip(NewSessionTip())
+        }
+        
+        ToolbarItem(placement: .keyboard) {
+            Button("Search") {
+                isSearchFieldFocused.toggle()
+            }
+            .keyboardShortcut("f")
         }
     }
 }
