@@ -91,9 +91,22 @@ class Provider {
         let demoImageModel = AIModel.dalle
         let demoSttModel = AIModel.whisper
         
-        let chatModels = type.getDefaultModels()
-        let imageModels = type == .openai ? AIModel.getOpenImageModels() : []
-        let sttModels = type == .openai ? AIModel.getOpenAITTSModels() : []
+        let allModels = type.getDefaultModels()
+
+        var chatModels: [AIModel] = []
+        var imageModels: [AIModel] = []
+        var sttModels: [AIModel] = []
+
+        for model in allModels {
+            switch model.type {
+            case .chat:
+                chatModels.append(model)
+            case .image:
+                imageModels.append(model)
+            case .stt:
+                sttModels.append(model)
+            }
+        }
         
         
         let provider = Provider(
@@ -114,14 +127,6 @@ class Provider {
             sttModel: sttModels.first ?? demoSttModel,
             sttModels: sttModels
         )
-        
-        
-//        Task {
-//            let newModels = await type.getService().refreshModels(provider: provider).map { model in
-//                ChatModel(code: model.code, name: model.name)
-//            }
-//            provider.chatModels.append(contentsOf: newModels)
-//        }
         
         return provider
     }
@@ -147,7 +152,7 @@ extension Provider {
     func refreshModels() async -> [GenericModel] {
         let refreshedChatModels: [GenericModel] = await type.getService().refreshModels(provider: self)
         let newModels = refreshedChatModels.filter { model in
-            !chatModels.contains(where: { $0.code == model.code })
+            !chatModels.contains(where: { $0.code == model.code }) || !imageModels.contains(where: { $0.code == model.code }) || !sttModels.contains(where: { $0.code == model.code })
         }
         
         return newModels.map { chatModel in

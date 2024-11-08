@@ -106,8 +106,13 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .vertex: AIModel.getVertexModels()
         case .xai: AIModel.getXaiModels()
         case .openrouter: AIModel.getOpenrouterModels()
+        case .groq: AIModel.getGroqModels()
+        case .mistral: AIModel.getMistralModels()
+        case .perplexity: AIModel.getPerplexityModels()
+        case .togetherai: AIModel.getTogetherModels()
+        case .lmstudio: AIModel.getLocalModels()
         case .ollama: AIModel.getLocalModels()
-        default: AIModel.getOpenaiModels()
+        case .custom: AIModel.getOpenaiModels()
         }
     }
     
