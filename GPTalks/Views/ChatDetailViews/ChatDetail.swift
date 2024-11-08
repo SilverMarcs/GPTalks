@@ -80,7 +80,6 @@ struct ChatDetail: View {
             #endif
             #endif
         }
-            .id(chat.id)
     }
     
     var navTitle: String {

@@ -57,4 +57,22 @@ struct FileHelper {
             return "bin"
         }
     }
+    
+    static func processDataFiles(_ dataFiles: [TypedData], threadId: String, role: ThreadRole) -> [ContentItem] {
+        return dataFiles.map { data in
+            if data.fileType.conforms(to: .text) || data.fileType.conforms(to: .pdf) {
+                return .text(data.formattedTextContent)
+            } else if data.fileType.conforms(to: .image) && role == .user {
+                return .image(data.mimeType, data.data)
+            } else {
+                let warning = "Notify the user if a file has been added but the assistant could not find a compatible plugin to read that file type."
+                return .text("Thread ID: \(threadId)\nFile: \(data.fileName)\n\(warning)")
+            }
+        }
+    }
+    
+    enum ContentItem {
+        case text(String)
+        case image(String, Data)  // mimeType, data
+    }
 }

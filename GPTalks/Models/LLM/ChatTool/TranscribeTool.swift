@@ -74,7 +74,7 @@ struct TranscribeTool: ToolProtocol {
     }
     
     static let description: String = """
-        You can open and access contents of audio files. Just respond with a list of file names without file extensions
+        You can open and access contents of audio files. Just respond with a list of file names WITH file extensions
         """
     
     static var openai: ChatQuery.ChatCompletionToolParam {
@@ -94,10 +94,11 @@ struct TranscribeTool: ToolProtocol {
                                 "fileNames":
                                     .init(
                                         type: .array,
-                                        description: "The array of audio file names without extension to access",
+                                        description: "The array of audio file names WITH extension to access",
                                         items: .init(type: .string)
                                     )
-                            ]
+                            ],
+                            required: ["fileNames", "conversationID"]
                         )
                 )
         )
@@ -115,7 +116,7 @@ struct TranscribeTool: ToolProtocol {
                     ),
                     "fileNames": Schema(
                         type: .array,
-                        description: "The array of audio file names without extension to access",
+                        description: "The array of audio file names WITH extension to access",
                         items: Schema(type: .string)
                     )
                 ],
@@ -137,14 +138,14 @@ struct TranscribeTool: ToolProtocol {
                     ],
                     "fileNames": [
                         "type": "array",
-                        "description": "The array of audio file names without extension to access",
+                        "description": "The array of audio file names WITH extension to access",
                         "items": [
                             "type": "string"
                         ],
                         "maxItems": 5
                     ]
                 ],
-                "required": ["url_list"]
+                "required": ["conversationID", "fileNames"]
             ]
         ]
     }

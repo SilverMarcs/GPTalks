@@ -14,23 +14,20 @@ import SwiftAnthropic
 struct ClaudeService: AIService {
     typealias ConvertedType = MessageParameter.Message
     
-    static func convert(conversation: Thread) -> MessageParameter.Message {        
-        // Convert processed contents into Claude's format
+    static func convert(conversation: Thread) -> MessageParameter.Message {
+        let contentItems = FileHelper.processDataFiles(conversation.dataFiles, threadId: conversation.id.uuidString, role: conversation.role)
         var contentObjects: [MessageParameter.Message.Content.ContentObject] = []
-
-        for dataFile in conversation.dataFiles {
-            if dataFile.fileType.conforms(to: .image) {
+        for item in contentItems {
+            switch item {
+            case .text(let text):
+                contentObjects.append(.text(text))
+            case .image(let mimeType, let data):
                 let imageSource = MessageParameter.Message.Content.ImageSource(
                     type: .base64,
-                    mediaType: .init(rawValue: dataFile.mimeType) ?? .jpeg,
-                    data: dataFile.data.base64EncodedString()
+                    mediaType: .init(rawValue: mimeType) ?? .jpeg,
+                    data: data.base64EncodedString()
                 )
                 contentObjects.append(.image(imageSource))
-            } else if dataFile.fileType.conforms(to: .text) {
-                contentObjects.append(.text(dataFile.formattedTextContent))
-            } else {
-                let warning = "Notify the user if a file has been added but the assistant could not find a compatible plugin to read that file type."
-                contentObjects.append(.text("Thread ID: \(conversation.id)\nFile: \(dataFile.fileName)\n\(warning)"))
             }
         }
         

@@ -37,29 +37,22 @@ struct VertexService: AIService {
             ])
         }
         
-        for data in conversation.dataFiles where conversation.role == .user {
-            if data.fileType.conforms(to: .image) {
-                let imageContent: [String: Any] = [
+        let contentItems = FileHelper.processDataFiles(conversation.dataFiles, threadId: conversation.id.uuidString, role: conversation.role)
+        for item in contentItems {
+            switch item {
+            case .text(let text):
+                contentObjects.append([
+                    "type": "text",
+                    "text": text
+                ])
+            case .image(let mimeType, let data):
+                contentObjects.append([
                     "type": "image",
                     "source": [
                         "type": "base64",
-                        "media_type": data.mimeType,
-                        "data": data.data.base64EncodedString()
+                        "media_type": mimeType,
+                        "data": data.base64EncodedString()
                     ]
-                ]
-                contentObjects.append(imageContent)
-            } else if data.fileType.conforms(to: .text) {
-                contentObjects.append([
-                    "type": "text",
-                    "text": data.formattedTextContent
-                ])
-            } else {
-                let warning = "Notify the user if a file has been added but the assistant could not find a compatible plugin to read that file type."
-                let detail = "Thread ID: \(conversation.id)\nFile: \(data.fileName)\n\(warning)"
-                
-                contentObjects.append([
-                    "type": "text",
-                    "text": detail
                 ])
             }
         }

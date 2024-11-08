@@ -32,6 +32,9 @@ struct GoogleService: AIService {
                 parts.insert(.text(dataFile.formattedTextContent), at: 0)
             } else if dataFile.fileType.conforms(to: .image) && conversation.role == .user {
                 parts.insert(.data(mimetype: dataFile.mimeType, dataFile.data), at: 0)
+            } else {
+                // Same as image but we create seperate block for better visibility of intentions
+                parts.insert(.data(mimetype: dataFile.mimeType, dataFile.data), at: 0)
             }
         }
         

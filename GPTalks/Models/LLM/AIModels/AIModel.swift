@@ -127,7 +127,7 @@ extension AIModel {
             .init(code: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo", name: "Meta-Llama-3.1-8B-Instruct-Turbo", type: .chat),
             .init(code: "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo", name: "Meta-Llama-3.1-70B-Instruct-Turbo", type: .chat),
             .init(code: "meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo", name: "Meta-Llama-3.1-405B-Instruct-Turbo", type: .chat),
-            .init(code: "meta-llama/Llama-3.2-3B-Instruct-Turbo", name: "Llama-3.2-3B-Instruct-Turbo", type: .chat),chat),
+            .init(code: "meta-llama/Llama-3.2-3B-Instruct-Turbo", name: "Llama-3.2-3B-Instruct-Turbo", type: .chat),
             .init(code: "microsoft/WizardLM-2-8x22B", name: "WizardLM-2-8x22B", type: .chat),
             .init(code: "google/gemma-2-27b-it", name: "Gemma-2-27B", type: .chat),
             .init(code: "google/gemma-2-9b-it", name: "Gemma-2-9B", type: .chat),

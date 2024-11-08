@@ -30,19 +30,17 @@ struct OpenAIService: AIService {
         let role = conversation.role.toOpenAIRole()
 
         switch role {
-        case .user where !conversation.dataFiles.isEmpty:
+        case .user where !conversation.dataFiles.isEmpty:            
+            let contentItems = FileHelper.processDataFiles(conversation.dataFiles, threadId: conversation.id.uuidString, role: conversation.role)
             var contents: [ChatQuery.ChatCompletionMessageParam.ChatCompletionUserMessageParam.Content.VisionContent] = []
-            
             contents.append(.init(chatCompletionContentPartTextParam: .init(text: conversation.content)))
-            for data in conversation.dataFiles {
-                if data.fileType.conforms(to: .image) {
-                    let url = "data:image/jpeg;base64,\(data.data.base64EncodedString())"
+            for item in contentItems {
+                switch item {
+                case .text(let text):
+                    contents.append(.init(chatCompletionContentPartTextParam: .init(text: text)))
+                case .image(let mimeType, let data):
+                    let url = "data:\(mimeType);base64,\(data.base64EncodedString())"
                     contents.append(.init(chatCompletionContentPartImageParam: .init(imageUrl: .init(url: url, detail: .low))))
-                } else if data.fileType.conforms(to: .text) {
-                    contents.append(.init(chatCompletionContentPartTextParam: .init(text: data.formattedTextContent)))
-                } else {
-                    let warning = "Notify the user if a file has been added but the assistant could not find a compatible plugin to read that file type."
-                    contents.append(.init(chatCompletionContentPartTextParam: .init(text: "Thread ID: \(conversation.id)\nFile: \(data.fileName)\n\(warning)")))
                 }
             }
             
