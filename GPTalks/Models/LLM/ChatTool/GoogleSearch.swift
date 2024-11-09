@@ -86,7 +86,7 @@ struct GoogleSearch: ToolProtocol {
         """
     
     static let jsonSchemaString = """
-    ```
+    ```json
     {
       "name": "\(toolName)",
       "description": "\(description)",

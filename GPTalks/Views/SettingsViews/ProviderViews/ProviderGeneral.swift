@@ -69,10 +69,15 @@ struct ProviderGeneral: View {
                 }
             }
     
-            Section("Default Models") {
+            Section {
                 ModelPicker(model: $provider.chatModel, models: provider.chatModels, label: "Chat Model")
                 
-                ModelPicker(model: $provider.liteModel, models: provider.chatModels, label: "Title Model")
+                ModelPicker(model: $provider.liteModel, models: provider.chatModels, label: "Lite Model")
+            } header: {
+                Text("Default Models")
+            } footer: {
+                Text("Default Models")
+                SectionFooterView(text: "Recommended to use cheaper models as lite model")
             }
 
             Section("Customisation") {

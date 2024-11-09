@@ -40,27 +40,6 @@ struct GuidesSettings: View {
     }
 }
 
-struct GuideSection: View {
-    let guide: Guide
-    
-    var body: some View {
-//        Section(guide.title) {
-//            
-//            Text(LocalizedStringKey(guide.content))
-//                .multilineTextAlignment(.leading)
-//                .textSelection(.enabled)
-//            MarkdownView(content: guide.content)
-//        }
-        
-        DisclosureGroup {
-            MarkdownView(content: guide.content)
-        } label: {
-            Text(guide.title)
-                .font(.title3.bold())
-        }
-    }
-}
-
 #Preview {
     GuidesSettings()
         .frame(width: 450)
