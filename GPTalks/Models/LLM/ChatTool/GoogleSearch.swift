@@ -81,7 +81,8 @@ struct GoogleSearch: ToolProtocol {
         Use this when
         - User is asking about current events or something that requires real-time information (weather, sports scores, etc.)
         - User is asking about some term you are totally unfamiliar with (it might be new)
-        - Usually prioritize your pre-existing knowledge before wanting to call this tool
+        - Always prioritize your pre-existing knowledge before wanting to call this tool
+        Do not call this tool unless you are absolutely certain that the information you have is outdated or incorrect or you have no knowledge about the topic. Try confirming with the user first. before automatically calling this tool.        
         """
     
     static let jsonSchemaString = """

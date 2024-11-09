@@ -16,6 +16,9 @@ struct ImageContentView: View {
     var body: some View {
         NavigationSplitView {
             ImageList()
+                #if os(macOS)
+                .navigationSplitViewColumnWidth(min: 240, ideal: 280, max: 400)
+                #endif
         } detail: {
             if let imageSession = sessionVM.activeImageSession {
                 ImageDetail(session: imageSession)

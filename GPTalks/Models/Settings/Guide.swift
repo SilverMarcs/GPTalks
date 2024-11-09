@@ -95,6 +95,18 @@ struct Guide: Identifiable {
         4. Check the **Models** tab at the top of the provider page. Add new models or refresh the page to see if more models are available from the provider.
         """),
         
+        Guide(title: "VertexAI Instructions", content: """
+        The app currently only supports **Anthropic Claude** providers for **VertexAI**.
+
+        ## Getting Started
+
+        1. Make sure you have credits in Google Cloud with the models enabled.
+        2. Check the quota and usage limits of individual models.
+        3. Sign in to Google in the Vertex provider settings to use the VertexAI Service.
+
+        _More providers are planned to be added later_
+        """),
+        
         Guide(title: "Adding Files", content: """
         ### File Support in the App
 

@@ -74,7 +74,7 @@ struct TranscribeTool: ToolProtocol {
     }
     
     static let description: String = """
-        You can open and access contents of audio files. Just respond with a list of file names WITH file extensions
+        You can open and access contents of audio files. Just respond with a list of file names WITH file extensions if the user provided any.
         """
     
     static let jsonSchemaString = """
