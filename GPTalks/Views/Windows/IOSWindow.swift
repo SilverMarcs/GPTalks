@@ -17,6 +17,8 @@ struct IOSWindow: Scene {
     @State private var showSettings = false
     
     var body: some Scene {
+        @Bindable var chatVM = chatVM
+        
         WindowGroup("Chats", id: "chats") {
             NavigationSplitView {
                 if !chatVM.searchResults.isEmpty {
@@ -25,13 +27,37 @@ struct IOSWindow: Scene {
                     Group {
                         switch listStateVM.listState {
                         case .chats:
-                            ChatList()
+                            ChatList(status: chatVM.statusFilter, searchText: chatVM.searchText)
                         case .images:
                             ImageList()
                         }
                     }
                     .toolbar {
-                        iosToolbar
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Menu {
+                                Button(action: { showSettings.toggle() }) {
+                                    Label("Settings", systemImage: "gear")
+                                }
+                                
+                                Picker("Chat Status", selection: $chatVM.statusFilter) {
+                                    ForEach([ChatStatus.normal, .starred, .archived]) { status in
+                                        Label(status.name, systemImage: status.systemImageName)
+                                            .tag(status)
+                                    }
+                                }
+                                #if os(macOS)
+                                .labelsHidden()
+                                #endif
+                                .pickerStyle(.inline)
+                                
+                            } label: {
+                                Label("More", systemImage: "ellipsis.circle")
+                                    .labelStyle(.titleOnly)
+                            }
+                            .sheet(isPresented: $showSettings) {
+                                SettingsView()
+                            }
+                        }
                     }
                 }
             } detail: {
@@ -50,22 +76,6 @@ struct IOSWindow: Scene {
                         Text("^[\(imageVM.selections.count) Image Session](inflect: true) Selected")
                     }
                 }
-            }
-        }
-    }
-    
-    var iosToolbar: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarLeading) {
-            Menu {
-                Button(action: { showSettings.toggle() }) {
-                    Label("Settings", systemImage: "gear")
-                }
-            } label: {
-                Label("More", systemImage: "ellipsis.circle")
-                    .labelStyle(.titleOnly)
-            }
-            .sheet(isPresented: $showSettings) {
-                SettingsView()
             }
         }
     }

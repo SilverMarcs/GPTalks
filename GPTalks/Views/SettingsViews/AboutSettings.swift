@@ -67,6 +67,7 @@ struct AboutSettings: View {
         }
         .formStyle(.grouped)
         .navigationTitle("About")
+        .toolbarTitleDisplayMode(.inline)
     }
     
     func getAppVersion() -> String {

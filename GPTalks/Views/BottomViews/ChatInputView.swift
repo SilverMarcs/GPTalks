@@ -34,9 +34,11 @@ struct ChatInputView: View {
             }
             
             VStack(alignment: .leading, spacing: 0) {
+                #if os(macOS)
                 TipView(PlusButtonTip())
                     .frame(height: 30)
                     .padding(.bottom, 15)
+                #endif
 
                 Spacer(minLength: 0)
                 
@@ -87,6 +89,9 @@ struct ChatInputView: View {
         } primaryAction: {
             showPhotosPicker = true
         }
+        #if !os(macOS)
+        .popoverTip(PlusButtonTip())
+        #endif
         .menuStyle(.button)
         .buttonStyle(.plain)
         .menuIndicator(.hidden)

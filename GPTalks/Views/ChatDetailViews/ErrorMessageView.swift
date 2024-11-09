@@ -11,23 +11,25 @@ struct ErrorMessageView: View {
     @Binding var message: String
     
     var body: some View {
-        HStack {
-            Text(message)
-                .textSelection(.enabled)
-            
-            Button(role: .destructive) {
-                withAnimation {
-                    message = ""
+        if !message.isEmpty {
+            HStack {
+                Text(message)
+                    .textSelection(.enabled)
+                
+                Button(role: .destructive) {
+                    withAnimation {
+                        message = ""
+                    }
+                } label: {
+                    Image(systemName: "delete.backward")
                 }
-            } label: {
-                Image(systemName: "delete.backward")
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
+            .foregroundStyle(.red)
+            .opacity(message.isEmpty ? 0 : 1)
+            .listRowSeparator(.hidden)
+            .transaction { $0.animation = nil }
         }
-        .foregroundStyle(.red)
-        .opacity(message.isEmpty ? 0 : 1)
-        .listRowSeparator(.hidden)
-        .transaction { $0.animation = nil }
     }
 }
 

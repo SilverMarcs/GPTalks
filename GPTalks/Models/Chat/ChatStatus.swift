@@ -15,12 +15,21 @@ enum ChatStatus: Int, Codable, Identifiable, Equatable, CaseIterable {
     
     var id: Int { rawValue }
     
+    var systemImageName: String {
+        switch self {
+        case .normal: return "message"
+        case .starred: return "star"
+        case .quick: return "bolt"
+        case .archived: return "archivebox"
+        }
+    }
+    
     var name: String {
         switch self {
-        case .normal: return "Normal"
-        case .starred: return "Starred"
-        case .quick: return "Quick"
-        case .archived: return "Archived"
+        case .normal: return "Active Chats"
+        case .starred: return "Starred Chats"
+        case .quick: return "Quick Chats"
+        case .archived: return "Archived Chats"
         }
     }
 }

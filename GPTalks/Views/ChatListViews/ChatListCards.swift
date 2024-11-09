@@ -19,7 +19,7 @@ struct ChatListCards: View {
     var body: some View {
         #if os(macOS)
         content
-            .listRowInsets(EdgeInsets(top: spacing - 1, leading: -5, bottom: spacing + 0.5, trailing: -5))
+            .listRowInsets(EdgeInsets(top: spacing, leading: -5, bottom: spacing, trailing: -5))
         #else
         Section {
             content
