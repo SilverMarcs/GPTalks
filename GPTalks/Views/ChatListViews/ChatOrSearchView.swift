@@ -60,7 +60,9 @@ struct ChatOrSearchView: View {
     private var chatSessionView: some View {
         if let chat = chatVM.activeChat, !chat.isQuick {
             ChatDetail(chat: chat)
-//                .id(chat.id)
+                #if !os(macOS)
+                .id(chat.id)
+                #endif
         } else {
             Text("^[\(chatVM.chatSelections.count) Chat Session](inflect: true) Selected")
                 .font(.title)

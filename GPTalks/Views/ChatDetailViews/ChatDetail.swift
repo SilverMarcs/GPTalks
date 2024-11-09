@@ -64,7 +64,15 @@ struct ChatDetail: View {
                     chat.hasUserScrolled = true
                 }
             }
+            .onChange(of: chatVM.chatSelections) {
+                chat.proxy = proxy
+                scrollToBottom(proxy: proxy, animated: false)
+            }
             #else
+            .onAppear {
+                chat.proxy = proxy
+                scrollToBottom(proxy: proxy, delay: 0.3)
+            }
             .listStyle(.plain)
             .toolbarTitleDisplayMode(.inline)
             .onScrollPhaseChange { oldPhase, newPhase in  // this sint working on macos

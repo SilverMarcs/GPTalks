@@ -38,7 +38,7 @@ struct ProviderDetail: View {
     private var picker: some View {
         Picker("Tabs", selection: $selectedTab) {
             ForEach(filteredTabs()) { tab in
-                Text(tab.rawValue.capitalized) // Use Text to represent the label
+                tab.label // Use Text to represent the label
                     .tag(tab)
                     #if os(macOS)
                     .labelStyle(.titleOnly)
@@ -56,7 +56,7 @@ struct ProviderDetail: View {
         switch provider.type {
         case .google, .anthropic, .vertex:
             // Only show chat tab
-            return [.chat]
+            return [.general, .chat]
         default:
             // Show all tabs
             return ProviderTab.allCases

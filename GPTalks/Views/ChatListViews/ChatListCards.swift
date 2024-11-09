@@ -54,7 +54,7 @@ struct ChatListCards: View {
             dismissWindow(id: "images")
         }
         #else
-        listStateVM.state = .chats
+        listStateVM.listState = .chats
         #endif
     }
     
@@ -65,7 +65,7 @@ struct ChatListCards: View {
             dismissWindow(id: "chats")
         }
         #else
-        listStateVM.state = .images
+        listStateVM.listState = .images
         #endif
     }
     
