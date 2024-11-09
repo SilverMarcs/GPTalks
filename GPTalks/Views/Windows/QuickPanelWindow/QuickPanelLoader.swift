@@ -12,12 +12,10 @@ struct QuickPanelLoader: View {
     @Environment(\.modelContext) var modelContext
     
     @State private var chat: Chat?
-    @Binding var isPresented: Bool
-    @Binding var showAdditionalContent: Bool
     
     var body: some View {
         if let chat = chat {
-            QuickPanelView(chat: chat, isPresented: $isPresented, showAdditionalContent: $showAdditionalContent)
+            QuickPanelView(chat: chat)
         } else {
             Text("Something went wrong")
                 .font(.title)

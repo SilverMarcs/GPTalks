@@ -12,11 +12,10 @@ import SwiftData
 struct QuickPanelView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(ChatVM.self) private var chatVM
+    @Environment(SettingsVM.self) private var settingsVM
     
     @Bindable var chat: Chat
-    @Binding var isPresented: Bool
-    @Binding var showAdditionalContent: Bool
-    
+
     @FocusState private var isFocused: Bool
     
     @Query(filter: #Predicate<Provider> { $0.isEnabled })
@@ -51,14 +50,14 @@ struct QuickPanelView: View {
             }
         }
         .frame(width: 650)
-        .onChange(of: isPresented) {
-            if isPresented {
+        .onChange(of: settingsVM.isQuickPanelPresented) {
+            if settingsVM.isQuickPanelPresented {
             
                 selections = chatVM.chatSelections
                 chatVM.chatSelections = [self.chat]
                 isFocused = true
                 if !chat.threads.isEmpty {
-                    showAdditionalContent = true
+                    settingsVM.isQuickPanelExpanded = true
                 }
             } else {
                 DispatchQueue.main.async {
@@ -71,9 +70,9 @@ struct QuickPanelView: View {
         }
         .onChange(of: chat.inputManager.dataFiles.isEmpty) {
             if chat.inputManager.dataFiles.isEmpty {
-                showAdditionalContent = false
+                settingsVM.isQuickPanelExpanded = false
             } else {
-                showAdditionalContent = true
+                settingsVM.isQuickPanelExpanded = true
             }
         }
     }
@@ -164,7 +163,7 @@ struct QuickPanelView: View {
     }
     
     private func resetChat() {
-        showAdditionalContent = false
+        settingsVM.isQuickPanelExpanded = false
         chat.deleteAllThreads()
         chat.inputManager.dataFiles.removeAll()
         let oldConfig = chat.config
@@ -187,8 +186,8 @@ struct QuickPanelView: View {
             chatVM.fork(newChat: newChat)
             resetChat()
             
-            showAdditionalContent = false
-            isPresented = false
+            settingsVM.isQuickPanelExpanded = false
+            settingsVM.isQuickPanelPresented = false
             
             if let mainWindow = NSApp.windows.first(where: { $0.identifier?.rawValue == "chats" }) {
                 mainWindow.makeKeyAndOrderFront(nil)
@@ -208,7 +207,7 @@ struct QuickPanelView: View {
             await chat.sendInput()
         }
         
-        showAdditionalContent = true
+        settingsVM.isQuickPanelExpanded = true
     }
 }
 
@@ -216,6 +215,6 @@ struct QuickPanelView: View {
     let quickSesion = Chat.mockChat
     quickSesion.isQuick = true
     
-    return QuickPanelView(chat: quickSesion, isPresented: .constant(true), showAdditionalContent: .constant(true))
+    return QuickPanelView(chat: quickSesion)
 }
 #endif

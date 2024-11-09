@@ -20,12 +20,12 @@ struct QuickPanelModifier: ViewModifier {
         content
             .task {
                 KeyboardShortcuts.onKeyDown(for: .togglePanel) {
-                    isPresented.toggle()
+                    settingsVM.isQuickPanelPresented.toggle()
                     QuickPanelTip().invalidate(reason: .actionPerformed)
                 }
             }
-            .floatingPanel(isPresented: $isPresented, showAdditionalContent: $showAdditionalContent) {
-                QuickPanelLoader(isPresented: $isPresented, showAdditionalContent: $showAdditionalContent)
+            .floatingPanel {
+                QuickPanelLoader()
                     .environment(\.isQuick, true)
                     .environment(chatVM)
                     .environment(settingsVM)

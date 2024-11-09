@@ -13,6 +13,7 @@ struct ChatList: View {
     @Environment(\.openWindow) private var openWindow
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ChatVM.self) var chatVM
+    @Environment(SettingsVM.self) var settingsVM
     @Environment(\.modelContext) var modelContext
     @Environment(\.providers) private var providers
     
@@ -73,7 +74,7 @@ struct ChatList: View {
                 
                 TipView(QuickPanelTip()) { action in
                     if action.id == "launch-quick-panel" {
-                        // TODO: isQuickPanelVisible.toggle()
+                        settingsVM.isQuickPanelPresented = true
                         QuickPanelTip().invalidate(reason: .actionPerformed)
                     }
                 }

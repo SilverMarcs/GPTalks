@@ -14,6 +14,7 @@ import Foundation
     var settingsTab: SettingsTab? = .general
     
     var isQuickPanelPresented: Bool = false
+    var isQuickPanelExpanded: Bool = false
     #else
     var settingsTab: SettingsTab?
     #endif

@@ -111,31 +111,32 @@ class QuickPanelWindow<Content: View>: NSPanel {
 }
 
 fileprivate struct QuickPanelModifierAux<PanelContent: View>: ViewModifier {
-    @Binding var isPresented: Bool
-    @Binding var showAdditionalContent: Bool
+    @Environment(SettingsVM.self) var settingsVM
     var contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 57)
     @ViewBuilder let view: () -> PanelContent
     @State var panel: QuickPanelWindow<PanelContent>?
     
     func body(content: Content) -> some View {
+        @Bindable var settingsVM = settingsVM
+        
         content
             .onAppear {
-                panel = QuickPanelWindow(view: view, contentRect: contentRect, isPresented: $isPresented)
+                panel = QuickPanelWindow(view: view, contentRect: contentRect, isPresented: $settingsVM.isQuickPanelPresented)
                 panel?.center()
-                if isPresented {
+                if settingsVM.isQuickPanelPresented {
                     present()
                 }
             }.onDisappear {
                 panel?.close()
                 panel = nil
-            }.onChange(of: isPresented) {
-                if isPresented {
+            }.onChange(of: settingsVM.isQuickPanelPresented) {
+                if settingsVM.isQuickPanelPresented {
                     present()
                 } else {
                     panel?.close()
                 }
-            }.onChange(of: showAdditionalContent) {
-                if showAdditionalContent {
+            }.onChange(of: settingsVM.isQuickPanelExpanded) {
+                if settingsVM.isQuickPanelExpanded {
                     panel?.updateHeight(to: 500)
                 } else {
                     panel?.updateHeight(to: contentRect.height)
@@ -150,11 +151,9 @@ fileprivate struct QuickPanelModifierAux<PanelContent: View>: ViewModifier {
 }
 
 extension View {
-    func floatingPanel<Content: View>(isPresented: Binding<Bool>,
-                                      showAdditionalContent: Binding<Bool>,
-                                      contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 57),
+    func floatingPanel<Content: View>(contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 57),
                                       @ViewBuilder content: @escaping () -> Content) -> some View {
-        self.modifier(QuickPanelModifierAux(isPresented: isPresented, showAdditionalContent: showAdditionalContent, contentRect: contentRect, view: content))
+        self.modifier(QuickPanelModifierAux(contentRect: contentRect, view: content))
     }
 }
 
