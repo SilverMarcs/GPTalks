@@ -28,6 +28,7 @@ struct MenuCommands: Commands {
         
         CommandGroup(before: .appSettings) {
             Button("Settings") {
+                OpenSettingsTip().invalidate(reason: .actionPerformed)
                 openWindow(id: "settings")
             }
             .keyboardShortcut(",", modifiers: .command)

@@ -16,6 +16,8 @@ struct ChatRow: View {
     
     @Bindable var session: Chat
     
+    var swipeTip = SwipeActionTip()
+    
     var body: some View {
         Group {
             #if os(macOS)
@@ -112,6 +114,7 @@ struct ChatRow: View {
 
     var swipeActionsLeading: some View {
         Button {
+            SwipeActionTip().invalidate(reason: .actionPerformed)
             session.isStarred.toggle()
         } label: {
             Label("Star", systemImage: "star")
@@ -121,9 +124,11 @@ struct ChatRow: View {
     
     var swipeActionsTrailing: some View {
         Button(role: .destructive) {
-            if session.isStarred || session.isQuick {
+            if session.isStarred {
                 return
             }
+            
+            SwipeActionTip().invalidate(reason: .actionPerformed)
             
             if sessionVM.chatSelections.contains(session) {
                 sessionVM.chatSelections.remove(session)

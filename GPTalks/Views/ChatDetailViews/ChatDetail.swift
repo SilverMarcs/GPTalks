@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 import SwiftData
 
 struct ChatDetail: View {
@@ -20,6 +21,9 @@ struct ChatDetail: View {
     var body: some View {
         ScrollViewReader { proxy in
             List {
+                TipView(ChatInspectorTip())
+                    .listRowSeparator(.hidden)
+                
                 ForEach(chat.threads, id: \.self) { thread in
                     ThreadView(thread: thread)
                         #if os(iOS)

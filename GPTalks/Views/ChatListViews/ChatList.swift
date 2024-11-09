@@ -7,15 +7,18 @@
 
 import SwiftData
 import SwiftUI
+import TipKit
 
 struct ChatList: View {
+    @Environment(\.openWindow) private var openWindow
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ChatVM.self) var chatVM
     @Environment(\.modelContext) var modelContext
     @Environment(\.providers) private var providers
     
     @Query(filter: #Predicate { !$0.isQuick },
-           sort: [SortDescriptor(\Chat.date, order: .reverse)]) // TODO: animation
+           sort: [SortDescriptor(\Chat.date, order: .reverse)],
+           animation: .default)
     var chats: [Chat]
     
     @FocusState private var isSearchFieldFocused: Bool
@@ -26,6 +29,11 @@ struct ChatList: View {
         List(selection: $chatVM.chatSelections) {
             ChatListCards(sessionCount: String(chats.count), imageSessionsCount: "↗")
                 .id(String.topID)
+            
+            TipView(SwipeActionTip())
+                .listRowSeparator(.hidden)
+                .tipCornerRadius(8)
+                .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
             
             ForEach(chats) { session in
                 ChatRow(session: session)
@@ -52,6 +60,27 @@ struct ChatList: View {
         }
         .searchable(text: $chatVM.searchText, placement: searchPlacement)
         .searchFocused($isSearchFieldFocused, equals: true)
+        #if os(macOS)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack {
+                TipView(OpenSettingsTip()) { action in
+                    if action.id == "launch-settings" {
+                        openWindow(id: "settings")
+                        OpenSettingsTip().invalidate(reason: .actionPerformed)
+                    }
+                }
+                .frame(height: 60)
+                
+                TipView(QuickPanelTip()) { action in
+                    if action.id == "launch-quick-panel" {
+                        // TODO: isQuickPanelVisible.toggle()
+                        QuickPanelTip().invalidate(reason: .actionPerformed)
+                    }
+                }
+            }
+            .padding()
+        }
+        #endif
     }
     
     private var searchPlacement: SearchFieldPlacement {
@@ -94,7 +123,7 @@ struct ChatList: View {
                 chatVM.createNewSession()
             }
             .menuIndicator(.hidden)
-            .popoverTip(NewSessionTip())
+            .popoverTip(NewChatTip())
         }
         
         ToolbarItem(placement: .keyboard) {
@@ -110,4 +139,5 @@ struct ChatList: View {
     ChatList()
     .frame(width: 400)
     .environment(ChatVM(modelContext: DatabaseService.shared.container.mainContext))
+    .environment(SettingsVM())
 }

@@ -47,14 +47,12 @@ struct ImageRow: View {
     }
     
     var swipeActionsLeading: some View {
-        Group {
-            Button {
-                session.isStarred.toggle()
-            } label: {
-                Label("Star", systemImage: "star")
-            }
-            .tint(.orange)
+        Button {
+            session.isStarred.toggle()
+        } label: {
+            Label("Star", systemImage: "star")
         }
+        .tint(.orange)
     }
     
     var swipeActionsTrailing: some View {

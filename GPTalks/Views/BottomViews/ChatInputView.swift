@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI
 import UniformTypeIdentifiers
-import SwiftData
+import TipKit
 
 struct ChatInputView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -34,6 +34,10 @@ struct ChatInputView: View {
             }
             
             VStack(alignment: .leading, spacing: 0) {
+                TipView(PlusButtonTip())
+                    .frame(height: 30)
+                    .padding(.bottom, 15)
+
                 Spacer(minLength: 0)
                 
                 if !chat.inputManager.dataFiles.isEmpty {
@@ -60,12 +64,18 @@ struct ChatInputView: View {
     var plusButton: some View {
         Menu {
             #if !os(macOS)
-            Button(action: {chat.showCamera = true}) {
+            Button {
+                chat.showCamera = true
+                PlusButtonTip().invalidate(reason: .actionPerformed)
+            } label: {
                 Label("Open Camera", systemImage: "camera")
             }
             #endif
             
-            Button(action: { isFilePickerPresented = true }) {
+            Button {
+                isFilePickerPresented = true
+                PlusButtonTip().invalidate(reason: .actionPerformed)
+            } label: {
                 Label("Attach Files", systemImage: "paperclip")
             }
         } label: {
@@ -77,7 +87,6 @@ struct ChatInputView: View {
         } primaryAction: {
             showPhotosPicker = true
         }
-        .popoverTip(PlusButtonTip())
         .menuStyle(.button)
         .buttonStyle(.plain)
         .menuIndicator(.hidden)
@@ -156,6 +165,7 @@ struct ChatInputView: View {
     }
 }
 
+import SwiftData
 #Preview {
     ChatDetail(chat: .mockChat)
         .environment(ChatVM(modelContext: try! ModelContainer(for: Chat.self).mainContext))

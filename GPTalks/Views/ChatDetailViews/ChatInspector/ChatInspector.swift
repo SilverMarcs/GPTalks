@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
-import SwiftData
+import TipKit
 
 struct ChatInspector: View {
     @Environment(\.dismiss) var dismiss
     var chat: Chat
     
-    @State private var selectedTab: Tab = .basic
+    @State private var selectedTab: InspectorTab = .basic
     
     var body: some View {
         #if os(macOS)
@@ -30,7 +30,6 @@ struct ChatInspector: View {
                         .opacity(0)
                     
                     Spacer()
-                    
                     
                     picker
                     
@@ -60,31 +59,31 @@ struct ChatInspector: View {
         }
     }
     
+    @ViewBuilder
     var commonParts: some View {
-        Group {
-            switch selectedTab {
-            case .basic:
-                BasicInspector(chat: chat)
-            case .advanced:
-                AdvancedInspector(chat: chat)
-            }
+        switch selectedTab {
+        case .basic:
+            BasicInspector(chat: chat)
+        case .advanced:
+            AdvancedInspector(chat: chat)
         }
     }
     
     var picker: some View {
         Picker("Tab", selection: $selectedTab) {
-            ForEach(Tab.allCases, id: \.self) { tab in
+            ForEach(InspectorTab.allCases, id: \.self) { tab in
                 Text(tab.rawValue)
             }
         }
         .fixedSize()
         .pickerStyle(.segmented)
         .labelsHidden()
-    }
-    
-    enum Tab: String, CaseIterable {
-        case basic = "Basic"
-        case advanced = "Advanced"
+        .popoverTip(ChatInspectorToolsTip())
+        .onChange(of: selectedTab) {
+            if selectedTab == .advanced {
+                ChatInspectorToolsTip().invalidate(reason: .actionPerformed)
+            }
+        }
     }
 }
 

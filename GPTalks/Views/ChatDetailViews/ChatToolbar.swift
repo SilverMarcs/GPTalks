@@ -18,16 +18,14 @@ struct ChatToolbar: ToolbarContent {
     
     var body: some ToolbarContent {
         ToolbarItem(placement: horizontalSizeClass == .compact ? .primaryAction : .navigation) {
-            Button {
-                toggleInspector()
-            } label: {
+            Button(action: toggleInspector) {
                 Label("Shortcuts", systemImage: horizontalSizeClass == .compact ? "info.circle" : "slider.vertical.3")
             }
             .keyboardShortcut(".")
             .sheet(isPresented: $showingInspector) {
                 ChatInspector(chat: chat)
                     #if os(macOS)
-                    .frame(height: 625)
+                    .frame(height: 659)
                     #endif
                     .presentationDetents(horizontalSizeClass == .compact ? [.medium, .large] : [.large])
                     .presentationDragIndicator(.hidden)

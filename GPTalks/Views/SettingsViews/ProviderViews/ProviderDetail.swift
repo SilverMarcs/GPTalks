@@ -47,6 +47,11 @@ struct ProviderDetail: View {
                     #endif
             }
         }
+        .onChange(of: selectedTab) {
+            if selectedTab == .chat {
+                ProviderRefreshTip().invalidate(reason: .actionPerformed)
+            }
+        }
         .popoverTip(ProviderRefreshTip())
         .pickerStyle(.segmented)
         .fixedSize()

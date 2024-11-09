@@ -110,7 +110,7 @@ class QuickPanelWindow<Content: View>: NSPanel {
     }
 }
 
-fileprivate struct FloatingPanelModifierAux<PanelContent: View>: ViewModifier {
+fileprivate struct QuickPanelModifierAux<PanelContent: View>: ViewModifier {
     @Binding var isPresented: Bool
     @Binding var showAdditionalContent: Bool
     var contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 57)
@@ -154,7 +154,7 @@ extension View {
                                       showAdditionalContent: Binding<Bool>,
                                       contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 57),
                                       @ViewBuilder content: @escaping () -> Content) -> some View {
-        self.modifier(FloatingPanelModifierAux(isPresented: isPresented, showAdditionalContent: showAdditionalContent, contentRect: contentRect, view: content))
+        self.modifier(QuickPanelModifierAux(isPresented: isPresented, showAdditionalContent: showAdditionalContent, contentRect: contentRect, view: content))
     }
 }
 

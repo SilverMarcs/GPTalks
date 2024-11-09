@@ -64,7 +64,7 @@ struct ImageList: View {
                 imageVM.createNewSession()
             }
             .menuIndicator(.hidden)
-            .popoverTip(NewSessionTip())
+            .popoverTip(NewChatTip())
         }
     }
     

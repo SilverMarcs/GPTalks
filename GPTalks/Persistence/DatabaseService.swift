@@ -7,6 +7,9 @@
 
 import Foundation
 import SwiftData
+#if os(macOS)
+import KeyboardShortcuts
+#endif
 
 // make modelactor
 class DatabaseService {
@@ -60,6 +63,10 @@ class DatabaseService {
         
         // If there are already providers in the modelContext, return since the setup has already been done
         guard try! modelContext.fetch(fetchProviders).count == 0 else { return }
+        
+        #if os(macOS)
+        KeyboardShortcuts.setShortcut(.init(.space, modifiers: .option), for: .togglePanel) // TODO: very bad (visibility wise) place to do this. 
+        #endif
         
         let openAI = Provider.factory(type: .openai)
         openAI.isPersistent = true

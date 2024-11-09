@@ -1,5 +1,5 @@
 //
-//  FloatingPanelModifier.swift
+//  QuickPanelModifier.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 04/11/2024.
@@ -9,10 +9,11 @@
 import SwiftUI
 import KeyboardShortcuts
 
-struct FloatingPanelModifier: ViewModifier {
+struct QuickPanelModifier: ViewModifier {
     @Binding var isPresented: Bool
     @Binding var showAdditionalContent: Bool
     @Environment(ChatVM.self) var chatVM
+    @Environment(SettingsVM.self) var settingsVM
     @Environment(\.modelContext) var modelContext
     
     func body(content: Content) -> some View {
@@ -20,12 +21,14 @@ struct FloatingPanelModifier: ViewModifier {
             .task {
                 KeyboardShortcuts.onKeyDown(for: .togglePanel) {
                     isPresented.toggle()
+                    QuickPanelTip().invalidate(reason: .actionPerformed)
                 }
             }
             .floatingPanel(isPresented: $isPresented, showAdditionalContent: $showAdditionalContent) {
                 QuickPanelLoader(isPresented: $isPresented, showAdditionalContent: $showAdditionalContent)
                     .environment(\.isQuick, true)
                     .environment(chatVM)
+                    .environment(settingsVM)
                     .modelContainer(modelContext.container)
             }
     }
@@ -33,7 +36,7 @@ struct FloatingPanelModifier: ViewModifier {
 
 extension View {
     func withFloatingPanel(isPresented: Binding<Bool>, showAdditionalContent: Binding<Bool>) -> some View {
-        self.modifier(FloatingPanelModifier(isPresented: isPresented, showAdditionalContent: showAdditionalContent))
+        self.modifier(QuickPanelModifier(isPresented: isPresented, showAdditionalContent: showAdditionalContent))
     }
 }
 #endif

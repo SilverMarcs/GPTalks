@@ -12,6 +12,8 @@ import Foundation
     
     #if os(macOS)
     var settingsTab: SettingsTab? = .general
+    
+    var isQuickPanelPresented: Bool = false
     #else
     var settingsTab: SettingsTab?
     #endif
