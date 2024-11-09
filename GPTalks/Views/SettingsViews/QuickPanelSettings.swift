@@ -51,13 +51,13 @@ struct QuickPanelSettings: View {
                         let quickSessions = try modelContext.fetch(descriptor)
                         let session = quickSessions.first
                         session?.config.provider = provider
-                        session?.config.model = provider.quickChatModel
+                        session?.config.model = provider.liteModel
                     } catch {
                         print("Error fetching quick session: \(error)")
                     }
                 }
                 
-                ModelPicker(model: $providerDefaults.quickProvider.quickChatModel, models: providerDefaults.quickProvider.chatModels)
+                ModelPicker(model: $providerDefaults.quickProvider.liteModel, models: providerDefaults.quickProvider.chatModels)
             }
                 
             Section("System Prompt") {

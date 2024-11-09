@@ -19,34 +19,31 @@ class Provider {
     @Attribute(.allowsCloudEncryption)
     var apiKey: String = ""
     
-    var type: ProviderType
-    var scheme: HTTPScheme
     var isPersistent: Bool = false  // added by the app by default and are not deletable
-    var extraInfo: String = ""
-    
+    var extraInfo: String = "" // TODO: add more info about the provider
     var color: String = "#00947A"
     var isEnabled: Bool = true
     
+    var type: ProviderType
+    var scheme: HTTPScheme
+    
+    var chatModels: [AIModel] { models.filter { $0.type == .chat } }
+    var imageModels: [AIModel] { models.filter { $0.type == .image } }
+    var sttModels: [AIModel] { models.filter { $0.type == .stt } }
+    
     @Relationship(deleteRule: .cascade)
+    var models: [AIModel]
+    
+    @Relationship(deleteRule: .nullify)
     var chatModel: AIModel
-    @Relationship(deleteRule: .cascade)
-    var quickChatModel: AIModel
-    @Relationship(deleteRule: .cascade)
-    var titleModel: AIModel
-    @Relationship(deleteRule: .cascade)
-    var chatModels: [AIModel] = []
+    @Relationship(deleteRule: .nullify)
+    var liteModel: AIModel
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var imageModel: AIModel
-    @Relationship(deleteRule: .cascade)
-    var toolImageModel: AIModel
-    @Relationship(deleteRule: .cascade)
-    var imageModels: [AIModel] = []
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .nullify)
     var sttModel: AIModel
-    @Relationship(deleteRule: .cascade)
-    var sttModels: [AIModel] = []
 
     public init(id: UUID = UUID(),
                 date: Date = Date(),
@@ -57,15 +54,11 @@ class Provider {
                 scheme: HTTPScheme,
                 color: String,
                 isEnabled: Bool,
+                models: [AIModel] = [],
                 chatModel: AIModel,
-                quickChatModel: AIModel,
-                titleModel: AIModel,
+                liteModel: AIModel,
                 imageModel: AIModel,
-                toolImageModel: AIModel,
-                chatModels: [AIModel] = [],
-                imageModels: [AIModel] = [],
-                sttModel: AIModel,
-                sttModels: [AIModel] = []) {
+                sttModel: AIModel) {
         self.id = id
         self.date = date
         self.name = name
@@ -75,39 +68,20 @@ class Provider {
         self.scheme = scheme
         self.color = color
         self.isEnabled = isEnabled
+        self.models = models
         self.chatModel = chatModel
-        self.quickChatModel = quickChatModel
-        self.titleModel = titleModel
+        self.liteModel = liteModel
         self.imageModel = imageModel
-        self.toolImageModel = toolImageModel
-        self.chatModels = chatModels
-        self.imageModels = imageModels
         self.sttModel = sttModel
-        self.sttModels = sttModels
     }
     
     
-    static func factory(type: ProviderType, isDummy: Bool = false) -> Provider {
-        let demoImageModel = AIModel.dalle
-        let demoSttModel = AIModel.whisper
-        
+    static func factory(type: ProviderType) -> Provider {
         let allModels = type.getDefaultModels()
-
-        var chatModels: [AIModel] = []
-        var imageModels: [AIModel] = []
-        var sttModels: [AIModel] = []
-
-        for model in allModels {
-            switch model.type {
-            case .chat:
-                chatModels.append(model)
-            case .image:
-                imageModels.append(model)
-            case .stt:
-                sttModels.append(model)
-            }
-        }
         
+        let chatModel = allModels.first { $0.type == .chat }
+        let imageModel = allModels.first { $0.type == .image }
+        let sttModel = allModels.first { $0.type == .stt }
         
         let provider = Provider(
             name: type.name,
@@ -116,37 +90,29 @@ class Provider {
             type: type,
             scheme: type.scheme,
             color: type.defaultColor,
-            isEnabled: !isDummy,
-            chatModel: chatModels.first!,
-            quickChatModel: chatModels.first!,
-            titleModel: chatModels.first!,
-            imageModel: imageModels.first ?? demoImageModel,
-            toolImageModel: imageModels.first ?? demoImageModel,
-            chatModels: chatModels,
-            imageModels: imageModels,
-            sttModel: sttModels.first ?? demoSttModel,
-            sttModels: sttModels
+            isEnabled: true,
+            models: allModels,
+            chatModel: chatModel!,
+            liteModel: chatModel!,
+            imageModel: imageModel ?? AIModel.dalle,
+            sttModel: sttModel ?? AIModel.whisper
         )
         
         return provider
     }
+}
     
-    func addModel(_ model: GenericModel) {
-        switch model.selectedModelType {
-        case .chat:
-            chatModels.append(AIModel(code: model.code, name: model.name, type: .chat))
-        case .image:
-            imageModels.append(AIModel(code: model.code, name: model.name, type: .image))
-        case .stt:
-            sttModels.append(AIModel(code: model.code, name: model.name, type: .stt))
-        }
-    }
-}
-
-enum HTTPScheme: String, Codable, CaseIterable {
-    case http
-    case https
-}
+//    func addModel(_ model: GenericModel) {
+//        switch model.selectedModelType {
+//        case .chat:
+//            chatModels.append(AIModel(code: model.code, name: model.name, type: .chat))
+//        case .image:
+//            imageModels.append(AIModel(code: model.code, name: model.name, type: .image))
+//        case .stt:
+//            sttModels.append(AIModel(code: model.code, name: model.name, type: .stt))
+//        }
+//    }
+//}
 
 extension Provider {
     func refreshModels() async -> [GenericModel] {

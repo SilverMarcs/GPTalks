@@ -44,7 +44,7 @@ struct GoogleCodeExecutionTip: Tip {
 
 struct ProviderRefreshTip: Tip {
     var title: Text {
-        Text("Go into Models Section to refresh the providers model list")
+        Text("Go into Models Section to refresh the provider's model list")
     }
 }
 

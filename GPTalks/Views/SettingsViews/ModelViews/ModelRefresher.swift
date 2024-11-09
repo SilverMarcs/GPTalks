@@ -79,8 +79,8 @@ struct ModelRefresher: View {
     private func addSelectedModels() {
         let selectedModels = refreshedModels.filter { $0.isSelected }
         
-        for selectableModel in selectedModels {
-            provider.addModel(selectableModel)
+        for model in selectedModels {
+            provider.models.append(.init(code: model.code, name: model.name, type: model.selectedModelType))
         }
         
         dismiss()

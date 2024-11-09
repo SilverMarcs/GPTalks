@@ -12,7 +12,7 @@ struct TranscribeSettings: View {
     @ObservedObject var config = ToolConfigDefaults.shared
     @Bindable var providerDefaults: ProviderDefaults
     
-    @Query(filter: #Predicate<Provider> { $0.isEnabled && !$0.sttModels.isEmpty})
+    @Query(filter: #Predicate<Provider> { $0.isEnabled})
     var providers: [Provider]
     
     var body: some View {
@@ -21,9 +21,9 @@ struct TranscribeSettings: View {
         }
         
         Section("Defaults") {
-            ProviderPicker(provider: $providerDefaults.toolSTTProvider, providers: providers)
+            ProviderPicker(provider: $providerDefaults.sttProvider, providers: providers)
             
-            ModelPicker(model: $providerDefaults.toolSTTProvider.sttModel, models: providerDefaults.toolSTTProvider.sttModels, label: "Transcription Model")
+            ModelPicker(model: $providerDefaults.sttProvider.sttModel, models: providerDefaults.sttProvider.sttModels, label: "Transcription Model")
         }
         
         Section("Schema") {

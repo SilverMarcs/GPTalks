@@ -37,7 +37,7 @@ struct TranscribeTool: ToolProtocol {
         var fetchDefaults = FetchDescriptor<ProviderDefaults>()
         fetchDefaults.fetchLimit = 1
         let fetchedProviders = try modelContext.fetch(fetchDefaults)
-        guard let provider = fetchedProviders.first?.toolSTTProvider else {
+        guard let provider = fetchedProviders.first?.sttProvider else {
             throw RuntimeError("No STT provider found")
         }
         

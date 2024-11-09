@@ -8,8 +8,7 @@
 import Foundation
 import SwiftData
 
-@Model
-class AIModel: Hashable, Identifiable {
+struct AIModel: Hashable, Identifiable, Codable {
     var id: UUID = UUID()
     var code: String
     var name: String

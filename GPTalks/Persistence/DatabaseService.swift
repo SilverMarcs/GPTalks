@@ -21,7 +21,6 @@ class DatabaseService {
             ChatConfig.self,
             Thread.self,
             Provider.self,
-            AIModel.self,
             Generation.self,
             ImageConfig.self,
             ProviderDefaults.self,
@@ -98,8 +97,7 @@ class DatabaseService {
         let providerDefaults = ProviderDefaults(defaultProvider: openAI,
                                                 quickProvider: openAI,
                                                 imageProvider: openAI,
-                                                toolImageProvider: openAI,
-                                                toolSTTProvider: openAI)
+                                                sttProvider: openAI)
         modelContext.insert(providerDefaults)
     }
 }

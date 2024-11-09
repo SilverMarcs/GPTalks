@@ -15,6 +15,7 @@
 		080E70EA2CDF1E2600A949C9 /* HeadlineTipViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70E92CDF1E2600A949C9 /* HeadlineTipViewStyle.swift */; };
 		080E70EC2CDF380500A949C9 /* InspectorTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70EB2CDF380500A949C9 /* InspectorTab.swift */; };
 		080E70EE2CDF498F00A949C9 /* ChatStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70ED2CDF498F00A949C9 /* ChatStatus.swift */; };
+		080E70F02CDF781500A949C9 /* HTTPScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70EF2CDF781500A949C9 /* HTTPScheme.swift */; };
 		08149A572C3E5E5B004485AC /* ThreadRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08149A562C3E5E5B004485AC /* ThreadRole.swift */; };
 		0819479E2C48DCDB0061227B /* ImageList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819479D2C48DCDB0061227B /* ImageList.swift */; };
 		081AB5A52CD7FF4700273259 /* QuickPanelModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081AB5A42CD7FF4700273259 /* QuickPanelModifier.swift */; };
@@ -55,7 +56,7 @@
 		085276BC2C98705A009184D2 /* iOSInputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BB2C98705A009184D2 /* iOSInputEditor.swift */; };
 		085276BE2C98706E009184D2 /* MacInputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BD2C98706E009184D2 /* MacInputEditor.swift */; };
 		085276C02C98794C009184D2 /* ToolCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BF2C98794C009184D2 /* ToolCallView.swift */; };
-		0853102B2CBF966F0078DD09 /* ModelTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0853102A2CBF966F0078DD09 /* ModelTester.swift */; };
+		0853102B2CBF966F0078DD09 /* ModelRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0853102A2CBF966F0078DD09 /* ModelRow.swift */; };
 		085361052C491BF0007DAB62 /* ImageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361042C491BF0007DAB62 /* ImageSession.swift */; };
 		085361072C492282007DAB62 /* Generation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361062C49225E007DAB62 /* Generation.swift */; };
 		085361092C4923E2007DAB62 /* ImageConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361082C4923E2007DAB62 /* ImageConfig.swift */; };
@@ -186,6 +187,7 @@
 		080E70E92CDF1E2600A949C9 /* HeadlineTipViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadlineTipViewStyle.swift; sourceTree = "<group>"; };
 		080E70EB2CDF380500A949C9 /* InspectorTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorTab.swift; sourceTree = "<group>"; };
 		080E70ED2CDF498F00A949C9 /* ChatStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStatus.swift; sourceTree = "<group>"; };
+		080E70EF2CDF781500A949C9 /* HTTPScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPScheme.swift; sourceTree = "<group>"; };
 		08149A562C3E5E5B004485AC /* ThreadRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadRole.swift; sourceTree = "<group>"; };
 		0819479D2C48DCDB0061227B /* ImageList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageList.swift; sourceTree = "<group>"; };
 		081AB5A42CD7FF4700273259 /* QuickPanelModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelModifier.swift; sourceTree = "<group>"; };
@@ -220,7 +222,7 @@
 		085276BB2C98705A009184D2 /* iOSInputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSInputEditor.swift; sourceTree = "<group>"; };
 		085276BD2C98706E009184D2 /* MacInputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacInputEditor.swift; sourceTree = "<group>"; };
 		085276BF2C98794C009184D2 /* ToolCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCallView.swift; sourceTree = "<group>"; };
-		0853102A2CBF966F0078DD09 /* ModelTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTester.swift; sourceTree = "<group>"; };
+		0853102A2CBF966F0078DD09 /* ModelRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelRow.swift; sourceTree = "<group>"; };
 		085361042C491BF0007DAB62 /* ImageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSession.swift; sourceTree = "<group>"; };
 		085361062C49225E007DAB62 /* Generation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Generation.swift; sourceTree = "<group>"; };
 		085361082C4923E2007DAB62 /* ImageConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConfig.swift; sourceTree = "<group>"; };
@@ -420,7 +422,7 @@
 		082F09CB2CB237A800B7860A /* ModelViews */ = {
 			isa = PBXGroup;
 			children = (
-				0853102A2CBF966F0078DD09 /* ModelTester.swift */,
+				0853102A2CBF966F0078DD09 /* ModelRow.swift */,
 				082F09D02CB2628B00B7860A /* ModelAdder.swift */,
 				085524E92C4EDEC400CBB827 /* ModelList.swift */,
 				082F09CC2CB237C400B7860A /* ModelRefresher.swift */,
@@ -777,6 +779,7 @@
 				08F8152C2C97F60100B49355 /* GoogleSearch.swift */,
 				08F8152A2C97F5FA00B49355 /* ImageGenerator.swift */,
 				082F09E42CB354FF00B7860A /* TranscribeTool.swift */,
+				080E70EF2CDF781500A949C9 /* HTTPScheme.swift */,
 			);
 			path = ChatTool;
 			sourceTree = "<group>";
@@ -935,6 +938,7 @@
 				081F58B82C6C8FFE00565F20 /* HoverScaleButton.swift in Sources */,
 				08C800572C36F843009581C5 /* SettingsView.swift in Sources */,
 				08C1ACE02C54BC8A00B86D37 /* TemperatureSlider.swift in Sources */,
+				080E70F02CDF781500A949C9 /* HTTPScheme.swift in Sources */,
 				08C1ACE22C54BC9C00B86D37 /* PresencePenaltySlider.swift in Sources */,
 				087F3F8F2CDDEF79001298B3 /* SettingsTab.swift in Sources */,
 				0819479E2C48DCDB0061227B /* ImageList.swift in Sources */,
@@ -944,7 +948,7 @@
 				080E70EE2CDF498F00A949C9 /* ChatStatus.swift in Sources */,
 				087F3F8B2CDDEF4C001298B3 /* Guide.swift in Sources */,
 				085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */,
-				0853102B2CBF966F0078DD09 /* ModelTester.swift in Sources */,
+				0853102B2CBF966F0078DD09 /* ModelRow.swift in Sources */,
 				08436F2C2CDEAB3B007A160F /* ListState.swift in Sources */,
 				087B40C02C561DDF00EAFA0A /* QuickPanelLoader.swift in Sources */,
 				089C7E102C4058CF005E3BE9 /* QuickPanelWindow.swift in Sources */,

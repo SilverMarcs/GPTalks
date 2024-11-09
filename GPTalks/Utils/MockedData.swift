@@ -22,7 +22,7 @@ extension Provider {
 }
 
 extension ProviderDefaults {
-    static var mockProviderDefaults = ProviderDefaults(defaultProvider: .openAIProvider, quickProvider: .openAIProvider, imageProvider: .openAIProvider, toolImageProvider: .openAIProvider, toolSTTProvider: .openAIProvider)
+    static var mockProviderDefaults = ProviderDefaults(defaultProvider: .openAIProvider, quickProvider: .openAIProvider, imageProvider: .openAIProvider, sttProvider: .openAIProvider)
 }
 
 extension AIModel {

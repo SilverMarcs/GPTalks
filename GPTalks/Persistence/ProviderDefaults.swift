@@ -13,14 +13,12 @@ class ProviderDefaults {
     var defaultProvider: Provider
     var quickProvider: Provider
     var imageProvider: Provider
-    var toolImageProvider: Provider
-    var toolSTTProvider: Provider
+    var sttProvider: Provider
 
-    init(defaultProvider: Provider, quickProvider: Provider, imageProvider: Provider, toolImageProvider: Provider, toolSTTProvider: Provider) {
+    init(defaultProvider: Provider, quickProvider: Provider, imageProvider: Provider, sttProvider: Provider) {
         self.defaultProvider = defaultProvider
         self.quickProvider = quickProvider
         self.imageProvider = imageProvider
-        self.toolImageProvider = toolImageProvider
-        self.toolSTTProvider = toolSTTProvider
+        self.sttProvider = sttProvider
     }
 }

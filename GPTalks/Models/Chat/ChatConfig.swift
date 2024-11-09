@@ -50,12 +50,12 @@ final class ChatConfig {
                 self.tools = ChatConfigTools()
             case .title:
                 self.systemPrompt = "Generate a title based on the content"
-                self.model = provider.titleModel
+                self.model = provider.liteModel
                 self.stream = false
                 self.tools = ChatConfigTools(isTitle: true)
             case .quick:
                 self.systemPrompt = AppConfig.shared.quickSystemPrompt
-                self.model = provider.quickChatModel
+                self.model = provider.liteModel
                 self.tools = ChatConfigTools()
         }
     }

@@ -100,7 +100,8 @@ import AuthenticationServices
     
     private func refreshAccessToken() async throws -> String {
         guard !refreshToken.isEmpty else {
-            throw NSError(domain: "TokenManager", code: 1, userInfo: [NSLocalizedDescriptionKey: "No refresh token available"])
+            throw RuntimeError("No refresh token available. Please sign in.")
+            
         }
         
         let url = URL(string: "https://oauth2.googleapis.com/token")!

@@ -12,7 +12,7 @@ struct GenerateImageSettings: View {
     @ObservedObject var config = ToolConfigDefaults.shared
     @Bindable var providerDefaults: ProviderDefaults
     
-    @Query(filter: #Predicate<Provider> { $0.isEnabled && !$0.imageModels.isEmpty})
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
     
     var body: some View {
@@ -21,9 +21,9 @@ struct GenerateImageSettings: View {
         }
         
         Section("Defaults") {            
-            ProviderPicker(provider: $providerDefaults.toolImageProvider, providers: providers)
+            ProviderPicker(provider: $providerDefaults.imageProvider, providers: providers)
             
-            ModelPicker(model: $providerDefaults.imageProvider.toolImageModel, models: providerDefaults.imageProvider.imageModels, label: "Image Model")
+            ModelPicker(model: $providerDefaults.imageProvider.imageModel, models: providerDefaults.imageProvider.imageModels, label: "Image Model")
         }
         
         Section("Schema") {

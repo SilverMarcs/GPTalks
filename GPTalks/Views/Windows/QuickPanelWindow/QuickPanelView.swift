@@ -85,7 +85,7 @@ struct QuickPanelView: View {
                     provider: $chat.config.provider,
                     providers: providers,
                     onChange: { newProvider in
-                        chat.config.model = newProvider.quickChatModel
+                        chat.config.model = newProvider.liteModel
                     }
                 )
 

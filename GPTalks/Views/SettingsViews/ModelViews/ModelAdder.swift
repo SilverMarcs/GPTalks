@@ -46,7 +46,6 @@ struct ModelAdder: View {
     }
     
     private func addModel() {
-        let newModel = GenericModel(code: modelCode, name: modelName, selectedModelType: selectedModelType)
-        provider.addModel(newModel)
+        provider.models.append(.init(code: modelCode, name: modelName, type: selectedModelType))
     }
 }

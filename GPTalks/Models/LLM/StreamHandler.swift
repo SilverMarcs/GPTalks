@@ -124,7 +124,7 @@ struct StreamHandler {
             let streamer = StreamHandler(session: session)
             try await streamer.handleRequest()
         } else {
-            let newAssistant = Thread(role: .assistant, provider: session.config.provider, model: session.config.provider.toolImageModel)
+            let newAssistant = Thread(role: .assistant, provider: session.config.provider, model: session.config.provider.imageModel)
             newAssistant.content = "Generations:"
             newAssistant.dataFiles = toolDatas
             newAssistant.isReplying = false
