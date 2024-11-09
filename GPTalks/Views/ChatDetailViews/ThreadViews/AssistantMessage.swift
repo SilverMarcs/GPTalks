@@ -20,6 +20,7 @@ struct AssistantMessage: View {
                 .resizable()
                 .frame(width: 17, height: 17)
                 .foregroundStyle(Color(hex: thread.provider?.color  ?? "#00947A").gradient)
+                .transaction { $0.animation = nil }
             
             VStack(alignment: .leading, spacing: 7) {
                 Text(thread.model?.name ?? "Assistant")
@@ -29,6 +30,7 @@ struct AssistantMessage: View {
                     #if os(macOS)
                     .padding(.top, 2)
                     #endif
+                    .transaction { $0.animation = nil }
                 
                 MarkdownView(content: thread.content)
                     .transaction { $0.animation = nil }

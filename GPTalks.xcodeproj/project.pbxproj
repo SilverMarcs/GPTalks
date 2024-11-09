@@ -16,6 +16,7 @@
 		080E70EC2CDF380500A949C9 /* InspectorTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70EB2CDF380500A949C9 /* InspectorTab.swift */; };
 		080E70EE2CDF498F00A949C9 /* ChatStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70ED2CDF498F00A949C9 /* ChatStatus.swift */; };
 		080E70F02CDF781500A949C9 /* HTTPScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70EF2CDF781500A949C9 /* HTTPScheme.swift */; };
+		080E70F22CDFB9C800A949C9 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70F12CDFB9C800A949C9 /* KeychainHelper.swift */; };
 		08149A572C3E5E5B004485AC /* ThreadRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08149A562C3E5E5B004485AC /* ThreadRole.swift */; };
 		0819479E2C48DCDB0061227B /* ImageList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819479D2C48DCDB0061227B /* ImageList.swift */; };
 		081AB5A52CD7FF4700273259 /* QuickPanelModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081AB5A42CD7FF4700273259 /* QuickPanelModifier.swift */; };
@@ -65,7 +66,7 @@
 		0853611F2C4A38C9007DAB62 /* GenericSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0853611E2C4A38C9007DAB62 /* GenericSlider.swift */; };
 		085361232C4A390D007DAB62 /* ProviderPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361222C4A390D007DAB62 /* ProviderPicker.swift */; };
 		085361252C4A5ECC007DAB62 /* MaxTokensPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361242C4A5ECC007DAB62 /* MaxTokensPicker.swift */; };
-		0854706F2CB4C3A1007FE9DB /* ModelTypeOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0854706E2CB4C3A1007FE9DB /* ModelTypeOption.swift */; };
+		0854706F2CB4C3A1007FE9DB /* ModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0854706E2CB4C3A1007FE9DB /* ModelType.swift */; };
 		085524E22C4ED2A400CBB827 /* MenuCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E12C4ED2A400CBB827 /* MenuCommands.swift */; };
 		085524E42C4ED2B800CBB827 /* ChatCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E32C4ED2B800CBB827 /* ChatCommands.swift */; };
 		085524E82C4ED61F00CBB827 /* ChatToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085524E72C4ED61F00CBB827 /* ChatToolbar.swift */; };
@@ -188,6 +189,7 @@
 		080E70EB2CDF380500A949C9 /* InspectorTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorTab.swift; sourceTree = "<group>"; };
 		080E70ED2CDF498F00A949C9 /* ChatStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStatus.swift; sourceTree = "<group>"; };
 		080E70EF2CDF781500A949C9 /* HTTPScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPScheme.swift; sourceTree = "<group>"; };
+		080E70F12CDFB9C800A949C9 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		08149A562C3E5E5B004485AC /* ThreadRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadRole.swift; sourceTree = "<group>"; };
 		0819479D2C48DCDB0061227B /* ImageList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageList.swift; sourceTree = "<group>"; };
 		081AB5A42CD7FF4700273259 /* QuickPanelModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelModifier.swift; sourceTree = "<group>"; };
@@ -231,7 +233,7 @@
 		0853611E2C4A38C9007DAB62 /* GenericSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSlider.swift; sourceTree = "<group>"; };
 		085361222C4A390D007DAB62 /* ProviderPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderPicker.swift; sourceTree = "<group>"; };
 		085361242C4A5ECC007DAB62 /* MaxTokensPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxTokensPicker.swift; sourceTree = "<group>"; };
-		0854706E2CB4C3A1007FE9DB /* ModelTypeOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTypeOption.swift; sourceTree = "<group>"; };
+		0854706E2CB4C3A1007FE9DB /* ModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelType.swift; sourceTree = "<group>"; };
 		085524E12C4ED2A400CBB827 /* MenuCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCommands.swift; sourceTree = "<group>"; };
 		085524E32C4ED2B800CBB827 /* ChatCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCommands.swift; sourceTree = "<group>"; };
 		085524E72C4ED61F00CBB827 /* ChatToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatToolbar.swift; sourceTree = "<group>"; };
@@ -414,7 +416,7 @@
 			children = (
 				08D913EB2CD9CAF7002E4E53 /* AIModel.swift */,
 				082F09D42CB2690800B7860A /* GenericModel.swift */,
-				0854706E2CB4C3A1007FE9DB /* ModelTypeOption.swift */,
+				0854706E2CB4C3A1007FE9DB /* ModelType.swift */,
 			);
 			path = AIModels;
 			sourceTree = "<group>";
@@ -493,6 +495,7 @@
 		087F3F902CDDEFC5001298B3 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				080E70F12CDFB9C800A949C9 /* KeychainHelper.swift */,
 				08C5C7282C9A1392004992A4 /* GoogleAuth.swift */,
 			);
 			path = Auth;
@@ -1005,6 +1008,7 @@
 				08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */,
 				08C800322C36AE1D009581C5 /* ChatList.swift in Sources */,
 				0891D5732C96796100BA428F /* ImageConfigDefaults.swift in Sources */,
+				080E70F22CDFB9C800A949C9 /* KeychainHelper.swift in Sources */,
 				08A77CC52C65A0B70087D0F3 /* AppearanceSettings.swift in Sources */,
 				08D913F02CDA1F75002E4E53 /* ProviderTab.swift in Sources */,
 				0869A3F62C95E4CC009BF9F2 /* ChatToolCall.swift in Sources */,
@@ -1016,7 +1020,7 @@
 				0886D8202C8707190058700F /* VertexService.swift in Sources */,
 				080E70EC2CDF380500A949C9 /* InspectorTab.swift in Sources */,
 				08B8DE1F2C97F3D10041A690 /* AppConfig.swift in Sources */,
-				0854706F2CB4C3A1007FE9DB /* ModelTypeOption.swift in Sources */,
+				0854706F2CB4C3A1007FE9DB /* ModelType.swift in Sources */,
 				0844C2752CA3E6E100F0A325 /* EmptyChat.swift in Sources */,
 				082A63382C55175E003996B7 /* MiscUtils.swift in Sources */,
 				085361232C4A390D007DAB62 /* ProviderPicker.swift in Sources */,

@@ -21,11 +21,18 @@ struct ProviderBackup: Codable {
     var schema: HTTPScheme
     var color: String
     var isEnabled: Bool
-    var models: [AIModel]
+    var models: [AIModelBackup]
     var chatModelCode: String
     var liteModelCode: String
     var imageModelCode: String
     var sttModelCode: String
+    
+    struct AIModelBackup: Codable {
+        var id: UUID
+        var code: String
+        var name: String
+        var type: ModelType
+    }
 }
 
 extension ProviderBackup {
@@ -39,7 +46,7 @@ extension ProviderBackup {
         self.schema = provider.scheme
         self.color = provider.color
         self.isEnabled = provider.isEnabled
-        self.models = provider.models
+        self.models = provider.models.map { AIModelBackup(from: $0) }
         self.chatModelCode = provider.chatModel.code
         self.liteModelCode = provider.liteModel.code
         self.imageModelCode = provider.imageModel.code
@@ -47,7 +54,9 @@ extension ProviderBackup {
     }
 
     func toProvider() -> Provider {
-        .init(
+        let models: [AIModel] = self.models.map { $0.toAIModel() }
+        
+        return Provider(
             id: UUID(),
             date: Date(),
             name: self.name,
@@ -57,11 +66,28 @@ extension ProviderBackup {
             scheme: self.schema,
             color: self.color,
             isEnabled: self.isEnabled,
-            models: self.models,
-            chatModel: self.models.first(where: { $0.code == self.chatModelCode }) ?? AIModel.gpt4,
-            liteModel: self.models.first(where: { $0.code == self.liteModelCode }) ?? AIModel.gpt4,
-            imageModel: self.models.first(where: { $0.code == self.imageModelCode }) ?? AIModel.dalle,
-            sttModel: self.models.first(where: { $0.code == self.imageModelCode }) ?? AIModel.whisper
+            models: models,
+            chatModel: models.first(where: { $0.code == self.chatModelCode }) ?? AIModel.gpt4,
+            liteModel: models.first(where: { $0.code == self.liteModelCode }) ?? AIModel.gpt4,
+            imageModel: models.first(where: { $0.code == self.imageModelCode }) ?? AIModel.dalle,
+            sttModel: models.first(where: { $0.code == self.sttModelCode }) ?? AIModel.whisper
+        )
+    }
+}
+
+extension ProviderBackup.AIModelBackup {
+    init(from model: AIModel) {
+        self.id = model.id
+        self.code = model.code
+        self.name = model.name
+        self.type = model.type
+    }
+    
+    func toAIModel() -> AIModel {
+        AIModel(
+            code: self.code,
+            name: self.name,
+            type: self.type
         )
     }
 }

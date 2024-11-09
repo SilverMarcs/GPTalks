@@ -15,7 +15,8 @@ struct GuidesSettings: View {
                 ForEach(Shortcut.shortcuts, id: \.key) { shortcut in
                     HStack {
                         Text(shortcut.key)
-                            .font(.system(.body, design: .monospaced))
+                            .monospaced()
+//                            .bold()
                             .foregroundStyle(.secondary)
                         Spacer()
                         Text(shortcut.action)

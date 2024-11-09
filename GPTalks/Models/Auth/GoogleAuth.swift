@@ -26,17 +26,29 @@ import AuthenticationServices
         loadTokens()
     }
     
-    // TODO: must not save tokens in UserDefaults
     private func loadTokens() {
-        accessToken = UserDefaults.standard.string(forKey: "accessToken") ?? ""
-        refreshToken = UserDefaults.standard.string(forKey: "refreshToken") ?? ""
-        expirationDate = UserDefaults.standard.object(forKey: "tokenExpirationDate") as? Date ?? Date()
+        if let accessTokenData = KeychainHelper.load(service: "com.zabir.GPTalksNew", account: "accessToken"),
+           let accessTokenString = String(data: accessTokenData, encoding: .utf8) {
+            accessToken = accessTokenString
+        }
+        
+        if let refreshTokenData = KeychainHelper.load(service: "com.zabir.GPTalksNew", account: "refreshToken"),
+           let refreshTokenString = String(data: refreshTokenData, encoding: .utf8) {
+            refreshToken = refreshTokenString
+        }
+        
+        if let expirationDateData = KeychainHelper.load(service: "com.zabir.GPTalksNew", account: "tokenExpirationDate"),
+           let expirationInterval = Double(String(data: expirationDateData, encoding: .utf8) ?? ""),
+           expirationInterval > 0 {
+            expirationDate = Date(timeIntervalSince1970: expirationInterval)
+        }
     }
-    
+
     private func saveTokens() {
-        UserDefaults.standard.set(accessToken, forKey: "accessToken")
-        UserDefaults.standard.set(refreshToken, forKey: "refreshToken")
-        UserDefaults.standard.set(expirationDate, forKey: "tokenExpirationDate")
+        let _ = KeychainHelper.save(service: "com.zabir.GPTalksNew", account: "accessToken", data: accessToken.data(using: .utf8) ?? Data())
+        let _ = KeychainHelper.save(service: "com.zabir.GPTalksNew", account: "refreshToken", data: refreshToken.data(using: .utf8) ?? Data())
+        let expirationData = String(expirationDate.timeIntervalSince1970).data(using: .utf8) ?? Data()
+        let _ = KeychainHelper.save(service: "com.zabir.GPTalksNew", account: "tokenExpirationDate", data: expirationData)
     }
     
     func clearTokens() {
@@ -44,7 +56,10 @@ import AuthenticationServices
             self.accessToken = ""
             self.refreshToken = ""
             self.expirationDate = Date()
-            self.saveTokens()
+            
+            KeychainHelper.delete(service: "com.zabir.GPTalksNew", account: "accessToken")
+            KeychainHelper.delete(service: "com.zabir.GPTalksNew", account: "refreshToken")
+            KeychainHelper.delete(service: "com.zabir.GPTalksNew", account: "tokenExpirationDate")
         }
     }
     

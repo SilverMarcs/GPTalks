@@ -8,7 +8,8 @@
 import Foundation
 import SwiftData
 
-struct AIModel: Hashable, Identifiable, Codable {
+@Model
+class AIModel: Hashable, Identifiable {
     var id: UUID = UUID()
     var code: String
     var name: String
@@ -27,7 +28,6 @@ extension AIModel {
         return [
             .init(code: "gpt-4o-mini", name: "GPT-4om", type: .chat),
             .init(code: "gpt-4o", name: "GPT-4o", type: .chat),
-            .init(code: "gpt-4o-audio-preview", name: "GPT-4o-A", type: .chat),
             .init(code: "chatgpt-4o-lates", name: "ChatGPT-4o-Latest", type: .chat),
             .init(code: "o1-mini", name: "o1-M", type: .chat),
             .init(code: "o1-preview", name: "o1-P", type: .chat),

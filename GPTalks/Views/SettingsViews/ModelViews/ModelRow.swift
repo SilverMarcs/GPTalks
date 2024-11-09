@@ -45,8 +45,10 @@ struct ModelRow: View {
                     if isTesting {
                         ProgressView()
                             .controlSize(.small)
+                            .frame(width: 20, height: 20)
                     } else {
                         Image(systemName: "play.circle")
+                            .imageScale(.large)
                             .foregroundStyle(foregroundColor(for: model.testResult))
                     }
                 }

@@ -50,26 +50,21 @@ struct URLScrape: ToolProtocol {
     }
     
     static func retrieveWebContent(from url: URL) async throws -> String {
-        let apiKey = ToolConfigDefaults.shared.rapidApiKey
-        guard !apiKey.isEmpty else {
-            throw RuntimeError("RapidAPI key is missing")
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200 else {
+            throw RuntimeError("Unable to retrieve content from the URL")
         }
         
-        let encodedURL = url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        let apiURL = URL(string: "https://article-extractor2.p.rapidapi.com/article/proxy/parse?url=\(encodedURL)")!
+        guard let htmlContent = String(data: data, encoding: .utf8) else {
+            throw RuntimeError("Unable to parse content from the URL")
+        }
         
-        var request = URLRequest(url: apiURL)
-        request.httpMethod = "GET"
-        request.addValue("article-extractor2.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
-        request.addValue(apiKey, forHTTPHeaderField: "x-rapidapi-key")
+        let strippedContent = stripHTML(from: htmlContent)
+        let content = strippedContent.isEmpty ? "Unable to scrape URL" : strippedContent
         
-        let (data, _) = try await URLSession.shared.data(for: request)
-        let response = try JSONDecoder().decode(ArticleResponse.self, from: data)
-        
-        let strippedContent = stripHTML(from: response.data.content)
-        let content = strippedContent.isEmpty ? "Tool was unable to scrape URL" : strippedContent
-        
-        return ["URL: \(url.absoluteString)", "Title: \(response.data.title)", content].joined(separator: "\n")
+        return ["URL: \(url.absoluteString)", content].joined(separator: "\n")
     }
 
     static func stripHTML(from html: String) -> String {

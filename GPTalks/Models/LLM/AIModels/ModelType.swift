@@ -1,5 +1,5 @@
 //
-//  ModelTypeOption.swift
+//  ModelType.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 08/10/2024.
@@ -12,14 +12,25 @@ enum ModelType: String, CaseIterable, Codable {
     case image
     case stt
     
+    var name: String {
+        switch self {
+        case .chat:
+            "Chat"
+        case .image:
+            "Image"
+        case .stt:
+            "STT"
+        }
+    }
+    
     var icon: String {
         switch self {
         case .chat:
-            return "quote.bubble"
+            "quote.bubble"
         case .image:
-            return "photo"
+            "photo"
         case .stt:
-            return "waveform"
+            "waveform"
         }
     }
 }

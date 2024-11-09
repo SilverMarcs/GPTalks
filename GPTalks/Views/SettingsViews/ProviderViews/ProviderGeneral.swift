@@ -76,7 +76,6 @@ struct ProviderGeneral: View {
             } header: {
                 Text("Default Models")
             } footer: {
-                Text("Default Models")
                 SectionFooterView(text: "Recommended to use cheaper models as lite model")
             }
 
