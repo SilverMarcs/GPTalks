@@ -54,14 +54,16 @@ struct ProviderList: View {
                     Button(action: { addProvider(type: type) }) {
                         Label(type.name, image: type.imageName)
                     }
+                    .labelStyle(.titleAndIcon)
                 }
             }
             
             Section(header: Text("Other Providers")) {
-                ForEach([ProviderType.vertex, .openrouter, .groq, .xai, .mistral, .perplexity, .togetherai], id: \.self) { type in
+                ForEach([ProviderType.vertex, .github, .openrouter, .groq, .xai, .mistral, .perplexity, .togetherai], id: \.self) { type in
                     Button(action: { addProvider(type: type) }) {
                         Label(type.name, image: type.imageName)
                     }
+                    .labelStyle(.titleAndIcon)
                 }
             }
             
@@ -71,6 +73,7 @@ struct ProviderList: View {
                     Button(action: { addProvider(type: type) }) {
                         Label(type.name, image: type.imageName)
                     }
+                    .labelStyle(.titleAndIcon)
                 }
             }
             #endif
@@ -79,10 +82,12 @@ struct ProviderList: View {
                 Button(action: { addProvider(type: .custom) }) {
                     Label(ProviderType.custom.name, image: ProviderType.custom.imageName)
                 }
+                .labelStyle(.titleAndIcon)
             }
         } label: {
             Label("Create Provider", systemImage: "plus")
         }
+
     }
 
     private func addProvider(type: ProviderType) {

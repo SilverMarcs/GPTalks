@@ -95,7 +95,6 @@ extension AIModel {
     
     static func getMistralModels() -> [AIModel] {
         return [
-            .init(code: "mistral-moderation-latest", name: "Mistral-Moderation", type: .chat),
             .init(code: "ministral-3b-latest", name: "Ministral-3B", type: .chat),
             .init(code: "ministral-8b-latest", name: "Ministral-8B", type: .chat),
             .init(code: "open-mistral-nemo", name: "Open-Mistral-Nemo", type: .chat),

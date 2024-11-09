@@ -53,7 +53,9 @@ struct ModelRow: View {
                 .buttonStyle(.plain)
             }
         }
+        #if os(macOS)
         .padding(5)
+        #endif
     }
     
     private func foregroundColor(for testResult: Bool?) -> Color {

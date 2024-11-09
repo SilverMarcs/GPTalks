@@ -15,7 +15,6 @@ struct ModelList: View {
 
     @State private var showAdder = false
     @State private var showModelSelectionSheet = false
-    @State private var selections: Set<AIModel> = []
     
     var body: some View {
         Group {
@@ -51,7 +50,7 @@ struct ModelList: View {
     }
     
     var list: some View {
-        List(selection: $selections) {
+        List {
             ForEach($provider.models.enumerated().filter { $0.element.wrappedValue.type == type },
                     id: \.offset) { index, $model in
                 ModelRow(provider: provider, model: $model)
