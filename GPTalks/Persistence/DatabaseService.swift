@@ -51,7 +51,8 @@ class DatabaseService {
     func initialSetup(modelContext: ModelContext) {
         // Fetch the quick session from the modelContext
         var fetchQuickSession = FetchDescriptor<Chat>()
-        fetchQuickSession.predicate = #Predicate { $0.isQuick == true }
+        let quickId = ChatStatus.quick.id
+        fetchQuickSession.predicate = #Predicate { $0.statusId == quickId }
         fetchQuickSession.fetchLimit = 1
         
         if let quickSession = try? modelContext.fetch(fetchQuickSession).first {
@@ -81,7 +82,8 @@ class DatabaseService {
         
         let config = ChatConfig(provider: openAI, purpose: .quick)
         let session = Chat(config: config)
-        session.isQuick = true
+        session.status = .quick
+        session.statusId = ChatStatus.quick.id
         session.title = "(↯) Quick Session"
         modelContext.insert(session)
         

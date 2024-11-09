@@ -28,8 +28,10 @@ struct QuickPanelLoader: View {
     }
     
     private func fetchQuickSession() {
+        let statusId = ChatStatus.quick.id
+        
         var descriptor = FetchDescriptor<Chat>(
-            predicate: #Predicate { $0.isQuick == true }
+            predicate: #Predicate { $0.statusId == statusId }
         )
         
         descriptor.fetchLimit = 1

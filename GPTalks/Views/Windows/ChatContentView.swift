@@ -11,11 +11,12 @@ import SwiftData
 
 struct ChatContentView: View {
     @Environment(ChatVM.self) private var sessionVM
+    @Environment(ChatVM.self) var chatVM
     
     var body: some View {
         NavigationSplitView {
-            ChatList()
-            #if os(macOS)
+            ChatList(status: chatVM.chatStatusFilter)
+                #if os(macOS)
                 .navigationSplitViewColumnWidth(min: 280, ideal: 300, max: 400)
                 #endif
         } detail: {

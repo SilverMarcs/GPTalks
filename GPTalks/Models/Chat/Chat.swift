@@ -13,16 +13,19 @@ final class Chat {
     var id: UUID = UUID()
     var date: Date = Date()
     var title: String = "Chat Session"
-    var isStarred: Bool = false // TODO: enum for archive and recently deleted and quick
     var errorMessage: String = ""
-    var isQuick: Bool = false
     var totalTokens: Int = 0
+    
+    var statusId: Int = 1 // normal status
+    var status: ChatStatus {
+        get { ChatStatus(rawValue: statusId)! }
+        set { statusId = newValue.id }
+    }
     
     @Relationship(deleteRule: .cascade)
     var unorderedThreads =  [Thread]()
-    
     var threads: [Thread] {
-        get {return unorderedThreads.sorted(by: {$0.date < $1.date})}
+        get { return unorderedThreads.sorted(by: {$0.date < $1.date})}
         set { unorderedThreads = newValue }
     }
     
@@ -31,7 +34,6 @@ final class Chat {
     
     @Transient
     var proxy: ScrollViewProxy?
-    
     @Attribute(.ephemeral)
     var hasUserScrolled: Bool = false
     
@@ -39,13 +41,12 @@ final class Chat {
     var showCamera: Bool = false
     
     @Transient
+    var streamingTask: Task<Void, Error>?
+    @Transient
     var isReplying: Bool {
         threads.last?.isReplying ?? false
     }
-    
-    @Transient
-    var streamingTask: Task<Void, Error>?
-    
+
     @Transient
     var inputManager = InputManager()
     
@@ -153,7 +154,7 @@ final class Chat {
     }
     
     func generateTitle(forced: Bool = false) async {
-        guard !isQuick else { return }
+        guard status != .quick else { return }
         guard forced || threads.count <= 2 else { return }
         
         if let newTitle = await TitleGenerator.generateTitle(threads: threads, provider: config.provider) {

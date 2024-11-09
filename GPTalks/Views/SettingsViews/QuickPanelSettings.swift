@@ -39,8 +39,10 @@ struct QuickPanelSettings: View {
             
             Section("LLM") {
                 ProviderPicker(provider: $providerDefaults.quickProvider, providers: providers) { provider in
+                    let statusId = ChatStatus.quick.id
+                    
                     var descriptor = FetchDescriptor<Chat>(
-                        predicate: #Predicate { $0.isQuick == true }
+                        predicate: #Predicate { $0.statusId == statusId }
                     )
                     
                     descriptor.fetchLimit = 1

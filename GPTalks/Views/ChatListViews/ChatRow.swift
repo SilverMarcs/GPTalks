@@ -96,11 +96,11 @@ struct ChatRow: View {
     
     @ViewBuilder
     var star: some View {
-        if session.isStarred {
+        if session.status == .starred {
             Image(systemName: "star.fill")
                 .foregroundStyle(.orange)
                 .imageScale(.small)
-                .symbolEffect(.appear, isActive: !session.isStarred)
+                .symbolEffect(.appear, isActive: session.status != .starred)
         }
     }
     
@@ -115,7 +115,8 @@ struct ChatRow: View {
     var swipeActionsLeading: some View {
         Button {
             SwipeActionTip().invalidate(reason: .actionPerformed)
-            session.isStarred.toggle()
+            session.status = session.status == .starred ? .normal : .starred
+            
         } label: {
             Label("Star", systemImage: "star")
         }
@@ -124,7 +125,8 @@ struct ChatRow: View {
     
     var swipeActionsTrailing: some View {
         Button(role: .destructive) {
-            if session.isStarred {
+            // TODO: do properly
+            if session.status == .starred {
                 return
             }
             

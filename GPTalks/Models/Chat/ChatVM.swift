@@ -12,6 +12,7 @@ import SwiftUI
 @Observable class ChatVM {
     // TODO: rename
     var chatSelections: Set<Chat> = []
+    var chatStatusFilter: ChatStatus = .normal
     
     var modelContext: ModelContext
     

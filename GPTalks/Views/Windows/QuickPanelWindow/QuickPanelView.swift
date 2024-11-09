@@ -212,9 +212,6 @@ struct QuickPanelView: View {
 }
 
 #Preview {
-    let quickSesion = Chat.mockChat
-    quickSesion.isQuick = true
-    
-    return QuickPanelView(chat: quickSesion)
+    QuickPanelView(chat: .mockChat)
 }
 #endif

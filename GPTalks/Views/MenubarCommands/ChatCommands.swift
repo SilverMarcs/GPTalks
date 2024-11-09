@@ -45,7 +45,7 @@ struct ChatCommands: Commands {
                 }
             }
             .keyboardShortcut(.return)
-            .disabled(!(sessionVM.activeChat?.isReplying ?? false) && sessionVM.activeChat?.isQuick ?? false)
+            .disabled(!(sessionVM.activeChat?.isReplying ?? false) || sessionVM.activeChat?.status == .quick)
             
             Button("Stop Streaming") {
                 sessionVM.stopStreaming()
@@ -60,7 +60,7 @@ struct ChatCommands: Commands {
                     }
                 }
                 .keyboardShortcut("e")
-                .disabled(sessionVM.activeChat?.isQuick ?? true)
+                .disabled(sessionVM.activeChat?.status == .quick)
                 
                 Button("Regen Last Message") {
                     Task { @MainActor in

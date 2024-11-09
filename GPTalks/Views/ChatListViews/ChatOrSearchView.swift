@@ -58,7 +58,7 @@ struct ChatOrSearchView: View {
     
     @ViewBuilder
     private var chatSessionView: some View {
-        if let chat = chatVM.activeChat, !chat.isQuick {
+        if let chat = chatVM.activeChat, chat.status != .quick {
             ChatDetail(chat: chat)
                 #if !os(macOS)
                 .id(chat.id)

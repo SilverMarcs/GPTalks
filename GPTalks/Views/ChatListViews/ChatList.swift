@@ -17,10 +17,17 @@ struct ChatList: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.providers) private var providers
     
-    @Query(filter: #Predicate { !$0.isQuick },
-           sort: [SortDescriptor(\Chat.date, order: .reverse)],
-           animation: .default)
-    var chats: [Chat]
+    @Query var chats: [Chat]
+    
+    init(status: ChatStatus) {
+        let statusId = status.id
+        let starredId = ChatStatus.starred.id
+        
+        let sortDescriptor = SortDescriptor(\Chat.date, order: .reverse)
+        let predicate = #Predicate<Chat> { $0.statusId == statusId || $0.statusId == starredId }
+        
+        _chats = Query(filter: predicate, sort: [sortDescriptor], animation: .default)
+    }
     
     @FocusState private var isSearchFieldFocused: Bool
     
@@ -39,7 +46,7 @@ struct ChatList: View {
             ForEach(chats) { session in
                 ChatRow(session: session)
                     .tag(session)
-                    .deleteDisabled(session.isQuick || session.isStarred)
+                    .deleteDisabled(session.status == .starred)
                     #if os(macOS)
                     .listRowSeparator(.visible)
                     .listRowSeparatorTint(Color.gray.opacity(0.2))
@@ -137,7 +144,7 @@ struct ChatList: View {
 }
 
 #Preview {
-    ChatList()
+    ChatList(status: .normal)
     .frame(width: 400)
     .environment(ChatVM(modelContext: DatabaseService.shared.container.mainContext))
     .environment(SettingsVM())
