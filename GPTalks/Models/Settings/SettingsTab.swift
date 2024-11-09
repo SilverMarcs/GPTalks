@@ -1,5 +1,5 @@
 //
-//  SettingsSidebar.swift
+//  SettingsTab.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 08/11/2024.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SettingsSidebar {
+enum SettingsTab {
     case general
     case appearance
     case quickPanel

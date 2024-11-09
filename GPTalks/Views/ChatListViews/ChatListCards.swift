@@ -11,7 +11,7 @@ import SwiftData
 struct ChatListCards: View {
     @Environment(\.openWindow) var openWindow
     @Environment(\.dismissWindow) var dismissWindow
-    @Environment(ListStateVM.self) private var listStateVM
+    @Environment(SettingsVM.self) private var listStateVM
     @ObservedObject var config = AppConfig.shared
     var sessionCount: String
     var imageSessionsCount: String

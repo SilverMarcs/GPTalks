@@ -9,50 +9,45 @@ import SwiftUI
 import SwiftData
 
 struct SettingsView: View {
-    @Environment(ChatVM.self) private var sessionVM
-    @Environment(\.dismiss) var dismiss
-    
-    #if os(macOS)
-    @State private var selectedSettingsSidebar: SettingsSidebar? = .general
-    #else
-    @State private var selectedSettingsSidebar: SettingsSidebar?
-    #endif
+    @Environment(SettingsVM.self) private var settingsVM
     
     @State private var columnVisibility = NavigationSplitViewVisibility.automatic
 
     @Query var providerDefaults: [ProviderDefaults]
     
     var body: some View {
+        @Bindable var settingsVM = settingsVM
+        
         NavigationSplitView(columnVisibility: $columnVisibility) {
-            List(selection: $selectedSettingsSidebar) {
+            List(selection: $settingsVM.settingsTab) {
                 Label("General", systemImage: "gear")
-                    .tag(SettingsSidebar.general)
+                    .tag(SettingsTab.general)
                 
                 Label("Appearance", systemImage: "paintbrush")
-                    .tag(SettingsSidebar.appearance)
+                    .tag(SettingsTab.appearance)
                 
                 #if os(macOS)
                 Label("Quick Panel", systemImage: "bolt.fill")
-                    .tag(SettingsSidebar.quickPanel)
+                    .tag(SettingsTab.quickPanel)
                 #endif
                 
                 Label("Plugins", systemImage: "hammer")
-                    .tag(SettingsSidebar.tools)
+                    .tag(SettingsTab.tools)
                 
                 Label("Parameters", systemImage: "slider.horizontal.3")
-                    .tag(SettingsSidebar.parameters)
+                    .tag(SettingsTab.parameters)
                 
                 Label("Image Gen", systemImage: "photo")
-                    .tag(SettingsSidebar.image)
+                    .tag(SettingsTab.image)
                 
                 Label("Providers", systemImage: "cpu")
-                    .tag(SettingsSidebar.providers)
+                    .tag(SettingsTab.providers)
                 
                 Label("Guides", systemImage: "book")
-                    .tag(SettingsSidebar.guides)
+                    .tag(SettingsTab.guides)
                 
                 Label("About", systemImage: "info.circle")
-                    .tag(SettingsSidebar.about)
+                    .tag(SettingsTab.about)
                          
             }
             #if !os(visionOS)
@@ -68,7 +63,7 @@ struct SettingsView: View {
             .navigationSplitViewColumnWidth(min: 190, ideal: 190, max: 190)
         } detail: {
             NavigationStack {
-                switch selectedSettingsSidebar {
+                switch settingsVM.settingsTab {
                 case .general:
                     GeneralSettings()
                 case .appearance:
@@ -106,5 +101,4 @@ struct SettingsView: View {
 #Preview {
     SettingsView()
         .modelContainer(for: ProviderDefaults.self, inMemory: true)
-        .environment(ChatVM.mockSessionVM)
 }

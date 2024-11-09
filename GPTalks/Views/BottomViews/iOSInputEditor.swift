@@ -10,11 +10,11 @@ import SwiftUI
 struct iOSInputEditor: View {
     @Binding var prompt: String
     var provider: Provider
-    @FocusState var isFocused: Bool
+    @FocusState var isFocused: FocusedField?
     
     var body: some View {
         TextField(placeHolder, text: $prompt, axis: .vertical)
-            .focused($isFocused)
+            .focused($isFocused, equals: .textEditor)
             .lineLimit(10, reservesSpace: false)
     }
     

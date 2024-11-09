@@ -14,8 +14,7 @@ struct ImageInputView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 15) {
             InputEditor(prompt: $session.prompt,
-                        provider: session.config.provider,
-                        isFocused: _isFocused)
+                        provider: session.config.provider)
             
             ActionButton(size: imageSize, isStop: false) {
                 sendInput()

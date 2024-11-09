@@ -10,13 +10,12 @@ import SwiftUI
 struct InputEditor: View {
     @Binding var prompt: String
     var provider: Provider
-    @FocusState var isFocused: Bool
     
     var body: some View {
         #if os(macOS)
-        MacInputEditor(prompt: $prompt, provider: provider, isFocused: _isFocused)
+        MacInputEditor(prompt: $prompt, provider: provider)
         #else
-        iOSInputEditor(prompt: $prompt, provider: provider, isFocused: _isFocused)
+        iOSInputEditor(prompt: $prompt, provider: provider)
         #endif
     }
 }

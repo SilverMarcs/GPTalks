@@ -45,6 +45,8 @@
 		0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E77A2C71A42F007CB294 /* TypedData.swift */; };
 		084139202C7169D50049E3B2 /* SessionListTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0841391F2C7169D50049E3B2 /* SessionListTips.swift */; };
 		08436F222CDE9182007A160F /* Acknowledgement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08436F212CDE9182007A160F /* Acknowledgement.swift */; };
+		08436F2C2CDEAB3B007A160F /* ListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08436F2B2CDEAB3B007A160F /* ListState.swift */; };
+		08436F2E2CDF07C2007A160F /* FocusedField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08436F2D2CDF07C2007A160F /* FocusedField.swift */; };
 		0843E0782CD8758C0040AA77 /* WindowScenes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0843E0772CD8758C0040AA77 /* WindowScenes.swift */; };
 		0844C2752CA3E6E100F0A325 /* EmptyChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0844C2742CA3E6E100F0A325 /* EmptyChat.swift */; };
 		084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084C743F2C521A8A0015AE2F /* DismissButton.swift */; };
@@ -80,8 +82,8 @@
 		087F3F872CDDDC3C001298B3 /* AboutSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F862CDDDC3C001298B3 /* AboutSettings.swift */; };
 		087F3F8B2CDDEF4C001298B3 /* Guide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F8A2CDDEF4C001298B3 /* Guide.swift */; };
 		087F3F8D2CDDEF5D001298B3 /* Shortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F8C2CDDEF5D001298B3 /* Shortcut.swift */; };
-		087F3F8F2CDDEF79001298B3 /* SettingsSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F8E2CDDEF79001298B3 /* SettingsSidebar.swift */; };
-		087F3F922CDDF00C001298B3 /* ListStateVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F912CDDF00C001298B3 /* ListStateVM.swift */; };
+		087F3F8F2CDDEF79001298B3 /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F8E2CDDEF79001298B3 /* SettingsTab.swift */; };
+		087F3F922CDDF00C001298B3 /* SettingsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F912CDDF00C001298B3 /* SettingsVM.swift */; };
 		087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F932CDE19EC001298B3 /* AboutWindow.swift */; };
 		087F3F962CDE2AA4001298B3 /* ProviderTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F952CDE2AA4001298B3 /* ProviderTips.swift */; };
 		088475342CAE8E57006C04F0 /* AppIconMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088475332CAE8E57006C04F0 /* AppIconMenu.swift */; };
@@ -209,6 +211,8 @@
 		0834E77A2C71A42F007CB294 /* TypedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedData.swift; sourceTree = "<group>"; };
 		0841391F2C7169D50049E3B2 /* SessionListTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListTips.swift; sourceTree = "<group>"; };
 		08436F212CDE9182007A160F /* Acknowledgement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Acknowledgement.swift; sourceTree = "<group>"; };
+		08436F2B2CDEAB3B007A160F /* ListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListState.swift; sourceTree = "<group>"; };
+		08436F2D2CDF07C2007A160F /* FocusedField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusedField.swift; sourceTree = "<group>"; };
 		0843E0772CD8758C0040AA77 /* WindowScenes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowScenes.swift; sourceTree = "<group>"; };
 		0844C2742CA3E6E100F0A325 /* EmptyChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyChat.swift; sourceTree = "<group>"; };
 		084C743F2C521A8A0015AE2F /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
@@ -244,8 +248,8 @@
 		087F3F862CDDDC3C001298B3 /* AboutSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettings.swift; sourceTree = "<group>"; };
 		087F3F8A2CDDEF4C001298B3 /* Guide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guide.swift; sourceTree = "<group>"; };
 		087F3F8C2CDDEF5D001298B3 /* Shortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcut.swift; sourceTree = "<group>"; };
-		087F3F8E2CDDEF79001298B3 /* SettingsSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSidebar.swift; sourceTree = "<group>"; };
-		087F3F912CDDF00C001298B3 /* ListStateVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListStateVM.swift; sourceTree = "<group>"; };
+		087F3F8E2CDDEF79001298B3 /* SettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTab.swift; sourceTree = "<group>"; };
+		087F3F912CDDF00C001298B3 /* SettingsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVM.swift; sourceTree = "<group>"; };
 		087F3F932CDE19EC001298B3 /* AboutWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
 		087F3F952CDE2AA4001298B3 /* ProviderTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderTips.swift; sourceTree = "<group>"; };
 		088475332CAE8E57006C04F0 /* AppIconMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconMenu.swift; sourceTree = "<group>"; };
@@ -477,9 +481,11 @@
 		087F3F892CDDEF28001298B3 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				08436F2D2CDF07C2007A160F /* FocusedField.swift */,
+				08436F2B2CDEAB3B007A160F /* ListState.swift */,
 				08436F212CDE9182007A160F /* Acknowledgement.swift */,
-				087F3F912CDDF00C001298B3 /* ListStateVM.swift */,
-				087F3F8E2CDDEF79001298B3 /* SettingsSidebar.swift */,
+				087F3F912CDDF00C001298B3 /* SettingsVM.swift */,
+				087F3F8E2CDDEF79001298B3 /* SettingsTab.swift */,
 				087F3F8C2CDDEF5D001298B3 /* Shortcut.swift */,
 				087F3F8A2CDDEF4C001298B3 /* Guide.swift */,
 			);
@@ -880,7 +886,7 @@
 				08D913EC2CD9CAF7002E4E53 /* AIModel.swift in Sources */,
 				08BDFE2E2C734DAE0054B36A /* ConversationListTips.swift in Sources */,
 				08B8DE132C97F3550041A690 /* MarkdownView.swift in Sources */,
-				087F3F922CDDF00C001298B3 /* ListStateVM.swift in Sources */,
+				087F3F922CDDF00C001298B3 /* SettingsVM.swift in Sources */,
 				08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */,
 				08F815382C97F65E00B49355 /* ToolsController.swift in Sources */,
 				08915D942C373340008ADE27 /* ProviderImage.swift in Sources */,
@@ -936,7 +942,7 @@
 				08C800572C36F843009581C5 /* SettingsView.swift in Sources */,
 				08C1ACE02C54BC8A00B86D37 /* TemperatureSlider.swift in Sources */,
 				08C1ACE22C54BC9C00B86D37 /* PresencePenaltySlider.swift in Sources */,
-				087F3F8F2CDDEF79001298B3 /* SettingsSidebar.swift in Sources */,
+				087F3F8F2CDDEF79001298B3 /* SettingsTab.swift in Sources */,
 				0819479E2C48DCDB0061227B /* ImageList.swift in Sources */,
 				085524E42C4ED2B800CBB827 /* ChatCommands.swift in Sources */,
 				08F8153A2C97F69200B49355 /* ImageInspector.swift in Sources */,
@@ -944,6 +950,7 @@
 				087F3F8B2CDDEF4C001298B3 /* Guide.swift in Sources */,
 				085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */,
 				0853102B2CBF966F0078DD09 /* ModelTester.swift in Sources */,
+				08436F2C2CDEAB3B007A160F /* ListState.swift in Sources */,
 				087B40C02C561DDF00EAFA0A /* QuickPanelLoader.swift in Sources */,
 				089C7E102C4058CF005E3BE9 /* QuickPanelWindow.swift in Sources */,
 				088475342CAE8E57006C04F0 /* AppIconMenu.swift in Sources */,
@@ -974,6 +981,7 @@
 				08F815222C97F58800B49355 /* GoogleSearchSettings.swift in Sources */,
 				0805DEED2C58CB0300A8354A /* AIService.swift in Sources */,
 				08F8152D2C97F60100B49355 /* GoogleSearch.swift in Sources */,
+				08436F2E2CDF07C2007A160F /* FocusedField.swift in Sources */,
 				08F8152B2C97F5FA00B49355 /* ImageGenerator.swift in Sources */,
 				08F0EF1E2C6C2DFD00900ED0 /* ActionButton.swift in Sources */,
 				087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */,

@@ -13,7 +13,7 @@ struct MacInputEditor: View {
     
     @Binding var prompt: String
     var provider: Provider
-    @FocusState var isFocused: Bool
+    @FocusState var isFocused: FocusedField?
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -24,7 +24,7 @@ struct MacInputEditor: View {
             }
             
             TextEditor(text: $prompt)
-                .focused($isFocused)
+                .focused($isFocused, equals: .textEditor)
                 .frame(maxHeight: 400)
                 .fixedSize(horizontal: false, vertical: true)
                 .scrollContentBackground(.hidden)
@@ -32,12 +32,12 @@ struct MacInputEditor: View {
         .font(.body)
         .onChange(of: sessionVM.chatSelections) {
             guard sessionVM.chatSelections.count == 1 else { return }
-            isFocused = true
+            isFocused = .textEditor
         }
         .toolbar {
             ToolbarItem(placement: .keyboard) {
                 Button {
-                    isFocused = true
+                    isFocused = .textEditor
                 } label: {
                     Image(systemName: "pencil")
                 }

@@ -18,7 +18,7 @@ struct ChatInputView: View {
     @State private var showPhotosPicker = false
     @State private var selectedPhotos = [PhotosPickerItem]()
     
-    @FocusState private var isFocused: Bool
+    @FocusState private var isFocused: FocusedField?
     
     var body: some View {
         HStack(alignment: .bottom, spacing: 0) {
@@ -43,7 +43,7 @@ struct ChatInputView: View {
                     .padding(.bottom, 5)
                 }
                 
-                InputEditor(prompt: $chat.inputManager.prompt, provider: chat.config.provider, isFocused: _isFocused)
+                InputEditor(prompt: $chat.inputManager.prompt, provider: chat.config.provider)
                 
                 Spacer(minLength: 0)
             }
@@ -148,7 +148,7 @@ struct ChatInputView: View {
     
     private func sendInput() {
         #if !os(macOS)
-        isFocused = false
+        isFocused = nil
         #endif
         Task { @MainActor in
             await chat.sendInput()

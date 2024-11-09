@@ -10,7 +10,7 @@ import SwiftData
 
 #if !os(macOS)
 struct IOSWindow: Scene {
-    @Environment(ListStateVM.self) private var listStateVM
+    @Environment(SettingsVM.self) private var listStateVM
     @Environment(ChatVM.self) private var chatVM
     @Environment(ImageVM.self) private var imageVM
     
@@ -23,7 +23,7 @@ struct IOSWindow: Scene {
                     ChatOrSearchView()
                 } else {
                     Group {
-                        switch listStateVM.state {
+                        switch listStateVM.listState {
                         case .chats:
                             ChatList()
                         case .images:
@@ -35,7 +35,7 @@ struct IOSWindow: Scene {
                     }
                 }
             } detail: {
-                switch listStateVM.state {
+                switch listStateVM.listState {
                 case .chats:
                     if let chat = chatVM.activeChat {
                         ChatDetail(chat: chat)
