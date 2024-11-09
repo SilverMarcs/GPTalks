@@ -10,9 +10,8 @@ import SwiftData
 import SwiftUI
 
 @Observable class ChatVM {
-    // TODO: rename
-    var chatSelections: Set<Chat> = []
-    var chatStatusFilter: ChatStatus = .normal
+    var selections: Set<Chat> = []
+    var statusFilter: ChatStatus = .normal
     
     var modelContext: ModelContext
     
@@ -21,8 +20,8 @@ import SwiftUI
     }
     
     public var activeChat: Chat? {
-        guard chatSelections.count == 1 else { return nil }
-        return chatSelections.first
+        guard selections.count == 1 else { return nil }
+        return selections.first
     }
     
     private var activeChatAndLastThread: (Chat, Thread)? {
@@ -60,11 +59,11 @@ import SwiftUI
     func fork(newChat: Chat) {
         modelContext.insert(newChat)
         #if os(macOS)
-        self.chatSelections = [newChat]
+        self.selections = [newChat]
         #else
-        self.chatSelections = []
+        self.selections = []
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.chatSelections = [newChat]
+            self.selections = [newChat]
         }
         #endif
     }
@@ -83,7 +82,7 @@ import SwiftUI
         modelContext.insert(newChat)
         
         searchText = ""
-        chatSelections = [newChat]
+        selections = [newChat]
         try? modelContext.save()
         
         return newChat

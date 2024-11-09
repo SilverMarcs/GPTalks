@@ -30,8 +30,8 @@ struct MacInputEditor: View {
                 .scrollContentBackground(.hidden)
         }
         .font(.body)
-        .onChange(of: sessionVM.chatSelections) {
-            guard sessionVM.chatSelections.count == 1 else { return }
+        .onChange(of: sessionVM.selections) {
+            guard sessionVM.selections.count == 1 else { return }
             isFocused = .textEditor
         }
         .toolbar {

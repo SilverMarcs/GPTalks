@@ -14,4 +14,13 @@ enum ChatStatus: Int, Codable, Identifiable, Equatable, CaseIterable {
     case archived
     
     var id: Int { rawValue }
+    
+    var name: String {
+        switch self {
+        case .normal: return "Normal"
+        case .starred: return "Starred"
+        case .quick: return "Quick"
+        case .archived: return "Archived"
+        }
+    }
 }

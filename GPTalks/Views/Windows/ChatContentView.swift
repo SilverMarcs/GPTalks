@@ -15,7 +15,7 @@ struct ChatContentView: View {
     
     var body: some View {
         NavigationSplitView {
-            ChatList(status: chatVM.chatStatusFilter)
+            ChatList(status: chatVM.statusFilter, searchText: chatVM.searchText)
                 #if os(macOS)
                 .navigationSplitViewColumnWidth(min: 280, ideal: 300, max: 400)
                 #endif

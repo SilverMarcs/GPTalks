@@ -89,6 +89,7 @@ struct ChatRow: View {
                 .fontWidth(.compressed)
             
             star
+                .imageScale(.small)
         }
         .padding(3)
         .symbolEffect(.bounce, options: .speed(0.5), isActive: session.isReplying)
@@ -96,11 +97,18 @@ struct ChatRow: View {
     
     @ViewBuilder
     var star: some View {
-        if session.status == .starred {
+        switch session.status {
+        case .starred:
             Image(systemName: "star.fill")
                 .foregroundStyle(.orange)
-                .imageScale(.small)
-                .symbolEffect(.appear, isActive: session.status != .starred)
+        case .archived:
+            Image(systemName: "archivebox.fill")
+                .foregroundStyle(.gray)
+        case .quick:
+            Image(systemName: "bolt.fill")
+                .foregroundStyle(.yellow)
+        default:
+            EmptyView()
         }
     }
     
@@ -112,34 +120,49 @@ struct ChatRow: View {
         return lastMessage.isEmpty ? "Start a conversation" : lastMessage
     }
 
+    @ViewBuilder
     var swipeActionsLeading: some View {
-        Button {
-            SwipeActionTip().invalidate(reason: .actionPerformed)
-            session.status = session.status == .starred ? .normal : .starred
-            
-        } label: {
-            Label("Star", systemImage: "star")
-        }
-        .tint(.orange)
+       if session.status == .archived {
+           Button {
+               SwipeActionTip().invalidate(reason: .actionPerformed)
+               session.status = .normal
+           } label: {
+               Label("Unarchive", systemImage: "tray.and.arrow.up")
+           }
+           .tint(.blue)
+       } else {
+           Button {
+               SwipeActionTip().invalidate(reason: .actionPerformed)
+               session.status = session.status == .starred ? .normal : .starred
+           } label: {
+               Label("Star", systemImage: "star")
+           }
+           .tint(.orange)
+       }
     }
     
     var swipeActionsTrailing: some View {
-        Button(role: .destructive) {
+        Button {
             // TODO: do properly
             if session.status == .starred {
                 return
             }
-            
+           
             SwipeActionTip().invalidate(reason: .actionPerformed)
-            
-            if sessionVM.chatSelections.contains(session) {
-                sessionVM.chatSelections.remove(session)
+
+            if sessionVM.selections.contains(session) {
+                sessionVM.selections.remove(session)
             }
-            
-            modelContext.delete(session)
+
+            if session.status == .normal {
+                session.status = .archived
+            } else if session.status == .archived {
+                modelContext.delete(session)
+            }
         } label: {
-            Label("Delete", systemImage: "trash")
+           Label("Delete", systemImage: session.status == .archived ? "trash" : "archivebox")
         }
+        .tint(session.status == .archived ? .red : .gray)
     }
 }
 

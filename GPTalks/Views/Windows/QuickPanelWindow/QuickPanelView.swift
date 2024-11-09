@@ -53,15 +53,15 @@ struct QuickPanelView: View {
         .onChange(of: settingsVM.isQuickPanelPresented) {
             if settingsVM.isQuickPanelPresented {
             
-                selections = chatVM.chatSelections
-                chatVM.chatSelections = [self.chat]
+                selections = chatVM.selections
+                chatVM.selections = [self.chat]
                 isFocused = true
                 if !chat.threads.isEmpty {
                     settingsVM.isQuickPanelExpanded = true
                 }
             } else {
                 DispatchQueue.main.async {
-                    chatVM.chatSelections = selections
+                    chatVM.selections = selections
                 }
             }
         }

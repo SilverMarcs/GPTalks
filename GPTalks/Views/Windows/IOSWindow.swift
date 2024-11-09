@@ -41,7 +41,7 @@ struct IOSWindow: Scene {
                         ChatDetail(chat: chat)
                             .id(chat.id)
                     } else {
-                        Text("^[\(chatVM.chatSelections.count) Chat Session](inflect: true) Selected")
+                        Text("^[\(chatVM.selections.count) Chat Session](inflect: true) Selected")
                     }
                 case .images:
                     if let imageSession = imageVM.activeImageSession {

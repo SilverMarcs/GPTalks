@@ -64,7 +64,7 @@ struct ChatOrSearchView: View {
                 .id(chat.id)
                 #endif
         } else {
-            Text("^[\(chatVM.chatSelections.count) Chat Session](inflect: true) Selected")
+            Text("^[\(chatVM.selections.count) Chat Session](inflect: true) Selected")
                 .font(.title)
                 .fullScreenBackground()
         }

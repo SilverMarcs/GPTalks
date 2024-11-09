@@ -40,7 +40,7 @@ struct ChatDetail: View {
                     .listRowSeparator(.hidden)
             }
             .scrollBounceBehavior(.basedOnSize)
-            .onChange(of: chatVM.chatSelections) {
+            .onChange(of: chatVM.selections) {
                 chat.proxy = proxy
                 
                 #if os(macOS)
@@ -68,7 +68,7 @@ struct ChatDetail: View {
                     chat.hasUserScrolled = true
                 }
             }
-            .onChange(of: chatVM.chatSelections) {
+            .onChange(of: chatVM.selections) {
                 chat.proxy = proxy
                 scrollToBottom(proxy: proxy, animated: false)
             }

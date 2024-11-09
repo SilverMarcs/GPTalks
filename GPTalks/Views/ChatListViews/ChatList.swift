@@ -19,22 +19,12 @@ struct ChatList: View {
     
     @Query var chats: [Chat]
     
-    init(status: ChatStatus) {
-        let statusId = status.id
-        let starredId = ChatStatus.starred.id
-        
-        let sortDescriptor = SortDescriptor(\Chat.date, order: .reverse)
-        let predicate = #Predicate<Chat> { $0.statusId == statusId || $0.statusId == starredId }
-        
-        _chats = Query(filter: predicate, sort: [sortDescriptor], animation: .default)
-    }
-    
     @FocusState private var isSearchFieldFocused: Bool
     
     var body: some View {
         @Bindable var chatVM = chatVM
 
-        List(selection: $chatVM.chatSelections) {
+        List(selection: $chatVM.selections) {
             ChatListCards(sessionCount: String(chats.count), imageSessionsCount: "↗")
                 .id(String.topID)
             
@@ -62,8 +52,8 @@ struct ChatList: View {
             toolbar
         }
         .task {
-            if let first = chats.first, chatVM.chatSelections.isEmpty, horizontalSizeClass != .compact {
-                chatVM.chatSelections = [first]
+            if let first = chats.first, chatVM.selections.isEmpty, horizontalSizeClass != .compact {
+                chatVM.selections = [first]
             }
         }
         .searchable(text: $chatVM.searchText, placement: searchPlacement)
@@ -100,12 +90,26 @@ struct ChatList: View {
     }
 
     private func deleteItems(offsets: IndexSet) {
-        for index in offsets {
-            if chatVM.chatSelections.contains(chats[index]) {
-                chatVM.chatSelections.remove(chats[index])
-            }
-            modelContext.delete(chats[index])
-        }
+       for index in offsets {
+           let chat = chats[index]
+           
+           // Skip starred chats
+           if chat.status == .starred {
+               continue
+           }
+           
+           // Remove from selections if selected
+           if chatVM.selections.contains(chat) {
+               chatVM.selections.remove(chat)
+           }
+           
+           // Archive if normal, delete if archived
+           if chat.status == .normal {
+               chat.status = .archived
+           } else if chat.status == .archived {
+               modelContext.delete(chat)
+           }
+       }
     }
     
     @ToolbarContentBuilder
@@ -141,10 +145,39 @@ struct ChatList: View {
             .keyboardShortcut("f")
         }
     }
+    
+    init(status: ChatStatus, searchText: String = "") {
+        let statusId = status.id
+        let normalId = ChatStatus.normal.id
+        let starredId = ChatStatus.starred.id
+        let quickId = ChatStatus.quick.id
+        
+        let sortDescriptor = SortDescriptor(\Chat.date, order: .reverse)
+        
+        let predicate: Predicate<Chat>
+        if searchText.isEmpty {
+            if status == .normal {
+                predicate = #Predicate<Chat> {
+                    $0.statusId == normalId || $0.statusId == starredId
+                }
+            } else {
+                predicate = #Predicate<Chat> {
+                    $0.statusId == statusId
+                }
+            }
+        } else {
+            predicate = #Predicate<Chat> {
+                $0.statusId != quickId &&
+                $0.title.localizedStandardContains(searchText)
+            }
+        }
+        
+        _chats = Query(filter: predicate, sort: [sortDescriptor], animation: .default)
+    }
 }
 
 #Preview {
-    ChatList(status: .normal)
+    ChatList(status: .normal, searchText: "")
     .frame(width: 400)
     .environment(ChatVM(modelContext: DatabaseService.shared.container.mainContext))
     .environment(SettingsVM())

@@ -9,17 +9,31 @@ import SwiftUI
 
 struct ChatCommands: Commands {
     @ObservedObject var config = AppConfig.shared
-    @Environment(ChatVM.self) var sessionVM
+    @Environment(ChatVM.self) var chatVM
+    @Environment(SettingsVM.self) var settingsVM
     
     var body: some Commands {
+        @Bindable var chatVM = chatVM
+        
         CommandGroup(replacing: .newItem) {
             Button("New Session") {
-                sessionVM.createNewSession()
+                chatVM.createNewSession()
             }
             .keyboardShortcut("n")
         }
         
         CommandGroup(before: .toolbar) {
+            Section {
+                Picker("Chat Status", selection: $chatVM.statusFilter) {
+                    ForEach([ChatStatus.normal, .starred, .archived]) { status in
+                        Text(status.name)
+                            .tag(status)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.inline)
+            }
+            
             Section {
                 Button("Actual Size") {
                     resetFontSize()
@@ -38,33 +52,35 @@ struct ChatCommands: Commands {
             }
         }
         
-        CommandMenu("Chat") {
-            Button("Send Prompt") {
-                Task { @MainActor in
-                    await sessionVM.sendPrompt()
+        CommandMenu("Chat") {  
+            Section {
+                Button("Send Prompt") {
+                    Task { @MainActor in
+                        await chatVM.sendPrompt()
+                    }
                 }
+                .keyboardShortcut(.return)
+                .disabled(!(chatVM.activeChat?.isReplying ?? false) || chatVM.activeChat?.status == .quick)
+                
+                Button("Stop Streaming") {
+                    chatVM.stopStreaming()
+                }
+                .keyboardShortcut("d")
+                .disabled(!(chatVM.activeChat?.isReplying ?? false))
             }
-            .keyboardShortcut(.return)
-            .disabled(!(sessionVM.activeChat?.isReplying ?? false) || sessionVM.activeChat?.status == .quick)
-            
-            Button("Stop Streaming") {
-                sessionVM.stopStreaming()
-            }
-            .keyboardShortcut("d")
-            .disabled(!(sessionVM.activeChat?.isReplying ?? false))
             
             Section {
                 Button("Edit Last Message") {
                     withAnimation {
-                        sessionVM.editLastMessage()
+                        chatVM.editLastMessage()
                     }
                 }
                 .keyboardShortcut("e")
-                .disabled(sessionVM.activeChat?.status == .quick)
+                .disabled(chatVM.activeChat?.status == .quick)
                 
                 Button("Regen Last Message") {
                     Task { @MainActor in
-                        await sessionVM.regenLastMessage()
+                        await chatVM.regenLastMessage()
                     }
                 }
                 .keyboardShortcut("r")
@@ -72,7 +88,7 @@ struct ChatCommands: Commands {
             
             Section {
                 Button("Delete Last Message", role: .destructive) {
-                    sessionVM.deleteLastMessage()
+                    chatVM.deleteLastMessage()
                 }
                 .keyboardShortcut(.delete)
             }

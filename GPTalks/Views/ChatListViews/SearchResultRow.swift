@@ -18,7 +18,7 @@ struct SearchResultRow: View {
                     .environment(\.isSearch, true)
                 
                 Button {
-                    chatVM.chatSelections = [matchedThread.chat]
+                    chatVM.selections = [matchedThread.chat]
                     chatVM.resetSearch()
                 } label: {
                     Image(systemName: "arrow.right")
