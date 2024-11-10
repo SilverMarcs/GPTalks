@@ -16,11 +16,8 @@ struct ListCard: View {
     var count: String
     var action: () -> Void = {}
     
-    @State var bounce = false
-    
     var body: some View {
         Button {
-            bounce.toggle()
             action()
         } label: {
             VStack(alignment: .leading, spacing: spacing) {
@@ -28,7 +25,6 @@ struct ListCard: View {
                     Image(systemName: icon)
                         .font(.title)
                         .foregroundStyle(.white, iconColor)
-                        .symbolEffect(.bounce, value: bounce)
 
                     Spacer()
                     

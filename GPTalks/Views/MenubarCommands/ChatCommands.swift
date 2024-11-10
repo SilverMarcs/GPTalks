@@ -10,11 +10,9 @@ import SwiftUI
 struct ChatCommands: Commands {
     @ObservedObject var config = AppConfig.shared
     @Environment(ChatVM.self) var chatVM
-    @Environment(SettingsVM.self) var settingsVM
+    @FocusState var isFocused: FocusedField?
     
     var body: some Commands {
-        @Bindable var chatVM = chatVM
-        
         CommandGroup(replacing: .newItem) {
             Button("New Session") {
                 chatVM.createNewSession()
@@ -23,17 +21,6 @@ struct ChatCommands: Commands {
         }
         
         CommandGroup(before: .toolbar) {
-            Section {
-                Picker("Chat Status", selection: $chatVM.statusFilter) {
-                    ForEach([ChatStatus.normal, .starred, .archived]) { status in
-                        Text(status.name)
-                            .tag(status)
-                    }
-                }
-                .labelsHidden()
-                .pickerStyle(.inline)
-            }
-            
             Section {
                 Button("Actual Size") {
                     resetFontSize()
@@ -72,6 +59,7 @@ struct ChatCommands: Commands {
             
             Section {
                 Button("Edit Last Message") {
+                    isFocused = .textEditor // this sint doing anything (on macos at least)
                     withAnimation {
                         chatVM.editLastMessage()
                     }

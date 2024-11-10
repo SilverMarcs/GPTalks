@@ -108,6 +108,7 @@
 		089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */; };
 		089DB5162CA865F70013E5C3 /* MockedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089DB5152CA865F70013E5C3 /* MockedData.swift */; };
 		089DB5182CA8EC140013E5C3 /* ImageViewerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089DB5172CA8EC140013E5C3 /* ImageViewerData.swift */; };
+		08A1DDBB2CE0024A00DAF6F9 /* Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1DDBA2CE0024A00DAF6F9 /* Source.swift */; };
 		08A222832C2AB4FD00D76C8B /* GPTalksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222822C2AB4FD00D76C8B /* GPTalksApp.swift */; };
 		08A222852C2AB4FD00D76C8B /* ChatContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222842C2AB4FD00D76C8B /* ChatContentView.swift */; };
 		08A222872C2AB4FD00D76C8B /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222862C2AB4FD00D76C8B /* Chat.swift */; };
@@ -275,6 +276,7 @@
 		089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelSettings.swift; sourceTree = "<group>"; };
 		089DB5152CA865F70013E5C3 /* MockedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedData.swift; sourceTree = "<group>"; };
 		089DB5172CA8EC140013E5C3 /* ImageViewerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewerData.swift; sourceTree = "<group>"; };
+		08A1DDBA2CE0024A00DAF6F9 /* Source.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Source.swift; sourceTree = "<group>"; };
 		08A2227F2C2AB4FD00D76C8B /* GPTalks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPTalks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08A222822C2AB4FD00D76C8B /* GPTalksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTalksApp.swift; sourceTree = "<group>"; };
 		08A222842C2AB4FD00D76C8B /* ChatContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatContentView.swift; sourceTree = "<group>"; };
@@ -380,6 +382,7 @@
 		080E70E62CDF1B9700A949C9 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				08A1DDBA2CE0024A00DAF6F9 /* Source.swift */,
 				080E70EB2CDF380500A949C9 /* InspectorTab.swift */,
 				08436F2D2CDF07C2007A160F /* FocusedField.swift */,
 				08436F2B2CDEAB3B007A160F /* ListState.swift */,
@@ -902,6 +905,7 @@
 				085276BC2C98705A009184D2 /* iOSInputEditor.swift in Sources */,
 				085EA4A52C9C4E9600124F83 /* IntegerStepper.swift in Sources */,
 				08F815462C980ABF00B49355 /* StreamHandler.swift in Sources */,
+				08A1DDBB2CE0024A00DAF6F9 /* Source.swift in Sources */,
 				082A63302C54F862003996B7 /* ProviderBackupSettings.swift in Sources */,
 				08A77CCC2C65AA820087D0F3 /* DatabaseService.swift in Sources */,
 				08F815242C97F59100B49355 /* PluginSettings.swift in Sources */,

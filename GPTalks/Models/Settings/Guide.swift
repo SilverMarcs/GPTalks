@@ -71,21 +71,6 @@ struct Guide: Identifiable {
         > Note that google programmable search only returns search result title and a small snippet and not the full content of the page. The URLScrape plugin may used to get the full content of the page.
         """),
         
-        Guide(title: "URL Scrape Plugin", content: """
-        > Note that the availability of the URLScrape plugin is subject to the availability of the Article Extractor2 API on RapidAPI.
-
-        1. Go to the [Article Extractor2 API](https://rapidapi.com/pwshub-pwshub-default/api/article-extractor2) page on RapidAPI.
-        2. Log in to your RapidAPI account. If you do not have an account, create one by clicking on **Sign Up**.
-        3. After logging in, click on the **Subscribe** button to subscribe to the Article Extractor2 API service.
-        4. Once you have subscribed (ideally the free tier is sufficient for most people), navigate to the **My Apps** section on RapidAPI.
-        5. Select an existing app or create a new one for managing your API subscriptions.
-        6. Copy the API key associated with your app.
-        7. Open your GPTalks app and go to **Settings > Plugins > URLScrape**.
-        8. Paste your RapidAPI API key into the appropriate field in the app settings.
-
-        Ensure that you've completed each step before moving on to the next to successfully set up the API key and subscription.
-        """),
-        
         Guide(title: "Adding New Providers", content: """
 
         1. Navigate to **Settings > Providers**.

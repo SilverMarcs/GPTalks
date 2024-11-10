@@ -17,19 +17,19 @@ enum ChatStatus: Int, Codable, Identifiable, Equatable, CaseIterable {
     
     var systemImageName: String {
         switch self {
-        case .normal: return "message"
-        case .starred: return "star"
-        case .quick: return "bolt"
-        case .archived: return "archivebox"
+        case .normal: return "tray.circle.fill"
+        case .starred: return "star.fill"
+        case .quick: return "bolt.fill"
+        case .archived: return "archivebox.fill"
         }
     }
     
     var name: String {
         switch self {
-        case .normal: return "Active Chats"
-        case .starred: return "Starred Chats"
-        case .quick: return "Quick Chats"
-        case .archived: return "Archived Chats"
+        case .normal: return "Chats"
+        case .starred: return "Starred"
+        case .quick: return "Quick"
+        case .archived: return "Archived"
         }
     }
 }

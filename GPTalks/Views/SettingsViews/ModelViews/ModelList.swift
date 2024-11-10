@@ -51,16 +51,14 @@ struct ModelList: View {
     
     var list: some View {
         List {
-            ForEach($provider.models.enumerated().filter { $0.element.wrappedValue.type == type },
-                    id: \.offset) { index, $model in
-                ModelRow(provider: provider, model: $model)
+            ForEach(provider.models.filter { $0.type == type }, id: \.self) { model in
+                ModelRow(provider: provider, model: model)
             }
-            .onDelete(perform: { indexSet in
-                let originalIndices = IndexSet(indexSet.map { index in
-                    provider.models.indices.filter { provider.models[$0].type == type }[index]
-                })
-                provider.models.remove(atOffsets: originalIndices)
-            })
+            .onDelete { indexSet in
+                for index in indexSet {
+                    provider.removeModel(provider.models[index])
+                }
+            }
         }
     }
 }

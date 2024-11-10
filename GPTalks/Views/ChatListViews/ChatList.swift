@@ -25,13 +25,16 @@ struct ChatList: View {
         @Bindable var chatVM = chatVM
 
         List(selection: $chatVM.selections) {
-            ChatListCards(sessionCount: String(chats.count), imageSessionsCount: "↗")
-                .id(String.topID)
+            ChatListCards(source: .chatlist, sessionCount: String(chats.count), imageSessionsCount: "↗")
             
-            TipView(SwipeActionTip())
-                .listRowSeparator(.hidden)
-                .tipCornerRadius(8)
-                .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
+            Group {
+                TipView(SwipeActionTip())
+                
+                TipView(ChatCardTip())
+            }
+            .listRowSeparator(.hidden)
+            .tipCornerRadius(8)
+            .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
             
             ForEach(chats) { session in
                 ChatRow(session: session)

@@ -53,12 +53,19 @@ struct AboutSettings: View {
             Section("Acknowledgements") {
                 ForEach(Acknowledgement.acknowledgements, id: \.name) { acknowledgement in
                     Link(destination: URL(string: acknowledgement.url)!) {
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text(acknowledgement.name)
-                                .font(.headline)
-                            Text(acknowledgement.description)
-                                .multilineTextAlignment(.leading)
-                                .font(.subheadline)
+                        HStack {
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(acknowledgement.name)
+                                    .font(.headline)
+                                Text(acknowledgement.description)
+                                    .multilineTextAlignment(.leading)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
                                 .foregroundColor(.secondary)
                         }
                     }

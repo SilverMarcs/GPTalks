@@ -15,14 +15,6 @@ struct URLScrapeSettings: View {
             Toggle("Enabled for new chats", isOn: $config.urlScrape)
         }
         
-        Section("Article Extractor") {
-            TextField(text: $config.rapidApiKey) {
-                Text("Rapid API Key")
-                Text("Subscribe and get your API key [Here](https://rapidapi.com/pwshub-pwshub-default/api/article-extractor2)")
-                    
-            }
-        }
-        
         Section("Schema") {
             MarkdownView(content: ChatTool.urlScrape.jsonSchemaString)
                 .padding(.bottom, -11)

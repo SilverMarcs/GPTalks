@@ -9,7 +9,11 @@ import TipKit
 
 struct PlusButtonTip: Tip {
     var title: Text {
+        #if os(macOS)
+        Text("Long Tap the plus button to see more input options and ⌘ + L to focus on input box")
+        #else
         Text("Long Tap the plus button to see more input options")
+        #endif
     }
     
     var options: [Option] {
@@ -27,6 +31,16 @@ struct SwipeActionTip: Tip {
     
     var options: [Option] {
         MaxDisplayCount(3)
+    }
+}
+
+struct ChatCardTip: Tip {
+    var title: Text {
+        Text("Click on the Chats card to cycle beterrn Starred or Archived chats")
+    }
+    
+    var options: [Option] {
+        MaxDisplayCount(1)
     }
 }
 
@@ -77,7 +91,7 @@ struct NewChatTip: Tip {
 
 struct OpenSettingsTip: Tip {
     var title: Text {
-        Text("Settings page offers more options")
+        Text("Configure more in settings")
     }
     
     var actions: [Action] {

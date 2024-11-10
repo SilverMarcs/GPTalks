@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ModelRow: View {
     var provider: Provider
-    @Binding var model: AIModel
+    @Bindable var model: AIModel
     
     @State private var isTesting = false
     

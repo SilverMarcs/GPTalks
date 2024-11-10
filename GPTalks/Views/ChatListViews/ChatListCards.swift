@@ -8,14 +8,20 @@
 import SwiftUI
 import SwiftData
 
+import SwiftUI
+import SwiftData
+
 struct ChatListCards: View {
     @Environment(\.openWindow) var openWindow
     @Environment(\.dismissWindow) var dismissWindow
-    @Environment(SettingsVM.self) private var listStateVM
+    @Environment(ChatVM.self) var chatVM
+    @Environment(SettingsVM.self) private var settingsVM
     @ObservedObject var config = AppConfig.shared
+    
+    var source: Source
     var sessionCount: String
     var imageSessionsCount: String
-    
+
     var body: some View {
         #if os(macOS)
         content
@@ -32,7 +38,7 @@ struct ChatListCards: View {
     var content: some View {
         HStack(spacing: spacing) {
             ListCard(
-                icon: "tray.circle.fill", iconColor: .blue, title: "Chats",
+                icon: "tray.circle.fill", iconColor: .blue, title: chatVM.statusFilter.name,
                 count: sessionCount) {
                     handleChatPress()
                 }
@@ -48,15 +54,35 @@ struct ChatListCards: View {
     }
     
     func handleChatPress() {
-        #if os(macOS)
-        openWindow(id: "chats")
-        if config.onlyOneWindow {
-            dismissWindow(id: "images")
+        switch source {
+        case .chatlist:
+            withAnimation {
+                cycleChatStatus()
+            }
+        case .imagelist:
+            #if os(macOS)
+            openWindow(id: "chats")
+            if config.onlyOneWindow {
+                dismissWindow(id: "images")
+            }
+            #else
+            settingsVM.listState = .chats
+            #endif
         }
-        #else
-        listStateVM.listState = .chats
-        #endif
     }
+    
+    func cycleChatStatus() {
+        ChatCardTip().invalidate(reason: .actionPerformed)
+        let statusesToCycle = ChatStatus.allCases.filter { $0 != .quick }
+        
+        guard let currentStatusIndex = statusesToCycle.firstIndex(of: chatVM.statusFilter) else {
+            return
+        }
+        
+        let nextStatusIndex = (currentStatusIndex + 1) % statusesToCycle.count
+        chatVM.statusFilter = statusesToCycle[nextStatusIndex]
+    }
+
     
     func handleImagePress() {
         #if os(macOS)
@@ -65,7 +91,7 @@ struct ChatListCards: View {
             dismissWindow(id: "chats")
         }
         #else
-        listStateVM.listState = .images
+        settingsVM.listState = .images
         #endif
     }
     
@@ -79,6 +105,6 @@ struct ChatListCards: View {
 }
 
 #Preview {
-    ChatListCards(sessionCount: "5", imageSessionsCount: "?")
+    ChatListCards(source: .chatlist, sessionCount: "5", imageSessionsCount: "?")
         .environment(ChatVM(modelContext: DatabaseService.shared.container.mainContext))
 }
