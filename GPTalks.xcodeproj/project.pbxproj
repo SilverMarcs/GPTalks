@@ -152,7 +152,6 @@
 		08CD009B2CBA20E900A96425 /* PasteHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CD009A2CBA20E900A96425 /* PasteHandler.swift */; };
 		08CF5B892C68980B0079D5EE /* HighlightedTextViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF5B882C68980B0079D5EE /* HighlightedTextViews.swift */; };
 		08D913EC2CD9CAF7002E4E53 /* AIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D913EB2CD9CAF7002E4E53 /* AIModel.swift */; };
-		08D913F02CDA1F75002E4E53 /* ProviderTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D913EF2CDA1F75002E4E53 /* ProviderTab.swift */; };
 		08DB150B2CDC5B2200DC5B90 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DB150A2CDC5B2200DC5B90 /* OpenAI */; };
 		08DF46222CDC83ED0064E3B5 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DF46212CDC83ED0064E3B5 /* OpenAI */; };
 		08F0EF1E2C6C2DFD00900ED0 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */; };
@@ -321,7 +320,6 @@
 		08CD009A2CBA20E900A96425 /* PasteHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteHandler.swift; sourceTree = "<group>"; };
 		08CF5B882C68980B0079D5EE /* HighlightedTextViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightedTextViews.swift; sourceTree = "<group>"; };
 		08D913EB2CD9CAF7002E4E53 /* AIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModel.swift; sourceTree = "<group>"; };
-		08D913EF2CDA1F75002E4E53 /* ProviderTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderTab.swift; sourceTree = "<group>"; };
 		08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		08F369E22C3C278E002E4A35 /* ProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderType.swift; sourceTree = "<group>"; };
 		08F3CA032C705B3300A800F9 /* SettingsWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindow.swift; sourceTree = "<group>"; };
@@ -716,7 +714,6 @@
 				08F815272C97F5D400B49355 /* ChatTool */,
 				0805DEEB2C58CAF900A8354A /* Services */,
 				08C8004F2C36F667009581C5 /* Provider.swift */,
-				08D913EF2CDA1F75002E4E53 /* ProviderTab.swift */,
 				0869A3F12C95DBF9009BF9F2 /* StreamResponse.swift */,
 				08B3AE9C2CDB58AB00D7231E /* NonStreamResponse.swift */,
 				08F815452C980ABF00B49355 /* StreamHandler.swift */,
@@ -1014,7 +1011,6 @@
 				0891D5732C96796100BA428F /* ImageConfigDefaults.swift in Sources */,
 				080E70F22CDFB9C800A949C9 /* KeychainHelper.swift in Sources */,
 				08A77CC52C65A0B70087D0F3 /* AppearanceSettings.swift in Sources */,
-				08D913F02CDA1F75002E4E53 /* ProviderTab.swift in Sources */,
 				0869A3F62C95E4CC009BF9F2 /* ChatToolCall.swift in Sources */,
 				088DA8F92CA752EF006C017E /* IOSWindow.swift in Sources */,
 				0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */,

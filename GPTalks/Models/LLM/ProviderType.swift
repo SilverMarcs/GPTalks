@@ -107,10 +107,12 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         }
     }
     
-    var supportedFileTypes: [UTType] {
+    var availableModelTypes: [ModelType] {
         switch self {
-        case .google: [.audio, .image, .pdf, .commaSeparatedText, .text, .sourceCode]
-        default: [.image, .pdf, .audio, .sourceCode]
+        case .google, .anthropic, .vertex:
+            return [.chat]
+        default:
+            return ModelType.allCases
         }
     }
     
