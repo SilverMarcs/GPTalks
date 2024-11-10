@@ -114,5 +114,4 @@ struct ProvidersDocument: FileDocument {
         let data = try encoder.encode(providers.map { ProviderBackup(from: $0) })
         return FileWrapper(regularFileWithContents: data)
     }
-
 }

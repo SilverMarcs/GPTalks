@@ -13,8 +13,6 @@ struct ProviderList: View {
     @Query var providers: [Provider]
     @Query var providerDefaults: [ProviderDefaults]
     
-    @State var selectedProvider: Provider?
-    
     var body: some View {
         Group {
             #if os(macOS)
@@ -27,15 +25,13 @@ struct ProviderList: View {
             #endif
         }
         .toolbar {
-            ProviderBackupSettings()
-                .menuIndicator(.hidden)
             addButton
         }
     }
     
     var content: some View {
-        List(selection: $selectedProvider) {
-            ForEach(providers, id: \.self) { provider in
+        List {
+            ForEach(providers) { provider in
                 NavigationLink(destination: ProviderDetail(provider: provider)) {
                     ProviderRow(provider: provider)
                 }
@@ -95,10 +91,6 @@ struct ProviderList: View {
         
         withAnimation {
             modelContext.insert(newProvider)
-        } completion: {
-            DispatchQueue.main.async {
-                selectedProvider = newProvider
-            }
         }
     }
     

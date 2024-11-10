@@ -25,6 +25,7 @@ struct ErrorMessageView: View {
                 }
                 .buttonStyle(.plain)
             }
+            .frame(maxWidth: .infinity)
             .foregroundStyle(.red)
             .opacity(message.isEmpty ? 0 : 1)
             .listRowSeparator(.hidden)

@@ -20,6 +20,7 @@ struct MarkdownView: View {
             .markdownHighlightString(sessionVM.searchText)
             .markdownFontSize(CGFloat(config.fontSize))
             .renderSkeleton(config.renderSkeleton)
+//        Text(LocalizedStringKey(content))
     }
 }
 

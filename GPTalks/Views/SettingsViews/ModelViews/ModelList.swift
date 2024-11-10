@@ -56,7 +56,7 @@ struct ModelList: View {
             }
             .onDelete { indexSet in
                 for index in indexSet {
-                    provider.removeModel(provider.models[index])
+                    modelContext.delete(provider.models[index])
                 }
             }
         }

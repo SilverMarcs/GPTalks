@@ -22,7 +22,7 @@ struct PlusButtonTip: Tip {
 }
 struct SwipeActionTip: Tip {
     var title: Text {
-        Text("Swipe left or right on list row to favourite or delete a chat")
+        Text("Swipe left or right on list row for actions")
     }
     
     var image: Image {

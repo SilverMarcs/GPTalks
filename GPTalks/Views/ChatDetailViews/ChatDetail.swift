@@ -21,8 +21,10 @@ struct ChatDetail: View {
     var body: some View {
         ScrollViewReader { proxy in
             List {
+                #if os(macOS)
                 TipView(ChatInspectorTip())
                     .listRowSeparator(.hidden)
+                #endif
                 
                 ForEach(chat.threads, id: \.self) { thread in
                     ThreadView(thread: thread)

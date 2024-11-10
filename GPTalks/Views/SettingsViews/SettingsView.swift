@@ -43,6 +43,9 @@ struct SettingsView: View {
                 Label("Providers", systemImage: "cpu")
                     .tag(SettingsTab.providers)
                 
+                Label("Advanced", systemImage: "gearshape.2")
+                    .tag(SettingsTab.advanced)
+                
                 Label("Guides", systemImage: "book")
                     .tag(SettingsTab.guides)
                 
@@ -78,6 +81,8 @@ struct SettingsView: View {
                     ImageSettings(providerDefaults: providerDefaults.first!)
                 case .providers:
                     ProviderList()
+                case .advanced:
+                    AdvancedSettings()
                 case .guides:
                     GuidesSettings()
                 case .about:

@@ -122,47 +122,48 @@ struct ChatRow: View {
 
     @ViewBuilder
     var swipeActionsLeading: some View {
-       if session.status == .archived {
-           Button {
-               SwipeActionTip().invalidate(reason: .actionPerformed)
-               session.status = .normal
-           } label: {
-               Label("Unarchive", systemImage: "tray.and.arrow.up")
-           }
-           .tint(.blue)
-       } else {
-           Button {
-               SwipeActionTip().invalidate(reason: .actionPerformed)
-               session.status = session.status == .starred ? .normal : .starred
-           } label: {
-               Label("Star", systemImage: "star")
-           }
-           .tint(.orange)
-       }
+        if session.status != .archived {
+            Button {
+                SwipeActionTip().invalidate(reason: .actionPerformed)
+                session.status = session.status == .starred ? .normal : .starred
+            } label: {
+                Label("Star", systemImage: "star")
+            }
+            .tint(.orange)
+        }
     }
     
+    @ViewBuilder
     var swipeActionsTrailing: some View {
-        Button {
-            // TODO: do properly
-            if session.status == .starred {
-                return
-            }
-           
-            SwipeActionTip().invalidate(reason: .actionPerformed)
+        if session.status != .starred {
+            Button {
+                SwipeActionTip().invalidate(reason: .actionPerformed)
 
-            if sessionVM.selections.contains(session) {
-                sessionVM.selections.remove(session)
-            }
+                if sessionVM.selections.contains(session) {
+                    sessionVM.selections.remove(session)
+                }
 
-            if session.status == .normal {
-                session.status = .archived
-            } else if session.status == .archived {
-                modelContext.delete(session)
+                session.status = (session.status == .archived) ? .normal : .archived
+            } label: {
+                Label("Archive", systemImage: session.status == .archived ? "tray.and.arrow.up.fill" : "archivebox")
             }
-        } label: {
-           Label("Delete", systemImage: session.status == .archived ? "trash" : "archivebox")
+            .tint(.gray)
+
+            Button {
+                SwipeActionTip().invalidate(reason: .actionPerformed)
+
+                if sessionVM.selections.contains(session) {
+                    sessionVM.selections.remove(session)
+                }
+                
+                if session.status == .archived {
+                    modelContext.delete(session)
+                }
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+            .tint(.red)
         }
-        .tint(session.status == .archived ? .red : .gray)
     }
 }
 
