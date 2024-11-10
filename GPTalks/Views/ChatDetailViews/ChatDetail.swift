@@ -62,11 +62,13 @@ struct ChatDetail: View {
                 }
             }
             .onChange(of: chatVM.selections) {
+                chat.hasUserScrolled = false
                 chat.proxy = proxy
                 scrollToBottom(proxy: proxy, animated: false)
             }
             #else
             .onAppear {
+                chat.hasUserScrolled = false
                 chat.proxy = proxy
                 scrollToBottom(proxy: proxy, delay: 0.3)
             }

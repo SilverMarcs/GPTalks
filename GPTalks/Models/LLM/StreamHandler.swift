@@ -46,6 +46,7 @@ struct StreamHandler {
                 let currentTime = Date()
                 if currentTime.timeIntervalSince(lastUIUpdateTime) >= Float.UIIpdateInterval {
                     assistant.content = streamText
+//                    assistant.content = streamText + "⬤"    // chatgpt animation
                     lastUIUpdateTime = currentTime
                     session.scrollBottom()
                 }

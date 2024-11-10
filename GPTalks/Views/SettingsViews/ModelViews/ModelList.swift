@@ -49,14 +49,28 @@ struct ModelList: View {
         }
     }
     
+    @ViewBuilder
     var list: some View {
-        List {
-            ForEach(provider.models.filter { $0.type == type }, id: \.self) { model in
-                ModelRow(provider: provider, model: model)
-            }
-            .onDelete { indexSet in
-                for index in indexSet {
-                    modelContext.delete(provider.models[index])
+        if provider.models.filter({ $0.type == type }).isEmpty {
+            Text("No models available")
+        } else {
+            List {
+                ForEach(provider.models.filter { $0.type == type }, id: \.self) { model in
+                    ModelRow(provider: provider, model: model)
+                }
+                .onDelete { indexSet in
+                    // Create an array of the filtered models
+                    let filteredModels = provider.models.filter { $0.type == type }
+                    
+                    // For each index in the indexSet, find the model in the filtered list
+                    for index in indexSet {
+                        let modelToDelete = filteredModels[index]
+                        
+                        // Find the index of the model in the original list and remove it
+                        if let indexToDelete = provider.models.firstIndex(of: modelToDelete) {
+                            provider.models.remove(at: indexToDelete)
+                        }
+                    }
                 }
             }
         }

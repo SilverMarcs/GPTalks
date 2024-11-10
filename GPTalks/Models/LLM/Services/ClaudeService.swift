@@ -47,7 +47,23 @@ struct ClaudeService: AIService {
     
     static func streamResponse(from conversations: [Thread], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let parameters = createParameters(from: conversations, config: config, stream: true)
-        return streamClaudeResponse(parameters: parameters, config: config)
+        let service = getService(provider: config.provider)
+        
+        return AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    let response = try await service.streamMessage(parameters)
+                    for try await result in response {
+                        if let content = result.delta?.text {
+                            continuation.yield(.content(content))
+                        }
+                    }
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
     }
     
     static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> NonStreamResponse {
@@ -81,49 +97,6 @@ struct ClaudeService: AIService {
             temperature: config.temperature,
             topP: config.topP
         )
-    }
-    
-    static private func streamClaudeResponse(parameters: MessageParameter, config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
-        let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
-        let service = AnthropicServiceFactory.service(
-            apiKey: config.provider.apiKey,
-            basePath: config.provider.scheme.rawValue + "://" + config.provider.host, betaHeaders: betaHeaders)
-        
-        return AsyncThrowingStream { continuation in
-            Task {
-                do {
-                    let response = try await service.streamMessage(parameters)
-                    for try await result in response {
-                        if let content = result.delta?.text {
-                            continuation.yield(.content(content))
-                        }
-                    }
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
-        }
-    }
-    
-    static private func nonStreamingClaudeResponse(parameters: MessageParameter, config: ChatConfig) async throws -> StreamResponse {
-        let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
-        let service = AnthropicServiceFactory.service(
-            apiKey: config.provider.apiKey,
-            basePath: config.provider.scheme.rawValue + "://" + config.provider.host, betaHeaders: betaHeaders)
-        
-        let message = try await service.createMessage(parameters)
-        // Extract the text content from the message
-        let content = message.content.compactMap { content -> String? in
-            switch content {
-            case .text(let text):
-                return text
-            case .toolUse:
-                return nil // TODO:
-            }
-        }.joined()
-        
-        return .content(content)
     }
     
     static func testModel(provider: Provider, model: AIModel) async -> Bool {

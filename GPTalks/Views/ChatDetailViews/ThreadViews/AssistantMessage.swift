@@ -13,6 +13,7 @@ struct AssistantMessage: View {
     
     @State private var isHovering: Bool = false
     @State private var showingTextSelection = false
+    @State private var dotOpacity: Double = 0.1  // Add a state variable for dot opacity
     
     var body: some View {
         HStack(alignment: .top, spacing: spacing) {
@@ -43,6 +44,17 @@ struct AssistantMessage: View {
                     ProgressView()
                         .controlSize(.small)
                 }
+                
+//                 chatgpt animation
+//                if thread.isReplying && thread.content.isEmpty {
+//                    Text("⬤")
+//                        .opacity(dotOpacity)
+//                        .onAppear {
+//                            withAnimation(Animation.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
+//                                dotOpacity = 1.0  // toggle between 0 and 1
+//                            }
+//                        }
+//                }
                 
                 #if os(macOS)
                 threadMenuView

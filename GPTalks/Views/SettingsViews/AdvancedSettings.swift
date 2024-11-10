@@ -118,7 +118,7 @@ struct AdvancedSettings: View {
                     }
                 }
             } footer: {
-                SectionFooterView(text: "Enter the same passphrase to restore the backup.")
+                SectionFooterView(text: "Enter the same passphrase when restoring the backup.")
             }
         }
         .formStyle(.grouped)
