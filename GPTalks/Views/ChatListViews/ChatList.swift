@@ -27,14 +27,16 @@ struct ChatList: View {
         List(selection: $chatVM.selections) {
             ChatListCards(source: .chatlist, sessionCount: String(chats.count), imageSessionsCount: "↗")
             
-            Group {
-                TipView(SwipeActionTip())
-                
-                TipView(ChatCardTip())
+            Section {
+                Group {
+                    TipView(SwipeActionTip())
+                    
+                    TipView(ChatCardTip())
+                }
+                .tipCornerRadius(8)
+                .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
             }
-            .listRowSeparator(.hidden)
-            .tipCornerRadius(8)
-            .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
+
             
             ForEach(chats) { session in
                 ChatRow(session: session)

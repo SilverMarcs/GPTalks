@@ -123,6 +123,7 @@ struct AdvancedSettings: View {
         }
         .formStyle(.grouped)
         .navigationTitle("Advanced Settings")
+        .toolbarTitleDisplayMode(.inline)
         .alert(isPresented: $showAlert) {
             Alert(
                 title: Text("Notice"),

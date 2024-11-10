@@ -35,11 +35,18 @@ struct ProviderDetail: View {
 
     private var picker: some View {
         Picker("Tabs", selection: $selectedTab) {
-            Text("General").tag(ModelType?.none)
+            Label("General", systemImage: "info.circle")
+                .tag(ModelType?.none)
             ForEach(provider.type.availableModelTypes, id: \.self) { modelType in
-                Text(modelType.rawValue.capitalized).tag(Optional(modelType))
+                Label(modelType.name, systemImage: modelType.icon)
+                    .tag(modelType)
             }
         }
+        #if os(macOS)
+        .labelStyle(.titleOnly)
+        #else
+        .labelStyle(.iconOnly)
+        #endif
         .onChange(of: selectedTab) {
             if selectedTab == .chat {
                 ProviderRefreshTip().invalidate(reason: .actionPerformed)

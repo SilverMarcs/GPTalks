@@ -33,27 +33,26 @@ struct ModelRow: View {
             
             Spacer()
             
-            if model.type == .chat {
-                Button {
-                    Task {
-                        isTesting = true
-                        let result = await provider.testModel(model: model)
-                        model.testResult = result
-                        isTesting = false
-                    }
-                } label: {
-                    if isTesting {
-                        ProgressView()
-                            .controlSize(.small)
-                            .frame(width: 20, height: 20)
-                    } else {
-                        Image(systemName: "play.circle")
-                            .imageScale(.large)
-                            .foregroundStyle(foregroundColor(for: model.testResult))
-                    }
+            Button {
+                Task {
+                    isTesting = true
+                    let result = await provider.testModel(model: model)
+                    model.testResult = result
+                    isTesting = false
                 }
-                .buttonStyle(.plain)
+            } label: {
+                if isTesting {
+                    ProgressView()
+                        .controlSize(.small)
+                        .frame(width: 20, height: 20)
+                } else {
+                    Image(systemName: "play.circle")
+                        .imageScale(.large)
+                        .foregroundStyle(foregroundColor(for: model.testResult))
+                }
             }
+            .buttonStyle(.plain)
+            .opacity(model.type == .chat ? 1 : 0)
         }
         #if os(macOS)
         .padding(5)

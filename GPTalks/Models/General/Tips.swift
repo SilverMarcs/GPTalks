@@ -40,7 +40,7 @@ struct ChatCardTip: Tip {
     }
     
     var options: [Option] {
-        MaxDisplayCount(1)
+        MaxDisplayCount(3)
     }
 }
 
