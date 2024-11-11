@@ -5,17 +5,23 @@
 //  Created by Zabir Raihan on 8/31/24.
 //
 
+import SwiftUI
 import Foundation
 import SwiftData
 #if os(macOS)
 import KeyboardShortcuts
 #endif
+import Observation
 
 // make modelactor
-class DatabaseService {
-    static var shared = DatabaseService()
+
+@MainActor
+final class DatabaseService: NSObject {
     
-    var container: ModelContainer = {
+    static let shared = DatabaseService()
+    
+    let container: ModelContainer = {
+        print(URL.applicationSupportDirectory.path(percentEncoded: false))
         let schema = Schema([
             Chat.self,
             ChatConfig.self,
@@ -35,10 +41,8 @@ class DatabaseService {
         }
     }()
     
-    var modelContext: ModelContext
-    
-    init() {
-        modelContext = ModelContext(container)
+    var modelContext: ModelContext {
+        container.mainContext
     }
     
     func getDefaultProvider() -> Provider {
@@ -65,7 +69,7 @@ class DatabaseService {
         guard try! modelContext.fetch(fetchProviders).count == 0 else { return }
         
         #if os(macOS)
-        KeyboardShortcuts.setShortcut(.init(.space, modifiers: .option), for: .togglePanel) // TODO: very bad (visibility wise) place to do this. 
+        KeyboardShortcuts.setShortcut(.init(.space, modifiers: .option), for: .togglePanel) // TODO: very bad (visibility wise) place to do this.
         #endif
         
         let openAI = Provider.factory(type: .openai)

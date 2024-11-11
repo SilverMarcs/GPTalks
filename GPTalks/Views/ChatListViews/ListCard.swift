@@ -32,7 +32,7 @@ struct ListCard: View {
                         .contentTransition(.numericText())
                         .font(.title2)
                         .fontWeight(.semibold)
-                        .monospaced()
+//                        .monospaced()
                 }
                 Text(title)
                     .font(.callout)

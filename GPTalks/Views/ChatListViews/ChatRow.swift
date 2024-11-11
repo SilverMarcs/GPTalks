@@ -147,7 +147,7 @@ struct ChatRow: View {
             } label: {
                 Label("Archive", systemImage: session.status == .archived ? "tray.and.arrow.up.fill" : "archivebox")
             }
-            .tint(.gray)
+            .tint(session.status == .archived ? .blue : .gray)
 
             Button {
                 SwipeActionTip().invalidate(reason: .actionPerformed)
@@ -156,9 +156,7 @@ struct ChatRow: View {
                     sessionVM.selections.remove(session)
                 }
                 
-                if session.status == .archived {
-                    modelContext.delete(session)
-                }
+                modelContext.delete(session)
             } label: {
                 Label("Delete", systemImage: "trash")
             }
@@ -170,7 +168,7 @@ struct ChatRow: View {
 #Preview {
     List {
         ChatRow(session: .mockChat)
-            .environment(ChatVM(modelContext: DatabaseService.shared.container.mainContext))
+            .environment(ChatVM())
     }
     .frame(width: 250)
 }

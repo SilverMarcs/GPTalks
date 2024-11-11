@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-import CryptoKit
 
 struct AdvancedSettings: View {
     @Environment(\.modelContext) private var modelContext
@@ -15,7 +14,6 @@ struct AdvancedSettings: View {
     
     @State private var isExportingProvider = false
     @State private var isImportingProvider = false
-    @State private var encryptionPassphrase = ""
     
     @State private var showAlert = false
     @State private var alertMessage = ""
@@ -27,7 +25,7 @@ struct AdvancedSettings: View {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
                         ForEach(providers, id: \.self) { provider in
                             VStack {
-                                ProviderImage(provider: provider, scale: .large)
+                                ProviderImage(provider: provider, frame: 30, scale: .large)
                                 
                                 Text(provider.name)
                                     .font(.subheadline)
@@ -40,85 +38,24 @@ struct AdvancedSettings: View {
                         .italic()
                         .foregroundColor(.secondary)
                 }
-                
             } header: {
                 Text("Backup & Restore Providers")
             }
             
             Section {
-                TextField("Encryption Passphrase:", text: $encryptionPassphrase)
-                
+                #if os(macOS)
                 HStack {
-                    Button {
-                        isExportingProvider = true
-                    } label: {
-                        Label("Backup", systemImage: "square.and.arrow.up")
-                            .labelStyle(.titleAndIcon)
-                    }
-                    .fileExporter(
-                        isPresented: $isExportingProvider,
-                        document: ProvidersDocument(providers: providers),
-                        contentType: .json,
-                        defaultFilename: "providers_backup_encrypted"
-                    ) { result in
-                        switch result {
-                        case .success(let url):
-                            do {
-                                try encryptFile(at: url, passphrase: encryptionPassphrase)
-                                alertMessage = "Backup saved to: \(url.path)"
-                            } catch {
-                                alertMessage = "Error encrypting backup: \(error.localizedDescription)"
-                            }
-                        case .failure(let error):
-                            alertMessage = "Error saving backup: \(error.localizedDescription)"
-                        }
-                        showAlert = true
-                    }
-                    
+                    Text("\(providers.count) Providers will be backed up.")
                     Spacer()
-                    Text("|")
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                    
-                    Button {
-                        isImportingProvider = true
-                    } label: {
-                        Label("Restore", systemImage: "square.and.arrow.down")
-                            .labelStyle(.titleAndIcon)
-                    }
-                    .fileImporter(
-                        isPresented: $isImportingProvider,
-                        allowedContentTypes: [.json],
-                        allowsMultipleSelection: false
-                    ) { result in
-                        switch result {
-                        case .success(let urls):
-                            guard let url = urls.first else { return }
-                            do {
-                                let decryptedData = try decryptFile(at: url, passphrase: encryptionPassphrase)
-                                let restoredProviders = try JSONDecoder().decode([ProviderBackup].self, from: decryptedData)
-                                
-                                var restoredCount = 0
-                                for restoredProvider in restoredProviders {
-                                    if let existingProvider = providers.first(where: { $0.name.lowercased() == restoredProvider.name.lowercased() }) {
-                                        existingProvider.apiKey = restoredProvider.apiKey
-                                    } else {
-                                        modelContext.insert(restoredProvider.toProvider())
-                                        restoredCount += 1
-                                    }
-                                }
-                                alertMessage = "Restore successful! Restored \(restoredCount) provider(s)."
-                            } catch {
-                                alertMessage = "Error restoring backup: Check passphrase or file integrity."
-                            }
-                        case .failure(let error):
-                            alertMessage = "Error selecting file: \(error.localizedDescription)"
-                        }
-                        showAlert = true
-                    }
+                    exportButton
+                    importButton
                 }
+                #else
+                exportButton
+                importButton
+                #endif
             } footer: {
-                SectionFooterView(text: "Enter the same passphrase when restoring the backup.")
+                SectionFooterView(text: "API Keys will be stored in plaintext")
             }
         }
         .formStyle(.grouped)
@@ -133,25 +70,76 @@ struct AdvancedSettings: View {
         }
     }
     
-    func encryptFile(at url: URL, passphrase: String) throws {
-        let data = try Data(contentsOf: url)
-        let symmetricKey = generateSymmetricKey(from: passphrase)
-        let sealedBox = try AES.GCM.seal(data, using: symmetricKey)
-        let encryptedData = sealedBox.combined
-        try encryptedData?.write(to: url)
+    var importButton: some View {
+        Button {
+            isImportingProvider = true
+        } label: {
+            Label("Restore", systemImage: "square.and.arrow.down")
+                .labelStyle(.titleOnly)
+        }
+        .disabled(providers.isEmpty)
+        .fileImporter(
+            isPresented: $isImportingProvider,
+            allowedContentTypes: [.json],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                guard let url = urls.first else { return }
+                do {
+                    guard url.startAccessingSecurityScopedResource() else {
+                         throw NSError(domain: "FileAccessError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to access the security-scoped resource."])
+                     }
+                     defer {
+                         url.stopAccessingSecurityScopedResource()
+                     }
+                    
+                    let data = try Data(contentsOf: url)
+                    let restoredProviders = try JSONDecoder().decode([ProviderBackup].self, from: data)
+                    
+                    var restoredCount = 0
+                    for restoredProvider in restoredProviders {
+                        if let existingProvider = providers.first(where: { $0.name.lowercased() == restoredProvider.name.lowercased() }) {
+                            existingProvider.apiKey = restoredProvider.apiKey
+                            existingProvider.isEnabled = restoredProvider.isEnabled
+                        } else {
+                            modelContext.insert(restoredProvider.toProvider())
+                            restoredCount += 1
+                        }
+                    }
+                    alertMessage = "Restore successful! Restored \(restoredCount) provider(s)."
+                } catch {
+                    alertMessage = "Error restoring backup: \(error.localizedDescription)"
+                }
+            case .failure(let error):
+                alertMessage = "Error selecting file: \(error.localizedDescription)"
+            }
+            showAlert = true
+        }
     }
     
-    func decryptFile(at url: URL, passphrase: String) throws -> Data {
-        let data = try Data(contentsOf: url)
-        let symmetricKey = generateSymmetricKey(from: passphrase)
-        let sealedBox = try AES.GCM.SealedBox(combined: data)
-        return try AES.GCM.open(sealedBox, using: symmetricKey)
-    }
-    
-    func generateSymmetricKey(from passphrase: String) -> SymmetricKey {
-        let keyData = Data(passphrase.utf8)
-        let hashedData = SHA256.hash(data: keyData)
-        return SymmetricKey(data: hashedData)
+    var exportButton: some View {
+        Button {
+            isExportingProvider = true
+        } label: {
+            Label("Backup", systemImage: "square.and.arrow.up")
+                .labelStyle(.titleOnly)
+        }
+        .disabled(providers.isEmpty)
+        .fileExporter(
+            isPresented: $isExportingProvider,
+            document: ProvidersDocument(providers: providers),
+            contentType: .json,
+            defaultFilename: "providers_backup"
+        ) { result in
+            switch result {
+            case .success(let url):
+                alertMessage = "Backup saved to: \(url.path)"
+            case .failure(let error):
+                alertMessage = "Error saving backup: \(error.localizedDescription)"
+            }
+            showAlert = true
+        }
     }
 }
 

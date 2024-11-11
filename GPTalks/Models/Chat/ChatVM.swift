@@ -13,12 +13,6 @@ import SwiftUI
     var selections: Set<Chat> = []
     var statusFilter: ChatStatus = .normal
     
-    var modelContext: ModelContext
-    
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-    }
-    
     public var activeChat: Chat? {
         guard selections.count == 1 else { return nil }
         return selections.first
@@ -56,7 +50,9 @@ import SwiftUI
     }
     
     // must provide new session, not the one to be forked
+    @MainActor
     func fork(newChat: Chat) {
+        let modelContext = DatabaseService.shared.modelContext
         modelContext.insert(newChat)
         #if os(macOS)
         self.selections = [newChat]
@@ -68,8 +64,11 @@ import SwiftUI
         #endif
     }
     
+    @MainActor
     @discardableResult
-    func createNewSession(provider: Provider? = nil, model: AIModel? = nil) -> Chat? {
+    func createNewSession(provider: Provider? = nil, model: AIModel? = nil) async -> Chat? {
+        let modelContext = DatabaseService.shared.modelContext
+        
         let provider = provider ?? DatabaseService.shared.getDefaultProvider()
         let config = ChatConfig(provider: provider, purpose: .chat)
         

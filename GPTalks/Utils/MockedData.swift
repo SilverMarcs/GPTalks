@@ -139,9 +139,9 @@ extension Generation {
 }
 
 extension ChatVM {
-    static var mockSessionVM = ChatVM(modelContext: DatabaseService.shared.modelContext)
+    static var mockSessionVM = ChatVM()
 }
 
 extension ImageVM {
-    static var mockImageVM = ImageVM(modelContext: DatabaseService.shared.modelContext)
+    static var mockImageVM = ImageVM()
 }

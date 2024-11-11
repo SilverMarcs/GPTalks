@@ -23,6 +23,13 @@ struct ModelRefresher: View {
                     .task {
                         await loadModels()
                     }
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel", role: .cancel) {
+                                dismiss()
+                            }
+                        }
+                    }
             } else {
                 Form {
                     List {
@@ -54,9 +61,17 @@ struct ModelRefresher: View {
                             }
                         }
                     }
+                    #if os(macOS)
                     .searchable(text: $searchText, prompt: "Search models")
+                    #else
+                    .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search models")
+                    .navigationTitle("Add Models")
+                    .toolbarTitleDisplayMode(.inline)
+                    #endif
                 }
+                #if os(macOS)
                 .padding(.top)
+                #endif
                 .toolbarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {

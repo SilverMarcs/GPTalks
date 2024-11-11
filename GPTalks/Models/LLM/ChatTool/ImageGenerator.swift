@@ -15,6 +15,7 @@ struct ImageGenerator: ToolProtocol {
     static let displayName: String = "Image Generate"
     static let icon: String = "photo"
     
+    @MainActor
     static func process(arguments: String) async throws -> ToolData {
         let modelContext = DatabaseService.shared.modelContext
         

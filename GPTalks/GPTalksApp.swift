@@ -11,9 +11,9 @@ import TipKit
 
 @main
 struct GPTalksApp: App {
-    @State private var chatVM: ChatVM
-    @State private var imageVM: ImageVM
-    @State private var listStateVM: SettingsVM
+    @State private var chatVM: ChatVM = ChatVM()
+    @State private var imageVM: ImageVM = ImageVM()
+    @State private var listStateVM: SettingsVM = SettingsVM()
     
     #if !os(macOS)
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
@@ -32,10 +32,6 @@ struct GPTalksApp: App {
         let dbService = DatabaseService.shared
         dbService.initialSetup(modelContext: dbService.container.mainContext)
 
-        _chatVM = State(initialValue: ChatVM(modelContext: dbService.container.mainContext))
-        _imageVM = State(initialValue: ImageVM(modelContext: dbService.container.mainContext))
-        _listStateVM = State(initialValue: SettingsVM())
-        
 //        #if DEBUG
 //        try? Tips.resetDatastore()
 //        #endif

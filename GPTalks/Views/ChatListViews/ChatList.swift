@@ -27,15 +27,14 @@ struct ChatList: View {
         List(selection: $chatVM.selections) {
             ChatListCards(source: .chatlist, sessionCount: String(chats.count), imageSessionsCount: "↗")
             
-            Section {
                 Group {
                     TipView(SwipeActionTip())
                     
                     TipView(ChatCardTip())
                 }
+//                .listRowSeparator(.hidden)
                 .tipCornerRadius(8)
                 .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
-            }
 
             
             ForEach(chats) { session in
@@ -127,7 +126,9 @@ struct ChatList: View {
                     Menu {
                         ForEach(provider.chatModels) { model in
                             Button(model.name) {
-                                chatVM.createNewSession(provider: provider, model: model)
+                                Task {
+                                    await chatVM.createNewSession(provider: provider, model: model)
+                                }
                             }
                         }
                     } label: {
@@ -137,7 +138,9 @@ struct ChatList: View {
             } label: {
                 Label("Add Item", systemImage: "square.and.pencil")
             } primaryAction: {
-                chatVM.createNewSession()
+                Task {
+                    await chatVM.createNewSession()
+                }
             }
             .menuIndicator(.hidden)
             .popoverTip(NewChatTip())
@@ -184,6 +187,6 @@ struct ChatList: View {
 #Preview {
     ChatList(status: .normal, searchText: "")
     .frame(width: 400)
-    .environment(ChatVM(modelContext: DatabaseService.shared.container.mainContext))
+    .environment(ChatVM())
     .environment(SettingsVM())
 }

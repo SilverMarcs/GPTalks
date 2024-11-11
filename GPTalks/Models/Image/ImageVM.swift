@@ -13,12 +13,6 @@ import Foundation
     var searchText: String = ""
     var selections: Set<ImageSession> = []
     
-    var modelContext: ModelContext
-    
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-    }
-    
     public var activeImageSession: ImageSession? {
         guard selections.count == 1 else { return nil }
         return selections.first
@@ -39,7 +33,10 @@ import Foundation
     }
     
     @discardableResult
+    @MainActor
     func createNewSession(provider: Provider? = nil) -> ImageSession? {
+        let modelContext = DatabaseService.shared.modelContext
+        
         let config: ImageConfig
         
         if let providedProvider = provider {

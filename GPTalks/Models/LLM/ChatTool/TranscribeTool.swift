@@ -20,6 +20,7 @@ struct TranscribeTool: ToolProtocol {
         let fileNames: [String]
     }
     
+    @MainActor
     static func process(arguments: String) async throws -> ToolData {
         var totalContent: String = ""
         let args = try TranscribeTool.getFileIds(from: arguments)

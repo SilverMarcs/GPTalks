@@ -39,16 +39,16 @@ struct IOSWindow: Scene {
                                     Label("Settings", systemImage: "gear")
                                 }
                                 
-                                Picker("Chat Status", selection: $chatVM.statusFilter) {
-                                    ForEach([ChatStatus.normal, .starred, .archived]) { status in
-                                        Label(status.name, systemImage: status.systemImageName)
-                                            .tag(status)
-                                    }
-                                }
-                                #if os(macOS)
-                                .labelsHidden()
-                                #endif
-                                .pickerStyle(.inline)
+//                                Picker("Chat Status", selection: $chatVM.statusFilter) {
+//                                    ForEach([ChatStatus.normal, .starred, .archived]) { status in
+//                                        Label(status.name, systemImage: status.systemImageName)
+//                                            .tag(status)
+//                                    }
+//                                }
+//                                #if os(macOS)
+//                                .labelsHidden()
+//                                #endif
+//                                .pickerStyle(.inline)
                                 
                             } label: {
                                 Label("More", systemImage: "ellipsis.circle")

@@ -173,5 +173,5 @@ struct ChatInputView: View {
 import SwiftData
 #Preview {
     ChatDetail(chat: .mockChat)
-        .environment(ChatVM(modelContext: try! ModelContainer(for: Chat.self).mainContext))
+        .environment(ChatVM())
 }

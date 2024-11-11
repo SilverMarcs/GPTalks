@@ -28,6 +28,6 @@ struct ChatContentView: View {
 #Preview {
     ChatContentView()
         .modelContainer(for: Chat.self, inMemory: true)
-        .environment(ChatVM(modelContext: DatabaseService.shared.container.mainContext))
+        .environment(ChatVM())
 }
 #endif

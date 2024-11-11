@@ -106,5 +106,5 @@ struct ChatListCards: View {
 
 #Preview {
     ChatListCards(source: .chatlist, sessionCount: "5", imageSessionsCount: "?")
-        .environment(ChatVM(modelContext: DatabaseService.shared.container.mainContext))
+        .environment(ChatVM())
 }
