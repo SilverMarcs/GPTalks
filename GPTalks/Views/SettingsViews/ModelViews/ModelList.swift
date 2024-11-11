@@ -64,11 +64,12 @@ struct ModelList: View {
                     
                     // For each index in the indexSet, find the model in the filtered list
                     for index in indexSet {
-                        let modelToDelete = filteredModels[index]
+                         let modelToDelete = filteredModels[index]
                         
                         // Find the index of the model in the original list and remove it
                         if let indexToDelete = provider.models.firstIndex(of: modelToDelete) {
-                            provider.models.remove(at: indexToDelete)
+                             provider.models.remove(at: indexToDelete)
+                             modelContext.delete(modelToDelete)
                         }
                     }
                 }

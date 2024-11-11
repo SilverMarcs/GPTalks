@@ -114,6 +114,8 @@ struct ChatList: View {
                modelContext.delete(chat)
            }
        }
+        
+        try? modelContext.save()
     }
     
     @ToolbarContentBuilder
