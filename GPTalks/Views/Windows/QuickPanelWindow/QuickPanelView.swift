@@ -115,7 +115,7 @@ struct QuickPanelView: View {
                     send()
                 }
             
-            ActionButton(size: 28, isStop: chat.isReplying) {
+            ActionButton(isStop: chat.isReplying) {
                 chat.isReplying ? chat.stopStreaming() : send()
             }
         }

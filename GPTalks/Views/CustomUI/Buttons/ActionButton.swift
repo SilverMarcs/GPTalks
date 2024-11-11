@@ -8,16 +8,13 @@
 import SwiftUI
 
 struct ActionButton: View {
-    var size: CGFloat = 24
     var isStop: Bool
     var action: () -> Void
     
     var body: some View {
         Button(action: action) {
             Image(systemName: isStop ? "stop.circle.fill" : "arrow.up.circle.fill")
-                .resizable()
-                .frame(width: size, height: size)
-                .fontWeight(.semibold)
+                .font(.title).fontWeight(.semibold)
         }
         .foregroundStyle((isStop ? AnyShapeStyle(.background) : AnyShapeStyle(.white)), (isStop ? .red : .accent))
         .buttonStyle(.plain)

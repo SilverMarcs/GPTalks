@@ -54,12 +54,10 @@ struct ChatInputView: View {
                 Spacer(minLength: 0)
             }
             
-            ActionButton(size: imageSize, isStop: chat.isReplying) {
+            ActionButton(isStop: chat.isReplying) {
                 chat.isReplying ? chat.stopStreaming() : sendInput()
             }
         }
-        .padding(5)
-        .roundedRectangleOverlay(radius: 18)
         .modifier(CommonInputStyling())
     }
 
@@ -82,16 +80,12 @@ struct ChatInputView: View {
             }
         } label: {
             Image(systemName: "plus.circle.fill")
-                .resizable()
+                .font(.title).fontWeight(.semibold)
                 .foregroundStyle(.primary, .clear)
-                .frame(width: imageSize, height: imageSize)
             
         } primaryAction: {
             showPhotosPicker = true
         }
-        #if !os(macOS)
-        .popoverTip(PlusButtonTip())
-        #endif
         .menuStyle(.button)
         .buttonStyle(.plain)
         .menuIndicator(.hidden)
@@ -101,7 +95,9 @@ struct ChatInputView: View {
             await chat.inputManager.loadTransferredPhotos(from: selectedPhotos)
             selectedPhotos.removeAll()
         }
+        
         #if !os(macOS)
+        .popoverTip(PlusButtonTip())
         .fullScreenCover(isPresented: $chat.showCamera) {
             CameraView(chat: chat)
                 .ignoresSafeArea()
@@ -137,27 +133,16 @@ struct ChatInputView: View {
         }
     }
     
-    @ViewBuilder
     var cancelEditing: some View {
         Button {
             chat.inputManager.reset()
         } label: {
             Image(systemName: "xmark.circle.fill")
-                .resizable()
-                .frame(width: imageSize, height: imageSize)
-                .fontWeight(.semibold)
+                .font(.title).fontWeight(.semibold)
                 .foregroundStyle(.red)
         }
         .keyboardShortcut(.cancelAction)
         .buttonStyle(.plain)
-    }
-    
-    var imageSize: CGFloat {
-        #if os(macOS)
-        21
-        #else
-        31
-        #endif
     }
     
     private func sendInput() {

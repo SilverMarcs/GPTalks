@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    func roundedRectangleOverlay(radius: CGFloat, opacity: CGFloat = 0.8, style: RoundedCornerStyle = .continuous) -> some View {
+    func roundedRectangleOverlay(radius: CGFloat = 20, opacity: CGFloat = 0.8) -> some View {
         self.modifier(RoundedRectangleOverlayModifier(radius: radius, opacity: opacity, style: style))
     }
 }
@@ -16,9 +16,8 @@ extension View {
 
 struct RoundedRectangleOverlayModifier: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
-    var radius: CGFloat
+    var radius: CGFloat = 20
     var opacity: CGFloat = 0.8
-    var style: RoundedCornerStyle = .continuous
     
     func body(content: Content) -> some View {
         content
@@ -40,6 +39,6 @@ struct RoundedRectangleOverlayModifier: ViewModifier {
 
 #Preview {
     TextEditor(text: .constant("Hello, World!"))
-        .modifier(RoundedRectangleOverlayModifier(radius: 18))
+        .modifier(RoundedRectangleOverlayModifier())
     
 }

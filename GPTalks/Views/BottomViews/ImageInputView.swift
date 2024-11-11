@@ -17,19 +17,15 @@ struct ImageInputView: View {
                 .focused($isFocused, equals: .imageInput)
                 .onSubmit( { sendInput() } )
                 .textFieldStyle(.plain)
-                .padding(.leading, 5)
+                .padding(.leading, 8)
             
             Button(action: sendInput) {
                 Image(systemName: "arrow.up.circle.fill")
-                    .resizable()
-                    .frame(width: imageSize, height: imageSize)
-                    .fontWeight(.semibold)
+                    .font(.title).fontWeight(.semibold)
             }
             .foregroundStyle(.white, .accent)
             .buttonStyle(.plain)
         }
-        .padding(5)
-        .roundedRectangleOverlay(radius: 20)
         .modifier(CommonInputStyling())
         #if os(macOS)
         .onAppear {

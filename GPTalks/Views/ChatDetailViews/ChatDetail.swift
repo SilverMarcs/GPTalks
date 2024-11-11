@@ -41,7 +41,6 @@ struct ChatDetail: View {
                     .id(String.bottomID)
                     .listRowSeparator(.hidden)
             }
-            .scrollBounceBehavior(.basedOnSize)
             .toolbar {
                 ChatToolbar(chat: chat)
             }
@@ -57,7 +56,7 @@ struct ChatDetail: View {
             #if os(macOS)
             .navigationSubtitle("\(chat.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-                if chat.isReplying {  // TODO: use isstreamong here.
+                if chat.isReplying {
                     chat.hasUserScrolled = true
                 }
             }

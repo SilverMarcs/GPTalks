@@ -101,18 +101,6 @@ class Provider {
         return provider
     }
 }
-    
-//    func addModel(_ model: GenericModel) {
-//        switch model.selectedModelType {
-//        case .chat:
-//            chatModels.append(AIModel(code: model.code, name: model.name, type: .chat))
-//        case .image:
-//            imageModels.append(AIModel(code: model.code, name: model.name, type: .image))
-//        case .stt:
-//            sttModels.append(AIModel(code: model.code, name: model.name, type: .stt))
-//        }
-//    }
-//}
 
 extension Provider {
     func refreshModels() async -> [GenericModel] {
