@@ -74,9 +74,7 @@ struct AssistantMessage: View {
         TextSelectionView(content: thread.content)
     }
     #else
-    .onHover { isHovered in
-        self.isHovering = isHovered
-    }
+    .onHover { isHovering = $0 }
     #endif
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.trailing, 30)

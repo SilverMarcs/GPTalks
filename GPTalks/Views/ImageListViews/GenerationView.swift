@@ -83,6 +83,12 @@ struct GenerationView: View {
         .contentShape(.rect)
         .contextMenu {
             Button {
+                generation.config.prompt.copyToPasteboard()
+            } label: {
+                Label("Copy Prompt", systemImage: "document.on.clipboard")
+            }
+            
+            Button {
                 generation.deleteSelf()
             } label: {
                 Label("Delete Generation", systemImage: "trash")

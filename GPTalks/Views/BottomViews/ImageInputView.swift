@@ -9,23 +9,38 @@ import SwiftUI
 
 struct ImageInputView: View {
     @Bindable var session: ImageSession
-    @FocusState private var isFocused: Bool
+    @FocusState var isFocused: FocusedField?
     
     var body: some View {
         HStack(alignment: .center, spacing: 15) {
-            InputEditor(prompt: $session.prompt,
-                        provider: session.config.provider)
+            TextField("Prompt", text: $session.prompt)
+                .focused($isFocused, equals: .imageInput)
+                .onSubmit( { sendInput() } )
+                .textFieldStyle(.plain)
+                .padding(.leading, 5)
             
-            ActionButton(size: imageSize, isStop: false) {
-                sendInput()
+            Button(action: sendInput) {
+                Image(systemName: "arrow.up.circle.fill")
+                    .resizable()
+                    .frame(width: imageSize, height: imageSize)
+                    .fontWeight(.semibold)
             }
+            .foregroundStyle(.white, .accent)
+            .buttonStyle(.plain)
         }
         .padding(5)
         .roundedRectangleOverlay(radius: 20)
         .modifier(CommonInputStyling())
+        #if os(macOS)
+        .onAppear {
+            isFocused = .imageInput
+        }
+        #endif
     }
     
     private func sendInput() {
+        guard !session.prompt.isEmpty else { return }
+        
         #if !os(macOS)
         isFocused = false
         #endif

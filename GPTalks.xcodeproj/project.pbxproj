@@ -25,7 +25,6 @@
 		08217FC02CE0EC5300D0D10D /* AdvancedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08217FBF2CE0EC5300D0D10D /* AdvancedSettings.swift */; };
 		0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181592C382B9B00171BF3 /* ProviderGeneral.swift */; };
 		082181602C3880F700171BF3 /* RoundedRectangleOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0821815F2C3880F700171BF3 /* RoundedRectangleOverlay.swift */; };
-		082181622C38C76E00171BF3 /* InputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181612C38C76E00171BF3 /* InputEditor.swift */; };
 		0821816A2C39001B00171BF3 /* ProviderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181692C39001B00171BF3 /* ProviderRow.swift */; };
 		0821816F2C39082900171BF3 /* ThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0821816E2C39082900171BF3 /* ThreadView.swift */; };
 		082255622CE22D3200AAD32B /* SecretInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082255612CE22D3200AAD32B /* SecretInputView.swift */; };
@@ -54,8 +53,7 @@
 		0843E0782CD8758C0040AA77 /* WindowScenes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0843E0772CD8758C0040AA77 /* WindowScenes.swift */; };
 		0844C2752CA3E6E100F0A325 /* EmptyChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0844C2742CA3E6E100F0A325 /* EmptyChat.swift */; };
 		084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084C743F2C521A8A0015AE2F /* DismissButton.swift */; };
-		085276BC2C98705A009184D2 /* iOSInputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BB2C98705A009184D2 /* iOSInputEditor.swift */; };
-		085276BE2C98706E009184D2 /* MacInputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BD2C98706E009184D2 /* MacInputEditor.swift */; };
+		085276BE2C98706E009184D2 /* InputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BD2C98706E009184D2 /* InputEditor.swift */; };
 		085276C02C98794C009184D2 /* ToolCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BF2C98794C009184D2 /* ToolCallView.swift */; };
 		0853102B2CBF966F0078DD09 /* ModelRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0853102A2CBF966F0078DD09 /* ModelRow.swift */; };
 		085361052C491BF0007DAB62 /* ImageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085361042C491BF0007DAB62 /* ImageSession.swift */; };
@@ -198,7 +196,6 @@
 		08217FBF2CE0EC5300D0D10D /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
 		082181592C382B9B00171BF3 /* ProviderGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderGeneral.swift; sourceTree = "<group>"; };
 		0821815F2C3880F700171BF3 /* RoundedRectangleOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedRectangleOverlay.swift; sourceTree = "<group>"; };
-		082181612C38C76E00171BF3 /* InputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputEditor.swift; sourceTree = "<group>"; };
 		082181692C39001B00171BF3 /* ProviderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderRow.swift; sourceTree = "<group>"; };
 		0821816E2C39082900171BF3 /* ThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadView.swift; sourceTree = "<group>"; };
 		082255612CE22D3200AAD32B /* SecretInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretInputView.swift; sourceTree = "<group>"; };
@@ -221,8 +218,7 @@
 		0843E0772CD8758C0040AA77 /* WindowScenes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowScenes.swift; sourceTree = "<group>"; };
 		0844C2742CA3E6E100F0A325 /* EmptyChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyChat.swift; sourceTree = "<group>"; };
 		084C743F2C521A8A0015AE2F /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
-		085276BB2C98705A009184D2 /* iOSInputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSInputEditor.swift; sourceTree = "<group>"; };
-		085276BD2C98706E009184D2 /* MacInputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacInputEditor.swift; sourceTree = "<group>"; };
+		085276BD2C98706E009184D2 /* InputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputEditor.swift; sourceTree = "<group>"; };
 		085276BF2C98794C009184D2 /* ToolCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCallView.swift; sourceTree = "<group>"; };
 		0853102A2CBF966F0078DD09 /* ModelRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelRow.swift; sourceTree = "<group>"; };
 		085361042C491BF0007DAB62 /* ImageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSession.swift; sourceTree = "<group>"; };
@@ -657,9 +653,7 @@
 				08A313462C4AD03300C3E578 /* ImageInputView.swift */,
 				087928362C48CFFB008646CD /* ExpandedTextField.swift */,
 				08C800392C36BA30009581C5 /* ChatInputView.swift */,
-				082181612C38C76E00171BF3 /* InputEditor.swift */,
-				085276BB2C98705A009184D2 /* iOSInputEditor.swift */,
-				085276BD2C98706E009184D2 /* MacInputEditor.swift */,
+				085276BD2C98706E009184D2 /* InputEditor.swift */,
 				08A313482C4AD0DC00C3E578 /* CommonModifiers.swift */,
 			);
 			path = BottomViews;
@@ -900,7 +894,6 @@
 				08217FC02CE0EC5300D0D10D /* AdvancedSettings.swift in Sources */,
 				0821816A2C39001B00171BF3 /* ProviderRow.swift in Sources */,
 				089DB5162CA865F70013E5C3 /* MockedData.swift in Sources */,
-				085276BC2C98705A009184D2 /* iOSInputEditor.swift in Sources */,
 				085EA4A52C9C4E9600124F83 /* IntegerStepper.swift in Sources */,
 				08F815462C980ABF00B49355 /* StreamHandler.swift in Sources */,
 				08A1DDBB2CE0024A00DAF6F9 /* Source.swift in Sources */,
@@ -996,7 +989,6 @@
 				08CF5B892C68980B0079D5EE /* HighlightedTextViews.swift in Sources */,
 				08F815292C97F5E100B49355 /* ChatTool.swift in Sources */,
 				0869A3EB2C958A4C009BF9F2 /* ChatConfigTools.swift in Sources */,
-				082181622C38C76E00171BF3 /* InputEditor.swift in Sources */,
 				08B82C1D2C74EA9400DC0183 /* ImageViewer.swift in Sources */,
 				085361052C491BF0007DAB62 /* ImageSession.swift in Sources */,
 				0888C5872CD568E000A1EA5E /* SearchResultRow.swift in Sources */,
@@ -1031,7 +1023,7 @@
 				0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */,
 				089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */,
 				08C5C72B2C9A139F004992A4 /* GoogleSignIn.swift in Sources */,
-				085276BE2C98706E009184D2 /* MacInputEditor.swift in Sources */,
+				085276BE2C98706E009184D2 /* InputEditor.swift in Sources */,
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,
 				0888C5852CD5686100A1EA5E /* ChatOrSearchView.swift in Sources */,
 				08149A572C3E5E5B004485AC /* ThreadRole.swift in Sources */,

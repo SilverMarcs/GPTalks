@@ -14,7 +14,7 @@ struct UserMessage: View {
     @ObservedObject var config = AppConfig.shared
     
     var thread: Thread
-    @State var isHovered: Bool = false
+    @State var isHovering: Bool = false
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
     
@@ -53,9 +53,7 @@ struct UserMessage: View {
             TextSelectionView(content: thread.content)
         }
         #else
-        .onHover { isHovered in
-            self.isHovered = isHovered
-        }
+        .onHover { isHovering = $0 }
         #endif
         .frame(maxWidth: .infinity, alignment: .trailing)
     }
@@ -63,7 +61,7 @@ struct UserMessage: View {
     @ViewBuilder
     var contextMenu: some View {
         ThreadMenu(thread: thread, isExpanded: $isExpanded)
-            .symbolEffect(.appear, isActive: !isHovered)
+            .symbolEffect(.appear, isActive: !isHovering)
     }
     
     func toggleTextSelection() {
