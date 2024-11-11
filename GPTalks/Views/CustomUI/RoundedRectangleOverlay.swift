@@ -9,7 +9,7 @@ import SwiftUI
 
 extension View {
     func roundedRectangleOverlay(radius: CGFloat = 20, opacity: CGFloat = 0.8) -> some View {
-        self.modifier(RoundedRectangleOverlayModifier(radius: radius, opacity: opacity, style: style))
+        self.modifier(RoundedRectangleOverlayModifier(radius: radius, opacity: opacity))
     }
 }
 
@@ -26,7 +26,7 @@ struct RoundedRectangleOverlayModifier: ViewModifier {
 //                    .fill(.background.secondary.opacity(0.4))
 //            )
             .overlay(
-                RoundedRectangle(cornerRadius: radius, style: style)
+                RoundedRectangle(cornerRadius: radius)
                 #if os(iOS)
                     .stroke(colorScheme == .dark ? Color(.tertiarySystemGroupedBackground) : Color(.tertiaryLabel), lineWidth: 1)
                 #else
