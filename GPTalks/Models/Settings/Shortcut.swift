@@ -19,5 +19,8 @@ struct Shortcut {
         Shortcut(key: "⌘ + .", action: "Open Chat Config Menu"),
         Shortcut(key: "⌘ + ,", action: "Open App Settings"),
         Shortcut(key: "⌥ + Space", action: "Toggle Quick Panel"),
+        Shortcut(key: "⌘  + +", action: "Increase Font Size"),
+        Shortcut(key: "⌘  + -", action: "Decrease Font Size"),
+        Shortcut(key: "⌘  + O", action: "Reset Font Size"),
     ]
 }

@@ -35,7 +35,6 @@ struct GenericSlider: View {
                    in: min...max,
                    step: steps) {
                 labelView
-                // TODO: explanation here
             } minimumValueLabel: {
                 Text("")
                     .frame(width: 0)
@@ -48,9 +47,7 @@ struct GenericSlider: View {
                 #endif
             }
         } else {
-            HStack {
-                Text(label)
-                Spacer()
+            LabeledContent(label) {
                 Button("Set") {
                     self.value = defaultValue
                 }
@@ -91,18 +88,17 @@ struct GenericSlider: View {
         }
     }
 
+    @ViewBuilder
     private var popoverContent: some View {
-        Group {
-            Button("Default") {
-                self.value = defaultValue
-            }
-            
-            Button(role: .destructive) {
-                self.value = nil
-            } label: {
-                Text("Unset")
-                    .foregroundStyle(.red)
-            }
+        Button("Default") {
+            self.value = defaultValue
+        }
+        
+        Button(role: .destructive) {
+            self.value = nil
+        } label: {
+            Text("Unset")
+                .foregroundStyle(.red)
         }
     }
 }

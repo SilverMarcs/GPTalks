@@ -44,11 +44,11 @@ struct AdvancedSettings: View {
             
             Section {
                 #if os(macOS)
-                HStack {
-                    Text("\(providers.count) Providers will be backed up.")
-                    Spacer()
-                    exportButton
-                    importButton
+                LabeledContent("\(providers.count) Providers will be backed up.") {
+                    HStack {
+                        exportButton
+                        importButton
+                    }
                 }
                 #else
                 exportButton

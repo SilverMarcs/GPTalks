@@ -71,8 +71,10 @@ struct SettingsView: View {
                     GeneralSettings()
                 case .appearance:
                     AppearanceSettings()
+                #if os(macOS)
                 case .quickPanel:
                     QuickPanelSettings(providerDefaults: providerDefaults.first!)
+                #endif
                 case .tools:
                     PluginSettings(providerDefaults: providerDefaults.first!)
                 case .parameters:

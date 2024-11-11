@@ -34,10 +34,8 @@ struct GoogleSearch: ToolProtocol {
         if let jsonResult = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
            let items = jsonResult["items"] as? [[String: Any]] {
             
-            let topItems = items.prefix(ToolConfigDefaults.shared.gSearchCount)
-            
             // Building a string representation of the search results
-            let searchResultsString = topItems.map { item -> String in
+            let searchResultsString = items.map { item -> String in
                 let title = item["title"] as? String ?? "No title"
                 let link = item["link"] as? String ?? "No link"
                 let snippet = item["snippet"] as? String ?? "No snippet"

@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct GuidesSettings: View {
+    @State var isExpanded = true
+    
     var body: some View {
         Form {
             #if os(macOS)
-            Section(header: Text("Keyboard Shortcuts").font(.headline)) {
+            Section("Keyboard Shortcuts", isExpanded: $isExpanded) {
                 ForEach(Shortcut.shortcuts, id: \.key) { shortcut in
                     HStack {
                         Text(shortcut.key)
                             .monospaced()
-//                            .bold()
                             .foregroundStyle(.secondary)
                         Spacer()
                         Text(shortcut.action)

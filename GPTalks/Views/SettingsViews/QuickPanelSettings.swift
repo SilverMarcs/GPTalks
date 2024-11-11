@@ -5,6 +5,7 @@
 //  Created by Zabir Raihan on 12/07/2024.
 //
 
+#if os(macOS)
 import KeyboardShortcuts
 import SwiftUI
 import SwiftData
@@ -18,22 +19,10 @@ struct QuickPanelSettings: View {
     @Bindable var providerDefaults: ProviderDefaults
     
     var body: some View {
-        #if os(macOS)
-        content
-        #else
-        EmptyView()
-        #endif
-    }
-    
-    var content: some View {
         Form {
             Section("Launch") {
-                HStack {
-                    Text("Shortcut")
-                    Spacer()
-                    #if os(macOS)
+                LabeledContent("Shortcut") {
                     KeyboardShortcuts.Recorder(for: .togglePanel)
-                    #endif
                 }
             }
             
@@ -75,3 +64,4 @@ struct QuickPanelSettings: View {
 #Preview {
     QuickPanelSettings(providerDefaults: .mockProviderDefaults)
 }
+#endif

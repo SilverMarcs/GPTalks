@@ -71,13 +71,7 @@ struct ImageSettings: View {
                 
                 IntegerStepper(value: $imageConfig.imageWidth, label: "Image Width", step: 50, range: 50...500)
                 
-                HStack(alignment: .top) {
-                    #if os(macOS)
-                    Text("Only applies to images from Image Generation Session")
-                    #endif
-                    
-                    Spacer()
-                    
+                LabeledContent("Demo") {
                     Image("sample")
                         .resizable()
                         .aspectRatio(contentMode: .fill)

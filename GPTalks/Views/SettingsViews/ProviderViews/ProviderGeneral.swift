@@ -44,28 +44,7 @@ struct ProviderGeneral: View {
                 if provider.type == .vertex {
                     GoogleSignIn()
                 } else {
-                    HStack {
-                        if showKey {
-                            TextField("API Key", text: $provider.apiKey)
-                                .monospaced()
-                        } else {
-                            SecureField("API Key", text: $provider.apiKey)
-                        }
-                        
-                        Button {
-                            showKey.toggle()
-                        } label: {
-                            Image(systemName: !showKey ? "eye.slash" : "eye" )
-                                .imageScale(.medium)
-                                .foregroundStyle(.secondary)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    .truncationMode(.middle)
-                    .autocorrectionDisabled(true)
-                #if !os(macOS)
-                    .textInputAutocapitalization(.never)
-                #endif
+                    SecretInputView(label: "API Key", secret: $provider.apiKey)
                 }
             }
     

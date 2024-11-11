@@ -26,5 +26,4 @@ class ToolConfigDefaults: ObservableObject {
     // google search
     @AppStorage("googleApiKey") var googleApiKey: String = ""
     @AppStorage("googleSearchEngineId") var googleSearchEngineId: String = ""
-    @AppStorage("gSearchCount") var gSearchCount: Int = 7
 }

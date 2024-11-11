@@ -36,17 +36,18 @@ struct AboutSettings: View {
             }
             
             Section("Connect") {
-                Link(destination: URL(string: "https://github.com/SilverMarcs/GPTalks")!) {
-                    HStack {
-                        Image(systemName: "link")
-                        Text("GitHub Repository")
-                    }
+                LabeledContent{
+                    Link("Github Repository", destination: URL(string: "https://github.com/SilverMarcs/GPTalks")!)
+                } label: {
+                    Text("\(Image(systemName: "link")) Source Code")
                 }
-                Link(destination: URL(string: "https://twitter.com/SilverMarcs3")!) {
-                    HStack {
-                        Image(systemName: "person")
-                        Text("Follow me on Twitter")
-                    }
+                
+                
+                
+                LabeledContent {
+                    Link("Follow on X.com", destination: URL(string: "https://twitter.com/SilverMarcs3")!)
+                } label: {
+                    Text("\(Image(systemName: "person")) Social Profile")
                 }
             }
             

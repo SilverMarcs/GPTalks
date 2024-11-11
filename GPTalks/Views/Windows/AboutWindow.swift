@@ -16,7 +16,7 @@ struct AboutWindow: Scene {
                 .padding(.horizontal, 5)
                 .scrollDisabled(true)
                 .scrollContentBackground(.hidden)
-                .frame(minWidth: 375, maxWidth: 375, minHeight: 388, maxHeight: 388)
+                .frame(minWidth: 325, maxWidth: 325, minHeight: 388, maxHeight: 388)
                 .windowMinimizeBehavior(.disabled)
         }
         .windowStyle(.hiddenTitleBar)

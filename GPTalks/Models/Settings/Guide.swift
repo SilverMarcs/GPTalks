@@ -19,9 +19,9 @@ struct Guide: Identifiable {
 
         The app features a Spotlight-like floating panel for interacting with LLMs. To configure:
 
-        - Navigate to **Settings > Quick Panel** to set a keyboard shortcut.
-        - Once enabled, using the shortcut will activate a hovering panel for LLM interaction.
-        - Additional settings, such as the Quick Panel's separate default provider and model, can also be configured in the same section.
+        1. Navigate to **Settings > Quick Panel** to set a keyboard shortcut.
+        2. Once enabled, using the shortcut will activate a hovering panel for LLM interaction.
+        3. Additional settings, such as the Quick Panel's separate default provider and model, can also be configured in the same section.
         """),
         
         Guide(title: "Plugins", content: """
@@ -83,8 +83,6 @@ struct Guide: Identifiable {
         Guide(title: "VertexAI Instructions", content: """
         The app currently only supports **Anthropic Claude** providers for **VertexAI**.
 
-        ## Getting Started
-
         1. Make sure you have credits in Google Cloud with the models enabled.
         2. Check the quota and usage limits of individual models.
         3. Sign in to Google in the Vertex provider settings to use the VertexAI Service.
@@ -93,8 +91,6 @@ struct Guide: Identifiable {
         """),
         
         Guide(title: "Adding Files", content: """
-        ### File Support in the App
-
         This app offers native support for various file types, while others require specific provider models or may not be supported at all.  Here's a breakdown:
 
         * **Text Files:** Most text file content can be directly pasted and processed within the app.

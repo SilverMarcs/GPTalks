@@ -15,17 +15,24 @@ struct GoogleSearchSettings: View {
             Toggle(isOn: $config.googleSearch) {
                 Text("Enabled for new chats")
             }
-
-            IntegerStepper(value: $config.gSearchCount, label: "Search Result Count", step: 1, range: 1...10)
         }
         
-        Section("Secrets") {
-            TextField("Google Search Engine ID", text: $config.googleSearchEngineId)
-            TextField(text: $config.googleApiKey) {
-                Text("Google Search API Key")
+        Section {
+            SecretInputView(label: "Google Search Engine ID", secret: $config.googleSearchEngineId)
+            SecretInputView(label: "Google Search API Key", secret: $config.googleApiKey)
+        } header: {
+            Text("Secrets")
+        } footer: {
+            #if os(macOS)
+            HStack {
                 Text("Follow [this](https://coda.io/@jon-dallas/google-image-search-pack-example/search-engine-id-and-google-api-key-3) guide to get your credentials")
-                
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
             }
+            #else
+            Text("Follow [this](https://coda.io/@jon-dallas/google-image-search-pack-example/search-engine-id-and-google-api-key-3) guide to get your credentials")
+            #endif
         }
         
         Section("Schema") {

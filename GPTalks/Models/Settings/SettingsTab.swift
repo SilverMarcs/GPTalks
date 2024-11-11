@@ -10,7 +10,9 @@ import Foundation
 enum SettingsTab {
     case general
     case appearance
+    #if os(macOS)
     case quickPanel
+    #endif
     case tools
     case parameters
     case image

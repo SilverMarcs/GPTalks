@@ -12,7 +12,6 @@
 		0805DEF12C58CB2A00A8354A /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEF02C58CB2A00A8354A /* ClaudeService.swift */; };
 		0805DEF32C58CB3D00A8354A /* GoogleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEF22C58CB3D00A8354A /* GoogleService.swift */; };
 		080E70E82CDF1BC100A949C9 /* Tips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70E72CDF1BC100A949C9 /* Tips.swift */; };
-		080E70EA2CDF1E2600A949C9 /* HeadlineTipViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70E92CDF1E2600A949C9 /* HeadlineTipViewStyle.swift */; };
 		080E70EC2CDF380500A949C9 /* InspectorTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70EB2CDF380500A949C9 /* InspectorTab.swift */; };
 		080E70EE2CDF498F00A949C9 /* ChatStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70ED2CDF498F00A949C9 /* ChatStatus.swift */; };
 		080E70F02CDF781500A949C9 /* HTTPScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70EF2CDF781500A949C9 /* HTTPScheme.swift */; };
@@ -29,6 +28,7 @@
 		082181622C38C76E00171BF3 /* InputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181612C38C76E00171BF3 /* InputEditor.swift */; };
 		0821816A2C39001B00171BF3 /* ProviderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181692C39001B00171BF3 /* ProviderRow.swift */; };
 		0821816F2C39082900171BF3 /* ThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0821816E2C39082900171BF3 /* ThreadView.swift */; };
+		082255622CE22D3200AAD32B /* SecretInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082255612CE22D3200AAD32B /* SecretInputView.swift */; };
 		0823550D2CDBB74900388273 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0823550C2CDBB74900388273 /* GoogleGenerativeAI */; };
 		082355152CDBBB2B00388273 /* SwiftMarkdownView in Frameworks */ = {isa = PBXBuildFile; productRef = 082355142CDBBB2B00388273 /* SwiftMarkdownView */; };
 		082355182CDBBC9A00388273 /* SwiftMarkdownView in Frameworks */ = {isa = PBXBuildFile; productRef = 082355172CDBBC9A00388273 /* SwiftMarkdownView */; };
@@ -185,7 +185,6 @@
 		0805DEF02C58CB2A00A8354A /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
 		0805DEF22C58CB3D00A8354A /* GoogleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleService.swift; sourceTree = "<group>"; };
 		080E70E72CDF1BC100A949C9 /* Tips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tips.swift; sourceTree = "<group>"; };
-		080E70E92CDF1E2600A949C9 /* HeadlineTipViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadlineTipViewStyle.swift; sourceTree = "<group>"; };
 		080E70EB2CDF380500A949C9 /* InspectorTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorTab.swift; sourceTree = "<group>"; };
 		080E70ED2CDF498F00A949C9 /* ChatStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStatus.swift; sourceTree = "<group>"; };
 		080E70EF2CDF781500A949C9 /* HTTPScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPScheme.swift; sourceTree = "<group>"; };
@@ -202,6 +201,7 @@
 		082181612C38C76E00171BF3 /* InputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputEditor.swift; sourceTree = "<group>"; };
 		082181692C39001B00171BF3 /* ProviderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderRow.swift; sourceTree = "<group>"; };
 		0821816E2C39082900171BF3 /* ThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadView.swift; sourceTree = "<group>"; };
+		082255612CE22D3200AAD32B /* SecretInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretInputView.swift; sourceTree = "<group>"; };
 		082A63312C551108003996B7 /* MarkdownFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownFile.swift; sourceTree = "<group>"; };
 		082A63372C55175E003996B7 /* MiscUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscUtils.swift; sourceTree = "<group>"; };
 		082B88162CD36CD80092C4D0 /* PlatformSpecificGroupBoxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformSpecificGroupBoxStyle.swift; sourceTree = "<group>"; };
@@ -505,7 +505,6 @@
 		08915D922C373332008ADE27 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
-				080E70E92CDF1E2600A949C9 /* HeadlineTipViewStyle.swift */,
 				08AAFB912C3C88CA002C04E0 /* Buttons */,
 				0821815F2C3880F700171BF3 /* RoundedRectangleOverlay.swift */,
 				08915D932C373340008ADE27 /* ProviderImage.swift */,
@@ -631,6 +630,7 @@
 		08AAFB912C3C88CA002C04E0 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				082255612CE22D3200AAD32B /* SecretInputView.swift */,
 				082B88162CD36CD80092C4D0 /* PlatformSpecificGroupBoxStyle.swift */,
 				08FD45592CB8EF680046D165 /* ClickHighlightButton.swift */,
 				081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */,
@@ -979,6 +979,7 @@
 				08CD009B2CBA20E900A96425 /* PasteHandler.swift in Sources */,
 				085524E22C4ED2A400CBB827 /* MenuCommands.swift in Sources */,
 				0891D5752C967A9700BA428F /* ImageSettings.swift in Sources */,
+				082255622CE22D3200AAD32B /* SecretInputView.swift in Sources */,
 				082F09DB2CB2715A00B7860A /* Thread.swift in Sources */,
 				085524E82C4ED61F00CBB827 /* ChatToolbar.swift in Sources */,
 				08F815222C97F58800B49355 /* GoogleSearchSettings.swift in Sources */,
@@ -990,7 +991,6 @@
 				08F0EF1E2C6C2DFD00900ED0 /* ActionButton.swift in Sources */,
 				087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */,
 				08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */,
-				080E70EA2CDF1E2600A949C9 /* HeadlineTipViewStyle.swift in Sources */,
 				085910CA2C4F7A720086E493 /* ImageVM.swift in Sources */,
 				08A77CC92C65A3AD0087D0F3 /* SectionFooterView.swift in Sources */,
 				08CF5B892C68980B0079D5EE /* HighlightedTextViews.swift in Sources */,
