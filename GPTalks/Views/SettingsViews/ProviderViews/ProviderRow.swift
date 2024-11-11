@@ -14,7 +14,7 @@ struct ProviderRow: View {
     
     var body: some View {
         HStack {
-            ProviderImage(provider: provider, radius: 6, frame: 18, scale: .small)
+            ProviderImage(provider: provider, radius: 7, frame: 22, scale: .medium)
             Text(provider.name)
             Spacer()
             if providerDefaults.first!.defaultProvider == provider {

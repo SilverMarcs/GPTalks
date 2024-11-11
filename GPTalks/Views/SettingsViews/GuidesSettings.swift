@@ -38,6 +38,7 @@ struct GuidesSettings: View {
         }
         .formStyle(.grouped)
         .navigationTitle("Guides")
+        .toolbarTitleDisplayMode(.inline)
     }
 }
 

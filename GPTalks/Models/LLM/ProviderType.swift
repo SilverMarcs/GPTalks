@@ -65,6 +65,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .xai: "xai.SFSymbol"
         case .groq: "groq.SFSymbol"
         case .github: "github.SFSymbol"
+        case .togetherai: "togetherai.SFSymbol"
         case .ollama: "ollama.SFSymbol"
         case .custom: "openai.SFSymbol"
         default: "brain.SFSymbol"
@@ -83,6 +84,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .xai: "#111111"
         case .groq: "#F55036"
         case .github: "#181717"
+        case .togetherai : "#106CF9"
         case .ollama: "#EFEFEF"
         default: Color.randomColors.randomElement() ?? "#00947A"
         }
