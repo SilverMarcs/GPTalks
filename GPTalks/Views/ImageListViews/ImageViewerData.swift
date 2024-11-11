@@ -12,7 +12,8 @@ struct ImageViewerData: View {
     let data: Data
     
     @State private var selectedFileURL: URL?
-    @State var isHovering = false
+    @State private var isHovering = false
+    @State private var showCheckmark = false
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -33,9 +34,9 @@ struct ImageViewerData: View {
             
             if isHovering {
                 Button(action: saveImage) {
-                    Image(systemName: "square.and.arrow.up.circle.fill")
+                    Image(systemName: showCheckmark ? "checkmark.circle.fill" : "square.and.arrow.up.circle.fill")
                         .font(.largeTitle)
-                        .rotationEffect(.degrees(180))
+                        .rotationEffect(.degrees(showCheckmark ? 0 : 180))
                 }
                 .foregroundStyle(.white, .black.tertiary)
                 .buttonStyle(.plain)
@@ -63,6 +64,13 @@ struct ImageViewerData: View {
         do {
             try data.write(to: fileURL)
             print("Image saved to \(fileURL.path)")
+            
+            showCheckmark = true
+            
+            // Revert back to the original icon after 2 seconds
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                showCheckmark = false
+            }
         } catch {
             print("Error saving image: \(error)")
         }

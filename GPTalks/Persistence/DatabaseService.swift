@@ -52,7 +52,7 @@ final class DatabaseService: NSObject {
     }
     
     func initialSetup(modelContext: ModelContext) {
-        // Fetch the quick session from the modelContext
+        // Reset the quick session on app launch
         var fetchQuickSession = FetchDescriptor<Chat>()
         let quickId = ChatStatus.quick.id
         fetchQuickSession.predicate = #Predicate { $0.statusId == quickId }
@@ -65,6 +65,8 @@ final class DatabaseService: NSObject {
         var fetchProviders = FetchDescriptor<Provider>()
         fetchProviders.fetchLimit = 1
         
+        // -- Upto here runs on every app launch -- //
+        
         // If there are already providers in the modelContext, return since the setup has already been done
         guard try! modelContext.fetch(fetchProviders).count == 0 else { return }
         
@@ -72,6 +74,7 @@ final class DatabaseService: NSObject {
         KeyboardShortcuts.setShortcut(.init(.space, modifiers: .option), for: .togglePanel) // TODO: very bad (visibility wise) place to do this.
         #endif
         
+        // adding default providers
         let openAI = Provider.factory(type: .openai)
         openAI.isPersistent = true
         let anthropic = Provider.factory(type: .anthropic)
@@ -83,6 +86,7 @@ final class DatabaseService: NSObject {
         modelContext.insert(anthropic)
         modelContext.insert(google)
         
+        // quick chat
         let config = ChatConfig(provider: openAI, purpose: .quick)
         let session = Chat(config: config)
         session.status = .quick
@@ -90,10 +94,30 @@ final class DatabaseService: NSObject {
         session.title = "(↯) Quick Session"
         modelContext.insert(session)
         
+        // demo chat with some threads
         let normalChatConfig = ChatConfig(provider: openAI, purpose: .chat)
         let normalSession = Chat(config: normalChatConfig)
+        normalSession.addThread(.mockUserThread)
+        normalSession.addThread(.mockAssistantThread)
         modelContext.insert(normalSession)
         
+        // demo favourite chat
+        let normalChatConfig2 = ChatConfig(provider: openAI, purpose: .chat)
+        let favouriteSession = Chat(config: normalChatConfig2)
+        favouriteSession.status = .starred
+        favouriteSession.statusId = ChatStatus.starred.id
+        favouriteSession.title = "Favourite Chat"
+        modelContext.insert(favouriteSession)
+        
+        // archivd chat
+        let normalChatConfig3 = ChatConfig(provider: openAI, purpose: .chat)
+        let archivedSession = Chat(config: normalChatConfig3)
+        archivedSession.status = .archived
+        archivedSession.statusId = ChatStatus.archived.id
+        archivedSession.title = "Archived Chat"
+        modelContext.insert(archivedSession)
+        
+        // image session
         let imageChatConfig = ImageConfig(prompt: "", provider: openAI)
         let imageSession = ImageSession(config: imageChatConfig)
         modelContext.insert(imageSession)
