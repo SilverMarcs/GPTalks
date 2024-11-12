@@ -17,46 +17,28 @@ struct IOSWindow: Scene {
     @State private var showSettings = false
     
     var body: some Scene {
-        @Bindable var chatVM = chatVM
-        
         WindowGroup("Chats", id: "chats") {
             NavigationSplitView {
-                if !chatVM.searchResults.isEmpty {
-                    ChatOrSearchView()
-                } else {
-                    Group {
-                        switch listStateVM.listState {
-                        case .chats:
-                            ChatList(status: chatVM.statusFilter, searchText: chatVM.searchText)
-                        case .images:
-                            ImageList()
-                        }
+                Group {
+                    switch listStateVM.listState {
+                    case .chats:
+                        ChatList(status: chatVM.statusFilter, searchText: chatVM.searchText)
+                    case .images:
+                        ImageList()
                     }
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Menu {
-                                Button(action: { showSettings.toggle() }) {
-                                    Label("Settings", systemImage: "gear")
-                                }
-                                
-//                                Picker("Chat Status", selection: $chatVM.statusFilter) {
-//                                    ForEach([ChatStatus.normal, .starred, .archived]) { status in
-//                                        Label(status.name, systemImage: status.systemImageName)
-//                                            .tag(status)
-//                                    }
-//                                }
-//                                #if os(macOS)
-//                                .labelsHidden()
-//                                #endif
-//                                .pickerStyle(.inline)
-                                
-                            } label: {
-                                Label("More", systemImage: "ellipsis.circle")
-                                    .labelStyle(.titleOnly)
+                }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Menu {
+                            Button(action: { showSettings.toggle() }) {
+                                Label("Settings", systemImage: "gear")
                             }
-                            .sheet(isPresented: $showSettings) {
-                                SettingsView()
-                            }
+                        } label: {
+                            Label("More", systemImage: "ellipsis.circle")
+                                .labelStyle(.titleOnly)
+                        }
+                        .sheet(isPresented: $showSettings) {
+                            SettingsView()
                         }
                     }
                 }

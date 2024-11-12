@@ -78,7 +78,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .anthropic: "#E6784B"
         case .google: "#E64335"
         case .vertex: "#4B62CA"
-        case .openrouter: "#8a97a9"
+        case .openrouter: "#7a8799"
         case .mistral: "#EB5A29"
         case .perplexity: "#2F7999"
         case .xai: "#111111"

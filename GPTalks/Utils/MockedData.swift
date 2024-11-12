@@ -105,7 +105,7 @@ extension String {
 }
 
 extension Thread {
-    static let mockAssistantThread = Thread(role: .assistant, content: String.codeBlock)
+    static let mockAssistantThread = Thread(role: .assistant, content: String.codeBlock, isReplying: false)
     
     static let mockAssistantTolCallThread = Thread(role: .assistant, toolCalls: [.init(toolCallId: "HEX", tool: .urlScrape, arguments: "url: https://www.google.com")])
     

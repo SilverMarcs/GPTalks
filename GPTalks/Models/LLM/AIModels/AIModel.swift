@@ -28,7 +28,7 @@ extension AIModel {
         return [
             .init(code: "gpt-4o-mini", name: "GPT-4om", type: .chat),
             .init(code: "gpt-4o", name: "GPT-4o", type: .chat),
-            .init(code: "chatgpt-4o-lates", name: "ChatGPT-4o-Latest", type: .chat),
+            .init(code: "chatgpt-4o-latest", name: "ChatGPT-4o-Latest", type: .chat),
             .init(code: "o1-mini", name: "o1-M", type: .chat),
             .init(code: "o1-preview", name: "o1-P", type: .chat),
             .init(code: "dall-e-2", name: "DALL-E-2", type: .image),
@@ -69,6 +69,9 @@ extension AIModel {
         return [
             .init(code: "openai/gpt-4o-mini", name: "GPT-4om", type: .chat),
             .init(code: "openai/gpt-4o", name: "GPT-4o", type: .chat),
+            .init(code: "anthropic/claude-3.5-sonnet", name: "Claude-3.5S", type: .chat),
+            .init(code: "anthropic/claude-3-5-haiku", name: "Claude-3.5H", type: .chat),
+            .init(code: "meta-llama/llama-3.1-8b-instruct", name: "Llama-3.1-8B", type: .chat),
         ]
     }
     

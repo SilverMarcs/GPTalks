@@ -38,7 +38,7 @@ struct ImageInputView: View {
         guard !session.prompt.isEmpty else { return }
         
         #if !os(macOS)
-        isFocused = false
+        isFocused = nil
         #endif
         Task { @MainActor in
             await session.send()

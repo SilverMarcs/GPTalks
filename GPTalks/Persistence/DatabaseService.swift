@@ -98,7 +98,7 @@ final class DatabaseService: NSObject {
         let normalChatConfig = ChatConfig(provider: openAI, purpose: .chat)
         let normalSession = Chat(config: normalChatConfig)
         normalSession.addThread(.mockUserThread)
-        normalSession.addThread(.mockAssistantThread)
+        normalSession.threads.append(.mockAssistantThread)
         modelContext.insert(normalSession)
         
         // demo favourite chat

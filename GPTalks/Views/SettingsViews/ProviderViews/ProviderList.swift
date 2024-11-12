@@ -55,7 +55,7 @@ struct ProviderList: View {
             }
             
             Section(header: Text("Other Providers")) {
-                ForEach([ProviderType.vertex, .github, .openrouter, .groq, .xai, .mistral, .perplexity, .togetherai], id: \.self) { type in
+                ForEach([ProviderType.openrouter, .github, .vertex, .groq, .xai, .mistral, .perplexity, .togetherai], id: \.self) { type in
                     Button(action: { addProvider(type: type) }) {
                         Label(type.name, image: type.imageName)
                     }
@@ -89,7 +89,11 @@ struct ProviderList: View {
     private func addProvider(type: ProviderType) {
         let newProvider = Provider.factory(type: type)
         
-        modelContext.insert(newProvider)
+        DispatchQueue.main.async {
+            withAnimation {
+                modelContext.insert(newProvider)
+            }
+        }
     }
     
     private func deleteProviders(offsets: IndexSet) {

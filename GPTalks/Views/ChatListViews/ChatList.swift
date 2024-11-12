@@ -148,12 +148,14 @@ struct ChatList: View {
             .popoverTip(NewChatTip())
         }
         
+        #if os(macOS)
         ToolbarItem(placement: .keyboard) {
             Button("Search") {
                 isSearchFieldFocused.toggle()
             }
             .keyboardShortcut("f")
         }
+        #endif
     }
     
     init(status: ChatStatus, searchText: String = "") {

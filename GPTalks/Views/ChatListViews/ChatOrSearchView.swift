@@ -34,6 +34,7 @@ struct ChatOrSearchView: View {
         }
     }
     
+    @ViewBuilder
     private var searchResultsList: some View {
         List {
             ForEach(chatVM.searchResults) { result in
@@ -70,24 +71,6 @@ struct ChatOrSearchView: View {
         }
     }
 }
-
-
-
-struct FullScreenBackgroundStyle: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.background)
-            .toolbarBackground(.hidden)
-    }
-}
-
-extension View {
-    func fullScreenBackground() -> some View {
-        self.modifier(FullScreenBackgroundStyle())
-    }
-}
-
 
 #Preview {
     ChatOrSearchView()
