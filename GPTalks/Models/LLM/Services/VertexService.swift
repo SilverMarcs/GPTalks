@@ -103,71 +103,77 @@ struct VertexService: AIService {
                         if let character = String(bytes: [byte], encoding: .utf8) {
                             buffer += character
                             if character == "\n" {
-//                                print("Received data: \(buffer)")
+    //                            print("Received data: \(buffer)")
                                 
                                 if buffer.hasPrefix("data: ") {
                                     let jsonString = buffer.dropFirst(6)
-//                                    print("JSON string: \(jsonString)")
+    //                                print("JSON string: \(jsonString)")
                                     
-                                    if let jsonData = jsonString.data(using: .utf8),
-                                       let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-                                        #if DEBUG
-                                        print("Parsed JSON object: \(jsonObject)")
-                                        #endif
-                                        
-                                        if let type = jsonObject["type"] as? String {
-                                            switch type {
-                                            case "message_start":
-                                                if let message = jsonObject["message"] as? [String: Any],
-                                                   let usage = message["usage"] as? [String: Any],
-                                                   let inputTokenCount = usage["input_tokens"] as? Int {
-                                                    inputTokens = inputTokenCount
-                                                    continuation.yield(.inputTokens(inputTokens))
-                                                }
-                                            case "content_block_start":
-                                                if let contentBlock = jsonObject["content_block"] as? [String: Any],
-                                                   contentBlock["type"] as? String == "tool_use" {
-                                                    isToolUse = true
-                                                    toolCalls.append(contentBlock)
-                                                }
-                                            case "content_block_delta":
-                                                if isToolUse {
-                                                   if let delta = jsonObject["delta"] as? [String: Any],
-                                                      let partialJson = delta["partial_json"] as? String {
-                                                       toolCalls[toolCalls.count - 1]["input"] = (toolCalls[toolCalls.count - 1]["input"] as? String ?? "") + partialJson
-                                                        }
-                                                   } else if let delta = jsonObject["delta"] as? [String: Any],
-                                                             let text = delta["text"] as? String {
-                                                       continuation.yield(.content(text))
-                                                   }
-                                            case "message_delta":
-                                                if let usage = jsonObject["usage"] as? [String: Any],
-                                                   let outputTokenCount = usage["output_tokens"] as? Int {
-                                                    outputTokens = outputTokenCount
-                                                    continuation.yield(.outputTokens(outputTokens))
-                                                }
-                                            case "content_block_stop":
-                                                if isToolUse {
-                                                    isToolUse = false
-                                                }
-                                            case "message_stop":
-                                                if !toolCalls.isEmpty {
-                                                    let calls: [ChatToolCall] = toolCalls.map {
-                                                        ChatToolCall(toolCallId: $0["id"] as? String ?? "",
-                                                                 tool: ChatTool(rawValue: $0["name"] as? String ?? "")!,
-                                                                 arguments: $0["input"] as? String ?? "")
+                                    do {
+                                        if let jsonData = jsonString.data(using: .utf8),
+                                           let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                                            #if DEBUG
+                                            //print("Parsed JSON object: \(jsonObject)")
+                                            #endif
+                                            
+                                            if let type = jsonObject["type"] as? String {
+                                                switch type {
+                                                case "message_start":
+                                                    if let message = jsonObject["message"] as? [String: Any],
+                                                       let usage = message["usage"] as? [String: Any],
+                                                       let inputTokenCount = usage["input_tokens"] as? Int {
+                                                        inputTokens = inputTokenCount
+                                                        continuation.yield(.inputTokens(inputTokens))
                                                     }
-                                                    continuation.yield(.toolCalls(calls))
-                                                    toolCalls.removeAll()
+                                                case "content_block_start":
+                                                    if let contentBlock = jsonObject["content_block"] as? [String: Any],
+                                                       contentBlock["type"] as? String == "tool_use" {
+                                                        isToolUse = true
+                                                        toolCalls.append(contentBlock)
+                                                    }
+                                                case "content_block_delta":
+                                                    if isToolUse {
+                                                        if let delta = jsonObject["delta"] as? [String: Any],
+                                                           let partialJson = delta["partial_json"] as? String {
+                                                            toolCalls[toolCalls.count - 1]["input"] = (toolCalls[toolCalls.count - 1]["input"] as? String ?? "") + partialJson
+                                                        }
+                                                    } else if let delta = jsonObject["delta"] as? [String: Any],
+                                                              let text = delta["text"] as? String {
+                                                        continuation.yield(.content(text))
+                                                    }
+                                                case "message_delta":
+                                                    if let usage = jsonObject["usage"] as? [String: Any],
+                                                       let outputTokenCount = usage["output_tokens"] as? Int {
+                                                        outputTokens = outputTokenCount
+                                                        continuation.yield(.outputTokens(outputTokens))
+                                                    }
+                                                case "content_block_stop":
+                                                    if isToolUse {
+                                                        isToolUse = false
+                                                    }
+                                                case "message_stop":
+                                                    if !toolCalls.isEmpty {
+                                                        let calls: [ChatToolCall] = toolCalls.map {
+                                                            ChatToolCall(toolCallId: $0["id"] as? String ?? "",
+                                                                         tool: ChatTool(rawValue: $0["name"] as? String ?? "")!,
+                                                                         arguments: $0["input"] as? String ?? "")
+                                                        }
+                                                        continuation.yield(.toolCalls(calls))
+                                                        toolCalls.removeAll()
+                                                    }
+                                                default:
+                                                    break
                                                 }
-                                            default:
-                                                break
+                                            } else {
+                                                throw URLError(.cannotParseResponse)
                                             }
                                         } else {
                                             throw URLError(.cannotParseResponse)
                                         }
-                                    } else {
-                                        throw URLError(.cannotParseResponse)
+                                    } catch {
+                                        print("Error parsing JSON: \(error.localizedDescription)")
+                                        print("JSON string: \(jsonString)")  // Print JSON string in case of error
+                                        throw error  // Re-throw the error to be caught by the outer catch
                                     }
                                 }
                                 buffer = ""
@@ -176,11 +182,13 @@ struct VertexService: AIService {
                     }
                     continuation.finish()
                 } catch {
+                    // If there's an error with the continuation, you can handle logging here as well
                     continuation.finish(throwing: error)
                 }
             }
         }
     }
+
 
     static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> NonStreamResponse {
         let request = try await createRequest(from: conversations, config: config)
