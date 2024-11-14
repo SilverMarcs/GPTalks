@@ -171,8 +171,10 @@ struct VertexService: AIService {
                                             throw URLError(.cannotParseResponse)
                                         }
                                     } catch {
+                                        #if DEBUG
                                         print("Error parsing JSON: \(error.localizedDescription)")
                                         print("JSON string: \(jsonString)")  // Print JSON string in case of error
+                                        #endif
                                         throw error  // Re-throw the error to be caught by the outer catch
                                     }
                                 }

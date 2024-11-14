@@ -1,5 +1,5 @@
 {
-  "originHash" : "dc10ab95750033ec7038896af96e9043ddd393e032683fd359cd6c01445b7ff7",
+  "originHash" : "211c1a8813d9485c231bb5e458631c42c4133dfdad699c5f1930e4f2e9b6acb9",
   "pins" : [
     {
       "identity" : "googlegenerativeai",
@@ -20,21 +20,12 @@
       }
     },
     {
-      "identity" : "markdown-webview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/markdown-webview",
-      "state" : {
-        "branch" : "main",
-        "revision" : "e2704f56e6b191d14b112be3be31a96920d9abdd"
-      }
-    },
-    {
       "identity" : "openai",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SilverMarcs/OpenAI",
       "state" : {
         "branch" : "main",
-        "revision" : "654b2bd0aa7f2ecf354f0b6c214b25bc6c0f697c"
+        "revision" : "d83f91da36e87991d4c61463cf721ea56b254ed5"
       }
     },
     {
@@ -44,6 +35,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "95524ed1d36b5de6e051cc82db95962959ff6efe"
+      }
+    },
+    {
+      "identity" : "swiftmarkdownview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/SwiftMarkdownView",
+      "state" : {
+        "branch" : "main",
+        "revision" : "e2704f56e6b191d14b112be3be31a96920d9abdd"
       }
     }
   ],
