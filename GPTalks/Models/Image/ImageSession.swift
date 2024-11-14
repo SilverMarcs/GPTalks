@@ -14,7 +14,6 @@ class ImageSession {
     var id: UUID = UUID()
     var date: Date = Date()
     var title: String = "Image Session"
-    var isStarred: Bool = false
     @Attribute(.ephemeral)
     var prompt: String = ""
 
@@ -56,14 +55,13 @@ class ImageSession {
     }
     
     func deleteGeneration(_ generation: Generation) {
-        withAnimation {
-            imageGenerations.removeAll(where: { $0 == generation })
-        }
+        imageGenerations.removeAll(where: { $0 == generation })
+        modelContext?.delete(generation)
     }
     
     func deleteAllGenerations() {
-        withAnimation {
-            imageGenerations.removeAll()
+        while let generation = imageGenerations.popLast() {
+            modelContext?.delete(generation)
         }
     }
 }

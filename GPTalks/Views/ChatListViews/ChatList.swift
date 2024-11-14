@@ -103,7 +103,7 @@ struct ChatList: View {
            }
        }
         
-        try? modelContext.save()
+//        try? modelContext.save()
     }
     
     @ToolbarContentBuilder

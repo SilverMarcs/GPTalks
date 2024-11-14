@@ -29,30 +29,11 @@ struct ImageRow: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .fontWidth(.compressed)
-            
-            if session.isStarred {
-                Image(systemName: "star.fill")
-                    .foregroundStyle(.orange)
-                    .imageScale(.small)
-                    .symbolEffect(.appear, isActive: !session.isStarred)
-            }
         }
         .padding(3)
-        .swipeActions(edge: .leading) {
-            swipeActionsLeading
-        }
         .swipeActions(edge: .trailing) {
             swipeActionsTrailing
         }
-    }
-    
-    var swipeActionsLeading: some View {
-        Button {
-            session.isStarred.toggle()
-        } label: {
-            Label("Star", systemImage: "star")
-        }
-        .tint(.orange)
     }
     
     var swipeActionsTrailing: some View {

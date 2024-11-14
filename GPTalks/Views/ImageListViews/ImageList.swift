@@ -27,7 +27,6 @@ struct ImageList: View {
                 ForEach(sessions) { session in
                     ImageRow(session: session)
                         .tag(session)
-                        .deleteDisabled(session.isStarred)
                         .listRowSeparator(.visible)
                         .listRowSeparatorTint(Color.gray.opacity(0.2))
                 }

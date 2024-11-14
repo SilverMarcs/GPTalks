@@ -88,7 +88,7 @@ struct GenerationView: View {
                 Label("Copy Prompt", systemImage: "document.on.clipboard")
             }
             
-            Button {
+            Button(role: .destructive) {
                 generation.deleteSelf()
             } label: {
                 Label("Delete Generation", systemImage: "trash")

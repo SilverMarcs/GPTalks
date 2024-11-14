@@ -31,6 +31,14 @@ struct ImageInputView: View {
         .onAppear {
             isFocused = .imageInput
         }
+        .toolbar {
+            ToolbarItem(placement: .keyboard) {
+                Button("Focus") {
+                    isFocused = .imageInput
+                }
+                .keyboardShortcut("l")
+            }
+        }
         #endif
     }
     
