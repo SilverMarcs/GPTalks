@@ -25,11 +25,8 @@ struct GeneralSettings: View {
             Section("Windows") {
                 Toggle(isOn: $config.onlyOneWindow) {
                     Text("Show one window at a time")
-                    Text("If enabled, chat window will be closed when image window is opened and vice versa") 
+                    Text("If enabled, chat window will be closed when image window is opened and vice versa")
                 }
-            }
-            
-            Section("Dock") {
                 Toggle(isOn: $config.hideDock) {
                     Text("Hide icon in Dock")
                     Text("Dock icon reappears on app restart")
@@ -42,8 +39,14 @@ struct GeneralSettings: View {
                     }
                 }
             }
-            
             #endif
+            
+            Section("Misc") {
+                Toggle(isOn: $config.enterToSend) {
+                    Text("Enter to send")
+                    Text("Enabling this makes input area very laggy and is not recommended.")
+                }
+            }
         }
         .formStyle(.grouped)
         .navigationTitle("General")

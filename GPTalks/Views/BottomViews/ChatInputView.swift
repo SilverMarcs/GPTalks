@@ -12,7 +12,7 @@ import TipKit
 
 struct ChatInputView: View {
     @Environment(\.colorScheme) var colorScheme
-    @Bindable var chat: Chat
+    var chat: Chat
     
     @State private var isFilePickerPresented: Bool = false
     @State private var showPhotosPicker = false
@@ -51,7 +51,7 @@ struct ChatInputView: View {
                     .padding(.bottom, 5)
                 }
                 
-                InputEditor(prompt: $chat.inputManager.prompt, provider: chat.config.provider)
+                InputEditor(chat: chat)
                 
                 Spacer(minLength: 0)
             }

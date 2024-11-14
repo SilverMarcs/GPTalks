@@ -20,7 +20,7 @@ struct ChatDetail: View {
     
     var body: some View {
         ScrollViewReader { proxy in
-            ScrollView {
+            List {
                 #if os(macOS)
                 TipView(ChatInspectorTip())
                     .listRowSeparator(.hidden)

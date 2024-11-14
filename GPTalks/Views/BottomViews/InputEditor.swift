@@ -9,27 +9,44 @@ import SwiftUI
 
 struct InputEditor: View {
     @Environment(ChatVM.self) private var sessionVM
+    @ObservedObject var config = AppConfig.shared
     
-    @Binding var prompt: String
-    var provider: Provider
+    @Bindable var chat: Chat
     @FocusState var isFocused: FocusedField?
     
     var body: some View {
         #if os(macOS)
-        ZStack(alignment: .leading) {
-            if prompt.isEmpty {
-                Text(placeHolder)
-                    .padding(.leading, 5)
-                    .foregroundStyle(.placeholder)
+        Group {
+            if config.enterToSend {
+                TextField(placeHolder, text: $chat.inputManager.prompt, axis: .vertical)
+                    .lineLimit(25, reservesSpace: false)
+                    .textFieldStyle(.plain)
+                    .onSubmit {
+                        if NSApp.currentEvent?.modifierFlags.contains(.shift) == true {
+                            chat.inputManager.prompt += "\n"
+                        } else {
+                            Task { @MainActor in
+                                await chat.sendInput()
+                            }
+                        }
+                    }
+            } else {
+                ZStack(alignment: .leading) {
+                    if chat.inputManager.prompt.isEmpty {
+                        Text(placeHolder)
+                            .padding(.leading, 5)
+                            .foregroundStyle(.placeholder)
+                    }
+                    
+                    TextEditor(text: $chat.inputManager.prompt)
+                        .frame(maxHeight: 400)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .scrollContentBackground(.hidden)
+                }
+                .font(.body)
             }
-            
-            TextEditor(text: $prompt)
-                .focused($isFocused, equals: .textEditor)
-                .frame(maxHeight: 400)
-                .fixedSize(horizontal: false, vertical: true)
-                .scrollContentBackground(.hidden)
         }
-        .font(.body)
+        .focused($isFocused, equals: .textEditor)
         .onChange(of: sessionVM.selections) {
             guard sessionVM.selections.count == 1 else { return }
             isFocused = .textEditor
@@ -45,13 +62,22 @@ struct InputEditor: View {
             }
         }
         #else
-        TextField(placeHolder, text: $prompt, axis: .vertical)
+        TextField(placeHolder, text: $chat.inputManager.prompt, axis: .vertical)
             .focused($isFocused, equals: .textEditor)
             .lineLimit(10, reservesSpace: false)
+            .onSubmit {
+                if config.enterToSend {
+                    Task { @MainActor in
+                        await chat.sendInput()
+                    }
+                } else {
+                    chat.inputManager.prompt += "\n"
+                }
+            }
         #endif
     }
     
     var placeHolder: String {
-        "Send a prompt • \(provider.name)"
+        "Send a prompt • \(chat.config.provider.name)"
     }
 }
