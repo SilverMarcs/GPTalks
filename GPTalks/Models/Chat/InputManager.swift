@@ -114,7 +114,7 @@ extension InputManager {
             }
 
             withAnimation {
-                self.dataFiles.append(typedData)
+                self.dataFiles.insert(typedData, at: 0)
             }
         }
     }

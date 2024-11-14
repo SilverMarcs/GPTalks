@@ -41,9 +41,9 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
         switch shortcutItem.type {
         case "camera":
             if let chatVM = AppDelegate.shared.chatVM {
-                Task {
-                    let session = await chatVM.createNewSession()
-                    if let session = session {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    Task {
+                        let session = await chatVM.createNewSession()
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                             session.showCamera = true
                         }

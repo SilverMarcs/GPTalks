@@ -109,7 +109,7 @@ struct QuickPanelTip: Tip {
     }
     
     var actions: [Action] {
-        Action(id: "launch-quick-panel", title: "⌥ + Space")
+        Action(id: "launch-quick-panel", title: "Open Settings")
     }
 }
 

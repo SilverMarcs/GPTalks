@@ -66,7 +66,7 @@ import SwiftUI
     
     @MainActor
     @discardableResult
-    func createNewSession(provider: Provider? = nil, model: AIModel? = nil) async -> Chat? {
+    func createNewSession(provider: Provider? = nil, model: AIModel? = nil) async -> Chat {
         let modelContext = DatabaseService.shared.modelContext
         
         let provider = provider ?? DatabaseService.shared.getDefaultProvider()

@@ -12,7 +12,7 @@ import TipKit
 
 struct ChatInputView: View {
     @Environment(\.colorScheme) var colorScheme
-    var chat: Chat
+    @Bindable var chat: Chat
     
     @State private var isFilePickerPresented: Bool = false
     @State private var showPhotosPicker = false

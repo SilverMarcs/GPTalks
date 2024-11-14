@@ -44,17 +44,12 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
         guard let selectedImage = info[.originalImage] as? UIImage,
               let imageData = selectedImage.jpegData(compressionQuality: 0.7) else { return }
         
-        let fileType = UTType.image
-        let fileName = "Camera_\(UUID().uuidString)"
-        
-        let typedData = TypedData(
-            data: imageData,
-            fileType: fileType,
-            fileName: fileName
-        )
-        
-        chat.inputManager.dataFiles.append(typedData)
-        chat.showCamera = false
+        Task {
+            try? await chat.inputManager.processData(imageData, fileType: .image, fileName: "Camera_\(UUID().uuidString)")
+            await MainActor.run {
+                chat.showCamera = false
+            }
+        }
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

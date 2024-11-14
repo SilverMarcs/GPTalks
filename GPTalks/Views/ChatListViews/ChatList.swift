@@ -61,7 +61,8 @@ struct ChatList: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             TipView(QuickPanelTip()) { action in
                 if action.id == "launch-quick-panel" {
-                    chatVM.isQuickPanelPresented = true
+                    openWindow(id: "settings")
+                    settingsVM.settingsTab = .quickPanel
                     QuickPanelTip().invalidate(reason: .actionPerformed)
                 }
             }

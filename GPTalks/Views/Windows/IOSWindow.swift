@@ -22,7 +22,7 @@ struct IOSWindow: Scene {
                 Group {
                     switch listStateVM.listState {
                     case .chats:
-                        ChatList(status: chatVM.statusFilter, searchText: chatVM.searchText)
+                        ChatList(status: chatVM.statusFilter)
                     case .images:
                         ImageList()
                     }
