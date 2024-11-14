@@ -53,7 +53,7 @@ struct ImageGenerator: ToolProtocol {
         let service = OpenAIService.getService(provider: config.provider)
 
         let query = ImagesQuery(prompt: config.prompt,
-                                model: config.provider.imageModel.code,
+                                model: config.model.code,
                                 n: config.numImages,
                                 quality: config.quality,
                                 size: config.size)

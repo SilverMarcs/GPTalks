@@ -33,6 +33,7 @@ struct ImageContentView: View {
         .inspector(isPresented: $showingInspector) {
             if let imageSession = sessionVM.activeImageSession {
                 ImageInspector(session: imageSession, showingInspector: $showingInspector)
+                    .id(imageSession.id)
             } else {
                 Image(systemName: "gear")
                     .imageScale(.large)

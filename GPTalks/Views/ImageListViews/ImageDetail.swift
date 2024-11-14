@@ -16,7 +16,7 @@ struct ImageDetail: View {
     var body: some View {
         ScrollViewReader { proxy in
             List {
-                ForEach(session.imageGenerations) { generation in
+                ForEach(session.imageGenerations.sorted(by: { $0.date < $1.date })) { generation in
                     GenerationView(generation: generation)
                 }
                 .listRowSeparator(.hidden)
