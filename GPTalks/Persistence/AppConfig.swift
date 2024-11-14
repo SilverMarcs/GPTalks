@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import SwiftMarkdownView
 
 class AppConfig: ObservableObject {
     static let shared = AppConfig()
     private init() {}
     
     // Appearance
+    @AppStorage("codeBlockTheme") var codeBlockTheme: CodeBlockTheme = .atom
     @AppStorage("renderSkeleton") var renderSkeleton: Bool = true
     #if os(macOS)
     @AppStorage("fontSize") var fontSize: Double = 13

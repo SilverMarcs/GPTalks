@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import SwiftMarkdownView
 
 struct AppearanceSettings: View {
     @Environment(\.modelContext) var modelContext
@@ -36,6 +37,19 @@ struct AppearanceSettings: View {
 
             Section("Markdown") {
                 Toggle("Skeleon Rendering in Markdown View", isOn: $config.renderSkeleton)
+                
+                Picker(selection: $config.codeBlockTheme) {
+                    ForEach(CodeBlockTheme.allCases, id: \.self) { theme in
+                        Text(theme.name)
+                    }
+                } label: {
+                    Text("Code Block Theme")
+                    Text("Change chat selection to take effect")
+                }
+                
+                MarkdownView(content: String.onlyCodeBlock)
+                    .id(config.codeBlockTheme)
+                    .padding(.bottom, -11)
             }
         }
         .formStyle(.grouped)

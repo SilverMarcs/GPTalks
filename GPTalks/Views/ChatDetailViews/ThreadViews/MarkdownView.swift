@@ -20,7 +20,8 @@ struct MarkdownView: View {
             .markdownHighlightString(sessionVM.searchText)
             .markdownFontSize(CGFloat(config.fontSize))
             .renderSkeleton(config.renderSkeleton)
-//        Text(LocalizedStringKey(content))
+            .codeBlockTheme(config.codeBlockTheme)
+//        Text(LocalizedStringKey(content)) // swiftui `native` markdown but its pretty bad
     }
 }
 
