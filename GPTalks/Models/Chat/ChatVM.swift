@@ -89,62 +89,6 @@ import SwiftUI
     
     // MARK: - Search
     var searchText: String = ""
-    var searchResults: [MatchedSession] = []
-    var isSearching: Bool = false
-    
-    private var searchTask: Task<Void, Never>?
-    private let debounceInterval: TimeInterval = 0.5 // 0.5sec
-    
-    func resetSearch() {
-        searchText = ""
-        searchResults = []
-    }
-    
-    func debouncedSearch(chats: [Chat]) {
-        if searchText.isEmpty {
-            searchResults = []
-            isSearching = false
-            return
-        }
-        
-        isSearching = true
-        searchTask?.cancel()
-        
-        searchTask = Task {
-            do {
-                try await Task.sleep(for: .seconds(debounceInterval))
-                if !Task.isCancelled {
-                    await updateMatchingThreads(chats: chats)
-                }
-            } catch {
-                print("Error debouncing search: \(error.localizedDescription)")
-            }
-        }
-    }
-
-    
-    func updateMatchingThreads(chats: [Chat]) async {
-        isSearching = true
-        
-        let results = await Task.detached(priority: .userInitiated) {
-            chats.compactMap { chat in
-                let matchingThreads = chat.unorderedThreads.compactMap { thread in
-                    let content = thread.content
-                    let cleanedContent = content.cleanMarkdown()
-                    if cleanedContent.localizedCaseInsensitiveContains(self.searchText) {
-                        return MatchedThread(thread: thread, chat: chat)
-                    }
-                    return nil
-                }
-                return matchingThreads.isEmpty ? nil : MatchedSession(chat: chat, matchedThreads: matchingThreads)
-            }
-        }.value
-        
-        await MainActor.run {
-            searchResults = results
-            isSearching = false
-        }
-    }
     
     // MARK: - Quick Panel
     var isQuickPanelPresented: Bool = false

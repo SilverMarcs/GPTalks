@@ -10,7 +10,6 @@ import SwiftUI
 import SwiftData
 
 struct ChatContentView: View {
-    @Environment(ChatVM.self) private var sessionVM
     @Environment(ChatVM.self) var chatVM
     
     var body: some View {
@@ -20,7 +19,16 @@ struct ChatContentView: View {
                 .navigationSplitViewColumnWidth(min: 270, ideal: 300, max: 400)
                 #endif
         } detail: {
-            ChatOrSearchView()
+            if let chat = chatVM.activeChat, chat.status != .quick {
+                ChatDetail(chat: chat)
+                    #if !os(macOS)
+                    .id(chat.id)
+                    #endif
+            } else {
+                Text("^[\(chatVM.selections.count) Chat Session](inflect: true) Selected")
+                    .font(.title)
+                    .fullScreenBackground()
+            }
         }
     }
 }

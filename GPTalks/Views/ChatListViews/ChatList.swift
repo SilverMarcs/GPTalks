@@ -46,9 +46,6 @@ struct ChatList: View {
             }
             .onDelete(perform: deleteItems)
         }
-        .onChange(of: chatVM.searchText) {
-            chatVM.debouncedSearch(chats: chats)
-        }
         .navigationTitle("Chats")
         .toolbar {
             toolbar
