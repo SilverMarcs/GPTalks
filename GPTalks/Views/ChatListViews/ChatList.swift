@@ -19,7 +19,7 @@ struct ChatList: View {
     
     @Query var chats: [Chat] // see init method below
     
-    @FocusState private var isSearchFieldFocused: Bool
+    @FocusState private var isSearchFieldFocused: FocusedField?
     
     var body: some View {
         @Bindable var chatVM = chatVM
@@ -59,7 +59,7 @@ struct ChatList: View {
             }
         }
         .searchable(text: $chatVM.searchText, placement: searchPlacement)
-        .searchFocused($isSearchFieldFocused, equals: true)
+        .searchFocused($isSearchFieldFocused, equals: .searchBox)
         #if os(macOS)
         .safeAreaInset(edge: .bottom, spacing: 0) {
             TipView(QuickPanelTip()) { action in
@@ -139,36 +139,28 @@ struct ChatList: View {
         #if os(macOS)
         ToolbarItem(placement: .keyboard) {
             Button("Search") {
-                isSearchFieldFocused.toggle()
+                isSearchFieldFocused = .searchBox
             }
             .keyboardShortcut("f")
         }
         #endif
     }
     
-    init(status: ChatStatus, searchText: String = "") {
+    init(status: ChatStatus) {
         let statusId = status.id
         let normalId = ChatStatus.normal.id
         let starredId = ChatStatus.starred.id
-        let quickId = ChatStatus.quick.id
         
         let sortDescriptor = SortDescriptor(\Chat.date, order: .reverse)
         
         let predicate: Predicate<Chat>
-        if searchText.isEmpty {
-            if status == .normal {
-                predicate = #Predicate<Chat> {
-                    $0.statusId == normalId || $0.statusId == starredId
-                }
-            } else {
-                predicate = #Predicate<Chat> {
-                    $0.statusId == statusId
-                }
+        if status == .normal {
+            predicate = #Predicate<Chat> {
+                $0.statusId == normalId || $0.statusId == starredId
             }
         } else {
             predicate = #Predicate<Chat> {
-                $0.statusId != quickId &&
-                $0.title.localizedStandardContains(searchText)
+                $0.statusId == statusId
             }
         }
         
@@ -177,7 +169,7 @@ struct ChatList: View {
 }
 
 #Preview {
-    ChatList(status: .normal, searchText: "")
+    ChatList(status: .normal)
     .frame(width: 400)
     .environment(ChatVM())
     .environment(SettingsVM())

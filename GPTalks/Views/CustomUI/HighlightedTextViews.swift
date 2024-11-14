@@ -41,7 +41,6 @@ struct AttributedText: View {
     init(text: String, highlightText: String) {
         let attributedString = NSMutableAttributedString(string: text)
         let nsString = text as NSString
-        let _ = (highlightText as NSString).length
         let stringLength = nsString.length
         
         var searchRange = NSRange(location: 0, length: stringLength)
@@ -57,9 +56,12 @@ struct AttributedText: View {
                 break
             }
             
-            attributedString.addAttribute(
-                .backgroundColor,
-                value: PlatformColor.yellow.withAlphaComponent(0.4),
+            // Set background color to a brighter yellow and foreground color to black
+            attributedString.addAttributes(
+                [
+                    .backgroundColor: PlatformColor.yellow,
+                    .foregroundColor: PlatformColor.black
+                ],
                 range: foundRange
             )
             

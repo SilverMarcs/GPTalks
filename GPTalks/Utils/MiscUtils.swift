@@ -67,7 +67,7 @@ extension String {
     }
     
     func cleanMarkdown() -> String {
-        let markdownCharacters = CharacterSet(charactersIn: "#*_`!:^")
+        let markdownCharacters = CharacterSet(charactersIn: "#*`!:^")
         let cleanedText = self.components(separatedBy: markdownCharacters).joined()
         return cleanedText
     }

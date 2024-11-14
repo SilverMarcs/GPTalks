@@ -10,4 +10,5 @@ import Foundation
 enum FocusedField {
     case textEditor
     case imageInput
+    case searchBox
 }

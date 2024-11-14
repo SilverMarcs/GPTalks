@@ -38,22 +38,43 @@ struct ChatOrSearchView: View {
     private var searchResultsList: some View {
         List {
             ForEach(chatVM.searchResults) { result in
-                Section("Session: \(result.chat.title)") {
+                Section {
                     VStack(spacing: 0) {
                         ForEach(result.matchedThreads) { matchedThread in
-                            SearchResultRow(matchedThread: matchedThread)
+                            ThreadView(thread: matchedThread.thread)
+                                .environment(\.isSearch, true)
                         }
+                    }
+                } header: {
+                    HStack {
+                        Text("Session: \(result.chat.title)")
+                        Spacer()
+                        
+                        Button {
+                            chatVM.selections = [result.chat]
+                            chatVM.resetSearch()
+                        } label: {
+                            Image(systemName: "arrow.right")
+                                .bold()
+                                .imageScale(.large)
+                                .foregroundStyle(.accent)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }
             .listRowSeparator(.hidden)
             .listSectionSeparator(.visible)
             
+            Divider()
+                .listRowSeparator(.hidden)
+            
             Text("End of Search Results")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .padding()
+                .padding(.bottom)
+                .listRowSeparator(.hidden)
         }
     }
     
