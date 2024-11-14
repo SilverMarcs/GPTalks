@@ -12,17 +12,17 @@ import SwiftData
 struct QuickPanelView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(ChatVM.self) private var chatVM
-    @Environment(SettingsVM.self) private var settingsVM
-    
+
     @Bindable var chat: Chat
+    var updateHeight: (CGFloat) -> Void
+    var toggleVisibility: () -> Void
 
     @FocusState private var isFocused: Bool
-    
+    @State var selections: Set<Chat> = []
+
     @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
-    
-    @State var selections: Set<Chat> = []
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             textfieldView
@@ -50,18 +50,18 @@ struct QuickPanelView: View {
             }
         }
         .frame(width: 650)
-        .onChange(of: settingsVM.isQuickPanelPresented) {
-            if settingsVM.isQuickPanelPresented {
-            
+        .onChange(of: chatVM.isQuickPanelPresented) {
+            if chatVM.isQuickPanelPresented {
                 selections = chatVM.selections
                 chatVM.selections = [self.chat]
                 isFocused = true
                 if !chat.threads.isEmpty {
-                    settingsVM.isQuickPanelExpanded = true
+                    updateHeight(500)
                 }
             } else {
                 DispatchQueue.main.async {
                     chatVM.selections = selections
+                    updateHeight(57)
                 }
             }
         }
@@ -70,9 +70,9 @@ struct QuickPanelView: View {
         }
         .onChange(of: chat.inputManager.dataFiles.isEmpty) {
             if chat.inputManager.dataFiles.isEmpty {
-                settingsVM.isQuickPanelExpanded = false
+                updateHeight(57)
             } else {
-                settingsVM.isQuickPanelExpanded = true
+                updateHeight(500)
             }
         }
     }
@@ -106,11 +106,10 @@ struct QuickPanelView: View {
             }
             .buttonStyle(.plain)
             
-            TextField("Ask Anything...", text: $chat.inputManager.prompt, axis: .vertical)
+            TextField("Ask Anything...", text: $chat.inputManager.prompt)
                 .focused($isFocused)
                 .font(.system(size: 25))
                 .textFieldStyle(.plain)
-                .allowsHitTesting(false)
                 .onSubmit {
                     send()
                 }
@@ -167,10 +166,12 @@ struct QuickPanelView: View {
     }
     
     private func resetChat() {
-        settingsVM.isQuickPanelExpanded = false
+        updateHeight(57)
+        
         chat.deleteAllThreads()
         chat.inputManager.dataFiles.removeAll()
         let oldConfig = chat.config
+        oldConfig.systemPrompt = ChatConfigDefaults.shared.systemPrompt
 
         let fetchDefaults = FetchDescriptor<ProviderDefaults>()
         let defaults = try! modelContext.fetch(fetchDefaults)
@@ -189,9 +190,6 @@ struct QuickPanelView: View {
             let newChat = await chat.copy(purpose: .chat)
             chatVM.fork(newChat: newChat)
             resetChat()
-            
-            settingsVM.isQuickPanelExpanded = false
-            settingsVM.isQuickPanelPresented = false
             
             if let mainWindow = NSApp.windows.first(where: { $0.identifier?.rawValue == "chats" }) {
                 mainWindow.makeKeyAndOrderFront(nil)
@@ -212,11 +210,11 @@ struct QuickPanelView: View {
             await chat.sendInput()
         }
         
-        settingsVM.isQuickPanelExpanded = true
+        updateHeight(500)
     }
 }
 
 #Preview {
-    QuickPanelView(chat: .mockChat)
+    QuickPanelView(chat: .mockChat, updateHeight: { _ in }, toggleVisibility: {})
 }
 #endif

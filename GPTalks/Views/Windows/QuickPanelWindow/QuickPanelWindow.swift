@@ -7,17 +7,22 @@
 
 #if os(macOS)
 import SwiftUI
+import SwiftData
+import KeyboardShortcuts
 
-class QuickPanelWindow<Content: View>: NSPanel {
-    @Binding var isPresented: Bool
+class QuickPanelWindow: NSPanel {
     private var heightConstraint: NSLayoutConstraint?
+    var chatVM: ChatVM
     
-    init(view: @escaping () -> Content,
-         contentRect: NSRect,
+    @discardableResult
+    init(
+         contentRect: NSRect = NSRect(x: 0, y: 0, width: 650, height: 57),
          backing: NSWindow.BackingStoreType = .buffered,
          defer flag: Bool = false,
-         isPresented: Binding<Bool>) {
-        self._isPresented = isPresented
+         chatVM: ChatVM,
+         modelContext: ModelContext
+    ) {
+        self.chatVM = chatVM
         super.init(contentRect: contentRect,
                    styleMask: [.nonactivatingPanel, .closable, .fullSizeContentView, .titled],
                    backing: backing,
@@ -37,9 +42,24 @@ class QuickPanelWindow<Content: View>: NSPanel {
         standardWindowButton(.zoomButton)?.isHidden = true
         animationBehavior = .none
         
-        let hostingView = NSHostingView(rootView: view()
-            .ignoresSafeArea()
-            .environment(\.floatingPanel, self)
+        let statusId = ChatStatus.quick.id
+        var descriptor = FetchDescriptor<Chat>(
+            predicate: #Predicate { $0.statusId == statusId }
+        )
+        descriptor.fetchLimit = 1
+        
+        let quickSessions = try! modelContext.fetch(descriptor)
+        let chat = quickSessions.first!
+        
+        let hostingView = NSHostingView(rootView: QuickPanelView(
+            chat: chat,
+            updateHeight: { [weak self] newHeight in self?.updateHeight(to: newHeight) },
+            toggleVisibility: { [weak self] in self?.toggleVisibility() }
+        )
+        .ignoresSafeArea()
+        .environment(\.isQuick, true)
+        .environment(chatVM)
+        .modelContainer(modelContext.container)
         )
         
         let visualEffectView = NSVisualEffectView(frame: contentRect)
@@ -64,6 +84,23 @@ class QuickPanelWindow<Content: View>: NSPanel {
         heightConstraint?.isActive = true
         self.contentMinSize = NSSize(width: contentRect.width, height: contentRect.height)
         self.contentMaxSize = NSSize(width: contentRect.width, height: 500)
+        
+        KeyboardShortcuts.onKeyDown(for: .togglePanel) { [weak self] in
+            self?.toggleVisibility()
+            QuickPanelTip().invalidate(reason: .actionPerformed)
+        }
+        
+        self.center()
+    }
+    
+    func toggleVisibility() {
+        if chatVM.isQuickPanelPresented {
+            chatVM.isQuickPanelPresented = false
+            close()
+        } else {
+            chatVM.isQuickPanelPresented = true
+            makeKeyAndOrderFront(nil)
+        }
     }
     
     override func resignMain() {
@@ -72,8 +109,8 @@ class QuickPanelWindow<Content: View>: NSPanel {
     }
     
     override func close() {
+        chatVM.isQuickPanelPresented = false
         super.close()
-        isPresented = false
     }
     
     override var canBecomeKey: Bool {
@@ -109,52 +146,4 @@ class QuickPanelWindow<Content: View>: NSPanel {
         self.contentMaxSize.height = height
     }
 }
-
-fileprivate struct QuickPanelModifierAux<PanelContent: View>: ViewModifier {
-    @Environment(SettingsVM.self) var settingsVM
-    var contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 57)
-    @ViewBuilder let view: () -> PanelContent
-    @State var panel: QuickPanelWindow<PanelContent>?
-    
-    func body(content: Content) -> some View {
-        @Bindable var settingsVM = settingsVM
-        
-        content
-            .onAppear {
-                panel = QuickPanelWindow(view: view, contentRect: contentRect, isPresented: $settingsVM.isQuickPanelPresented)
-                panel?.center()
-                if settingsVM.isQuickPanelPresented {
-                    present()
-                }
-            }.onDisappear {
-                panel?.close()
-                panel = nil
-            }.onChange(of: settingsVM.isQuickPanelPresented) {
-                if settingsVM.isQuickPanelPresented {
-                    present()
-                } else {
-                    panel?.close()
-                }
-            }.onChange(of: settingsVM.isQuickPanelExpanded) {
-                if settingsVM.isQuickPanelExpanded {
-                    panel?.updateHeight(to: 500)
-                } else {
-                    panel?.updateHeight(to: contentRect.height)
-                }
-            }
-    }
-    
-    func present() {
-        panel?.orderFront(nil)
-        panel?.makeKey()
-    }
-}
-
-extension View {
-    func floatingPanel<Content: View>(contentRect: CGRect = CGRect(x: 0, y: 0, width: 650, height: 57),
-                                      @ViewBuilder content: @escaping () -> Content) -> some View {
-        self.modifier(QuickPanelModifierAux(contentRect: contentRect, view: content))
-    }
-}
-
 #endif

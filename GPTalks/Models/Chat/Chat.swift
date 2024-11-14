@@ -172,7 +172,7 @@ final class Chat {
         threads.append(thread)
         scrollBottom()
         
-        try? modelContext?.save()
+//        try? modelContext?.save()
     }
     
     func scrollBottom() {
@@ -187,7 +187,7 @@ final class Chat {
             errorMessage = ""
         }
         modelContext?.delete(thread)
-        try? modelContext?.save()
+//        try? modelContext?.save()
     }
 
     func deleteAllThreads() {
@@ -195,7 +195,7 @@ final class Chat {
         while let thread = threads.popLast() {
             modelContext?.delete(thread)
         }
-        try? modelContext?.save()
+//        try? modelContext?.save()
     }
     
     

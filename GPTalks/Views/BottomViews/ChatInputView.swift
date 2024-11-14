@@ -44,7 +44,9 @@ struct ChatInputView: View {
                 
                 if !chat.inputManager.dataFiles.isEmpty {
                     DataFilesView(dataFiles: chat.inputManager.dataFiles, edge: .leading) { file in
-                        chat.inputManager.dataFiles.removeAll(where: { $0 == file })
+                        withAnimation {
+                            chat.inputManager.dataFiles.removeAll(where: { $0 == file })
+                        }
                     }
                     .padding(.bottom, 5)
                 }

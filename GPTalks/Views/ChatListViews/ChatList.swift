@@ -17,7 +17,7 @@ struct ChatList: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.providers) private var providers
     
-    @Query var chats: [Chat]
+    @Query var chats: [Chat] // see init method below
     
     @FocusState private var isSearchFieldFocused: Bool
     
@@ -28,11 +28,9 @@ struct ChatList: View {
             ChatListCards(source: .chatlist, sessionCount: String(chats.count), imageSessionsCount: "↗")
             
                 Group {
-                    TipView(SwipeActionTip())
-                    
                     TipView(ChatCardTip())
+                    TipView(SwipeActionTip())
                 }
-//                .listRowSeparator(.hidden)
                 .tipCornerRadius(8)
                 .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
 
@@ -64,20 +62,10 @@ struct ChatList: View {
         .searchFocused($isSearchFieldFocused, equals: true)
         #if os(macOS)
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            VStack {
-                TipView(OpenSettingsTip()) { action in
-                    if action.id == "launch-settings" {
-                        openWindow(id: "settings")
-                        OpenSettingsTip().invalidate(reason: .actionPerformed)
-                    }
-                }
-                .frame(height: 60)
-                
-                TipView(QuickPanelTip()) { action in
-                    if action.id == "launch-quick-panel" {
-                        settingsVM.isQuickPanelPresented = true
-                        QuickPanelTip().invalidate(reason: .actionPerformed)
-                    }
+            TipView(QuickPanelTip()) { action in
+                if action.id == "launch-quick-panel" {
+                    chatVM.isQuickPanelPresented = true
+                    QuickPanelTip().invalidate(reason: .actionPerformed)
                 }
             }
             .padding()

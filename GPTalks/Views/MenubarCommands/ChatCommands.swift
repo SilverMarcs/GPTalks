@@ -49,7 +49,7 @@ struct ChatCommands: Commands {
                     }
                 }
                 .keyboardShortcut(.return)
-                .disabled(chatVM.activeChat?.status == .quick)
+//                .disabled(chatVM.activeChat?.status == .quick)
 //                          chatVM.activeChat?.isReplying ?? false) ||
                           
                 Button("Stop Streaming") {

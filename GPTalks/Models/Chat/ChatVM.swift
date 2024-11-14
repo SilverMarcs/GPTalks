@@ -145,4 +145,7 @@ import SwiftUI
             isSearching = false
         }
     }
+    
+    // MARK: - Quick Panel
+    var isQuickPanelPresented: Bool = false
 }

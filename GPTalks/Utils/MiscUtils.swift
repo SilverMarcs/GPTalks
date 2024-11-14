@@ -112,10 +112,6 @@ extension EnvironmentValues {
     @Entry var providers: [Provider] = []
     
     @Entry var isQuick: Bool = false
-
-    #if os(macOS)
-    @Entry var floatingPanel: NSPanel? = nil
-    #endif
 }
 
 // MARK: - Image

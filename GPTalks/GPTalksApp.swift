@@ -6,14 +6,13 @@
 //
 
 import SwiftUI
-import SwiftData
 import TipKit
 
 @main
 struct GPTalksApp: App {
     @State private var chatVM: ChatVM = ChatVM()
     @State private var imageVM: ImageVM = ImageVM()
-    @State private var listStateVM: SettingsVM = SettingsVM()
+    @State private var settingsVM: SettingsVM = SettingsVM()
     
     #if !os(macOS)
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
@@ -24,14 +23,11 @@ struct GPTalksApp: App {
             .commands { MenuCommands() }
             .environment(chatVM)
             .environment(imageVM)
-            .environment(listStateVM)
+            .environment(settingsVM)
             .modelContainer(DatabaseService.shared.container)
     }
     
     init() {
-        let dbService = DatabaseService.shared
-        dbService.initialSetup(modelContext: dbService.container.mainContext)
-
 //        #if DEBUG
 //        try? Tips.resetDatastore()
 //        #endif
@@ -40,7 +36,14 @@ struct GPTalksApp: App {
 
         #if os(macOS)
         AppConfig.shared.hideDock = false
+
+        QuickPanelWindow(
+            chatVM: chatVM,
+            modelContext: DatabaseService.shared.container.mainContext
+        )
+
         #else
+        // TODO: find a way to avoid having chatVM in app delegate
         AppDelegate.shared.chatVM = _chatVM.wrappedValue
         #endif
     }
