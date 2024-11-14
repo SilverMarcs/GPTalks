@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ImageDetail: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ImageVM.self) var imageVM
     @Bindable var session: ImageSession
     @State private var showingInspector: Bool = false
@@ -63,6 +64,8 @@ struct ImageDetail: View {
             }
             .sheet(isPresented: $showingInspector) {
                 ImageInspector(session: session, showingInspector: $showingInspector)
+                    .presentationDetents(horizontalSizeClass == .compact ? [.medium, .large] : [.large])
+                    .presentationDragIndicator(.hidden)
             }
             #endif
         }

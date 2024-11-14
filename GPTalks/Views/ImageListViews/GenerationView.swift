@@ -12,7 +12,7 @@ struct GenerationView: View {
     var generation: Generation
     
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Spacer()
 
@@ -54,6 +54,7 @@ struct GenerationView: View {
                         .padding(.leading, 5)
                         .padding(.top, 1)
                 } else {
+                    #if os(macOS)
                     LazyVGrid(columns: [
                         GridItem(.fixed(CGFloat(imageConfig.imageHeight)), spacing: gridSpacing),
                         GridItem(.fixed(CGFloat(imageConfig.imageHeight)), spacing: gridSpacing),
@@ -77,6 +78,11 @@ struct GenerationView: View {
                             }
                         }
                     }
+                    #else
+                    ForEach(generation.images, id: \.self) { image in
+                        ImageViewerData(data: image)
+                    }
+                    #endif
                 }
             }
         }

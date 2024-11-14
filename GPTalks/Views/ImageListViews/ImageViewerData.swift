@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import Photos
 
 struct ImageViewerData: View {
     @ObservedObject var imageConfig = ImageConfigDefaults.shared
     let data: Data
     
     @State private var selectedFileURL: URL?
-    @State private var isHovering = false
+    @State private var isHovering = true
     @State private var showCheckmark = false
     
     var body: some View {
@@ -43,7 +44,9 @@ struct ImageViewerData: View {
                 .padding(10)
             }
         }
+        #if os(macOS)
         .onHover { isHovering = $0 }
+        #endif
     }
     
     func onTap() {
@@ -53,26 +56,59 @@ struct ImageViewerData: View {
     }
     
     func saveImage() {
-        guard let downloadsDirectory = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first else {
-            print("Unable to access Downloads directory")
-            return
-        }
-        
-        let fileName = UUID().uuidString + "_image.png"
-        let fileURL = downloadsDirectory.appendingPathComponent(fileName)
-        
-        do {
-            try data.write(to: fileURL)
-            print("Image saved to \(fileURL.path)")
+        if imageConfig.saveToPhotos {
+            let image = PlatformImage(data: data)
             
-            showCheckmark = true
-            
-            // Revert back to the original icon after 2 seconds
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                showCheckmark = false
+            PHPhotoLibrary.requestAuthorization { status in
+                guard status == .authorized else {
+                    print("No access to photo library")
+                    return
+                }
+                
+                if let image = image {
+                    PHPhotoLibrary.shared().performChanges({
+                        PHAssetChangeRequest.creationRequestForAsset(from: image)
+                    }) { success, error in
+                        if success {
+                            print("Image saved to Photos")
+                            DispatchQueue.main.async {
+                                showCheckmark = true
+                                
+                                // Revert back to the original icon after 2 seconds
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    showCheckmark = false
+                                }
+                            }
+                        } else if let error = error {
+                            print("Error saving image to Photos: \(error)")
+                        }
+                    }
+                } else {
+                    print("Error creating UIImage from data")
+                }
             }
-        } catch {
-            print("Error saving image: \(error)")
+        } else {
+            guard let downloadsDirectory = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first else {
+                print("Unable to access Downloads directory")
+                return
+            }
+            
+            let fileName = UUID().uuidString + "_image.png"
+            let fileURL = downloadsDirectory.appendingPathComponent(fileName)
+            
+            do {
+                try data.write(to: fileURL)
+                print("Image saved to \(fileURL.path)")
+                
+                showCheckmark = true
+                
+                // Revert back to the original icon after 2 seconds
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    showCheckmark = false
+                }
+            } catch {
+                print("Error saving image: \(error)")
+            }
         }
     }
 }

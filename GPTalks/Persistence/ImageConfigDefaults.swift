@@ -19,4 +19,6 @@ class ImageConfigDefaults: ObservableObject {
     
     @AppStorage("imageWidth") var imageWidth: Int = 250
     @AppStorage("imageHeight") var imageHeight: Int = 250
+    
+    @AppStorage("saveToPhotos") var saveToPhotos = true
 }

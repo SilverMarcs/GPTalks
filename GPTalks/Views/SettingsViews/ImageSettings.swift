@@ -23,6 +23,11 @@ struct ImageSettings: View {
     
     var body: some View {
         Form {
+            Toggle(isOn: $imageConfig.saveToPhotos) {
+                Text("Save to Photos Library")
+                Text("Images will be saved to Downloads folder otherwise")
+            }
+            
             Section {
                 ProviderPicker(provider: $providerDefaults.imageProvider, providers: filteredProviders)
                 
