@@ -65,11 +65,7 @@ struct GenerationView: View {
                                     .frame(width: CGFloat(imageConfig.imageWidth), height: CGFloat(imageConfig.imageHeight))
                                     .background(
                                         RoundedRectangle(cornerRadius: 15)
-                                        #if os(macOS)
-                                            .fill(.background.quinary)
-                                        #else
-                                            .fill(.background.secondary)
-                                        #endif
+                                        .fill(.background.quinary)
                                     )
                             }
                         } else if generation.state == .success {
@@ -79,8 +75,19 @@ struct GenerationView: View {
                         }
                     }
                     #else
-                    ForEach(generation.images, id: \.self) { image in
-                        ImageViewerData(data: image)
+                    if generation.state == .generating {
+                        ForEach(1 ... generation.config.numImages, id: \.self) { image in
+                            ProgressView()
+                                .frame(width: CGFloat(imageConfig.imageWidth), height: CGFloat(imageConfig.imageHeight))
+                                .background(
+                                    RoundedRectangle(cornerRadius: 15)
+                                    .fill(.background.secondary)
+                                )
+                        }
+                    } else if generation.state == .success {
+                        ForEach(generation.images, id: \.self) { image in
+                            ImageViewerData(data: image)
+                        }
                     }
                     #endif
                 }
