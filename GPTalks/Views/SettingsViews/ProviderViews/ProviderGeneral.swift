@@ -23,7 +23,7 @@ struct ProviderGeneral: View {
                 header
             }
             
-            Section("Host Settings") {
+            Section {
                 HStack {
                     TextField(provider.type == .vertex ? "Project ID" : "Host URL", text: $provider.host)
                     
@@ -44,8 +44,12 @@ struct ProviderGeneral: View {
                 if provider.type == .vertex {
                     GoogleSignIn()
                 } else {
-                    SecretInputView(label: "API Key", secret: $provider.apiKey)
+                    SecretInputView(label: provider.type == .github ? "Personal Access Token" : "API Key", secret: $provider.apiKey)
                 }
+            } header: {
+                Text("Host Settings")
+            } footer: {
+                SectionFooterView(text: provider.type.extraInfo)
             }
     
             Section {

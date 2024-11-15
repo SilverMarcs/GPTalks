@@ -149,4 +149,29 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
             OpenAIService.self
         }
     }
+    
+//    var fieldName: String {
+//        switch self {
+//        case .vertex: "Project ID"
+//        default: "Host URL"
+//        }
+    
+    var extraInfo: String {
+        switch self {
+        case .openai: "Get OpenAI API key [here](https://platform.openai.com/settings/organization/api-keys)"
+        case .anthropic: "Get Anthropic API key [here](https://console.anthropic.com/settings/keys)"
+        case .google: "Get Google API key [here](https://aistudio.google.com/app/apikey)"
+        case .vertex: "Enable Vertex AI API and find project ID [here](https://console.cloud.google.com)"
+        case .ollama: "Download and setup Ollama from [here](https://ollama.com/download/mac)"
+        case .lmstudio: "Download and setup LMStudio from [here](https://lmstudio.ai/download)"
+        case .xai: "Get xAI API key [here](https://console.x.ai) and click on key icon"
+        case .groq: "Get Groq API key [here](https://console.groq.com/keys)"
+        case .openrouter: "Get OpenRouter API key [here](https://openrouter.ai/settings/keys)"
+        case .mistral: "Get Mistral API key [here](https://console.mistral.ai/api-keys)"
+        case .perplexity: "Get Perplexity API key [here](https://www.perplexity.ai/settings/api)"
+        case .togetherai: "Get TogetherAI API key [here](https://api.together.ai/settings/api-keys)"
+        case .github: "Get Github Personal Access Token key [here](https://github.com/settings/tokens)"
+        case .custom: "Enter custom API key and host"
+        }
+    }
 }

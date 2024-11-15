@@ -23,16 +23,7 @@ struct GoogleSearchSettings: View {
         } header: {
             Text("Secrets")
         } footer: {
-            #if os(macOS)
-            HStack {
-                Text("Follow [this](https://coda.io/@jon-dallas/google-image-search-pack-example/search-engine-id-and-google-api-key-3) guide to get your credentials")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Spacer()
-            }
-            #else
-            Text("Follow [this](https://coda.io/@jon-dallas/google-image-search-pack-example/search-engine-id-and-google-api-key-3) guide to get your credentials")
-            #endif
+            SectionFooterView(text: "Follow [this](https://coda.io/@jon-dallas/google-image-search-pack-example/search-engine-id-and-google-api-key-3) guide to get your credentials")
         }
         
         Section("Schema") {

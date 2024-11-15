@@ -20,7 +20,6 @@ class Provider {
     var apiKey: String = ""
     
     var isPersistent: Bool = false  // added by the app by default and are not deletable
-    var extraInfo: String = "" // TODO: add more info about the provider
     var color: String = "#00947A"
     var isEnabled: Bool = true
     
