@@ -44,7 +44,7 @@ struct GeneralSettings: View {
             Section("Misc") {
                 Toggle(isOn: $config.enterToSend) {
                     Text("Enter to send message")
-                    Text("Enabling this makes input area very laggy and is not recommended.")
+                    Text("Enabling this makes input area laggy and is not recommended.")
                 }
             }
         }
