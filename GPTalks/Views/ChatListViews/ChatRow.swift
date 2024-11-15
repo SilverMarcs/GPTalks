@@ -122,18 +122,20 @@ struct ChatRow: View {
 
     @ViewBuilder
     var swipeActionsLeading: some View {
-        Button {
-            SwipeActionTip().invalidate(reason: .actionPerformed)
-
-            if sessionVM.selections.contains(session) {
-                sessionVM.selections.remove(session)
+        if session.status != .starred {
+            Button {
+                SwipeActionTip().invalidate(reason: .actionPerformed)
+                
+                if sessionVM.selections.contains(session) {
+                    sessionVM.selections.remove(session)
+                }
+                
+                session.status = (session.status == .archived) ? .normal : .archived
+            } label: {
+                Label("Archive", systemImage: session.status == .archived ? "tray.and.arrow.up.fill" : "archivebox")
             }
-
-            session.status = (session.status == .archived) ? .normal : .archived
-        } label: {
-            Label("Archive", systemImage: session.status == .archived ? "tray.and.arrow.up.fill" : "archivebox")
+            .tint(session.status == .archived ? .blue : .gray)
         }
-        .tint(session.status == .archived ? .blue : .gray)
         
         if session.status != .archived {
             Button {

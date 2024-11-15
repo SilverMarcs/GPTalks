@@ -13,7 +13,7 @@ struct ImageInputView: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 15) {
-            TextField("Prompt", text: $session.prompt)
+            TextField("Prompt", text: $session.prompt, axis: .vertical)
                 .focused($isFocused, equals: .imageInput)
                 .onSubmit( { sendInput() } )
                 .textFieldStyle(.plain)

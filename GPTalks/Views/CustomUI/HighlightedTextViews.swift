@@ -24,7 +24,7 @@ struct HighlightedText: View {
     
     @ViewBuilder
     var comprised: some View {
-        if let highlightedText, highlightedText.count >= 3 {
+        if let highlightedText, highlightedText.count >= 2 {
             AttributedText(
                 text: text,
                 highlightText: highlightedText
