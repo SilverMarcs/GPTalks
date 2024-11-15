@@ -137,7 +137,9 @@ struct ChatInputView: View {
     
     var cancelEditing: some View {
         Button {
-            chat.inputManager.reset()
+            withAnimation {
+                chat.inputManager.reset()
+            }
         } label: {
             Image(systemName: "xmark.circle.fill")
                 .font(.title).fontWeight(.semibold)

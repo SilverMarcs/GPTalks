@@ -18,16 +18,12 @@ struct CommonInputStyling: ViewModifier {
             .padding(.horizontal)
             .padding(.top, verticalPadding - 5)
             .padding(.bottom, verticalPadding)
-            #if os(macOS)
+            #if os(macOS) || os(visionOS)
             .background(.bar)
             #else
             .background(.background)
-            #if os(visionOS)
-            .background(.regularMaterial)
-            #endif
             #endif
             .ignoresSafeArea()
-        
     }
     
     private var verticalPadding: CGFloat {

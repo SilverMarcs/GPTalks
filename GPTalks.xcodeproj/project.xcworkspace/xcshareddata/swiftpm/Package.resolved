@@ -1,15 +1,6 @@
 {
-  "originHash" : "93185ae2df416422866f4bcd675cd406c3c9f562f1ae2d4ac3c27ec13e962287",
+  "originHash" : "69c39523ac0471922b625cc56b8722155cfd2afd660bdd4f5ff67335b5b87714",
   "pins" : [
-    {
-      "identity" : "googlegenerativeai",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/GoogleGenerativeAI",
-      "state" : {
-        "branch" : "main",
-        "revision" : "f17e1750c78e85254ad40d6be1f43aca41adf405"
-      }
-    },
     {
       "identity" : "keyboardshortcuts",
       "kind" : "remoteSourceControl",
@@ -17,33 +8,6 @@
       "state" : {
         "revision" : "e6b60117ec266e1e5d059f7f34815144f9762b36",
         "version" : "2.0.2"
-      }
-    },
-    {
-      "identity" : "openai",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/OpenAI",
-      "state" : {
-        "branch" : "main",
-        "revision" : "d83f91da36e87991d4c61463cf721ea56b254ed5"
-      }
-    },
-    {
-      "identity" : "swiftanthropic",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/SwiftAnthropic",
-      "state" : {
-        "branch" : "main",
-        "revision" : "95524ed1d36b5de6e051cc82db95962959ff6efe"
-      }
-    },
-    {
-      "identity" : "swiftmarkdownview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/SwiftMarkdownView",
-      "state" : {
-        "branch" : "main",
-        "revision" : "e2704f56e6b191d14b112be3be31a96920d9abdd"
       }
     }
   ],

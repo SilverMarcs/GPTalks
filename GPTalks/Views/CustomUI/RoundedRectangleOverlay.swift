@@ -27,10 +27,12 @@ struct RoundedRectangleOverlayModifier: ViewModifier {
 //            )
             .overlay(
                 RoundedRectangle(cornerRadius: radius)
-                #if os(iOS)
-                    .stroke(colorScheme == .dark ? Color(.tertiarySystemGroupedBackground) : Color(.tertiaryLabel), lineWidth: 1)
-                #else
+                #if os(macOS)
                     .stroke(.tertiary, lineWidth: 0.6)
+                #elseif os(visionOS)
+                    .stroke(Color(.quaternaryLabel), lineWidth: 1)
+                #else
+                    .stroke(colorScheme == .dark ? Color(.tertiarySystemGroupedBackground) : Color(.tertiaryLabel), lineWidth: 1)
                 #endif
                     .opacity(opacity)
             )

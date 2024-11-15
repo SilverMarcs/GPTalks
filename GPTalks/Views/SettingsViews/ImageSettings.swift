@@ -28,15 +28,11 @@ struct ImageSettings: View {
                 Text("Images will be saved to Downloads folder otherwise")
             }
             
-            Section {
+            Section("Models") {
                 ProviderPicker(provider: $providerDefaults.imageProvider, providers: filteredProviders)
                 
                 ModelPicker(model: $providerDefaults.imageProvider.imageModel, models: providerDefaults.imageProvider.imageModels, label: "Model")
                 
-            } header: {
-                Text("Models")
-            } footer: {
-                SectionFooterView(text: "Check Plugin Settings to configure models for plugin generations")
             }
             
             Section(header: Text("Default Parameters")) {

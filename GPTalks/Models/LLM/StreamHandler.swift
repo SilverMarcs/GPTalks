@@ -74,7 +74,7 @@ struct StreamHandler {
             assistant.isReplying = false
             session.scrollBottom()
             session.hasUserScrolled = false
-//            try? assistant.modelContext?.save()
+            try? assistant.modelContext?.save()
         }
     }
 
@@ -95,7 +95,7 @@ struct StreamHandler {
         assistant.isReplying = false
         session.scrollBottom()
         session.hasUserScrolled = false
-//        try? assistant.modelContext?.save()
+        try? assistant.modelContext?.save()
     }
 
     @MainActor
