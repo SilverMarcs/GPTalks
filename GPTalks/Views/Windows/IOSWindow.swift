@@ -23,6 +23,7 @@ struct IOSWindow: Scene {
                     switch listStateVM.listState {
                     case .chats:
                         ChatList(status: chatVM.statusFilter)
+                            .searchable(text: $chatVM.searchText)
                     case .images:
                         ImageList()
                     }

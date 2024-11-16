@@ -32,7 +32,6 @@ struct ImageSettings: View {
                 ProviderPicker(provider: $providerDefaults.imageProvider, providers: filteredProviders)
                 
                 ModelPicker(model: $providerDefaults.imageProvider.imageModel, models: providerDefaults.imageProvider.imageModels, label: "Model")
-                
             }
             
             Section(header: Text("Default Parameters")) {

@@ -12,6 +12,7 @@ import SwiftUI
 import SwiftData
 
 struct ChatListCards: View {
+    @Environment(\.isSearching) private var isSearching
     @Environment(\.openWindow) var openWindow
     @Environment(\.dismissWindow) var dismissWindow
     @Environment(ChatVM.self) var chatVM
@@ -38,10 +39,13 @@ struct ChatListCards: View {
     var content: some View {
         HStack(spacing: spacing) {
             ListCard(
-                icon: "tray.circle.fill", iconColor: .blue, title: chatVM.statusFilter.name,
+                icon: chatVM.statusFilter.systemImageName, iconColor: chatVM.statusFilter.iconColor, title: isSearching ? "Searching" : chatVM.statusFilter.name,
                 count: sessionCount) {
                     handleChatPress()
                 }
+//                .transition(.symbolEffect(.automatic))
+                .contentTransition(.symbolEffect(.replace.offUp))
+                .disabled(isSearching)
             
             ListCard(
                 icon: "photo.circle.fill", iconColor: .indigo, title: "Images",

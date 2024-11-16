@@ -107,8 +107,6 @@ struct RuntimeError: LocalizedError {
 
 // MARK: - Environment Values
 extension EnvironmentValues {
-    @Entry var isSearch: Bool = false
-
     @Entry var providers: [Provider] = []
     
     @Entry var isQuick: Bool = false

@@ -12,14 +12,13 @@ import TipKit
 struct ChatList: View {
     @Environment(\.openWindow) private var openWindow
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.isSearching) private var isSearching
     @Environment(ChatVM.self) var chatVM
     @Environment(SettingsVM.self) var settingsVM
     @Environment(\.modelContext) var modelContext
     @Environment(\.providers) private var providers
     
     @Query var chats: [Chat] // see init method below
-    
-    @FocusState private var isSearchFieldFocused: FocusedField?
     
     var body: some View {
         @Bindable var chatVM = chatVM
@@ -34,17 +33,28 @@ struct ChatList: View {
                 .tipCornerRadius(8)
                 .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
 
-            
-            ForEach(chats) { session in
-                ChatRow(session: session)
-                    .tag(session)
-                    .deleteDisabled(session.status == .starred)
-                    #if os(macOS)
-                    .listRowSeparator(.visible)
-                    .listRowSeparatorTint(Color.gray.opacity(0.2))
-                    #endif
+            if isSearching {
+                Text("Press Enter to search")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .bold()
+                    .listRowSeparator(.hidden)
             }
-            .onDelete(perform: deleteItems)
+            
+            if isSearching && chats.isEmpty {
+                ContentUnavailableView.search
+            } else {
+                ForEach(chats) { session in
+                    ChatRow(session: session)
+                        .tag(session)
+                        .deleteDisabled(session.status == .starred)
+                        #if os(macOS)
+                        .listRowSeparator(.visible)
+                        .listRowSeparatorTint(Color.gray.opacity(0.2))
+                        #endif
+                }
+                .onDelete(perform: deleteItems)
+            }
         }
         .navigationTitle("Chats")
         .toolbar {
@@ -55,8 +65,6 @@ struct ChatList: View {
                 chatVM.selections = [first]
             }
         }
-        .searchable(text: $chatVM.searchText, placement: searchPlacement)
-        .searchFocused($isSearchFieldFocused, equals: .searchBox)
         #if os(macOS)
         .safeAreaInset(edge: .bottom, spacing: 0) {
             TipView(QuickPanelTip()) { action in
@@ -68,14 +76,6 @@ struct ChatList: View {
             }
             .padding()
         }
-        #endif
-    }
-    
-    private var searchPlacement: SearchFieldPlacement {
-        #if os(macOS)
-        return .sidebar
-        #else
-        return .automatic
         #endif
     }
 
@@ -100,8 +100,6 @@ struct ChatList: View {
                modelContext.delete(chat)
            }
        }
-        
-//        try? modelContext.save()
     }
     
     @ToolbarContentBuilder
@@ -133,41 +131,63 @@ struct ChatList: View {
             .menuIndicator(.hidden)
             .popoverTip(NewChatTip())
         }
-        
-        #if os(macOS)
-        ToolbarItem(placement: .keyboard) {
-            Button("Search") {
-                isSearchFieldFocused = .searchBox
-            }
-            .keyboardShortcut("f")
-        }
-        #endif
     }
     
-    init(status: ChatStatus) {
+    init(status: ChatStatus, searchText: String, searchTokens: [SearchToken]) {
         let statusId = status.id
         let normalId = ChatStatus.normal.id
         let starredId = ChatStatus.starred.id
         
         let sortDescriptor = SortDescriptor(\Chat.date, order: .reverse)
         
-        let predicate: Predicate<Chat>
+        let statusPredicate: Predicate<Chat>
         if status == .normal {
-            predicate = #Predicate<Chat> {
+            statusPredicate = #Predicate<Chat> {
                 $0.statusId == normalId || $0.statusId == starredId
             }
         } else {
-            predicate = #Predicate<Chat> {
+            statusPredicate = #Predicate<Chat> {
                 $0.statusId == statusId
             }
         }
         
-        _chats = Query(filter: predicate, sort: [sortDescriptor], animation: .default)
+        let searchPredicate: Predicate<Chat>
+        if searchText.count >= 2 {
+            if searchTokens.isEmpty || (searchTokens.contains(.title) && searchTokens.contains(.messages)) {
+                searchPredicate = #Predicate<Chat> {
+                    $0.title.localizedStandardContains(searchText) ||
+                    $0.unorderedThreads.contains {
+                        $0.content.localizedStandardContains(searchText)
+                    }
+                }
+            } else if searchTokens.contains(.title) {
+                searchPredicate = #Predicate<Chat> {
+                    $0.title.localizedStandardContains(searchText)
+                }
+            } else if searchTokens.contains(.messages) {
+                searchPredicate = #Predicate<Chat> {
+                    $0.unorderedThreads.contains {
+                        $0.content.localizedStandardContains(searchText)
+                    }
+                }
+            } else {
+                searchPredicate = #Predicate<Chat> { _ in true }
+            }
+            
+            // When searching, we ignore the status filter
+            _chats = Query(filter: searchPredicate, sort: [sortDescriptor], animation: .default)
+        } else {
+            // When not searching, we apply the status filter
+            let combinedPredicate = #Predicate<Chat> {
+                statusPredicate.evaluate($0)
+            }
+            _chats = Query(filter: combinedPredicate, sort: [sortDescriptor], animation: .default)
+        }
     }
 }
 
 #Preview {
-    ChatList(status: .normal)
+    ChatList(status: .normal, searchText: "", searchTokens: [])
     .frame(width: 400)
     .environment(ChatVM())
     .environment(SettingsVM())

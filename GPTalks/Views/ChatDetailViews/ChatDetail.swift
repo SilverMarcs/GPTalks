@@ -15,6 +15,7 @@ struct ChatDetail: View {
     @Environment(\.modelContext) var modelContext
     @Environment(ChatVM.self) private var chatVM
     @ObservedObject var config: AppConfig = AppConfig.shared
+    @FocusState var isFocused: FocusedField?
     
     @Bindable var chat: Chat
     

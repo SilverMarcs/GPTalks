@@ -89,6 +89,7 @@ import SwiftUI
     
     // MARK: - Search
     var searchText: String = ""
+    var serchTokens = [SearchToken]()
     
     // MARK: - Quick Panel
     var isQuickPanelPresented: Bool = false
