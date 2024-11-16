@@ -6,10 +6,23 @@
 //
 
 import SwiftUI
+import SwiftMarkdownView
 
 struct GuidesSettings: View {
-    @State var isExpanded = true
-    
+    @State private var isExpanded = true
+    @State private var searchText = ""
+
+    var filteredGuides: [Guide] {
+        if searchText.isEmpty {
+            return Guide.guides
+        } else {
+            return Guide.guides.filter { guide in
+                guide.title.localizedCaseInsensitiveContains(searchText) ||
+                guide.content.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+    }
+
     var body: some View {
         Form {
             #if os(macOS)
@@ -26,16 +39,30 @@ struct GuidesSettings: View {
             }
             #endif
             
-            ForEach(Guide.guides) { guide in
-                Section {   
+            ForEach(filteredGuides) { guide in
+                Section {
                     DisclosureGroup {
-                        MarkdownView(content: guide.content)
+                        SwiftMarkdownView(guide.content)
+                            .markdownBaseURL("GPTalks Guide")
+                            .markdownHighlightString(searchText)
+                            .renderSkeleton(false)
+                        
                     } label: {
-                        Text(guide.title)
-                            .font(.title3.bold())
+                        HStack {
+                            Text(guide.title)
+                                .font(.title3.bold())
+                            
+                            Spacer()
+                            
+                            Image(systemName: guide.icon)
+                        }
                     }
                 }
             }
+        }
+        .searchable(text: $searchText, placement: .toolbar, prompt: "Search Guides")
+        .onChange(of: searchText) {
+            isExpanded = searchText.isEmpty
         }
         .formStyle(.grouped)
         .navigationTitle("Guides")

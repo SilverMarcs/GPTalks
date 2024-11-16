@@ -60,8 +60,8 @@ struct ChatContentView: View {
         }
     }
     
-    var filteredTokens: [SearchToken] {
-        let remainingTokens = SearchToken.allCases.filter { !chatVM.serchTokens.contains($0) }
+    var filteredTokens: [ChatSearchToken] {
+        let remainingTokens = ChatSearchToken.allCases.filter { !chatVM.serchTokens.contains($0) }
         return localSearchText.isEmpty
             ? remainingTokens
             : remainingTokens.filter { $0.name.lowercased().hasPrefix(localSearchText.lowercased()) }

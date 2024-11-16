@@ -135,7 +135,7 @@ struct ChatList: View {
         }
     }
     
-    init(status: ChatStatus, searchText: String, searchTokens: [SearchToken]) {
+    init(status: ChatStatus, searchText: String, searchTokens: [ChatSearchToken]) {
         let statusId = status.id
         let normalId = ChatStatus.normal.id
         let starredId = ChatStatus.starred.id

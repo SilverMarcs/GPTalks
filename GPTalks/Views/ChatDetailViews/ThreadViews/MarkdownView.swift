@@ -17,7 +17,7 @@ struct MarkdownView: View {
     var body: some View {
         SwiftMarkdownView(content)
             .markdownBaseURL("GPTalks Web Content")
-            .markdownHighlightString(chatVM.searchText)
+//            .markdownHighlightString(chatVM.searchText)
             .markdownFontSize(CGFloat(config.fontSize))
             .renderSkeleton(config.renderSkeleton)
             .codeBlockTheme(config.codeBlockTheme)

@@ -19,6 +19,7 @@ struct WindowScenes: Scene {
             ImageWindow()
             SettingsWindow()
             AboutWindow()
+            HelpWindow()
             #else
             IOSWindow()
             #endif

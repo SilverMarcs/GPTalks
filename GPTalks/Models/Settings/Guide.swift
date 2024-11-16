@@ -10,11 +10,12 @@ import Foundation
 struct Guide: Identifiable {
     let id = UUID()
     let title: String
+    let icon: String
     let content: String
     
     static let guides = [
         
-        Guide(title: "Quick Panel", content: """
+        Guide(title: "Quick Panel", icon: "bolt.fill",  content: """
         _This feature is only available on macOS_
 
         The app features a Spotlight-like floating panel for interacting with LLMs. To configure:
@@ -24,7 +25,7 @@ struct Guide: Identifiable {
         3. Additional settings, such as the Quick Panel's separate default provider and model, can also be configured in the same section.
         """),
         
-        Guide(title: "Plugins", content: """
+        Guide(title: "Plugins", icon: "hammer.fill", content: """
         Extend the capabilities of Language Learning Models (LLMs) with these powerful plugins:
 
         1. **URLScrape Plugin**
@@ -43,7 +44,7 @@ struct Guide: Identifiable {
         > Make sure the plugins are enabled in **Settings > Plugins** in order to use them. They are not enabled by default
         """),
         
-        Guide(title: "Google Search Plugin", content: """
+        Guide(title: "Google Search Plugin", icon: "safari.fill", content: """
         ### How to Create a Programmable Search Engine
 
         1. Go to [Programmable Search Engine](https://programmablesearchengine.google.com/controlpanel/create) (Be sure you’re logged into Google)
@@ -71,7 +72,7 @@ struct Guide: Identifiable {
         > Note that google programmable search only returns search result title and a small snippet and not the full content of the page. The URLScrape plugin may used to get the full content of the page.
         """),
         
-        Guide(title: "Adding New Providers", content: """
+        Guide(title: "Adding New Providers", icon: "cpu.fill", content: """
 
         1. Navigate to **Settings > Providers**.
         2. Click the **Add** button to include any available providers.
@@ -80,7 +81,7 @@ struct Guide: Identifiable {
         4. Check the **Models** tab at the top of the provider page. Add new models or refresh the page to see if more models are available from the provider.
         """),
         
-        Guide(title: "VertexAI Instructions", content: """
+        Guide(title: "VertexAI Instructions", icon: "brain.fill", content: """
         The app currently only supports **Anthropic Claude** providers for **VertexAI**.
 
         1. Make sure you have credits in Google Cloud with the models enabled.
@@ -90,7 +91,7 @@ struct Guide: Identifiable {
         _More providers are planned to be added later_
         """),
         
-        Guide(title: "Adding Files", content: """
+        Guide(title: "Adding Files", icon: "paperclip.circle.fill", content: """
         This app offers native support for various file types, while others require specific provider models or may not be supported at all.  Here's a breakdown:
 
         * **Text Files:** Most text file content can be directly pasted and processed within the app.
