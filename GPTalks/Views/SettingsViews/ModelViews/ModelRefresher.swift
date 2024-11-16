@@ -32,45 +32,47 @@ struct ModelRefresher: View {
                     }
             } else {
                 Form {
-                    List {
-                        ForEach(filteredModels) { selectableModel in
-                            HStack {
-                                Toggle(isOn: $refreshedModels[refreshedModels.firstIndex(where: { $0.id == selectableModel.id })!].isSelected) {
-                                    VStack(alignment: .leading) {
-                                        Text(selectableModel.code)
-                                        Text(selectableModel.name)
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
+                    if filteredModels.isEmpty {
+                        ContentUnavailableView.search
+                    } else {
+                        List {
+                            ForEach(filteredModels) { selectableModel in
+                                HStack {
+                                    Toggle(isOn: $refreshedModels[refreshedModels.firstIndex(where: { $0.id == selectableModel.id })!].isSelected) {
+                                        VStack(alignment: .leading) {
+                                            Text(selectableModel.code)
+                                            Text(selectableModel.name)
+                                                .font(.subheadline)
+                                                .foregroundColor(.secondary)
+                                        }
                                     }
-                                }
-
-                                Spacer()
-
-                                Picker("Model Type", selection: $refreshedModels[refreshedModels.firstIndex(where: { $0.id == selectableModel.id })!].selectedModelType) {
-                                    ForEach(ModelType.allCases, id: \.self) { option in
-                                        Image(systemName: option.icon)
-                                            .tag(option)
+                                    
+                                    Spacer()
+                                    
+                                    Picker("Model Type", selection: $refreshedModels[refreshedModels.firstIndex(where: { $0.id == selectableModel.id })!].selectedModelType) {
+                                        ForEach(ModelType.allCases, id: \.self) { option in
+                                            Image(systemName: option.icon)
+                                                .tag(option)
+                                        }
                                     }
+                                    .onChange(of: selectableModel.selectedModelType) {
+                                        refreshedModels[refreshedModels.firstIndex(where: { $0.id == selectableModel.id })!].isSelected = true
+                                    }
+                                    .labelsHidden()
+                                    .pickerStyle(.segmented)
+                                    .fixedSize()
                                 }
-                                .onChange(of: selectableModel.selectedModelType) {
-                                    refreshedModels[refreshedModels.firstIndex(where: { $0.id == selectableModel.id })!].isSelected = true
-                                }
-                                .labelsHidden()
-                                .pickerStyle(.segmented)
-                                .fixedSize()
                             }
                         }
                     }
-                    #if os(macOS)
-                    .searchable(text: $searchText, prompt: "Search models")
-                    #else
-                    .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search models")
-                    .navigationTitle("Add Models")
-                    .toolbarTitleDisplayMode(.inline)
-                    #endif
                 }
                 #if os(macOS)
                 .padding(.top)
+                .searchable(text: $searchText, prompt: "Search models")
+                #else
+                .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search models")
+                .navigationTitle("Add Models")
+                .toolbarTitleDisplayMode(.inline)
                 #endif
                 .toolbarTitleDisplayMode(.inline)
                 .toolbar {
@@ -91,7 +93,7 @@ struct ModelRefresher: View {
         }
         .formStyle(.grouped)
         #if os(macOS)
-        .frame(width: 400, height: 450)
+        .frame(width: 400, height: isLoading ? 488 : 450)
         #endif
     }
 

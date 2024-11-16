@@ -82,6 +82,28 @@ struct ChatDetail: View {
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)) { _ in
                 scrollToBottom(proxy: proxy, delay: 0.1)
             }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                if !chatVM.searchText.isEmpty {
+                    
+                    HStack {
+                        Text("Searching: \(chatVM.searchText)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .bold()
+                        
+                        Spacer()
+                        
+                        Button("Clear") {
+                            chatVM.searchText = ""
+                        }
+                        .font(.subheadline)
+                        .foregroundStyle(.accent)
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 5)
+                    .background(.bar)
+                }
+            }
             #if !os(visionOS)
             .scrollDismissesKeyboard(.immediately)
             #endif

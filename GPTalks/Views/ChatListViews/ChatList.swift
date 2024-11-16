@@ -33,6 +33,7 @@ struct ChatList: View {
                 .tipCornerRadius(8)
                 .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
 
+            #if os(macOS)
             if isSearching {
                 Text("Press Enter to search")
                     .font(.caption)
@@ -40,6 +41,7 @@ struct ChatList: View {
                     .bold()
                     .listRowSeparator(.hidden)
             }
+            #endif
             
             if isSearching && chats.isEmpty {
                 ContentUnavailableView.search

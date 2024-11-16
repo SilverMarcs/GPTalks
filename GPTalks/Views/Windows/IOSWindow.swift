@@ -17,12 +17,14 @@ struct IOSWindow: Scene {
     @State private var showSettings = false
     
     var body: some Scene {
+        @Bindable var chatVM = chatVM
+        
         WindowGroup("Chats", id: "chats") {
             NavigationSplitView {
                 Group {
                     switch listStateVM.listState {
                     case .chats:
-                        ChatList(status: chatVM.statusFilter)
+                        ChatList(status: chatVM.statusFilter, searchText: chatVM.searchText, searchTokens: [])
                             .searchable(text: $chatVM.searchText)
                     case .images:
                         ImageList()
