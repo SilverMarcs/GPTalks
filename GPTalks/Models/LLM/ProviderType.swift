@@ -96,7 +96,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .anthropic: "api.anthropic.com"
         case .google: "generativelanguage.googleapis.com"
         case .vertex: ""
-        case .ollama: "ollamahost:11434"
+        case .ollama: "localhost:11434"
         case .github: "models.inference.ai.azure.com"
         case .perplexity: "api.perplexity.ai"
         case .groq: "api.groq.com/openai"
