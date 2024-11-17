@@ -67,18 +67,6 @@ struct ChatList: View {
                 chatVM.selections = [first]
             }
         }
-        #if os(macOS)
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            TipView(QuickPanelTip()) { action in
-                if action.id == "launch-quick-panel" {
-                    openWindow(id: "settings")
-                    settingsVM.settingsTab = .quickPanel
-                    QuickPanelTip().invalidate(reason: .actionPerformed)
-                }
-            }
-            .padding()
-        }
-        #endif
     }
 
     private func deleteItems(offsets: IndexSet) {
@@ -111,16 +99,10 @@ struct ChatList: View {
         ToolbarItem {
             Menu {
                 ForEach(providers) { provider in
-                    Menu {
-                        ForEach(provider.chatModels) { model in
-                            Button(model.name) {
-                                Task {
-                                    await chatVM.createNewSession(provider: provider, model: model)
-                                }
-                            }
+                    Button(provider.name) {
+                        Task {
+                            await chatVM.createNewSession(provider: provider)
                         }
-                    } label: {
-                        Label(provider.name, systemImage: "cpu")
                     }
                 }
             } label: {

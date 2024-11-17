@@ -20,6 +20,7 @@ struct PlusButtonTip: Tip {
         MaxDisplayCount(3)
     }
 }
+
 struct SwipeActionTip: Tip {
     var title: Text {
         Text("Swipe left or right on list row for actions")
@@ -44,11 +45,11 @@ struct ChatCardTip: Tip {
     }
 }
 
-struct GenerateTitleTip: Tip {
-    var title: Text {
-        Text("Generate Title")
-    }
-}
+//struct GenerateTitleTip: Tip {
+//    var title: Text {
+//        Text("Generate Title")
+//    }
+//}
 
 struct GoogleCodeExecutionTip: Tip {
     var title: Text {
@@ -89,43 +90,43 @@ struct NewChatTip: Tip {
 //    }
 }
 
-struct OpenSettingsTip: Tip {
-    var title: Text {
-        Text("Configure more in settings")
-    }
-    
-    var actions: [Action] {
-        Action(id: "launch-settings", title: "Settings (⌘ + ,)")
-    }
-    
-    var options: [Option] {
-        MaxDisplayCount(3)
-    }
-}
+//struct OpenSettingsTip: Tip {
+//    var title: Text {
+//        Text("Configure more in settings")
+//    }
+//    
+//    var actions: [Action] {
+//        Action(id: "launch-settings", title: "Settings (⌘ + ,)")
+//    }
+//    
+//    var options: [Option] {
+//        MaxDisplayCount(3)
+//    }
+//}
 
-struct QuickPanelTip: Tip {
-    var title: Text {
-        Text("Launch Floating Chat Window")
-    }
-    
-    var actions: [Action] {
-        Action(id: "launch-quick-panel", title: "Open Settings")
-    }
-}
+//struct QuickPanelTip: Tip {
+//    var title: Text {
+//        Text("Launch Floating Chat Window")
+//    }
+//    
+//    var actions: [Action] {
+//        Action(id: "launch-quick-panel", title: "Open Settings")
+//    }
+//}
 
-struct ChatInspectorTip: Tip {
-    var title: Text {
-        Text("Tap Top left icon of the page to configure chat options like plugins, temperature, max tokens etc")
-    }
-    
-    var options: [Option] {
-        MaxDisplayCount(3)
-    }
-}
+//struct ChatInspectorTip: Tip {
+//    var title: Text {
+//        Text("Tap Top left icon of the page to configure chat options like plugins, temperature, max tokens etc")
+//    }
+//    
+//    var options: [Option] {
+//        MaxDisplayCount(3)
+//    }
+//}
 
 struct ChatInspectorToolsTip: Tip {
     var title: Text {
-        Text("Tap Advanced for configuring lugins")
+        Text("Tap Advanced for configuring plugins")
     }
     
     var options: [Option] {

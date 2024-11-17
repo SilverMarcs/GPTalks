@@ -66,13 +66,11 @@ struct ModelRefresher: View {
                         }
                     }
                 }
+                .searchable(text: $searchText, prompt: "Search models")
                 #if os(macOS)
                 .padding(.top)
-                .searchable(text: $searchText, prompt: "Search models")
                 #else
-                .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search models")
                 .navigationTitle("Add Models")
-                .toolbarTitleDisplayMode(.inline)
                 #endif
                 .toolbarTitleDisplayMode(.inline)
                 .toolbar {
@@ -93,7 +91,7 @@ struct ModelRefresher: View {
         }
         .formStyle(.grouped)
         #if os(macOS)
-        .frame(width: 400, height: isLoading ? 488 : 450)
+        .frame(width: 400, height: isLoading ? 488 : 450) // the searchbar and toolbar in the list take extra space
         #endif
     }
 

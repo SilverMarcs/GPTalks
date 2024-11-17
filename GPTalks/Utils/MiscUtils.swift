@@ -41,10 +41,11 @@ extension KeyboardShortcuts.Name {
 // MARK: - Platform Color
 #if os(macOS)
 typealias PlatformColor = NSColor
+typealias PlatformFont = NSFont
 #else
 typealias PlatformColor = UIColor
+typealias PlatformFont = UIFont
 #endif
-
 // MARK: - Numbers
 
 extension Float {

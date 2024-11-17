@@ -21,7 +21,11 @@ struct MarkdownView: View {
             .markdownFontSize(CGFloat(config.fontSize))
             .renderSkeleton(config.renderSkeleton)
             .codeBlockTheme(config.codeBlockTheme)
+        
 //        Text(LocalizedStringKey(content)) // swiftui `native` markdown but its pretty bad
+        
+//        AttributedText(text: content, highlightText: "") // uses my basic markdown parser
+//            .textSelection(.enabled)
     }
 }
 

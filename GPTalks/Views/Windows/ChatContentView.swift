@@ -13,6 +13,8 @@ struct ChatContentView: View {
     @Environment(\.isSearching) private var isSearching
     @Environment(ChatVM.self) var chatVM
     
+    @ObservedObject var config = AppConfig.shared
+    
     @State private var localSearchText = ""
     @FocusState private var isSearchFieldFocused: FocusedField?
     
@@ -31,6 +33,9 @@ struct ChatContentView: View {
                     .font(.title)
                     .fullScreenBackground()
             }
+        }
+        .sheet(isPresented: .constant(!config.hasCompletedOnboarding)) {
+            OnboardingView()
         }
         .searchable(text: $localSearchText, tokens: $chatVM.serchTokens, placement: searchPlacement) { token in
             Text(token.name)

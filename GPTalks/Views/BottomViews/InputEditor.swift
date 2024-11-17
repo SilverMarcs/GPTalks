@@ -34,7 +34,7 @@ struct InputEditor: View {
                 ZStack(alignment: .leading) {
                     if chat.inputManager.prompt.isEmpty {
                         Text(placeHolder)
-                            .padding(.leading, 5)
+                            .padding(.leading, 3)
                             .foregroundStyle(.placeholder)
                     }
                     

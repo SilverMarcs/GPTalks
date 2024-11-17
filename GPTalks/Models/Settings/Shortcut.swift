@@ -5,6 +5,7 @@
 //  Created by Zabir Raihan on 08/11/2024.
 //
 
+import Foundation
 
 struct Shortcut {
     let key: String
@@ -13,6 +14,7 @@ struct Shortcut {
     static let shortcuts = [
         Shortcut(key: "⌘ + N", action: "New Chat"),
         Shortcut(key: "⌘ + Enter", action: "Send Prompt"),
+        Shortcut(key: "⌘ + L", action: "Focus Inputbox"),
         Shortcut(key: "⌘ + R", action: "Regenerate Last Response"),
         Shortcut(key: "⌘ + E", action: "Edit Last Prompt"),
         Shortcut(key: "⌘ + D", action: "Delete Last Prompt/Response"),

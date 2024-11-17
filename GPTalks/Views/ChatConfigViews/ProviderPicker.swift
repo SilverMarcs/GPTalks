@@ -11,9 +11,10 @@ struct ProviderPicker: View {
     @Binding var provider: Provider
     var providers: [Provider]
     var onChange: ((Provider) -> Void)?
+    var label: String = "Provider"
     
     var body: some View {
-        Picker("Provider", selection: $provider) {
+        Picker(label, selection: $provider) {
             ForEach(providers) { provider in
                 Text(provider.name.uppercased())
                     .tag(provider)

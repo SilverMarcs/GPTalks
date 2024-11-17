@@ -99,6 +99,16 @@
 		0891D5822C968B3A00BA428F /* ToolConfigDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0891D5812C968B3A00BA428F /* ToolConfigDefaults.swift */; };
 		0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2012C3955CC00D4D501 /* CustomSearchField.swift */; };
 		0893B2062C39810900D4D501 /* ChatConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893B2052C39810900D4D501 /* ChatConfig.swift */; };
+		089825232CE8F75400980468 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825222CE8F75400980468 /* OnboardingView.swift */; };
+		089825252CE9B62900980468 /* APIKeyOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825242CE9B62900980468 /* APIKeyOnboarding.swift */; };
+		089825272CE9B67700980468 /* WelcomeOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825262CE9B67700980468 /* WelcomeOnboarding.swift */; };
+		089825292CE9BA2900980468 /* QuickPanelOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825282CE9BA2900980468 /* QuickPanelOnboarding.swift */; };
+		0898252B2CE9BB1700980468 /* OnboardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898252A2CE9BB1700980468 /* OnboardingPage.swift */; };
+		0898252D2CE9C0C100980468 /* ReadyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898252C2CE9C0C100980468 /* ReadyPageView.swift */; };
+		0898252F2CE9C0F200980468 /* PageDots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898252E2CE9C0F200980468 /* PageDots.swift */; };
+		089825312CE9D96A00980468 /* ImageGenOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825302CE9D96A00980468 /* ImageGenOnboarding.swift */; };
+		089825332CE9ECF000980468 /* PluginsOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825322CE9ECF000980468 /* PluginsOnboarding.swift */; };
+		089825352CE9F55B00980468 /* GenericOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825342CE9F55B00980468 /* GenericOnboardingView.swift */; };
 		089C7E102C4058CF005E3BE9 /* QuickPanelWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E0F2C4058CF005E3BE9 /* QuickPanelWindow.swift */; };
 		089C7E122C405904005E3BE9 /* QuickPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E112C405904005E3BE9 /* QuickPanelView.swift */; };
 		089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */; };
@@ -261,6 +271,16 @@
 		0891D5812C968B3A00BA428F /* ToolConfigDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolConfigDefaults.swift; sourceTree = "<group>"; };
 		0893B2012C3955CC00D4D501 /* CustomSearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchField.swift; sourceTree = "<group>"; };
 		0893B2052C39810900D4D501 /* ChatConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatConfig.swift; sourceTree = "<group>"; };
+		089825222CE8F75400980468 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		089825242CE9B62900980468 /* APIKeyOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyOnboarding.swift; sourceTree = "<group>"; };
+		089825262CE9B67700980468 /* WelcomeOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeOnboarding.swift; sourceTree = "<group>"; };
+		089825282CE9BA2900980468 /* QuickPanelOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelOnboarding.swift; sourceTree = "<group>"; };
+		0898252A2CE9BB1700980468 /* OnboardingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPage.swift; sourceTree = "<group>"; };
+		0898252C2CE9C0C100980468 /* ReadyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyPageView.swift; sourceTree = "<group>"; };
+		0898252E2CE9C0F200980468 /* PageDots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageDots.swift; sourceTree = "<group>"; };
+		089825302CE9D96A00980468 /* ImageGenOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGenOnboarding.swift; sourceTree = "<group>"; };
+		089825322CE9ECF000980468 /* PluginsOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginsOnboarding.swift; sourceTree = "<group>"; };
+		089825342CE9F55B00980468 /* GenericOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericOnboardingView.swift; sourceTree = "<group>"; };
 		089C7E0F2C4058CF005E3BE9 /* QuickPanelWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelWindow.swift; sourceTree = "<group>"; };
 		089C7E112C405904005E3BE9 /* QuickPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelView.swift; sourceTree = "<group>"; };
 		089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelSettings.swift; sourceTree = "<group>"; };
@@ -376,6 +396,7 @@
 		080E70E62CDF1B9700A949C9 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				0898252A2CE9BB1700980468 /* OnboardingPage.swift */,
 				08A1DDBA2CE0024A00DAF6F9 /* Source.swift */,
 				080E70EB2CDF380500A949C9 /* InspectorTab.swift */,
 				08436F2D2CDF07C2007A160F /* FocusedField.swift */,
@@ -526,6 +547,22 @@
 			path = ProviderViews;
 			sourceTree = "<group>";
 		};
+		089825212CE8F69600980468 /* OnboardingViews */ = {
+			isa = PBXGroup;
+			children = (
+				089825222CE8F75400980468 /* OnboardingView.swift */,
+				089825342CE9F55B00980468 /* GenericOnboardingView.swift */,
+				0898252E2CE9C0F200980468 /* PageDots.swift */,
+				089825262CE9B67700980468 /* WelcomeOnboarding.swift */,
+				089825242CE9B62900980468 /* APIKeyOnboarding.swift */,
+				089825322CE9ECF000980468 /* PluginsOnboarding.swift */,
+				089825282CE9BA2900980468 /* QuickPanelOnboarding.swift */,
+				089825302CE9D96A00980468 /* ImageGenOnboarding.swift */,
+				0898252C2CE9C0C100980468 /* ReadyPageView.swift */,
+			);
+			path = OnboardingViews;
+			sourceTree = "<group>";
+		};
 		089C7E0E2C404E86005E3BE9 /* QuickPanelWindow */ = {
 			isa = PBXGroup;
 			children = (
@@ -594,11 +631,12 @@
 		08A222C22C2AC6A800D76C8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				089825212CE8F69600980468 /* OnboardingViews */,
 				08B82C1B2C74EA8300DC0183 /* DataFileViews */,
+				08C8003B2C36BC56009581C5 /* ChatDetailViews */,
 				085524E02C4ED29400CBB827 /* MenubarCommands */,
 				08C800512C36F79E009581C5 /* SettingsViews */,
 				08C800382C36BA1E009581C5 /* BottomViews */,
-				08C8003B2C36BC56009581C5 /* ChatDetailViews */,
 				08C8003F2C36BD7B009581C5 /* ChatListViews */,
 				0853611D2C4A3763007DAB62 /* ChatConfigViews */,
 				0819479F2C48DCE50061227B /* ImageListViews */,
@@ -879,6 +917,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				089825332CE9ECF000980468 /* PluginsOnboarding.swift in Sources */,
 				082181602C3880F700171BF3 /* RoundedRectangleOverlay.swift in Sources */,
 				08D913EC2CD9CAF7002E4E53 /* AIModel.swift in Sources */,
 				08B8DE132C97F3550041A690 /* MarkdownView.swift in Sources */,
@@ -900,6 +939,7 @@
 				08A77CCC2C65AA820087D0F3 /* DatabaseService.swift in Sources */,
 				08F815242C97F59100B49355 /* PluginSettings.swift in Sources */,
 				0893B2062C39810900D4D501 /* ChatConfig.swift in Sources */,
+				0898252F2CE9C0F200980468 /* PageDots.swift in Sources */,
 				082F09D52CB2690800B7860A /* GenericModel.swift in Sources */,
 				08F8153E2C97F75700B49355 /* GenerateImageSettings.swift in Sources */,
 				08F815362C97F65500B49355 /* ChatInspector.swift in Sources */,
@@ -926,6 +966,7 @@
 				08F815322C97F63E00B49355 /* AdvancedInspector.swift in Sources */,
 				08A222BE2C2ABDB400D76C8B /* InputManager.swift in Sources */,
 				08F840062C9AA26C000CB498 /* CameraView.swift in Sources */,
+				089825252CE9B62900980468 /* APIKeyOnboarding.swift in Sources */,
 				08C49FD82C502EC90085792F /* FileHelper.swift in Sources */,
 				08B3AE9D2CDB58AB00D7231E /* NonStreamResponse.swift in Sources */,
 				08E7209A2CE7D46D0014888B /* SearchToken.swift in Sources */,
@@ -947,6 +988,7 @@
 				080E70EE2CDF498F00A949C9 /* ChatStatus.swift in Sources */,
 				087F3F8B2CDDEF4C001298B3 /* Guide.swift in Sources */,
 				085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */,
+				089825352CE9F55B00980468 /* GenericOnboardingView.swift in Sources */,
 				0853102B2CBF966F0078DD09 /* ModelRow.swift in Sources */,
 				08436F2C2CDEAB3B007A160F /* ListState.swift in Sources */,
 				089C7E102C4058CF005E3BE9 /* QuickPanelWindow.swift in Sources */,
@@ -960,6 +1002,7 @@
 				087F3F852CDDD99E001298B3 /* GuidesSettings.swift in Sources */,
 				085361132C4939C5007DAB62 /* GenerationView.swift in Sources */,
 				0805DEF12C58CB2A00A8354A /* ClaudeService.swift in Sources */,
+				0898252B2CE9BB1700980468 /* OnboardingPage.swift in Sources */,
 				085276C02C98794C009184D2 /* ToolCallView.swift in Sources */,
 				08C1ACE42C54BCA600B86D37 /* FrequencyPenaltySlider.swift in Sources */,
 				0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */,
@@ -975,6 +1018,7 @@
 				082255622CE22D3200AAD32B /* SecretInputView.swift in Sources */,
 				082F09DB2CB2715A00B7860A /* Thread.swift in Sources */,
 				085524E82C4ED61F00CBB827 /* ChatToolbar.swift in Sources */,
+				089825312CE9D96A00980468 /* ImageGenOnboarding.swift in Sources */,
 				08F815222C97F58800B49355 /* GoogleSearchSettings.swift in Sources */,
 				0805DEED2C58CB0300A8354A /* AIService.swift in Sources */,
 				08F8152D2C97F60100B49355 /* GoogleSearch.swift in Sources */,
@@ -988,6 +1032,7 @@
 				08A77CC92C65A3AD0087D0F3 /* SectionFooterView.swift in Sources */,
 				08CF5B892C68980B0079D5EE /* HighlightedTextViews.swift in Sources */,
 				08F815292C97F5E100B49355 /* ChatTool.swift in Sources */,
+				089825272CE9B67700980468 /* WelcomeOnboarding.swift in Sources */,
 				0869A3EB2C958A4C009BF9F2 /* ChatConfigTools.swift in Sources */,
 				08B82C1D2C74EA9400DC0183 /* ImageViewer.swift in Sources */,
 				085361052C491BF0007DAB62 /* ImageSession.swift in Sources */,
@@ -1005,11 +1050,13 @@
 				0869A3F62C95E4CC009BF9F2 /* ChatToolCall.swift in Sources */,
 				088DA8F92CA752EF006C017E /* IOSWindow.swift in Sources */,
 				0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */,
+				0898252D2CE9C0C100980468 /* ReadyPageView.swift in Sources */,
 				08A313492C4AD0DC00C3E578 /* CommonModifiers.swift in Sources */,
 				08A222C42C2AC6B300D76C8B /* ChatDetail.swift in Sources */,
 				08C800472C36C4ED009581C5 /* UserMessage.swift in Sources */,
 				0886D8202C8707190058700F /* VertexService.swift in Sources */,
 				080E70EC2CDF380500A949C9 /* InspectorTab.swift in Sources */,
+				089825292CE9BA2900980468 /* QuickPanelOnboarding.swift in Sources */,
 				08B8DE1F2C97F3D10041A690 /* AppConfig.swift in Sources */,
 				0854706F2CB4C3A1007FE9DB /* ModelType.swift in Sources */,
 				0844C2752CA3E6E100F0A325 /* EmptyChat.swift in Sources */,
@@ -1031,6 +1078,7 @@
 				0891D5822C968B3A00BA428F /* ToolConfigDefaults.swift in Sources */,
 				082F09E32CB3545600B7860A /* ToolProtocol.swift in Sources */,
 				0834E7792C719C00007CB294 /* DataFileView.swift in Sources */,
+				089825232CE8F75400980468 /* OnboardingView.swift in Sources */,
 				08C800432C36C045009581C5 /* ChatVM.swift in Sources */,
 				082F09ED2CB3668800B7860A /* ModelPicker.swift in Sources */,
 				082A63322C551108003996B7 /* MarkdownFile.swift in Sources */,

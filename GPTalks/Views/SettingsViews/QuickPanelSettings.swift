@@ -21,8 +21,11 @@ struct QuickPanelSettings: View {
     var body: some View {
         Form {
             Section("Launch") {
-                LabeledContent("Shortcut") {
+                LabeledContent {
                     KeyboardShortcuts.Recorder(for: .togglePanel)
+                } label: {
+                    Text("Global shortcut")
+                    Text("Access from anywhere in the OS")
                 }
             }
             

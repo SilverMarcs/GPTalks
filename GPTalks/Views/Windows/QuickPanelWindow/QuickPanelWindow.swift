@@ -87,7 +87,6 @@ class QuickPanelWindow: NSPanel {
         
         KeyboardShortcuts.onKeyDown(for: .togglePanel) { [weak self] in
             self?.toggleVisibility()
-            QuickPanelTip().invalidate(reason: .actionPerformed)
         }
         
         self.center()

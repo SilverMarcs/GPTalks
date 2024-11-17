@@ -17,7 +17,7 @@ struct GeneralSettings: View {
             Section("Title") {
                 Toggle(isOn: $config.autogenTitle) {
                     Text("Autogen Title")
-                    Text("Uses title model in provider general settings")
+                    Text("Uses Lite Model in provider general settings")
                 }
             }
             
@@ -46,7 +46,15 @@ struct GeneralSettings: View {
                     Text("Enter to send message")
                     Text("Enabling this makes input area laggy and is not recommended.")
                 }
+                
+                LabeledContent("Restart Onboarding") {
+                    Button("Launch") {
+                        config.hasCompletedOnboarding = false
+                    }
+                }
             }
+            
+ 
         }
         .formStyle(.grouped)
         .navigationTitle("General")

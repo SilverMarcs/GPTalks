@@ -54,7 +54,7 @@ struct GuidesSettings: View {
                             
                             Spacer()
                             
-                            Image(systemName: guide.icon)
+                            Image(systemName: guide.icon) 
                         }
                     }
                 }
