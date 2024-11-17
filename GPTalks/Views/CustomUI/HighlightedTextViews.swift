@@ -53,9 +53,9 @@ struct AttributedText: View {
         
         // Scale heading sizes relative to base font size
         let headingPatterns = [
-            (pattern: "^### (.*?)$", size: baseSize * 1.4),  // H3
-            (pattern: "^## (.*?)$", size: baseSize * 1.7),   // H2
-            (pattern: "^# (.*?)$", size: baseSize * 2.0)     // H1
+            (pattern: "^### (.*?)$", size: baseSize * 1.7),  // H3
+            (pattern: "^## (.*?)$", size: baseSize * 2.0),   // H2
+            (pattern: "^# (.*?)$", size: baseSize * 2.3)     // H1
         ]
         
         for (pattern, size) in headingPatterns {
@@ -169,7 +169,7 @@ struct AttributedText: View {
     
     var body: some View {
         Text(AttributedString(attributedString))
-            .lineSpacing(4)
-            .font(.system(size: config.fontSize)) // Apply the font size from config
+            .lineSpacing(2)
+            .font(.system(size: config.fontSize))
     }
 }

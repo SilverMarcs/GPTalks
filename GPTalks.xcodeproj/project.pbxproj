@@ -111,6 +111,7 @@
 		089825352CE9F55B00980468 /* GenericOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825342CE9F55B00980468 /* GenericOnboardingView.swift */; };
 		089825372CEA01FC00980468 /* NavigationDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825362CEA01FC00980468 /* NavigationDirection.swift */; };
 		089825392CEA2AD400980468 /* BoolControlledLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825382CEA2AD400980468 /* BoolControlledLabelStyle.swift */; };
+		0898253B2CEA31A300980468 /* MarkdownProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898253A2CEA31A300980468 /* MarkdownProvider.swift */; };
 		089C7E102C4058CF005E3BE9 /* QuickPanelWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E0F2C4058CF005E3BE9 /* QuickPanelWindow.swift */; };
 		089C7E122C405904005E3BE9 /* QuickPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E112C405904005E3BE9 /* QuickPanelView.swift */; };
 		089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */; };
@@ -285,6 +286,7 @@
 		089825342CE9F55B00980468 /* GenericOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericOnboardingView.swift; sourceTree = "<group>"; };
 		089825362CEA01FC00980468 /* NavigationDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDirection.swift; sourceTree = "<group>"; };
 		089825382CEA2AD400980468 /* BoolControlledLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolControlledLabelStyle.swift; sourceTree = "<group>"; };
+		0898253A2CEA31A300980468 /* MarkdownProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownProvider.swift; sourceTree = "<group>"; };
 		089C7E0F2C4058CF005E3BE9 /* QuickPanelWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelWindow.swift; sourceTree = "<group>"; };
 		089C7E112C405904005E3BE9 /* QuickPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelView.swift; sourceTree = "<group>"; };
 		089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelSettings.swift; sourceTree = "<group>"; };
@@ -506,6 +508,7 @@
 		087F3F892CDDEF28001298B3 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				0898253A2CEA31A300980468 /* MarkdownProvider.swift */,
 				08436F212CDE9182007A160F /* Acknowledgement.swift */,
 				087F3F912CDDF00C001298B3 /* SettingsVM.swift */,
 				087F3F8E2CDDEF79001298B3 /* SettingsTab.swift */,
@@ -931,6 +934,7 @@
 				087F3F922CDDF00C001298B3 /* SettingsVM.swift in Sources */,
 				08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */,
 				08F815382C97F65E00B49355 /* ToolsController.swift in Sources */,
+				0898253B2CEA31A300980468 /* MarkdownProvider.swift in Sources */,
 				08915D942C373340008ADE27 /* ProviderImage.swift in Sources */,
 				087906872CA6C73100E5DCAD /* ImageWindow.swift in Sources */,
 				08B8DE232C97F4EA0041A690 /* ToolResponseView.swift in Sources */,

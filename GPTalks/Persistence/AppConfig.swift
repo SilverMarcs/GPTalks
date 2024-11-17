@@ -13,6 +13,7 @@ class AppConfig: ObservableObject {
     private init() {}
     
     // Appearance
+    @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
     @AppStorage("codeBlockTheme") var codeBlockTheme: CodeBlockTheme = .atom
     @AppStorage("renderSkeleton") var renderSkeleton: Bool = true
     #if os(macOS)

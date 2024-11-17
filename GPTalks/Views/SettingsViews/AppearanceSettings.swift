@@ -38,18 +38,33 @@ struct AppearanceSettings: View {
             Section("Markdown") {
                 Toggle("Skeleon Rendering in Markdown View", isOn: $config.renderSkeleton)
                 
-                Picker(selection: $config.codeBlockTheme) {
-                    ForEach(CodeBlockTheme.allCases, id: \.self) { theme in
-                        Text(theme.name)
+                Picker(selection: $config.markdownProvider) {
+                    ForEach(MarkdownProvider.allCases) { provider in
+                        Text(provider.name)
+                            .tag(provider)
                     }
                 } label: {
-                    Text("Code Block Theme")
-                    Text("Change chat selection to take effect")
+                    Text("Markdown Provider")
+                    Text("Native uses less memeory but webview performs better")
                 }
+                #if os(macOS)
+                .pickerStyle(.radioGroup)
+                #endif
                 
-                MarkdownView(content: String.onlyCodeBlock)
-                    .id(config.codeBlockTheme)
-                    .padding(.bottom, -11)
+                if config.markdownProvider == .webview {
+                    Picker(selection: $config.codeBlockTheme) {
+                        ForEach(CodeBlockTheme.allCases, id: \.self) { theme in
+                            Text(theme.name)
+                        }
+                    } label: {
+                        Text("Code Block Theme")
+                        Text("Change chat selection to take effect")
+                    }
+                    
+                    MarkdownView(content: String.onlyCodeBlock)
+                        .id(config.codeBlockTheme)
+                        .padding(.bottom, -11)
+                }
             }
         }
         .formStyle(.grouped)

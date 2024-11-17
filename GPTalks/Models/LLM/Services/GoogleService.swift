@@ -42,7 +42,6 @@ struct GoogleService: AIService {
         }
         
         let modelContent = ModelContent(role: conversation.role.toGoogleRole(), parts: parts)
-        print("Model Content: \(modelContent)")
         
         return modelContent
     }

@@ -15,17 +15,18 @@ struct MarkdownView: View {
     var content: String
 
     var body: some View {
-        SwiftMarkdownView(content)
-            .markdownBaseURL("GPTalks Web Content")
-//            .markdownHighlightString(chatVM.searchText)
-            .markdownFontSize(CGFloat(config.fontSize))
-            .renderSkeleton(config.renderSkeleton)
-            .codeBlockTheme(config.codeBlockTheme)
-        
-//        Text(LocalizedStringKey(content)) // swiftui `native` markdown but its pretty bad
-        
-//        AttributedText(text: content, highlightText: "") // uses my basic markdown parser
-//            .textSelection(.enabled)
+        switch config.markdownProvider {
+        case .native:
+            AttributedText(text: content, highlightText: chatVM.searchText) // uses my basic markdown parser
+                .textSelection(.enabled)
+        case .webview:
+            SwiftMarkdownView(content)
+                .markdownBaseURL("GPTalks Web Content")
+                .markdownHighlightString(chatVM.searchText)
+                .markdownFontSize(CGFloat(config.fontSize))
+                .renderSkeleton(config.renderSkeleton)
+                .codeBlockTheme(config.codeBlockTheme)
+        }
     }
 }
 
