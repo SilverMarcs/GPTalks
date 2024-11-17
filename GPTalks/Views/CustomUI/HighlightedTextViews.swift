@@ -27,7 +27,8 @@ struct HighlightedText: View {
         if let highlightedText, highlightedText.count >= 2 {
             AttributedText(
                 text: text,
-                highlightText: highlightedText
+                highlightText: highlightedText,
+                parseMarkdown: false
             )
         } else {
             Text(text)
@@ -39,9 +40,11 @@ struct AttributedText: View {
     @ObservedObject private var config = AppConfig.shared
     let attributedString: NSAttributedString
     
-    init(text: String, highlightText: String) {
+    init(text: String, highlightText: String, parseMarkdown: Bool) {
         let mutableString = NSMutableAttributedString(string: text)
-        Self.applyMarkdownFormatting(to: mutableString)
+        if parseMarkdown {
+            Self.applyMarkdownFormatting(to: mutableString)
+        }
         Self.applyHighlighting(to: mutableString, highlightText: highlightText)
         self.attributedString = mutableString
     }
@@ -50,12 +53,15 @@ struct AttributedText: View {
         let fullRange = NSRange(location: 0, length: attributedString.length)
         let text = attributedString.string
         let baseSize = AppConfig.shared.fontSize
+        let monoFont = PlatformFont.monospacedSystemFont(ofSize: baseSize - 1, weight: .regular)
+
+        let boldFont = PlatformFont.boldSystemFont(ofSize: baseSize)
         
         // Scale heading sizes relative to base font size
         let headingPatterns = [
-            (pattern: "^### (.*?)$", size: baseSize * 1.7),  // H3
-            (pattern: "^## (.*?)$", size: baseSize * 2.0),   // H2
-            (pattern: "^# (.*?)$", size: baseSize * 2.3)     // H1
+            (pattern: "^### (.*?)$", size: baseSize * 1.6),  // H3
+            (pattern: "^## (.*?)$", size: baseSize * 1.9),   // H2
+            (pattern: "^# (.*?)$", size: baseSize * 2.2)     // H1
         ]
         
         for (pattern, size) in headingPatterns {
@@ -68,30 +74,12 @@ struct AttributedText: View {
                     attributedString.replaceCharacters(in: match.range, with: headingContent)
                     
                     let newRange = NSRange(location: match.range.location, length: headingContent.count)
-                    #if os(macOS)
                     let headingFont = PlatformFont.systemFont(ofSize: size, weight: .bold)
-                    #else
-                    let headingFont = PlatformFont.systemFont(ofSize: size, weight: .bold)
-                    #endif
                     
                     attributedString.addAttribute(.font, value: headingFont, range: newRange)
                 }
             }
         }
-        
-        // For code blocks
-        #if os(macOS)
-        let monoFont = PlatformFont.monospacedSystemFont(ofSize: baseSize - 1, weight: .regular)
-        #else
-        let monoFont = PlatformFont.monospacedSystemFont(ofSize: baseSize - 1, weight: .regular)
-        #endif
-        
-        // For bold text
-        #if os(macOS)
-        let boldFont = PlatformFont.boldSystemFont(ofSize: baseSize)
-        #else
-        let boldFont = PlatformFont.boldSystemFont(ofSize: baseSize)
-        #endif
         
         // Handle code blocks (```)
         let codeBlockPattern = try! NSRegularExpression(pattern: "```(?:[a-zA-Z]*\\n)?([\\s\\S]*?)```")
