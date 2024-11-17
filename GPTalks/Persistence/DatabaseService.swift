@@ -83,6 +83,7 @@ final class DatabaseService: NSObject {
             let normalSession = Chat(config: normalChatConfig)
             normalSession.addThread(.mockUserThread)
             normalSession.threads.append(.mockAssistantThread)
+            normalSession.totalTokens = 181
             modelContext.insert(normalSession)
             
             // Demo favourite chat

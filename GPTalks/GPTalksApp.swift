@@ -30,8 +30,7 @@ struct GPTalksApp: App {
     init() {
 //        #if DEBUG
 //        try? Tips.resetDatastore()
-//        #endif
-        
+//        #endif        
         try? Tips.configure()
 
         #if os(macOS)

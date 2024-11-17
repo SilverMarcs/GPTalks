@@ -142,7 +142,7 @@ struct ChatRow: View {
                 SwipeActionTip().invalidate(reason: .actionPerformed)
                 session.status = session.status == .starred ? .normal : .starred
             } label: {
-                Label("Star", systemImage: "star")
+                Label(session.status == .starred ? "Unstar" : "Star", systemImage: session.status == .starred ? "star.slash" : "star")
             }
             .tint(.orange)
         }

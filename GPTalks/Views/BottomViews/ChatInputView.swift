@@ -34,12 +34,6 @@ struct ChatInputView: View {
             }
             
             VStack(alignment: .leading, spacing: 0) {
-                #if os(macOS)
-                TipView(PlusButtonTip())
-                    .frame(height: 30)
-                    .padding(.bottom, 15)
-                #endif
-
                 Spacer(minLength: 0)
                 
                 if !chat.inputManager.dataFiles.isEmpty {
@@ -65,28 +59,34 @@ struct ChatInputView: View {
 
     var plusButton: some View {
         Menu {
-            #if !os(macOS)
-            Button {
-                chat.showCamera = true
-                PlusButtonTip().invalidate(reason: .actionPerformed)
-            } label: {
-                Label("Open Camera", systemImage: "camera")
+            Group {
+                #if !os(macOS)
+                Button {
+                    chat.showCamera = true
+                } label: {
+                    Label("Open Camera", systemImage: "camera")
+                }
+                #endif
+                
+                Button {
+                    showPhotosPicker = true
+                } label: {
+                    Label("Photos Library", systemImage: "photo.on.rectangle.angled")
+                }
+                
+                Button {
+                    isFilePickerPresented = true
+                } label: {
+                    Label(
+                        "Attach Files", systemImage: "paperclip")
+                }
             }
-            #endif
-            
-            Button {
-                isFilePickerPresented = true
-                PlusButtonTip().invalidate(reason: .actionPerformed)
-            } label: {
-                Label("Attach Files", systemImage: "paperclip")
-            }
+            .labelStyle(.titleAndIcon)
         } label: {
             Image(systemName: "plus.circle.fill")
                 .font(.title).fontWeight(.semibold)
                 .foregroundStyle(.primary, .clear)
             
-        } primaryAction: {
-            showPhotosPicker = true
         }
         .menuStyle(.button)
         .buttonStyle(.plain)
@@ -99,11 +99,12 @@ struct ChatInputView: View {
         }
         
         #if !os(macOS)
-        .popoverTip(PlusButtonTip())
         .fullScreenCover(isPresented: $chat.showCamera) {
             CameraView(chat: chat)
                 .ignoresSafeArea()
         }
+        #else
+        .popoverTip(PlusButtonTip())
         #endif
         .fileImporter(
             isPresented: $isFilePickerPresented,

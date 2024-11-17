@@ -17,6 +17,7 @@ struct ChatListCards: View {
     @Environment(\.dismissWindow) var dismissWindow
     @Environment(ChatVM.self) var chatVM
     @Environment(SettingsVM.self) private var settingsVM
+    
     @ObservedObject var config = AppConfig.shared
     
     var source: Source
@@ -43,7 +44,13 @@ struct ChatListCards: View {
                 count: sessionCount) {
                     handleChatPress()
                 }
-//                .transition(.symbolEffect(.automatic))
+                .overlay {
+                    if !config.hasUsedChatStatusFilter {
+                        RoundedRectangle(cornerRadius: radius)
+                            .stroke(Color.accentColor, lineWidth: 2)
+                            .allowsHitTesting(false)
+                    }
+                }
                 .contentTransition(.symbolEffect(.replace.offUp))
                 .disabled(isSearching)
             
@@ -60,9 +67,7 @@ struct ChatListCards: View {
     func handleChatPress() {
         switch source {
         case .chatlist:
-            withAnimation {
-                cycleChatStatus()
-            }
+            cycleChatStatus()
         case .imagelist:
             #if os(macOS)
             openWindow(id: "chats")
@@ -76,7 +81,7 @@ struct ChatListCards: View {
     }
     
     func cycleChatStatus() {
-        ChatCardTip().invalidate(reason: .actionPerformed)
+        config.hasUsedChatStatusFilter = true
         let statusesToCycle = ChatStatus.allCases.filter { $0 != .quick }
         
         guard let currentStatusIndex = statusesToCycle.firstIndex(of: chatVM.statusFilter) else {
@@ -104,6 +109,14 @@ struct ChatListCards: View {
         return 8
         #else
         return 13
+        #endif
+    }
+    
+    private var radius: CGFloat {
+        #if os(macOS)
+        return 7
+        #else
+        return 10
         #endif
     }
 }

@@ -73,7 +73,6 @@ import SwiftUI
         let config = ChatConfig(provider: provider, purpose: .chat)
         
         if let model = model {
-            NewChatTip().invalidate(reason: .actionPerformed)
             config.model = model
         }
         

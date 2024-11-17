@@ -49,6 +49,11 @@ struct ChatDetail: View {
                 chat.inputManager.handleDrop(providers)
             }
             .navigationTitle(navTitle)
+            .toolbarTitleMenu {
+                Section(chat.title) {
+                    Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
+                }
+            }
             #if os(macOS)
             .navigationSubtitle("\(chat.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
@@ -62,13 +67,13 @@ struct ChatDetail: View {
                 scrollToBottom(proxy: proxy, animated: false)
             }
             #else
+            .listStyle(.plain)
+            .toolbarTitleDisplayMode(.inline)
             .onAppear {
                 chat.hasUserScrolled = false
                 chat.proxy = proxy
                 scrollToBottom(proxy: proxy, delay: 0.3)
             }
-            .listStyle(.plain)
-            .toolbarTitleDisplayMode(.inline)
             .onScrollPhaseChange { oldPhase, newPhase in  // this sint working on macos
                 if newPhase == .tracking || newPhase.isScrolling {
                     chat.hasUserScrolled = true

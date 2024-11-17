@@ -110,6 +110,7 @@
 		089825332CE9ECF000980468 /* PluginsOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825322CE9ECF000980468 /* PluginsOnboarding.swift */; };
 		089825352CE9F55B00980468 /* GenericOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825342CE9F55B00980468 /* GenericOnboardingView.swift */; };
 		089825372CEA01FC00980468 /* NavigationDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825362CEA01FC00980468 /* NavigationDirection.swift */; };
+		089825392CEA2AD400980468 /* BoolControlledLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089825382CEA2AD400980468 /* BoolControlledLabelStyle.swift */; };
 		089C7E102C4058CF005E3BE9 /* QuickPanelWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E0F2C4058CF005E3BE9 /* QuickPanelWindow.swift */; };
 		089C7E122C405904005E3BE9 /* QuickPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E112C405904005E3BE9 /* QuickPanelView.swift */; };
 		089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */; };
@@ -283,6 +284,7 @@
 		089825322CE9ECF000980468 /* PluginsOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginsOnboarding.swift; sourceTree = "<group>"; };
 		089825342CE9F55B00980468 /* GenericOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericOnboardingView.swift; sourceTree = "<group>"; };
 		089825362CEA01FC00980468 /* NavigationDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDirection.swift; sourceTree = "<group>"; };
+		089825382CEA2AD400980468 /* BoolControlledLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolControlledLabelStyle.swift; sourceTree = "<group>"; };
 		089C7E0F2C4058CF005E3BE9 /* QuickPanelWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelWindow.swift; sourceTree = "<group>"; };
 		089C7E112C405904005E3BE9 /* QuickPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelView.swift; sourceTree = "<group>"; };
 		089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickPanelSettings.swift; sourceTree = "<group>"; };
@@ -525,6 +527,7 @@
 		08915D922C373332008ADE27 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
+				089825382CEA2AD400980468 /* BoolControlledLabelStyle.swift */,
 				08AAFB912C3C88CA002C04E0 /* Buttons */,
 				08B4F45F2CE3B87A004B3618 /* FullScreenBackgroundStyle.swift */,
 				0821815F2C3880F700171BF3 /* RoundedRectangleOverlay.swift */,
@@ -534,6 +537,7 @@
 				0893B2012C3955CC00D4D501 /* CustomSearchField.swift */,
 				08CF5B882C68980B0079D5EE /* HighlightedTextViews.swift */,
 				085EA4A42C9C4E9600124F83 /* IntegerStepper.swift */,
+				082B88162CD36CD80092C4D0 /* PlatformSpecificGroupBoxStyle.swift */,
 			);
 			path = CustomUI;
 			sourceTree = "<group>";
@@ -667,7 +671,6 @@
 		08AAFB912C3C88CA002C04E0 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
-				082B88162CD36CD80092C4D0 /* PlatformSpecificGroupBoxStyle.swift */,
 				08FD45592CB8EF680046D165 /* ClickHighlightButton.swift */,
 				081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */,
 				08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */,
@@ -924,6 +927,7 @@
 				082181602C3880F700171BF3 /* RoundedRectangleOverlay.swift in Sources */,
 				08D913EC2CD9CAF7002E4E53 /* AIModel.swift in Sources */,
 				08B8DE132C97F3550041A690 /* MarkdownView.swift in Sources */,
+				089825392CEA2AD400980468 /* BoolControlledLabelStyle.swift in Sources */,
 				087F3F922CDDF00C001298B3 /* SettingsVM.swift in Sources */,
 				08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */,
 				08F815382C97F65E00B49355 /* ToolsController.swift in Sources */,

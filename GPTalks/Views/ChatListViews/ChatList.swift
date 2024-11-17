@@ -10,13 +10,12 @@ import SwiftUI
 import TipKit
 
 struct ChatList: View {
-    @Environment(\.openWindow) private var openWindow
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.isSearching) private var isSearching
     @Environment(ChatVM.self) var chatVM
-    @Environment(SettingsVM.self) var settingsVM
     @Environment(\.modelContext) var modelContext
     @Environment(\.providers) private var providers
+    
+    @ObservedObject var config = AppConfig.shared
     
     @Query var chats: [Chat] // see init method below
     
@@ -25,13 +24,9 @@ struct ChatList: View {
 
         List(selection: $chatVM.selections) {
             ChatListCards(source: .chatlist, sessionCount: String(chats.count), imageSessionsCount: "↗")
-            
-                Group {
-                    TipView(ChatCardTip())
-                    TipView(SwipeActionTip())
-                }
-                .tipCornerRadius(8)
-                .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
+                TipView(SwipeActionTip())
+                    .tipCornerRadius(8)
+                    .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
 
             #if os(macOS)
             if isSearching {
@@ -62,11 +57,13 @@ struct ChatList: View {
         .toolbar {
             toolbar
         }
+        #if os(macOS)
         .task {
-            if let first = chats.first, chatVM.selections.isEmpty, horizontalSizeClass != .compact {
+            if let first = chats.first, chatVM.selections.isEmpty {
                 chatVM.selections = [first]
             }
         }
+        #endif
     }
 
     private func deleteItems(offsets: IndexSet) {
@@ -100,20 +97,21 @@ struct ChatList: View {
             Menu {
                 ForEach(providers) { provider in
                     Button(provider.name) {
+                        config.hasLongTappedNewChat = true
                         Task {
                             await chatVM.createNewSession(provider: provider)
                         }
                     }
                 }
             } label: {
-                Label("Add Item", systemImage: "square.and.pencil")
+                Label("Long Tap", systemImage: "square.and.pencil")
             } primaryAction: {
                 Task {
                     await chatVM.createNewSession()
                 }
             }
             .menuIndicator(.hidden)
-            .popoverTip(NewChatTip())
+            .labelStyle(BoolControlledLabelStyle(showTitle: !config.hasLongTappedNewChat))
         }
     }
     
@@ -174,5 +172,4 @@ struct ChatList: View {
     ChatList(status: .normal, searchText: "", searchTokens: [])
     .frame(width: 400)
     .environment(ChatVM())
-    .environment(SettingsVM())
 }

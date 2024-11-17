@@ -9,11 +9,7 @@ import TipKit
 
 struct PlusButtonTip: Tip {
     var title: Text {
-        #if os(macOS)
-        Text("Long Tap the plus button for more input options and ⌘ + L to focus on input box and ⌘ + Enter to send. ⌘ + V to paste files")
-        #else
-        Text("Long Tap the plus button to see more input options")
-        #endif
+        Text("⌘ + Enter to send\n⌘ + L to focus on input box\n⌘ + V to paste files")
     }
     
     var options: [Option] {
@@ -23,7 +19,7 @@ struct PlusButtonTip: Tip {
 
 struct SwipeActionTip: Tip {
     var title: Text {
-        Text("Swipe left or right on list row for actions")
+        Text("Swipe left or right on list row for more actions")
     }
     
     var image: Image {
@@ -35,15 +31,15 @@ struct SwipeActionTip: Tip {
     }
 }
 
-struct ChatCardTip: Tip {
-    var title: Text {
-        Text("Click on the Chats card to cycle beterrn Starred or Archived chats")
-    }
-    
-    var options: [Option] {
-        MaxDisplayCount(3)
-    }
-}
+//struct ChatCardTip: Tip {
+//    var title: Text {
+//        Text("Click on the Chats card to cycle beterrn Starred or Archived chats")
+//    }
+//    
+//    var options: [Option] {
+//        MaxDisplayCount(3)
+//    }
+//}
 
 //struct GenerateTitleTip: Tip {
 //    var title: Text {
@@ -53,7 +49,7 @@ struct ChatCardTip: Tip {
 
 struct GoogleCodeExecutionTip: Tip {
     var title: Text {
-        Text("Code Execution or Google Search Retrieval cannnot be used with other tools enabled")
+        Text("Code Execution or Search Retrieval cannnot be used with other tools enabled")
     }
 }
 
@@ -63,32 +59,32 @@ struct ProviderRefreshTip: Tip {
     }
 }
 
-struct NewChatTip: Tip {
-    var title: Text {
-        Text("Long Tap to see list of all providers")
-    }
-    
-    var message: Text {
-        Text("Long Tap the plus button to see list of all providers")
-    }
-    
-    var options: [Option] {
-        MaxDisplayCount(3)
-    }
-    
+//struct NewChatTip: Tip {
+//    var title: Text {
+//        Text("Long Tap to see list of all providers")
+//    }
+//    
+//    var message: Text {
+//        Text("Long Tap the plus button to see list of all providers")
+//    }
+//    
+//    var options: [Option] {
+//        MaxDisplayCount(3)
+//    }
+//    
 //    var image: Image {
 //        Image(systemName: "plus")
 //    }
-    
+//    
 //    var actions: [Action] {
 //        Action(id: "provider-list", title: "Provider Settings")
 //        Action(id: "faq", title: "View our FAQ")
 //    }
-    
+//    
 //    var options: [Option] {
 //        MaxDisplayCount(2)
 //    }
-}
+//}
 
 //struct OpenSettingsTip: Tip {
 //    var title: Text {

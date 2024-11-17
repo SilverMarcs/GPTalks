@@ -27,7 +27,10 @@ class AppConfig: ObservableObject {
     @AppStorage("hideDock") var hideDock = false
     @AppStorage("onlyOneWindow") var onlyOneWindow = false
     
+    // Onboarding
     @AppStorage("hasCompletedOnboarding") var hasCompletedOnboarding = false
+    @AppStorage("hasUsedChatStatusFilter") var hasUsedChatStatusFilter = false
+    @AppStorage("hasLongTappedNewChat") var hasLongTappedNewChat = false
     
     // Quick
     @AppStorage("quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."
