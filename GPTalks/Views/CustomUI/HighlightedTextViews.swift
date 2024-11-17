@@ -36,13 +36,109 @@ struct HighlightedText: View {
 }
 
 struct AttributedText: View {
+    @ObservedObject private var config = AppConfig.shared
     let attributedString: NSAttributedString
     
     init(text: String, highlightText: String) {
-        let attributedString = NSMutableAttributedString(string: text)
-        let nsString = text as NSString
-        let stringLength = nsString.length
+        let mutableString = NSMutableAttributedString(string: text)
+        Self.applyMarkdownFormatting(to: mutableString)
+        Self.applyHighlighting(to: mutableString, highlightText: highlightText)
+        self.attributedString = mutableString
+    }
+    
+    private static func applyMarkdownFormatting(to attributedString: NSMutableAttributedString) {
+        let fullRange = NSRange(location: 0, length: attributedString.length)
+        let text = attributedString.string
+        let baseSize = AppConfig.shared.fontSize
         
+        // Scale heading sizes relative to base font size
+        let headingPatterns = [
+            (pattern: "^### (.*?)$", size: baseSize * 1.4),  // H3
+            (pattern: "^## (.*?)$", size: baseSize * 1.7),   // H2
+            (pattern: "^# (.*?)$", size: baseSize * 2.0)     // H1
+        ]
+        
+        for (pattern, size) in headingPatterns {
+            let headingRegex = try! NSRegularExpression(pattern: pattern, options: .anchorsMatchLines)
+            let headingMatches = headingRegex.matches(in: text, range: fullRange)
+            
+            for match in headingMatches.reversed() {
+                if let contentRange = Range(match.range(at: 1), in: text) {
+                    let headingContent = String(text[contentRange])
+                    attributedString.replaceCharacters(in: match.range, with: headingContent)
+                    
+                    let newRange = NSRange(location: match.range.location, length: headingContent.count)
+                    #if os(macOS)
+                    let headingFont = PlatformFont.systemFont(ofSize: size, weight: .bold)
+                    #else
+                    let headingFont = PlatformFont.systemFont(ofSize: size, weight: .bold)
+                    #endif
+                    
+                    attributedString.addAttribute(.font, value: headingFont, range: newRange)
+                }
+            }
+        }
+        
+        // For code blocks
+        #if os(macOS)
+        let monoFont = PlatformFont.monospacedSystemFont(ofSize: baseSize - 1, weight: .regular)
+        #else
+        let monoFont = PlatformFont.monospacedSystemFont(ofSize: baseSize - 1, weight: .regular)
+        #endif
+        
+        // For bold text
+        #if os(macOS)
+        let boldFont = PlatformFont.boldSystemFont(ofSize: baseSize)
+        #else
+        let boldFont = PlatformFont.boldSystemFont(ofSize: baseSize)
+        #endif
+        
+        // Handle code blocks (```)
+        let codeBlockPattern = try! NSRegularExpression(pattern: "```(?:[a-zA-Z]*\\n)?([\\s\\S]*?)```")
+        let codeMatches = codeBlockPattern.matches(in: attributedString.string, range: NSRange(location: 0, length: attributedString.length))
+        
+        for match in codeMatches.reversed() {
+            if let contentRange = Range(match.range(at: 1), in: attributedString.string) {
+                let codeContent = String(attributedString.string[contentRange])
+                attributedString.replaceCharacters(in: match.range, with: codeContent)
+                
+                let newRange = NSRange(location: match.range.location, length: codeContent.count)
+                attributedString.addAttribute(.font, value: monoFont, range: newRange)
+            }
+        }
+        
+        // Handle inline code (single backticks)
+        let inlineCodePattern = try! NSRegularExpression(pattern: "`([^`]+)`")
+        let inlineCodeMatches = inlineCodePattern.matches(in: attributedString.string, range: NSRange(location: 0, length: attributedString.length))
+        
+        for match in inlineCodeMatches.reversed() {
+            if let contentRange = Range(match.range(at: 1), in: attributedString.string) {
+                let codeContent = String(attributedString.string[contentRange])
+                attributedString.replaceCharacters(in: match.range, with: codeContent)
+                
+                let newRange = NSRange(location: match.range.location, length: codeContent.count)
+                attributedString.addAttribute(.font, value: monoFont, range: newRange)
+            }
+        }
+        
+        // Handle bold text
+        let boldPattern = try! NSRegularExpression(pattern: "\\*\\*(.*?)\\*\\*")
+        let boldMatches = boldPattern.matches(in: attributedString.string, range: NSRange(location: 0, length: attributedString.length))
+        
+        for match in boldMatches.reversed() {
+            if let contentRange = Range(match.range(at: 1), in: attributedString.string) {
+                let boldContent = String(attributedString.string[contentRange])
+                attributedString.replaceCharacters(in: match.range, with: boldContent)
+                
+                let newRange = NSRange(location: match.range.location, length: boldContent.count)
+                attributedString.addAttribute(.font, value: boldFont, range: newRange)
+            }
+        }
+    }
+    
+    private static func applyHighlighting(to attributedString: NSMutableAttributedString, highlightText: String) {
+        let nsString = attributedString.string as NSString
+        let stringLength = nsString.length
         var searchRange = NSRange(location: 0, length: stringLength)
         
         while searchRange.location < stringLength {
@@ -56,23 +152,24 @@ struct AttributedText: View {
                 break
             }
             
-            // Set background color to a brighter yellow and foreground color to black
-            attributedString.addAttributes(
-                [
-                    .backgroundColor: PlatformColor.yellow,
-                    .foregroundColor: PlatformColor.black
-                ],
-                range: foundRange
-            )
+            // Highlighting takes priority - save existing attributes
+            let existingAttributes = attributedString.attributes(at: foundRange.location, effectiveRange: nil)
+            
+            // Apply highlight attributes while preserving existing ones
+            var newAttributes = existingAttributes
+            newAttributes[.backgroundColor] = PlatformColor.yellow
+            newAttributes[.foregroundColor] = PlatformColor.black
+            
+            attributedString.setAttributes(newAttributes, range: foundRange)
             
             searchRange.location = foundRange.location + 1
             searchRange.length = stringLength - searchRange.location
         }
-        
-        self.attributedString = attributedString
     }
     
     var body: some View {
         Text(AttributedString(attributedString))
+            .lineSpacing(4)
+            .font(.system(size: config.fontSize)) // Apply the font size from config
     }
 }
