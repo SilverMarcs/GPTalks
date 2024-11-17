@@ -14,6 +14,8 @@ struct IOSWindow: Scene {
     @Environment(ChatVM.self) private var chatVM
     @Environment(ImageVM.self) private var imageVM
     
+    @ObservedObject var config = AppConfig.shared
+    
     @State private var showSettings = false
     
     var body: some Scene {
@@ -61,6 +63,9 @@ struct IOSWindow: Scene {
                         Text("^[\(imageVM.selections.count) Image Session](inflect: true) Selected")
                     }
                 }
+            }
+            .sheet(isPresented: .constant(!config.hasCompletedOnboarding)) {
+                OnboardingView()
             }
         }
     }

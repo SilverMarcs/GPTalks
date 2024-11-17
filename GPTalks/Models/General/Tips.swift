@@ -10,7 +10,7 @@ import TipKit
 struct PlusButtonTip: Tip {
     var title: Text {
         #if os(macOS)
-        Text("Long Tap the plus button to see more input options and ⌘ + L to focus on input box and ⌘ + Enter to send")
+        Text("Long Tap the plus button for more input options and ⌘ + L to focus on input box and ⌘ + Enter to send. ⌘ + V to paste files")
         #else
         Text("Long Tap the plus button to see more input options")
         #endif

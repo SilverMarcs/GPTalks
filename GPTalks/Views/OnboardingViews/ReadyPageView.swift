@@ -14,13 +14,13 @@ struct ReadyPageView: View {
             
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 60))
-                .foregroundColor(.green)
+                .foregroundStyle(.green)
             
             Text("Ready to Go")
                 .font(.title)
                 .bold()
             
-            Text("You're all set to begin your journey!")
+            Text(text)
                 .font(.body)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.secondary)
@@ -29,6 +29,11 @@ struct ReadyPageView: View {
             Spacer()
         }
     }
+    #if os(macOS)
+    let text = "You can configure much more in Settings (⌘ + ,)"
+    #else
+    let text = "You can configure much more in Settings"
+    #endif
 }
 
 #Preview {

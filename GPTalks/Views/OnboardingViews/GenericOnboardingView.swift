@@ -24,6 +24,7 @@ struct GenericOnboardingView<Content: View>: View {
                     Image(systemName: icon)
                         .foregroundStyle(iconColor)
                         .font(.system(size: geometry.size.height * 0.1))
+                        .animation(.default, value: iconColor)
                     
                     Text(title)
                         .font(.title)

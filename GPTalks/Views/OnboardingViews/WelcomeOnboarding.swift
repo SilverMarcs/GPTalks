@@ -17,13 +17,13 @@ struct WelcomeOnboarding: View {
             Image(systemName: "hand.wave.fill")
                 .symbolEffect(.wiggle, options: .repeating, value: isAppear)
                 .font(.system(size: 60))
-                .foregroundColor(.blue)
+                .foregroundStyle(.blue)
             
             Text("Welcome to GPTalks")
                 .font(.title)
                 .bold()
             
-            Text("Chat with any LLM model, generate images, and more")
+            Text("Chat with multiple LLM models, generate images, and more")
                 .font(.body)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)

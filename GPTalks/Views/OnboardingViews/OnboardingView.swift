@@ -9,10 +9,14 @@ import SwiftUI
 import SwiftData
 
 struct OnboardingView: View {
-    @State private var currentPage = OnboardingPage.welcome
-    @Query var providerDefaults: [ProviderDefaults]
     @ObservedObject var config = AppConfig.shared
-    @Namespace private var skipButtonSpace // Add namespace for matched geometry effect
+    
+    @Namespace private var skipButtonSpace
+    
+    @State private var currentPage = OnboardingPage.welcome
+    @State private var navigationDirection = NavigationDirection.forward
+    
+    @Query var providerDefaults: [ProviderDefaults]
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -24,7 +28,6 @@ struct OnboardingView: View {
                 navigationControls
             }
             
-            // Show skip button at top-left only for middle pages
             if currentPage != .welcome && currentPage != .ready {
                 Button("Skip") {
                     config.hasCompletedOnboarding = true
@@ -35,25 +38,39 @@ struct OnboardingView: View {
             }
         }
         .padding()
+        #if os(macOS)
         .frame(width: 500, height: 500)
+        #else
+        .interactiveDismissDisabled(!config.hasCompletedOnboarding)
+        #endif
     }
     
     @ViewBuilder
     private var pageContent: some View {
-        switch currentPage {
-        case .welcome:
-            WelcomeOnboarding()
-        case .apiKey:
-            APIKeyOnboarding(providerDefault: providerDefaults.first!)
-        case .plugins:
-            PluginsOnboarding()
-        case .quickPanel:
-            QuickPanelOnboarding(provider: providerDefaults.first!.quickProvider)
-        case .imageGen:
-            ImageGenOnboarding(provider: providerDefaults.first!.imageProvider)
-        case .ready:
-            ReadyPageView()
+        Group {
+            switch currentPage {
+            case .welcome:
+                WelcomeOnboarding()
+            case .apiKey:
+                APIKeyOnboarding(providerDefault: providerDefaults.first!)
+            case .plugins:
+                PluginsOnboarding()
+            #if os(macOS)
+            case .quickPanel:
+                QuickPanelOnboarding(provider: providerDefaults.first!.quickProvider)
+            #endif
+            case .imageGen:
+                ImageGenOnboarding(provider: providerDefaults.first!.imageProvider)
+            case .ready:
+                ReadyPageView()
+            }
         }
+        .transition(.asymmetric(
+            insertion: navigationDirection == .forward ?
+                .move(edge: .trailing) : .move(edge: .leading),
+            removal: navigationDirection == .forward ?
+                .move(edge: .leading) : .move(edge: .trailing)
+        ))
     }
     
     private var navigationControls: some View {
@@ -61,13 +78,13 @@ struct OnboardingView: View {
             HStack(spacing: 20) {
                 if currentPage != .welcome {
                     Button("Previous") {
+                        navigationDirection = .backward // Set direction
                         withAnimation {
                             currentPage = OnboardingPage(rawValue: currentPage.rawValue - 1) ?? .welcome
                         }
                     }
                 }
                 
-                // Show skip button in navigation controls only for welcome page
                 if currentPage == .welcome {
                     Button("Skip") {
                         config.hasCompletedOnboarding = true
@@ -79,18 +96,17 @@ struct OnboardingView: View {
                 
                 Spacer()
                 
-                if currentPage != .ready {
-                    Button("Next") {
+                Button(currentPage != .ready ? "Next" : "Get Started") {
+                    if currentPage != .ready {
+                        navigationDirection = .forward
                         withAnimation {
                             currentPage = OnboardingPage(rawValue: currentPage.rawValue + 1) ?? .ready
                         }
-                    }
-                } else {
-                    Button("Get Started") {
+                    } else {
                         config.hasCompletedOnboarding = true
                     }
-                    .keyboardShortcut(.defaultAction)
                 }
+                .keyboardShortcut(currentPage == .ready ? .defaultAction : nil)
             }
             
             PageDots(current: currentPage.rawValue, total: OnboardingPage.allCases.count)

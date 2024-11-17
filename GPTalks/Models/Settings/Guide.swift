@@ -92,7 +92,9 @@ struct Guide: Identifiable {
         """),
         
         Guide(title: "Adding Files", icon: "paperclip.circle.fill", content: """
-        This app offers native support for various file types, while others require specific provider models or may not be supported at all.  Here's a breakdown:
+        Pressing ⌘ + V with files in the clipboard will paste them to the current chat
+        
+        This app natively support for various file types, while others require specific provider models or may not be supported at all.  Here's a breakdown:
 
         * **Text Files:** Most text file content can be directly pasted and processed within the app.
         * **Image Files:** Image file support depends on the capabilities of the provider's model.

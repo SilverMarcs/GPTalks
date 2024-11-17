@@ -23,7 +23,7 @@ struct QuickPanelOnboarding: View {
                         KeyboardShortcuts.Recorder(for: .togglePanel)
                     } label: {
                         Text("Global shortcut")
-                        Text("Access from anywhere in the OS")
+
                     }
                     
                     ModelPicker(model: $provider.liteModel, models: provider.chatModels, label: "Quick Panel Model")
@@ -31,7 +31,7 @@ struct QuickPanelOnboarding: View {
                 .scrollDisabled(true)
                 .formStyle(.grouped)
             },
-            footerText: "You may configure further in Settings."
+            footerText: "Access from anywhere in the OS"
         )
     }
 }
