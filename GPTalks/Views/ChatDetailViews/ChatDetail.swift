@@ -54,55 +54,23 @@ struct ChatDetail: View {
                     Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
                 }
             }
+            .task(id: chatVM.selections) {
+                config.hasUserScrolled = false
+                config.proxy = proxy
+                scrollToBottom(proxy: proxy, animated: false)
+            }
             #if os(macOS)
             .navigationSubtitle("\(chat.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 if chat.isReplying {
-                    chat.hasUserScrolled = true
+                    config.hasUserScrolled = true
                 }
-            }
-            .onChange(of: chatVM.selections) {
-                chat.hasUserScrolled = false
-                chat.proxy = proxy
-                scrollToBottom(proxy: proxy, animated: false)
             }
             #else
             .listStyle(.plain)
             .toolbarTitleDisplayMode(.inline)
-            .onAppear {
-                chat.hasUserScrolled = false
-                chat.proxy = proxy
-                scrollToBottom(proxy: proxy, delay: 0.3)
-            }
-            .onScrollPhaseChange { oldPhase, newPhase in  // this sint working on macos
-                if newPhase == .tracking || newPhase.isScrolling {
-                    chat.hasUserScrolled = true
-                }
-            }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)) { _ in
                 scrollToBottom(proxy: proxy, delay: 0.1)
-            }
-            .safeAreaInset(edge: .top, spacing: 0) {
-                if !chatVM.searchText.isEmpty {
-                    
-                    HStack {
-                        Text("Searching: \(chatVM.searchText)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .bold()
-                        
-                        Spacer()
-                        
-                        Button("Clear") {
-                            chatVM.searchText = ""
-                        }
-                        .font(.subheadline)
-                        .foregroundStyle(.accent)
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 5)
-                    .background(.bar)
-                }
             }
             #if !os(visionOS)
             .scrollDismissesKeyboard(.immediately)

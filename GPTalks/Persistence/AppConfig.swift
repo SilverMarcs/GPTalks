@@ -12,6 +12,9 @@ class AppConfig: ObservableObject {
     static let shared = AppConfig()
     private init() {}
     
+    var proxy: ScrollViewProxy?
+    var hasUserScrolled = false
+    
     // Appearance
     @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
     @AppStorage("codeBlockTheme") var codeBlockTheme: CodeBlockTheme = .atom

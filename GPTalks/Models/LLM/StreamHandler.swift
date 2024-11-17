@@ -73,7 +73,7 @@ struct StreamHandler {
             assistant.content = streamText
             assistant.isReplying = false
             session.scrollBottom()
-            session.hasUserScrolled = false
+            AppConfig.shared.hasUserScrolled = false
             try? assistant.modelContext?.save()
         }
     }
@@ -94,7 +94,7 @@ struct StreamHandler {
         session.totalTokens = response.inputTokens + response.outputTokens
         assistant.isReplying = false
         session.scrollBottom()
-        session.hasUserScrolled = false
+        AppConfig.shared.hasUserScrolled = false
         try? assistant.modelContext?.save()
     }
 

@@ -42,13 +42,14 @@ struct ChatList: View {
                 ContentUnavailableView.search
             } else {
                 ForEach(chats) { session in
-                    ChatRow(session: session)
-                        .tag(session)
-                        .deleteDisabled(session.status == .starred)
-                        #if os(macOS)
-                        .listRowSeparator(.visible)
-                        .listRowSeparatorTint(Color.gray.opacity(0.2))
-                        #endif
+                    NavigationLink(value: session) {
+                        ChatRow(session: session)
+                            .deleteDisabled(session.status == .starred)
+                            #if os(macOS)
+                            .listRowSeparator(.visible)
+                            .listRowSeparatorTint(Color.gray.opacity(0.2))
+                            #endif
+                    }
                 }
                 .onDelete(perform: deleteItems)
             }

@@ -67,6 +67,14 @@ struct ChatToolbar: ToolbarContent {
             Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
                 .allowsHitTesting(false)
         }
+        #else
+        if !chatVM.searchText.isEmpty {
+            ToolbarItem {
+                Button("Clear Search") {
+                    chatVM.searchText = ""
+                }
+            }
+        }
         #endif
     }
     
@@ -92,7 +100,7 @@ struct ChatToolbar: ToolbarContent {
     private func scrollToCurrentMatch() {
         guard currentSearchIndex >= 0 && currentSearchIndex < matchingThreads.count else { return }
         let thread = matchingThreads[currentSearchIndex]
-        chat.proxy?.scrollTo(thread, anchor: .top)
+        AppConfig.shared.proxy?.scrollTo(thread, anchor: .top)
     }
 }
 

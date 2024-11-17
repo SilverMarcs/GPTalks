@@ -32,11 +32,6 @@ final class Chat {
     @Relationship(deleteRule: .cascade)
     var config: ChatConfig
     
-    @Transient
-    var proxy: ScrollViewProxy?
-    @Attribute(.ephemeral)
-    var hasUserScrolled: Bool = false
-    
     @Attribute(.ephemeral)
     var showCamera: Bool = false
     
@@ -127,7 +122,7 @@ final class Chat {
     }
     
     func stopStreaming() {
-        hasUserScrolled = false
+        AppConfig.shared.hasUserScrolled = false
         streamingTask?.cancel()
         streamingTask = nil
         
@@ -144,7 +139,7 @@ final class Chat {
     private func handleError(_ error: Error) {
         errorMessage = error.localizedDescription
         scrollBottom()
-        hasUserScrolled = false
+        AppConfig.shared.hasUserScrolled = false
         
         DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
             if let lastThread = self.threads.last, lastThread.content.isEmpty, lastThread.role == .assistant {
@@ -174,8 +169,10 @@ final class Chat {
     }
     
     func scrollBottom() {
-        if let proxy = self.proxy, !hasUserScrolled {
-            scrollToBottom(proxy: proxy)
+        if let proxy = AppConfig.shared.proxy, !AppConfig.shared.hasUserScrolled {
+            DispatchQueue.main.async {
+                scrollToBottom(proxy: proxy)
+            }
         }
     }
     

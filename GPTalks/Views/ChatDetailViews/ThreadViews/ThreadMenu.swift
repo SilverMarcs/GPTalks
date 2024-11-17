@@ -74,7 +74,7 @@ struct ThreadMenu: View {
         if thread.role == .user {
             Button {
                 isExpanded.toggle()
-                thread.chat?.proxy?.scrollTo(thread, anchor: .top)
+                AppConfig.shared.proxy?.scrollTo(thread, anchor: .top)
             } label: {
                 Label(isExpanded ? "Collapse" : "Expand", systemImage: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right")
             }

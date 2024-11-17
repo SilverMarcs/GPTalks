@@ -26,13 +26,7 @@ struct CommonInputStyling: ViewModifier {
             .ignoresSafeArea()
     }
     
-    private var verticalPadding: CGFloat {
-#if os(macOS)
-        16
-#else
-        9
-#endif
-    }
+    private let verticalPadding: CGFloat = 16
 }
 
 #Preview {

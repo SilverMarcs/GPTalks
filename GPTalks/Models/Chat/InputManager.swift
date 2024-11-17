@@ -77,10 +77,12 @@ enum InputState {
         
         prompt = thread.content
         dataFiles = thread.dataFiles
-        thread.chat?.proxy?.scrollTo(thread, anchor: .top)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            withAnimation {
-                thread.chat?.proxy?.scrollTo(thread, anchor: .top)
+        AppConfig.shared.proxy?.scrollTo(thread, anchor: .top)
+        if config.markdownProvider == .webview {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation {
+                    thread.chat?.proxy?.scrollTo(thread, anchor: .top)
+                }
             }
         }
     }
