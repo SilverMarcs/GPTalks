@@ -10,6 +10,8 @@ import SwiftUI
 struct GenerationView: View {
     @ObservedObject var imageConfig = ImageConfigDefaults.shared
     var generation: Generation
+    private let spacing: CGFloat = 10
+    private let size: CGFloat = 300
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -54,18 +56,14 @@ struct GenerationView: View {
                         .padding(.leading, 5)
                         .padding(.top, 1)
                 } else {
-                    #if os(macOS)
-                    LazyVGrid(columns: [
-                        GridItem(.fixed(CGFloat(imageConfig.imageHeight)), spacing: gridSpacing),
-                        GridItem(.fixed(CGFloat(imageConfig.imageHeight)), spacing: gridSpacing),
-                    ], alignment: .leading, spacing: gridSpacing) {
+                    LazyVGrid(columns: gridColumns, alignment: .leading, spacing: spacing) {
                         if generation.state == .generating {
                             ForEach(1 ... generation.config.numImages, id: \.self) { image in
                                 ProgressView()
-                                    .frame(width: CGFloat(imageConfig.imageWidth), height: CGFloat(imageConfig.imageHeight))
+                                    .frame(width: size, height: size)
                                     .background(
                                         RoundedRectangle(cornerRadius: 15)
-                                        .fill(.background.quinary)
+                                            .fill(.background.quinary)
                                     )
                             }
                         } else if generation.state == .success {
@@ -74,22 +72,6 @@ struct GenerationView: View {
                             }
                         }
                     }
-                    #else
-                    if generation.state == .generating {
-                        ForEach(1 ... generation.config.numImages, id: \.self) { image in
-                            ProgressView()
-                                .frame(width: CGFloat(imageConfig.imageWidth), height: CGFloat(imageConfig.imageHeight))
-                                .background(
-                                    RoundedRectangle(cornerRadius: 15)
-                                    .fill(.background.secondary)
-                                )
-                        }
-                    } else if generation.state == .success {
-                        ForEach(generation.images, id: \.self) { image in
-                            ImageViewerData(data: image)
-                        }
-                    }
-                    #endif
                 }
             }
         }
@@ -109,19 +91,12 @@ struct GenerationView: View {
         }
     }
     
-    var gridSpacing: CGFloat {
-        #if os(macOS)
-        10
+    private var gridColumns: [GridItem] {
+        #if os(iOS)
+        [GridItem(.fixed(size), spacing: spacing)]
         #else
-        10
-        #endif
-    }
-    
-    var size: CGFloat {
-        #if os(macOS)
-        10
-        #else
-        10
+        [GridItem(.fixed(size), spacing: spacing),
+        GridItem(.fixed(size), spacing: spacing)]
         #endif
     }
 }

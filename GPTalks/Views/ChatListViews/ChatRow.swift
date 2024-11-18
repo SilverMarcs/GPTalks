@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ChatRow: View {
     @Environment(\.modelContext) var modelContext
-    @Environment(\.sidebarRowSize) private var sidebarRowSize
     @Environment(ChatVM.self) private var sessionVM
     
     @ObservedObject var config = AppConfig.shared
@@ -19,13 +18,7 @@ struct ChatRow: View {
     var swipeTip = SwipeActionTip()
     
     var body: some View {
-        Group {
-            #if os(macOS)
-            small
-            #else
-            large
-            #endif
-        }
+        row
         .swipeActions(edge: .leading) {
             swipeActionsLeading
         }
@@ -33,52 +26,15 @@ struct ChatRow: View {
             swipeActionsTrailing
         }
     }
-    
-    var large: some View {
+    var row: some View {
         HStack {
-            ProviderImage(provider: session.config.provider, radius: 9, frame: 29, scale: .large)
-                .symbolEffect(.pulse, isActive: session.isReplying)
-            
-            VStack(alignment: .leading) {
-                HStack {
-                    HighlightedText(text: session.title, highlightedText: sessionVM.searchText, selectable: false)
-                        .lineLimit(1)
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                        .opacity(0.9)
-                    
-                    Spacer()
-                    
-                    Text(session.config.model.name)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .fontWidth(.compressed)
-                }
-                
-                HStack {
-                    Text(subText)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                    
-                    Spacer()
-                    
-                    star
-                }
-            }
-        }
-        .padding(3)
-    }
-    
-    var small: some View {
-        HStack {
-            ProviderImage(provider: session.config.provider, radius: 8, frame: 23, scale: .medium)
+            ProviderImage(provider: session.config.provider, radius: 8, frame: imageSize, scale: .medium)
                 .symbolEffect(.bounce, options: .speed(0.5), isActive: session.isReplying)
             
             HighlightedText(text: session.title, highlightedText: sessionVM.searchText, selectable: false)
                 .lineLimit(1)
-                .font(.headline)
-                .fontWeight(.regular)
+                .font(font)
+                .fontWeight(fontWeight)
                 .opacity(0.9)
             
             Spacer()
@@ -88,15 +44,46 @@ struct ChatRow: View {
                 .foregroundStyle(.secondary)
                 .fontWidth(.compressed)
             
-            star
+            chatStatusMarker
                 .imageScale(.small)
         }
-        .padding(3)
-        .symbolEffect(.bounce, options: .speed(0.5), isActive: session.isReplying)
+        .padding(padding)
+    }
+    
+    var imageSize: CGFloat {
+        #if os(macOS)
+        return 23
+        #else
+        return 26
+        #endif
+    }
+    
+    var font: Font {
+        #if os(macOS)
+        return .headline
+        #else
+        return .subheadline
+        #endif
+    }
+    
+    var fontWeight: Font.Weight {
+        #if os(macOS)
+        return .regular
+        #else
+        return .semibold
+        #endif
+    }
+    
+    var padding: CGFloat {
+        #if os(macOS)
+        return 3
+        #else
+        return 4
+        #endif
     }
     
     @ViewBuilder
-    var star: some View {
+    var chatStatusMarker: some View {
         switch session.status {
         case .starred:
             Image(systemName: "star.fill")
@@ -110,14 +97,6 @@ struct ChatRow: View {
         default:
             EmptyView()
         }
-    }
-    
-    var subText: String {
-        if session.isReplying {
-            return "Generating…"
-        }
-        let lastMessage = session.threads.last?.content ?? ""
-        return lastMessage.isEmpty ? "Start a conversation" : lastMessage
     }
 
     @ViewBuilder
@@ -172,5 +151,5 @@ struct ChatRow: View {
         ChatRow(session: .mockChat)
             .environment(ChatVM())
     }
-    .frame(width: 250)
+    .frame(width: 400)
 }

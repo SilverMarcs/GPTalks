@@ -17,8 +17,5 @@ class ImageConfigDefaults: ObservableObject {
     @AppStorage("quality") var quality = ImagesQuery.Quality.standard
     @AppStorage("style") var style = ImagesQuery.Style.natural
     
-    @AppStorage("imageWidth") var imageWidth: Int = 250
-    @AppStorage("imageHeight") var imageHeight: Int = 250
-    
     @AppStorage("saveToPhotos") var saveToPhotos = true
 }

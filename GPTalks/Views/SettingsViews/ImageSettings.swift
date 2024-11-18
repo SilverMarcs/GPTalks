@@ -65,20 +65,6 @@ struct ImageSettings: View {
                     }
                 }
             }
-            
-            Section("Generation Image Size") {
-                IntegerStepper(value: $imageConfig.imageHeight, label: "Image Height", step: 50, range: 50...500)
-                
-                IntegerStepper(value: $imageConfig.imageWidth, label: "Image Width", step: 50, range: 50...500)
-                
-                LabeledContent("Demo") {
-                    Image("sample")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: CGFloat(imageConfig.imageWidth), height: CGFloat(imageConfig.imageHeight))
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                }
-            }
         }
         .formStyle(.grouped)
         .navigationTitle("Image Gen")

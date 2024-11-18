@@ -11,6 +11,7 @@ import Photos
 struct ImageViewerData: View {
     @ObservedObject var imageConfig = ImageConfigDefaults.shared
     let data: Data
+    private let size: CGFloat = 300
     
     @State private var selectedFileURL: URL?
     @State private var isHovering = true
@@ -23,11 +24,12 @@ struct ImageViewerData: View {
                     Image(platformImage: image)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: CGFloat(imageConfig.imageWidth), height: CGFloat(imageConfig.imageHeight))
+                        .frame(width: size, height: size)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                 } else {
                     Text("Image Unable to Load")
-                        .frame(width: CGFloat(imageConfig.imageWidth), height: CGFloat(imageConfig.imageHeight))
+                        .foregroundStyle(.red)
+                        .frame(width: size, height: size)
                 }
             }
             .quickLookPreview($selectedFileURL)
