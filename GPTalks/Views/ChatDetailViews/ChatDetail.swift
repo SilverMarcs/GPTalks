@@ -21,22 +21,7 @@ struct ChatDetail: View {
     
     var body: some View {
         ScrollViewReader { proxy in
-            List {
-                ForEach(chat.threads, id: \.self) { thread in
-                    ThreadView(thread: thread)
-                        #if os(iOS)
-                        .opacity(0.9)
-                        #endif
-                }
-                .listRowSeparator(.hidden)
-                
-                ErrorMessageView(message: $chat.errorMessage)
-                
-                Color.clear
-                    .transaction { $0.animation = nil }
-                    .id(String.bottomID)
-                    .listRowSeparator(.hidden)
-            }
+            content
             .toolbar {
                 ChatToolbar(chat: chat)
             }
@@ -80,6 +65,30 @@ struct ChatDetail: View {
             .scrollDismissesKeyboard(.immediately)
             #endif
             #endif
+        }
+    }
+    
+    @ViewBuilder
+    var content: some View {
+        if chat.threads.isEmpty {
+            EmptyChat(chat: chat)
+        } else {
+            List {
+                ForEach(chat.threads, id: \.self) { thread in
+                    ThreadView(thread: thread)
+                        #if os(iOS)
+                        .opacity(0.9)
+                        #endif
+                }
+                .listRowSeparator(.hidden)
+                
+                ErrorMessageView(message: $chat.errorMessage)
+                
+                Color.clear
+                    .transaction { $0.animation = nil }
+                    .id(String.bottomID)
+                    .listRowSeparator(.hidden)
+            }
         }
     }
     

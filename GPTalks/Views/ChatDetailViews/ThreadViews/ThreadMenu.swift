@@ -27,6 +27,7 @@ struct ThreadMenu: View {
                 buttons
                     .buttonStyle(HoverScaleButtonStyle())
             }
+            .transaction { $0.animation = nil }
             .frame(height: 20)
         #else
             buttons
@@ -53,6 +54,8 @@ struct ThreadMenu: View {
         }
         
         Section {
+            resetContext
+            
             deleteGroup
         }
     }
@@ -127,6 +130,15 @@ struct ThreadMenu: View {
         .help("Select Text")
     }
 
+    var resetContext: some View {
+        Button {
+            thread.chat?.resetContext(at: thread)
+        } label: {
+            Label("Reset Context", systemImage: "eraser")
+        }
+        .help("Reset Context")
+    }
+    
     var deleteGroup: some View {
         Button(role: .destructive) {
             thread.chat?.deleteThread(thread)

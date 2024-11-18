@@ -14,6 +14,7 @@ final class Chat {
     var date: Date = Date()
     var title: String = "Chat Session"
     var errorMessage: String = ""
+    var resetMarker: Int?
     var totalTokens: Int = 0
     
     var statusId: Int = 1 // normal status
@@ -27,6 +28,10 @@ final class Chat {
     var threads: [Thread] {
         get { return unorderedThreads.sorted(by: {$0.date < $1.date})}
         set { unorderedThreads = newValue }
+    }
+    var adjustedThreads: [Thread] {
+        guard let resetMarker = resetMarker else { return threads }
+        return Array(threads.dropFirst(resetMarker))
     }
     
     @Relationship(deleteRule: .cascade)
@@ -54,7 +59,7 @@ final class Chat {
         errorMessage = ""
         date = Date()
         streamingTask = Task {
-            let streamer = StreamHandler(session: self)
+            let streamer = StreamHandler(chat: self)
             
             // Request background task before starting network operations
             #if !os(macOS)
@@ -99,6 +104,7 @@ final class Chat {
     @MainActor
     private func handleEditing() async {
         guard let index = inputManager.editingIndex else { return }
+        unsetResetMarker(at: index)
         let editingMessage = threads[index]
         editingMessage.content = inputManager.prompt
         editingMessage.dataFiles = inputManager.dataFiles
@@ -117,6 +123,7 @@ final class Chat {
     @MainActor
     func regenerate(thread: Thread) async {
         guard let index = threads.firstIndex(where: { $0 == thread }) else { return }
+        unsetResetMarker(at: index)
         threads.removeSubrange(thread.role == .assistant ? index... : (index + 1)...)
         await processRequest()
     }
@@ -150,9 +157,9 @@ final class Chat {
     
     func generateTitle(forced: Bool = false) async {
         guard status != .quick else { return }
-        guard forced || threads.count <= 2 else { return }
+        guard forced || adjustedThreads.count <= 2 else { return }
         
-        if let newTitle = await TitleGenerator.generateTitle(threads: threads, provider: config.provider) {
+        if let newTitle = await TitleGenerator.generateTitle(threads: adjustedThreads, provider: config.provider) {
             self.title = newTitle
         }
     }
@@ -168,15 +175,23 @@ final class Chat {
         scrollBottom()
     }
     
-    func scrollBottom() {
-        if let proxy = AppConfig.shared.proxy, !AppConfig.shared.hasUserScrolled {
-            DispatchQueue.main.async {
-                scrollToBottom(proxy: proxy)
-            }
+    func unsetResetMarker(at index: Int) {
+        if let resetMarker = resetMarker, index <= resetMarker {
+            self.resetMarker = nil
+        }
+    }
+
+    func resetContext(at thread: Thread) {
+        guard let index = threads.firstIndex(of: thread) else { return }
+        resetMarker = (resetMarker == index) ? nil : index
+        if resetMarker == threads.count - 1 {
+            scrollBottom()
         }
     }
     
     func deleteThread(_ thread: Thread) {
+        guard let index = threads.firstIndex(of: thread) else { return }
+        unsetResetMarker(at: index)
         threads.removeAll(where: { $0 == thread })
         if threads.count == 0 {
             errorMessage = ""
@@ -186,11 +201,19 @@ final class Chat {
 
     func deleteAllThreads() {
         errorMessage = ""
+        resetMarker = nil
         while let thread = threads.popLast() {
             modelContext?.delete(thread)
         }
     }
     
+    func scrollBottom() {
+        if let proxy = AppConfig.shared.proxy, !AppConfig.shared.hasUserScrolled {
+            DispatchQueue.main.async {
+                scrollToBottom(proxy: proxy)
+            }
+        }
+    }
     
     func copy(from thread: Thread? = nil, purpose: ChatConfigPurpose) async -> Chat {
         let newSession = Chat(config: config.copy(purpose: purpose))

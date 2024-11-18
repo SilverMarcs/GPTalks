@@ -115,7 +115,6 @@ struct ChatInputView: View {
             case .success(let urls):
                 Task {
                     for url in urls {
-                        // TODO: MOVE SEC STUFF TO PROCESSFILE FUNC
                         guard url.startAccessingSecurityScopedResource() else {
                             print("Failed to access security scoped resource for: \(url.lastPathComponent)")
                             continue

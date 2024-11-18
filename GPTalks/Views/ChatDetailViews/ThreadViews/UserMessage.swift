@@ -32,6 +32,7 @@ struct UserMessage: View {
                     .padding(5)
                     #endif
             }
+            .transaction { $0.animation = nil }
             .groupBoxStyle(PlatformSpecificGroupBoxStyle())
             .overlay(
                 RoundedRectangle(cornerRadius: 5)

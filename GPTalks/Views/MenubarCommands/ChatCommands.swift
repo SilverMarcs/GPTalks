@@ -49,8 +49,6 @@ struct ChatCommands: Commands {
                     }
                 }
                 .keyboardShortcut(.return)
-//                .disabled(chatVM.activeChat?.status == .quick)
-//                          chatVM.activeChat?.isReplying ?? false) ||
                           
                 Button("Stop Streaming") {
                     chatVM.stopStreaming()
@@ -61,7 +59,7 @@ struct ChatCommands: Commands {
             
             Section {
                 Button("Edit Last Message") {
-                    isFocused = .textEditor // this sint doing anything (on macos at least)
+                    isFocused = .textEditor // this isnt doing anything (on macos at least)
                     withAnimation {
                         chatVM.editLastMessage()
                     }
@@ -78,6 +76,11 @@ struct ChatCommands: Commands {
             }
             
             Section {
+                Button("Reset Context") {
+                    chatVM.resetContext()
+                }
+                .keyboardShortcut("k")
+                
                 Button("Delete Last Message", role: .destructive) {
                     chatVM.deleteLastMessage()
                 }

@@ -38,6 +38,11 @@ import SwiftUI
         await chat.regenerate(thread: lastThread)
     }
     
+    func resetContext() {
+        guard let (chat, lastThread) = activeChatAndLastThread else { return }
+        chat.resetContext(at: lastThread)
+    }
+    
     func deleteLastMessage() {
         guard let (chat, lastThread) = activeChatAndLastThread else { return }
         chat.deleteThread(lastThread)
