@@ -16,9 +16,10 @@ struct MarkdownView: View {
 
     var body: some View {
         switch config.markdownProvider {
-        case .native:
-            AttributedText(text: content, highlightText: chatVM.searchText, parseMarkdown: true) // uses my basic markdown parser
-                .textSelection(.enabled)
+        case .native, 
+             .webview where !chatVM.searchText.isEmpty:
+                AttributedText(text: content, highlightText: chatVM.searchText, parseMarkdown: true)
+                    .textSelection(.enabled)
         case .webview:
             SwiftMarkdownView(content)
                 .markdownBaseURL("GPTalks Web Content")

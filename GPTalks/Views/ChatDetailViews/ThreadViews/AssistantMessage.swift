@@ -34,17 +34,6 @@ struct AssistantMessage: View {
                     #endif
                     .transaction { $0.animation = nil }
                 
-//                if !chatVM.searchText.isEmpty {
-//                    HighlightedText(text: thread.content, highlightedText: chatVM.searchText)
-//                        .font(.system(size: config.fontSize))
-//                        #if os(macOS)
-//                        .lineSpacing(2)
-//                        #endif
-//                } else {
-//                    MarkdownView(content: thread.content)
-//                        .transaction { $0.animation = nil }
-//                }
-                
                 MarkdownView(content: thread.content)
                     .transaction { $0.animation = nil }
                 

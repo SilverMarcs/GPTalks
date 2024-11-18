@@ -78,22 +78,22 @@ final class DatabaseService: NSObject {
             session.title = "(↯) Quick Session"
             modelContext.insert(session)
             
-            // Demo chat with some threads
-            let normalChatConfig = ChatConfig(provider: openAI, purpose: .chat)
-            let normalSession = Chat(config: normalChatConfig)
-            normalSession.addThread(.mockUserThread)
-            normalSession.threads.append(.mockAssistantThread)
-            normalSession.totalTokens = 181
-            modelContext.insert(normalSession)
-            
-            // Demo favourite chat
+            // Demo favourite chat with some threads
             let normalChatConfig2 = ChatConfig(provider: openAI, purpose: .chat)
             let favouriteSession = Chat(config: normalChatConfig2)
             favouriteSession.status = .starred
             favouriteSession.statusId = ChatStatus.starred.id
+            favouriteSession.addThread(.mockUserThread)
+            favouriteSession.threads.append(.mockAssistantThread)
             favouriteSession.title = "Favourite Chat"
             modelContext.insert(favouriteSession)
             
+            // Demo chat with no threads
+            let normalChatConfig = ChatConfig(provider: openAI, purpose: .chat)
+            let normalSession = Chat(config: normalChatConfig)
+            normalSession.totalTokens = 181
+            modelContext.insert(normalSession)
+
             // Archived chat
             let normalChatConfig3 = ChatConfig(provider: openAI, purpose: .chat)
             let archivedSession = Chat(config: normalChatConfig3)

@@ -33,9 +33,13 @@ struct UserMessage: View {
                     #endif
             }
             .groupBoxStyle(PlatformSpecificGroupBoxStyle())
-//            .background(
-//                    (thread.chat?.inputManager.editingIndex == indexOfThread ? Color.accentColor.opacity(0.1) : .clear)
-//            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(
+                        thread.chat?.inputManager.editingIndex == indexOfThread ? Color.accentColor : .clear,
+                        lineWidth: 2
+                    )
+            )
             
             #if os(macOS)
             contextMenu
@@ -84,9 +88,9 @@ struct UserMessage: View {
         #endif
     }
     
-//    var indexOfThread: Int {
-//        thread.chat?.threads.firstIndex(where: { $0 == thread }) ?? 0
-//    }
+    var indexOfThread: Int {
+        thread.chat?.threads.firstIndex(where: { $0 == thread }) ?? 0
+    }
     
     private var maxImageSize: CGFloat {
         300

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HighlightedText: View {
     let text: String
-    let highlightedText: String?
+    let highlightedText: String
     var selectable: Bool = true
     
     var body: some View {
@@ -24,7 +24,7 @@ struct HighlightedText: View {
     
     @ViewBuilder
     var comprised: some View {
-        if let highlightedText, highlightedText.count >= 2 {
+        if !highlightedText.isEmpty {
             AttributedText(
                 text: text,
                 highlightText: highlightedText,

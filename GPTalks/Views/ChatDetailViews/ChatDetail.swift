@@ -57,7 +57,11 @@ struct ChatDetail: View {
             .task(id: chatVM.selections) {
                 config.hasUserScrolled = false
                 config.proxy = proxy
+                #if os(macOS)
                 scrollToBottom(proxy: proxy, animated: false)
+                #else
+                scrollToBottom(proxy: proxy, delay: 0.3)
+                #endif
             }
             #if os(macOS)
             .navigationSubtitle("\(chat.config.systemPrompt.prefix(70))")
