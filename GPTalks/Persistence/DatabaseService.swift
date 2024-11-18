@@ -24,7 +24,7 @@ final class DatabaseService: NSObject {
         let schema = Schema([
             Chat.self,
             ChatConfig.self,
-            Thread.self,
+            Message.self,
             Provider.self,
             Generation.self,
             ImageConfig.self,
@@ -37,13 +37,13 @@ final class DatabaseService: NSObject {
             let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
             let modelContext = container.mainContext
             
-            var fetchQuickSession = FetchDescriptor<Chat>()
+            var fetchQuickChats = FetchDescriptor<Chat>()
             let quickId = ChatStatus.quick.id
-            fetchQuickSession.predicate = #Predicate { $0.statusId == quickId }
-            fetchQuickSession.fetchLimit = 1
+            fetchQuickChats.predicate = #Predicate { $0.statusId == quickId }
+            fetchQuickChats.fetchLimit = 1
             
-            if let quickSession = try? modelContext.fetch(fetchQuickSession).first {
-                quickSession.deleteAllThreads()
+            if let quickChat = try? modelContext.fetch(fetchQuickChats).first {
+                quickChat.deleteAllMessages()
             }
             
             var fetchProviders = FetchDescriptor<Provider>()
@@ -72,35 +72,35 @@ final class DatabaseService: NSObject {
             
             // Quick chat
             let config = ChatConfig(provider: openAI, purpose: .quick)
-            let session = Chat(config: config)
-            session.status = .quick
-            session.statusId = ChatStatus.quick.id
-            session.title = "(↯) Quick Session"
-            modelContext.insert(session)
+            let chat = Chat(config: config)
+            chat.status = .quick
+            chat.statusId = ChatStatus.quick.id
+            chat.title = "(↯) Quick Chat"
+            modelContext.insert(chat)
             
-            // Demo favourite chat with some threads
+            // Demo favourite chat with some messages
             let normalChatConfig2 = ChatConfig(provider: openAI, purpose: .chat)
-            let favouriteSession = Chat(config: normalChatConfig2)
-            favouriteSession.status = .starred
-            favouriteSession.statusId = ChatStatus.starred.id
-            favouriteSession.addThread(.mockUserThread)
-            favouriteSession.threads.append(.mockAssistantThread)
-            favouriteSession.title = "Favourite Chat"
-            modelContext.insert(favouriteSession)
+            let favouriteChat = Chat(config: normalChatConfig2)
+            favouriteChat.status = .starred
+            favouriteChat.statusId = ChatStatus.starred.id
+            favouriteChat.addMessage(.mockUserMessage)
+            favouriteChat.messages.append(.mockAssistantMessage)
+            favouriteChat.title = "Favourite Chat"
+            modelContext.insert(favouriteChat)
             
-            // Demo chat with no threads
+            // Demo chat with no messages
             let normalChatConfig = ChatConfig(provider: openAI, purpose: .chat)
-            let normalSession = Chat(config: normalChatConfig)
-            normalSession.totalTokens = 181
-            modelContext.insert(normalSession)
+            let normalChat = Chat(config: normalChatConfig)
+            normalChat.totalTokens = 181
+            modelContext.insert(normalChat)
 
             // Archived chat
             let normalChatConfig3 = ChatConfig(provider: openAI, purpose: .chat)
-            let archivedSession = Chat(config: normalChatConfig3)
-            archivedSession.status = .archived
-            archivedSession.statusId = ChatStatus.archived.id
-            archivedSession.title = "Archived Chat"
-            modelContext.insert(archivedSession)
+            let archivedChat = Chat(config: normalChatConfig3)
+            archivedChat.status = .archived
+            archivedChat.statusId = ChatStatus.archived.id
+            archivedChat.title = "Archived Chat"
+            modelContext.insert(archivedChat)
             
             // Image session
             let imageChatConfig = ImageConfig(prompt: "", provider: openAI)

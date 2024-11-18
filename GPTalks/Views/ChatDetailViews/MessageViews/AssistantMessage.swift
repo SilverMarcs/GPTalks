@@ -10,21 +10,21 @@ import SwiftUI
 struct AssistantMessage: View {
     @Environment(ChatVM.self) var chatVM
     @ObservedObject var config = AppConfig.shared
-    var thread: Thread
+    var message: Message
     
     @State private var isHovering: Bool = false
     @State private var showingTextSelection = false
     
     var body: some View {
         HStack(alignment: .top, spacing: spacing) {
-            Image(thread.provider?.type.imageName ?? "brain.SFSymbol")
+            Image(message.provider?.type.imageName ?? "brain.SFSymbol")
                 .resizable()
                 .frame(width: 17, height: 17)
-                .foregroundStyle(Color(hex: thread.provider?.color  ?? "#00947A").gradient)
+                .foregroundStyle(Color(hex: message.provider?.color  ?? "#00947A").gradient)
                 .transaction { $0.animation = nil }
             
             VStack(alignment: .leading, spacing: 7) {
-                Text(thread.model?.name ?? "Assistant")
+                Text(message.model?.name ?? "Assistant")
                     .font(.subheadline)
                     .bold()
                     .foregroundStyle(.secondary)
@@ -33,34 +33,34 @@ struct AssistantMessage: View {
                     #endif
                     .transaction { $0.animation = nil }
                 
-                MarkdownView(content: thread.content)
+                MarkdownView(content: message.content)
                     .transaction { $0.animation = nil }
                 
-                if !thread.dataFiles.isEmpty {
-                    DataFilesView(dataFiles: thread.dataFiles, edge: .leading)
+                if !message.dataFiles.isEmpty {
+                    DataFilesView(dataFiles: message.dataFiles, edge: .leading)
                 }
                 
-                if thread.isReplying {
+                if message.isReplying {
                     ProgressView()
                         .controlSize(.small)
                 }
                 
                 #if os(macOS)
-                threadMenuView
+                messageMenuView
                 #endif
             }
         }
     #if !os(macOS)
     .contextMenu {
-        if !thread.isReplying {
-            ThreadMenu(thread: thread, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
+        if !message.isReplying {
+            MessageMenu(message: message, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
         }
     } preview: {
         Text("Assistant Message")
             .padding()
     }
     .sheet(isPresented: $showingTextSelection) {
-        TextSelectionView(content: thread.content)
+        TextSelectionView(content: message.content)
     }
     #else
     .onHover { isHovering = $0 }
@@ -70,11 +70,11 @@ struct AssistantMessage: View {
     }
 
     @ViewBuilder
-    var threadMenuView: some View {
+    var messageMenuView: some View {
         #if os(macOS)
-        ThreadMenu(thread: thread, isExpanded: .constant(true))
+        MessageMenu(message: message, isExpanded: .constant(true))
             .symbolEffect(.appear, isActive: !isHovering)
-            .opacity(thread.isReplying ? 0 : 1)
+            .opacity(message.isReplying ? 0 : 1)
         #endif
     }
     
@@ -92,7 +92,7 @@ struct AssistantMessage: View {
 }
 
 #Preview {
-    AssistantMessage(thread: .mockAssistantThread)
+    AssistantMessage(message: .mockAssistantMessage)
         .frame(width: 500, height: 300)
 }
 

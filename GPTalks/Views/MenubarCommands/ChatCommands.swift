@@ -16,7 +16,7 @@ struct ChatCommands: Commands {
         CommandGroup(replacing: .newItem) {
             Button("New Session") {
                 Task {
-                    await chatVM.createNewSession()
+                    await chatVM.createNewChat()
                 }
             }
             .keyboardShortcut("n")

@@ -16,7 +16,7 @@ struct VertexService: AIService {
         }
     }
     
-    static func convert(conversation: Thread) -> [String: Any] {
+    static func convert(conversation: Message) -> [String: Any] {
         let role = conversation.role.toVertexRole()
         
         var contentObjects: [[String: Any]] = []
@@ -37,7 +37,7 @@ struct VertexService: AIService {
             ])
         }
         
-        let contentItems = FileHelper.processDataFiles(conversation.dataFiles, threadId: conversation.id.uuidString, role: conversation.role)
+        let contentItems = FileHelper.processDataFiles(conversation.dataFiles, messageId: conversation.id.uuidString, role: conversation.role)
         for item in contentItems {
             switch item {
             case .text(let text):
@@ -85,7 +85,7 @@ struct VertexService: AIService {
         return finalContent
     }
     
-    static func streamResponse(from conversations: [Thread], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, any Error> {
+    static func streamResponse(from conversations: [Message], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, any Error> {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
@@ -192,7 +192,7 @@ struct VertexService: AIService {
     }
 
 
-    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> NonStreamResponse {
+    static func nonStreamingResponse(from conversations: [Message], config: ChatConfig) async throws -> NonStreamResponse {
         let request = try await createRequest(from: conversations, config: config)
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -242,7 +242,7 @@ struct VertexService: AIService {
         )
     }
 
-    static func createRequest(from conversations: [Thread], config: ChatConfig) async throws -> URLRequest {
+    static func createRequest(from conversations: [Message], config: ChatConfig) async throws -> URLRequest {
         let modelID = config.model.code
         let projectID = config.provider.host
         let location = "us-east5"
@@ -286,7 +286,7 @@ struct VertexService: AIService {
     }
     
     static func testModel(provider: Provider, model: AIModel) async -> Bool {
-        let testThread = Thread(role: .user, content: String.testPrompt)
+        let testMessage = Message(role: .user, content: String.testPrompt)
         let location = "us-east5"  // Assuming this is the default location
         let apiUrl = "https://\(location)-aiplatform.googleapis.com/v1/projects/\(provider.host)/locations/\(location)/publishers/anthropic/models/\(model.code):streamRawPredict"
         
@@ -302,7 +302,7 @@ struct VertexService: AIService {
             let token = try await GoogleAuth.shared.getValidAccessToken()
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             
-            let message = convert(conversation: testThread)
+            let message = convert(conversation: testMessage)
             
             let body: [String: Any] = [
                 "anthropic_version": "vertex-2023-10-16",

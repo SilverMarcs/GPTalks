@@ -1,5 +1,5 @@
 //
-//  ThreadMenu.swift
+//  MessageMenu.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 04/07/2024.
@@ -8,12 +8,12 @@
 import SwiftUI
 import SwiftData
 
-struct ThreadMenu: View {
-    @Environment(ChatVM.self) private var sessionVM
+struct MessageMenu: View {
+    @Environment(ChatVM.self) private var chatVM
     @Environment(\.isQuick) private var isQuick
     @Environment(\.providers) var providers
     
-    var thread: Thread
+    var message: Message
     
     @Binding var isExpanded: Bool
     var toggleTextSelection: (() -> Void)? = nil
@@ -39,15 +39,15 @@ struct ThreadMenu: View {
         expandHeight
         
         Section {
-            editGroup
+            editMessage
             
-            regenGroup
+            regenMessage
         }
     
         Section {
             copyText
             
-            forkSession
+            forkChat
             #if !os(macOS)
             selectText
             #endif
@@ -56,15 +56,15 @@ struct ThreadMenu: View {
         Section {
             resetContext
             
-            deleteGroup
+            deleteMessage
         }
     }
     
     @ViewBuilder
-    var editGroup: some View {
-        if !isQuick && thread.role == .user {
+    var editMessage: some View {
+        if !isQuick && message.role == .user {
             Button {
-                thread.chat?.inputManager.setupEditing(thread: thread)
+                message.chat?.inputManager.setupEditing(message: message)
             } label: {
                 Label("Edit", systemImage: "pencil.and.outline")
             }
@@ -74,10 +74,10 @@ struct ThreadMenu: View {
     
     @ViewBuilder
     var expandHeight: some View {
-        if thread.role == .user {
+        if message.role == .user {
             Button {
                 isExpanded.toggle()
-                AppConfig.shared.proxy?.scrollTo(thread, anchor: .top)
+                AppConfig.shared.proxy?.scrollTo(message, anchor: .top)
             } label: {
                 Label(isExpanded ? "Collapse" : "Expand", systemImage: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right")
             }
@@ -87,7 +87,7 @@ struct ThreadMenu: View {
     }
 
     @ViewBuilder
-    var forkSession: some View {
+    var forkChat: some View {
         if isForking {
             ProgressView()
                 .controlSize(.small)
@@ -95,8 +95,8 @@ struct ThreadMenu: View {
             Button {
                 isForking = true
                 Task {
-                    if let newChat = await thread.chat?.copy(from: thread, purpose: .chat) {
-                        sessionVM.fork(newChat: newChat)
+                    if let newChat = await message.chat?.copy(from: message, purpose: .chat) {
+                        chatVM.fork(newChat: newChat)
                         isForking = false
                     }
                 }
@@ -109,7 +109,7 @@ struct ThreadMenu: View {
 
     var copyText: some View {
         Button {
-            thread.content.copyToPasteboard()
+            message.content.copyToPasteboard()
             
             isCopied = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -132,16 +132,16 @@ struct ThreadMenu: View {
 
     var resetContext: some View {
         Button {
-            thread.chat?.resetContext(at: thread)
+            message.chat?.resetContext(at: message)
         } label: {
             Label("Reset Context", systemImage: "eraser")
         }
         .help("Reset Context")
     }
     
-    var deleteGroup: some View {
+    var deleteMessage: some View {
         Button(role: .destructive) {
-            thread.chat?.deleteThread(thread)
+            message.chat?.deleteMessage(message)
         } label: {
             #if os(macOS)
             Image(systemName: "trash")
@@ -154,15 +154,15 @@ struct ThreadMenu: View {
         .help("Delete")
     }
 
-    var regenGroup: some View {
+    var regenMessage: some View {
         #if os(macOS)
         Menu {
             ForEach(providers) { provider in
                 Menu {
                     ForEach(provider.chatModels) { model in
                         Button(model.name) {
-                            thread.chat?.config.provider = provider
-                            thread.chat?.config.model = model
+                            message.chat?.config.provider = provider
+                            message.chat?.config.model = model
                             
                             regen()
                         }
@@ -188,15 +188,15 @@ struct ThreadMenu: View {
     
     func regen() {
         Task {
-            await thread.chat?.regenerate(thread: thread)
+            await message.chat?.regenerate(message: message)
         }
     }
 }
 
 #Preview {
     VStack {
-        ThreadMenu(thread: .mockUserThread, isExpanded: .constant(true))
-        ThreadMenu(thread: .mockAssistantThread, isExpanded: .constant(true))
+        MessageMenu(message: .mockUserMessage, isExpanded: .constant(true))
+        MessageMenu(message: .mockAssistantMessage, isExpanded: .constant(true))
     }
     .frame(width: 500)
     .padding()

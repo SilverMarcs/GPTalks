@@ -41,9 +41,9 @@ struct QuickPanelSettings: View {
                     
                     do {
                         let quickSessions = try modelContext.fetch(descriptor)
-                        let session = quickSessions.first
-                        session?.config.provider = provider
-                        session?.config.model = provider.liteModel
+                        let chat = quickSessions.first
+                        chat?.config.provider = provider
+                        chat?.config.model = provider.liteModel
                     } catch {
                         print("Error fetching quick session: \(error)")
                     }

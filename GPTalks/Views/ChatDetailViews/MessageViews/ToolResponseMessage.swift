@@ -1,5 +1,5 @@
 //
-//  ToolResponseView.swift
+//  ToolResponseMessage.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 15/09/2024.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct ToolResponseView: View {
-    var thread: Thread
+struct ToolResponseMessage: View {
+    var message: Message
     @State private var showPopover = false
     
     var body: some View {
@@ -17,13 +17,13 @@ struct ToolResponseView: View {
                 .opacity(0)
                 .frame(width: size, height: size)
                 
-            if !thread.content.isEmpty {
-                Text(thread.content)
+            if !message.content.isEmpty {
+                Text(message.content)
             }
             
             button
                 .popover(isPresented: $showPopover, arrowEdge: .leading) {
-                    if let toolResponse = thread.toolResponse {
+                    if let toolResponse = message.toolResponse {
                         popoverContent(content: toolResponse.processedContent)
                     }
                 }
@@ -50,14 +50,14 @@ struct ToolResponseView: View {
         Button(action: { showPopover.toggle() }) {
             GroupBox {
                 HStack(spacing: 4) {
-                    Text(thread.isReplying ? "Using" : "Used")
+                    Text(message.isReplying ? "Using" : "Used")
                         .foregroundStyle(.secondary)
                     
-                    if let tool = thread.toolResponse?.tool {
+                    if let tool = message.toolResponse?.tool {
                         Text(tool.displayName)
                             .fontWeight(.semibold)
                         
-                        if thread.isReplying {
+                        if message.isReplying {
                             ProgressView()
                                 .controlSize(.mini)
                         } else {
@@ -86,5 +86,5 @@ struct ToolResponseView: View {
 }
 
 #Preview {
-    ToolResponseView(thread: .mockToolThread)
+    ToolResponseMessage(message: .mockToolMessage)
 }

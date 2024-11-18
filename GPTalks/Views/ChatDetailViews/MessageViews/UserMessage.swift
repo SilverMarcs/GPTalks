@@ -9,23 +9,23 @@ import SwiftUI
 
 struct UserMessage: View {
     @Environment(\.colorScheme) var colorScheme
-    @Environment(ChatVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var chatVM
     @ObservedObject var config = AppConfig.shared
     
-    var thread: Thread
+    var message: Message
     @State var isHovering: Bool = false
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 7) {
-            if !thread.dataFiles.isEmpty {
-                DataFilesView(dataFiles: thread.dataFiles)
+            if !message.dataFiles.isEmpty {
+                DataFilesView(dataFiles: message.dataFiles)
             }
             
             GroupBox {
-                HighlightedText(text: String(thread.content.prefix(isExpanded ? .max : 400)),
-                                highlightedText: sessionVM.searchText)
+                HighlightedText(text: String(message.content.prefix(isExpanded ? .max : 400)),
+                                highlightedText: chatVM.searchText)
                     .font(.system(size: config.fontSize))
                     #if os(macOS)
                     .lineSpacing(2)
@@ -37,7 +37,7 @@ struct UserMessage: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(
-                        thread.chat?.inputManager.editingIndex == indexOfThread ? Color.accentColor : .clear,
+                        message.chat?.inputManager.editingIndex == indexOfMessage ? Color.accentColor : .clear,
                         lineWidth: 2
                     )
             )
@@ -49,13 +49,13 @@ struct UserMessage: View {
         .padding(.leading, leadingPadding)
         #if !os(macOS)
         .contextMenu {
-            ThreadMenu(thread: thread, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
+            MessageMenu(message: message, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
         } preview: {
             Text("User Message")
                 .padding()
         }
         .sheet(isPresented: $showingTextSelection) {
-            TextSelectionView(content: thread.content)
+            TextSelectionView(content: message.content)
         }
         #else
         .onHover { isHovering = $0 }
@@ -65,7 +65,7 @@ struct UserMessage: View {
     
     @ViewBuilder
     var contextMenu: some View {
-        ThreadMenu(thread: thread, isExpanded: $isExpanded)
+        MessageMenu(message: message, isExpanded: $isExpanded)
             .symbolEffect(.appear, isActive: !isHovering)
     }
     
@@ -89,8 +89,8 @@ struct UserMessage: View {
         #endif
     }
     
-    var indexOfThread: Int {
-        thread.chat?.threads.firstIndex(where: { $0 == thread }) ?? 0
+    var indexOfMessage: Int {
+        message.chat?.messages.firstIndex(where: { $0 == message }) ?? 0
     }
     
     private var maxImageSize: CGFloat {
@@ -99,6 +99,6 @@ struct UserMessage: View {
 }
 
 #Preview {
-    UserMessage(thread: .mockUserThread)
+    UserMessage(message: .mockUserMessage)
         .frame(width: 500, height: 300)
 }

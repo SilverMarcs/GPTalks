@@ -18,10 +18,10 @@ import SwiftUI
         return selections.first
     }
     
-    private var activeChatAndLastThread: (Chat, Thread)? {
+    private var activeChatAndLastMessage: (Chat, Message)? {
         guard let chat = activeChat, !chat.isReplying,
-              let lastThread = chat.threads.last else { return nil }
-        return (chat, lastThread)
+              let lastMessage = chat.messages.last else { return nil }
+        return (chat, lastMessage)
     }
     
     func sendPrompt() async {
@@ -34,27 +34,27 @@ import SwiftUI
     }
     
     func regenLastMessage() async {
-        guard let (chat, lastThread) = activeChatAndLastThread else { return }
-        await chat.regenerate(thread: lastThread)
+        guard let (chat, lastMessage) = activeChatAndLastMessage else { return }
+        await chat.regenerate(message: lastMessage)
     }
     
     func resetContext() {
-        guard let (chat, lastThread) = activeChatAndLastThread else { return }
-        chat.resetContext(at: lastThread)
+        guard let (chat, lastMessage) = activeChatAndLastMessage else { return }
+        chat.resetContext(at: lastMessage)
     }
     
     func deleteLastMessage() {
-        guard let (chat, lastThread) = activeChatAndLastThread else { return }
-        chat.deleteThread(lastThread)
+        guard let (chat, lastMessage) = activeChatAndLastMessage else { return }
+        chat.deleteMessage(lastMessage)
     }
 
     func editLastMessage() {
         guard let chat = activeChat else { return }
-        guard let lastUserThread = chat.threads.last(where: { $0.role == .user }) else { return }
-        chat.inputManager.setupEditing(thread: lastUserThread)
+        guard let lastUserMessage = chat.messages.last(where: { $0.role == .user }) else { return }
+        chat.inputManager.setupEditing(message: lastUserMessage)
     }
     
-    // must provide new session, not the one to be forked
+    // must provide new chat, not the one to be forked
     @MainActor
     func fork(newChat: Chat) {
         let modelContext = DatabaseService.shared.modelContext
@@ -71,7 +71,7 @@ import SwiftUI
     
     @MainActor
     @discardableResult
-    func createNewSession(provider: Provider? = nil, model: AIModel? = nil) async -> Chat {
+    func createNewChat(provider: Provider? = nil, model: AIModel? = nil) async -> Chat {
         let modelContext = DatabaseService.shared.modelContext
         
         let provider = provider ?? DatabaseService.shared.getDefaultProvider()

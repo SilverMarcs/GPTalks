@@ -28,7 +28,7 @@ struct TranscribeTool: ToolProtocol {
         let modelContext = DatabaseService.shared.modelContext
         let uuid = UUID(uuidString: args.conversationID)!
         
-        let fetchDescriptor = FetchDescriptor<Thread>(
+        let fetchDescriptor = FetchDescriptor<Message>(
             predicate: #Predicate { conversation in
                 conversation.id == uuid
             }

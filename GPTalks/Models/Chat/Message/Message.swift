@@ -1,5 +1,5 @@
 //
-//  Thread.swift
+//  Message.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 25/06/2024.
@@ -12,7 +12,7 @@ import GoogleGenerativeAI
 import SwiftAnthropic
 
 @Model
-final class Thread {
+final class Message {
     var id: UUID = UUID()
     var date: Date = Date()
     
@@ -27,7 +27,7 @@ final class Thread {
 
     @Relationship(deleteRule: .cascade)
     var dataFiles: [TypedData] = []
-    var role: ThreadRole
+    var role: MessageRole
     
     @Attribute(.ephemeral)
     var isReplying: Bool = false
@@ -35,7 +35,7 @@ final class Thread {
     var toolCalls: [ChatToolCall] = []
     var toolResponse: ToolResponse?
     
-    init(role: ThreadRole, content: String = "", chat: Chat? = nil, provider: Provider? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
+    init(role: MessageRole, content: String = "", chat: Chat? = nil, provider: Provider? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
         self.role = role
         self.content = content
         self.chat = chat
@@ -54,8 +54,8 @@ final class Thread {
         self.isReplying = true
     }
 
-    func copy() -> Thread {
-        return Thread(
+    func copy() -> Message {
+        return Message(
             role: role,
             content: content,
             chat: chat,

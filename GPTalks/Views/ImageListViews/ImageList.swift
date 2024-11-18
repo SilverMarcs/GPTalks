@@ -22,7 +22,7 @@ struct ImageList: View {
         
         ScrollViewReader { proxy in
             List(selection: $imageVM.selections) {
-                ChatListCards(source: .imagelist, sessionCount: "↗", imageSessionsCount: String(sessions.count))
+                ChatListCards(source: .imagelist, chatCount: "↗", imageSessionsCount: String(sessions.count))
                 
                 ForEach(sessions) { session in
                     ImageRow(session: session)

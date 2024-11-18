@@ -9,11 +9,11 @@ import SwiftUI
 
 struct ChatRow: View {
     @Environment(\.modelContext) var modelContext
-    @Environment(ChatVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var chatVM
     
     @ObservedObject var config = AppConfig.shared
     
-    @Bindable var session: Chat
+    @Bindable var chat: Chat
     
     var swipeTip = SwipeActionTip()
     
@@ -28,10 +28,10 @@ struct ChatRow: View {
     }
     var row: some View {
         HStack {
-            ProviderImage(provider: session.config.provider, radius: 8, frame: imageSize, scale: .medium)
-                .symbolEffect(.bounce, options: .speed(0.5), isActive: session.isReplying)
+            ProviderImage(provider: chat.config.provider, radius: 8, frame: imageSize, scale: .medium)
+                .symbolEffect(.bounce, options: .speed(0.5), isActive: chat.isReplying)
             
-            HighlightedText(text: session.title, highlightedText: sessionVM.searchText, selectable: false)
+            HighlightedText(text: chat.title, highlightedText: chatVM.searchText, selectable: false)
                 .lineLimit(1)
                 .font(font)
                 .fontWeight(fontWeight)
@@ -39,13 +39,13 @@ struct ChatRow: View {
             
             Spacer()
             
-            Text(session.config.model.name)
+            chatStatusMarker
+                .imageScale(.small)
+            
+            Text(chat.config.model.name)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .fontWidth(.compressed)
-            
-            chatStatusMarker
-                .imageScale(.small)
         }
         .padding(padding)
     }
@@ -84,7 +84,7 @@ struct ChatRow: View {
     
     @ViewBuilder
     var chatStatusMarker: some View {
-        switch session.status {
+        switch chat.status {
         case .starred:
             Image(systemName: "star.fill")
                 .foregroundStyle(.orange)
@@ -101,27 +101,27 @@ struct ChatRow: View {
 
     @ViewBuilder
     var swipeActionsLeading: some View {
-        if session.status != .starred {
+        if chat.status != .starred {
             Button {
                 SwipeActionTip().invalidate(reason: .actionPerformed)
                 
-                if sessionVM.selections.contains(session) {
-                    sessionVM.selections.remove(session)
+                if chatVM.selections.contains(chat) {
+                    chatVM.selections.remove(chat)
                 }
                 
-                session.status = (session.status == .archived) ? .normal : .archived
+                chat.status = (chat.status == .archived) ? .normal : .archived
             } label: {
-                Label("Archive", systemImage: session.status == .archived ? "tray.and.arrow.up.fill" : "archivebox")
+                Label("Archive", systemImage: chat.status == .archived ? "tray.and.arrow.up.fill" : "archivebox")
             }
-            .tint(session.status == .archived ? .blue : .gray)
+            .tint(chat.status == .archived ? .blue : .gray)
         }
         
-        if session.status != .archived {
+        if chat.status != .archived {
             Button {
                 SwipeActionTip().invalidate(reason: .actionPerformed)
-                session.status = session.status == .starred ? .normal : .starred
+                chat.status = chat.status == .starred ? .normal : .starred
             } label: {
-                Label(session.status == .starred ? "Unstar" : "Star", systemImage: session.status == .starred ? "star.slash" : "star")
+                Label(chat.status == .starred ? "Unstar" : "Star", systemImage: chat.status == .starred ? "star.slash" : "star")
             }
             .tint(.orange)
         }
@@ -129,15 +129,15 @@ struct ChatRow: View {
     
     @ViewBuilder
     var swipeActionsTrailing: some View {
-        if session.status != .starred {
+        if chat.status != .starred {
             Button(role: .destructive) {
                 SwipeActionTip().invalidate(reason: .actionPerformed)
 
-                if sessionVM.selections.contains(session) {
-                    sessionVM.selections.remove(session)
+                if chatVM.selections.contains(chat) {
+                    chatVM.selections.remove(chat)
                 }
                 
-                modelContext.delete(session)
+                modelContext.delete(chat)
             } label: {
                 Label("Delete", systemImage: "trash")
             }
@@ -148,7 +148,7 @@ struct ChatRow: View {
 
 #Preview {
     List {
-        ChatRow(session: .mockChat)
+        ChatRow(chat: .mockChat)
             .environment(ChatVM())
     }
     .frame(width: 400)

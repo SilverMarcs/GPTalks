@@ -1,5 +1,5 @@
 //
-//  ThreadRole.swift
+//  MessageRole.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 10/07/2024.
@@ -10,7 +10,7 @@ import OpenAI
 import GoogleGenerativeAI
 import SwiftAnthropic
 
-enum ThreadRole: String, Codable {
+enum MessageRole: String, Codable {
     case user
     case assistant
     case system

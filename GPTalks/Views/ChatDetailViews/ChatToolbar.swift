@@ -17,10 +17,10 @@ struct ChatToolbar: ToolbarContent {
     @State private var showingInspector: Bool = false
     @State private var currentSearchIndex: Int = 0
     
-    private var matchingThreads: [Thread] {
+    private var matchingMessages: [Message] {
         guard !chatVM.searchText.isEmpty else { return [] }
-        return chat.threads.enumerated().compactMap { index, thread in
-            thread.content.localizedCaseInsensitiveContains(chatVM.searchText) ? thread : nil
+        return chat.messages.enumerated().compactMap { index, message in
+            message.content.localizedCaseInsensitiveContains(chatVM.searchText) ? message : nil
         }
     }
     
@@ -41,9 +41,9 @@ struct ChatToolbar: ToolbarContent {
         }
         
         #if os(macOS)
-        if !matchingThreads.isEmpty {
+        if !matchingMessages.isEmpty {
             ToolbarItem {
-                Text("\(currentSearchIndex + 1)/\(matchingThreads.count)")
+                Text("\(currentSearchIndex + 1)/\(matchingMessages.count)")
                     .foregroundStyle(.secondary)
                     .monospacedDigit()
             }
@@ -58,7 +58,7 @@ struct ChatToolbar: ToolbarContent {
                     Button(action: nextMatch) {
                         Label("Next match", systemImage: "chevron.right")
                     }
-                    .disabled(currentSearchIndex >= matchingThreads.count - 1)
+                    .disabled(currentSearchIndex >= matchingMessages.count - 1)
                 }
             }
         }
@@ -86,7 +86,7 @@ struct ChatToolbar: ToolbarContent {
     }
     
     private func nextMatch() {
-        guard currentSearchIndex < matchingThreads.count - 1 else { return }
+        guard currentSearchIndex < matchingMessages.count - 1 else { return }
         currentSearchIndex += 1
         scrollToCurrentMatch()
     }
@@ -98,9 +98,9 @@ struct ChatToolbar: ToolbarContent {
     }
     
     private func scrollToCurrentMatch() {
-        guard currentSearchIndex >= 0 && currentSearchIndex < matchingThreads.count else { return }
-        let thread = matchingThreads[currentSearchIndex]
-        AppConfig.shared.proxy?.scrollTo(thread, anchor: .top)
+        guard currentSearchIndex >= 0 && currentSearchIndex < matchingMessages.count else { return }
+        let message = matchingMessages[currentSearchIndex]
+        AppConfig.shared.proxy?.scrollTo(message, anchor: .top)
     }
 }
 

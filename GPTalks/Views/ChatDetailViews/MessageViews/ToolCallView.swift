@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ToolCallView: View {
-    var thread: Thread
+    var message: Message
     @State private var showArguments = false
     
     var body: some View {
@@ -28,10 +28,10 @@ struct ToolCallView: View {
                     }
                 } label: {
                     HStack {
-                        Text("^[\(thread.toolCalls.count) Tool](inflect: true)")
+                        Text("^[\(message.toolCalls.count) Tool](inflect: true)")
                             .foregroundStyle(.secondary)
                         
-                        if thread.isReplying {
+                        if message.isReplying {
                             ProgressView()
                                 .controlSize(.mini)
                         } else {
@@ -44,8 +44,8 @@ struct ToolCallView: View {
                 .transaction { $0.animation = nil }
                 .buttonStyle(.plain)
                 
-                if !thread.content.isEmpty {
-                    Text(thread.content)
+                if !message.content.isEmpty {
+                    Text(message.content)
                         .lineSpacing(3)
                         .textSelection(.enabled)
                         .transaction { $0.animation = nil }
@@ -59,7 +59,7 @@ struct ToolCallView: View {
                             .padding(.trailing, 8)
                         
                         VStack(alignment: .leading, spacing: 10) {
-                            ForEach(thread.toolCalls) { toolCall in
+                            ForEach(message.toolCalls) { toolCall in
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(toolCall.tool.displayName)
                                     Text(toolCall.arguments)
@@ -78,7 +78,7 @@ struct ToolCallView: View {
 }
 
 #Preview {
-    AssistantMessage(thread: .mockAssistantTolCallThread)
+    AssistantMessage(message: .mockAssistantTolCallMessage)
         .frame(width: 500, height: 300)
 }
 

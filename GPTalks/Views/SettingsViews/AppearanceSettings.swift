@@ -12,8 +12,6 @@ import SwiftMarkdownView
 struct AppearanceSettings: View {
     @Environment(\.modelContext) var modelContext
     @ObservedObject var config = AppConfig.shared
-    
-    @State var session: Chat?
 
     var body: some View {
         Form {

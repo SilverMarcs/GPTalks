@@ -38,7 +38,7 @@ struct QuickPanelView: View {
                 .safeAreaPadding(.vertical, 10)
             }
             
-            if chat.threads.isEmpty {
+            if chat.messages.isEmpty {
                 Spacer()
             } else {
                 Divider()
@@ -55,7 +55,7 @@ struct QuickPanelView: View {
                 selections = chatVM.selections
                 chatVM.selections = [self.chat]
                 isFocused = true
-                if !chat.threads.isEmpty {
+                if !chat.messages.isEmpty {
                     updateHeight(500)
                 }
             } else {
@@ -154,7 +154,7 @@ struct QuickPanelView: View {
                     Image(systemName: "plus.square.on.square")
                         .imageScale(.medium)
                 }
-                .disabled(chat.threads.isEmpty)
+                .disabled(chat.messages.isEmpty)
                 .keyboardShortcut("N", modifiers: [.command])
                 
             }
@@ -168,7 +168,7 @@ struct QuickPanelView: View {
     private func resetChat() {
         updateHeight(57)
         
-        chat.deleteAllThreads()
+        chat.deleteAllMessages()
         chat.inputManager.dataFiles.removeAll()
         let oldConfig = chat.config
         oldConfig.systemPrompt = ChatConfigDefaults.shared.systemPrompt

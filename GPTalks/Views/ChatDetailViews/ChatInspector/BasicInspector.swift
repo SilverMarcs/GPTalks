@@ -108,7 +108,7 @@ struct BasicInspector: View {
         .listRowInsets(EdgeInsets())
         .confirmationDialog("Are you sure you want to delete all messages?", isPresented: $showingDeleteConfirmation) {
             Button("Delete All", role: .destructive) {
-                chat.deleteAllThreads()
+                chat.deleteAllMessages()
             }
             Button("Cancel", role: .cancel) {}
         }

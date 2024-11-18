@@ -29,7 +29,7 @@ struct ChatContentView: View {
                 ChatDetail(chat: chat)
 //                    .id(chat.id)
             } else {
-                Text("^[\(chatVM.selections.count) Chat Session](inflect: true) Selected")
+                Text("^[\(chatVM.selections.count) Chat](inflect: true) Selected")
                     .font(.title)
                     .fullScreenBackground()
             }

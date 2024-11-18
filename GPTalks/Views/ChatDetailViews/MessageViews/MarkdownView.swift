@@ -32,7 +32,7 @@ struct MarkdownView: View {
 }
 
 #Preview {
-    MarkdownView(content: Thread.mockAssistantThread.content)
+    MarkdownView(content: Message.mockAssistantMessage.content)
         .frame(width: 600, height: 500)
         .padding()
 }

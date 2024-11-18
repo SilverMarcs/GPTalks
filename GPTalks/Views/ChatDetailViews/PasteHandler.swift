@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 
 struct PasteHandler: ViewModifier {
     @State private var eventMonitor: Any?
-    @Environment(ChatVM.self) private var sessionVM
+    @Environment(ChatVM.self) private var chatVM
 
     func body(content: Content) -> some View {
         content
@@ -34,7 +34,7 @@ struct PasteHandler: ViewModifier {
 
     private func handleCommandV() -> Bool {
         guard let pasteboardItems = NSPasteboard.general.pasteboardItems,
-              let session = sessionVM.activeChat else {
+              let chat = chatVM.activeChat else {
             return false
         }
 
@@ -44,7 +44,7 @@ struct PasteHandler: ViewModifier {
 
         for item in pasteboardItems {
             if Set(item.types).intersection(handledTypes).isEmpty == false {
-                session.inputManager.handlePaste(pasteboardItem: item)
+                chat.inputManager.handlePaste(pasteboardItem: item)
                 handledFiles = true
             } else if item.types.contains(.string) {
                 containsText = true

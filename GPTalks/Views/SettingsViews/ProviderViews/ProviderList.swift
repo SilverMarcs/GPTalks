@@ -113,9 +113,9 @@ struct ProviderList: View {
             if providerToDelete == defaultProvider {
                 providersToDelete.remove(index)
             } else {
-                for sessionConfig in allChatConfigs where sessionConfig.provider == providerToDelete {
-                    sessionConfig.provider = defaultProvider
-                    sessionConfig.model = sessionConfig.provider.chatModel
+                for chatConfig in allChatConfigs where chatConfig.provider == providerToDelete {
+                    chatConfig.provider = defaultProvider
+                    chatConfig.model = chatConfig.provider.chatModel
                 }
             }
         }

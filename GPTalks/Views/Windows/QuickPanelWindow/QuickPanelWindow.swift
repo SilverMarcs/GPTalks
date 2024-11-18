@@ -48,8 +48,8 @@ class QuickPanelWindow: NSPanel {
         )
         descriptor.fetchLimit = 1
         
-        let quickSessions = try! modelContext.fetch(descriptor)
-        let chat = quickSessions.first!
+        let quickChat = try! modelContext.fetch(descriptor)
+        let chat = quickChat.first!
         
         let hostingView = NSHostingView(rootView: QuickPanelView(
             chat: chat,

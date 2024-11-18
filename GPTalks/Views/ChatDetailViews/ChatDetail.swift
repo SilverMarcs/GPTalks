@@ -70,12 +70,12 @@ struct ChatDetail: View {
     
     @ViewBuilder
     var content: some View {
-        if chat.threads.isEmpty {
+        if chat.messages.isEmpty {
             EmptyChat(chat: chat)
         } else {
             List {
-                ForEach(chat.threads, id: \.self) { thread in
-                    ThreadView(thread: thread)
+                ForEach(chat.messages, id: \.self) { message in
+                    MessageView(message: message)
                         #if os(iOS)
                         .opacity(0.9)
                         #endif
@@ -99,5 +99,5 @@ struct ChatDetail: View {
 
 #Preview {
     ChatDetail(chat: .mockChat)
-        .environment(ChatVM.mockSessionVM)
+        .environment(ChatVM.mockChatVM)
 }

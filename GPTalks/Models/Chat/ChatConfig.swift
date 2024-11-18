@@ -74,7 +74,7 @@ enum ChatConfigPurpose: Codable {
         switch self {
             case .chat: return "(Forked)"
             case .title: return "Title"
-            case .quick: return "Quick Session"
+            case .quick: return "Quick Chat"
         }
     }
 }

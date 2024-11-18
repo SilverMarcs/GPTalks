@@ -28,9 +28,9 @@ struct MarkdownFile: FileDocument {
         
         var content = "# Chat Title: \(chat.title)\n\n"
         
-        for thread in chat.threads {
-            content += "## \(thread.role.rawValue.capitalized)\n"
-            content += "\(thread.content)\n\n\n"
+        for message in chat.messages {
+            content += "## \(message.role.rawValue.capitalized)\n"
+            content += "\(message.content)\n\n\n"
         }
         
         return content

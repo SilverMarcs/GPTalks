@@ -24,7 +24,7 @@ struct GoogleService: AIService {
         }
     }
     
-    static func convert(conversation: Thread) -> GoogleGenerativeAI.ModelContent {
+    static func convert(conversation: Message) -> GoogleGenerativeAI.ModelContent {
         var parts: [ModelContent.Part] = [.text(conversation.content)]
         
         for dataFile in conversation.dataFiles {
@@ -46,7 +46,7 @@ struct GoogleService: AIService {
         return modelContent
     }
     
-    static func streamResponse(from conversations: [Thread], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
+    static func streamResponse(from conversations: [Message], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let (model, messages) = createModelAndMessages(from: conversations, config: config)
         
         return AsyncThrowingStream { continuation in
@@ -93,7 +93,7 @@ struct GoogleService: AIService {
         }
     }
     
-    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> NonStreamResponse {
+    static func nonStreamingResponse(from conversations: [Message], config: ChatConfig) async throws -> NonStreamResponse {
         let (model, messages) = createModelAndMessages(from: conversations, config: config)
         let response = try await model.generateContent(messages)
         let toolCalls = response.functionCalls.map {
@@ -106,7 +106,7 @@ struct GoogleService: AIService {
         return NonStreamResponse(content: response.text, toolCalls: toolCalls, inputTokens: 0, outputTokens: totalTokens)
     }
     
-    static private func createModelAndMessages(from conversations: [Thread], config: ChatConfig) -> (GenerativeModel, [ModelContent]) {
+    static private func createModelAndMessages(from conversations: [Message], config: ChatConfig) -> (GenerativeModel, [ModelContent]) {
         let systemPrompt = ModelContent(role: "system", parts: [.text(config.systemPrompt)])
         
         let genConfig = GenerationConfig(

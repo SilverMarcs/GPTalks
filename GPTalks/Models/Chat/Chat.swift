@@ -24,14 +24,14 @@ final class Chat {
     }
     
     @Relationship(deleteRule: .cascade)
-    var unorderedThreads =  [Thread]()
-    var threads: [Thread] {
-        get { return unorderedThreads.sorted(by: {$0.date < $1.date})}
-        set { unorderedThreads = newValue }
+    var unorderedMessages =  [Message]()
+    var messages: [Message] {
+        get { return unorderedMessages.sorted(by: {$0.date < $1.date})}
+        set { unorderedMessages = newValue }
     }
-    var adjustedThreads: [Thread] {
-        guard let resetMarker = resetMarker else { return threads }
-        return Array(threads.dropFirst(resetMarker))
+    var adjustedMessages: [Message] {
+        guard let resetMarker = resetMarker else { return messages }
+        return Array(messages.dropFirst(resetMarker))
     }
     
     @Relationship(deleteRule: .cascade)
@@ -44,7 +44,7 @@ final class Chat {
     var streamingTask: Task<Void, Error>?
     @Transient
     var isReplying: Bool {
-        threads.last?.isReplying ?? false
+        messages.last?.isReplying ?? false
     }
 
     @Transient
@@ -105,26 +105,26 @@ final class Chat {
     private func handleEditing() async {
         guard let index = inputManager.editingIndex else { return }
         unsetResetMarker(at: index)
-        let editingMessage = threads[index]
+        let editingMessage = messages[index]
         editingMessage.content = inputManager.prompt
         editingMessage.dataFiles = inputManager.dataFiles
         inputManager.reset()
-        await regenerate(thread: editingMessage)
+        await regenerate(message: editingMessage)
     }
 
     @MainActor
     private func handleNewInput() async {
-        let user = Thread(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
-        addThread(user)
+        let user = Message(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
+        addMessage(user)
         inputManager.reset()
         await processRequest()
     }
     
     @MainActor
-    func regenerate(thread: Thread) async {
-        guard let index = threads.firstIndex(where: { $0 == thread }) else { return }
+    func regenerate(message: Message) async {
+        guard let index = messages.firstIndex(where: { $0 == message }) else { return }
         unsetResetMarker(at: index)
-        threads.removeSubrange(thread.role == .assistant ? index... : (index + 1)...)
+        messages.removeSubrange(message.role == .assistant ? index... : (index + 1)...)
         await processRequest()
     }
     
@@ -133,13 +133,13 @@ final class Chat {
         streamingTask?.cancel()
         streamingTask = nil
         
-        if let last = threads.last {
+        if let last = messages.last {
             last.isReplying = false
             if last.content.isEmpty {
-                deleteThread(last)
+                deleteMessage(last)
             }
         } else {
-            threads.last.map(deleteThread)
+            messages.last.map(deleteMessage)
         }
     }
     
@@ -149,61 +149,61 @@ final class Chat {
         AppConfig.shared.hasUserScrolled = false
         
         DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
-            if let lastThread = self.threads.last, lastThread.content.isEmpty, lastThread.role == .assistant {
-                self.deleteThread(lastThread)
+            if let lastMessage = self.messages.last, lastMessage.content.isEmpty, lastMessage.role == .assistant {
+                self.deleteMessage(lastMessage)
             }
         }
     }
     
     func generateTitle(forced: Bool = false) async {
         guard status != .quick else { return }
-        guard forced || adjustedThreads.count <= 2 else { return }
+        guard forced || adjustedMessages.count <= 2 else { return }
         
-        if let newTitle = await TitleGenerator.generateTitle(threads: adjustedThreads, provider: config.provider) {
+        if let newTitle = await TitleGenerator.generateTitle(messages: adjustedMessages, provider: config.provider) {
             self.title = newTitle
         }
     }
 
-    func addThread(_ thread: Thread) {
-        if thread.role == .assistant {
-            thread.isReplying = true
+    func addMessage(_ message: Message) {
+        if message.role == .assistant {
+            message.isReplying = true
         }
         
-        thread.chat = self
+        message.chat = self
         
-        threads.append(thread)
+        messages.append(message)
         scrollBottom()
     }
     
-    func unsetResetMarker(at index: Int) {
+    private func unsetResetMarker(at index: Int) {
         if let resetMarker = resetMarker, index <= resetMarker {
             self.resetMarker = nil
         }
     }
 
-    func resetContext(at thread: Thread) {
-        guard let index = threads.firstIndex(of: thread) else { return }
+    func resetContext(at message: Message) {
+        guard let index = messages.firstIndex(of: message) else { return }
         resetMarker = (resetMarker == index) ? nil : index
-        if resetMarker == threads.count - 1 {
+        if resetMarker == messages.count - 1 {
             scrollBottom()
         }
     }
     
-    func deleteThread(_ thread: Thread) {
-        guard let index = threads.firstIndex(of: thread) else { return }
+    func deleteMessage(_ message: Message) {
+        guard let index = messages.firstIndex(of: message) else { return }
         unsetResetMarker(at: index)
-        threads.removeAll(where: { $0 == thread })
-        if threads.count == 0 {
+        messages.removeAll(where: { $0 == message })
+        if messages.count == 0 {
             errorMessage = ""
         }
-        modelContext?.delete(thread)
+        modelContext?.delete(message)
     }
 
-    func deleteAllThreads() {
+    func deleteAllMessages() {
         errorMessage = ""
         resetMarker = nil
-        while let thread = threads.popLast() {
-            modelContext?.delete(thread)
+        while let message = messages.popLast() {
+            modelContext?.delete(message)
         }
     }
     
@@ -215,8 +215,8 @@ final class Chat {
         }
     }
     
-    func copy(from thread: Thread? = nil, purpose: ChatConfigPurpose) async -> Chat {
-        let newSession = Chat(config: config.copy(purpose: purpose))
+    func copy(from message: Message? = nil, purpose: ChatConfigPurpose) async -> Chat {
+        let newChat = Chat(config: config.copy(purpose: purpose))
         
         let leading = switch purpose {
             case .chat: "Ψ"
@@ -224,15 +224,15 @@ final class Chat {
             case .title: "T"
         }
         
-        newSession.title = "\(leading) \(self.title)"
-        newSession.totalTokens = self.totalTokens
+        newChat.title = "\(leading) \(self.title)"
+        newChat.totalTokens = self.totalTokens
         
-        if let thread = thread, let index = threads.firstIndex(of: thread) {
-            newSession.threads = threads.prefix(through: index).map { $0.copy() }
+        if let message = message, let index = messages.firstIndex(of: message) {
+            newChat.messages = messages.prefix(through: index).map { $0.copy() }
         } else {
-            newSession.threads = threads.map { $0.copy() }
+            newChat.messages = messages.map { $0.copy() }
         }
         
-        return newSession
+        return newChat
     }
 }

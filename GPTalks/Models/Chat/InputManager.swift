@@ -68,20 +68,20 @@ enum InputState {
         }
     }
     
-    func setupEditing(thread: Thread) {
-        editingIndex = thread.chat?.threads.firstIndex(of: thread)
+    func setupEditing(message: Message) {
+        editingIndex = message.chat?.messages.firstIndex(of: message)
         tempNormalPrompt = normalPrompt
         tempNormalDataFiles = normalDataFiles
         
         state = .editing
         
-        prompt = thread.content
-        dataFiles = thread.dataFiles
-        AppConfig.shared.proxy?.scrollTo(thread, anchor: .top)
+        prompt = message.content
+        dataFiles = message.dataFiles
+        AppConfig.shared.proxy?.scrollTo(message, anchor: .top)
         if AppConfig.shared.markdownProvider == .webview {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 withAnimation {
-                    AppConfig.shared.proxy?.scrollTo(thread, anchor: .top)
+                    AppConfig.shared.proxy?.scrollTo(message, anchor: .top)
                 }
             }
         }

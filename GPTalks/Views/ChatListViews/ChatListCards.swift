@@ -21,7 +21,7 @@ struct ChatListCards: View {
     @ObservedObject var config = AppConfig.shared
     
     var source: Source
-    var sessionCount: String
+    var chatCount: String
     var imageSessionsCount: String
 
     var body: some View {
@@ -41,7 +41,7 @@ struct ChatListCards: View {
         HStack(spacing: spacing) {
             ListCard(
                 icon: chatVM.statusFilter.systemImageName, iconColor: chatVM.statusFilter.iconColor, title: isSearching ? "Searching" : chatVM.statusFilter.name,
-                count: sessionCount) {
+                count: chatCount) {
                     handleChatPress()
                 }
                 .overlay {
@@ -122,6 +122,6 @@ struct ChatListCards: View {
 }
 
 #Preview {
-    ChatListCards(source: .chatlist, sessionCount: "5", imageSessionsCount: "?")
+    ChatListCards(source: .chatlist, chatCount: "5", imageSessionsCount: "?")
         .environment(ChatVM())
 }

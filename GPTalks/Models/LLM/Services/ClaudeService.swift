@@ -14,8 +14,8 @@ import SwiftAnthropic
 struct ClaudeService: AIService {
     typealias ConvertedType = MessageParameter.Message
     
-    static func convert(conversation: Thread) -> MessageParameter.Message {
-        let contentItems = FileHelper.processDataFiles(conversation.dataFiles, threadId: conversation.id.uuidString, role: conversation.role)
+    static func convert(conversation: Message) -> MessageParameter.Message {
+        let contentItems = FileHelper.processDataFiles(conversation.dataFiles, messageId: conversation.id.uuidString, role: conversation.role)
         var contentObjects: [MessageParameter.Message.Content.ContentObject] = []
         for item in contentItems {
             switch item {
@@ -45,7 +45,7 @@ struct ClaudeService: AIService {
         }
     }
     
-    static func streamResponse(from conversations: [Thread], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
+    static func streamResponse(from conversations: [Message], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
         let parameters = createParameters(from: conversations, config: config, stream: true)
         let service = getService(provider: config.provider)
         
@@ -66,7 +66,7 @@ struct ClaudeService: AIService {
         }
     }
     
-    static func nonStreamingResponse(from conversations: [Thread], config: ChatConfig) async throws -> NonStreamResponse {
+    static func nonStreamingResponse(from conversations: [Message], config: ChatConfig) async throws -> NonStreamResponse {
         let parameters = createParameters(from: conversations, config: config, stream: false)
         let service = getService(provider: config.provider)
         
@@ -84,7 +84,7 @@ struct ClaudeService: AIService {
         return NonStreamResponse(content: content, toolCalls: nil, inputTokens: 0, outputTokens: 0)
     }
     
-    static private func createParameters(from conversations: [Thread], config: ChatConfig, stream: Bool) -> MessageParameter {
+    static private func createParameters(from conversations: [Message], config: ChatConfig, stream: Bool) -> MessageParameter {
         let messages = conversations.map { convert(conversation: $0) }
         let systemPrompt = MessageParameter.System.text(config.systemPrompt)
         

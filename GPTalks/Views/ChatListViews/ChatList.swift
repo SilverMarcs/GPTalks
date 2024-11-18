@@ -23,7 +23,7 @@ struct ChatList: View {
         @Bindable var chatVM = chatVM
 
         List(selection: $chatVM.selections) {
-            ChatListCards(source: .chatlist, sessionCount: String(chats.count), imageSessionsCount: "↗")
+            ChatListCards(source: .chatlist, chatCount: String(chats.count), imageSessionsCount: "↗")
                 TipView(SwipeActionTip())
                     .tipCornerRadius(8)
                     .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
@@ -41,10 +41,10 @@ struct ChatList: View {
             if isSearching && chats.isEmpty {
                 ContentUnavailableView.search
             } else {
-                ForEach(chats) { session in
-                    NavigationLink(value: session) {
-                        ChatRow(session: session)
-                            .deleteDisabled(session.status == .starred)
+                ForEach(chats) { chat in
+                    NavigationLink(value: chat) {
+                        ChatRow(chat: chat)
+                            .deleteDisabled(chat.status == .starred)
                             #if os(macOS)
                             .listRowSeparator(.visible)
                             .listRowSeparatorTint(Color.gray.opacity(0.2))
@@ -100,7 +100,7 @@ struct ChatList: View {
                     Button(provider.name) {
                         config.hasLongTappedNewChat = true
                         Task {
-                            await chatVM.createNewSession(provider: provider)
+                            await chatVM.createNewChat(provider: provider)
                         }
                     }
                 }
@@ -108,7 +108,7 @@ struct ChatList: View {
                 Label("Long Tap", systemImage: "square.and.pencil")
             } primaryAction: {
                 Task {
-                    await chatVM.createNewSession()
+                    await chatVM.createNewChat()
                 }
             }
             .menuIndicator(.hidden)
@@ -139,7 +139,7 @@ struct ChatList: View {
             if searchTokens.isEmpty || (searchTokens.contains(.title) && searchTokens.contains(.messages)) {
                 searchPredicate = #Predicate<Chat> {
                     $0.title.localizedStandardContains(searchText) ||
-                    $0.unorderedThreads.contains {
+                    $0.unorderedMessages.contains {
                         $0.content.localizedStandardContains(searchText)
                     }
                 }
@@ -149,7 +149,7 @@ struct ChatList: View {
                 }
             } else if searchTokens.contains(.messages) {
                 searchPredicate = #Predicate<Chat> {
-                    $0.unorderedThreads.contains {
+                    $0.unorderedMessages.contains {
                         $0.content.localizedStandardContains(searchText)
                     }
                 }

@@ -122,17 +122,17 @@ extension String {
         """
 }
 
-extension Thread {
-    static let mockAssistantThread = Thread(role: .assistant, content: String.codeBlock, isReplying: false)
+extension Message {
+    static let mockAssistantMessage = Message(role: .assistant, content: String.codeBlock, isReplying: false)
     
-    static let mockAssistantTolCallThread = Thread(role: .assistant, toolCalls: [.init(toolCallId: "HEX", tool: .urlScrape, arguments: "url: https://www.google.com")])
+    static let mockAssistantTolCallMessage = Message(role: .assistant, toolCalls: [.init(toolCallId: "HEX", tool: .urlScrape, arguments: "url: https://www.google.com")])
     
-    static var mockUserThread: Thread {
-        Thread(role: .user, content: String.shortContent)
+    static var mockUserMessage: Message {
+        Message(role: .user, content: String.shortContent)
     }
     
-    static var mockToolThread: Thread {
-        Thread(role: .tool, toolResponse: .init(toolCallId: "HEX", tool: .urlScrape, processedContent: "This is what I got"))
+    static var mockToolMessage: Message {
+        Message(role: .tool, toolResponse: .init(toolCallId: "HEX", tool: .urlScrape, processedContent: "This is what I got"))
     }
 }
 
@@ -157,7 +157,7 @@ extension Generation {
 }
 
 extension ChatVM {
-    static var mockSessionVM = ChatVM()
+    static var mockChatVM = ChatVM()
 }
 
 extension ImageVM {
