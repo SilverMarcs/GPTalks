@@ -30,23 +30,34 @@ struct GoogleSearch: ToolProtocol {
         }
         
         let (data, _) = try await URLSession.shared.data(from: url)
-        
-        if let jsonResult = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-           let items = jsonResult["items"] as? [[String: Any]] {
-            
-            // Building a string representation of the search results
-            let searchResultsString = items.map { item -> String in
-                let title = item["title"] as? String ?? "No title"
-                let link = item["link"] as? String ?? "No link"
-                let snippet = item["snippet"] as? String ?? "No snippet"
-                return "Title: \(title)\nLink: \(link)\nSnippet: \(snippet)\n"
-            }.joined(separator: "\n")
-            
-            return .init(string: searchResultsString)
-        } else {
-            throw RuntimeError("Failed to parse search results")
+
+        // Check for HTTP error and extract error message
+        do {
+            if let jsonResult = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                if let error = jsonResult["error"] as? [String: Any],
+                   let message = error["message"] as? String {
+                    throw RuntimeError("Search API error: \(message)")
+                }
+                
+                if let items = jsonResult["items"] as? [[String: Any]] {
+                    let searchResultsString = items.map { item -> String in
+                        let title = item["title"] as? String ?? "No title"
+                        let link = item["link"] as? String ?? "No link"
+                        let snippet = item["snippet"] as? String ?? "No snippet"
+                        return "Title: \(title)\nLink: \(link)\nSnippet: \(snippet)\n"
+                    }.joined(separator: "\n")
+                    
+                    return .init(string: searchResultsString)
+                }
+            }
+        } catch {
+            throw RuntimeError("Failed to parse search results: \(error.localizedDescription)")
         }
+        
+        throw RuntimeError("Failed to parse search results")
     }
+
+
     
     static func process(arguments: String) async throws -> ToolData {
         let query = try getQuery(from: arguments)

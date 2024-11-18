@@ -81,14 +81,6 @@ struct UserMessage: View {
         #endif
     }
     
-    var lineLimit: Int {
-        #if os(macOS)
-        15
-        #else
-        6
-        #endif
-    }
-    
     var indexOfMessage: Int {
         message.chat?.messages.firstIndex(where: { $0 == message }) ?? 0
     }

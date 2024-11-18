@@ -18,8 +18,8 @@ struct GoogleSearchSettings: View {
         }
         
         Section {
-            SecretInputView(label: "Google Search Engine ID", secret: $config.googleSearchEngineId)
             SecretInputView(label: "Google Search API Key", secret: $config.googleApiKey)
+            SecretInputView(label: "Google Search Engine ID", secret: $config.googleSearchEngineId)
         } header: {
             Text("Secrets")
         } footer: {

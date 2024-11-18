@@ -50,21 +50,21 @@ struct AssistantMessage: View {
                 #endif
             }
         }
-    #if !os(macOS)
-    .contextMenu {
-        if !message.isReplying {
-            MessageMenu(message: message, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
+        #if !os(macOS)
+        .contextMenu {
+            if !message.isReplying {
+                MessageMenu(message: message, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
+            }
+        } preview: {
+            Text("Assistant Message")
+                .padding()
         }
-    } preview: {
-        Text("Assistant Message")
-            .padding()
-    }
-    .sheet(isPresented: $showingTextSelection) {
-        TextSelectionView(content: message.content)
-    }
-    #else
-    .onHover { isHovering = $0 }
-    #endif
+        .sheet(isPresented: $showingTextSelection) {
+            TextSelectionView(content: message.content)
+        }
+        #else
+        .onHover { isHovering = $0 }
+        #endif
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.trailing, 30)
     }
