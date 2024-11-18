@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GenericOnboardingView<Content: View>: View {
+    @Environment(\.colorScheme) var colorScheme
     let icon: String
     let iconColor: Color
     let title: String
@@ -34,6 +35,11 @@ struct GenericOnboardingView<Content: View>: View {
                 
                 // Content
                 content()
+                    .scrollDisabled(true)
+                    .formStyle(.grouped)
+                    #if os(iOS)
+                    .scrollContentBackground(colorScheme == .dark ? .visible : .hidden)
+                    #endif
                     .frame(height: geometry.size.height * 0.4)
                 
                 Spacer()

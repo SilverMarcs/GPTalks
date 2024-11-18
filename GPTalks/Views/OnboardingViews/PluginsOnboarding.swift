@@ -17,13 +17,16 @@ struct PluginsOnboarding: View {
             title: "Connect LLMs with plugins",
             content: {
                 Form {
-                    Toggle("URL Scrape", isOn: $config.urlScrape)
-                    Toggle("Google Search", isOn: $config.googleSearch)
-                    Toggle("Image Generate", isOn: $config.imageGenerate)
-                    Toggle("Transcribe", isOn: $config.transcribe)
+                    Section {
+                        Toggle("URL Scrape", isOn: $config.urlScrape)
+                        Toggle("Google Search", isOn: $config.googleSearch)
+                        Toggle("Image Generate", isOn: $config.imageGenerate)
+                        Toggle("Transcribe", isOn: $config.transcribe)
+                    }
+                    #if os(iOS)
+                    .listRowBackground(Color(.secondarySystemBackground))
+                    #endif
                 }
-                .scrollDisabled(true)
-                .formStyle(.grouped)
             },
             footerText: "Disable plugins if LLMs behave unexpectedly"
         )

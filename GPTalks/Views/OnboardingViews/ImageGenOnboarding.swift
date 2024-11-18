@@ -18,15 +18,18 @@ struct ImageGenOnboarding: View {
             title: "Generate Images with DALL-E",
             content: {
                 Form {
-                    ModelPicker(model: $provider.imageModel, models: provider.imageModels, label: "Default Model")
-                    
-                    Toggle(isOn: $imageConfig.saveToPhotos) {
-                        Text("Save to Photos Library")
-                        Text("Images will be saved to Downloads folder otherwise")
+                    Section {
+                        ModelPicker(model: $provider.imageModel, models: provider.imageModels, label: "Default Model")
+                        
+                        Toggle(isOn: $imageConfig.saveToPhotos) {
+                            Text("Save to Photos Library")
+                            Text("Images will be saved to Downloads folder otherwise")
+                        }
                     }
+                    #if os(iOS)
+                    .listRowBackground(Color(.secondarySystemBackground))
+                    #endif
                 }
-                .scrollDisabled(true)
-                .formStyle(.grouped)
             },
             footerText: "You may configure further in Settings."
         )

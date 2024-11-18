@@ -28,9 +28,10 @@ struct APIKeyOnboarding: View {
                     } footer: {
                         SectionFooterView(text: providerDefault.defaultProvider.type.extraInfo)
                     }
+                    #if os(iOS)
+                    .listRowBackground(Color(.secondarySystemBackground))
+                    #endif
                 }
-                .scrollDisabled(true)
-                .formStyle(.grouped)
             },
             footerText: "Configure other providers in Settings."
         )
@@ -42,6 +43,5 @@ struct APIKeyOnboarding: View {
     providerDefault.defaultProvider = Provider.openAIProvider
     
     return APIKeyOnboarding(providerDefault: providerDefault)
-
         .frame(width: 500, height: 500)
 }

@@ -9,8 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct GeneralSettings: View {
-    @ObservedObject var config = AppConfig.shared
     @Environment(\.modelContext) var modelContext
+    @Environment(SettingsVM.self) private var settingsVM
+    
+    @ObservedObject var config = AppConfig.shared
 
     var body: some View {
         Form {
@@ -47,8 +49,12 @@ struct GeneralSettings: View {
                     Text("Enabling this makes input area laggy and is not recommended.")
                 }
                 
+            }
+            
+            Section {
                 LabeledContent("Restart Onboarding") {
                     Button("Launch") {
+                        settingsVM.showSettings = false
                         config.hasCompletedOnboarding = false
                     }
                 }

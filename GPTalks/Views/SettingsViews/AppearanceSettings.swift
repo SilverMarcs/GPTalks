@@ -34,8 +34,6 @@ struct AppearanceSettings: View {
             }
 
             Section("Markdown") {
-                Toggle("Skeleon Rendering in Markdown View", isOn: $config.renderSkeleton)
-                
                 Picker(selection: $config.markdownProvider) {
                     ForEach(MarkdownProvider.allCases) { provider in
                         Text(provider.name)
@@ -50,6 +48,8 @@ struct AppearanceSettings: View {
                 #endif
                 
                 if config.markdownProvider == .webview {
+                    Toggle("Skeleon Rendering in Markdown View", isOn: $config.renderSkeleton)
+                    
                     Picker(selection: $config.codeBlockTheme) {
                         ForEach(CodeBlockTheme.allCases, id: \.self) { theme in
                             Text(theme.name)

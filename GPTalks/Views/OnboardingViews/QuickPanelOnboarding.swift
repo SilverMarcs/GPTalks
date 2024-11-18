@@ -28,8 +28,6 @@ struct QuickPanelOnboarding: View {
                     
                     ModelPicker(model: $provider.liteModel, models: provider.chatModels, label: "Quick Panel Model")
                 }
-                .scrollDisabled(true)
-                .formStyle(.grouped)
             },
             footerText: "Access from anywhere in the OS"
         )

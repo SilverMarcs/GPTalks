@@ -12,7 +12,7 @@ import SwiftUI
 final class Chat {
     var id: UUID = UUID()
     var date: Date = Date()
-    var title: String = "Chat Session"
+    var title: String = "New Chat Session"
     var errorMessage: String = ""
     var resetMarker: Int?
     var totalTokens: Int = 0

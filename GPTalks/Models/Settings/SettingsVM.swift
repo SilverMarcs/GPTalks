@@ -9,6 +9,7 @@ import Foundation
 
 @Observable class SettingsVM {
     var listState: ListState = .chats
+    var showSettings = false
     
     #if os(macOS)
     var settingsTab: SettingsTab? = .general

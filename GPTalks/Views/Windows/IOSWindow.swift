@@ -10,21 +10,20 @@ import SwiftData
 
 #if !os(macOS)
 struct IOSWindow: Scene {
-    @Environment(SettingsVM.self) private var listStateVM
+    @Environment(SettingsVM.self) private var settingsVM
     @Environment(ChatVM.self) private var chatVM
     @Environment(ImageVM.self) private var imageVM
     
     @ObservedObject var config = AppConfig.shared
     
-    @State private var showSettings = false
-    
     var body: some Scene {
         @Bindable var chatVM = chatVM
+        @Bindable var settingsVM = settingsVM
         
         WindowGroup("Chats", id: "chats") {
             NavigationSplitView {
                 Group {
-                    switch listStateVM.listState {
+                    switch settingsVM.listState {
                     case .chats:
                         ChatList(status: chatVM.statusFilter, searchText: chatVM.searchText, searchTokens: [])
                             .searchable(text: $chatVM.searchText)
@@ -35,20 +34,20 @@ struct IOSWindow: Scene {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Menu {
-                            Button(action: { showSettings.toggle() }) {
+                            Button(action: { settingsVM.showSettings.toggle() }) {
                                 Label("Settings", systemImage: "gear")
                             }
                         } label: {
                             Label("More", systemImage: "ellipsis.circle")
                                 .labelStyle(.titleOnly)
                         }
-                        .sheet(isPresented: $showSettings) {
+                        .sheet(isPresented: $settingsVM.showSettings) {
                             SettingsView()
                         }
                     }
                 }
             } detail: {
-                switch listStateVM.listState {
+                switch settingsVM.listState {
                 case .chats:
                     if let chat = chatVM.activeChat {
                         ChatDetail(chat: chat)
