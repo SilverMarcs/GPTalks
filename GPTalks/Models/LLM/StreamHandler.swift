@@ -20,6 +20,7 @@ struct StreamHandler {
 
     @MainActor
     func handleRequest() async throws {
+        chat.config.provider.host = chat.config.provider.host.trimmingCharacters(in: .whitespacesAndNewlines)
         if chat.config.stream {
             try await handleStream()
         } else {
