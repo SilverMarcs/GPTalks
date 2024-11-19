@@ -9,7 +9,7 @@ import TipKit
 
 struct PlusButtonTip: Tip {
     var title: Text {
-        Text("⌘ + Enter to send\n⌘ + L to focus on input box\n⌘ + V to paste files")
+        Text("⌘ + Enter to send, ⌘ + L to focus on input box, ⌘ + V to paste files")
     }
     
     var options: [Option] {
@@ -59,32 +59,28 @@ struct ProviderRefreshTip: Tip {
     }
 }
 
-//struct NewChatTip: Tip {
-//    var title: Text {
-//        Text("Long Tap to see list of all providers")
-//    }
-//    
-//    var message: Text {
-//        Text("Long Tap the plus button to see list of all providers")
-//    }
-//    
-//    var options: [Option] {
-//        MaxDisplayCount(3)
-//    }
-//    
-//    var image: Image {
-//        Image(systemName: "plus")
-//    }
-//    
+struct NewChatTip: Tip {
+    var title: Text {
+        Text("Long Tap New chat icon to see list of all providers")
+    }
+    
+    var message: Text {
+        Text("Long Tap the plus button to see list of all providers")
+    }
+    
+    var options: [Option] {
+        MaxDisplayCount(3)
+    }
+    
+    var image: Image {
+        Image(systemName: "plus")
+    }
+    
 //    var actions: [Action] {
 //        Action(id: "provider-list", title: "Provider Settings")
 //        Action(id: "faq", title: "View our FAQ")
 //    }
-//    
-//    var options: [Option] {
-//        MaxDisplayCount(2)
-//    }
-//}
+}
 
 //struct OpenSettingsTip: Tip {
 //    var title: Text {

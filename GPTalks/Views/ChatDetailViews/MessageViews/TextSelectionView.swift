@@ -6,15 +6,20 @@
 //
 
 import SwiftUI
+import SwiftMarkdownView
 
 struct TextSelectionView: View {
     @Environment(\.dismiss) var dismiss
+    @ObservedObject var config = AppConfig.shared
+    
     var content: String
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                MarkdownView(content: content)
+                SwiftMarkdownView(content)
+                    .markdownBaseURL("GPTalks Web Content")
+                    .codeBlockTheme(config.codeBlockTheme)
             }
             .safeAreaPadding(.horizontal)
             .navigationTitle("Select Text")

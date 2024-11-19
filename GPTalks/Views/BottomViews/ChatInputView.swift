@@ -38,6 +38,12 @@ struct ChatInputView: View {
             VStack(alignment: .leading, spacing: 0) {
                 Spacer(minLength: 0)
                 
+                #if os(macOS)
+                TipView(PlusButtonTip())
+                    .frame(height: 30)
+                    .padding(.bottom, 20)
+                #endif
+                
                 if !chat.inputManager.dataFiles.isEmpty {
                     DataFilesView(dataFiles: chat.inputManager.dataFiles, edge: .leading) { file in
                         withAnimation {
@@ -105,8 +111,6 @@ struct ChatInputView: View {
             CameraView(chat: chat)
                 .ignoresSafeArea()
         }
-        #else
-        .popoverTip(PlusButtonTip())
         #endif
         .fileImporter(
             isPresented: $isFilePickerPresented,

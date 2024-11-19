@@ -25,9 +25,12 @@ struct ChatList: View {
         List(selection: $chatVM.selections) {
             ChatListCards(source: .chatlist, chatCount: String(chats.count), imageSessionsCount: "↗")
             
+            Group {
                 TipView(SwipeActionTip())
-                    .tipCornerRadius(8)
-                    .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
+                TipView(NewChatTip())
+            }
+            .tipCornerRadius(8)
+            .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
 
             #if os(macOS)
             if isSearching {
@@ -98,7 +101,7 @@ struct ChatList: View {
             Menu {
                 ForEach(providers) { provider in
                     Button(provider.name) {
-                        config.hasLongTappedNewChat = true
+                        NewChatTip().invalidate(reason: .actionPerformed)
                         Task {
                             await chatVM.createNewChat(provider: provider)
                         }
@@ -112,7 +115,6 @@ struct ChatList: View {
                 }
             }
             .menuIndicator(.hidden)
-            .labelStyle(BoolControlledLabelStyle(showTitle: !config.hasLongTappedNewChat))
         }
     }
     

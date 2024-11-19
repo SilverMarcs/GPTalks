@@ -2,13 +2,24 @@
 
 ![128-mac](https://github.com/user-attachments/assets/a7102a49-3656-4ea1-8198-ee6f19379338)
 
-# GPTalks
+# GPTalks - LLM API Client
+
+<a href="https://www.buymeacoffee.com/SilverMarcs" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 35px !important;width: 150px !important;" ></a>
+
+<a href="https://github.com/SilverMarcs/GPTalks/stargazers"><img src="https://img.shields.io/github/stars/SilverMarcs/GPTalks" alt="Stars Badge"/></a>
+<a href="https://github.com/SilverMarcs/GPTalks/network/members"><img src="https://img.shields.io/github/forks/SilverMarcs/GPTalks" alt="Forks Badge"/></a>
+<a href="https://github.com/SilverMarcs/GPTalks/pulls"><img src="https://img.shields.io/github/issues-pr/SilverMarcs/GPTalks?color=blue" alt="Pull Requests Badge"/></a>
+<a href="https://github.com/SilverMarcs/GPTalks/issues"><img src="https://img.shields.io/github/issues/SilverMarcs/GPTalks?color=blue" alt="Issues Badge"/></a>
+<a href="https://github.com/SilverMarcs/GPTalks/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/SilverMarcs/GPTalks?color=2b9348"/></a>
+<a href="https://github.com/SilverMarcs/GPTalks/blob/master/LICENSE"><img src="https://img.shields.io/github/license/SilverMarcs/GPTalks?color=orange" alt="License Badge"/></a>
+
 </div>
 
 A SwiftUI and SwiftData multi-platform app to interact with various LLM providers.
 Supports iOS, iPadOS, MacOS and visionOS.
 
-**Minimm Targets: iOS 18 and MacOS 15**
+### ⚠️ Important Note
+> Minimum Targets: iOS 18 and MacOS 15
 
 ## Supported Providers:
 - OpenAI
@@ -17,7 +28,7 @@ Supports iOS, iPadOS, MacOS and visionOS.
 - Ollama and LMStudio (via their OpenAI Compatible API)
 - Any other OpenAI compatible provider (OpenRouter, Groq, Perplexity, MistralAI, TogetherAI, etc.)
 
-_All providers require their respective API Key from the user's end_
+> 🔑 All providers (besides local) require their respective API Key from the user's end
 
 ## MacOS
 
@@ -108,4 +119,4 @@ _All providers require their respective API Key from the user's end_
 </tr>
 </table>
 
-
+Consider supporting me on [buymeacoffee.com/silvermarcs](https://buymeacoffee.com/silvermarcs) if you like my work

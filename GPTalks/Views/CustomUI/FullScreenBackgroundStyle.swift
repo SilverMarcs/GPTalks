@@ -11,7 +11,9 @@ struct FullScreenBackgroundStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            #if !os(visionOS)
             .background(.background)
+            #endif
             .toolbarBackground(.hidden)
     }
 }
