@@ -16,7 +16,11 @@ struct MarkdownView: View {
 
     var body: some View {
         switch config.markdownProvider {
-        case .native, 
+        case .disabled:
+            Text(content)
+                .textSelection(.enabled)
+                .font(.system(size: config.fontSize))
+        case .native,
              .webview where !chatVM.searchText.isEmpty:
                 AttributedText(text: content, highlightText: chatVM.searchText, parseMarkdown: true)
                     .textSelection(.enabled)
