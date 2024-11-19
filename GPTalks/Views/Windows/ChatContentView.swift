@@ -10,6 +10,8 @@ import SwiftUI
 import SwiftData
 
 struct ChatContentView: View {
+    @Environment(\.undoManager) var undoManager
+    @Environment(\.modelContext) var modelContext
     @Environment(\.isSearching) private var isSearching
     @Environment(ChatVM.self) var chatVM
     
@@ -33,6 +35,9 @@ struct ChatContentView: View {
                     .font(.title)
                     .fullScreenBackground()
             }
+        }
+        .onChange(of: undoManager, initial: true) {
+            modelContext.undoManager = undoManager
         }
         .sheet(isPresented: .constant(!config.hasCompletedOnboarding)) {
             OnboardingView()

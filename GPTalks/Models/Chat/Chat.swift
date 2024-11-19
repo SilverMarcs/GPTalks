@@ -133,13 +133,10 @@ final class Chat {
         streamingTask?.cancel()
         streamingTask = nil
         
-        if let last = messages.last {
-            last.isReplying = false
-            if last.content.isEmpty {
-                deleteMessage(last)
-            }
-        } else {
-            messages.last.map(deleteMessage)
+        guard let last = messages.last else { return }
+        last.isReplying = false
+        if last.content.isEmpty {
+            deleteMessage(last)
         }
     }
     
@@ -168,9 +165,6 @@ final class Chat {
         if message.role == .assistant {
             message.isReplying = true
         }
-        
-        message.chat = self
-        
         messages.append(message)
         scrollBottom()
     }
@@ -196,15 +190,12 @@ final class Chat {
         if messages.count == 0 {
             errorMessage = ""
         }
-        modelContext?.delete(message)
     }
 
     func deleteAllMessages() {
         errorMessage = ""
         resetMarker = nil
-        while let message = messages.popLast() {
-            modelContext?.delete(message)
-        }
+        messages.removeAll()
     }
     
     func scrollBottom() {

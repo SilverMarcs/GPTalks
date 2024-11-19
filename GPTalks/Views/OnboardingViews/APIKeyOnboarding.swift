@@ -39,9 +39,6 @@ struct APIKeyOnboarding: View {
 }
 
 #Preview {
-    var providerDefault = ProviderDefaults.mockProviderDefaults
-    providerDefault.defaultProvider = Provider.openAIProvider
-    
-    return APIKeyOnboarding(providerDefault: providerDefault)
+    APIKeyOnboarding(providerDefault: .mockProviderDefaults)
         .frame(width: 500, height: 500)
 }
