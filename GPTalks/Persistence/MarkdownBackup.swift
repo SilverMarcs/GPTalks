@@ -1,5 +1,5 @@
 //
-//  ChatExporting.swift
+//  MarkdownBackup.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 27/07/2024.
@@ -8,7 +8,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-struct MarkdownFile: FileDocument {
+struct MarkdownBackup: FileDocument {
     static var readableContentTypes: [UTType] { [.plainText] }
     
     var chat: Chat?

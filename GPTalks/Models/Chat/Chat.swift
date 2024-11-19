@@ -23,7 +23,7 @@ final class Chat {
         set { statusId = newValue.id }
     }
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .cascade, inverse: \Message.chat)
     var unorderedMessages =  [Message]()
     var messages: [Message] {
         get { return unorderedMessages.sorted(by: {$0.date < $1.date})}
@@ -36,9 +36,6 @@ final class Chat {
     
     @Relationship(deleteRule: .cascade)
     var config: ChatConfig
-    
-    @Attribute(.ephemeral)
-    var showCamera: Bool = false
     
     @Transient
     var streamingTask: Task<Void, Error>?
@@ -186,7 +183,7 @@ final class Chat {
     func deleteMessage(_ message: Message) {
         guard let index = messages.firstIndex(of: message) else { return }
         unsetResetMarker(at: index)
-        messages.removeAll(where: { $0 == message })
+        messages.remove(at: index)
         if messages.count == 0 {
             errorMessage = ""
         }

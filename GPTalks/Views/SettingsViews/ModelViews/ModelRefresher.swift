@@ -18,20 +18,14 @@ struct ModelRefresher: View {
 
     var body: some View {
         NavigationStack {
-            if isLoading {
-                ProgressView("Loading models...")
-                    .task {
-                        await loadModels()
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel", role: .cancel) {
-                                dismiss()
-                            }
+            Form {
+                if isLoading {
+                    ProgressView("Loading models...")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .task {
+                            await loadModels()
                         }
-                    }
-            } else {
-                Form {
+                } else {
                     if filteredModels.isEmpty {
                         ContentUnavailableView.search
                     } else {
@@ -66,33 +60,31 @@ struct ModelRefresher: View {
                         }
                     }
                 }
-                .searchable(text: $searchText, prompt: "Search models")
-                #if os(macOS)
-                .padding(.top)
-                #else
-                .navigationTitle("Add Models")
-                #endif
-                .toolbarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel", role: .cancel) {
-                            dismiss()
-                        }
-                    }
-
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Add") {
-                            addSelectedModels()
-                        }
-                        .disabled(refreshedModels.filter { $0.isSelected }.isEmpty)
+            }
+            .formStyle(.grouped)
+            .searchable(text: $searchText, prompt: "Search models")
+            .toolbarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", role: .cancel) {
+                        dismiss()
                     }
                 }
+
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Add") {
+                        addSelectedModels()
+                    }
+                    .disabled(refreshedModels.filter { $0.isSelected }.isEmpty)
+                }
             }
+            #if os(macOS)
+            .padding(.top)
+            .frame(width: 400, height: 450)
+            #else
+            .navigationTitle("Add Models")
+            #endif
         }
-        .formStyle(.grouped)
-        #if os(macOS)
-        .frame(width: 400, height: isLoading ? 488 : 450) // the searchbar and toolbar in the list take extra space
-        #endif
     }
 
     private var filteredModels: [GenericModel] {

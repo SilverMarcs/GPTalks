@@ -86,7 +86,6 @@ import SwiftUI
         
         searchText = ""
         selections = [newChat]
-//        try? modelContext.save()
         
         return newChat
     }

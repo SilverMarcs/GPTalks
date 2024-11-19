@@ -54,7 +54,6 @@ import Foundation
         
         let newItem = ImageSession(config: config)
         modelContext.insert(newItem)
-//        try? modelContext.save()
         
         self.selections = [newItem]
         

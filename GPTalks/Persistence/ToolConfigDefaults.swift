@@ -20,9 +20,6 @@ class ToolConfigDefaults: ObservableObject {
     @AppStorage("googleCodeExecution") var googleCodeExecution: Bool = false
     @AppStorage("googleSearchRetrieval") var googleSearchRetrieval: Bool = false
     
-    // pdf reader
-    @AppStorage("pdfMaxContentLength") var pdfMaxContentLength: Int = 10000
-    
     // google search
     @AppStorage("googleApiKey") var googleApiKey: String = ""
     @AppStorage("googleSearchEngineId") var googleSearchEngineId: String = ""

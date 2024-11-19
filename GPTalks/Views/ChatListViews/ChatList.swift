@@ -24,6 +24,7 @@ struct ChatList: View {
 
         List(selection: $chatVM.selections) {
             ChatListCards(source: .chatlist, chatCount: String(chats.count), imageSessionsCount: "↗")
+            
                 TipView(SwipeActionTip())
                     .tipCornerRadius(8)
                     .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
@@ -42,14 +43,13 @@ struct ChatList: View {
                 ContentUnavailableView.search
             } else {
                 ForEach(chats) { chat in
-                    NavigationLink(value: chat) {
-                        ChatRow(chat: chat)
-                            .deleteDisabled(chat.status == .starred)
-                            #if os(macOS)
-                            .listRowSeparator(.visible)
-                            .listRowSeparatorTint(Color.gray.opacity(0.2))
-                            #endif
-                    }
+                    ChatRow(chat: chat)
+                        .tag(chat)
+                        .deleteDisabled(chat.status == .starred)
+                        #if os(macOS)
+                        .listRowSeparator(.visible)
+                        .listRowSeparatorTint(Color.gray.opacity(0.2))
+                        #endif
                 }
                 .onDelete(perform: deleteItems)
             }

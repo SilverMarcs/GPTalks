@@ -47,13 +47,13 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
         Task {
             try? await chat.inputManager.processData(imageData, fileType: .image, fileName: "Camera_\(UUID().uuidString)")
             await MainActor.run {
-                chat.showCamera = false
+                AppConfig.shared.showCamera = false
             }
         }
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        chat.showCamera = false
+        AppConfig.shared.showCamera = false
     }
 }
 #endif

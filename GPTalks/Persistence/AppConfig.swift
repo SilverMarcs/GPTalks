@@ -15,6 +15,8 @@ class AppConfig: ObservableObject {
     var proxy: ScrollViewProxy?
     var hasUserScrolled = false
     
+    @Published var showCamera = false
+    
     // Appearance
     @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
     @AppStorage("codeBlockTheme") var codeBlockTheme: CodeBlockTheme = .atom

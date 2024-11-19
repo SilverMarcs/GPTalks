@@ -43,9 +43,9 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
             if let chatVM = AppDelegate.shared.chatVM {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     Task {
-                        let chat = await chatVM.createNewChat()
+                        await chatVM.createNewChat()
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                            chat.showCamera = true
+                            AppConfig.shared.showCamera = true
                         }
                     }
                 }

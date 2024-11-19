@@ -34,7 +34,7 @@ struct AdvancedInspector: View {
             .foregroundStyle(.accent)
             .fileExporter(
                 isPresented: $isExportingMarkdown,
-                document: MarkdownFile(chat: chat),
+                document: MarkdownBackup(chat: chat),
                 contentType: .plainText,
                 defaultFilename: "\(chat.title).md"
             ) { result in

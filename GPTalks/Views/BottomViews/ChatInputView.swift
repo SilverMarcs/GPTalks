@@ -12,6 +12,8 @@ import TipKit
 
 struct ChatInputView: View {
     @Environment(\.colorScheme) var colorScheme
+    @ObservedObject var config = AppConfig.shared
+    
     @Bindable var chat: Chat
     
     @State private var isFilePickerPresented: Bool = false
@@ -62,7 +64,7 @@ struct ChatInputView: View {
             Group {
                 #if !os(macOS)
                 Button {
-                    chat.showCamera = true
+                    config.showCamera = true
                 } label: {
                     Label("Open Camera", systemImage: "camera")
                 }
@@ -99,7 +101,7 @@ struct ChatInputView: View {
         }
         
         #if !os(macOS)
-        .fullScreenCover(isPresented: $chat.showCamera) {
+        .fullScreenCover(isPresented: $config.showCamera) {
             CameraView(chat: chat)
                 .ignoresSafeArea()
         }
