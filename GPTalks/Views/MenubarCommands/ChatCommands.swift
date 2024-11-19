@@ -60,9 +60,7 @@ struct ChatCommands: Commands {
             Section {
                 Button("Edit Last Message") {
                     isFocused = .textEditor // this isnt doing anything (on macos at least)
-                    withAnimation {
-                        chatVM.editLastMessage()
-                    }
+                    chatVM.editLastMessage()
                 }
                 .keyboardShortcut("e")
                 .disabled(chatVM.activeChat?.status == .quick)

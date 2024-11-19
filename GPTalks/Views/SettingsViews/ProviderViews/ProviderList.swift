@@ -88,12 +88,7 @@ struct ProviderList: View {
 
     private func addProvider(type: ProviderType) {
         let newProvider = Provider.factory(type: type)
-        
-        DispatchQueue.main.async {
-            withAnimation {
-                modelContext.insert(newProvider)
-            }
-        }
+        modelContext.insert(newProvider)
     }
     
     private func deleteProviders(offsets: IndexSet) {

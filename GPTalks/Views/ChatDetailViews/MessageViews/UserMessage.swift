@@ -34,13 +34,13 @@ struct UserMessage: View {
             }
             .transaction { $0.animation = nil }
             .groupBoxStyle(PlatformSpecificGroupBoxStyle())
-            .overlay(
+            .background(
                 RoundedRectangle(cornerRadius: 5)
-                    .stroke(
-                        message.chat?.inputManager.editingIndex == indexOfMessage ? Color.accentColor : .clear,
-                        lineWidth: 2
+                    .fill(
+                        message.chat?.inputManager.editingIndex == indexOfMessage ? Color.accentColor.opacity(0.2) : .clear
                     )
             )
+
             
             #if os(macOS)
             contextMenu
