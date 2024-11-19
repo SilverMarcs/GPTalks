@@ -25,12 +25,9 @@ struct ChatList: View {
         List(selection: $chatVM.selections) {
             ChatListCards(source: .chatlist, chatCount: String(chats.count), imageSessionsCount: "↗")
             
-            Group {
-                TipView(SwipeActionTip())
-                TipView(NewChatTip())
-            }
-            .tipCornerRadius(8)
-            .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
+            TipView(SwipeActionTip())
+                .tipCornerRadius(8)
+                .listRowInsets(EdgeInsets(top: -6, leading: -5, bottom: 10, trailing: -5))
 
             #if os(macOS)
             if isSearching {
@@ -115,6 +112,7 @@ struct ChatList: View {
                 }
             }
             .menuIndicator(.hidden)
+            .popoverTip(NewChatTip())
         }
     }
     
