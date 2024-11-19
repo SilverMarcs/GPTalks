@@ -119,4 +119,4 @@ Supports iOS, iPadOS, MacOS and visionOS.
 </tr>
 </table>
 
-Consider supporting me on [buymeacoffee.com/silvermarcs](https://buymeacoffee.com/silvermarcs) if you like my work
+Consider supporting me on [Buy me a Coffee](https://buymeacoffee.com/silvermarcs) if you like my work
