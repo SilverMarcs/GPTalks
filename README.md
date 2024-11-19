@@ -11,7 +11,7 @@
 <a href="https://github.com/SilverMarcs/GPTalks/pulls"><img src="https://img.shields.io/github/issues-pr/SilverMarcs/GPTalks?color=blue" alt="Pull Requests Badge"/></a>
 <a href="https://github.com/SilverMarcs/GPTalks/issues"><img src="https://img.shields.io/github/issues/SilverMarcs/GPTalks?color=blue" alt="Issues Badge"/></a>
 <a href="https://github.com/SilverMarcs/GPTalks/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/SilverMarcs/GPTalks?color=2b9348"/></a>
-<a href="https://github.com/SilverMarcs/GPTalks/blob/master/LICENSE"><img src="https://img.shields.io/github/license/SilverMarcs/GPTalks?color=orange" alt="License Badge"/></a>
+<a href="https://github.com/SilverMarcs/GPTalks/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-orange" alt="GPL-3.0 License Badge"/></a>
 
 </div>
 
