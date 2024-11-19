@@ -1,31 +1,13 @@
 {
-  "originHash" : "8be40d0e05d3b87c26a0bac2cedeb70ff5f1dffc17ae4e340344c1f7ce00ac12",
+  "originHash" : "93185ae2df416422866f4bcd675cd406c3c9f562f1ae2d4ac3c27ec13e962287",
   "pins" : [
     {
-      "identity" : "fuzi",
+      "identity" : "googlegenerativeai",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/cezheng/Fuzi",
-      "state" : {
-        "revision" : "f08c8323da21e985f3772610753bcfc652c2103f",
-        "version" : "3.1.3"
-      }
-    },
-    {
-      "identity" : "generative-ai-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/generative-ai-swift",
+      "location" : "https://github.com/SilverMarcs/GoogleGenerativeAI",
       "state" : {
         "branch" : "main",
-        "revision" : "b73b2c2644e1969334639865fad793403f2d89d5"
-      }
-    },
-    {
-      "identity" : "gptencoder",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/alfianlosari/GPTEncoder.git",
-      "state" : {
-        "revision" : "a86968867ab4380e36b904a14c42215f71efe8b4",
-        "version" : "1.0.4"
+        "revision" : "f17e1750c78e85254ad40d6be1f43aca41adf405"
       }
     },
     {
@@ -33,17 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
       "state" : {
-        "revision" : "09e4a10ed6b65b3a40fe07b6bf0c84809313efc4",
-        "version" : "2.0.0"
-      }
-    },
-    {
-      "identity" : "markdown-webview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/markdown-webview",
-      "state" : {
-        "branch" : "master",
-        "revision" : "fda3c84242a5aa0c29d94b6208db45911b45be98"
+        "revision" : "e6b60117ec266e1e5d059f7f34815144f9762b36",
+        "version" : "2.0.2"
       }
     },
     {
@@ -51,35 +24,26 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SilverMarcs/OpenAI",
       "state" : {
-        "branch" : "cancellable",
-        "revision" : "b00b7b607be73db06a4dc7a18fd50e5ac5d2c828"
-      }
-    },
-    {
-      "identity" : "reeeed",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nate-parrott/reeeed",
-      "state" : {
-        "revision" : "567e2f50592f8a5fe41e9ff64784b42c77f35433",
-        "version" : "1.0.1"
+        "branch" : "main",
+        "revision" : "d83f91da36e87991d4c61463cf721ea56b254ed5"
       }
     },
     {
       "identity" : "swiftanthropic",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
+      "location" : "https://github.com/SilverMarcs/SwiftAnthropic",
       "state" : {
-        "revision" : "a624abcf464117a0c113043d0b94f294b4bed4d1",
-        "version" : "1.8.2"
+        "branch" : "main",
+        "revision" : "95524ed1d36b5de6e051cc82db95962959ff6efe"
       }
     },
     {
-      "identity" : "swiftsoup",
+      "identity" : "swiftmarkdownview",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/scinfu/SwiftSoup.git",
+      "location" : "https://github.com/SilverMarcs/SwiftMarkdownView",
       "state" : {
-        "revision" : "3c2c7e1e72b8abd96eafbae80323c5c1e5317437",
-        "version" : "2.7.5"
+        "branch" : "main",
+        "revision" : "85e3ffea9f0ef986ea8cff7bd90a3b949ed7fa11"
       }
     }
   ],

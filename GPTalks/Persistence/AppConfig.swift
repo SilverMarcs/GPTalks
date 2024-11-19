@@ -6,52 +6,39 @@
 //
 
 import SwiftUI
-import MarkdownWebView
+import SwiftMarkdownView
 
 class AppConfig: ObservableObject {
     static let shared = AppConfig()
     private init() {}
     
+    var proxy: ScrollViewProxy?
+    var hasUserScrolled = false
+    
+    @Published var showCamera = false
+    
     // Appearance
+    @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
+    @AppStorage("codeBlockTheme") var codeBlockTheme: CodeBlockTheme = .atom
+    @AppStorage("renderSkeleton") var renderSkeleton: Bool = true
     #if os(macOS)
     @AppStorage("fontSize") var fontSize: Double = 13
     #else
     @AppStorage("fontSize") var fontSize: Double = 18
     #endif
     
-    #if os(macOS)
-    @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
-    #else
-    @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .native
-    #endif
-    
-    #if os(macOS)
-    @AppStorage("compactList") var compactList: Bool = true
-    #else
-    @AppStorage("compactList") var compactList: Bool = false
-    #endif
-    
-    #if os(macOS)
-    @AppStorage("conversationListStyle") var conversationListStyle: ConversationListStyle = .list
-    #else
-    @AppStorage("conversationListStyle") var conversationListStyle: ConversationListStyle = .scrollview
-    #endif
-    
-    @AppStorage("truncateList") var truncateList: Bool = false
-    @AppStorage("listCount") var listCount: Int = 16
-    
-    // Markdown
-    @AppStorage("markdownTheme") var markdownTheme: MarkdownTheme = .atom
-    
     // General
     @AppStorage("autogenTitle") var autogenTitle: Bool = true
-    @AppStorage("expensiveSearch") var expensiveSearch: Bool = true
+    @AppStorage("enterToSend") var enterToSend: Bool = false
     @AppStorage("hideDock") var hideDock = false
     @AppStorage("onlyOneWindow") var onlyOneWindow = false
     
+    // Onboarding
+    @AppStorage("hasCompletedOnboarding") var hasCompletedOnboarding = false
+    @AppStorage("hasUsedChatStatusFilter") var hasUsedChatStatusFilter = false
+    
     // Quick
     @AppStorage("quickSystemPrompt") var quickSystemPrompt: String = "Keep your responses extremeley concise."
-    @AppStorage("quickMarkdownProvider") var quickMarkdownProvider: MarkdownProvider = .native
     
     func resetFontSize() {
         #if os(macOS)
@@ -62,21 +49,8 @@ class AppConfig: ObservableObject {
     }
 }
 
-enum ConversationListStyle: String, Codable, CaseIterable {
-    case scrollview = "ScrollView"
-    case list = "List"
-}
-
-enum MarkdownProvider: String, Codable, CaseIterable {
-    case webview
-    case native
-    case disabled
-    
-    var name: String {
-        switch self {
-        case .webview: "WebView"
-        case .native: "Native"
-        case .disabled: "Disabled"
-        }
-    }
+enum SidebarIconSize: String, Codable, CaseIterable {
+    case system
+    case medium
+    case large
 }

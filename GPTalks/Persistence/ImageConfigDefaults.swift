@@ -13,13 +13,9 @@ class ImageConfigDefaults: ObservableObject {
     private init() {}
     
     @AppStorage("numImages") var numImages: Int = 1
-    @AppStorage("size") var size: ImagesQuery.Size = ImagesQuery.Size._256
+    @AppStorage("size") var size: ImagesQuery.Size = ImagesQuery.Size._1024
     @AppStorage("quality") var quality = ImagesQuery.Quality.standard
     @AppStorage("style") var style = ImagesQuery.Style.natural
     
-    @AppStorage("imageWidth") var imageWidth: Int = 250
-    @AppStorage("imageHeight") var imageHeight: Int = 250
-    
-    @AppStorage("chatImageWidth") var chatImageWidth: Int = 100
-    @AppStorage("chatImageHeight") var chatImageHeight: Int = 48
+    @AppStorage("saveToPhotos") var saveToPhotos = true
 }

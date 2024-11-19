@@ -6,31 +6,11 @@
 //
 
 import Foundation
-import SwiftUI
-import SwiftData
-import UniformTypeIdentifiers
-import QuickLook
 
 struct FileHelper {
-    static func deleteFile(at path: String) {
-        do {
-            #if os(macOS)
-            if let fileURL = URL(string: path) {
-                try Foundation.FileManager.default.removeItem(at: fileURL)
-            }
-            #else
-            let documentsDirectory = try Foundation.FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let fileURL = documentsDirectory.appendingPathComponent(path)
-            try Foundation.FileManager.default.removeItem(at: fileURL)
-            #endif
-        } catch {
-            print("Error deleting file: \(error.localizedDescription)")
-        }
-    }
-    
     static func createTemporaryURL(for typedData: TypedData) -> URL? {
         let tempDirectoryURL = FileManager.default.temporaryDirectory
-        let fileName = typedData.fileName + "." + typedData.fileExtension
+        let fileName = typedData.fileName
         let fileURL = tempDirectoryURL.appendingPathComponent(fileName)
 
         do {
@@ -44,7 +24,7 @@ struct FileHelper {
     
     static func createTemporaryURL(for data: Data) -> URL? {
         let tempDirectoryURL = FileManager.default.temporaryDirectory
-        let fileName = "temp_file_\(UUID().uuidString)"
+        let fileName = "temp_\(UUID().uuidString)"
         let fileExtension = inferFileExtension(from: data)
         let fullFileName = fileName + "." + fileExtension
         let fileURL = tempDirectoryURL.appendingPathComponent(fullFileName)
@@ -77,48 +57,22 @@ struct FileHelper {
             return "bin"
         }
     }
-}
-
-
-extension View {
-    @ViewBuilder
-    func multipleFileImporter(isPresented: Binding<Bool>, supportedFileTypes: [UTType], onDataAppend: @escaping (TypedData) -> Void) -> some View {
-        self.fileImporter(
-            isPresented: isPresented,
-            allowedContentTypes: supportedFileTypes,
-            allowsMultipleSelection: true
-        ) { result in
-            switch result {
-            case .success(let urls):
-                DispatchQueue.global(qos: .userInitiated).async {
-                    for url in urls {
-                        autoreleasepool {
-                            if let data = try? Data(contentsOf: url) {
-                                let fileType = UTType(filenameExtension: url.pathExtension) ?? .data
-                                let fileName = url.deletingPathExtension().lastPathComponent
-                                let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
-                                let fileSize = (attributes?[.size] as? Int ?? 0).formatFileSize()
-                                let fileExtension = url.pathExtension.lowercased()
-                                
-                                let typedData = TypedData(
-                                    data: data,
-                                    fileType: fileType,
-                                    fileName: fileName,
-                                    fileSize: fileSize,
-                                    fileExtension: fileExtension
-                                )
-                                
-                                DispatchQueue.main.async {
-                                    onDataAppend(typedData)
-                                }
-                            }
-                        }
-                    }
-                }
-            case .failure(let error):
-                print("File selection error: \(error.localizedDescription)")
+    
+    static func processDataFiles(_ dataFiles: [TypedData], messageId: String, role: MessageRole) -> [ContentItem] {
+        return dataFiles.map { data in
+            if data.fileType.conforms(to: .text) || data.fileType.conforms(to: .pdf) {
+                return .text(data.formattedTextContent)
+            } else if data.fileType.conforms(to: .image) && role == .user {
+                return .image(data.mimeType, data.data)
+            } else {
+                let warning = "Notify the user if a file has been added but the assistant could not find a compatible plugin to read that file type."
+                return .text("Message ID: \(messageId)\nFile: \(data.fileName)\n\(warning)")
             }
         }
     }
+    
+    enum ContentItem {
+        case text(String)
+        case image(String, Data)  // mimeType, data
+    }
 }
-
