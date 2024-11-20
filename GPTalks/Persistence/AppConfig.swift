@@ -13,7 +13,7 @@ class AppConfig: ObservableObject {
     private init() {}
     
     var proxy: ScrollViewProxy?
-    var hasUserScrolled = false
+    @Published var hasUserScrolled = false
     
     @Published var showCamera = false
     

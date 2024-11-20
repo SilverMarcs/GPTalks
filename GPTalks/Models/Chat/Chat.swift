@@ -1,5 +1,5 @@
 //
-//  Item.swift
+//  Chat.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 25/06/2024.

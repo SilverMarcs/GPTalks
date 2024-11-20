@@ -52,9 +52,7 @@ struct ChatDetail: View {
             #if os(macOS)
             .navigationSubtitle("\(chat.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-                if chat.isReplying {
-                    config.hasUserScrolled = true
-                }
+                config.hasUserScrolled = true
             }
             #else
             .listStyle(.plain)
