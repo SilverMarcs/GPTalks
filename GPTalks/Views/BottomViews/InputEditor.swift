@@ -67,6 +67,8 @@ struct InputEditor: View {
             .lineLimit(10, reservesSpace: false)
             .onSubmit {
                 if config.enterToSend {
+//                    isFocused = nil // doesn't work
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     Task { @MainActor in
                         await chat.sendInput()
                     }

@@ -94,7 +94,7 @@ struct SettingsView: View {
                 }
             }
             #if !os(macOS) && !os(visionOS)
-            .scrollDismissesKeyboard(.interactively)
+            .scrollDismissesKeyboard(.immediately)
             #endif
             .scrollContentBackground(.visible)
             .onChange(of: columnVisibility, initial: true) { oldVal, newVal in

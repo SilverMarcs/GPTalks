@@ -156,8 +156,9 @@ struct ChatInputView: View {
     }
     
     private func sendInput() {
-        #if !os(macOS)
-        isFocused = nil
+        #if os(iOS)
+//        isFocused = nil // doesn't work
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         #endif
         Task { @MainActor in
             await chat.sendInput()
