@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ChatRow: View {
     @Environment(\.modelContext) var modelContext
+    @Environment(\.openWindow) var openWindow
     @Environment(ChatVM.self) private var chatVM
     
     @ObservedObject var config = AppConfig.shared
@@ -25,6 +26,16 @@ struct ChatRow: View {
         .swipeActions(edge: .trailing) {
             swipeActionsTrailing
         }
+        #if os(macOS)
+        .contextMenu {
+            Button {
+                openWindow(value: chat.id)
+            } label: {
+                Label("Open in New Window", systemImage: "rectangle.on.rectangle")
+                    .labelStyle(.titleAndIcon)
+            }
+        }
+        #endif
     }
     var row: some View {
         HStack {

@@ -18,6 +18,8 @@ struct MenuCommands: Commands {
         
 //        TextEditingCommands()
         
+//        TextFormattingCommands()
+        
 //        ToolbarCommands()
         
         CommandGroup(replacing: .appInfo) {
