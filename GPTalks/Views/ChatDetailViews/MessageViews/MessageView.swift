@@ -32,6 +32,9 @@ struct MessageView: View {
                     .padding(.vertical)
             }
         }
+        #if os(iOS)
+        .opacity(0.9)
+        #endif
     }
 }
 

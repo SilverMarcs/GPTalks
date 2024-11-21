@@ -25,11 +25,6 @@ struct ChatDetail: View {
             .toolbar {
                 ChatToolbar(chat: chat)
             }
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                if !isQuick {
-                    ChatInputView(chat: chat)
-                }
-            }
             .onDrop(of: [.item], isTargeted: nil) { providers in
                 chat.inputManager.handleDrop(providers)
             }
@@ -71,22 +66,42 @@ struct ChatDetail: View {
     var content: some View {
         if chat.messages.isEmpty && config.markdownProvider == .webview {
             EmptyChat(chat: chat)
-        } else {
-            List {
-                ForEach(chat.messages, id: \.self) { message in
-                    MessageView(message: message)
-                        #if os(iOS)
-                        .opacity(0.9)
-                        #endif
+                .safeAreaInset(edge: .bottom, spacing: 0) {
+                    if !isQuick {
+                        ChatInputView(chat: chat)
+                    }
                 }
+        } else {
+            if let pinned = chatVM.sidePinnedChat {
+                HSplitView {
+                    list
+                    
+                    SidePinnedChat(chat: pinned)
+                }
+            }  else {
+                list
+            }
+        }
+    }
+    
+    var list: some View {
+        List {
+            ForEach(chat.messages, id: \.self) { message in
+                MessageView(message: message)
+
+            }
+            .listRowSeparator(.hidden)
+            
+            ErrorMessageView(message: $chat.errorMessage)
+            
+            Color.clear
+                .transaction { $0.animation = nil }
+                .id(String.bottomID)
                 .listRowSeparator(.hidden)
-                
-                ErrorMessageView(message: $chat.errorMessage)
-                
-                Color.clear
-                    .transaction { $0.animation = nil }
-                    .id(String.bottomID)
-                    .listRowSeparator(.hidden)
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if !isQuick {
+                ChatInputView(chat: chat)
             }
         }
     }

@@ -176,6 +176,7 @@ final class Chat {
         guard let index = messages.firstIndex(of: message) else { return }
         resetMarker = (resetMarker == index) ? nil : index
         if resetMarker == messages.count - 1 {
+            AppConfig.shared.hasUserScrolled = false
             scrollBottom()
         }
     }

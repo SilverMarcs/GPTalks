@@ -29,6 +29,13 @@ struct ChatRow: View {
         #if os(macOS)
         .contextMenu {
             Button {
+                chatVM.sidePinnedChat = chat
+            } label: {
+                Label("Open in New Tab", systemImage: "square.split.2x1")
+                    .labelStyle(.titleAndIcon)
+            }
+            
+            Button {
                 openWindow(value: chat.id)
             } label: {
                 Label("Open in New Window", systemImage: "rectangle.on.rectangle")

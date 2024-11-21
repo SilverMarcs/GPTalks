@@ -11,6 +11,8 @@ import SwiftUI
 
 @Observable class ChatVM {
     var selections: Set<Chat> = []
+    var sidePinnedChat: Chat?
+    
     var statusFilter: ChatStatus = .normal
     
     public var activeChat: Chat? {
