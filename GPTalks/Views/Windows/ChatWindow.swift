@@ -14,7 +14,6 @@ struct ChatWindow: Scene {
     var body: some Scene {
         Window("Chats", id: "chats") {
             ChatContentView()
-                .pasteHandler()
         }
         .commands {
             ChatCommands()

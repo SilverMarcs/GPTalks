@@ -15,34 +15,39 @@ struct ChatDetail: View {
     @Environment(\.modelContext) var modelContext
     @Environment(ChatVM.self) private var chatVM
     @ObservedObject var config: AppConfig = AppConfig.shared
-    @FocusState var isFocused: FocusedField?
     
     @Bindable var chat: Chat
+    
+    @State private var showingAllMessages = false
     
     var body: some View {
         ScrollViewReader { proxy in
             content
+            .pasteHandler(chat: chat)
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                if !isQuick {
+                    ChatInputView(chat: chat)
+                }
+            }
             .toolbar {
                 ChatToolbar(chat: chat)
             }
             .onDrop(of: [.item], isTargeted: nil) { providers in
                 chat.inputManager.handleDrop(providers)
             }
-            .navigationTitle(navTitle)
+            .navigationTitle(horizontalSizeClass == .compact ? chat.config.model.name : chat.title)
             .toolbarTitleMenu {
                 Section(chat.title) {
                     Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
                 }
             }
-            .task(id: chatVM.selections) {
+            .task {
                 config.hasUserScrolled = false
                 config.proxy = proxy
-                #if os(macOS)
-                scrollToBottom(proxy: proxy, animated: false)
-                #else
-                scrollToBottom(proxy: proxy, delay: 0.3)
-                #endif
-                scrollToBottom(proxy: proxy, delay: 0.2)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    showingAllMessages = true
+                }
             }
             #if os(macOS)
             .navigationSubtitle("\(chat.config.systemPrompt.prefix(70))")
@@ -62,52 +67,49 @@ struct ChatDetail: View {
         }
     }
     
+    var messagesToShow: [Message] {
+        if showingAllMessages {
+            return chat.messages
+        } else {
+            return Array(chat.messages.suffix(2))
+        }
+    }
+    
     @ViewBuilder
     var content: some View {
         if chat.messages.isEmpty && config.markdownProvider == .webview {
             EmptyChat(chat: chat)
-                .safeAreaInset(edge: .bottom, spacing: 0) {
-                    if !isQuick {
-                        ChatInputView(chat: chat)
-                    }
-                }
         } else {
-            if let pinned = chatVM.sidePinnedChat {
-                HSplitView {
-                    list
-                    
-                    SidePinnedChat(chat: pinned)
+            List {
+                if !showingAllMessages {
+                    ProgressView()
+                        .frame(maxWidth: .infinity)
+                        .listRowSeparator(.hidden)
+                        .onDisappear {
+                            if let proxy = config.proxy {
+                                #if os(macOS)
+                                scrollToBottom(proxy: proxy, animated: false)
+                                #else
+                                scrollToBottom(proxy: proxy, delay: 0.3)
+                                #endif
+                                scrollToBottom(proxy: proxy, delay: 0.4)
+                            }
+                        }
                 }
-            }  else {
-                list
-            }
-        }
-    }
-    
-    var list: some View {
-        List {
-            ForEach(chat.messages, id: \.self) { message in
-                MessageView(message: message)
-
-            }
-            .listRowSeparator(.hidden)
-            
-            ErrorMessageView(message: $chat.errorMessage)
-            
-            Color.clear
-                .transaction { $0.animation = nil }
-                .id(String.bottomID)
+                
+                ForEach(messagesToShow, id: \.self) { message in
+                    MessageView(message: message)
+                }
                 .listRowSeparator(.hidden)
-        }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            if !isQuick {
-                ChatInputView(chat: chat)
+                
+                ErrorMessageView(message: $chat.errorMessage)
+                
+                Color.clear
+                    .transaction { $0.animation = nil }
+                    .id(String.bottomID)
+                    .listRowSeparator(.hidden)
             }
         }
-    }
-    
-    var navTitle: String {
-        horizontalSizeClass == .compact ? chat.config.model.name : chat.title
     }
 }
 

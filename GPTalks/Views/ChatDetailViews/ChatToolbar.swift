@@ -17,6 +17,8 @@ struct ChatToolbar: ToolbarContent {
     @State private var showingInspector: Bool = false
     @State private var currentSearchIndex: Int = 0
     
+    @FocusState private var isFocused: FocusedField?
+    
     private var matchingMessages: [Message] {
         guard !chatVM.searchText.isEmpty else { return [] }
         return chat.messages.enumerated().compactMap { index, message in
@@ -67,6 +69,46 @@ struct ChatToolbar: ToolbarContent {
             Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
                 .allowsHitTesting(false)
         }
+        
+        
+        ToolbarItemGroup(placement: .keyboard) {
+            Section {
+                Button("Edit Last Message") {
+                    guard let lastUserMessage = chat.messages.last(where: { $0.role == .user }) else { return }
+                    isFocused = .textEditor // this isnt doing anything (on macos at least)
+                    chat.inputManager.setupEditing(message: lastUserMessage)
+                }
+                .keyboardShortcut("e")
+                .disabled(chat.status == .quick)
+                
+                Button("Regen Last Message") {
+                    if let last = lastMessage {
+                        Task { @MainActor in
+                            await chat.regenerate(message: last)
+                        }
+                    }
+                }
+                .keyboardShortcut("r")
+            }
+            
+            Section {
+                Button("Reset Context") {
+                    if let last = lastMessage {
+                        chat.resetContext(at: last)
+                    }
+                }
+                .keyboardShortcut("k")
+                
+                Button("Delete Last Message", role: .destructive) {
+                    if let last = lastMessage {
+                        chat.deleteMessage(last)
+                    }
+                }
+                .keyboardShortcut(.delete)
+            }
+        }
+        
+        
         #else
         if !chatVM.searchText.isEmpty {
             ToolbarItem {
@@ -76,6 +118,12 @@ struct ChatToolbar: ToolbarContent {
             }
         }
         #endif
+    }
+    
+    private var lastMessage: Message? {
+        guard !chat.isReplying,
+              let lastMessage = chat.messages.last else { return nil }
+        return lastMessage
     }
     
     private func toggleInspector() {

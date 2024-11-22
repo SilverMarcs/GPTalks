@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 
 struct PasteHandler: ViewModifier {
     @State private var eventMonitor: Any?
-    @Environment(ChatVM.self) private var chatVM
+    var chat: Chat
 
     func body(content: Content) -> some View {
         content
@@ -33,8 +33,7 @@ struct PasteHandler: ViewModifier {
     }
 
     private func handleCommandV() -> Bool {
-        guard let pasteboardItems = NSPasteboard.general.pasteboardItems,
-              let chat = chatVM.activeChat else {
+        guard let pasteboardItems = NSPasteboard.general.pasteboardItems else {
             return false
         }
 
@@ -56,8 +55,8 @@ struct PasteHandler: ViewModifier {
 }
 
 extension View {
-    func pasteHandler() -> some View {
-        self.modifier(PasteHandler())
+    func pasteHandler(chat: Chat) -> some View {
+        self.modifier(PasteHandler(chat: chat))
     }
 }
 #endif

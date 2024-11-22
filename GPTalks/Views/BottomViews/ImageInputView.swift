@@ -28,7 +28,7 @@ struct ImageInputView: View {
         }
         .modifier(CommonInputStyling())
         #if os(macOS)
-        .onAppear {
+        .task {
             isFocused = .imageInput
         }
         .toolbar {

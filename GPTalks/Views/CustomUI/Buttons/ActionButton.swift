@@ -19,6 +19,6 @@ struct ActionButton: View {
         .foregroundStyle((isStop ? AnyShapeStyle(.background) : AnyShapeStyle(.white)), (isStop ? .red : .accent))
         .buttonStyle(.plain)
         .contentTransition(.symbolEffect(.replace, options: .speed(2)))
-//        .keyboardShortcut(isStop ? "d" : .return)
+        .keyboardShortcut(isStop ? "d" : .return)
     }
 }

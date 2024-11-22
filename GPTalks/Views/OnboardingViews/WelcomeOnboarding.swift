@@ -32,7 +32,7 @@ struct WelcomeOnboarding: View {
             Spacer()
             
         }
-        .onAppear {
+        .task {
             isAppear.toggle()
         }
     }

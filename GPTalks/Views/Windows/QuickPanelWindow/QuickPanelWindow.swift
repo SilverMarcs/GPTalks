@@ -79,7 +79,6 @@ class QuickPanelWindow: NSPanel {
         
         contentView = visualEffectView
         
-        // Set the initial height constraint
         heightConstraint = visualEffectView.heightAnchor.constraint(equalToConstant: contentRect.height)
         heightConstraint?.isActive = true
         self.contentMinSize = NSSize(width: contentRect.width, height: contentRect.height)

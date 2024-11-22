@@ -19,6 +19,7 @@ struct InputEditor: View {
         Group {
             if config.enterToSend {
                 TextField(placeHolder, text: $chat.inputManager.prompt, axis: .vertical)
+                    .focused($isFocused, equals: .textEditor)
                     .lineLimit(25, reservesSpace: false)
                     .textFieldStyle(.plain)
                     .onSubmit {
@@ -39,6 +40,7 @@ struct InputEditor: View {
                     }
                     
                     TextEditor(text: $chat.inputManager.prompt)
+                        .focused($isFocused, equals: .textEditor)
                         .frame(maxHeight: 400)
                         .fixedSize(horizontal: false, vertical: true)
                         .scrollContentBackground(.hidden)
@@ -46,8 +48,7 @@ struct InputEditor: View {
                 .font(.body)
             }
         }
-        .focused($isFocused, equals: .textEditor)
-        .task(id: chatVM.selections) {
+        .task {
             guard chatVM.selections.count == 1 else { return }
             isFocused = .textEditor
         }

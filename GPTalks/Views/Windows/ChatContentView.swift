@@ -27,9 +27,9 @@ struct ChatContentView: View {
             ChatList(status: chatVM.statusFilter, searchText: chatVM.searchText, searchTokens: chatVM.serchTokens)
                 .navigationSplitViewColumnWidth(min: 270, ideal: 300, max: 400)
         } detail: {
-            if let chat = chatVM.activeChat, chat.status != .quick {
+            if let chat = chatVM.activeChat {
                 ChatDetail(chat: chat)
-//                    .id(chat.id)
+                    .id(chat.id)
             } else {
                 Text("^[\(chatVM.selections.count) Chat](inflect: true) Selected")
                     .font(.title)

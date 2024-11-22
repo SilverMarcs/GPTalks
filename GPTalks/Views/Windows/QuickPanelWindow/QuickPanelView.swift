@@ -18,7 +18,6 @@ struct QuickPanelView: View {
     var toggleVisibility: () -> Void
 
     @FocusState private var isFocused: Bool
-    @State var selections: Set<Chat> = []
 
     @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
@@ -52,15 +51,12 @@ struct QuickPanelView: View {
         .frame(width: 650)
         .onChange(of: chatVM.isQuickPanelPresented) {
             if chatVM.isQuickPanelPresented {
-                selections = chatVM.selections
-                chatVM.selections = [self.chat]
                 isFocused = true
                 if !chat.messages.isEmpty {
                     updateHeight(500)
                 }
             } else {
                 DispatchQueue.main.async {
-                    chatVM.selections = selections
                     updateHeight(57)
                 }
             }
@@ -69,7 +65,7 @@ struct QuickPanelView: View {
             isFocused = true
         }
         .onChange(of: chat.inputManager.dataFiles.isEmpty) {
-            if chat.inputManager.dataFiles.isEmpty {
+            if chat.inputManager.dataFiles.isEmpty && chat.messages.isEmpty {
                 updateHeight(57)
             } else {
                 updateHeight(500)
@@ -106,7 +102,8 @@ struct QuickPanelView: View {
             }
             .buttonStyle(.plain)
             
-            TextField("Ask Anything...", text: $chat.inputManager.prompt)
+            TextField("Ask Anything...", text: $chat.inputManager.prompt, axis: .vertical)
+                .allowsTightening(true)
                 .focused($isFocused)
                 .font(.system(size: 25))
                 .textFieldStyle(.plain)
@@ -194,7 +191,7 @@ struct QuickPanelView: View {
             if let mainWindow = NSApp.windows.first(where: { $0.identifier?.rawValue == "chats" }) {
                 mainWindow.makeKeyAndOrderFront(nil)
             }
-            selections = [newChat]
+//            selections = [newChat]
             NSApp.activate(ignoringOtherApps: true)
         }
     }

@@ -127,7 +127,6 @@
 		08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A313462C4AD03300C3E578 /* ImageInputView.swift */; };
 		08A313492C4AD0DC00C3E578 /* CommonModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A313482C4AD0DC00C3E578 /* CommonModifiers.swift */; };
 		08A3134B2C4ADEA000C3E578 /* ImageRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A3134A2C4ADEA000C3E578 /* ImageRow.swift */; };
-		08A7658F2CEE6339001D5F8F /* SidePinnedChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A7658E2CEE6339001D5F8F /* SidePinnedChat.swift */; };
 		08A77CC52C65A0B70087D0F3 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A77CC42C65A0B70087D0F3 /* AppearanceSettings.swift */; };
 		08A77CC92C65A3AD0087D0F3 /* SectionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A77CC82C65A3AD0087D0F3 /* SectionFooterView.swift */; };
 		08A77CCC2C65AA820087D0F3 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A77CCB2C65AA820087D0F3 /* DatabaseService.swift */; };
@@ -305,7 +304,6 @@
 		08A313462C4AD03300C3E578 /* ImageInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageInputView.swift; sourceTree = "<group>"; };
 		08A313482C4AD0DC00C3E578 /* CommonModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonModifiers.swift; sourceTree = "<group>"; };
 		08A3134A2C4ADEA000C3E578 /* ImageRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRow.swift; sourceTree = "<group>"; };
-		08A7658E2CEE6339001D5F8F /* SidePinnedChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePinnedChat.swift; sourceTree = "<group>"; };
 		08A77CC42C65A0B70087D0F3 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		08A77CC82C65A3AD0087D0F3 /* SectionFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionFooterView.swift; sourceTree = "<group>"; };
 		08A77CCB2C65AA820087D0F3 /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -717,7 +715,6 @@
 				0810F5882CEAFB5C002D4ACF /* ContextResetDivider.swift */,
 				086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */,
 				08CD009A2CBA20E900A96425 /* PasteHandler.swift */,
-				08A7658E2CEE6339001D5F8F /* SidePinnedChat.swift */,
 			);
 			path = ChatDetailViews;
 			sourceTree = "<group>";
@@ -981,7 +978,6 @@
 				08A222BE2C2ABDB400D76C8B /* InputManager.swift in Sources */,
 				08F840062C9AA26C000CB498 /* CameraView.swift in Sources */,
 				089825252CE9B62900980468 /* APIKeyOnboarding.swift in Sources */,
-				08A7658F2CEE6339001D5F8F /* SidePinnedChat.swift in Sources */,
 				08C49FD82C502EC90085792F /* FileHelper.swift in Sources */,
 				08B3AE9D2CDB58AB00D7231E /* NonStreamResponse.swift in Sources */,
 				08E7209A2CE7D46D0014888B /* SearchToken.swift in Sources */,

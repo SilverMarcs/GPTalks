@@ -40,51 +40,6 @@ struct ChatCommands: Commands {
                 .keyboardShortcut("-", modifiers: .command)
             }
         }
-        
-        CommandMenu("Chat") {  
-            Section {
-                Button("Send Prompt") {
-                    Task { @MainActor in
-                        await chatVM.sendPrompt()
-                    }
-                }
-                .keyboardShortcut(.return)
-                          
-                Button("Stop Streaming") {
-                    chatVM.stopStreaming()
-                }
-                .keyboardShortcut("d")
-                .disabled(!(chatVM.activeChat?.isReplying ?? false))
-            }
-            
-            Section {
-                Button("Edit Last Message") {
-                    isFocused = .textEditor // this isnt doing anything (on macos at least)
-                    chatVM.editLastMessage()
-                }
-                .keyboardShortcut("e")
-                .disabled(chatVM.activeChat?.status == .quick)
-                
-                Button("Regen Last Message") {
-                    Task { @MainActor in
-                        await chatVM.regenLastMessage()
-                    }
-                }
-                .keyboardShortcut("r")
-            }
-            
-            Section {
-                Button("Reset Context") {
-                    chatVM.resetContext()
-                }
-                .keyboardShortcut("k")
-                
-                Button("Delete Last Message", role: .destructive) {
-                    chatVM.deleteLastMessage()
-                }
-                .keyboardShortcut(.delete)
-            }
-        }
     }
     
     private func increaseFontSize() {

@@ -11,49 +11,12 @@ import SwiftUI
 
 @Observable class ChatVM {
     var selections: Set<Chat> = []
-    var sidePinnedChat: Chat?
     
     var statusFilter: ChatStatus = .normal
     
     public var activeChat: Chat? {
         guard selections.count == 1 else { return nil }
         return selections.first
-    }
-    
-    private var activeChatAndLastMessage: (Chat, Message)? {
-        guard let chat = activeChat, !chat.isReplying,
-              let lastMessage = chat.messages.last else { return nil }
-        return (chat, lastMessage)
-    }
-    
-    func sendPrompt() async {
-        guard let chat = activeChat else { return }
-        await chat.sendInput()
-    }
-    
-    func stopStreaming() {
-        activeChat?.stopStreaming()
-    }
-    
-    func regenLastMessage() async {
-        guard let (chat, lastMessage) = activeChatAndLastMessage else { return }
-        await chat.regenerate(message: lastMessage)
-    }
-    
-    func resetContext() {
-        guard let (chat, lastMessage) = activeChatAndLastMessage else { return }
-        chat.resetContext(at: lastMessage)
-    }
-    
-    func deleteLastMessage() {
-        guard let (chat, lastMessage) = activeChatAndLastMessage else { return }
-        chat.deleteMessage(lastMessage)
-    }
-
-    func editLastMessage() {
-        guard let chat = activeChat else { return }
-        guard let lastUserMessage = chat.messages.last(where: { $0.role == .user }) else { return }
-        chat.inputManager.setupEditing(message: lastUserMessage)
     }
     
     // must provide new chat, not the one to be forked
