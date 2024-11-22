@@ -40,7 +40,6 @@ struct UserMessage: View {
                         message.chat?.inputManager.editingIndex == indexOfMessage ? Color.accentColor.opacity(0.2) : .clear
                     )
             )
-
             
             #if os(macOS)
             contextMenu
@@ -50,9 +49,6 @@ struct UserMessage: View {
         #if !os(macOS)
         .contextMenu {
             MessageMenu(message: message, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
-        } preview: {
-            Text("User Message")
-                .padding()
         }
         .sheet(isPresented: $showingTextSelection) {
             TextSelectionView(content: message.content)

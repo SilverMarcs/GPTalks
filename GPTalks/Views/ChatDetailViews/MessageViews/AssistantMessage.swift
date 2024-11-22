@@ -55,9 +55,6 @@ struct AssistantMessage: View {
             if !message.isReplying {
                 MessageMenu(message: message, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
             }
-        } preview: {
-            Text("Assistant Message")
-                .padding()
         }
         .sheet(isPresented: $showingTextSelection) {
             TextSelectionView(content: message.content)

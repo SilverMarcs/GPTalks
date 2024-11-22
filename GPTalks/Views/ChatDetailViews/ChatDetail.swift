@@ -23,7 +23,6 @@ struct ChatDetail: View {
     var body: some View {
         ScrollViewReader { proxy in
             content
-            .pasteHandler(chat: chat)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if !isQuick {
                     ChatInputView(chat: chat)
@@ -47,9 +46,16 @@ struct ChatDetail: View {
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     showingAllMessages = true
+                    #if os(macOS)
+                    scrollToBottom(proxy: proxy, animated: false)
+                    #else
+                    scrollToBottom(proxy: proxy, delay: 0.3)
+                    #endif
+                    scrollToBottom(proxy: proxy, delay: 0.4)
                 }
             }
             #if os(macOS)
+            .pasteHandler(chat: chat)
             .navigationSubtitle("\(chat.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 config.hasUserScrolled = true
@@ -81,20 +87,10 @@ struct ChatDetail: View {
             EmptyChat(chat: chat)
         } else {
             List {
-                if !showingAllMessages {
+                if !showingAllMessages && chat.messages.count > 2 {
                     ProgressView()
                         .frame(maxWidth: .infinity)
                         .listRowSeparator(.hidden)
-                        .onDisappear {
-                            if let proxy = config.proxy {
-                                #if os(macOS)
-                                scrollToBottom(proxy: proxy, animated: false)
-                                #else
-                                scrollToBottom(proxy: proxy, delay: 0.3)
-                                #endif
-                                scrollToBottom(proxy: proxy, delay: 0.4)
-                            }
-                        }
                 }
                 
                 ForEach(messagesToShow, id: \.self) { message in

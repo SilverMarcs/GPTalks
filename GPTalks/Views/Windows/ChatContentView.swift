@@ -65,7 +65,7 @@ struct ChatContentView: View {
                 Button("Search") {
                     isSearchFieldFocused = .searchBox
                 }
-                .keyboardShortcut("f")
+                .keyboardShortcut("f", modifiers: [.command, .shift])
             }
         }
     }

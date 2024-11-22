@@ -16,7 +16,7 @@ struct MenuCommands: Commands {
         
 //        InspectorCommands()
         
-//        TextEditingCommands()
+        TextEditingCommands()
         
 //        TextFormattingCommands()
         

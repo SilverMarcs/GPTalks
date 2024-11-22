@@ -28,6 +28,7 @@
 		0821816A2C39001B00171BF3 /* ProviderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181692C39001B00171BF3 /* ProviderRow.swift */; };
 		0821816F2C39082900171BF3 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0821816E2C39082900171BF3 /* MessageView.swift */; };
 		082255622CE22D3200AAD32B /* SecretInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082255612CE22D3200AAD32B /* SecretInputView.swift */; };
+		0822A6C52CF09F31008DF4FC /* ExpandedInputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0822A6C42CF09F31008DF4FC /* ExpandedInputEditor.swift */; };
 		0823550D2CDBB74900388273 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0823550C2CDBB74900388273 /* GoogleGenerativeAI */; };
 		082355152CDBBB2B00388273 /* SwiftMarkdownView in Frameworks */ = {isa = PBXBuildFile; productRef = 082355142CDBBB2B00388273 /* SwiftMarkdownView */; };
 		0823551E2CDBC94D00388273 /* SwiftAnthropic in Frameworks */ = {isa = PBXBuildFile; productRef = 0823551D2CDBC94D00388273 /* SwiftAnthropic */; };
@@ -81,7 +82,6 @@
 		086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */; };
 		087906872CA6C73100E5DCAD /* ImageWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087906862CA6C73100E5DCAD /* ImageWindow.swift */; };
 		087906892CA6E22900E5DCAD /* ImageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087906882CA6E22900E5DCAD /* ImageContentView.swift */; };
-		087928372C48CFFB008646CD /* ExpandedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087928362C48CFFB008646CD /* ExpandedTextField.swift */; };
 		087F3F852CDDD99E001298B3 /* GuidesSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F842CDDD99E001298B3 /* GuidesSettings.swift */; };
 		087F3F872CDDDC3C001298B3 /* AboutSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F862CDDDC3C001298B3 /* AboutSettings.swift */; };
 		087F3F8B2CDDEF4C001298B3 /* Guide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F8A2CDDEF4C001298B3 /* Guide.swift */; };
@@ -212,6 +212,7 @@
 		082181692C39001B00171BF3 /* ProviderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderRow.swift; sourceTree = "<group>"; };
 		0821816E2C39082900171BF3 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		082255612CE22D3200AAD32B /* SecretInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretInputView.swift; sourceTree = "<group>"; };
+		0822A6C42CF09F31008DF4FC /* ExpandedInputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedInputEditor.swift; sourceTree = "<group>"; };
 		082A63312C551108003996B7 /* MarkdownBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownBackup.swift; sourceTree = "<group>"; };
 		082A63372C55175E003996B7 /* MiscUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscUtils.swift; sourceTree = "<group>"; };
 		082B88162CD36CD80092C4D0 /* PlatformSpecificGroupBoxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformSpecificGroupBoxStyle.swift; sourceTree = "<group>"; };
@@ -256,7 +257,6 @@
 		086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		087906862CA6C73100E5DCAD /* ImageWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWindow.swift; sourceTree = "<group>"; };
 		087906882CA6E22900E5DCAD /* ImageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContentView.swift; sourceTree = "<group>"; };
-		087928362C48CFFB008646CD /* ExpandedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedTextField.swift; sourceTree = "<group>"; };
 		087F3F842CDDD99E001298B3 /* GuidesSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidesSettings.swift; sourceTree = "<group>"; };
 		087F3F862CDDDC3C001298B3 /* AboutSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettings.swift; sourceTree = "<group>"; };
 		087F3F8A2CDDEF4C001298B3 /* Guide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guide.swift; sourceTree = "<group>"; };
@@ -696,10 +696,10 @@
 			children = (
 				08F840052C9AA26C000CB498 /* CameraView.swift */,
 				08A313462C4AD03300C3E578 /* ImageInputView.swift */,
-				087928362C48CFFB008646CD /* ExpandedTextField.swift */,
 				08C800392C36BA30009581C5 /* ChatInputView.swift */,
 				085276BD2C98706E009184D2 /* InputEditor.swift */,
 				08A313482C4AD0DC00C3E578 /* CommonModifiers.swift */,
+				0822A6C42CF09F31008DF4FC /* ExpandedInputEditor.swift */,
 			);
 			path = BottomViews;
 			sourceTree = "<group>";
@@ -934,6 +934,7 @@
 				08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */,
 				08F815382C97F65E00B49355 /* ToolsController.swift in Sources */,
 				0898253B2CEA31A300980468 /* MarkdownProvider.swift in Sources */,
+				0822A6C52CF09F31008DF4FC /* ExpandedInputEditor.swift in Sources */,
 				08915D942C373340008ADE27 /* ProviderImage.swift in Sources */,
 				087906872CA6C73100E5DCAD /* ImageWindow.swift in Sources */,
 				0810F5892CEAFB5C002D4ACF /* ContextResetDivider.swift in Sources */,
@@ -1020,7 +1021,6 @@
 				0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */,
 				085524EA2C4EDEC400CBB827 /* ModelList.swift in Sources */,
 				08A3134B2C4ADEA000C3E578 /* ImageRow.swift in Sources */,
-				087928372C48CFFB008646CD /* ExpandedTextField.swift in Sources */,
 				085361112C4938C4007DAB62 /* ImageDetail.swift in Sources */,
 				08C800492C36C521009581C5 /* AssistantMessage.swift in Sources */,
 				08B82C1F2C74EAFD00DC0183 /* FileViewer.swift in Sources */,

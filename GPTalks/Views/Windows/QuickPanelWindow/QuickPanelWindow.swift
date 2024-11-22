@@ -93,7 +93,6 @@ class QuickPanelWindow: NSPanel {
     
     func toggleVisibility() {
         if chatVM.isQuickPanelPresented {
-            chatVM.isQuickPanelPresented = false
             close()
         } else {
             chatVM.isQuickPanelPresented = true

@@ -20,6 +20,8 @@ struct ChatInputView: View {
     @State private var showPhotosPicker = false
     @State private var selectedPhotos = [PhotosPickerItem]()
     
+    @State private var isExpanded = false
+    
     @FocusState private var isFocused: FocusedField?
     
     var body: some View {
@@ -58,9 +60,19 @@ struct ChatInputView: View {
                 Spacer(minLength: 0)
             }
             
-            ActionButton(isStop: chat.isReplying) {
-                chat.isReplying ? chat.stopStreaming() : sendInput()
+            VStack {
+                if chat.inputManager.prompt.count > truncateLimit || isExpanded {
+                    expandInput
+                    
+                    Spacer()
+                }
+                
+                ActionButton(isStop: chat.isReplying) {
+                    chat.isReplying ? chat.stopStreaming() : sendInput()
+                }
             }
+            
+
         }
         .modifier(CommonInputStyling())
     }
@@ -138,6 +150,28 @@ struct ChatInputView: View {
             case .failure(let error):
                 print("File selection error: \(error.localizedDescription)")
             }
+        }
+    }
+    
+    
+    var truncateLimit: Int {
+        #if os(macOS)
+        120
+        #else
+        30
+        #endif
+    }
+        
+    var expandInput: some View {
+        Button {
+            isExpanded.toggle()
+        } label: {
+            Image(systemName: isExpanded ? "arrow.up.right.and.arrow.down.left" : "arrow.down.left.and.arrow.up.right")
+                .padding(3)
+        }
+        .buttonStyle(.plain)
+        .sheet(isPresented: $isExpanded) {
+            ExpandedInputEditor(prompt: $chat.inputManager.prompt)
         }
     }
     
