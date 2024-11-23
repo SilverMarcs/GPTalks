@@ -11,9 +11,15 @@ struct ExpandedInputEditor: View {
     @Environment(\.dismiss) var dismiss
     @Binding var prompt: String
     
+    @FocusState private var isFocused: FocusedField?
+    
     var body: some View {
         NavigationStack {
             TextEditor(text: $prompt)
+                .focused($isFocused, equals: .textEditor)
+                .task {
+                    isFocused = .textEditor
+                }
                 .font(.body)
                 .textEditorStyle(.plain)
                 .safeAreaPadding()

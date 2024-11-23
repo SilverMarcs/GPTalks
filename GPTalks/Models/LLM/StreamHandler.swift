@@ -15,6 +15,7 @@ struct StreamHandler {
     init(chat: Chat, assistant: Message) {
         self.chat = chat
         self.assistant = assistant
+        AppConfig.shared.hasUserScrolled = false
     }
 
     @MainActor

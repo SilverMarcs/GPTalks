@@ -45,6 +45,10 @@ final class MessageGroup {
         activeMessage = message
     }
     
+    func copy() -> MessageGroup {
+        return MessageGroup(message: activeMessage.copy())
+    }
+    
     // MARK: - computed message properties
     var provider: Provider? {
         activeMessage.provider
@@ -131,8 +135,13 @@ final class MessageGroup {
         activeMessage = allMessages[currentMessageIndex + 1]
     }
     
-    func copy() -> MessageGroup {
-        return MessageGroup(message: activeMessage.copy())
+    func deleteActiveMessage() {
+        guard allMessages.count > 1, let index = allMessages.firstIndex(of: activeMessage) else { return }
+        
+        allUnorderedMessages.removeAll { $0 == activeMessage }
+        
+        let nextIndex = min(index, allMessages.count - 1)
+        activeMessage = allMessages[nextIndex]
     }
     
     // MARK: - Secondary Message Navigation

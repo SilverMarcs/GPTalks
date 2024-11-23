@@ -79,16 +79,6 @@ final class DatabaseService: NSObject {
             chat.title = "(↯) Quick Chat"
             modelContext.insert(chat)
             
-            // Demo favourite chat with some messages
-            let normalChatConfig2 = ChatConfig(provider: openAI, purpose: .chat)
-            let favouriteChat = Chat(config: normalChatConfig2)
-            favouriteChat.status = .starred
-            favouriteChat.statusId = ChatStatus.starred.id
-            favouriteChat.addMessage(.mockUserMessage)
-            favouriteChat.messages.append(.mockAssistantGroup)
-            favouriteChat.title = "Favourite Chat"
-            modelContext.insert(favouriteChat)
-            
             // Demo chat with no messages
             let normalChatConfig = ChatConfig(provider: openAI, purpose: .chat)
             let normalChat = Chat(config: normalChatConfig)
@@ -102,6 +92,16 @@ final class DatabaseService: NSObject {
             archivedChat.statusId = ChatStatus.archived.id
             archivedChat.title = "Archived Chat"
             modelContext.insert(archivedChat)
+            
+            // Demo favourite chat with some messages
+            let normalChatConfig2 = ChatConfig(provider: openAI, purpose: .chat)
+            let favouriteChat = Chat(config: normalChatConfig2)
+            favouriteChat.status = .starred
+            favouriteChat.statusId = ChatStatus.starred.id
+            favouriteChat.addMessage(.mockUserMessage)
+            favouriteChat.messages.append(.mockAssistantGroup)
+            favouriteChat.title = "Favourite Chat"
+            modelContext.insert(favouriteChat)
             
             // Image session
             let imageChatConfig = ImageConfig(prompt: "", provider: openAI)

@@ -48,9 +48,11 @@ struct MessageMenu: View {
             DeleteButton(message: message)
         }
         
+        #if os(macOS)
         Section {
             NavigationButtons(message: message)
         }
+        #endif
     }
 }
 

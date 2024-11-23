@@ -59,12 +59,12 @@ extension String {
     static let testPrompt = "Respond with just the word Test"
     
     func copyToPasteboard() {
-#if os(macOS)
+        #if os(macOS)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(self, forType: .string)
-#else
+        #else
         UIPasteboard.general.string = self
-#endif
+        #endif
     }
 }
 

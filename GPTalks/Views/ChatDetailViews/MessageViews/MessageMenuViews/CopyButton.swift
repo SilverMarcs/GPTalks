@@ -22,7 +22,6 @@ struct CopyButton: View {
             Label(isCopied ? "Copied" : "Copy Text", 
                   systemImage: isCopied ? "checkmark" : "paperclip")
         }
-        .frame(width: 10)
         .contentTransition(.symbolEffect(.replace))
     }
 }
