@@ -1,0 +1,64 @@
+//
+//  MessageMenu.swift
+//  GPTalks
+//
+//  Created by Zabir Raihan on 04/07/2024.
+//
+
+import SwiftUI
+import SwiftData
+
+struct MessageMenu: View {
+    var message: MessageGroup
+    @Binding var isExpanded: Bool
+    var toggleTextSelection: (() -> Void)? = nil
+
+    var body: some View {
+        #if os(macOS)
+            HStack {
+                buttons
+                    .buttonStyle(HoverScaleButtonStyle())
+            }
+            .transaction { $0.animation = nil }
+            .frame(height: 20)
+        #else
+            buttons
+        #endif
+    }
+
+    @ViewBuilder
+    var buttons: some View {
+        ExpandButton(isExpanded: $isExpanded, message: message)
+        
+        Section {
+            EditButton(message: message)
+            RegenButton(message: message)
+        }
+    
+        Section {
+            CopyButton(message: message)
+            ForkButton(message: message)
+            #if !os(macOS)
+            SelectTextButton(toggleTextSelection: toggleTextSelection)
+            #endif
+        }
+        
+        Section {
+            ResetContextButton(message: message)
+            DeleteButton(message: message)
+        }
+        
+        Section {
+            NavigationButtons(message: message)
+        }
+    }
+}
+
+#Preview {
+    VStack {
+        MessageMenu(message: .mockUserGroup, isExpanded: .constant(true))
+        MessageMenu(message: .mockAssistantGroup, isExpanded: .constant(true))
+    }
+    .frame(width: 500)
+    .padding()
+}

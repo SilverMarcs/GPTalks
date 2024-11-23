@@ -161,6 +161,15 @@
 		08C800552C36F82B009581C5 /* ProviderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800542C36F82B009581C5 /* ProviderList.swift */; };
 		08C800572C36F843009581C5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800562C36F843009581C5 /* SettingsView.swift */; };
 		08CA42B32CF0F4430073BB01 /* MessageGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA42B22CF0F4430073BB01 /* MessageGroup.swift */; };
+		08CA42B62CF1F13B0073BB01 /* ExpandButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA42B52CF1F13B0073BB01 /* ExpandButton.swift */; };
+		08CA42B82CF1F1530073BB01 /* EditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA42B72CF1F1530073BB01 /* EditButton.swift */; };
+		08CA42BA2CF1F18D0073BB01 /* ForkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA42B92CF1F18D0073BB01 /* ForkButton.swift */; };
+		08CA42BC2CF1F1E60073BB01 /* CopyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA42BB2CF1F1E60073BB01 /* CopyButton.swift */; };
+		08CA42BE2CF1F3C00073BB01 /* SelectTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA42BD2CF1F3C00073BB01 /* SelectTextButton.swift */; };
+		08CA42C02CF1F3C90073BB01 /* ResetContextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA42BF2CF1F3C90073BB01 /* ResetContextButton.swift */; };
+		08CA42C22CF1F3E70073BB01 /* DeleteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA42C12CF1F3E70073BB01 /* DeleteButton.swift */; };
+		08CA42C42CF1F3F30073BB01 /* RegenButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA42C32CF1F3F30073BB01 /* RegenButton.swift */; };
+		08CA42C62CF1F3FE0073BB01 /* NavigationButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA42C52CF1F3FE0073BB01 /* NavigationButtons.swift */; };
 		08CD009B2CBA20E900A96425 /* PasteHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CD009A2CBA20E900A96425 /* PasteHandler.swift */; };
 		08CF5B892C68980B0079D5EE /* HighlightedTextViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CF5B882C68980B0079D5EE /* HighlightedTextViews.swift */; };
 		08D913EC2CD9CAF7002E4E53 /* AIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D913EB2CD9CAF7002E4E53 /* AIModel.swift */; };
@@ -338,6 +347,15 @@
 		08C800542C36F82B009581C5 /* ProviderList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderList.swift; sourceTree = "<group>"; };
 		08C800562C36F843009581C5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		08CA42B22CF0F4430073BB01 /* MessageGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGroup.swift; sourceTree = "<group>"; };
+		08CA42B52CF1F13B0073BB01 /* ExpandButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandButton.swift; sourceTree = "<group>"; };
+		08CA42B72CF1F1530073BB01 /* EditButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditButton.swift; sourceTree = "<group>"; };
+		08CA42B92CF1F18D0073BB01 /* ForkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForkButton.swift; sourceTree = "<group>"; };
+		08CA42BB2CF1F1E60073BB01 /* CopyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyButton.swift; sourceTree = "<group>"; };
+		08CA42BD2CF1F3C00073BB01 /* SelectTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTextButton.swift; sourceTree = "<group>"; };
+		08CA42BF2CF1F3C90073BB01 /* ResetContextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetContextButton.swift; sourceTree = "<group>"; };
+		08CA42C12CF1F3E70073BB01 /* DeleteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteButton.swift; sourceTree = "<group>"; };
+		08CA42C32CF1F3F30073BB01 /* RegenButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegenButton.swift; sourceTree = "<group>"; };
+		08CA42C52CF1F3FE0073BB01 /* NavigationButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationButtons.swift; sourceTree = "<group>"; };
 		08CD009A2CBA20E900A96425 /* PasteHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteHandler.swift; sourceTree = "<group>"; };
 		08CF5B882C68980B0079D5EE /* HighlightedTextViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightedTextViews.swift; sourceTree = "<group>"; };
 		08D913EB2CD9CAF7002E4E53 /* AIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModel.swift; sourceTree = "<group>"; };
@@ -736,8 +754,8 @@
 		08C800402C36BF54009581C5 /* MessageViews */ = {
 			isa = PBXGroup;
 			children = (
+				08CA42B42CF1F12E0073BB01 /* MessageMenuViews */,
 				088A09F22C55C7740055B567 /* TextSelectionView.swift */,
-				08C800442C36C10A009581C5 /* MessageMenu.swift */,
 				0821816E2C39082900171BF3 /* MessageView.swift */,
 				08C800462C36C4ED009581C5 /* UserMessage.swift */,
 				08C800482C36C521009581C5 /* AssistantMessage.swift */,
@@ -780,6 +798,23 @@
 				087F3F862CDDDC3C001298B3 /* AboutSettings.swift */,
 			);
 			path = SettingsViews;
+			sourceTree = "<group>";
+		};
+		08CA42B42CF1F12E0073BB01 /* MessageMenuViews */ = {
+			isa = PBXGroup;
+			children = (
+				08CA42C52CF1F3FE0073BB01 /* NavigationButtons.swift */,
+				08CA42C32CF1F3F30073BB01 /* RegenButton.swift */,
+				08CA42C12CF1F3E70073BB01 /* DeleteButton.swift */,
+				08CA42BF2CF1F3C90073BB01 /* ResetContextButton.swift */,
+				08CA42BD2CF1F3C00073BB01 /* SelectTextButton.swift */,
+				08CA42BB2CF1F1E60073BB01 /* CopyButton.swift */,
+				08CA42B92CF1F18D0073BB01 /* ForkButton.swift */,
+				08CA42B72CF1F1530073BB01 /* EditButton.swift */,
+				08CA42B52CF1F13B0073BB01 /* ExpandButton.swift */,
+				08C800442C36C10A009581C5 /* MessageMenu.swift */,
+			);
+			path = MessageMenuViews;
 			sourceTree = "<group>";
 		};
 		08F3CA022C705B1600A800F9 /* Windows */ = {
@@ -953,6 +988,9 @@
 				08A1DDBB2CE0024A00DAF6F9 /* Source.swift in Sources */,
 				08A77CCC2C65AA820087D0F3 /* DatabaseService.swift in Sources */,
 				08F815242C97F59100B49355 /* PluginSettings.swift in Sources */,
+				08CA42B62CF1F13B0073BB01 /* ExpandButton.swift in Sources */,
+				08CA42BA2CF1F18D0073BB01 /* ForkButton.swift in Sources */,
+				08CA42BE2CF1F3C00073BB01 /* SelectTextButton.swift in Sources */,
 				0893B2062C39810900D4D501 /* ChatConfig.swift in Sources */,
 				0898252F2CE9C0F200980468 /* PageDots.swift in Sources */,
 				082F09D52CB2690800B7860A /* GenericModel.swift in Sources */,
@@ -969,6 +1007,8 @@
 				089DB5182CA8EC140013E5C3 /* ImageViewerData.swift in Sources */,
 				08B5D7B82C77A64000D1F100 /* ChatWindow.swift in Sources */,
 				085361072C492282007DAB62 /* Generation.swift in Sources */,
+				08CA42C62CF1F3FE0073BB01 /* NavigationButtons.swift in Sources */,
+				08CA42B82CF1F1530073BB01 /* EditButton.swift in Sources */,
 				08C800502C36F667009581C5 /* Provider.swift in Sources */,
 				085361092C4923E2007DAB62 /* ImageConfig.swift in Sources */,
 				087F3F872CDDDC3C001298B3 /* AboutSettings.swift in Sources */,
@@ -1002,6 +1042,7 @@
 				08BBD78D2CE87BC3001510F5 /* HelpWindow.swift in Sources */,
 				080E70EE2CDF498F00A949C9 /* ChatStatus.swift in Sources */,
 				087F3F8B2CDDEF4C001298B3 /* Guide.swift in Sources */,
+				08CA42BC2CF1F1E60073BB01 /* CopyButton.swift in Sources */,
 				085645442C3F98DF00ED84DA /* TitleGenerator.swift in Sources */,
 				089825352CE9F55B00980468 /* GenericOnboardingView.swift in Sources */,
 				0853102B2CBF966F0078DD09 /* ModelRow.swift in Sources */,
@@ -1011,6 +1052,7 @@
 				088475342CAE8E57006C04F0 /* AppIconMenu.swift in Sources */,
 				082F09CD2CB237C400B7860A /* ModelRefresher.swift in Sources */,
 				08FD455A2CB8EF680046D165 /* ClickHighlightButton.swift in Sources */,
+				08CA42C02CF1F3C90073BB01 /* ResetContextButton.swift in Sources */,
 				08C800552C36F82B009581C5 /* ProviderList.swift in Sources */,
 				082F09E52CB354FF00B7860A /* TranscribeTool.swift in Sources */,
 				08A222872C2AB4FD00D76C8B /* Chat.swift in Sources */,
@@ -1024,9 +1066,11 @@
 				0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */,
 				085524EA2C4EDEC400CBB827 /* ModelList.swift in Sources */,
 				08A3134B2C4ADEA000C3E578 /* ImageRow.swift in Sources */,
+				08CA42C42CF1F3F30073BB01 /* RegenButton.swift in Sources */,
 				085361112C4938C4007DAB62 /* ImageDetail.swift in Sources */,
 				08C800492C36C521009581C5 /* AssistantMessage.swift in Sources */,
 				08B82C1F2C74EAFD00DC0183 /* FileViewer.swift in Sources */,
+				08CA42C22CF1F3E70073BB01 /* DeleteButton.swift in Sources */,
 				08CD009B2CBA20E900A96425 /* PasteHandler.swift in Sources */,
 				085524E22C4ED2A400CBB827 /* MenuCommands.swift in Sources */,
 				0891D5752C967A9700BA428F /* ImageSettings.swift in Sources */,
