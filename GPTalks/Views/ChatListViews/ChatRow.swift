@@ -45,7 +45,6 @@ struct ChatRow: View {
             HighlightedText(text: chat.title, highlightedText: chatVM.searchText, selectable: false)
                 .lineLimit(1)
                 .font(font)
-                .fontWeight(fontWeight)
                 .opacity(0.9)
             
             Spacer()
@@ -71,17 +70,9 @@ struct ChatRow: View {
     
     var font: Font {
         #if os(macOS)
-        return .headline
+        return .headline.weight(.medium)
         #else
-        return .subheadline
-        #endif
-    }
-    
-    var fontWeight: Font.Weight {
-        #if os(macOS)
-        return .regular
-        #else
-        return .semibold
+        return .headline.weight(.medium)
         #endif
     }
     

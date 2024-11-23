@@ -72,15 +72,14 @@ struct AssistantMessage: View {
                 } else {
                     secondaryNavigateButtons
                 }
-                #endif
-                
                 Spacer()
+                #endif
             }
         }
         #if !os(macOS)
         .contextMenu {
             if !message.isReplying {
-                MessageMenu(message: message, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
+                MessageMenu(message: self.message, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
             }
         }
         .sheet(isPresented: $showingTextSelection) {
