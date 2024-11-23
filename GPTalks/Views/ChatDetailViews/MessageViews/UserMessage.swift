@@ -59,7 +59,6 @@ struct UserMessage: View {
         .frame(maxWidth: .infinity, alignment: .trailing)
     }
     
-    @ViewBuilder
     var contextMenu: some View {
         MessageMenu(message: message, isExpanded: $isExpanded)
             .symbolEffect(.appear, isActive: !isHovering)

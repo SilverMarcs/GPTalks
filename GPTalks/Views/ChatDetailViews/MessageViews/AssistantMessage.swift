@@ -16,11 +16,32 @@ struct AssistantMessage: View {
     @State private var showingTextSelection = false
     
     var body: some View {
+        #if os(macOS)
+        if message.isSplitView {
+            HStack {
+                messageContent(message: message.activeMessage)
+                
+                Divider()
+                
+                if message.isSplitView {
+                    messageContent(message: message.secondaryMessages[message.secondaryMessageIndex], showMenu: false)
+                }
+            }
+        } else {
+            messageContent(message: message.activeMessage)
+        }
+        #else
+        messageContent(message: message.activeMessage)
+        #endif
+    }
+    
+    @ViewBuilder
+    private func messageContent(message: Message, showMenu: Bool = true) -> some View {
         HStack(alignment: .top, spacing: spacing) {
             Image(message.provider?.type.imageName ?? "brain.SFSymbol")
                 .resizable()
                 .frame(width: 17, height: 17)
-                .foregroundStyle(Color(hex: message.provider?.color  ?? "#00947A").gradient)
+                .foregroundStyle(Color(hex: message.provider?.color ?? "#00947A").gradient)
                 .transaction { $0.animation = nil }
             
             VStack(alignment: .leading, spacing: 7) {
@@ -46,8 +67,14 @@ struct AssistantMessage: View {
                 }
                 
                 #if os(macOS)
-                messageMenuView
+                if showMenu {
+                    messageMenuView
+                } else {
+                    secondaryNavigateButtons
+                }
                 #endif
+                
+                Spacer()
             }
         }
         #if !os(macOS)
@@ -65,14 +92,36 @@ struct AssistantMessage: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.trailing, 30)
     }
-
-    @ViewBuilder
+    
     var messageMenuView: some View {
-        #if os(macOS)
         MessageMenu(message: message, isExpanded: .constant(true))
             .symbolEffect(.appear, isActive: !isHovering)
             .opacity(message.isReplying ? 0 : 1)
-        #endif
+    }
+    
+    @ViewBuilder
+    var secondaryNavigateButtons: some View {
+        if message.secondaryMessages.count > 1 {
+            HStack {
+                Button {
+                    message.previousSecondaryMessage()
+                } label: {
+                    Label("Previous", systemImage: "chevron.left")
+                }
+                .disabled(!message.canGoToPreviousSecondary)
+                .opacity(!message.canGoToPreviousSecondary ? 0.5 : 1)
+                
+                Button {
+                    message.nextSecondaryMessage()
+                } label: {
+                    Label("Next", systemImage: "chevron.right")
+                }
+                .disabled(!message.canGoToNextSecondary)
+                .opacity(!message.canGoToNextSecondary ? 0.5 : 1)
+            }
+            .buttonStyle(HoverScaleButtonStyle())
+            .symbolEffect(.appear, isActive: !isHovering)
+        }
     }
     
     var spacing: CGFloat {
