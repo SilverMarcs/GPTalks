@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MessageView: View {
-    var message: Message
+    var message: MessageGroup
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -41,8 +41,8 @@ struct MessageView: View {
 
 #Preview {
     VStack {
-        MessageView(message: .mockUserMessage)
-        MessageView(message: .mockAssistantMessage)
+        MessageView(message: .mockUserGroup)
+        MessageView(message: .mockAssistantGroup)
     }
     .frame(width: 400)
     .padding()

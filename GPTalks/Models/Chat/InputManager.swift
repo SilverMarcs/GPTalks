@@ -68,7 +68,7 @@ enum InputState {
         }
     }
     
-    func setupEditing(message: Message) {
+    func setupEditing(message: MessageGroup) {
         tempNormalPrompt = normalPrompt
         tempNormalDataFiles = normalDataFiles
         

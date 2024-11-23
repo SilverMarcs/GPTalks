@@ -140,7 +140,7 @@ struct ChatList: View {
                 searchPredicate = #Predicate<Chat> {
                     $0.title.localizedStandardContains(searchText) ||
                     $0.unorderedMessages.contains {
-                        $0.content.localizedStandardContains(searchText)
+                        $0.activeMessage.content.localizedStandardContains(searchText)
                     }
                 }
             } else if searchTokens.contains(.title) {
@@ -150,7 +150,7 @@ struct ChatList: View {
             } else if searchTokens.contains(.messages) {
                 searchPredicate = #Predicate<Chat> {
                     $0.unorderedMessages.contains {
-                        $0.content.localizedStandardContains(searchText)
+                        $0.activeMessage.content.localizedStandardContains(searchText)
                     }
                 }
             } else {

@@ -136,6 +136,13 @@ extension Message {
     }
 }
 
+extension MessageGroup {
+    static var mockUserGroup = MessageGroup(message: .mockUserMessage)
+    static var mockAssistantGroup = MessageGroup(message: .mockAssistantMessage)
+    static var mockToolGroup = MessageGroup(message: .mockToolMessage)
+    static var mockAssistantToolCallGroup = MessageGroup(message: .mockAssistantTolCallMessage)
+}
+
 extension ChatConfig {
     static var mockChatConfig = ChatConfig(provider: .openAIProvider, purpose: .chat)
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ToolCallView: View {
-    var message: Message
+    var message: MessageGroup
     @State private var showArguments = false
     
     var body: some View {
@@ -78,7 +78,7 @@ struct ToolCallView: View {
 }
 
 #Preview {
-    AssistantMessage(message: .mockAssistantTolCallMessage)
+    AssistantMessage(message: .mockAssistantToolCallGroup)
         .frame(width: 500, height: 300)
 }
 

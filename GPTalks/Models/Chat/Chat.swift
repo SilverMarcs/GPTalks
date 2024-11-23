@@ -23,13 +23,13 @@ final class Chat {
         set { statusId = newValue.id }
     }
     
-    @Relationship(deleteRule: .cascade, inverse: \Message.chat)
-    var unorderedMessages =  [Message]()
-    var messages: [Message] {
+    @Relationship(deleteRule: .cascade, inverse: \MessageGroup.chat)
+    var unorderedMessages =  [MessageGroup]()
+    var messages: [MessageGroup] {
         get { return unorderedMessages.sorted(by: {$0.date < $1.date})}
         set { unorderedMessages = newValue }
     }
-    var adjustedMessages: [Message] {
+    var adjustedMessages: [MessageGroup] {
         guard let resetMarker = resetMarker else { return messages }
         return Array(messages.dropFirst(resetMarker))
     }
@@ -52,11 +52,11 @@ final class Chat {
     }
     
     @MainActor
-    func processRequest() async {
+    func processRequest(message: Message) async {
         errorMessage = ""
         date = Date()
         streamingTask = Task {
-            let streamer = StreamHandler(chat: self)
+            let streamer = StreamHandler(chat: self, assistant: message)
             
             // Request background task before starting network operations
             #if !os(macOS)
@@ -101,6 +101,7 @@ final class Chat {
     @MainActor
     private func handleEditing() async {
         guard let index = inputManager.editingIndex else { return }
+        messages.removeSubrange((index + 1)...)
         unsetResetMarker(at: index)
         let editingMessage = messages[index]
         editingMessage.content = inputManager.prompt
@@ -114,15 +115,33 @@ final class Chat {
         let user = Message(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
         addMessage(user)
         inputManager.reset()
-        await processRequest()
+        let assistant: Message = .init(role: .assistant)
+        addMessage(assistant)
+        await processRequest(message: assistant)
     }
     
     @MainActor
-    func regenerate(message: Message) async {
+    func regenerate(message: MessageGroup) async {
         guard let index = messages.firstIndex(where: { $0 == message }) else { return }
         unsetResetMarker(at: index)
-        messages.removeSubrange(message.role == .assistant ? index... : (index + 1)...)
-        await processRequest()
+        
+        if message.role == .assistant {
+            messages.removeSubrange((index + 1)...)
+            let nextAssistant: Message = .init(role: .assistant)
+            message.addMessage(nextAssistant)
+            
+            await processRequest(message: nextAssistant)
+        } else if message.role == .user {
+            let nextAssistant: Message = .init(role: .assistant)
+            let nextIndex = index + 1
+            if nextIndex < messages.count, messages[nextIndex].role == .assistant {
+                messages[nextIndex].addMessage(nextAssistant)
+            } else {
+                addMessage(nextAssistant)
+            }
+            messages.removeSubrange((index + 2)...)
+            await processRequest(message: nextAssistant)
+        }
     }
     
     func stopStreaming() {
@@ -133,7 +152,12 @@ final class Chat {
         guard let last = messages.last else { return }
         last.isReplying = false
         if last.content.isEmpty {
-            deleteMessage(last)
+            guard let currentIndex = last.allMessages.firstIndex(of: last.activeMessage),
+                  currentIndex > 0 else {
+                return
+            }
+            last.activeMessage = last.allMessages[currentIndex - 1]
+            last.allMessages.remove(at: currentIndex)
         }
     }
     
@@ -153,16 +177,21 @@ final class Chat {
         guard status != .quick else { return }
         guard forced || adjustedMessages.count <= 2 else { return }
         
-        if let newTitle = await TitleGenerator.generateTitle(messages: adjustedMessages, provider: config.provider) {
+        if let newTitle = await TitleGenerator.generateTitle(messages: adjustedMessages.map( { $0.activeMessage } ), provider: config.provider) {
             self.title = newTitle
         }
     }
 
     func addMessage(_ message: Message) {
+        message.provider = config.provider
+        message.model = config.model
+        
         if message.role == .assistant {
             message.isReplying = true
         }
-        messages.append(message)
+        
+        let group = MessageGroup(message: message)
+        messages.append(group)
         scrollBottom()
     }
     
@@ -172,7 +201,7 @@ final class Chat {
         }
     }
 
-    func resetContext(at message: Message) {
+    func resetContext(at message: MessageGroup) {
         guard let index = messages.firstIndex(of: message) else { return }
         resetMarker = (resetMarker == index) ? nil : index
         if resetMarker == messages.count - 1 {
@@ -181,7 +210,7 @@ final class Chat {
         }
     }
     
-    func deleteMessage(_ message: Message) {
+    func deleteMessage(_ message: MessageGroup) {
         guard let index = messages.firstIndex(of: message) else { return }
         unsetResetMarker(at: index)
         messages.remove(at: index)
@@ -204,7 +233,7 @@ final class Chat {
         }
     }
     
-    func copy(from message: Message? = nil, purpose: ChatConfigPurpose) async -> Chat {
+    func copy(from message: MessageGroup? = nil, purpose: ChatConfigPurpose) async -> Chat {
         let newChat = Chat(config: config.copy(purpose: purpose))
         
         let leading = switch purpose {

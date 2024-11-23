@@ -19,7 +19,7 @@ struct ChatToolbar: ToolbarContent {
     
     @FocusState private var isFocused: FocusedField?
     
-    private var matchingMessages: [Message] {
+    private var matchingMessages: [MessageGroup] {
         guard !chatVM.searchText.isEmpty else { return [] }
         return chat.messages.enumerated().compactMap { index, message in
             message.content.localizedCaseInsensitiveContains(chatVM.searchText) ? message : nil
@@ -120,7 +120,7 @@ struct ChatToolbar: ToolbarContent {
         #endif
     }
     
-    private var lastMessage: Message? {
+    private var lastMessage: MessageGroup? {
         guard !chat.isReplying,
               let lastMessage = chat.messages.last else { return nil }
         return lastMessage

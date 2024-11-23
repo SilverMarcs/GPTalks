@@ -19,7 +19,6 @@ import SwiftUI
         return selections.first
     }
     
-    // must provide new chat, not the one to be forked
     @MainActor
     func fork(newChat: Chat) {
         let modelContext = DatabaseService.shared.modelContext

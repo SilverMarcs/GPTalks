@@ -12,7 +12,7 @@ struct UserMessage: View {
     @Environment(ChatVM.self) private var chatVM
     @ObservedObject var config = AppConfig.shared
     
-    var message: Message
+    var message: MessageGroup
     @State var isHovering: Bool = false
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
@@ -87,6 +87,6 @@ struct UserMessage: View {
 }
 
 #Preview {
-    UserMessage(message: .mockUserMessage)
+    UserMessage(message: .mockUserGroup)
         .frame(width: 500, height: 300)
 }

@@ -10,7 +10,7 @@ import SwiftUI
 struct AssistantMessage: View {
     @Environment(ChatVM.self) var chatVM
     @ObservedObject var config = AppConfig.shared
-    var message: Message
+    var message: MessageGroup
     
     @State private var isHovering: Bool = false
     @State private var showingTextSelection = false
@@ -89,7 +89,7 @@ struct AssistantMessage: View {
 }
 
 #Preview {
-    AssistantMessage(message: .mockAssistantMessage)
+    AssistantMessage(message: .mockAssistantGroup)
         .frame(width: 500, height: 300)
 }
 

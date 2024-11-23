@@ -13,7 +13,7 @@ struct MessageMenu: View {
     @Environment(\.isQuick) private var isQuick
     @Environment(\.providers) var providers
     
-    var message: Message
+    var message: MessageGroup
     
     @Binding var isExpanded: Bool
     var toggleTextSelection: (() -> Void)? = nil
@@ -57,6 +57,16 @@ struct MessageMenu: View {
             resetContext
             
             deleteMessage
+        }
+        
+        Section {
+            if message.allMessages.count > 1 &&
+                message == message.chat?.messages.last {
+                
+                previousButton
+                
+                nextButton
+            }
         }
     }
     
@@ -191,12 +201,32 @@ struct MessageMenu: View {
             await message.chat?.regenerate(message: message)
         }
     }
+    
+    var previousButton: some View {
+        Button {
+            message.goToPreviousMessage()
+        } label: {
+            Label("Previous", systemImage: "chevron.left")
+        }
+        .disabled(!message.canGoToPrevious)
+        .opacity(message.canGoToPrevious ? 1 : 0.5)
+    }
+    
+    var nextButton: some View {
+        Button {
+            message.goToNextMessage()
+        } label: {
+            Label("Next", systemImage: "chevron.right")
+        }
+        .disabled(!message.canGoToNext)
+        .opacity(message.canGoToNext ? 1 : 0.5)
+    }
 }
 
 #Preview {
     VStack {
-        MessageMenu(message: .mockUserMessage, isExpanded: .constant(true))
-        MessageMenu(message: .mockAssistantMessage, isExpanded: .constant(true))
+        MessageMenu(message: .mockUserGroup, isExpanded: .constant(true))
+        MessageMenu(message: .mockAssistantGroup, isExpanded: .constant(true))
     }
     .frame(width: 500)
     .padding()

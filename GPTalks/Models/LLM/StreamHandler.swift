@@ -12,10 +12,9 @@ struct StreamHandler {
     private let chat: Chat
     private var assistant: Message // TODO: maybe need ot fidn diff way of getting setting assistant
 
-    init(chat: Chat) {
+    init(chat: Chat, assistant: Message) {
         self.chat = chat
-        self.assistant = Message(role: .assistant, provider: chat.config.provider, model: chat.config.model, isReplying: true)
-        chat.addMessage(assistant)
+        self.assistant = assistant
     }
 
     @MainActor
@@ -39,7 +38,7 @@ struct StreamHandler {
         let service = chat.config.provider.type.getService()
 
         // must do droplast since last is the empty assistant message
-        for try await response in service.streamResponse(from: chat.adjustedMessages.dropLast(), config: chat.config) {
+        for try await response in service.streamResponse(from: chat.adjustedMessages.map( {$0.activeMessage} ).dropLast(), config: chat.config) {
             switch response {
             case .content(let content):
                 streamText += content
@@ -81,7 +80,7 @@ struct StreamHandler {
     @MainActor
     private func handleNonStream() async throws {
         let service = chat.config.provider.type.getService()
-        let response = try await service.nonStreamingResponse(from: chat.adjustedMessages, config: chat.config)
+        let response = try await service.nonStreamingResponse(from: chat.adjustedMessages.map( {$0.activeMessage} ), config: chat.config)
         
         if let content = response.content {
             assistant.content = content
@@ -122,14 +121,16 @@ struct StreamHandler {
         }
         
         if toolDatas.isEmpty {
-            let streamer = StreamHandler(chat: chat)
+            let newAssistant = Message(role: .assistant)
+            chat.addMessage(newAssistant)
+            let streamer = StreamHandler(chat: chat, assistant: newAssistant)
             try await streamer.handleRequest()
         } else {
             let newAssistant = Message(role: .assistant, provider: chat.config.provider, model: chat.config.provider.imageModel)
-            newAssistant.content = "Generations:"
+            newAssistant.content = "Here are the imags I generated:"
             newAssistant.dataFiles = toolDatas
             newAssistant.isReplying = false
-            chat.addMessage(newAssistant)
+            chat.messages.append(.init(message: newAssistant)) // only time we call this manually instead of addMessage func
         }
     }
 }

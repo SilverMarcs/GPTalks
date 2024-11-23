@@ -73,7 +73,7 @@ struct ChatDetail: View {
         }
     }
     
-    var messagesToShow: [Message] {
+    var messagesToShow: [MessageGroup] {
         if showingAllMessages {
             return chat.messages
         } else {
