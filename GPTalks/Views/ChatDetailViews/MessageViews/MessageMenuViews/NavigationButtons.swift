@@ -12,11 +12,13 @@ struct NavigationButtons: View {
     
     var body: some View {
         if message.allMessages.count > 1 && message == message.chat?.messages.last {
+            Divider()
+            
             if message.allMessages.count >= 2 {
                 Button {
                     message.toggleSplitView()
                 } label: {
-                    Label("Split View", systemImage: message.isSplitView ? "rectangle.split.2x1.slash" : "rectangle.split.2x1")
+                    Label("Split View", systemImage: message.isSplitView ? "rectangle.split.2x1.slash" : "square.split.2x1")
                 }
                 .contentTransition(.symbolEffect(.replace))
             }

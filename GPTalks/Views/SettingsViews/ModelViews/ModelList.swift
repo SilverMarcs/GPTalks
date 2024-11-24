@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct ModelList: View {
     @Environment(\.modelContext) var modelContext
@@ -20,7 +21,13 @@ struct ModelList: View {
         Group {
             #if os(macOS)
             Form {
-                list
+                Section {
+                    list
+                } header: {
+                    TipView(ModelEditTip())
+                } footer: {
+//                    SectionFooterView(text: "Click on name or code to edit")
+                }
             }
             .formStyle(.grouped)
             .labelsHidden()
@@ -55,23 +62,38 @@ struct ModelList: View {
             Text("No models available")
         } else {
             List {
-                ForEach(provider.models.filter { $0.type == type }, id: \.self) { model in
-                    ModelRow(provider: provider, model: model)
-                }
-                .onDelete { indexSet in
-                    // Create an array of the filtered models
-                    let filteredModels = provider.models.filter { $0.type == type }
-                    
-                    // For each index in the indexSet, find the model in the filtered list
-                    for index in indexSet {
-                         let modelToDelete = filteredModels[index]
+                Section {
+                    ForEach(provider.models.filter { $0.type == type }, id: \.self) { model in
+                        ModelRow(provider: provider, model: model)
+                    }
+                    .onDelete { indexSet in
+                        // Create an array of the filtered models
+                        let filteredModels = provider.models.filter { $0.type == type }
                         
-                        // Find the index of the model in the original list and remove it
-                        if let indexToDelete = provider.models.firstIndex(of: modelToDelete) {
-                             provider.models.remove(at: indexToDelete)
-                             modelContext.delete(modelToDelete)
+                        // For each index in the indexSet, find the model in the filtered list
+                        for index in indexSet {
+                            let modelToDelete = filteredModels[index]
+                            
+                            // Find the index of the model in the original list and remove it
+                            if let indexToDelete = provider.models.firstIndex(of: modelToDelete) {
+                                provider.models.remove(at: indexToDelete)
+                                modelContext.delete(modelToDelete)
+                            }
                         }
                     }
+                } header: {
+                    HStack {
+                        
+                        Text("Name")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        Text("Code")
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        
+                        Text("Actions")
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                    }
+                    .padding(.horizontal, 5)
                 }
             }
         }

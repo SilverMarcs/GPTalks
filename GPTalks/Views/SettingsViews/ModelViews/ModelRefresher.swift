@@ -26,7 +26,7 @@ struct ModelRefresher: View {
                             await loadModels()
                         }
                 } else {
-                    if filteredModels.isEmpty {
+                    if filteredModels.isEmpty && !searchText.isEmpty {
                         ContentUnavailableView.search
                     } else {
                         List {

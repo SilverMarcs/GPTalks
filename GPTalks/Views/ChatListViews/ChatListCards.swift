@@ -23,6 +23,8 @@ struct ChatListCards: View {
     var source: Source
     var chatCount: String
     var imageSessionsCount: String
+    
+    @State private var isFlashing = false
 
     var body: some View {
         #if os(macOS)
@@ -44,15 +46,26 @@ struct ChatListCards: View {
                 count: chatCount) {
                     handleChatPress()
                 }
-                .overlay {
-                    if !config.hasUsedChatStatusFilter {
-                        RoundedRectangle(cornerRadius: radius)
-                            .stroke(Color.accentColor, lineWidth: 2)
-                            .allowsHitTesting(false)
+                .background(
+                    Group {
+                        if !config.hasUsedChatStatusFilter {
+                            Color.accentColor.opacity(isFlashing ? 0.3 : 0)
+                                .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true), value: isFlashing)
+                        }
                     }
-                }
+                )
                 .contentTransition(.symbolEffect(.replace.offUp))
                 .disabled(isSearching)
+                .onAppear {
+                    if !config.hasUsedChatStatusFilter {
+                        isFlashing = true
+                    }
+                }
+                .onChange(of: config.hasUsedChatStatusFilter) {
+                    if config.hasUsedChatStatusFilter {
+                        isFlashing = false
+                    }
+                }
             
             ListCard(
                 icon: "photo.circle.fill", iconColor: .indigo, title: "Images",
