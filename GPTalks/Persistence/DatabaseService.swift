@@ -45,6 +45,7 @@ final class DatabaseService: NSObject {
             
             if let quickChat = try? modelContext.fetch(fetchQuickChats).first {
                 quickChat.deleteAllMessages()
+                // TODO: fetch providerdeafutls and set quick provider and model
             }
             
             var fetchProviders = FetchDescriptor<Provider>()

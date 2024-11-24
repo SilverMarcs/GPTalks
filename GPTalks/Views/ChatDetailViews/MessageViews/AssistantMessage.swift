@@ -27,7 +27,7 @@ struct AssistantMessage: View {
             }
         }
         #else
-        AssistantMessageAux(message: message.activeMessage)
+        AssistantMessageAux(message: message.activeMessage, group: message)
             .contextMenu {
                 if !message.isReplying {
                     MessageMenu(message: self.message, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)

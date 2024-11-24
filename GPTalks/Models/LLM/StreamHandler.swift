@@ -10,7 +10,7 @@ import SwiftUI
 
 struct StreamHandler {
     private let chat: Chat
-    private var assistant: Message // TODO: maybe need ot fidn diff way of getting setting assistant
+    private var assistant: Message
 
     init(chat: Chat, assistant: Message) {
         self.chat = chat

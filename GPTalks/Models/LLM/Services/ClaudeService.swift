@@ -9,8 +9,6 @@ import Foundation
 import SwiftUI
 import SwiftAnthropic
 
-
-// TODO: refactor and combiine common variabels into static props
 struct ClaudeService: AIService {
     typealias ConvertedType = MessageParameter.Message
     

@@ -161,3 +161,7 @@ struct ChatToolbar: ToolbarContent {
         ChatToolbar(chat: .mockChat)
     }
 }
+
+extension ToolbarItemPlacement {
+    static let searchPanel = accessoryBar(id: "com.SilverMarcs.GPTalks.searchPanel")
+}

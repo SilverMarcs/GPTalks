@@ -128,11 +128,17 @@ final class MessageGroup {
     func goToPreviousMessage() {
         guard canGoToPrevious else { return }
         activeMessage = allMessages[currentMessageIndex - 1]
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            AppConfig.shared.proxy?.scrollTo(self, anchor: .bottom)
+        }
     }
     
     func goToNextMessage() {
         guard canGoToNext else { return }
         activeMessage = allMessages[currentMessageIndex + 1]
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            AppConfig.shared.proxy?.scrollTo(self, anchor: .bottom)
+        }
     }
     
     func deleteActiveMessage() {
