@@ -15,7 +15,6 @@ struct StreamHandler {
     init(chat: Chat, assistant: Message) {
         self.chat = chat
         self.assistant = assistant
-        AppConfig.shared.hasUserScrolled = false
     }
 
     @MainActor
@@ -110,7 +109,7 @@ struct StreamHandler {
         for call in assistant.toolCalls {
             let toolResponse = ToolResponse(toolCallId: call.toolCallId, tool: call.tool)
             let tool = Message(toolResponse: toolResponse)
-            chat.addMessage(tool) // TODO: use single response message insetad of multiple tool messages
+            chat.addMessage(tool, defensive: true) // TODO: use single response message insetad of multiple tool messages
             
             let toolData = try await call.tool.process(arguments: call.arguments)
             toolDatas.append(contentsOf: toolData.data)
@@ -123,7 +122,7 @@ struct StreamHandler {
         
         if toolDatas.isEmpty {
             let newAssistant = Message(role: .assistant)
-            chat.addMessage(newAssistant)
+            chat.addMessage(newAssistant, defensive: true)
             let streamer = StreamHandler(chat: chat, assistant: newAssistant)
             try await streamer.handleRequest()
         } else {

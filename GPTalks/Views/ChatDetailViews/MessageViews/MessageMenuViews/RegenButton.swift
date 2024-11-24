@@ -13,34 +13,36 @@ struct RegenButton: View {
     var message: MessageGroup
     
     var body: some View {
-        #if os(macOS)
-        Menu {
-            ForEach(providers) { provider in
-                Menu {
-                    ForEach(provider.chatModels) { model in
-                        Button(model.name) {
-                            message.chat?.config.provider = provider
-                            message.chat?.config.model = model
-                            regen()
+        if !message.isSplitView {
+            #if os(macOS)
+            Menu {
+                ForEach(providers) { provider in
+                    Menu {
+                        ForEach(provider.chatModels) { model in
+                            Button(model.name) {
+                                message.chat?.config.provider = provider
+                                message.chat?.config.model = model
+                                regen()
+                            }
                         }
+                    } label: {
+                        Text(provider.name)
                     }
-                } label: {
-                    Text(provider.name)
                 }
+            } label: {
+                Label("Regenerate", systemImage: "arrow.2.circlepath")
+            } primaryAction: {
+                regen()
             }
-        } label: {
-            Label("Regenerate", systemImage: "arrow.2.circlepath")
-        } primaryAction: {
-            regen()
+            .menuStyle(HoverScaleMenuStyle())
+            #else
+            Button {
+                regen()
+            } label: {
+                Label("Regenerate", systemImage: "arrow.2.circlepath")
+            }
+            #endif
         }
-        .menuStyle(HoverScaleMenuStyle())
-        #else
-        Button {
-            regen()
-        } label: {
-            Label("Regenerate", systemImage: "arrow.2.circlepath")
-        }
-        #endif
     }
     
     private func regen() {

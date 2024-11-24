@@ -182,7 +182,7 @@ final class Chat {
         }
     }
 
-    func addMessage(_ message: Message) {
+    func addMessage(_ message: Message, defensive: Bool = false) {
         message.provider = config.provider
         message.model = config.model
         
@@ -191,6 +191,9 @@ final class Chat {
         }
         
         let group = MessageGroup(message: message)
+        if !defensive {
+            AppConfig.shared.hasUserScrolled = false
+        }
         messages.append(group)
         scrollBottom()
     }

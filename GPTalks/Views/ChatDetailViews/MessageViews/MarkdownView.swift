@@ -13,6 +13,7 @@ struct MarkdownView: View {
     
     @ObservedObject var config = AppConfig.shared
     var content: String
+    var calculatedHeight: Binding<CGFloat>? = nil
 
     var body: some View {
         switch config.markdownProvider {
@@ -25,7 +26,7 @@ struct MarkdownView: View {
                 AttributedText(text: content, highlightText: chatVM.searchText, parseMarkdown: true)
                     .textSelection(.enabled)
         case .webview:
-            SwiftMarkdownView(content)
+            SwiftMarkdownView(content, calculatedHeight: calculatedHeight)
                 .markdownBaseURL("GPTalks Web Content")
                 .markdownHighlightString(chatVM.searchText)
                 .markdownFontSize(CGFloat(config.fontSize))

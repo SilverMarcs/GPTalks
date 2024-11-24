@@ -51,7 +51,7 @@ struct ChatDetail: View {
                     #else
                     scrollToBottom(proxy: proxy, delay: 0.3)
                     #endif
-                    scrollToBottom(proxy: proxy, delay: 0.4)
+                    scrollToBottom(proxy: proxy, delay: 0.3)
                 }
             }
             #if os(macOS)

@@ -30,7 +30,9 @@ final class Message {
     var toolCalls: [ChatToolCall] = []
     var toolResponse: ToolResponse?
     
-    init(role: MessageRole, content: String = "", provider: Provider? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
+    var height: CGFloat = 0
+    
+    init(role: MessageRole, content: String = "", provider: Provider? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false, height: CGFloat = 0) {
         self.role = role
         self.content = content
         self.provider = provider
@@ -39,6 +41,7 @@ final class Message {
         self.toolCalls = toolCalls
         self.toolResponse = toolResponse
         self.isReplying = isReplying
+        self.height = height
     }
     
     init(toolResponse: ToolResponse) {
@@ -57,7 +60,8 @@ final class Message {
             dataFiles: dataFiles,
             toolCalls: toolCalls,
             toolResponse: toolResponse,
-            isReplying: isReplying
+            isReplying: isReplying,
+            height: height
         )
     }
 }
