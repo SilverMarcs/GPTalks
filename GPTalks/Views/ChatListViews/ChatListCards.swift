@@ -6,10 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
-
-import SwiftUI
-import SwiftData
 
 struct ChatListCards: View {
     @Environment(\.isSearching) private var isSearching

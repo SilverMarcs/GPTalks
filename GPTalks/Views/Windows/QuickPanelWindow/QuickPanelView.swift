@@ -8,7 +8,6 @@
 import SwiftUI
 import SwiftData
 
-#if os(macOS)
 struct QuickPanelView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(ChatVM.self) private var chatVM
@@ -214,4 +213,3 @@ struct QuickPanelView: View {
 #Preview {
     QuickPanelView(chat: .mockChat, updateHeight: { _ in }, toggleVisibility: {})
 }
-#endif

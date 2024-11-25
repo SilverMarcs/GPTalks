@@ -7,7 +7,6 @@
 
 import SwiftUI
 import TipKit
-import SwiftData
 
 struct ChatDetail: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass

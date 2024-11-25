@@ -5,7 +5,6 @@
 //  Created by Zabir Raihan on 12/07/2024.
 //
 
-#if os(macOS)
 import SwiftUI
 import SwiftData
 import KeyboardShortcuts
@@ -143,4 +142,3 @@ class QuickPanelWindow: NSPanel {
         self.contentMaxSize.height = height
     }
 }
-#endif

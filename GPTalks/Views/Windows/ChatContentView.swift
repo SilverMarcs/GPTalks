@@ -5,9 +5,7 @@
 //  Created by Zabir Raihan on 25/06/2024.
 //
 
-#if os(macOS)
 import SwiftUI
-import SwiftData
 
 struct ChatContentView: View {
     @Environment(\.undoManager) var undoManager
@@ -91,4 +89,3 @@ struct ChatContentView: View {
         .modelContainer(for: Chat.self, inMemory: true)
         .environment(ChatVM())
 }
-#endif

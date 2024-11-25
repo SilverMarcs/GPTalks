@@ -5,7 +5,6 @@
 //  Created by Zabir Raihan on 03/10/2024.
 //
 
-#if !os(macOS)
 import UIKit
 
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -63,4 +62,3 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
         }
     }
 }
-#endif

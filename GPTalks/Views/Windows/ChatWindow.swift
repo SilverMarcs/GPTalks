@@ -5,12 +5,10 @@
 //  Created by Zabir Raihan on 23/08/2024.
 //
 
-#if os(macOS)
 import SwiftUI
 import SwiftData
 
 struct ChatWindow: Scene {
-
     var body: some Scene {
         Window("Chats", id: "chats") {
             ChatContentView()
@@ -56,6 +54,3 @@ struct ChatDetailWrapper: View {
         }
     }
 }
-#endif
-
-

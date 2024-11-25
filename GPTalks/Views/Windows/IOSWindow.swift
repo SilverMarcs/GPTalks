@@ -6,9 +6,7 @@
 //
 
 import SwiftUI
-import SwiftData
 
-#if !os(macOS)
 struct IOSWindow: Scene {
     @Environment(SettingsVM.self) private var settingsVM
     @Environment(ChatVM.self) private var chatVM
@@ -69,4 +67,3 @@ struct IOSWindow: Scene {
         }
     }
 }
-#endif

@@ -5,7 +5,6 @@
 //  Created by Zabir Raihan on 27/09/2024.
 //
 
-#if os(macOS)
 import SwiftUI
 
 struct ImageWindow: Scene {
@@ -15,4 +14,3 @@ struct ImageWindow: Scene {
         }
     }
 }
-#endif

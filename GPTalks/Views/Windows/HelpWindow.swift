@@ -5,7 +5,6 @@
 //  Created by Zabir Raihan on 16/11/2024.
 //
 
-#if os(macOS)
 import SwiftUI
 
 struct HelpWindow: Scene {
@@ -18,4 +17,3 @@ struct HelpWindow: Scene {
         .windowIdealSize(.fitToContent)
     }
 }
-#endif

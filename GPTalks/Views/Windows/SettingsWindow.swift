@@ -5,7 +5,6 @@
 //  Created by Zabir Raihan on 17/08/2024.
 //
 
-#if os(macOS)
 import SwiftUI
 
 struct SettingsWindow: Scene {
@@ -18,4 +17,3 @@ struct SettingsWindow: Scene {
         .windowResizability(.contentSize)
     }
 }
-#endif

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct MessageMenu: View {
     var message: MessageGroup
