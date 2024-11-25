@@ -149,7 +149,7 @@ struct ProviderGeneral: View {
         case .vertex:
             "Provide your Google Cloud Project ID where Vertex AI API and Anthropic models are enabled."
         default:
-            "Omit https:// and /v1/ from the URL.\Correct input example: api.openai.com"
+            "Omit https:// and /v1/ from the URL.\nCorrect input example: api.openai.com"
         }
     }
 }
