@@ -70,7 +70,7 @@ struct ChatRow: View {
     
     var font: Font {
         #if os(macOS)
-        return .headline.weight(.medium)
+        return .headline.weight(.regular)
         #else
         return .headline.weight(.medium)
         #endif

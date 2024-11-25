@@ -19,7 +19,6 @@ struct InputEditor: View {
         Group {
             if config.enterToSend {
                 TextField(placeHolder, text: $chat.inputManager.prompt, axis: .vertical)
-//                    .focused($isFocused, equals: .textEditor)
                     .lineLimit(25, reservesSpace: false)
                     .textFieldStyle(.plain)
                     .onSubmit {

@@ -39,91 +39,120 @@ struct HighlightedText: View {
 struct AttributedText: View {
     @ObservedObject private var config = AppConfig.shared
     let attributedString: NSAttributedString
-    
+
     init(text: String, highlightText: String, parseMarkdown: Bool) {
-        let mutableString = NSMutableAttributedString(string: text)
+        let mutableString: NSMutableAttributedString
         if parseMarkdown {
-            Self.applyMarkdownFormatting(to: mutableString)
+            mutableString = AttributedText.parseMarkdown(text)
+        } else {
+            mutableString = NSMutableAttributedString(string: text)
         }
-        Self.applyHighlighting(to: mutableString, highlightText: highlightText)
+        AttributedText.applyHighlighting(to: mutableString, highlightText: highlightText)
         self.attributedString = mutableString
     }
-    
-    private static func applyMarkdownFormatting(to attributedString: NSMutableAttributedString) {
-        let fullRange = NSRange(location: 0, length: attributedString.length)
-        let text = attributedString.string
-        let baseSize = AppConfig.shared.fontSize
-        let monoFont = PlatformFont.monospacedSystemFont(ofSize: baseSize - 1, weight: .regular)
 
+    private static func parseMarkdown(_ text: String) -> NSMutableAttributedString {
+        let attributedString = NSMutableAttributedString()
+        let scanner = Scanner(string: text)
+        scanner.charactersToBeSkipped = nil
+
+        let baseSize = AppConfig.shared.fontSize
+        let defaultFont = PlatformFont.systemFont(ofSize: baseSize)
+        let monoFont = PlatformFont.monospacedSystemFont(ofSize: baseSize - 1, weight: .regular)
         let boldFont = PlatformFont.boldSystemFont(ofSize: baseSize)
-        
-        // Scale heading sizes relative to base font size
-        let headingPatterns = [
-            (pattern: "^### (.*?)$", size: baseSize * 1.6),  // H3
-            (pattern: "^## (.*?)$", size: baseSize * 1.9),   // H2
-            (pattern: "^# (.*?)$", size: baseSize * 2.2)     // H1
-        ]
-        
-        for (pattern, size) in headingPatterns {
-            let headingRegex = try! NSRegularExpression(pattern: pattern, options: .anchorsMatchLines)
-            let headingMatches = headingRegex.matches(in: text, range: fullRange)
-            
-            for match in headingMatches.reversed() {
-                if let contentRange = Range(match.range(at: 1), in: text) {
-                    let headingContent = String(text[contentRange])
-                    attributedString.replaceCharacters(in: match.range, with: headingContent)
-                    
-                    let newRange = NSRange(location: match.range.location, length: headingContent.count)
-                    let headingFont = PlatformFont.systemFont(ofSize: size, weight: .bold)
-                    
-                    attributedString.addAttribute(.font, value: headingFont, range: newRange)
+
+        while !scanner.isAtEnd {
+            if scanner.scanString("```") != nil {
+                // Code block
+                // Skip the language signifier if present
+                let _ = scanner.scanUpToCharacters(from: .newlines)
+                let _ = scanner.scanCharacters(from: .newlines)
+                
+                if let codeContent = scanner.scanUpToString("```") {
+                    if scanner.scanString("```") != nil {
+                        let codeAttributed = NSAttributedString(string: codeContent, attributes: [.font: monoFont])
+                        attributedString.append(codeAttributed)
+                    } else {
+                        // No closing ``` found
+                        attributedString.append(NSAttributedString(string: "```\(codeContent)", attributes: [.font: defaultFont]))
+                    }
+                } else {
+                    // No closing ``` found
+                    let remainingText = scanner.string[scanner.currentIndex...]
+                    attributedString.append(NSAttributedString(string: String(remainingText), attributes: [.font: defaultFont]))
+                    break
+                }
+            } else if scanner.scanString("`") != nil {
+                // Inline code
+                if let codeContent = scanner.scanUpToString("`") {
+                    if scanner.scanString("`") != nil {
+                        let codeAttributed = NSAttributedString(string: codeContent, attributes: [.font: monoFont])
+                        attributedString.append(codeAttributed)
+                    } else {
+                        // No closing ` found
+                        attributedString.append(NSAttributedString(string: "`\(codeContent)", attributes: [.font: defaultFont]))
+                    }
+                } else {
+                    // No closing ` found
+                    attributedString.append(NSAttributedString(string: "`", attributes: [.font: defaultFont]))
+                }
+            } else if scanner.scanString("**") != nil {
+                // Bold text
+                if let boldContent = scanner.scanUpToString("**") {
+                    if scanner.scanString("**") != nil {
+                        let boldAttributed = NSAttributedString(string: boldContent, attributes: [.font: boldFont])
+                        attributedString.append(boldAttributed)
+                    } else {
+                        // No closing ** found
+                        attributedString.append(NSAttributedString(string: "**\(boldContent)", attributes: [.font: defaultFont]))
+                    }
+                } else {
+                    // No closing ** found
+                    attributedString.append(NSAttributedString(string: "**", attributes: [.font: defaultFont]))
+                }
+            } else if scanner.scanString("#") != nil {
+                // Heading
+                var headingLevel = 1
+                while scanner.scanString("#") != nil {
+                    headingLevel += 1
+                }
+                let _ = scanner.scanCharacters(from: .whitespaces) // Skip whitespace
+                if let headingContent = scanner.scanUpToCharacters(from: .newlines) {
+                    let headingSize: CGFloat
+                    switch headingLevel {
+                    case 1:
+                        headingSize = baseSize * 2.0
+                    case 2:
+                        headingSize = baseSize * 1.7
+                    case 3:
+                        headingSize = baseSize * 1.4
+                    case 4:
+                        headingSize = baseSize * 1.1
+                    default:
+                        headingSize = baseSize
+                    }
+                    let headingFont = PlatformFont.systemFont(ofSize: headingSize, weight: .bold)
+                    let headingAttributed = NSAttributedString(string: headingContent, attributes: [.font: headingFont])
+                    attributedString.append(headingAttributed)
+                }
+                // add newline after heading
+                attributedString.append(NSAttributedString(string: "\n"))
+            } else {
+                // Regular text
+                if let textContent = scanner.scanUpToCharacters(from: CharacterSet(charactersIn: "`*#")) {
+                    let textAttributed = NSAttributedString(string: textContent, attributes: [.font: defaultFont])
+                    attributedString.append(textAttributed)
+                } else {
+                    // Handle special characters not part of markdown syntax
+                    if let char = scanner.scanCharacter() {
+                        attributedString.append(NSAttributedString(string: String(char), attributes: [.font: defaultFont]))
+                    }
                 }
             }
         }
-        
-        // Handle code blocks (```)
-        let codeBlockPattern = try! NSRegularExpression(pattern: "```(?:[a-zA-Z]*\\n)?([\\s\\S]*?)```")
-        let codeMatches = codeBlockPattern.matches(in: attributedString.string, range: NSRange(location: 0, length: attributedString.length))
-        
-        for match in codeMatches.reversed() {
-            if let contentRange = Range(match.range(at: 1), in: attributedString.string) {
-                let codeContent = String(attributedString.string[contentRange])
-                attributedString.replaceCharacters(in: match.range, with: codeContent)
-                
-                let newRange = NSRange(location: match.range.location, length: codeContent.count)
-                attributedString.addAttribute(.font, value: monoFont, range: newRange)
-            }
-        }
-        
-        // Handle inline code (single backticks)
-        let inlineCodePattern = try! NSRegularExpression(pattern: "`([^`]+)`")
-        let inlineCodeMatches = inlineCodePattern.matches(in: attributedString.string, range: NSRange(location: 0, length: attributedString.length))
-        
-        for match in inlineCodeMatches.reversed() {
-            if let contentRange = Range(match.range(at: 1), in: attributedString.string) {
-                let codeContent = String(attributedString.string[contentRange])
-                attributedString.replaceCharacters(in: match.range, with: codeContent)
-                
-                let newRange = NSRange(location: match.range.location, length: codeContent.count)
-                attributedString.addAttribute(.font, value: monoFont, range: newRange)
-            }
-        }
-        
-        // Handle bold text
-        let boldPattern = try! NSRegularExpression(pattern: "\\*\\*(.*?)\\*\\*")
-        let boldMatches = boldPattern.matches(in: attributedString.string, range: NSRange(location: 0, length: attributedString.length))
-        
-        for match in boldMatches.reversed() {
-            if let contentRange = Range(match.range(at: 1), in: attributedString.string) {
-                let boldContent = String(attributedString.string[contentRange])
-                attributedString.replaceCharacters(in: match.range, with: boldContent)
-                
-                let newRange = NSRange(location: match.range.location, length: boldContent.count)
-                attributedString.addAttribute(.font, value: boldFont, range: newRange)
-            }
-        }
+        return attributedString
     }
-    
+
     private static func applyHighlighting(to attributedString: NSMutableAttributedString, highlightText: String) {
         let nsString = attributedString.string as NSString
         let stringLength = nsString.length
@@ -150,11 +179,11 @@ struct AttributedText: View {
             
             attributedString.setAttributes(newAttributes, range: foundRange)
             
-            searchRange.location = foundRange.location + 1
+            searchRange.location = foundRange.location + foundRange.length
             searchRange.length = stringLength - searchRange.location
         }
     }
-    
+
     var body: some View {
         Text(AttributedString(attributedString))
             .lineSpacing(2)

@@ -109,7 +109,7 @@ struct StreamHandler {
         for call in assistant.toolCalls {
             let toolResponse = ToolResponse(toolCallId: call.toolCallId, tool: call.tool)
             let tool = Message(toolResponse: toolResponse)
-            chat.addMessage(tool, defensive: true) // TODO: use single response message insetad of multiple tool messages
+            chat.addMessage(tool, defensive: true)
             
             let toolData = try await call.tool.process(arguments: call.arguments)
             toolDatas.append(contentsOf: toolData.data)

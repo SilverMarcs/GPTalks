@@ -83,7 +83,7 @@ struct ChatDetail: View {
     
     @ViewBuilder
     var content: some View {
-        if chat.messages.isEmpty && config.markdownProvider == .webview {
+        if chat.messages.isEmpty {
             EmptyChat(chat: chat)
         } else {
             List {

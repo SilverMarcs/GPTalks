@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct AssistantMessage: View {
-    @Environment(ChatVM.self) var chatVM
-    @ObservedObject var config = AppConfig.shared
     @Bindable var message: MessageGroup
     
     @State private var showingTextSelection = false
@@ -55,6 +53,8 @@ struct AssistantMessageAux: View {
     var group: MessageGroup
     var showMenu: Bool = true
     
+    @ObservedObject var config = AppConfig.shared
+    
     @State var height: CGFloat = 0
     @State private var isHovering: Bool = false
     
@@ -77,7 +77,9 @@ struct AssistantMessageAux: View {
                     .transaction { $0.animation = nil }
                 
                 MarkdownView(content: message.content, calculatedHeight: $height)
-                    .frame(height: message.height, alignment: .top)
+                    .if(config.markdownProvider == .webview) {
+                        $0.frame(height: message.height, alignment: .top)
+                    }
                     .onChange(of: height) {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // without the delay window resizing adds extra space below
                             if height > 0   {

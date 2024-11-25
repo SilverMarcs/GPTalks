@@ -144,13 +144,12 @@ struct ProviderGeneral: View {
         }
     }
     
-    // TODO: This should come form extarContext in provider type
     private var popoverText: String {
         switch provider.type {
         case .vertex:
-            "Put in your Google Cloud Project ID.\nOnly Anthropic models are supported.\nMake sure to enable Vertex AI Api in GCloud Console and enable Anthropic models."
+            "Provide your Google Cloud Project ID where Vertex AI API and Anthropic models are enabled."
         default:
-            "Omit https:// and /v1/ from the URL.\nFor example: api.openai.com"
+            "Omit https:// and /v1/ from the URL.\Correct input example: api.openai.com"
         }
     }
 }

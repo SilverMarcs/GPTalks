@@ -34,9 +34,6 @@ struct ChatToolbar: ToolbarContent {
             .keyboardShortcut(".")
             .sheet(isPresented: $showingInspector) {
                 ChatInspector(chat: chat)
-                    #if os(macOS)
-                    .frame(height: 659)
-                    #endif
                     .presentationDetents(horizontalSizeClass == .compact ? [.medium, .large] : [.large])
                     .presentationDragIndicator(.hidden)
             }
@@ -162,6 +159,8 @@ struct ChatToolbar: ToolbarContent {
     }
 }
 
+#if os(macOS)
 extension ToolbarItemPlacement {
     static let searchPanel = accessoryBar(id: "com.SilverMarcs.GPTalks.searchPanel")
 }
+#endif

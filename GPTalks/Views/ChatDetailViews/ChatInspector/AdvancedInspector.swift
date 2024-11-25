@@ -16,6 +16,7 @@ struct AdvancedInspector: View {
     var body: some View {
         Form {
             Section("Parameters") {
+                MaxTokensPicker(value: $chat.config.maxTokens)
                 TopPSlider(topP: $chat.config.topP, shortLabel: true)
                 FrequencyPenaltySlider(penalty: $chat.config.frequencyPenalty, shortLabel: true)
                 PresencePenaltySlider(penalty: $chat.config.presencePenalty, shortLabel: true)

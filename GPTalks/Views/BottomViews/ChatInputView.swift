@@ -80,14 +80,6 @@ struct ChatInputView: View {
     var plusButton: some View {
         Menu {
             Group {
-                #if !os(macOS)
-                Button {
-                    config.showCamera = true
-                } label: {
-                    Label("Open Camera", systemImage: "camera")
-                }
-                #endif
-                
                 Button {
                     showPhotosPicker = true
                 } label: {
@@ -100,6 +92,23 @@ struct ChatInputView: View {
                     Label(
                         "Attach Files", systemImage: "paperclip")
                 }
+                
+                #if !os(macOS)
+                Button {
+                    config.showCamera = true
+                } label: {
+                    Label("Open Camera", systemImage: "camera")
+                }
+                
+                Button {
+                    guard !chat.isReplying, let lastMessage = chat.messages.last else { return }
+                    
+                    chat.resetContext(at: lastMessage)
+                } label: {
+                    Label("Reset Context", systemImage: "eraser")
+                }
+                
+                #endif
             }
             .labelStyle(.titleAndIcon)
         } label: {
@@ -156,9 +165,9 @@ struct ChatInputView: View {
     
     var truncateLimit: Int {
         #if os(macOS)
-        120
+        125
         #else
-        30
+        35
         #endif
     }
         
