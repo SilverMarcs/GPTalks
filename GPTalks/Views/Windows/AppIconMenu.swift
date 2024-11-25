@@ -9,7 +9,7 @@ import UIKit
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     static let shared = AppDelegate()
-    var chatVM: ChatVM?
+    weak var chatVM: ChatVM?
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         let sceneConfig = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
@@ -39,15 +39,8 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
     func handleQuickAction(shortcutItem: UIApplicationShortcutItem) {
         switch shortcutItem.type {
         case "camera":
-            if let chatVM = AppDelegate.shared.chatVM {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    Task {
-                        await chatVM.createNewChat()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                            AppConfig.shared.showCamera = true
-                        }
-                    }
-                }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                AppConfig.shared.showCamera = true
             }
         case "newchat":
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

@@ -52,6 +52,7 @@
 		0843E0782CD8758C0040AA77 /* WindowScenes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0843E0772CD8758C0040AA77 /* WindowScenes.swift */; };
 		0844C2752CA3E6E100F0A325 /* EmptyChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0844C2742CA3E6E100F0A325 /* EmptyChat.swift */; };
 		084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084C743F2C521A8A0015AE2F /* DismissButton.swift */; };
+		0850374B2CF4D0AA00810CBC /* InputState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0850374A2CF4D0AA00810CBC /* InputState.swift */; };
 		085276BE2C98706E009184D2 /* InputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BD2C98706E009184D2 /* InputEditor.swift */; };
 		085276C02C98794C009184D2 /* ToolCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BF2C98794C009184D2 /* ToolCallView.swift */; };
 		0853102B2CBF966F0078DD09 /* ModelRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0853102A2CBF966F0078DD09 /* ModelRow.swift */; };
@@ -242,6 +243,7 @@
 		0843E0772CD8758C0040AA77 /* WindowScenes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowScenes.swift; sourceTree = "<group>"; };
 		0844C2742CA3E6E100F0A325 /* EmptyChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyChat.swift; sourceTree = "<group>"; };
 		084C743F2C521A8A0015AE2F /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
+		0850374A2CF4D0AA00810CBC /* InputState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputState.swift; sourceTree = "<group>"; };
 		085276BD2C98706E009184D2 /* InputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputEditor.swift; sourceTree = "<group>"; };
 		085276BF2C98794C009184D2 /* ToolCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCallView.swift; sourceTree = "<group>"; };
 		0853102A2CBF966F0078DD09 /* ModelRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelRow.swift; sourceTree = "<group>"; };
@@ -640,6 +642,7 @@
 				0893B2052C39810900D4D501 /* ChatConfig.swift */,
 				0869A3EA2C958A4C009BF9F2 /* ChatConfigTools.swift */,
 				08A222BD2C2ABDAF00D76C8B /* InputManager.swift */,
+				0850374A2CF4D0AA00810CBC /* InputState.swift */,
 				08C800422C36C045009581C5 /* ChatVM.swift */,
 				085645432C3F98DF00ED84DA /* TitleGenerator.swift */,
 				080E70ED2CDF498F00A949C9 /* ChatStatus.swift */,
@@ -1136,6 +1139,7 @@
 				08F8153C2C97F72200B49355 /* TranscribeSettings.swift in Sources */,
 				08F52EF42C52C3AB00E4482C /* ProviderBackup.swift in Sources */,
 				0891D5822C968B3A00BA428F /* ToolConfigDefaults.swift in Sources */,
+				0850374B2CF4D0AA00810CBC /* InputState.swift in Sources */,
 				082F09E32CB3545600B7860A /* ToolProtocol.swift in Sources */,
 				0834E7792C719C00007CB294 /* DataFileView.swift in Sources */,
 				089825232CE8F75400980468 /* OnboardingView.swift in Sources */,

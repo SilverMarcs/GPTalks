@@ -64,6 +64,11 @@ struct ChatList: View {
                 chatVM.selections = [first]
             }
         }
+        #else
+        .fullScreenCover(isPresented: $config.showCamera) {
+            CameraView(chatVM: chatVM)
+                .ignoresSafeArea()
+        }
         #endif
     }
 

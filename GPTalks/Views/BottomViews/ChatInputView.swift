@@ -127,13 +127,6 @@ struct ChatInputView: View {
             await chat.inputManager.loadTransferredPhotos(from: selectedPhotos)
             selectedPhotos.removeAll()
         }
-        
-        #if !os(macOS)
-        .fullScreenCover(isPresented: $config.showCamera) {
-            CameraView(chat: chat)
-                .ignoresSafeArea()
-        }
-        #endif
         .fileImporter(
             isPresented: $isFilePickerPresented,
             allowedContentTypes: [.item],

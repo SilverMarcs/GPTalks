@@ -9,11 +9,6 @@ import SwiftUI
 import UniformTypeIdentifiers
 import PhotosUI
 
-enum InputState {
-    case normal
-    case editing
-}
-
 @Observable class InputManager {
     var state: InputState = .normal
     

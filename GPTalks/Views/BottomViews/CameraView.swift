@@ -10,7 +10,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct CameraView: UIViewControllerRepresentable {
-    var chat: Chat
+    var chatVM: ChatVM
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
@@ -27,17 +27,17 @@ struct CameraView: UIViewControllerRepresentable {
     }
 
     func makeCoordinator() -> Coordinator {
-        return Coordinator(picker: self, chat: chat)
+        return Coordinator(picker: self, chatVM: chatVM)
     }
 }
 
 class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     var picker: CameraView
-    var chat: Chat
+    var chatVM: ChatVM
     
-    init(picker: CameraView, chat: Chat) {
+    init(picker: CameraView, chatVM: ChatVM) {
         self.picker = picker
-        self.chat = chat
+        self.chatVM = chatVM
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -45,7 +45,19 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
               let imageData = selectedImage.jpegData(compressionQuality: 0.7) else { return }
         
         Task {
-            try? await chat.inputManager.processData(imageData, fileType: .image, fileName: "Camera_\(UUID().uuidString)")
+            let chat: Chat
+            if let activeChat = chatVM.activeChat {
+                chat = activeChat
+            } else {
+                chat = await chatVM.createNewChat()
+            }
+            
+            try? await chat.inputManager.processData(
+                imageData,
+                fileType: .image,
+                fileName: "Camera_\(UUID().uuidString)"
+            )
+            
             await MainActor.run {
                 AppConfig.shared.showCamera = false
             }
