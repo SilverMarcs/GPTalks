@@ -26,6 +26,8 @@ struct ImageInputView: View {
             .foregroundStyle(.white, .accent)
             .buttonStyle(.plain)
         }
+        .padding(2)
+        .roundedRectangleOverlay()
         .modifier(CommonInputStyling())
         #if os(macOS)
         .task {

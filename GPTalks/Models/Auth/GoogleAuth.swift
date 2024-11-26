@@ -115,7 +115,7 @@ import AuthenticationServices
     
     private func refreshAccessToken() async throws -> String {
         guard !refreshToken.isEmpty else {
-            throw RuntimeError("No refresh token available. Please sign in.")
+            throw RuntimeError("Please sign in from Settings")
             
         }
         

@@ -134,6 +134,7 @@
 		08AAFB962C3CF0DD002C04E0 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */; };
 		08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB992C3D0017002C04E0 /* ListCard.swift */; };
 		08AAFB9C2C3D01A6002C04E0 /* ChatListCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9B2C3D01A6002C04E0 /* ChatListCards.swift */; };
+		08AC26112CF4F71500750269 /* ChatInputMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC26102CF4F71500750269 /* ChatInputMenu.swift */; };
 		08B3AE9D2CDB58AB00D7231E /* NonStreamResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B3AE9C2CDB58AB00D7231E /* NonStreamResponse.swift */; };
 		08B4F4602CE3B87A004B3618 /* FullScreenBackgroundStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B4F45F2CE3B87A004B3618 /* FullScreenBackgroundStyle.swift */; };
 		08B5D7B82C77A64000D1F100 /* ChatWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B5D7B72C77A64000D1F100 /* ChatWindow.swift */; platformFilters = (macos, ); };
@@ -321,6 +322,7 @@
 		08A77CCB2C65AA820087D0F3 /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		08AAFB992C3D0017002C04E0 /* ListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCard.swift; sourceTree = "<group>"; };
 		08AAFB9B2C3D01A6002C04E0 /* ChatListCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCards.swift; sourceTree = "<group>"; };
+		08AC26102CF4F71500750269 /* ChatInputMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputMenu.swift; sourceTree = "<group>"; };
 		08B3AE9C2CDB58AB00D7231E /* NonStreamResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonStreamResponse.swift; sourceTree = "<group>"; };
 		08B4F45F2CE3B87A004B3618 /* FullScreenBackgroundStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenBackgroundStyle.swift; sourceTree = "<group>"; };
 		08B5D7B72C77A64000D1F100 /* ChatWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWindow.swift; sourceTree = "<group>"; };
@@ -721,6 +723,7 @@
 			children = (
 				08F840052C9AA26C000CB498 /* CameraView.swift */,
 				08C800392C36BA30009581C5 /* ChatInputView.swift */,
+				08AC26102CF4F71500750269 /* ChatInputMenu.swift */,
 				085276BD2C98706E009184D2 /* InputEditor.swift */,
 				08A313482C4AD0DC00C3E578 /* CommonModifiers.swift */,
 				0822A6C42CF09F31008DF4FC /* ExpandedInputEditor.swift */,
@@ -1033,6 +1036,7 @@
 				08C5C7292C9A1392004992A4 /* GoogleAuth.swift in Sources */,
 				081F58B82C6C8FFE00565F20 /* HoverScaleButton.swift in Sources */,
 				08C800572C36F843009581C5 /* SettingsView.swift in Sources */,
+				08AC26112CF4F71500750269 /* ChatInputMenu.swift in Sources */,
 				08C1ACE02C54BC8A00B86D37 /* TemperatureSlider.swift in Sources */,
 				080E70F02CDF781500A949C9 /* HTTPScheme.swift in Sources */,
 				08C1ACE22C54BC9C00B86D37 /* PresencePenaltySlider.swift in Sources */,

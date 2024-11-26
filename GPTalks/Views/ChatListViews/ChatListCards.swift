@@ -42,14 +42,7 @@ struct ChatListCards: View {
                 count: chatCount) {
                     handleChatPress()
                 }
-                .background(
-                    Group {
-                        if !config.hasUsedChatStatusFilter {
-                            Color.accentColor.opacity(isFlashing ? 0.3 : 0)
-                                .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true), value: isFlashing)
-                        }
-                    }
-                )
+                .symbolEffect(.bounce.down, options: .speed(0.1), isActive: config.hasUsedChatStatusFilter == false)
                 .contentTransition(.symbolEffect(.replace.offUp))
                 .disabled(isSearching)
                 .onAppear {

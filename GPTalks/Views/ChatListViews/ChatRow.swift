@@ -51,6 +51,7 @@ struct ChatRow: View {
             
             chatStatusMarker
                 .imageScale(.small)
+                .transition(.symbolEffect(.appear))
             
             Text(chat.config.model.name)
                 .font(.subheadline)
@@ -153,5 +154,5 @@ struct ChatRow: View {
         ChatRow(chat: .mockChat)
             .environment(ChatVM())
     }
-    .frame(width: 400)
+    .frame(width: 220)
 }

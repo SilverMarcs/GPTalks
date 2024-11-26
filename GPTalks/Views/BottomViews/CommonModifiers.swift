@@ -12,8 +12,6 @@ struct CommonInputStyling: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .padding(3)
-            .roundedRectangleOverlay()
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal)
             .padding(.top, verticalPadding - 5)
