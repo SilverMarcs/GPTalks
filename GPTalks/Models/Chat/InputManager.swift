@@ -75,6 +75,9 @@ import PhotosUI
         prompt = message.content
         dataFiles = message.dataFiles
         AppConfig.shared.proxy?.scrollTo(message, anchor: .top)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            AppConfig.shared.proxy?.scrollTo(message, anchor: .top)
+        }
     }
     
     func reset() {

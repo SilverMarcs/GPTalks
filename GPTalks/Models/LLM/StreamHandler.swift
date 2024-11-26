@@ -67,7 +67,7 @@ struct StreamHandler {
     
     private func finaliseStream(streamText: String = "", pendingToolCalls: [ChatToolCall], totalTokens: Int) {
         DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
-            chat.totalTokens = totalTokens
+            chat.totalTokens = totalTokens > 0 ? totalTokens : chat.totalTokens
             assistant.toolCalls = pendingToolCalls
             assistant.content = streamText
             assistant.isReplying = false
@@ -90,7 +90,9 @@ struct StreamHandler {
             try await handleToolCalls(calls)
         }
         
-        chat.totalTokens = response.inputTokens + response.outputTokens
+        let tokens = response.inputTokens + response.outputTokens
+        
+        chat.totalTokens = tokens > 0 ? tokens : chat.totalTokens
         assistant.isReplying = false
         chat.scrollBottom()
         AppConfig.shared.hasUserScrolled = false

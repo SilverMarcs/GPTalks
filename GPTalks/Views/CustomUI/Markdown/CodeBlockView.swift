@@ -15,17 +15,13 @@ struct CodeBlockView: View {
     let language: String?
     
     @State var clicked = false
-//    @State var result: HighlightResult?
     
     var body: some View {
         GroupBox {
             ZStack(alignment: .bottomTrailing) {
-//                Text(AttributedString(attributedCode))
                 CodeText(code)
+                    .codeTextColors(.theme(.github))
                     .highlightedString(chatVM.searchText)
-//                    .onHighlightSuccess { result in
-//                        self.result = result
-//                    }
                     .font(.system(size: AppConfig.shared.fontSize - 1, design: .monospaced))
 
                 Button {
