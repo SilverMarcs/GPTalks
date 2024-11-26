@@ -29,9 +29,25 @@ final class Chat {
         get { return unorderedMessages.sorted(by: {$0.date < $1.date})}
         set { unorderedMessages = newValue }
     }
+    
     var adjustedMessages: [MessageGroup] {
         guard let resetMarker = resetMarker else { return messages }
         return Array(messages.dropFirst(resetMarker))
+    }
+
+    @Relationship(deleteRule: .cascade)
+    var rootMessage: MessageGroup?
+    
+    var currentThread: [MessageGroup] {
+        var thread: [MessageGroup] = []
+        var currentGroup = rootMessage
+        
+        while let group = currentGroup {
+            thread.append(group)
+            currentGroup = group.activeMessage.next
+        }
+        
+        return thread
     }
     
     @Relationship(deleteRule: .cascade)
@@ -84,19 +100,7 @@ final class Chat {
             Task { await generateTitle() }
         }
     }
-    
-    @MainActor
-    func sendInput() async {
-        errorMessage = ""
-        
-        guard !inputManager.prompt.isEmpty else { return }
 
-        if inputManager.state == .editing {
-            await handleEditing()
-        } else {
-            await handleNewInput()
-        }
-    }
 
     @MainActor
     private func handleEditing() async {
@@ -110,39 +114,55 @@ final class Chat {
         await regenerate(message: editingMessage)
     }
 
-    @MainActor
-    private func handleNewInput() async {
-        let user = Message(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
-        addMessage(user)
-        inputManager.reset()
-        let assistant: Message = .init(role: .assistant)
-        addMessage(assistant)
-        await processRequest(message: assistant)
-    }
     
-    @MainActor
-    func regenerate(message: MessageGroup) async {
-        guard let index = messages.firstIndex(where: { $0 == message }) else { return }
-        unsetResetMarker(at: index)
-        
-        if message.role == .assistant {
-            messages.removeSubrange((index + 1)...)
-            let nextAssistant: Message = .init(role: .assistant)
-            message.addMessage(nextAssistant)
-            
-            await processRequest(message: nextAssistant)
-        } else if message.role == .user {
-            let nextAssistant: Message = .init(role: .assistant)
-            let nextIndex = index + 1
-            if nextIndex < messages.count, messages[nextIndex].role == .assistant {
-                messages[nextIndex].addMessage(nextAssistant)
-            } else {
-                addMessage(nextAssistant)
-            }
-            messages.removeSubrange((index + 2)...)
-            await processRequest(message: nextAssistant)
-        }
-    }
+   @MainActor
+   func sendInput() async {
+       errorMessage = ""
+       
+       guard !inputManager.prompt.isEmpty else { return }
+       
+       let userMessage = Message(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
+       let userGroup = MessageGroup(message: userMessage)
+      userGroup.chat = self
+       
+       if rootMessage == nil {
+           rootMessage = userGroup
+       } else {
+           let lastGroup = currentThread.last!
+           lastGroup.activeMessage.next = userGroup
+       }
+       
+       inputManager.reset()
+       
+       let assistantMessage = Message(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
+       let assistantGroup = MessageGroup(message: assistantMessage)
+       assistantGroup.chat = self
+       userGroup.activeMessage.next = assistantGroup
+       
+       await processRequest(message: assistantMessage)
+   }
+   
+   @MainActor
+   func regenerate(message: MessageGroup) async {
+       guard let index = currentThread.firstIndex(where: { $0 == message }) else { return }
+       
+       if message.role == .assistant {
+           let newAssistantMessage = Message(role: .assistant)
+           message.addMessage(newAssistantMessage)
+           message.activeMessage.next = nil
+           
+           await processRequest(message: newAssistantMessage)
+       } else if message.role == .user {
+           if index + 1 < currentThread.count {
+               let assistantGroup = currentThread[index + 1]
+               let newAssistantMessage = Message(role: .assistant)
+               assistantGroup.addMessage(newAssistantMessage)
+               assistantGroup.activeMessage.next = nil
+               
+               await processRequest(message: newAssistantMessage)
+           }
+       }
+   }
     
     func stopStreaming() {
         AppConfig.shared.hasUserScrolled = false
@@ -175,9 +195,9 @@ final class Chat {
     
     func generateTitle(forced: Bool = false) async {
         guard status != .quick else { return }
-        guard forced || adjustedMessages.count <= 2 else { return }
+        guard forced || messages.count <= 2 else { return }
         
-        if let newTitle = await TitleGenerator.generateTitle(messages: adjustedMessages.map( { $0.activeMessage } ), provider: config.provider) {
+        if let newTitle = await TitleGenerator.generateTitle(messages: messages.map( { $0.activeMessage } ), provider: config.provider) {
             self.title = newTitle
         }
     }

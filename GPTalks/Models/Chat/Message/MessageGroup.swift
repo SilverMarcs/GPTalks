@@ -16,6 +16,9 @@ final class MessageGroup {
     var chat: Chat?
     
     @Relationship(deleteRule: .nullify)
+    var rootMessage: Message?
+    
+    @Relationship(deleteRule: .nullify)
     var activeMessage: Message
     
     @Relationship(deleteRule: .cascade)

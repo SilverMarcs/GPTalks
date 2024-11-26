@@ -91,7 +91,7 @@ struct ChatDetail: View {
     
     @ViewBuilder
     var content: some View {
-        if chat.messages.isEmpty {
+        if chat.currentThread.isEmpty {
             EmptyChat(chat: chat)
         } else {
             List {
@@ -100,8 +100,8 @@ struct ChatDetail: View {
                         .frame(maxWidth: .infinity)
                         .listRowSeparator(.hidden)
                 }
-                
-                ForEach(messagesToShow, id: \.self) { message in
+            
+                ForEach(chat.currentThread, id: \.self) { message in
                     MessageView(message: message)
                 }
                 .listRowSeparator(.hidden)
