@@ -11,7 +11,7 @@ struct AttributedTextView: View {
     @ObservedObject private var config = AppConfig.shared
     var contentItems: [ContentItem]
 
-    init(text: String, highlightText: String, parseMarkdown: Bool) {
+    init(text: String, highlightText: String, parseMarkdown: Bool = false) {
         if parseMarkdown {
             self.contentItems = AttributedTextView.parseMarkdown(text)
         } else {
@@ -67,9 +67,21 @@ struct AttributedTextView: View {
                 }
             } else if scanner.scanString("`") != nil {
                 // Inline code
+                #if os(macOS)
+                let backgroundColor =  NSColor.windowBackgroundColor
+                #else
+                let backgroundColor = UIColor.systemBackground
+                #endif
+                 
                 if let codeContent = scanner.scanUpToString("`") {
                     if scanner.scanString("`") != nil {
-                        let codeAttributed = NSAttributedString(string: codeContent, attributes: [.font: monoFont])
+                        let codeAttributed = NSAttributedString(
+                            string: codeContent,
+                            attributes: [
+                                .font: monoFont,
+                                .backgroundColor: backgroundColor
+                            ]
+                        )
                         currentAttributedString.append(codeAttributed)
                     } else {
                         // No closing ` found

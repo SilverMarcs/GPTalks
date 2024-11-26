@@ -42,8 +42,11 @@ struct CodeBlockView: View {
                 .padding(5)
                 .buttonStyle(.plain)
             }
+            .padding(5)
         }
         .groupBoxStyle(PlatformGroupBoxStyle())
+        .padding(.leading)
+        .padding(.vertical, -10)
 //        .background(
 //            RoundedRectangle(cornerRadius: 5)
 //                .fill(Color(.textBackgroundColor).opacity(0.5))
