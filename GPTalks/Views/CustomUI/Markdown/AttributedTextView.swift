@@ -45,7 +45,7 @@ struct AttributedTextView: View {
                 appendCurrentAttributedString()
                 
                 let language = scanner.scanUpToCharacters(from: .newlines) ?? ""
-                let _ = scanner.scanCharacters(from: .newlines)
+                let _ = scanner.scanCharacters(from: .newlines) // Skip newline after language
                 
                 if var codeContent = scanner.scanUpToString("```") {
                     if scanner.scanString("```") != nil {
@@ -66,20 +66,13 @@ struct AttributedTextView: View {
                     break
                 }
             } else if scanner.scanString("`") != nil {
-                // Inline code
-                #if os(macOS)
-                let backgroundColor =  NSColor.windowBackgroundColor
-                #else
-                let backgroundColor = UIColor.systemBackground
-                #endif
-                 
                 if let codeContent = scanner.scanUpToString("`") {
                     if scanner.scanString("`") != nil {
                         let codeAttributed = NSAttributedString(
                             string: codeContent,
                             attributes: [
                                 .font: monoFont,
-                                .backgroundColor: backgroundColor
+                                .backgroundColor: PlatformColor.secondarySystemFill,
                             ]
                         )
                         currentAttributedString.append(codeAttributed)

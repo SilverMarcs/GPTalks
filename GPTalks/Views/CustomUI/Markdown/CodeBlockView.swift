@@ -48,7 +48,6 @@ struct CodeBlockView: View {
         #if os(macOS)
         .padding(.leading)
         #endif
-        .padding(.vertical, -10)
 //        .background(
 //            RoundedRectangle(cornerRadius: 5)
 //                .fill(Color(.textBackgroundColor).opacity(0.5))
