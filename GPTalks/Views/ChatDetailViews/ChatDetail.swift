@@ -39,28 +39,22 @@ struct ChatDetail: View {
                     Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
                 }
             }
+
+            #if os(macOS)
             .onAppear {
                 scrollToBottom(proxy: proxy, animated: false)
-                config.hasUserScrolled = false
-                config.proxy = proxy
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    showingAllMessages = true
-                    #if os(macOS)
-                    scrollToBottom(proxy: proxy, animated: false)
-                    #else
-                    scrollToBottom(proxy: proxy, delay: 0.3)
-                    #endif
-                    scrollToBottom(proxy: proxy, delay: 0.3)
-                }
+                onAppearStuff(proxy: proxy)
             }
-            #if os(macOS)
             .pasteHandler(chat: chat)
             .navigationSubtitle("\(chat.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
                 config.hasUserScrolled = true
             }
             #else
+            .task {
+                scrollToBottom(proxy: proxy, delay: 0.3)
+                onAppearStuff(proxy: proxy)
+            }
             .listStyle(.plain)
             .toolbarTitleDisplayMode(.inline)
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)) { _ in
@@ -70,6 +64,21 @@ struct ChatDetail: View {
             .scrollDismissesKeyboard(.immediately)
             #endif
             #endif
+        }
+    }
+    
+    func onAppearStuff(proxy: ScrollViewProxy) {
+        config.hasUserScrolled = false
+        config.proxy = proxy
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            showingAllMessages = true
+            #if os(macOS)
+            scrollToBottom(proxy: proxy, animated: false)
+            #else
+            scrollToBottom(proxy: proxy, delay: 0.3)
+            #endif
+            scrollToBottom(proxy: proxy, delay: 0.3)
         }
     }
     

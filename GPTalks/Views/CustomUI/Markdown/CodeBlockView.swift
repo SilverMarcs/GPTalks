@@ -45,7 +45,9 @@ struct CodeBlockView: View {
             .padding(5)
         }
         .groupBoxStyle(PlatformGroupBoxStyle())
+        #if os(macOS)
         .padding(.leading)
+        #endif
         .padding(.vertical, -10)
 //        .background(
 //            RoundedRectangle(cornerRadius: 5)
