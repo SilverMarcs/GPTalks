@@ -39,7 +39,8 @@ struct ChatDetail: View {
                     Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
                 }
             }
-            .task {
+            .onAppear {
+                scrollToBottom(proxy: proxy, animated: false)
                 config.hasUserScrolled = false
                 config.proxy = proxy
                 

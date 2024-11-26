@@ -67,7 +67,7 @@ struct ToolResponseMessage: View {
                 }
                 .padding(3)
             }
-            .groupBoxStyle(PlatformSpecificGroupBoxStyle())
+            .groupBoxStyle(PlatformGroupBoxStyle())
         }
         .buttonStyle(.plain)
     }

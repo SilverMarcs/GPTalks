@@ -1,58 +1,27 @@
 //
-//  HighlightedTextViews.swift
+//  AttributedTextView.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 8/11/24.
+//  Created by Zabir Raihan on 26/11/2024.
 //
 
 import SwiftUI
 
-struct HighlightedText: View {
-    let text: String
-    let highlightedText: String
-    var selectable: Bool = true
-    
-    var body: some View {
-        if selectable {
-            comprised
-                .textSelection(.enabled)
-        } else {
-            comprised
-                .textSelection(.disabled)
-        }
-    }
-    
-    @ViewBuilder
-    var comprised: some View {
-        if !highlightedText.isEmpty {
-            AttributedText(
-                text: text,
-                highlightText: highlightedText,
-                parseMarkdown: false
-            )
-        } else {
-            Text(text)
-        }
-    }
-}
-
-struct AttributedText: View {
+struct AttributedTextView: View {
     @ObservedObject private var config = AppConfig.shared
-    let attributedString: NSAttributedString
+    var contentItems: [ContentItem]
 
     init(text: String, highlightText: String, parseMarkdown: Bool) {
-        let mutableString: NSMutableAttributedString
         if parseMarkdown {
-            mutableString = AttributedText.parseMarkdown(text)
+            self.contentItems = AttributedTextView.parseMarkdown(text)
         } else {
-            mutableString = NSMutableAttributedString(string: text)
+            self.contentItems = [.text(NSAttributedString(string: text))]
         }
-        AttributedText.applyHighlighting(to: mutableString, highlightText: highlightText)
-        self.attributedString = mutableString
+        AttributedTextView.applyHighlighting(to: &self.contentItems, highlightText: highlightText)
     }
 
-    private static func parseMarkdown(_ text: String) -> NSMutableAttributedString {
-        let attributedString = NSMutableAttributedString()
+    private static func parseMarkdown(_ text: String) -> [ContentItem] {
+        var contentItems: [ContentItem] = []
         let scanner = Scanner(string: text)
         scanner.charactersToBeSkipped = nil
 
@@ -61,25 +30,38 @@ struct AttributedText: View {
         let monoFont = PlatformFont.monospacedSystemFont(ofSize: baseSize - 1, weight: .regular)
         let boldFont = PlatformFont.boldSystemFont(ofSize: baseSize)
 
+        var currentAttributedString = NSMutableAttributedString()
+
+        func appendCurrentAttributedString() {
+            if currentAttributedString.length > 0 {
+                contentItems.append(.text(currentAttributedString))
+                currentAttributedString = NSMutableAttributedString()
+            }
+        }
+
         while !scanner.isAtEnd {
             if scanner.scanString("```") != nil {
                 // Code block
-                // Skip the language signifier if present
-                let _ = scanner.scanUpToCharacters(from: .newlines)
+                appendCurrentAttributedString()
+                
+                let language = scanner.scanUpToCharacters(from: .newlines) ?? ""
                 let _ = scanner.scanCharacters(from: .newlines)
                 
-                if let codeContent = scanner.scanUpToString("```") {
+                if var codeContent = scanner.scanUpToString("```") {
                     if scanner.scanString("```") != nil {
-                        let codeAttributed = NSAttributedString(string: codeContent, attributes: [.font: monoFont])
-                        attributedString.append(codeAttributed)
+                        // remove trailing newline if any
+                        if codeContent.last == "\n" {
+                            codeContent.removeLast()
+                        }
+                        contentItems.append(.codeBlock(codeContent, language: language.isEmpty ? nil : language))
                     } else {
                         // No closing ``` found
-                        attributedString.append(NSAttributedString(string: "```\(codeContent)", attributes: [.font: defaultFont]))
+                        currentAttributedString.append(NSAttributedString(string: "```\(codeContent)", attributes: [.font: defaultFont]))
                     }
                 } else {
                     // No closing ``` found
                     let remainingText = scanner.string[scanner.currentIndex...]
-                    attributedString.append(NSAttributedString(string: String(remainingText), attributes: [.font: defaultFont]))
+                    currentAttributedString.append(NSAttributedString(string: String(remainingText), attributes: [.font: defaultFont]))
                     break
                 }
             } else if scanner.scanString("`") != nil {
@@ -87,28 +69,28 @@ struct AttributedText: View {
                 if let codeContent = scanner.scanUpToString("`") {
                     if scanner.scanString("`") != nil {
                         let codeAttributed = NSAttributedString(string: codeContent, attributes: [.font: monoFont])
-                        attributedString.append(codeAttributed)
+                        currentAttributedString.append(codeAttributed)
                     } else {
                         // No closing ` found
-                        attributedString.append(NSAttributedString(string: "`\(codeContent)", attributes: [.font: defaultFont]))
+                        currentAttributedString.append(NSAttributedString(string: "`\(codeContent)", attributes: [.font: defaultFont]))
                     }
                 } else {
                     // No closing ` found
-                    attributedString.append(NSAttributedString(string: "`", attributes: [.font: defaultFont]))
+                    currentAttributedString.append(NSAttributedString(string: "`", attributes: [.font: defaultFont]))
                 }
             } else if scanner.scanString("**") != nil {
                 // Bold text
                 if let boldContent = scanner.scanUpToString("**") {
                     if scanner.scanString("**") != nil {
                         let boldAttributed = NSAttributedString(string: boldContent, attributes: [.font: boldFont])
-                        attributedString.append(boldAttributed)
+                        currentAttributedString.append(boldAttributed)
                     } else {
                         // No closing ** found
-                        attributedString.append(NSAttributedString(string: "**\(boldContent)", attributes: [.font: defaultFont]))
+                        currentAttributedString.append(NSAttributedString(string: "**\(boldContent)", attributes: [.font: defaultFont]))
                     }
                 } else {
                     // No closing ** found
-                    attributedString.append(NSAttributedString(string: "**", attributes: [.font: defaultFont]))
+                    currentAttributedString.append(NSAttributedString(string: "**", attributes: [.font: defaultFont]))
                 }
             } else if scanner.scanString("#") != nil {
                 // Heading
@@ -133,24 +115,36 @@ struct AttributedText: View {
                     }
                     let headingFont = PlatformFont.systemFont(ofSize: headingSize, weight: .bold)
                     let headingAttributed = NSAttributedString(string: headingContent, attributes: [.font: headingFont])
-                    attributedString.append(headingAttributed)
+                    currentAttributedString.append(headingAttributed)
                 }
                 // add newline after heading
-                attributedString.append(NSAttributedString(string: "\n"))
+                currentAttributedString.append(NSAttributedString(string: "\n"))
             } else {
                 // Regular text
                 if let textContent = scanner.scanUpToCharacters(from: CharacterSet(charactersIn: "`*#")) {
                     let textAttributed = NSAttributedString(string: textContent, attributes: [.font: defaultFont])
-                    attributedString.append(textAttributed)
+                    currentAttributedString.append(textAttributed)
                 } else {
                     // Handle special characters not part of markdown syntax
                     if let char = scanner.scanCharacter() {
-                        attributedString.append(NSAttributedString(string: String(char), attributes: [.font: defaultFont]))
+                        currentAttributedString.append(NSAttributedString(string: String(char), attributes: [.font: defaultFont]))
                     }
                 }
             }
         }
-        return attributedString
+
+        appendCurrentAttributedString()
+        return contentItems
+    }
+    
+    private static func applyHighlighting(to contentItems: inout [ContentItem], highlightText: String) {
+        for index in contentItems.indices {
+            if case .text(let attributedString) = contentItems[index] {
+                let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
+                applyHighlighting(to: mutableAttributedString, highlightText: highlightText)
+                contentItems[index] = .text(mutableAttributedString)
+            }
+        }
     }
 
     private static func applyHighlighting(to attributedString: NSMutableAttributedString, highlightText: String) {
@@ -185,8 +179,17 @@ struct AttributedText: View {
     }
 
     var body: some View {
-        Text(AttributedString(attributedString))
-            .lineSpacing(2)
-            .font(.system(size: config.fontSize))
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(contentItems.enumerated()), id: \.offset) { _, item in
+                switch item {
+                case .text(let attributedString):
+                    Text(AttributedString(attributedString))
+                        .lineSpacing(2)
+                        .font(.system(size: config.fontSize))
+                case .codeBlock(let code, let language):
+                    CodeBlockView(code: code, language: language)
+                }
+            }
+        }
     }
 }

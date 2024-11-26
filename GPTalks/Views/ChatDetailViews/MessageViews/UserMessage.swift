@@ -33,7 +33,7 @@ struct UserMessage: View {
                     #endif
             }
             .transaction { $0.animation = nil }
-            .groupBoxStyle(PlatformSpecificGroupBoxStyle())
+            .groupBoxStyle(PlatformGroupBoxStyle())
             .background(
                 RoundedRectangle(cornerRadius: 5)
                     .fill(
