@@ -47,22 +47,22 @@ struct AppearanceSettings: View {
                 .pickerStyle(.radioGroup)
                 #endif
                 
-                if config.markdownProvider == .webview {
-                    Toggle("Skeleon Rendering in Markdown View", isOn: $config.renderSkeleton)
-                    
-                    Picker(selection: $config.codeBlockTheme) {
-                        ForEach(CodeBlockTheme.allCases, id: \.self) { theme in
-                            Text(theme.name)
-                        }
-                    } label: {
-                        Text("Code Block Theme")
-                        Text("Change chat selection to take effect")
+                Picker(selection: $config.codeBlockTheme) {
+                    ForEach(CodeTheme.allCases, id: \.self) { theme in
+                        Text(theme.rawValue)
+                            .tag(theme)
                     }
-                    
-                    MarkdownView(content: String.onlyCodeBlock)
+                } label: {
+                    Text("Code Block Theme")
+                    Text("Change chat selection to take effect")
+                }
+                
+                MarkdownView(content: String.onlyCodeBlock)
+                    .if(config.markdownProvider == .webview) {
+                        $0
                         .id(config.codeBlockTheme)
                         .padding(.bottom, -11)
-                }
+                    }
             }
         }
         .formStyle(.grouped)

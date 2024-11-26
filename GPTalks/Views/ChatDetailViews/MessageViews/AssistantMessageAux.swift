@@ -37,17 +37,18 @@ struct AssistantMessageAux: View {
                     .transaction { $0.animation = nil }
                 
                 MarkdownView(content: message.content, calculatedHeight: $height)
-                    .if(config.markdownProvider == .webview) {
-                        $0.frame(height: message.height, alignment: .top)
-                    }
-                    .onChange(of: height) {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // without the delay window resizing adds extra space below
-                            if height > 0   {
-                                message.height = height
-                            }
-                        }
-                    }
                     .transaction { $0.animation = nil }
+                    .if(config.markdownProvider == .webview) { view in
+                        view
+                            .frame(height: message.height, alignment: .top)
+                            .onChange(of: height) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // without the delay window resizing adds extra space below
+                                    if height > 0   {
+                                        message.height = height
+                                    }
+                                }
+                            }
+                    }
                 
                 if !message.dataFiles.isEmpty {
                     DataFilesView(dataFiles: message.dataFiles, edge: .leading)

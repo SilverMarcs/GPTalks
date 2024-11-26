@@ -19,7 +19,7 @@ struct TextSelectionView: View {
             ScrollView {
                 SwiftMarkdownView(content)
                     .markdownBaseURL("GPTalks Web Content")
-                    .codeBlockTheme(config.codeBlockTheme)
+                    .codeBlockTheme(config.codeBlockTheme.toCodeBlockTheme())
             }
             .safeAreaPadding(.horizontal)
             .navigationTitle("Select Text")

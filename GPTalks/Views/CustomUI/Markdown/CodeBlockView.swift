@@ -10,6 +10,7 @@ import HighlightSwift
 
 struct CodeBlockView: View {
     @Environment(ChatVM.self) var chatVM
+    @ObservedObject var config = AppConfig.shared
     
     let code: String
     let language: String?
@@ -19,7 +20,7 @@ struct CodeBlockView: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             CodeText(code)
-                .codeTextColors(.theme(.github))
+                .codeTextColors(.theme(config.codeBlockTheme.toHighlightTheme()))
                 .highlightedString(chatVM.searchText)
                 .font(.system(size: AppConfig.shared.fontSize - 1, design: .monospaced))
                 .padding()

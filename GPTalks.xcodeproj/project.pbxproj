@@ -135,6 +135,7 @@
 		08A77CC52C65A0B70087D0F3 /* AppearanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A77CC42C65A0B70087D0F3 /* AppearanceSettings.swift */; };
 		08A77CC92C65A3AD0087D0F3 /* SectionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A77CC82C65A3AD0087D0F3 /* SectionFooterView.swift */; };
 		08A77CCC2C65AA820087D0F3 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A77CCB2C65AA820087D0F3 /* DatabaseService.swift */; };
+		08A9E8CF2CF63EFF008AB187 /* CodeTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A9E8CE2CF63EFF008AB187 /* CodeTheme.swift */; };
 		08AAFB962C3CF0DD002C04E0 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */; };
 		08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB992C3D0017002C04E0 /* ListCard.swift */; };
 		08AAFB9C2C3D01A6002C04E0 /* ChatListCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9B2C3D01A6002C04E0 /* ChatListCards.swift */; };
@@ -329,6 +330,7 @@
 		08A77CC42C65A0B70087D0F3 /* AppearanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettings.swift; sourceTree = "<group>"; };
 		08A77CC82C65A3AD0087D0F3 /* SectionFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionFooterView.swift; sourceTree = "<group>"; };
 		08A77CCB2C65AA820087D0F3 /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		08A9E8CE2CF63EFF008AB187 /* CodeTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeTheme.swift; sourceTree = "<group>"; };
 		08AAFB992C3D0017002C04E0 /* ListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCard.swift; sourceTree = "<group>"; };
 		08AAFB9B2C3D01A6002C04E0 /* ChatListCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCards.swift; sourceTree = "<group>"; };
 		08AC26102CF4F71500750269 /* ChatInputMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputMenu.swift; sourceTree = "<group>"; };
@@ -548,6 +550,7 @@
 		087F3F892CDDEF28001298B3 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				08A9E8CE2CF63EFF008AB187 /* CodeTheme.swift */,
 				0898253A2CEA31A300980468 /* MarkdownProvider.swift */,
 				08436F212CDE9182007A160F /* Acknowledgement.swift */,
 				087F3F912CDDF00C001298B3 /* SettingsVM.swift */,
@@ -1137,6 +1140,7 @@
 				085361052C491BF0007DAB62 /* ImageSession.swift in Sources */,
 				08F815342C97F64E00B49355 /* BasicInspector.swift in Sources */,
 				08A222832C2AB4FD00D76C8B /* GPTalksApp.swift in Sources */,
+				08A9E8CF2CF63EFF008AB187 /* CodeTheme.swift in Sources */,
 				089C7E122C405904005E3BE9 /* QuickPanelView.swift in Sources */,
 				08C8003A2C36BA30009581C5 /* ChatInputView.swift in Sources */,
 				08B8DE212C97F3E10041A690 /* ChatConfigDefaults.swift in Sources */,

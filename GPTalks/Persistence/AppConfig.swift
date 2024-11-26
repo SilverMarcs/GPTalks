@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftMarkdownView
 
 class AppConfig: ObservableObject {
     static let shared = AppConfig()
@@ -19,8 +18,7 @@ class AppConfig: ObservableObject {
     
     // Appearance
     @AppStorage("markdownProvider") var markdownProvider: MarkdownProvider = .webview
-    @AppStorage("codeBlockTheme") var codeBlockTheme: CodeBlockTheme = .atom
-    @AppStorage("renderSkeleton") var renderSkeleton: Bool = true
+    @AppStorage("codeBlockTheme") var codeBlockTheme: CodeTheme = .atomOne
     #if os(macOS)
     @AppStorage("fontSize") var fontSize: Double = 13
     #else

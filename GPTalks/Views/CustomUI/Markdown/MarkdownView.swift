@@ -30,8 +30,7 @@ struct MarkdownView: View {
                 .markdownBaseURL("GPTalks Web Content")
                 .markdownHighlightString(chatVM.searchText)
                 .markdownFontSize(CGFloat(config.fontSize))
-                .renderSkeleton(config.renderSkeleton)
-                .codeBlockTheme(config.codeBlockTheme)
+                .codeBlockTheme(config.codeBlockTheme.toCodeBlockTheme())
         }
     }
 }
