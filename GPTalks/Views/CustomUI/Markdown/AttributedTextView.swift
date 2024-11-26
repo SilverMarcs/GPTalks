@@ -53,7 +53,8 @@ struct AttributedTextView: View {
                         if codeContent.last == "\n" {
                             codeContent.removeLast()
                         }
-                        contentItems.append(.codeBlock(codeContent, language: language.isEmpty ? nil : language))
+                        let codeAttributedString = NSAttributedString(string: codeContent, attributes: [.font: monoFont])
+                        contentItems.append(.codeBlock(codeAttributedString, language: language.isEmpty ? nil : language))
                     } else {
                         // No closing ``` found
                         currentAttributedString.append(NSAttributedString(string: "```\(codeContent)", attributes: [.font: defaultFont]))
@@ -139,13 +140,19 @@ struct AttributedTextView: View {
     
     private static func applyHighlighting(to contentItems: inout [ContentItem], highlightText: String) {
         for index in contentItems.indices {
-            if case .text(let attributedString) = contentItems[index] {
+            switch contentItems[index] {
+            case .text(let attributedString):
                 let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
                 applyHighlighting(to: mutableAttributedString, highlightText: highlightText)
                 contentItems[index] = .text(mutableAttributedString)
+            case .codeBlock(let attributedString, let language):
+                let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
+                applyHighlighting(to: mutableAttributedString, highlightText: highlightText)
+                contentItems[index] = .codeBlock(mutableAttributedString, language: language)
             }
         }
     }
+
 
     private static func applyHighlighting(to attributedString: NSMutableAttributedString, highlightText: String) {
         let nsString = attributedString.string as NSString
@@ -186,8 +193,8 @@ struct AttributedTextView: View {
                     Text(AttributedString(attributedString))
                         .lineSpacing(2)
                         .font(.system(size: config.fontSize))
-                case .codeBlock(let code, let language):
-                    CodeBlockView(code: code, language: language)
+                case .codeBlock(let attributedString, let language):
+                    CodeBlockView(attributedCode: attributedString, language: language)
                 }
             }
         }

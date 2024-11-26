@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CodeBlockView: View {
-    let code: String
+    let attributedCode: NSAttributedString
     let language: String?
     
     @State var clicked = false
@@ -21,14 +21,14 @@ struct CodeBlockView: View {
 //            }
         GroupBox {
             ZStack(alignment: .bottomTrailing) {
-                Text(code)
+                Text(AttributedString(attributedCode))
                     .font(.system(size: AppConfig.shared.fontSize - 1, design: .monospaced))
                 
                 Button {
                     withAnimation {
                         clicked.toggle()
                     }
-                    code.copyToPasteboard()
+                    attributedCode.string.copyToPasteboard()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                         withAnimation {
                             clicked.toggle()
@@ -52,5 +52,5 @@ struct CodeBlockView: View {
 }
 
 #Preview {
-    CodeBlockView(code: .codeBlock, language: "Swift")
+    CodeBlockView(attributedCode: NSAttributedString(string: .codeBlock), language: "Swift")
 }

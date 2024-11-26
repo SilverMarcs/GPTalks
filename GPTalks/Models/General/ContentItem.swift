@@ -9,6 +9,6 @@ import Foundation
 
 enum ContentItem {
     case text(NSAttributedString)
-    case codeBlock(String, language: String?)
+    case codeBlock(NSAttributedString, language: String?)
 }
 
