@@ -13,78 +13,47 @@ import PhotosUI
     var state: InputState = .normal
     
     var normalPrompt: String = ""
-    var tempNormalPrompt: String? = ""
-    
     var editingPrompt: String = ""
-    var editingDataFiles: [TypedData] = []
-    
-    var editingIndex: Int?
     
     var normalDataFiles: [TypedData] = []
-    var tempNormalDataFiles: [TypedData]? = []
+    var editingDataFiles: [TypedData] = []
     
-    init() { }
+    var editingMessage: Message?
     
     var prompt: String {
-        get {
-            switch state {
-            case .normal:
-                normalPrompt
-            case .editing:
-                editingPrompt
-            }
-        }
+        get { state == .normal ? normalPrompt : editingPrompt }
         set {
-            switch state {
-            case .normal:
+            if state == .normal {
                 normalPrompt = newValue
-            case .editing:
+            } else {
                 editingPrompt = newValue
             }
         }
     }
     
     var dataFiles: [TypedData] {
-        get {
-            switch state {
-            case .normal:
-                normalDataFiles
-            case .editing:
-                editingDataFiles
-            }
-        }
+        get { state == .normal ? normalDataFiles : editingDataFiles }
         set {
-            switch state {
-            case .normal:
+            if state == .normal {
                 normalDataFiles = newValue
-            case .editing:
+            } else {
                 editingDataFiles = newValue
             }
         }
     }
     
     func setupEditing(message: MessageGroup) {
-        tempNormalPrompt = normalPrompt
-        tempNormalDataFiles = normalDataFiles
-        
-        withAnimation {
-            editingIndex = message.chat?.messages.firstIndex(of: message)
-            state = .editing
-        }
-        
+        state = .editing
+        editingMessage = message.activeMessage
         prompt = message.content
         dataFiles = message.dataFiles
-        AppConfig.shared.proxy?.scrollTo(message, anchor: .top)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            AppConfig.shared.proxy?.scrollTo(message, anchor: .top)
-        }
     }
     
     func reset() {
         state = .normal
-        editingIndex = nil
-        dataFiles = tempNormalDataFiles ?? []
-        prompt = tempNormalPrompt ?? ""
+        editingMessage = nil
+        prompt = ""
+        dataFiles = []
     }
 }
 

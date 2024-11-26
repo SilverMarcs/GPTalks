@@ -129,19 +129,21 @@ final class MessageGroup {
     }
     
     func goToPreviousMessage() {
+        // TODO: go to parent or next basd on role
         guard canGoToPrevious else { return }
         activeMessage = allMessages[currentMessageIndex - 1]
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            AppConfig.shared.proxy?.scrollTo(self, anchor: .bottom)
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//            AppConfig.shared.proxy?.scrollTo(self, anchor: .bottom)
+//        }
     }
     
     func goToNextMessage() {
+        // TODO: go to parent or next basd on role
         guard canGoToNext else { return }
         activeMessage = allMessages[currentMessageIndex + 1]
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            AppConfig.shared.proxy?.scrollTo(self, anchor: .bottom)
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//            AppConfig.shared.proxy?.scrollTo(self, anchor: .bottom)
+//        }
     }
     
     func deleteActiveMessage() {

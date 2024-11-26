@@ -101,6 +101,8 @@ struct StreamHandler {
 
     @MainActor
     private func handleToolCalls(_ toolCalls: [ChatToolCall]) async throws {
+        throw RuntimeError("ToolCalls not implemented")
+        
         // DO NOT call this when assitant.toolCalls is already populated. this func does it for you
         assistant.isReplying = false
         assistant.toolCalls = toolCalls
@@ -111,7 +113,7 @@ struct StreamHandler {
         for call in assistant.toolCalls {
             let toolResponse = ToolResponse(toolCallId: call.toolCallId, tool: call.tool)
             let tool = Message(toolResponse: toolResponse)
-            chat.addMessage(tool, defensive: true)
+//            chat.addMessage(tool, defensive: true)
             
             let toolData = try await call.tool.process(arguments: call.arguments)
             toolDatas.append(contentsOf: toolData.data)
@@ -124,7 +126,7 @@ struct StreamHandler {
         
         if toolDatas.isEmpty {
             let newAssistant = Message(role: .assistant)
-            chat.addMessage(newAssistant, defensive: true)
+//            chat.addMessage(newAssistant, defensive: true)
             let streamer = StreamHandler(chat: chat, assistant: newAssistant)
             try await streamer.handleRequest()
         } else {

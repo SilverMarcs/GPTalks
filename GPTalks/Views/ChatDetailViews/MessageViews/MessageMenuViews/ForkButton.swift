@@ -22,7 +22,7 @@ struct ForkButton: View {
             Button {
                 isForking = true
                 Task {
-                    if let newChat = await message.chat?.copy(from: message, purpose: .chat) {
+                    if let newChat = await message.chat?.copy(from: message.activeMessage, purpose: .chat) {
                         chatVM.fork(newChat: newChat)
                         isForking = false
                     }

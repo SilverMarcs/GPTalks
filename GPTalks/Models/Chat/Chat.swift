@@ -102,46 +102,57 @@ final class Chat {
     }
 
 
-    @MainActor
-    private func handleEditing() async {
-        guard let index = inputManager.editingIndex else { return }
-        messages.removeSubrange((index + 1)...)
-        unsetResetMarker(at: index)
-        let editingMessage = messages[index]
-        editingMessage.content = inputManager.prompt
-        editingMessage.dataFiles = inputManager.dataFiles
-        inputManager.reset()
-        await regenerate(message: editingMessage)
+     @MainActor
+     func editMessage(_ message: Message) async {
+        guard let userGroup = currentThread.first(where: { $0.activeMessage == message }) else { return }
+        
+        let newUserMessage = Message(role: .user, content: inputManager.prompt, provider: message.provider, model: message.model, dataFiles: inputManager.dataFiles)
+        userGroup.addMessage(newUserMessage)
+        
+        // Create a new assistant message group
+        let newAssistantMessage = Message(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
+        let newAssistantGroup = MessageGroup(message: newAssistantMessage)
+        newAssistantGroup.chat = self
+        
+        // Set the new assistant group as the next of the new user message
+        newUserMessage.next = newAssistantGroup
+         
+        // Process the new assistant message
+        await processRequest(message: newAssistantMessage)
     }
 
-    
-   @MainActor
-   func sendInput() async {
-       errorMessage = ""
-       
-       guard !inputManager.prompt.isEmpty else { return }
-       
-       let userMessage = Message(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
-       let userGroup = MessageGroup(message: userMessage)
-      userGroup.chat = self
-       
-       if rootMessage == nil {
-           rootMessage = userGroup
-       } else {
-           let lastGroup = currentThread.last!
-           lastGroup.activeMessage.next = userGroup
-       }
-       
-       inputManager.reset()
-       
-       let assistantMessage = Message(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
-       let assistantGroup = MessageGroup(message: assistantMessage)
-       assistantGroup.chat = self
-       userGroup.activeMessage.next = assistantGroup
-       
-       await processRequest(message: assistantMessage)
-   }
-   
+    @MainActor
+    func sendInput() async {
+        errorMessage = ""
+        
+        guard !inputManager.prompt.isEmpty else { return }
+        
+        if let editingMessage = inputManager.editingMessage {
+            await editMessage(editingMessage)
+            inputManager.editingMessage = nil
+        } else {
+            let userMessage = Message(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
+            let userGroup = MessageGroup(message: userMessage)
+            userGroup.chat = self
+            
+            if rootMessage == nil {
+                rootMessage = userGroup
+            } else {
+                let lastGroup = currentThread.last!
+                lastGroup.activeMessage.next = userGroup
+            }
+            
+            let assistantMessage = Message(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
+            let assistantGroup = MessageGroup(message: assistantMessage)
+            assistantGroup.chat = self
+            userGroup.activeMessage.next = assistantGroup
+             
+            await processRequest(message: assistantMessage)
+        }
+         
+        inputManager.reset()
+    }
+
    @MainActor
    func regenerate(message: MessageGroup) async {
        guard let index = currentThread.firstIndex(where: { $0 == message }) else { return }
@@ -202,21 +213,21 @@ final class Chat {
         }
     }
 
-    func addMessage(_ message: Message, defensive: Bool = false) {
-        message.provider = config.provider
-        message.model = config.model
-        
-        if message.role == .assistant {
-            message.isReplying = true
-        }
-        
-        let group = MessageGroup(message: message)
-        if !defensive {
-            AppConfig.shared.hasUserScrolled = false
-        }
-        messages.append(group)
-        scrollBottom()
-    }
+//    func addMessage(_ message: Message, defensive: Bool = false) {
+//        message.provider = config.provider
+//        message.model = config.model
+//        
+//        if message.role == .assistant {
+//            message.isReplying = true
+//        }
+//        
+//        let group = MessageGroup(message: message)
+//        if !defensive {
+//            AppConfig.shared.hasUserScrolled = false
+//        }
+//        messages.append(group)
+//        scrollBottom()
+//    }
     
     private func unsetResetMarker(at index: Int) {
         if let resetMarker = resetMarker, index <= resetMarker {
@@ -256,7 +267,7 @@ final class Chat {
         }
     }
     
-    func copy(from message: MessageGroup? = nil, purpose: ChatConfigPurpose) async -> Chat {
+    func copy(from message: Message? = nil, purpose: ChatConfigPurpose) async -> Chat {
         let newChat = Chat(config: config.copy(purpose: purpose))
         
         let leading = switch purpose {
@@ -268,10 +279,30 @@ final class Chat {
         newChat.title = "\(leading) \(self.title)"
         newChat.totalTokens = self.totalTokens
         
-        if let message = message, let index = messages.firstIndex(of: message) {
-            newChat.messages = messages.prefix(through: index).map { $0.copy() }
+        var threadToCopy: [MessageGroup] = []
+        
+        if let message = message {
+            // Find the MessageGroup containing the specified message
+            if let groupIndex = currentThread.firstIndex(where: { $0.allMessages.contains(message) }) {
+                threadToCopy = Array(currentThread.prefix(through: groupIndex))
+            }
         } else {
-            newChat.messages = messages.map { $0.copy() }
+            threadToCopy = currentThread
+        }
+        
+        // Copy the thread
+        var previousGroup: MessageGroup?
+        for group in threadToCopy {
+            let copiedGroup = group.copy()
+            copiedGroup.chat = newChat
+            
+            if let previousGroup = previousGroup {
+                previousGroup.activeMessage.next = copiedGroup
+            } else {
+                newChat.rootMessage = copiedGroup
+            }
+            
+            previousGroup = copiedGroup
         }
         
         return newChat
