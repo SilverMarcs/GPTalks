@@ -45,8 +45,8 @@ struct DataFilesView: View {
                 }
                 .buttonStyle(HoverScaleButtonStyle())
                 .shadow(radius: 5)
-                .padding(.top, 5)
-                .padding(.trailing, 5)
+//                .padding(.top, 5)
+//                .padding(.trailing, 5)
             }
         }
     }

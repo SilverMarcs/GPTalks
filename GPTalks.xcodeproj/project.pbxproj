@@ -17,6 +17,8 @@
 		080E70F02CDF781500A949C9 /* HTTPScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70EF2CDF781500A949C9 /* HTTPScheme.swift */; };
 		080E70F22CDFB9C800A949C9 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70F12CDFB9C800A949C9 /* KeychainHelper.swift */; };
 		0810F5892CEAFB5C002D4ACF /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0810F5882CEAFB5C002D4ACF /* ContextResetDivider.swift */; };
+		0812974D2CF5A9DE00440D19 /* HighlightSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0812974C2CF5A9DE00440D19 /* HighlightSwift */; };
+		081297502CF5B7DF00440D19 /* HighlightSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0812974F2CF5B7DF00440D19 /* HighlightSwift */; };
 		08149A572C3E5E5B004485AC /* MessageRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08149A562C3E5E5B004485AC /* MessageRole.swift */; };
 		0819479E2C48DCDB0061227B /* ImageList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819479D2C48DCDB0061227B /* ImageList.swift */; };
 		081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D932C3BD33F0078BB24 /* ParameterSettings.swift */; };
@@ -402,7 +404,9 @@
 			files = (
 				082AA6F62CE683C40088A8B2 /* OpenAI in Frameworks */,
 				0823550D2CDBB74900388273 /* GoogleGenerativeAI in Frameworks */,
+				081297502CF5B7DF00440D19 /* HighlightSwift in Frameworks */,
 				086346B42CE780C6006E5927 /* GoogleGenerativeAI in Frameworks */,
+				0812974D2CF5A9DE00440D19 /* HighlightSwift in Frameworks */,
 				082355152CDBBB2B00388273 /* SwiftMarkdownView in Frameworks */,
 				086346B12CE780B6006E5927 /* SwiftAnthropic in Frameworks */,
 				08DB150B2CDC5B2200DC5B90 /* OpenAI in Frameworks */,
@@ -926,6 +930,8 @@
 				086346AD2CE7808B006E5927 /* OpenAI */,
 				086346B02CE780B6006E5927 /* SwiftAnthropic */,
 				086346B32CE780C6006E5927 /* GoogleGenerativeAI */,
+				0812974C2CF5A9DE00440D19 /* HighlightSwift */,
+				0812974F2CF5B7DF00440D19 /* HighlightSwift */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -961,6 +967,7 @@
 				086346AC2CE7808B006E5927 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				086346AF2CE780B6006E5927 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
 				086346B22CE780C6006E5927 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */,
+				0812974E2CF5B7DF00440D19 /* XCRemoteSwiftPackageReference "HighlightSwift" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1411,6 +1418,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0812974E2CF5B7DF00440D19 /* XCRemoteSwiftPackageReference "HighlightSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SilverMarcs/HighlightSwift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		086346A92CE78078006E5927 /* XCRemoteSwiftPackageReference "SwiftMarkdownView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/SwiftMarkdownView";
@@ -1454,6 +1469,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0812974C2CF5A9DE00440D19 /* HighlightSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HighlightSwift;
+		};
+		0812974F2CF5B7DF00440D19 /* HighlightSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0812974E2CF5B7DF00440D19 /* XCRemoteSwiftPackageReference "HighlightSwift" */;
+			productName = HighlightSwift;
+		};
 		0823550C2CDBB74900388273 /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GoogleGenerativeAI;

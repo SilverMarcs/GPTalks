@@ -1,5 +1,5 @@
 {
-  "originHash" : "93185ae2df416422866f4bcd675cd406c3c9f562f1ae2d4ac3c27ec13e962287",
+  "originHash" : "22280006598d11855f023a7f94b32bfc6150544a879b7955371945d4db82aeea",
   "pins" : [
     {
       "identity" : "googlegenerativeai",
@@ -8,6 +8,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "f17e1750c78e85254ad40d6be1f43aca41adf405"
+      }
+    },
+    {
+      "identity" : "highlightswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/HighlightSwift",
+      "state" : {
+        "branch" : "main",
+        "revision" : "0a67074838759f14279113b53b5415152f6373c7"
       }
     },
     {

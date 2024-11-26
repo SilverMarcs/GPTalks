@@ -6,29 +6,33 @@
 //
 
 import SwiftUI
+import HighlightSwift
 
 struct CodeBlockView: View {
-    let attributedCode: NSAttributedString
+    @Environment(ChatVM.self) var chatVM
+    
+    let code: String
     let language: String?
     
     @State var clicked = false
+//    @State var result: HighlightResult?
     
     var body: some View {
-//            if let language = language {
-//                Text(language)
-//                    .font(.caption)
-//                    .foregroundColor(.secondary)
-//            }
         GroupBox {
             ZStack(alignment: .bottomTrailing) {
-                Text(AttributedString(attributedCode))
+//                Text(AttributedString(attributedCode))
+                CodeText(code)
+                    .highlightedString(chatVM.searchText)
+//                    .onHighlightSuccess { result in
+//                        self.result = result
+//                    }
                     .font(.system(size: AppConfig.shared.fontSize - 1, design: .monospaced))
-                
+
                 Button {
                     withAnimation {
                         clicked.toggle()
                     }
-                    attributedCode.string.copyToPasteboard()
+                    code.copyToPasteboard()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                         withAnimation {
                             clicked.toggle()
@@ -39,7 +43,6 @@ struct CodeBlockView: View {
                         .imageScale(.medium)
                 }
                 .contentTransition(.symbolEffect(.replace))
-                .padding(5)
                 .buttonStyle(.plain)
             }
             .padding(5)
@@ -56,5 +59,5 @@ struct CodeBlockView: View {
 }
 
 #Preview {
-    CodeBlockView(attributedCode: NSAttributedString(string: .codeBlock), language: "Swift")
+    CodeBlockView(code: .codeBlock, language: "Swift")
 }

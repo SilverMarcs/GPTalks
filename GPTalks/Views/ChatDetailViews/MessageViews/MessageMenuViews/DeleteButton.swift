@@ -17,11 +17,7 @@ struct DeleteButton: View {
                 Button("Delete Current Message", role: .destructive) {
                     message.deleteActiveMessage()
                 }
-            }
-            
-            Button("Delete Message Group", role: .destructive) {
-                message.chat?.deleteMessage(message)
-            }            
+            }       
         } label: {
             Image(systemName: "trash")
                 .resizable()
