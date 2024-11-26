@@ -24,8 +24,9 @@ struct UserMessage: View {
             }
             
             GroupBox {
-                HighlightedText(text: String(message.content.prefix(isExpanded || !chatVM.searchText.isEmpty  ? .max : 400)),
+                HighlightableTextView(text: String(message.content.prefix(isExpanded || !chatVM.searchText.isEmpty  ? .max : 400)),
                                 highlightedText: chatVM.searchText)
+                    .textSelection(.enabled)
                     .font(.system(size: config.fontSize))
                     #if os(macOS)
                     .lineSpacing(2)

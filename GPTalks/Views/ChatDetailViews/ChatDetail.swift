@@ -39,7 +39,6 @@ struct ChatDetail: View {
                     Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
                 }
             }
-
             #if os(macOS)
             .onAppear {
                 scrollToBottom(proxy: proxy, animated: false)

@@ -99,6 +99,20 @@ struct ChatList: View {
     var toolbar: some ToolbarContent {
         ToolbarItem { Spacer() }
         
+        ToolbarItem(placement: .keyboard) {
+            Button(action: { chatVM.goToPreviousChat(chats: chats) }) {
+                Image(systemName: "chevron.left")
+            }
+            .keyboardShortcut("[", modifiers: .command)
+        }
+        
+        ToolbarItem(placement: .keyboard) {
+            Button(action: { chatVM.goToNextChat(chats: chats) }) {
+                Image(systemName: "chevron.right")
+            }
+            .keyboardShortcut("]", modifiers: .command)
+        }
+        
         ToolbarItem {
             Menu {
                 ForEach(providers) { provider in

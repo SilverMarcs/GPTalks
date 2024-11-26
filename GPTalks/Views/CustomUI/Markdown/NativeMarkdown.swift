@@ -1,5 +1,5 @@
 //
-//  AttributedTextView.swift
+//  NativeMarkdown.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 26/11/2024.
@@ -7,17 +7,13 @@
 
 import SwiftUI
 
-struct AttributedTextView: View {
+struct NativeMarkdown: View {
     @ObservedObject private var config = AppConfig.shared
     var contentItems: [ContentItem]
 
-    init(text: String, highlightText: String, parseMarkdown: Bool = false) {
-        if parseMarkdown {
-            self.contentItems = AttributedTextView.parseMarkdown(text)
-        } else {
-            self.contentItems = [.text(NSAttributedString(string: text))]
-        }
-        AttributedTextView.applyHighlighting(to: &self.contentItems, highlightText: highlightText)
+    init(text: String, highlightText: String) {
+        self.contentItems = NativeMarkdown.parseMarkdown(text)
+        NativeMarkdown.applyHighlighting(to: &self.contentItems, highlightText: highlightText)
     }
 
     private static func parseMarkdown(_ text: String) -> [ContentItem] {

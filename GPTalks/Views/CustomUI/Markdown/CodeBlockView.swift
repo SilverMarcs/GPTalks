@@ -44,22 +44,12 @@ struct CodeBlockView: View {
             }
         } label: {
             Image(systemName: clicked ? "checkmark" : "square.on.square")
-            .font(.system(size: 11))
-            .frame(width: 11, height: 11)
+                .font(.system(size: 12).bold())
+            .frame(width: 12, height: 12)
             .padding(7)
             .contentShape(Rectangle())
         }
         .contentTransition(.symbolEffect(.replace))
-        #if os(macOS)
-        .background(
-            .background.opacity(0.5),
-            in: RoundedRectangle(cornerRadius: 5)
-        )
-        .overlay {
-            RoundedRectangle(cornerRadius: 5)
-                .stroke(.quaternary, lineWidth: 0.7)
-        }
-        #endif
         .buttonStyle(.borderless)
     }
 }

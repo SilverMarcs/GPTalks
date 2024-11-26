@@ -54,6 +54,25 @@ import SwiftUI
         return newChat
     }
     
+    // MARK: - Navigation
+    func goToNextChat(chats: [Chat]) {
+        guard let activeChat = activeChat,
+              let index = chats.firstIndex(of: activeChat),
+              index < chats.count - 1 else { return }
+        
+        let nextChat = chats[index + 1]
+        selections = [nextChat]
+    }
+
+    func goToPreviousChat(chats: [Chat]) {
+        guard let activeChat = activeChat,
+              let index = chats.firstIndex(of: activeChat),
+              index > 0 else { return }
+        
+        let previousChat = chats[index - 1]
+        selections = [previousChat]
+    }
+    
     // MARK: - Search
     var searchText: String = ""
     var serchTokens = [ChatSearchToken]()

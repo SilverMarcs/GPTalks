@@ -42,7 +42,7 @@ struct ChatRow: View {
             ProviderImage(provider: chat.config.provider, radius: 8, frame: imageSize, scale: .medium)
                 .symbolEffect(.bounce, options: .speed(0.5), isActive: chat.isReplying)
             
-            HighlightedText(text: chat.title, highlightedText: chatVM.searchText, selectable: false)
+            HighlightableTextView(text: chat.title, highlightedText: chatVM.searchText)
                 .lineLimit(1)
                 .font(font)
                 .opacity(0.9)

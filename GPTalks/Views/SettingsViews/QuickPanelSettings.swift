@@ -5,7 +5,6 @@
 //  Created by Zabir Raihan on 12/07/2024.
 //
 
-#if os(macOS)
 import KeyboardShortcuts
 import SwiftUI
 import SwiftData
@@ -67,4 +66,3 @@ struct QuickPanelSettings: View {
 #Preview {
     QuickPanelSettings(providerDefaults: .mockProviderDefaults)
 }
-#endif

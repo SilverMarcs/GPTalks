@@ -30,7 +30,7 @@ struct DataFilesView: View {
     
     @ViewBuilder
     private func fileItemView(for typedData: TypedData) -> some View {
-        ZStack(alignment: .topTrailing) {
+        ZStack(alignment: .topLeading) {
             fileView(for: typedData)
             
             if let onDelete {
@@ -45,8 +45,6 @@ struct DataFilesView: View {
                 }
                 .buttonStyle(HoverScaleButtonStyle())
                 .shadow(radius: 5)
-//                .padding(.top, 5)
-//                .padding(.trailing, 5)
             }
         }
     }
