@@ -77,7 +77,7 @@ struct ChatDetail: View {
             #else
             scrollToBottom(proxy: proxy, delay: 0.3)
             #endif
-            scrollToBottom(proxy: proxy, delay: 0.3)
+//            scrollToBottom(proxy: proxy, delay: 0.3)
         }
     }
     

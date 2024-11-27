@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ChatContentView: View {
     @Environment(\.undoManager) var undoManager
@@ -21,8 +22,13 @@ struct ChatContentView: View {
         @Bindable var chatVM = chatVM
         
         NavigationSplitView {
-            ChatList(status: chatVM.statusFilter, searchText: chatVM.searchText, searchTokens: chatVM.serchTokens)
-                .navigationSplitViewColumnWidth(min: 270, ideal: 300, max: 400)
+            if !chatVM.searchText.isEmpty && chatVM.searchTokens.contains(.messages) {
+                MessageGroupList(searchText: chatVM.searchText)
+                    .navigationSplitViewColumnWidth(min: 270, ideal: 300, max: 400)
+            } else {
+                ChatList(status: chatVM.statusFilter, searchText: chatVM.searchText, searchTokens: chatVM.searchTokens)
+                    .navigationSplitViewColumnWidth(min: 270, ideal: 300, max: 400)
+            }
         } detail: {
             if let chat = chatVM.activeChat {
                 ChatDetail(chat: chat)
@@ -39,7 +45,7 @@ struct ChatContentView: View {
         .sheet(isPresented: .constant(!config.hasCompletedOnboarding)) {
             OnboardingView()
         }
-        .searchable(text: $chatVM.localSearchText, tokens: $chatVM.serchTokens, placement: searchPlacement) { token in
+        .searchable(text: $chatVM.localSearchText, tokens: $chatVM.searchTokens, placement: searchPlacement) { token in
             Text(token.name)
         }
         .searchSuggestions {
@@ -50,6 +56,9 @@ struct ChatContentView: View {
         }
         .searchFocused($isSearchFieldFocused, equals: .searchBox)
         .onSubmit(of: .search) {
+            if chatVM.searchTokens.isEmpty {
+                chatVM.searchTokens = [.title]
+            }
             chatVM.searchText = chatVM.localSearchText
         }
         .onChange(of: chatVM.localSearchText) {

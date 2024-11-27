@@ -155,6 +155,6 @@ struct StreamHandler {
     }
 
     private func scrollDown() {
-        Scroller.scrollToBottom()
+        chat.scrollDown()
     }
 }

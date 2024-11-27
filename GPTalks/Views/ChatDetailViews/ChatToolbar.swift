@@ -19,13 +19,6 @@ struct ChatToolbar: ToolbarContent {
     
     @FocusState private var isFocused: FocusedField?
     
-    private var matchingMessages: [MessageGroup] {
-        guard !chatVM.searchText.isEmpty else { return [] }
-        return chat.currentThread.enumerated().compactMap { index, message in
-            message.content.localizedCaseInsensitiveContains(chatVM.searchText) ? message : nil
-        }
-    }
-    
     var body: some ToolbarContent {
         ToolbarItem(placement: horizontalSizeClass == .compact ? .primaryAction : .navigation) {
             Button(action: toggleInspector) {
@@ -40,27 +33,27 @@ struct ChatToolbar: ToolbarContent {
         }
         
         #if os(macOS)
-        if !matchingMessages.isEmpty {
-            ToolbarItem {
-                Text("\(currentSearchIndex + 1)/\(matchingMessages.count)")
-                    .foregroundStyle(.secondary)
-                    .monospacedDigit()
-            }
-            
-            ToolbarItem {
-                ControlGroup {
-                    Button(action: previousMatch) {
-                        Label("Previous match", systemImage: "chevron.left")
-                    }
-                    .disabled(currentSearchIndex <= 0)
-
-                    Button(action: nextMatch) {
-                        Label("Next match", systemImage: "chevron.right")
-                    }
-                    .disabled(currentSearchIndex >= matchingMessages.count - 1)
-                }
-            }
-        }
+//        if !matchingMessages.isEmpty {
+//            ToolbarItem {
+//                Text("\(currentSearchIndex + 1)/\(matchingMessages.count)")
+//                    .foregroundStyle(.secondary)
+//                    .monospacedDigit()
+//            }
+//            
+//            ToolbarItem {
+//                ControlGroup {
+//                    Button(action: previousMatch) {
+//                        Label("Previous match", systemImage: "chevron.left")
+//                    }
+//                    .disabled(currentSearchIndex <= 0)
+//
+//                    Button(action: nextMatch) {
+//                        Label("Next match", systemImage: "chevron.right")
+//                    }
+//                    .disabled(currentSearchIndex >= matchingMessages.count - 1)
+//                }
+//            }
+//        }
 
         ToolbarItem(placement: .primaryAction) {
             Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
@@ -128,23 +121,30 @@ struct ChatToolbar: ToolbarContent {
         showingInspector.toggle()
     }
     
-    private func nextMatch() {
-        guard currentSearchIndex < matchingMessages.count - 1 else { return }
-        currentSearchIndex += 1
-        scrollToCurrentMatch()
-    }
-    
-    private func previousMatch() {
-        guard currentSearchIndex > 0 else { return }
-        currentSearchIndex -= 1
-        scrollToCurrentMatch()
-    }
-    
-    private func scrollToCurrentMatch() {
-        guard currentSearchIndex >= 0 && currentSearchIndex < matchingMessages.count else { return }
-        let message = matchingMessages[currentSearchIndex]
-        AppConfig.shared.proxy?.scrollTo(message, anchor: .top)
-    }
+//    private var matchingMessages: [MessageGroup] {
+//        guard !chatVM.searchText.isEmpty else { return [] }
+//        return chat.currentThread.enumerated().compactMap { index, message in
+//            message.content.localizedCaseInsensitiveContains(chatVM.searchText) ? message : nil
+//        }
+//    }
+//    
+//    private func nextMatch() {
+//        guard currentSearchIndex < matchingMessages.count - 1 else { return }
+//        currentSearchIndex += 1
+//        scrollToCurrentMatch()
+//    }
+//    
+//    private func previousMatch() {
+//        guard currentSearchIndex > 0 else { return }
+//        currentSearchIndex -= 1
+//        scrollToCurrentMatch()
+//    }
+//    
+//    private func scrollToCurrentMatch() {
+//        guard currentSearchIndex >= 0 && currentSearchIndex < matchingMessages.count else { return }
+//        let message = matchingMessages[currentSearchIndex]
+//        Scroller.scroll(to: .top, of: message)
+//    }
 }
 
 #Preview {

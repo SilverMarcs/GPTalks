@@ -15,8 +15,13 @@ import SwiftUI
     var statusFilter: ChatStatus = .normal
     
     public var activeChat: Chat? {
-        guard selections.count == 1 else { return nil }
-        return selections.first
+        get {
+            guard selections.count == 1 else { return nil }
+            return selections.first
+        }
+        set {
+            selections = newValue.map { [$0] } ?? []
+        }
     }
     
     @MainActor
@@ -76,13 +81,16 @@ import SwiftUI
     // MARK: - Search
     var searchText: String = ""
     var localSearchText: String = ""
-    var serchTokens = [ChatSearchToken]()
+    var searchTokens = [ChatSearchToken]()
     
     var filteredTokens: [ChatSearchToken] {
-        let remainingTokens = ChatSearchToken.allCases.filter { !serchTokens.contains($0) }
-        return localSearchText.isEmpty
-            ? remainingTokens
-            : remainingTokens.filter { $0.name.lowercased().hasPrefix(localSearchText.lowercased()) }
+        if searchTokens.isEmpty {
+            return localSearchText.isEmpty
+                ? ChatSearchToken.allCases
+                : ChatSearchToken.allCases.filter { $0.name.lowercased().hasPrefix(localSearchText.lowercased()) }
+        } else {
+            return [] // Return an empty array if a token is already selected
+        }
     }
     
     // MARK: - Quick Panel

@@ -14,7 +14,7 @@ enum ChatSearchToken: String, Identifiable, Hashable, CaseIterable {
     
     var name: String {
         switch self {
-        case .title: return "Chat Titles"
+        case .title: return "Titles"
         case .messages: return "Messages"
         }
     }

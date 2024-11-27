@@ -15,10 +15,10 @@ final class MessageGroup: Hashable, Identifiable {
     
     var chat: Chat?
     
-    @Relationship(deleteRule: .nullify)
+    @Relationship(deleteRule: .cascade)
     var rootMessage: Message?
     
-    @Relationship(deleteRule: .nullify)
+    @Relationship(deleteRule: .cascade)
     var activeMessage: Message
     
     @Relationship(deleteRule: .cascade)
