@@ -15,7 +15,6 @@ struct ChatContentView: View {
     
     @ObservedObject var config = AppConfig.shared
     
-    @State private var localSearchText = ""
     @FocusState private var isSearchFieldFocused: FocusedField?
     
     var body: some View {
@@ -40,21 +39,21 @@ struct ChatContentView: View {
         .sheet(isPresented: .constant(!config.hasCompletedOnboarding)) {
             OnboardingView()
         }
-        .searchable(text: $localSearchText, tokens: $chatVM.serchTokens, placement: searchPlacement) { token in
+        .searchable(text: $chatVM.localSearchText, tokens: $chatVM.serchTokens, placement: searchPlacement) { token in
             Text(token.name)
         }
         .searchSuggestions {
-            ForEach(filteredTokens) { suggestion in
+            ForEach(chatVM.filteredTokens) { suggestion in
                 Text("Matching: \(suggestion.name)")
                     .searchCompletion(suggestion)
             }
         }
         .searchFocused($isSearchFieldFocused, equals: .searchBox)
         .onSubmit(of: .search) {
-            chatVM.searchText = localSearchText
+            chatVM.searchText = chatVM.localSearchText
         }
-        .onChange(of: localSearchText) {
-            if localSearchText.isEmpty {
+        .onChange(of: chatVM.localSearchText) {
+            if chatVM.localSearchText.isEmpty {
                 chatVM.searchText = ""
             }
         }
@@ -63,16 +62,9 @@ struct ChatContentView: View {
                 Button("Search") {
                     isSearchFieldFocused = .searchBox
                 }
-                .keyboardShortcut("f", modifiers: [.command, .shift])
+                .keyboardShortcut("f")
             }
         }
-    }
-    
-    var filteredTokens: [ChatSearchToken] {
-        let remainingTokens = ChatSearchToken.allCases.filter { !chatVM.serchTokens.contains($0) }
-        return localSearchText.isEmpty
-            ? remainingTokens
-            : remainingTokens.filter { $0.name.lowercased().hasPrefix(localSearchText.lowercased()) }
     }
     
     private var searchPlacement: SearchFieldPlacement {

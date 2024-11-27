@@ -75,7 +75,15 @@ import SwiftUI
     
     // MARK: - Search
     var searchText: String = ""
+    var localSearchText: String = ""
     var serchTokens = [ChatSearchToken]()
+    
+    var filteredTokens: [ChatSearchToken] {
+        let remainingTokens = ChatSearchToken.allCases.filter { !serchTokens.contains($0) }
+        return localSearchText.isEmpty
+            ? remainingTokens
+            : remainingTokens.filter { $0.name.lowercased().hasPrefix(localSearchText.lowercased()) }
+    }
     
     // MARK: - Quick Panel
     var isQuickPanelPresented: Bool = false
