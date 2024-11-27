@@ -8,74 +8,72 @@
 import SwiftUI
 
 struct AssistantMessageAux: View {
-    @Environment(ChatVM.self) private var chatVM
+    @ObservedObject var config = AppConfig.shared
+    
     var message: Message
     var group: MessageGroup
     var showMenu: Bool = true
     
-    @ObservedObject var config = AppConfig.shared
-    
     @State var height: CGFloat = 0
-//    @State private var isHovering: Bool = false
+    @State private var showingTextSelection = false
     
     var body: some View {
-        HStack(alignment: .top, spacing: spacing) {
-            Image(message.provider?.type.imageName ?? "brain.SFSymbol")
-                .resizable()
-                .frame(width: 17, height: 17)
-                .foregroundStyle(Color(hex: message.provider?.color ?? "#00947A").gradient)
-                .transaction { $0.animation = nil }
-            
-            VStack(alignment: .leading, spacing: 7) {
+        VStack(alignment: .leading, spacing: 7) {
+            Label {
                 Text(message.model?.name ?? "Assistant")
                     .font(.subheadline)
                     .bold()
                     .foregroundStyle(.secondary)
-                    #if os(macOS)
-                    .padding(.top, 2)
-                    #endif
                     .transaction { $0.animation = nil }
-                
-                MarkdownView(content: message.content, calculatedHeight: $height)
+            } icon: {
+                Image(message.provider?.type.imageName ?? "brain.SFSymbol")
+                    .imageScale(.large)
+                    .foregroundStyle(Color(hex: message.provider?.color ?? "#00947A").gradient)
                     .transaction { $0.animation = nil }
-                    .if(config.markdownProvider == .webview) { view in
-                        view
-                            .frame(height: message.height, alignment: .top)
-                            .onChange(of: height) {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // without the delay window resizing adds extra space below
-                                    if height > 0   {
-                                        message.height = height
-                                    }
+            }
+            .padding(.leading, -23)
+            
+            MarkdownView(content: message.content, calculatedHeight: $height)
+                .transaction { $0.animation = nil }
+                .if(config.markdownProvider == .webview) { view in
+                    view
+                        .frame(height: message.height, alignment: .top)
+                        .onChange(of: height) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                // without the delay window resizing adds extra space below
+                                if height > 0   {
+                                    message.height = height
                                 }
                             }
-                    }
-                
-                if !message.dataFiles.isEmpty {
-                    DataFilesView(dataFiles: message.dataFiles, edge: .leading)
+                        }
                 }
-                
-                if message.isReplying {
-                    ProgressView()
-                        .controlSize(.small)
-                }
-                
-                if !showMenu {
-                    secondaryNavigateButtons
-                }
+            
+            if !message.dataFiles.isEmpty {
+                DataFilesView(dataFiles: message.dataFiles, edge: .leading)
             }
+            
+            if message.isReplying {
+                ProgressView()
+                    .controlSize(.small)
+            }
+            
+            if !showMenu {
+                secondaryNavigateButtons
+            }
+            
+            Spacer()
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.leading, 27)
         .padding(.trailing, 30)
         .contextMenu {
-            MessageMenu(message: group, isExpanded: .constant(true))
+            MessageMenu(message: group, isExpanded: .constant(true)) {
+                showingTextSelection.toggle()
+            }
         }
-    }
-    
-    var spacing: CGFloat {
-        #if os(macOS)
-        10
-        #else
-        7
-        #endif
+        .sheet(isPresented: $showingTextSelection) {
+            TextSelectionView(content: message.content)
+        }
     }
     
     @ViewBuilder
@@ -102,3 +100,10 @@ struct AssistantMessageAux: View {
         }
     }
 }
+
+#Preview {
+    AssistantMessageAux(message: .mockAssistantMessage, group: .mockAssistantGroup)
+        .environment(ChatVM())
+        .frame(width: 600, height: 300)
+}
+

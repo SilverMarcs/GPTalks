@@ -133,7 +133,7 @@ struct StreamHandler {
 
         let newAssistant: Message
         if toolDatas.isEmpty {
-            newAssistant = Message(role: .assistant, provider: chat.config.provider, model: chat.config.provider.chatModel)
+            newAssistant = Message(role: .assistant, provider: chat.config.provider, model: chat.config.model)
             let newAssistantGroup = MessageGroup(message: newAssistant)
             newAssistantGroup.chat = chat
             

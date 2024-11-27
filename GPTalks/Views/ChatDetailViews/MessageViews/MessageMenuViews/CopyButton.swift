@@ -19,7 +19,7 @@ struct CopyButton: View {
                 isCopied = false
             }
         } label: {
-            Label("Copy including file contents", systemImage: "doc.on.clipboard")
+            Label("Copy", systemImage: "doc.on.clipboard")
         }
         
         if !message.dataFiles.isEmpty {

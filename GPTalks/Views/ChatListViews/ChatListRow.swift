@@ -1,5 +1,5 @@
 //
-//  ChatRow.swift
+//  ChatListRow.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 04/07/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ChatRow: View {
+struct ChatListRow: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.openWindow) var openWindow
     @Environment(ChatVM.self) private var chatVM
@@ -59,6 +59,7 @@ struct ChatRow: View {
                 .fontWidth(.compressed)
         }
         .padding(padding)
+//        defaultMinListRowHeight()
     }
     
     var imageSize: CGFloat {
@@ -151,7 +152,7 @@ struct ChatRow: View {
 
 #Preview {
     List {
-        ChatRow(chat: .mockChat)
+        ChatListRow(chat: .mockChat)
             .environment(ChatVM())
     }
     .frame(width: 220)

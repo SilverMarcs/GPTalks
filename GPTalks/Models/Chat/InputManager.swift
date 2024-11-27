@@ -46,7 +46,7 @@ import PhotosUI
     }
     
     func setupEditing(message: MessageGroup) {
-        Scroller.scroll(to: .top, of: message)
+        Scroller.scroll(to: .top, of: message, animated: false)
         
         withAnimation {
             state = .editing

@@ -12,68 +12,66 @@ struct ToolCallView: View {
     @State private var showArguments = false
     
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "hammer")
-                .resizable()
-                .fontWeight(.semibold)
-                .frame(width: 18, height: 18)
-                .foregroundStyle(.teal)
-                .opacity(0.9)
-                .transaction { $0.animation = nil }
-            
-            VStack(alignment: .leading, spacing: 5) {
+        VStack(alignment: .leading, spacing: 5) {
+            Label {
                 Button {
                     withAnimation {
                         showArguments.toggle()
                     }
                 } label: {
-                    HStack {
-                        Text("^[\(message.toolCalls.count) Tool](inflect: true)")
+                    Text("^[\(message.toolCalls.count) Tool](inflect: true)")
+                        .foregroundStyle(.secondary)
+                    
+                    if message.isReplying {
+                        ProgressView()
+                            .controlSize(.mini)
+                    } else {
+                        Image(systemName: showArguments ? "chevron.up" : "chevron.down")
                             .foregroundStyle(.secondary)
-                        
-                        if message.isReplying {
-                            ProgressView()
-                                .controlSize(.mini)
-                        } else {
-                            Image(systemName: showArguments ? "chevron.up" : "chevron.down")
-                                .foregroundStyle(.secondary)
-                        }
                     }
-                    .contentShape(Rectangle())
                 }
                 .transaction { $0.animation = nil }
                 .buttonStyle(.plain)
+            } icon: {
+                Image(systemName: "hammer")
+                    .imageScale(.medium)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.teal)
+                    .opacity(0.9)
+                    .transaction { $0.animation = nil }
+            }
+            .padding(.leading, -23)
+            
+            if !message.content.isEmpty {
+                Text(message.content)
+                    .lineSpacing(3)
+                    .textSelection(.enabled)
+                    .transaction { $0.animation = nil }
+            }
                 
-                if !message.content.isEmpty {
-                    Text(message.content)
-                        .lineSpacing(3)
-                        .textSelection(.enabled)
-                        .transaction { $0.animation = nil }
-                }
+            if showArguments {
+                HStack(alignment: .center) {
+                    Rectangle()
+                        .fill(.tertiary)
+                        .frame(width: 2)
+                        .padding(.trailing, 8)
                     
-                if showArguments {
-                    HStack(alignment: .center) {
-                        Rectangle()
-                            .fill(.tertiary)
-                            .frame(width: 2)
-                            .padding(.trailing, 8)
-                        
-                        VStack(alignment: .leading, spacing: 10) {
-                            ForEach(message.toolCalls) { toolCall in
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(toolCall.tool.displayName)
-                                    Text(toolCall.arguments)
-                                        .foregroundStyle(.secondary)
-                                        .textSelection(.enabled)
-                                        .monospaced()
-                                }
+                    VStack(alignment: .leading, spacing: 10) {
+                        ForEach(message.toolCalls) { toolCall in
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(toolCall.tool.displayName)
+                                Text(toolCall.arguments)
+                                    .foregroundStyle(.secondary)
+                                    .textSelection(.enabled)
+                                    .monospaced()
                             }
                         }
                     }
-                    .padding(.leading, 4)
                 }
+                .padding(.leading, 4)
             }
         }
+        .padding(.leading, 27)
     }
 }
 

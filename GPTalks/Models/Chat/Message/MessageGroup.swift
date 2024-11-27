@@ -173,6 +173,7 @@ final class MessageGroup: Hashable, Identifiable {
         if isSplitView {
             secondaryMessageIndex = 0
         }
+        Scroller.scroll(to: .top, of: self)
     }
     
     func nextSecondaryMessage() {

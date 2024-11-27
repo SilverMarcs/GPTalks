@@ -13,7 +13,7 @@ struct UserMessage: View {
     @ObservedObject var config = AppConfig.shared
     
     var message: MessageGroup
-//    @State var isHovering: Bool = false
+
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
     
@@ -62,10 +62,6 @@ struct UserMessage: View {
         #else
         60
         #endif
-    }
-    
-    private var maxImageSize: CGFloat {
-        300
     }
 }
 

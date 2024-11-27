@@ -103,6 +103,7 @@ struct ChatDetail: View {
                 ForEach(messagesToShow, id: \.self) { message in
                     MessageView(message: message)
                 }
+                .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 0))
                 .listRowSeparator(.hidden)
                 
                 ErrorMessageView(message: $chat.errorMessage)

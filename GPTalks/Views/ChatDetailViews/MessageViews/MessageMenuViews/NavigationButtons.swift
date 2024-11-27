@@ -16,7 +16,7 @@ struct NavigationButtons: View {
                 Button {
                     message.toggleSplitView()
                 } label: {
-                    Label(message.isSplitView ? "Exit Splitview" : "Splitview", systemImage: message.isSplitView ? "rectangle.split.2x1.slash" : "square.split.2x1")
+                    Label(message.isSplitView ? "Exit SplitView" : "SplitView", systemImage: message.isSplitView ? "rectangle.split.2x1.slash" : "square.split.2x1")
                 }
             }
             

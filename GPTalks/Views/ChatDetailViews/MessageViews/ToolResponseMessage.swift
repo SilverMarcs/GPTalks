@@ -15,7 +15,7 @@ struct ToolResponseMessage: View {
         HStack(alignment: .center, spacing: spacing) {
             Rectangle()
                 .opacity(0)
-                .frame(width: size, height: size)
+                .frame(width: 18, height: 18)
                 
             if !message.content.isEmpty {
                 Text(message.content)
@@ -30,6 +30,7 @@ struct ToolResponseMessage: View {
             
             Spacer()
         }
+        .padding(.top, -10)
     }
     
     func popoverContent(content: String) -> some View {
@@ -70,10 +71,6 @@ struct ToolResponseMessage: View {
             .groupBoxStyle(PlatformGroupBoxStyle())
         }
         .buttonStyle(.plain)
-    }
-    
-    var size: CGFloat {
-        18
     }
     
     var spacing: CGFloat {

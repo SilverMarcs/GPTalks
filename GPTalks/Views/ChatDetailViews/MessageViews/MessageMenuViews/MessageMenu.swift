@@ -13,21 +13,6 @@ struct MessageMenu: View {
     var toggleTextSelection: (() -> Void)? = nil
 
     var body: some View {
-        buttons
-//        #if os(macOS)
-//            HStack {
-//                buttons
-//                    .buttonStyle(HoverScaleButtonStyle())
-//            }
-//            .transaction { $0.animation = nil }
-//            .frame(height: 20)
-//        #else
-//            buttons
-//        #endif
-    }
-
-    @ViewBuilder
-    var buttons: some View {
         ExpandButton(isExpanded: $isExpanded, message: message)
         
         Section {

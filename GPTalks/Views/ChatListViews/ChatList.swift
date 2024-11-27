@@ -45,7 +45,7 @@ struct ChatList: View {
                 ContentUnavailableView.search
             } else {
                 ForEach(chats) { chat in
-                    ChatRow(chat: chat)
+                    ChatListRow(chat: chat)
                         .tag(chat)
                         .deleteDisabled(chat.status == .starred)
                         #if os(macOS)

@@ -14,31 +14,21 @@ struct AssistantMessage: View {
     
     var body: some View {
         #if os(macOS)
-        HStack {
-            AssistantMessageAux(message: message.activeMessage, group: message)
-            
-            if message.isSplitView {
-                Divider()
+        if message.isSplitView {
+            HStack {
+                AssistantMessageAux(message: message.activeMessage, group: message)
                 
+                Divider()
+                    
                 AssistantMessageAux(message: message.secondaryMessages[message.secondaryMessageIndex],
-                                    group: message, showMenu: false)
+                                        group: message, showMenu: false)
             }
+        } else {
+            AssistantMessageAux(message: message.activeMessage, group: message)
         }
         #else
         AssistantMessageAux(message: message.activeMessage, group: message)
-            .contextMenu {
-                if !message.isReplying {
-                    MessageMenu(message: self.message, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
-                }
-            }
-            .sheet(isPresented: $showingTextSelection) {
-                TextSelectionView(content: message.content)
-            }
         #endif
-    }
-    
-    func toggleTextSelection() {
-        showingTextSelection.toggle()
     }
 }
 

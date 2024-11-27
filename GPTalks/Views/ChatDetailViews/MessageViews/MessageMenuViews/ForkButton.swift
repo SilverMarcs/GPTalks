@@ -28,9 +28,9 @@ struct ForkButton: View {
                     }
                 }
             } label: {
-                Label("Fork Session", systemImage: "arrow.branch")
+                Label("Fork Chat", systemImage: "arrow.branch")
             }
-            .help("Fork Session")
+            .help("Fork Chat")
         }
     }
 }
