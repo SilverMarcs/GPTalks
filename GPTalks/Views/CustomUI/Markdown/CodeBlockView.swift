@@ -18,16 +18,16 @@ struct CodeBlockView: View {
     @State var clicked = false
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
+//        ZStack(alignment: .bottomTrailing) {
             CodeText(code)
                 .codeTextColors(.theme(config.codeBlockTheme.toHighlightTheme()))
                 .highlightedString(chatVM.searchText)
                 .font(.system(size: AppConfig.shared.fontSize - 1, design: .monospaced))
                 .padding()
 
-            copyButton
-                .padding(5)
-        }
+//            copyButton
+//                .padding(5)
+//        }
         .roundedRectangleOverlay(radius: 6)
         .background(.background.quinary.opacity(0.1), in: RoundedRectangle(cornerRadius: 6))
     }
@@ -45,10 +45,11 @@ struct CodeBlockView: View {
             }
         } label: {
             Image(systemName: clicked ? "checkmark" : "square.on.square")
-                .font(.system(size: 12).bold())
-            .frame(width: 12, height: 12)
-            .padding(7)
-            .contentShape(Rectangle())
+                .imageScale(.medium)
+                .bold()
+                .frame(width: 12, height: 12)
+                .padding(7)
+                .contentShape(Rectangle())
         }
         .contentTransition(.symbolEffect(.replace))
         .buttonStyle(.borderless)

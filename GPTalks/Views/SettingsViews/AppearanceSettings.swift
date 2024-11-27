@@ -41,7 +41,7 @@ struct AppearanceSettings: View {
                     }
                 } label: {
                     Text("Markdown Provider")
-                    Text("Native uses less memeory but webview performs better")
+                    Text("Native uses less memeory but may be inaccurate")
                 }
                 #if os(macOS)
                 .pickerStyle(.radioGroup)

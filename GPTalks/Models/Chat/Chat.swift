@@ -214,6 +214,9 @@ final class Chat {
             contextResetPoint = nil
         } else {
             contextResetPoint = message
+            if let lastMessage = currentThread.last, lastMessage == message {
+                scrollDown()
+            }
         }
     }
 

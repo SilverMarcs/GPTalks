@@ -46,6 +46,7 @@ struct ChatDetail: View {
             .pasteHandler(chat: chat)
             .navigationSubtitle("\(chat.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
+                
                 config.hasUserScrolled = true
             }
             #else
