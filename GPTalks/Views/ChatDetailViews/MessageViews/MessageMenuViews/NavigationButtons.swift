@@ -11,7 +11,7 @@ struct NavigationButtons: View {
     var message: MessageGroup
     
     var body: some View {
-        if message.allMessages.count > 1 && message.role == .assistant {
+        if message.allMessages.count > 1 {
             if message.allMessages.count >= 2 {
                 Button {
                     message.toggleSplitView()

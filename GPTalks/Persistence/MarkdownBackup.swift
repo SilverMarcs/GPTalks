@@ -31,17 +31,8 @@ struct MarkdownBackup: FileDocument {
         for messageGroup in chat.currentThread {
             let message = messageGroup.activeMessage
             content += "## \(message.role.rawValue.capitalized)\n"
+            content += "\(message.dataFiles.map { $0.formattedTextContent }.joined(separator: "\n"))\n"
             content += "\(message.content)\n\n"
-            
-            if !message.dataFiles.isEmpty {
-                content += "### Attached Files:\n"
-                for file in message.dataFiles {
-                    content += "- \(file.fileName) (\(file.fileType.description))\n"
-                }
-                content += "\n"
-            }
-            
-            content += "\n"
         }
         
         return content

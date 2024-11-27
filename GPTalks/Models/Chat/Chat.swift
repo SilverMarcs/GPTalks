@@ -103,28 +103,20 @@ final class Chat {
     func editMessage(_ message: Message) async {
         guard let userGroup = currentThread.first(where: { $0.activeMessage == message }) else { return }
         
-        // Check if we're editing a message before the context reset point
-        if let resetPoint = contextResetPoint,
-           let resetIndex = currentThread.firstIndex(of: resetPoint),
-           let editIndex = currentThread.firstIndex(of: userGroup),
-           editIndex <= resetIndex {
-            contextResetPoint = nil
-        }
+        unsetContextResetPointIfNeeded(for: userGroup)
         
         let newUserMessage = Message(role: .user, content: inputManager.prompt, provider: message.provider, model: message.model, dataFiles: inputManager.dataFiles)
         userGroup.addMessage(newUserMessage)
         
-        // Create a new assistant message group
         let newAssistantMessage = Message(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
         let newAssistantGroup = MessageGroup(message: newAssistantMessage)
         newAssistantGroup.chat = self
         
-        // Set the new assistant group as the next of the new user message
         newUserMessage.next = newAssistantGroup
          
-        // Process the new assistant message
         await processRequest(message: newAssistantMessage)
     }
+    
 
     @MainActor
     func sendInput() async {
@@ -158,35 +150,29 @@ final class Chat {
         inputManager.reset()
     }
 
-   @MainActor
-   func regenerate(message: MessageGroup) async {
-       guard let index = currentThread.firstIndex(where: { $0 == message }) else { return }
+    @MainActor
+    func regenerate(message: MessageGroup) async {
+        guard let index = currentThread.firstIndex(where: { $0 == message }) else { return }
        
-       // Check if we're regenerating a message before the context reset point
-       // TODO: convert unsetting reset point to a private func
-       if let resetPoint = contextResetPoint,
-          let resetIndex = currentThread.firstIndex(of: resetPoint),
-          index <= resetIndex {
-           contextResetPoint = nil
-       }
+        unsetContextResetPointIfNeeded(for: message)
        
-       if message.role == .assistant {
-           let newAssistantMessage = Message(role: .assistant)
-           message.addMessage(newAssistantMessage)
-           message.activeMessage.next = nil
+        if message.role == .assistant {
+            let newAssistantMessage = Message(role: .assistant)
+            message.addMessage(newAssistantMessage)
+            message.activeMessage.next = nil
            
-           await processRequest(message: newAssistantMessage)
-       } else if message.role == .user {
-           if index + 1 < currentThread.count {
-               let assistantGroup = currentThread[index + 1]
-               let newAssistantMessage = Message(role: .assistant)
-               assistantGroup.addMessage(newAssistantMessage)
-               assistantGroup.activeMessage.next = nil
+            await processRequest(message: newAssistantMessage)
+        } else if message.role == .user {
+            if index + 1 < currentThread.count {
+                let assistantGroup = currentThread[index + 1]
+                let newAssistantMessage = Message(role: .assistant)
+                assistantGroup.addMessage(newAssistantMessage)
+                assistantGroup.activeMessage.next = nil
                
-               await processRequest(message: newAssistantMessage)
-           }
-       }
-   }
+                await processRequest(message: newAssistantMessage)
+            }
+        }
+    }
     
     func stopStreaming() {
         AppConfig.shared.hasUserScrolled = false
@@ -205,11 +191,12 @@ final class Chat {
         scrollBottom()
         AppConfig.shared.hasUserScrolled = false
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
-            if let lastMessage = self.currentThread.last, lastMessage.content.isEmpty, lastMessage.role == .assistant {
-                self.deleteLastMessage()
-            }
-        }
+        // TODO: only delete last mesasage and not entire group if group has other messages
+//        DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
+//            if let lastMessage = self.currentThread.last, lastMessage.content.isEmpty, lastMessage.role == .assistant {
+//                self.deleteLastMessage()
+//            }
+//        }
     }
     
     func generateTitle(forced: Bool = false) async {
@@ -229,29 +216,40 @@ final class Chat {
         }
     }
 
+    private func unsetContextResetPointIfNeeded(for messageGroup: MessageGroup) {
+        guard let resetPoint = contextResetPoint,
+              let resetIndex = currentThread.firstIndex(of: resetPoint),
+              let messageIndex = currentThread.firstIndex(of: messageGroup),
+              messageIndex <= resetIndex else {
+            return
+        }
+        contextResetPoint = nil
+    }
     
     func deleteLastMessage() {
         guard let lastGroup = currentThread.last, !lastGroup.isReplying else { return }
         
+        if lastGroup == contextResetPoint {
+            contextResetPoint = nil
+        }
+        
         if currentThread.count == 1 {
-            // If this is the only message group, clear the root message
             rootMessage = nil
         } else {
-            // Find the second to last group and set its next to nil
             let secondToLastGroup = currentThread[currentThread.count - 2]
             secondToLastGroup.activeMessage.next = nil
         }
 
-        // Clear error message if we're deleting the last message
         errorMessage = ""
     }
     
     func deleteAllMessages() {
         rootMessage = nil
+        contextResetPoint = nil
         stopStreaming()
         errorMessage = ""
         totalTokens = 0
-
+        
     }
     
     func scrollBottom() {

@@ -5,8 +5,8 @@
 //  Created by Zabir Raihan on 22/11/2024.
 //
 
-import Foundation
 import SwiftData
+import SwiftUI
 
 @Model
 final class MessageGroup: Hashable, Identifiable {
@@ -129,21 +129,24 @@ final class MessageGroup: Hashable, Identifiable {
     }
     
     func goToPreviousMessage() {
-        // TODO: go to parent or next basd on role
         guard canGoToPrevious else { return }
         activeMessage = allMessages[currentMessageIndex - 1]
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//            AppConfig.shared.proxy?.scrollTo(self, anchor: .bottom)
-//        }
+        
+        scrollToActiveMessage()
     }
     
     func goToNextMessage() {
-        // TODO: go to parent or next basd on role
         guard canGoToNext else { return }
         activeMessage = allMessages[currentMessageIndex + 1]
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//            AppConfig.shared.proxy?.scrollTo(self, anchor: .bottom)
-//        }
+        
+        scrollToActiveMessage()
+    }
+    
+    private func scrollToActiveMessage() {
+        let anchor: UnitPoint = role == .assistant ? .bottom : .top
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            AppConfig.shared.proxy?.scrollTo(self, anchor: anchor) // TODO: central func instead of invoking appconfig everytime
+        }
     }
     
     func deleteActiveMessage() {
