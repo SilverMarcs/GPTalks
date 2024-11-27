@@ -101,40 +101,57 @@ struct StreamHandler {
 
     @MainActor
     private func handleToolCalls(_ toolCalls: [ChatToolCall]) async throws {
-        throw RuntimeError("ToolCalls not implemented")
-        
-        // DO NOT call this when assitant.toolCalls is already populated. this func does it for you
+        // DO NOT call this when assistant.toolCalls is already populated. this func does it for you
         assistant.isReplying = false
         assistant.toolCalls = toolCalls
         chat.scrollBottom()
 
         var toolDatas: [TypedData] = []
-        
+        var lastToolGroup: MessageGroup?
+
         for call in assistant.toolCalls {
             let toolResponse = ToolResponse(toolCallId: call.toolCallId, tool: call.tool)
             let tool = Message(toolResponse: toolResponse)
-//            chat.addMessage(tool, defensive: true)
-            
+            let toolGroup = MessageGroup(message: tool)
+            toolGroup.chat = chat
+
+            if let lastGroup = lastToolGroup {
+                lastGroup.activeMessage.next = toolGroup
+            } else {
+                assistant.next = toolGroup
+            }
+            lastToolGroup = toolGroup
+
             let toolData = try await call.tool.process(arguments: call.arguments)
             toolDatas.append(contentsOf: toolData.data)
             tool.toolResponse?.processedContent = toolData.string
             tool.toolResponse?.processedData = toolData.data // possibly never used
             tool.isReplying = false
-            
+
             chat.scrollBottom()
         }
-        
+
+        let newAssistant: Message
         if toolDatas.isEmpty {
-            let newAssistant = Message(role: .assistant)
-//            chat.addMessage(newAssistant, defensive: true)
+            newAssistant = Message(role: .assistant, provider: chat.config.provider, model: chat.config.provider.chatModel)
+            let newAssistantGroup = MessageGroup(message: newAssistant)
+            newAssistantGroup.chat = chat
+            
+            lastToolGroup?.activeMessage.next = newAssistantGroup
+            
             let streamer = StreamHandler(chat: chat, assistant: newAssistant)
             try await streamer.handleRequest()
         } else {
-            let newAssistant = Message(role: .assistant, provider: chat.config.provider, model: chat.config.provider.imageModel)
-            newAssistant.content = "Here are the imags I generated:"
+            newAssistant = Message(role: .assistant, provider: chat.config.provider, model: chat.config.provider.imageModel)
+            newAssistant.content = "Here are the images I generated:"
             newAssistant.dataFiles = toolDatas
             newAssistant.isReplying = false
-//            chat.messages.append(.init(message: newAssistant)) // only time we call this manually instead of addMessage func
+            
+            let newAssistantGroup = MessageGroup(message: newAssistant)
+            newAssistantGroup.chat = chat
+            
+            lastToolGroup?.activeMessage.next = newAssistantGroup
         }
     }
+
 }

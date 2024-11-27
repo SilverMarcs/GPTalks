@@ -25,19 +25,13 @@ final class Chat {
     @Relationship(deleteRule: .nullify)
     var contextResetPoint: MessageGroup?
     var adjustedContext: [Message] {
-        guard let resetPoint = contextResetPoint else {
+        guard let resetPoint = contextResetPoint,
+              let resetIndex = currentThread.firstIndex(of: resetPoint),
+              resetIndex + 1 < currentThread.count else {
             return currentThread.map { $0.activeMessage }
         }
 
-        var adjustedThread: [MessageGroup] = []
-        var currentGroup: MessageGroup? = resetPoint
-
-        while let group = currentGroup {
-            adjustedThread.append(group)
-            currentGroup = group.activeMessage.next
-        }
-
-        return adjustedThread.map { $0.activeMessage }
+        return currentThread[(resetIndex + 1)...].map { $0.activeMessage }
     }
 
     @Relationship(deleteRule: .cascade)
@@ -105,10 +99,17 @@ final class Chat {
         }
     }
 
-
-     @MainActor
-     func editMessage(_ message: Message) async {
+    @MainActor
+    func editMessage(_ message: Message) async {
         guard let userGroup = currentThread.first(where: { $0.activeMessage == message }) else { return }
+        
+        // Check if we're editing a message before the context reset point
+        if let resetPoint = contextResetPoint,
+           let resetIndex = currentThread.firstIndex(of: resetPoint),
+           let editIndex = currentThread.firstIndex(of: userGroup),
+           editIndex <= resetIndex {
+            contextResetPoint = nil
+        }
         
         let newUserMessage = Message(role: .user, content: inputManager.prompt, provider: message.provider, model: message.model, dataFiles: inputManager.dataFiles)
         userGroup.addMessage(newUserMessage)
@@ -160,6 +161,14 @@ final class Chat {
    @MainActor
    func regenerate(message: MessageGroup) async {
        guard let index = currentThread.firstIndex(where: { $0 == message }) else { return }
+       
+       // Check if we're regenerating a message before the context reset point
+       // TODO: convert unsetting reset point to a private func
+       if let resetPoint = contextResetPoint,
+          let resetIndex = currentThread.firstIndex(of: resetPoint),
+          index <= resetIndex {
+           contextResetPoint = nil
+       }
        
        if message.role == .assistant {
            let newAssistantMessage = Message(role: .assistant)
