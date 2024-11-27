@@ -16,7 +16,7 @@ struct AssistantMessageAux: View {
     @ObservedObject var config = AppConfig.shared
     
     @State var height: CGFloat = 0
-    @State private var isHovering: Bool = false
+//    @State private var isHovering: Bool = false
     
     var body: some View {
         HStack(alignment: .top, spacing: spacing) {
@@ -59,21 +59,15 @@ struct AssistantMessageAux: View {
                         .controlSize(.small)
                 }
                 
-                #if os(macOS)
-                if showMenu {
-                    messageMenuView
-                } else {
+                if !showMenu {
                     secondaryNavigateButtons
                 }
-                Spacer()
-                #endif
             }
         }
-        #if os(macOS)
-        .onHover { isHovering = $0 }
-        #endif
-        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.trailing, 30)
+        .contextMenu {
+            MessageMenu(message: group, isExpanded: .constant(true))
+        }
     }
     
     var spacing: CGFloat {
@@ -82,12 +76,6 @@ struct AssistantMessageAux: View {
         #else
         7
         #endif
-    }
-    
-    var messageMenuView: some View {
-        MessageMenu(message: group, isExpanded: .constant(true))
-            .symbolEffect(.appear, isActive: !isHovering)
-            .opacity(message.isReplying ? 0 : 1)
     }
     
     @ViewBuilder
@@ -111,7 +99,6 @@ struct AssistantMessageAux: View {
                 .opacity(!group.canGoToNextSecondary ? 0.5 : 1)
             }
             .buttonStyle(HoverScaleButtonStyle())
-            .symbolEffect(.appear, isActive: !isHovering)
         }
     }
 }

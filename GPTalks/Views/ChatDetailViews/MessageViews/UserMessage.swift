@@ -13,7 +13,7 @@ struct UserMessage: View {
     @ObservedObject var config = AppConfig.shared
     
     var message: MessageGroup
-    @State var isHovering: Bool = false
+//    @State var isHovering: Bool = false
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
     
@@ -43,32 +43,17 @@ struct UserMessage: View {
                         .clear
                     )
             )
-            
-            #if os(macOS)
-            contextMenu
-            #endif
         }
         .padding(.leading, leadingPadding)
-        #if !os(macOS)
+        .frame(maxWidth: .infinity, alignment: .trailing)
         .contextMenu {
-            MessageMenu(message: message, isExpanded: $isExpanded, toggleTextSelection: toggleTextSelection)
+            MessageMenu(message: message, isExpanded: $isExpanded) {
+                showingTextSelection.toggle()
+            }
         }
         .sheet(isPresented: $showingTextSelection) {
             TextSelectionView(content: message.content)
         }
-        #else
-        .onHover { isHovering = $0 }
-        #endif
-        .frame(maxWidth: .infinity, alignment: .trailing)
-    }
-    
-    var contextMenu: some View {
-        MessageMenu(message: message, isExpanded: $isExpanded)
-            .symbolEffect(.appear, isActive: !isHovering)
-    }
-    
-    func toggleTextSelection() {
-        showingTextSelection.toggle()
     }
     
     var leadingPadding: CGFloat {

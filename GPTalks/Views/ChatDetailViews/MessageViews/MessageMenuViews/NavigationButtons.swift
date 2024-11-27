@@ -16,7 +16,7 @@ struct NavigationButtons: View {
                 Button {
                     message.toggleSplitView()
                 } label: {
-                    Label("Split View", systemImage: message.isSplitView ? "rectangle.split.2x1.slash" : "square.split.2x1")
+                    Label(message.isSplitView ? "Exit Splitview" : "Splitview", systemImage: message.isSplitView ? "rectangle.split.2x1.slash" : "square.split.2x1")
                 }
             }
             
@@ -27,7 +27,7 @@ struct NavigationButtons: View {
                     Label("Previous", systemImage: "chevron.left")
                 }
                 .disabled(!message.canGoToPrevious)
-                .opacity(message.canGoToPrevious ? 1 : 0.5)
+//                .opacity(message.canGoToPrevious ? 1 : 0.5)
                 
                 Button {
                     message.goToNextMessage()
@@ -35,7 +35,7 @@ struct NavigationButtons: View {
                     Label("Next", systemImage: "chevron.right")
                 }
                 .disabled(!message.canGoToNext)
-                .opacity(message.canGoToNext ? 1 : 0.5)
+//                .opacity(message.canGoToNext ? 1 : 0.5)
             }
         }
     }

@@ -12,7 +12,17 @@ struct CopyButton: View {
     @State private var isCopied = false
     
     var body: some View {
-        Menu {
+        Button {
+            message.content.copyToPasteboard()
+            isCopied = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                isCopied = false
+            }
+        } label: {
+            Label("Copy including file contents", systemImage: "doc.on.clipboard")
+        }
+        
+        if !message.dataFiles.isEmpty {
             Button {
                 var finalString = ""
                 
@@ -23,20 +33,8 @@ struct CopyButton: View {
                 finalString += message.content
                 finalString.copyToPasteboard()
             } label: {
-                Label("Copy including file contents", systemImage: "doc.on.clipboard")
-            }
-            
-        } label: {
-            Label(isCopied ? "Copied" : "Copy Text",
-                  systemImage: isCopied ? "checkmark" : "paperclip")
-        } primaryAction: {
-            message.content.copyToPasteboard()
-            isCopied = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                isCopied = false
+                Label("Copy including file contents", systemImage: "doc.richtext")
             }
         }
-        .contentTransition(.symbolEffect(.replace))
-        .menuStyle(HoverScaleMenuStyle())
     }
 }

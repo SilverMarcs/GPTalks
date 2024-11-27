@@ -23,7 +23,7 @@ struct ChatInputMenu: View {
                 #if !os(macOS)
                 Section {
                     Button {
-                        guard !chat.isReplying, let lastMessage = chat.messages.last else { return }
+                        guard !chat.isReplying, let lastMessage = chat.currentThread.last else { return }
                         
                         chat.resetContext(at: lastMessage)
                     } label: {
