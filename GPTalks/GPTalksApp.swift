@@ -19,12 +19,22 @@ struct GPTalksApp: App {
     #endif
     
     var body: some Scene {
-        WindowScenes()
-            .commands { MenuCommands() }
-            .environment(chatVM)
-            .environment(imageVM)
-            .environment(settingsVM)
-            .modelContainer(DatabaseService.shared.container)
+        Group {
+            #if os(macOS)
+            ChatWindow()
+            ImageWindow()
+            SettingsWindow()
+            AboutWindow()
+            HelpWindow()
+            #else
+            IOSWindow()
+            #endif
+        }
+        .commands { MenuCommands() }
+        .environment(chatVM)
+        .environment(imageVM)
+        .environment(settingsVM)
+        .modelContainer(DatabaseService.shared.container)
     }
     
     init() {

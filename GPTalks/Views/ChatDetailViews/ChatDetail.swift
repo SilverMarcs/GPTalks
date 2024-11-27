@@ -10,7 +10,6 @@ import TipKit
 
 struct ChatDetail: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Environment(\.isQuick) var isQuick
     @Environment(\.modelContext) var modelContext
     @Environment(ChatVM.self) private var chatVM
     @ObservedObject var config: AppConfig = AppConfig.shared
@@ -23,7 +22,7 @@ struct ChatDetail: View {
         ScrollViewReader { proxy in
             content
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                if !isQuick {
+                if chat.status != .quick {
                     ChatInputView(chat: chat)
                 }
             }

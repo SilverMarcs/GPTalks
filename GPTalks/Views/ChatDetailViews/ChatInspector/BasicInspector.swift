@@ -6,15 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct BasicInspector: View {
-    @Environment(\.providers) var providers
     @Environment(\.dismiss) var dismiss
     
     @Bindable var chat: Chat
     
     @State var isGeneratingTtile: Bool = false
     @State var showingDeleteConfirmation: Bool = false
+    
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
+    var providers: [Provider]
     
     var body: some View {
         Form {

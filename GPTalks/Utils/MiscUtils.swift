@@ -81,13 +81,6 @@ struct RuntimeError: LocalizedError {
     }
 }
 
-// MARK: - Environment Values
-extension EnvironmentValues {
-    @Entry var providers: [Provider] = []
-    
-    @Entry var isQuick: Bool = false
-}
-
 // MARK: - Image
 #if os(macOS)
 typealias PlatformImage = NSImage

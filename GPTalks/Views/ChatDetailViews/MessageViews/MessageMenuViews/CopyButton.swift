@@ -23,7 +23,7 @@ struct CopyButton: View {
                 finalString += message.content
                 finalString.copyToPasteboard()
             } label: {
-                Label("Copy including file contents", systemImage: "doc.doc.on.clipboard")
+                Label("Copy including file contents", systemImage: "doc.on.clipboard")
             }
             
         } label: {

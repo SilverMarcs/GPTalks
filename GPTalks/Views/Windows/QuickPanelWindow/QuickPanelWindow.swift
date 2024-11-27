@@ -56,7 +56,6 @@ class QuickPanelWindow: NSPanel {
             toggleVisibility: { [weak self] in self?.toggleVisibility() }
         )
         .ignoresSafeArea()
-        .environment(\.isQuick, true)
         .environment(chatVM)
         .modelContainer(modelContext.container)
         )

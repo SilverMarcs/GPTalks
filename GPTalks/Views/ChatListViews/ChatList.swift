@@ -10,14 +10,16 @@ import SwiftUI
 import TipKit
 
 struct ChatList: View {
+    @Environment(\.openWindow) var openWindow
     @Environment(\.isSearching) private var isSearching
     @Environment(ChatVM.self) var chatVM
     @Environment(\.modelContext) var modelContext
-    @Environment(\.providers) private var providers
     
     @ObservedObject var config = AppConfig.shared
     
     @Query var chats: [Chat] // see init method below
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
+    var providers: [Provider]
     
     var body: some View {
         @Bindable var chatVM = chatVM

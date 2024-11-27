@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct EditButton: View {
-    @Environment(\.isQuick) var isQuick
     var message: MessageGroup
     
     var body: some View {
-        if !isQuick && message.role == .user {
+        if message.role == .user {
             Button {
                 message.chat?.inputManager.setupEditing(message: message)
             } label: {
