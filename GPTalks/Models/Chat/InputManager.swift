@@ -15,6 +15,9 @@ import PhotosUI
     var normalPrompt: String = ""
     var editingPrompt: String = ""
     
+    var tempNormalPrompt: String = ""
+    var tempNormalDataFiles: [TypedData] = []
+    
     var normalDataFiles: [TypedData] = []
     var editingDataFiles: [TypedData] = []
     
@@ -43,7 +46,15 @@ import PhotosUI
     }
     
     func setupEditing(message: MessageGroup) {
-        state = .editing
+        Scroller.scroll(to: .top, of: message)
+        
+        withAnimation {
+            state = .editing
+        }
+        
+        tempNormalPrompt = normalPrompt
+        tempNormalDataFiles = normalDataFiles
+        
         editingMessage = message.activeMessage
         prompt = message.content
         dataFiles = message.dataFiles
@@ -52,8 +63,8 @@ import PhotosUI
     func reset() {
         state = .normal
         editingMessage = nil
-        prompt = ""
-        dataFiles = []
+        prompt = tempNormalPrompt
+        dataFiles = tempNormalDataFiles
     }
 }
 

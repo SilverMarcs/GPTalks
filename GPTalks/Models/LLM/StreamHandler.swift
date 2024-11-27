@@ -46,8 +46,8 @@ struct StreamHandler {
                 let currentTime = Date()
                 if currentTime.timeIntervalSince(lastUIUpdateTime) >= Float.UIIpdateInterval {
                     assistant.content = streamText
+                    scrollDown()
                     lastUIUpdateTime = currentTime
-                    chat.scrollBottom()
                 }
             case .toolCalls(let calls):
                 pendingToolCalls.append(contentsOf: calls)
@@ -71,7 +71,7 @@ struct StreamHandler {
             assistant.toolCalls = pendingToolCalls
             assistant.content = streamText
             assistant.isReplying = false
-            chat.scrollBottom()
+            scrollDown()
             AppConfig.shared.hasUserScrolled = false
             try? assistant.modelContext?.save()
         }
@@ -94,7 +94,7 @@ struct StreamHandler {
         
         chat.totalTokens = tokens > 0 ? tokens : chat.totalTokens
         assistant.isReplying = false
-        chat.scrollBottom()
+        scrollDown()
         AppConfig.shared.hasUserScrolled = false
         try? assistant.modelContext?.save()
     }
@@ -104,7 +104,7 @@ struct StreamHandler {
         // DO NOT call this when assistant.toolCalls is already populated. this func does it for you
         assistant.isReplying = false
         assistant.toolCalls = toolCalls
-        chat.scrollBottom()
+        scrollDown()
 
         var toolDatas: [TypedData] = []
         var lastToolGroup: MessageGroup?
@@ -128,7 +128,7 @@ struct StreamHandler {
             tool.toolResponse?.processedData = toolData.data // possibly never used
             tool.isReplying = false
 
-            chat.scrollBottom()
+            scrollDown()
         }
 
         let newAssistant: Message
@@ -154,4 +154,7 @@ struct StreamHandler {
         }
     }
 
+    private func scrollDown() {
+        Scroller.scrollToBottom()
+    }
 }

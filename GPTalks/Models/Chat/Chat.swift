@@ -67,6 +67,7 @@ final class Chat {
     
     @MainActor
     func processRequest(message: Message) async {
+        scrollDown()
         errorMessage = ""
         date = Date()
         streamingTask = Task {
@@ -188,7 +189,7 @@ final class Chat {
     
     private func handleError(_ error: Error) {
         errorMessage = error.localizedDescription
-        scrollBottom()
+        scrollDown()
         AppConfig.shared.hasUserScrolled = false
         
         // TODO: only delete last mesasage and not entire group if group has other messages
@@ -201,9 +202,9 @@ final class Chat {
     
     func generateTitle(forced: Bool = false) async {
         guard status != .quick else { return }
-        guard forced || currentThread.count <= 2 else { return }
+        guard forced || adjustedContext.count <= 2 else { return }
         
-        if let newTitle = await TitleGenerator.generateTitle(messages: currentThread.map( { $0.activeMessage } ), provider: config.provider) {
+        if let newTitle = await TitleGenerator.generateTitle(messages: adjustedContext, provider: config.provider) {
             self.title = newTitle
         }
     }
@@ -252,12 +253,8 @@ final class Chat {
         
     }
     
-    func scrollBottom() {
-        if let proxy = AppConfig.shared.proxy, !AppConfig.shared.hasUserScrolled {
-            DispatchQueue.main.async {
-                scrollToBottom(proxy: proxy)
-            }
-        }
+    private func scrollDown() {
+        Scroller.scrollToBottom()
     }
     
     func copy(from message: Message? = nil, purpose: ChatConfigPurpose) async -> Chat {

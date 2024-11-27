@@ -35,9 +35,6 @@ final class Message {
     @Relationship(deleteRule: .nullify)
     var next: MessageGroup?
     
-    @Relationship(deleteRule: .nullify)
-    var parent: Message?
-    
     init(role: MessageRole, content: String = "", provider: Provider? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false, height: CGFloat = 0) {
         self.role = role
         self.content = content

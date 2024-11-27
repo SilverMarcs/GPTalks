@@ -145,7 +145,7 @@ final class MessageGroup: Hashable, Identifiable {
     private func scrollToActiveMessage() {
         let anchor: UnitPoint = role == .assistant ? .bottom : .top
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            AppConfig.shared.proxy?.scrollTo(self, anchor: anchor) // TODO: central func instead of invoking appconfig everytime
+            Scroller.scroll(to: anchor, of: self)
         }
     }
     
