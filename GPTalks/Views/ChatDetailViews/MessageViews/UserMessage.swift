@@ -35,12 +35,14 @@ struct UserMessage: View {
             }
             .transaction { $0.animation = nil }
             .groupBoxStyle(PlatformGroupBoxStyle())
-//            .background(
-//                RoundedRectangle(cornerRadius: 5)
-//                    .fill(
-//                        message.chat?.inputManager.editingIndex == indexOfMessage ? Color.accentColor.opacity(0.2) : .clear
-//                    )
-//            )
+            .background(
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(
+                        (message.chat?.inputManager.editingMessage == self.message.activeMessage) ?
+                        Color.accentColor.opacity(0.2) :
+                        .clear
+                    )
+            )
             
             #if os(macOS)
             contextMenu
@@ -75,10 +77,6 @@ struct UserMessage: View {
         #else
         60
         #endif
-    }
-    
-    var indexOfMessage: Int {
-        message.chat?.messages.firstIndex(where: { $0 == message }) ?? 0
     }
     
     private var maxImageSize: CGFloat {

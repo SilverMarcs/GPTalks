@@ -91,8 +91,7 @@ struct BasicInspector: View {
     private var resetContext: some View {
         Button(action: {}) {
             Button {
-                guard !chat.isReplying, let lastMessage = chat.messages.last else { return }
-                
+                guard !chat.isReplying, let lastMessage = chat.currentThread.last else { return }
                 chat.resetContext(at: lastMessage)
                 dismiss()
             } label: {

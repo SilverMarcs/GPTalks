@@ -11,27 +11,12 @@ struct DeleteButton: View {
     var message: MessageGroup
     
     var body: some View {
-        #if os(macOS)
-        Menu {
-            if message.allMessages.count > 1 {
-                Button("Delete Current Message", role: .destructive) {
-                    message.deleteActiveMessage()
-                }
-            }       
-        } label: {
-            Image(systemName: "trash")
-                .resizable()
-                .frame(width: 11, height: 13)
-        } primaryAction: {
-            message.chat?.deleteMessage(message)
+        if message.chat?.currentThread.last == self.message {
+            Button(role: .destructive) {
+                message.chat?.deleteLastMessage()
+            } label: {
+                Label("Delete Message", systemImage: "trash")
+            }
         }
-        .help("Delete options")
-        #else
-        Button(role: .destructive) {
-            message.chat?.deleteMessage(message)
-        } label: {
-            Label("Delete Message", systemImage: "trash")
-        }
-        #endif
     }
 }

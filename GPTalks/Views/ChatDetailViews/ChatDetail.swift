@@ -83,9 +83,9 @@ struct ChatDetail: View {
     
     var messagesToShow: [MessageGroup] {
         if showingAllMessages {
-            return chat.messages
+            return chat.currentThread
         } else {
-            return Array(chat.messages.suffix(2))
+            return Array(chat.currentThread.suffix(2))
         }
     }
     
@@ -95,13 +95,13 @@ struct ChatDetail: View {
             EmptyChat(chat: chat)
         } else {
             List {
-                if !showingAllMessages && chat.messages.count > 2 {
+                if !showingAllMessages && chat.currentThread.count > 2 {
                     ProgressView()
                         .frame(maxWidth: .infinity)
                         .listRowSeparator(.hidden)
                 }
             
-                ForEach(chat.currentThread, id: \.self) { message in
+                ForEach(messagesToShow, id: \.self) { message in
                     MessageView(message: message)
                 }
                 .listRowSeparator(.hidden)

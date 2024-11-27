@@ -11,10 +11,9 @@ struct NavigationButtons: View {
     var message: MessageGroup
     
     var body: some View {
-        if message.allMessages.count > 1 {
+        if message.allMessages.count > 1 && message.role == .assistant {
             if message.allMessages.count >= 2 {
                 Button {
-                    // TODO: this is v busted
                     message.toggleSplitView()
                 } label: {
                     Label("Split View", systemImage: message.isSplitView ? "rectangle.split.2x1.slash" : "square.split.2x1")

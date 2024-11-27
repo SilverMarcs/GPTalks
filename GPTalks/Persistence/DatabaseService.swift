@@ -105,7 +105,7 @@ final class DatabaseService: NSObject {
             favouriteChat.status = .starred
             favouriteChat.statusId = ChatStatus.starred.id
 //            favouriteChat.addMessage(.mockUserMessage)
-            favouriteChat.messages.append(.mockAssistantGroup)
+//            favouriteChat.messages.append(.mockAssistantGroup)
             favouriteChat.title = "Favourite Chat"
             modelContext.insert(favouriteChat)
             

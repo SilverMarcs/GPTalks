@@ -154,36 +154,20 @@ struct ChatList: View {
         }
         
         let searchPredicate: Predicate<Chat>
-        if searchText.count >= 2 {
-            if searchTokens.isEmpty || (searchTokens.contains(.title) && searchTokens.contains(.messages)) {
-                searchPredicate = #Predicate<Chat> {
-                    $0.title.localizedStandardContains(searchText) ||
-                    $0.unorderedMessages.contains {
-                        $0.activeMessage.content.localizedStandardContains(searchText)
-                    }
-                }
-            } else if searchTokens.contains(.title) {
-                searchPredicate = #Predicate<Chat> {
-                    $0.title.localizedStandardContains(searchText)
-                }
-            } else if searchTokens.contains(.messages) {
-                searchPredicate = #Predicate<Chat> {
-                    $0.unorderedMessages.contains {
-                        $0.activeMessage.content.localizedStandardContains(searchText)
-                    }
-                }
-            } else {
-                searchPredicate = #Predicate<Chat> { _ in true }
+        if searchText.count >= 2 && (searchTokens.isEmpty || searchTokens.contains(.title)) {
+            searchPredicate = #Predicate<Chat> {
+                $0.title.localizedStandardContains(searchText)
             }
             
-            // When searching, we ignore the status filter
-            _chats = Query(filter: searchPredicate, sort: [sortDescriptor], animation: .default)
-        } else {
-            // When not searching, we apply the status filter
+            // Combine search and status predicates
             let combinedPredicate = #Predicate<Chat> {
-                statusPredicate.evaluate($0)
+                statusPredicate.evaluate($0) && searchPredicate.evaluate($0)
             }
+            
             _chats = Query(filter: combinedPredicate, sort: [sortDescriptor], animation: .default)
+        } else {
+            // When not searching or search tokens don't include title, we only apply the status filter
+            _chats = Query(filter: statusPredicate, sort: [sortDescriptor], animation: .default)
         }
     }
 }

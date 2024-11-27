@@ -23,14 +23,14 @@ struct CopyButton: View {
                 finalString += message.content
                 finalString.copyToPasteboard()
             } label: {
-                Label("Copy including file content", systemImage: "doc.doc.on.clipboard")
+                Label("Copy including file contents", systemImage: "doc.doc.on.clipboard")
             }
             
         } label: {
             Label(isCopied ? "Copied" : "Copy Text",
                   systemImage: isCopied ? "checkmark" : "paperclip")
         } primaryAction: {
-            message.content.copyToPasteboard() // TODO: copy file sring contents too, use menu here
+            message.content.copyToPasteboard()
             isCopied = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 isCopied = false

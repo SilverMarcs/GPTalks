@@ -27,10 +27,10 @@ struct MessageView: View {
                 Text("Unknown role")
             }
             
-//            if message.chat?.messages.firstIndex(where: { $0 == message }) == message.chat?.resetMarker {
-//                ContextResetDivider() { message.chat?.resetMarker = nil }
-//                    .padding(.vertical)
-//            }
+            if message.chat?.contextResetPoint == message {
+                ContextResetDivider() { message.chat?.resetContext(at: message)}
+                    .padding(.vertical)
+            }
         }
         #if os(iOS)
         .opacity(0.9)

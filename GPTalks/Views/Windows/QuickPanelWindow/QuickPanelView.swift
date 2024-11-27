@@ -36,7 +36,7 @@ struct QuickPanelView: View {
                 .safeAreaPadding(.vertical, 10)
             }
             
-            if chat.messages.isEmpty {
+            if chat.currentThread.isEmpty {
                 Spacer()
             } else {
                 Divider()
@@ -51,7 +51,7 @@ struct QuickPanelView: View {
         .onChange(of: chatVM.isQuickPanelPresented) {
             if chatVM.isQuickPanelPresented {
                 isFocused = true
-                if !chat.messages.isEmpty {
+                if !chat.currentThread.isEmpty {
                     updateHeight(500)
                 }
             } else {
@@ -64,7 +64,7 @@ struct QuickPanelView: View {
             isFocused = true
         }
         .onChange(of: chat.inputManager.dataFiles.isEmpty) {
-            if chat.inputManager.dataFiles.isEmpty && chat.messages.isEmpty {
+            if chat.inputManager.dataFiles.isEmpty && chat.currentThread.isEmpty {
                 updateHeight(57)
             } else {
                 updateHeight(500)
@@ -150,7 +150,7 @@ struct QuickPanelView: View {
                     Image(systemName: "plus.square.on.square")
                         .imageScale(.medium)
                 }
-                .disabled(chat.messages.isEmpty)
+                .disabled(chat.currentThread.isEmpty)
                 .keyboardShortcut("N", modifiers: [.command])
                 
             }

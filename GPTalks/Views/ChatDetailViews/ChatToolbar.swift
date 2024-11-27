@@ -19,12 +19,12 @@ struct ChatToolbar: ToolbarContent {
     
     @FocusState private var isFocused: FocusedField?
     
-    private var matchingMessages: [MessageGroup] {
-        guard !chatVM.searchText.isEmpty else { return [] }
-        return chat.messages.enumerated().compactMap { index, message in
-            message.content.localizedCaseInsensitiveContains(chatVM.searchText) ? message : nil
-        }
-    }
+//    private var matchingMessages: [MessageGroup] {
+//        guard !chatVM.searchText.isEmpty else { return [] }
+//        return chat.messages.enumerated().compactMap { index, message in
+//            message.content.localizedCaseInsensitiveContains(chatVM.searchText) ? message : nil
+//        }
+//    }
     
     var body: some ToolbarContent {
         ToolbarItem(placement: horizontalSizeClass == .compact ? .primaryAction : .navigation) {
@@ -40,27 +40,27 @@ struct ChatToolbar: ToolbarContent {
         }
         
         #if os(macOS)
-        if !matchingMessages.isEmpty {
-            ToolbarItem {
-                Text("\(currentSearchIndex + 1)/\(matchingMessages.count)")
-                    .foregroundStyle(.secondary)
-                    .monospacedDigit()
-            }
-            
-            ToolbarItem {
-                ControlGroup {
-                    Button(action: previousMatch) {
-                        Label("Previous match", systemImage: "chevron.left")
-                    }
-                    .disabled(currentSearchIndex <= 0)
-
-                    Button(action: nextMatch) {
-                        Label("Next match", systemImage: "chevron.right")
-                    }
-                    .disabled(currentSearchIndex >= matchingMessages.count - 1)
-                }
-            }
-        }
+//        if !matchingMessages.isEmpty {
+//            ToolbarItem {
+//                Text("\(currentSearchIndex + 1)/\(matchingMessages.count)")
+//                    .foregroundStyle(.secondary)
+//                    .monospacedDigit()
+//            }
+//            
+//            ToolbarItem {
+//                ControlGroup {
+//                    Button(action: previousMatch) {
+//                        Label("Previous match", systemImage: "chevron.left")
+//                    }
+//                    .disabled(currentSearchIndex <= 0)
+//
+//                    Button(action: nextMatch) {
+//                        Label("Next match", systemImage: "chevron.right")
+//                    }
+//                    .disabled(currentSearchIndex >= matchingMessages.count - 1)
+//                }
+//            }
+//        }
 
         ToolbarItem(placement: .primaryAction) {
             Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
@@ -71,7 +71,7 @@ struct ChatToolbar: ToolbarContent {
         ToolbarItemGroup(placement: .keyboard) {
             Section {
                 Button("Edit Last Message") {
-                    guard let lastUserMessage = chat.messages.last(where: { $0.role == .user }) else { return }
+                    guard let lastUserMessage = chat.currentThread.last(where: { $0.role == .user }) else { return }
                     isFocused = .textEditor // this isnt doing anything (on macos at least)
                     chat.inputManager.setupEditing(message: lastUserMessage)
                 }
@@ -97,9 +97,7 @@ struct ChatToolbar: ToolbarContent {
                 .keyboardShortcut("k")
                 
                 Button("Delete Last Message", role: .destructive) {
-                    if let last = lastMessage {
-                        chat.deleteMessage(last)
-                    }
+                    chat.deleteLastMessage()
                 }
                 .keyboardShortcut(.delete)
             }
@@ -119,7 +117,7 @@ struct ChatToolbar: ToolbarContent {
     
     private var lastMessage: MessageGroup? {
         guard !chat.isReplying,
-              let lastMessage = chat.messages.last else { return nil }
+              let lastMessage = chat.currentThread.last else { return nil }
         return lastMessage
     }
     
@@ -130,23 +128,23 @@ struct ChatToolbar: ToolbarContent {
         showingInspector.toggle()
     }
     
-    private func nextMatch() {
-        guard currentSearchIndex < matchingMessages.count - 1 else { return }
-        currentSearchIndex += 1
-        scrollToCurrentMatch()
-    }
-    
-    private func previousMatch() {
-        guard currentSearchIndex > 0 else { return }
-        currentSearchIndex -= 1
-        scrollToCurrentMatch()
-    }
-    
-    private func scrollToCurrentMatch() {
-        guard currentSearchIndex >= 0 && currentSearchIndex < matchingMessages.count else { return }
-        let message = matchingMessages[currentSearchIndex]
-        AppConfig.shared.proxy?.scrollTo(message, anchor: .top)
-    }
+//    private func nextMatch() {
+//        guard currentSearchIndex < matchingMessages.count - 1 else { return }
+//        currentSearchIndex += 1
+//        scrollToCurrentMatch()
+//    }
+//    
+//    private func previousMatch() {
+//        guard currentSearchIndex > 0 else { return }
+//        currentSearchIndex -= 1
+//        scrollToCurrentMatch()
+//    }
+//    
+//    private func scrollToCurrentMatch() {
+//        guard currentSearchIndex >= 0 && currentSearchIndex < matchingMessages.count else { return }
+//        let message = matchingMessages[currentSearchIndex]
+//        AppConfig.shared.proxy?.scrollTo(message, anchor: .top)
+//    }
 }
 
 #Preview {
