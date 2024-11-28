@@ -11,6 +11,21 @@ struct NativeMarkdown: View {
     @ObservedObject private var config = AppConfig.shared
     var contentItems: [ContentItem]
 
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(contentItems.enumerated()), id: \.offset) { _, item in
+                switch item {
+                case .text(let attributedString):
+                    Text(AttributedString(attributedString))
+                        .lineSpacing(2)
+                        .font(.system(size: config.fontSize))
+                case .codeBlock(let codeString, let language):
+                    CodeBlockView(code: codeString, language: language)
+                }
+            }
+        }
+    }
+    
     init(text: String, highlightText: String) {
         self.contentItems = NativeMarkdown.parseMarkdown(text)
         NativeMarkdown.applyHighlighting(to: &self.contentItems, highlightText: highlightText)
@@ -180,21 +195,6 @@ struct NativeMarkdown: View {
             
             searchRange.location = foundRange.location + foundRange.length
             searchRange.length = stringLength - searchRange.location
-        }
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            ForEach(Array(contentItems.enumerated()), id: \.offset) { _, item in
-                switch item {
-                case .text(let attributedString):
-                    Text(AttributedString(attributedString))
-                        .lineSpacing(2)
-                        .font(.system(size: config.fontSize))
-                case .codeBlock(let codeString, let language):
-                    CodeBlockView(code: codeString, language: language)
-                }
-            }
         }
     }
 }
