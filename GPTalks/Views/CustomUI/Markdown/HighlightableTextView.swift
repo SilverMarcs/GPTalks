@@ -11,7 +11,7 @@ struct HighlightableTextView: View {
     let attributedText: AttributedString
     
     init(text: String, highlightedText: String) {
-        self.attributedText = HighlightableTextView.createAttributedString(from: text, highlightedText: highlightedText)
+        self.attributedText = Self.createAttributedString(from: text, highlightedText: highlightedText)
     }
     
     var body: some View {

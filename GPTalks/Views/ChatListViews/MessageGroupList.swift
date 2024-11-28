@@ -18,9 +18,9 @@ struct MessageGroupList: View {
         let groupedMessageGroups = Dictionary(grouping: messageGroups.filter { $0.chat != nil }) { $0.chat! }
         
         return List {
-            ForEach(groupedMessageGroups.keys.sorted(by: { $0.id < $1.id }), id: \.self) { chat in
+            ForEach(groupedMessageGroups.keys.sorted(by: { $0.date > $1.date }), id: \.self) { chat in
                 Section(chat.title) {
-                    ForEach(groupedMessageGroups[chat] ?? []) { group in
+                    ForEach(groupedMessageGroups[chat]?.sorted(by: { $0.date < $1.date }) ?? []) { group in
                         Button {
                             let delay = chatVM.activeChat == chat ? 0 : 0.2
                             
@@ -30,13 +30,11 @@ struct MessageGroupList: View {
                                 Scroller.scroll(to: .top, of: group)
                             }
                         } label: {
-                            // TODO: show attachment icon if group has attachments
                             HighlightableTextView(text: getContextAroundMatch(content: group.activeMessage.content, searchText: searchText), highlightedText: searchText)
                                 .font(.system(size: 13))
                                 .lineLimit(3)
                                 .multilineTextAlignment(.leading)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-//                                .contentShape(RoundedRectangle(cornerRadius: 8))
                                 .opacity(0.8)
                         }
                         .buttonStyle(ClickHighlightButton())
@@ -56,9 +54,11 @@ struct MessageGroupList: View {
     
     private func getContextAroundMatch(content: String, searchText: String) -> String {
         let limit = 80
+        let ellipsis = "..."
         
         guard !searchText.isEmpty else {
-            return String(content.prefix(limit))
+            let truncated = String(content.prefix(limit)).trimmingCharacters(in: .whitespacesAndNewlines)
+            return content.count > limit ? ellipsis + truncated + ellipsis : truncated
         }
         
         if let range = content.range(of: searchText, options: .caseInsensitive) {
@@ -70,17 +70,29 @@ struct MessageGroupList: View {
             
             var result = String(content[preMatchStart..<postMatchEnd])
             
-            // Trim or pad the result to exactly 40 characters
+            // Trim the result to exactly 80 characters if it exceeds
             if result.count > limit {
                 result = String(result.prefix(limit))
-            } else if result.count < limit {
-                let padding = String(repeating: " ", count: limit - result.count)
-                result += padding
+            }
+            
+            // Remove leading and trailing whitespaces or newlines
+            result = result.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            // Add ellipsis if truncation occurred
+            let needsLeadingEllipsis = preMatchStart > content.startIndex
+            let needsTrailingEllipsis = postMatchEnd < content.endIndex
+            
+            if needsLeadingEllipsis {
+                result = ellipsis + result
+            }
+            if needsTrailingEllipsis {
+                result = result + ellipsis
             }
             
             return result
         } else {
-            return String(content.prefix(limit))
+            let truncated = String(content.prefix(limit)).trimmingCharacters(in: .whitespacesAndNewlines)
+            return content.count > limit ? ellipsis + truncated + ellipsis : truncated
         }
     }
 }

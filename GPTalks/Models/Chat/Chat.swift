@@ -68,7 +68,6 @@ final class Chat {
     @MainActor
     func processRequest(message: Message) async {
         AppConfig.shared.hasUserScrolled = false
-        scrollDown()
         errorMessage = ""
         date = Date()
         streamingTask = Task {
@@ -122,9 +121,9 @@ final class Chat {
 
     @MainActor
     func sendInput() async {
-        errorMessage = ""
-        
         guard !inputManager.prompt.isEmpty else { return }
+        errorMessage = ""
+        AppConfig.shared.hasUserScrolled = false
         
         if let editingMessage = inputManager.editingMessage {
             await editMessage(editingMessage)
@@ -139,12 +138,14 @@ final class Chat {
             } else {
                 let lastGroup = currentThread.last!
                 lastGroup.activeMessage.next = userGroup
+                scrollDown()
             }
             
             let assistantMessage = Message(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
             let assistantGroup = MessageGroup(message: assistantMessage)
             assistantGroup.chat = self
             userGroup.activeMessage.next = assistantGroup
+            scrollDown()
              
             await processRequest(message: assistantMessage)
         }
@@ -155,6 +156,7 @@ final class Chat {
     @MainActor
     func regenerate(message: MessageGroup) async {
         guard let index = currentThread.firstIndex(where: { $0 == message }) else { return }
+        AppConfig.shared.hasUserScrolled = false
        
         unsetContextResetPointIfNeeded(for: message)
        

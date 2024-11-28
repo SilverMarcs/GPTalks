@@ -54,6 +54,7 @@ import SwiftUI
         modelContext.insert(newChat)
         
         searchText = ""
+        searchTokens = []
         selections = [newChat]
         
         return newChat

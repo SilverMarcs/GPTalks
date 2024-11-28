@@ -40,7 +40,9 @@ struct ChatDetail: View {
             }
             #if os(macOS)
             .onAppear {
-                scrollToBottom(proxy: proxy, animated: false)
+                if chatVM.searchText.isEmpty {
+                    scrollToBottom(proxy: proxy, animated: false)
+                }
                 onAppearStuff(proxy: proxy)
             }
             .pasteHandler(chat: chat)
@@ -73,7 +75,9 @@ struct ChatDetail: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             showingAllMessages = true
             #if os(macOS)
-            scrollToBottom(proxy: proxy, animated: false)
+            if chatVM.searchText.isEmpty {
+                scrollToBottom(proxy: proxy, animated: false)
+            }
             #else
             scrollToBottom(proxy: proxy, delay: 0.3)
             #endif
