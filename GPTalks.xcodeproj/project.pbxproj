@@ -52,6 +52,7 @@
 		08436F2C2CDEAB3B007A160F /* ListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08436F2B2CDEAB3B007A160F /* ListState.swift */; };
 		08436F2E2CDF07C2007A160F /* FocusedField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08436F2D2CDF07C2007A160F /* FocusedField.swift */; };
 		0844C2752CA3E6E100F0A325 /* EmptyChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0844C2742CA3E6E100F0A325 /* EmptyChat.swift */; };
+		084B3C602CFB6DF70018ACDE /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084B3C5F2CFB6DF70018ACDE /* TableView.swift */; };
 		084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084C743F2C521A8A0015AE2F /* DismissButton.swift */; };
 		0850374B2CF4D0AA00810CBC /* InputState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0850374A2CF4D0AA00810CBC /* InputState.swift */; };
 		085276BE2C98706E009184D2 /* InputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BD2C98706E009184D2 /* InputEditor.swift */; };
@@ -139,7 +140,6 @@
 		08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB992C3D0017002C04E0 /* ListCard.swift */; };
 		08AAFB9C2C3D01A6002C04E0 /* ChatListCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9B2C3D01A6002C04E0 /* ChatListCards.swift */; };
 		08AC26112CF4F71500750269 /* ChatInputMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC26102CF4F71500750269 /* ChatInputMenu.swift */; };
-		08AC26132CF54BA700750269 /* BasicMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC26122CF54BA700750269 /* BasicMarkdownView.swift */; };
 		08AC26162CF5555A00750269 /* CodeBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC26152CF5555A00750269 /* CodeBlockView.swift */; };
 		08AC26182CF5559000750269 /* ContentItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC26172CF5559000750269 /* ContentItem.swift */; };
 		08B3AE9D2CDB58AB00D7231E /* NonStreamResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B3AE9C2CDB58AB00D7231E /* NonStreamResponse.swift */; };
@@ -157,6 +157,7 @@
 		08C1ACE42C54BCA600B86D37 /* FrequencyPenaltySlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACE32C54BCA600B86D37 /* FrequencyPenaltySlider.swift */; };
 		08C1ACE62C54BCB600B86D37 /* TopPSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACE52C54BCB600B86D37 /* TopPSlider.swift */; };
 		08C49FD82C502EC90085792F /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C49FD72C502EC90085792F /* FileHelper.swift */; };
+		08C5AD752CFB792200F5FEA0 /* CustomCopyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5AD742CFB792200F5FEA0 /* CustomCopyButton.swift */; };
 		08C5C7292C9A1392004992A4 /* GoogleAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5C7282C9A1392004992A4 /* GoogleAuth.swift */; };
 		08C5C72B2C9A139F004992A4 /* GoogleSignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5C72A2C9A139F004992A4 /* GoogleSignIn.swift */; };
 		08C800322C36AE1D009581C5 /* ChatList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800312C36AE1D009581C5 /* ChatList.swift */; };
@@ -186,10 +187,10 @@
 		08DB150B2CDC5B2200DC5B90 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DB150A2CDC5B2200DC5B90 /* OpenAI */; };
 		08E7209A2CE7D46D0014888B /* SearchToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E720992CE7D46D0014888B /* SearchToken.swift */; };
 		08F02DB32CFAE7140041F128 /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 08F02DB22CFAE7140041F128 /* Markdown */; };
-		08F02DB52CFAE73B0041F128 /* AdvancedMarkdownParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F02DB42CFAE73B0041F128 /* AdvancedMarkdownParser.swift */; };
+		08F02DB52CFAE73B0041F128 /* MarkdownParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F02DB42CFAE73B0041F128 /* MarkdownParser.swift */; };
 		08F02DB82CFB006E0041F128 /* HighlightSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08F02DB72CFB006E0041F128 /* HighlightSwift */; };
 		08F02DBE2CFB13030041F128 /* HighlightSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08F02DBD2CFB13030041F128 /* HighlightSwift */; };
-		08F02DC02CFB2F800041F128 /* AdvancedMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F02DBF2CFB2F800041F128 /* AdvancedMarkdownView.swift */; };
+		08F02DC02CFB2F800041F128 /* NativeMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F02DBF2CFB2F800041F128 /* NativeMarkdownView.swift */; };
 		08F0EF1E2C6C2DFD00900ED0 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */; };
 		08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F369E22C3C278E002E4A35 /* ProviderType.swift */; };
 		08F3CA042C705B3300A800F9 /* SettingsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F3CA032C705B3300A800F9 /* SettingsWindow.swift */; platformFilters = (macos, ); };
@@ -256,6 +257,7 @@
 		08436F2B2CDEAB3B007A160F /* ListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListState.swift; sourceTree = "<group>"; };
 		08436F2D2CDF07C2007A160F /* FocusedField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusedField.swift; sourceTree = "<group>"; };
 		0844C2742CA3E6E100F0A325 /* EmptyChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyChat.swift; sourceTree = "<group>"; };
+		084B3C5F2CFB6DF70018ACDE /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		084C743F2C521A8A0015AE2F /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
 		0850374A2CF4D0AA00810CBC /* InputState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputState.swift; sourceTree = "<group>"; };
 		085276BD2C98706E009184D2 /* InputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputEditor.swift; sourceTree = "<group>"; };
@@ -339,7 +341,6 @@
 		08AAFB992C3D0017002C04E0 /* ListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCard.swift; sourceTree = "<group>"; };
 		08AAFB9B2C3D01A6002C04E0 /* ChatListCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCards.swift; sourceTree = "<group>"; };
 		08AC26102CF4F71500750269 /* ChatInputMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputMenu.swift; sourceTree = "<group>"; };
-		08AC26122CF54BA700750269 /* BasicMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicMarkdownView.swift; sourceTree = "<group>"; };
 		08AC26152CF5555A00750269 /* CodeBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeBlockView.swift; sourceTree = "<group>"; };
 		08AC26172CF5559000750269 /* ContentItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentItem.swift; sourceTree = "<group>"; };
 		08B3AE9C2CDB58AB00D7231E /* NonStreamResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonStreamResponse.swift; sourceTree = "<group>"; };
@@ -357,6 +358,7 @@
 		08C1ACE32C54BCA600B86D37 /* FrequencyPenaltySlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyPenaltySlider.swift; sourceTree = "<group>"; };
 		08C1ACE52C54BCB600B86D37 /* TopPSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopPSlider.swift; sourceTree = "<group>"; };
 		08C49FD72C502EC90085792F /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
+		08C5AD742CFB792200F5FEA0 /* CustomCopyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCopyButton.swift; sourceTree = "<group>"; };
 		08C5C7282C9A1392004992A4 /* GoogleAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuth.swift; sourceTree = "<group>"; };
 		08C5C72A2C9A139F004992A4 /* GoogleSignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignIn.swift; sourceTree = "<group>"; };
 		08C800312C36AE1D009581C5 /* ChatList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatList.swift; sourceTree = "<group>"; };
@@ -384,8 +386,8 @@
 		08D571672CF7CCAD002EC931 /* MessageGroupList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGroupList.swift; sourceTree = "<group>"; };
 		08D913EB2CD9CAF7002E4E53 /* AIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModel.swift; sourceTree = "<group>"; };
 		08E720992CE7D46D0014888B /* SearchToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchToken.swift; sourceTree = "<group>"; };
-		08F02DB42CFAE73B0041F128 /* AdvancedMarkdownParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedMarkdownParser.swift; sourceTree = "<group>"; };
-		08F02DBF2CFB2F800041F128 /* AdvancedMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedMarkdownView.swift; sourceTree = "<group>"; };
+		08F02DB42CFAE73B0041F128 /* MarkdownParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownParser.swift; sourceTree = "<group>"; };
+		08F02DBF2CFB2F800041F128 /* NativeMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeMarkdownView.swift; sourceTree = "<group>"; };
 		08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		08F369E22C3C278E002E4A35 /* ProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderType.swift; sourceTree = "<group>"; };
 		08F3CA032C705B3300A800F9 /* SettingsWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindow.swift; sourceTree = "<group>"; };
@@ -733,6 +735,7 @@
 				081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */,
 				08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */,
 				084C743F2C521A8A0015AE2F /* DismissButton.swift */,
+				08C5AD742CFB792200F5FEA0 /* CustomCopyButton.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -740,11 +743,11 @@
 		08AC26142CF5553D00750269 /* Markdown */ = {
 			isa = PBXGroup;
 			children = (
-				08F02DBF2CFB2F800041F128 /* AdvancedMarkdownView.swift */,
-				08F02DB42CFAE73B0041F128 /* AdvancedMarkdownParser.swift */,
+				084B3C5F2CFB6DF70018ACDE /* TableView.swift */,
+				08F02DBF2CFB2F800041F128 /* NativeMarkdownView.swift */,
+				08F02DB42CFAE73B0041F128 /* MarkdownParser.swift */,
 				08B8DE122C97F3550041A690 /* MarkdownView.swift */,
 				08AC26152CF5555A00750269 /* CodeBlockView.swift */,
-				08AC26122CF54BA700750269 /* BasicMarkdownView.swift */,
 				08CF5B882C68980B0079D5EE /* HighlightableTextView.swift */,
 			);
 			path = Markdown;
@@ -1031,6 +1034,7 @@
 				08915D942C373340008ADE27 /* ProviderImage.swift in Sources */,
 				087906872CA6C73100E5DCAD /* ImageWindow.swift in Sources */,
 				0810F5892CEAFB5C002D4ACF /* ContextResetDivider.swift in Sources */,
+				084B3C602CFB6DF70018ACDE /* TableView.swift in Sources */,
 				08B8DE232C97F4EA0041A690 /* ToolResponseMessage.swift in Sources */,
 				087906892CA6E22900E5DCAD /* ImageContentView.swift in Sources */,
 				0805DEEF2C58CB1400A8354A /* OpenAIService.swift in Sources */,
@@ -1044,7 +1048,7 @@
 				08A77CCC2C65AA820087D0F3 /* DatabaseService.swift in Sources */,
 				08F815242C97F59100B49355 /* PluginSettings.swift in Sources */,
 				08CA42B62CF1F13B0073BB01 /* ExpandButton.swift in Sources */,
-				08F02DB52CFAE73B0041F128 /* AdvancedMarkdownParser.swift in Sources */,
+				08F02DB52CFAE73B0041F128 /* MarkdownParser.swift in Sources */,
 				08CA42BA2CF1F18D0073BB01 /* ForkButton.swift in Sources */,
 				08CA42BE2CF1F3C00073BB01 /* SelectTextButton.swift in Sources */,
 				0893B2062C39810900D4D501 /* ChatConfig.swift in Sources */,
@@ -1145,9 +1149,10 @@
 				08F8152B2C97F5FA00B49355 /* ImageGenerator.swift in Sources */,
 				080E70E82CDF1BC100A949C9 /* Tips.swift in Sources */,
 				08F0EF1E2C6C2DFD00900ED0 /* ActionButton.swift in Sources */,
-				08F02DC02CFB2F800041F128 /* AdvancedMarkdownView.swift in Sources */,
+				08F02DC02CFB2F800041F128 /* NativeMarkdownView.swift in Sources */,
 				087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */,
 				08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */,
+				08C5AD752CFB792200F5FEA0 /* CustomCopyButton.swift in Sources */,
 				085910CA2C4F7A720086E493 /* ImageVM.swift in Sources */,
 				08CA42B32CF0F4430073BB01 /* MessageGroup.swift in Sources */,
 				08A77CC92C65A3AD0087D0F3 /* SectionFooterView.swift in Sources */,
@@ -1191,7 +1196,6 @@
 				0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */,
 				089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */,
 				08C5C72B2C9A139F004992A4 /* GoogleSignIn.swift in Sources */,
-				08AC26132CF54BA700750269 /* BasicMarkdownView.swift in Sources */,
 				085276BE2C98706E009184D2 /* InputEditor.swift in Sources */,
 				0886050F2CF61E4200A9657C /* ShortcutSettings.swift in Sources */,
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,

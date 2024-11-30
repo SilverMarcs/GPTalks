@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import Markdown
 
 enum ContentItem {
     case text(NSAttributedString)
     case codeBlock(String, language: String?)
+    case table(Table)
 }
-

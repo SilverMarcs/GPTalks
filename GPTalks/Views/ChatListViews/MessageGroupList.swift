@@ -30,7 +30,7 @@ struct MessageGroupList: View {
                                 Scroller.scroll(to: .top, of: group)
                             }
                         } label: {
-                            HighlightableTextView(text: getContextAroundMatch(content: group.activeMessage.content, searchText: searchText), highlightedText: searchText)
+                            HighlightableTextView(getContextAroundMatch(content: group.activeMessage.content, searchText: searchText), highlightedText: searchText)
                                 .font(.system(size: 13))
                                 .lineLimit(3)
                                 .multilineTextAlignment(.leading)

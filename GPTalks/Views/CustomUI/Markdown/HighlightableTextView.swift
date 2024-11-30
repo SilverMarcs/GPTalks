@@ -10,7 +10,7 @@ import SwiftUI
 struct HighlightableTextView: View {
     let attributedText: AttributedString
     
-    init(text: String, highlightedText: String) {
+    init(_ text: String, highlightedText: String) {
         self.attributedText = Self.createAttributedString(from: text, highlightedText: highlightedText)
     }
     

@@ -1,5 +1,5 @@
 //
-//  AdvancedMarkdownParser.swift
+//  MarkdownView.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 30/11/2024.
@@ -24,7 +24,7 @@ import Foundation
 /// Based on the source code from Christian Selig
 /// https://github.com/christianselig/Markdownosaur/blob/main/Sources/Markdownosaur/Markdownosaur.swift
 
-public struct AdvancedMarkdownParser: MarkupVisitor {
+public struct MarkdownParser: MarkupVisitor {
     let baseSize = AppConfig.shared.fontSize
     
     let defaultFont = PlatformFont.systemFont(ofSize:  AppConfig.shared.fontSize)
@@ -39,39 +39,16 @@ public struct AdvancedMarkdownParser: MarkupVisitor {
         return visit(document)
     }
   
-    
-    mutating func parserResults(from document: Document) -> [ParserResult] {
-        var results = [ParserResult]()
-        var currentAttrString = NSMutableAttributedString()
-
-        func appendCurrentAttrString() {
-            if !currentAttrString.string.isEmpty {
-                results.append(.init(attributedString: currentAttrString))
-            }
-        }
-
-        document.children.forEach { markup in
-            let attrString = visit(markup)
-            if let codeBlock = markup as? CodeBlock {
-                appendCurrentAttrString()
-                results.append(.init(code: codeBlock.code.trimmingCharacters(in: .whitespacesAndNewlines) + "@@"))
-                currentAttrString = NSMutableAttributedString()
-            } else {
-                currentAttrString.append(attrString)
-            }
-        }
-
-        appendCurrentAttrString()
-        return results
-    }
-    
-    mutating func parserResults2(from document: Document) -> [ContentItem] {
+    mutating func parserResults2(from document: Document, highlightText: String) -> [ContentItem] {
         var results = [ContentItem]()
         var currentTextBuffer = NSMutableAttributedString()
         
         func appendCurrentAttrString() {
             if !currentTextBuffer.string.isEmpty {
+                // Apply highlighting before appending
+                applyHighlighting(to: currentTextBuffer, highlightText: highlightText)
                 results.append(.text(currentTextBuffer))
+                currentTextBuffer = NSMutableAttributedString()
             }
         }
         
@@ -79,7 +56,9 @@ public struct AdvancedMarkdownParser: MarkupVisitor {
             if let codeBlock = markup as? CodeBlock {
                 appendCurrentAttrString()
                 results.append(.codeBlock(codeBlock.code.trimmingCharacters(in: .whitespacesAndNewlines), language: codeBlock.language))
-                currentTextBuffer = NSMutableAttributedString()
+            } else if let table = markup as? Table {
+                appendCurrentAttrString()
+                results.append(.table(table))
             } else {
                 currentTextBuffer.append(visit(markup))
             }
@@ -88,6 +67,37 @@ public struct AdvancedMarkdownParser: MarkupVisitor {
         appendCurrentAttrString()
         
         return results
+    }
+
+    private func applyHighlighting(to attributedString: NSMutableAttributedString, highlightText: String) {
+        let nsString = attributedString.string as NSString
+        let stringLength = nsString.length
+        var searchRange = NSRange(location: 0, length: stringLength)
+        
+        while searchRange.location < stringLength {
+            let foundRange = nsString.range(
+                of: highlightText,
+                options: .caseInsensitive,
+                range: searchRange
+            )
+            
+            if foundRange.location == NSNotFound {
+                break
+            }
+            
+            // Highlighting takes priority - save existing attributes
+            let existingAttributes = attributedString.attributes(at: foundRange.location, effectiveRange: nil)
+            
+            // Apply highlight attributes while preserving existing ones
+            var newAttributes = existingAttributes
+            newAttributes[.backgroundColor] = PlatformColor.yellow
+            newAttributes[.foregroundColor] = PlatformColor.black
+            
+            attributedString.setAttributes(newAttributes, range: foundRange)
+            
+            searchRange.location = foundRange.location + foundRange.length
+            searchRange.length = stringLength - searchRange.location
+        }
     }
 
     mutating public func defaultVisit(_ markup: Markup) -> NSAttributedString {
@@ -136,7 +146,7 @@ public struct AdvancedMarkdownParser: MarkupVisitor {
         }
 
         if paragraph.hasSuccessor {
-            let shouldUseSingleNewline = paragraph.successor is CodeBlock || paragraph.isContainedInList
+            let shouldUseSingleNewline = paragraph.successor is CodeBlock ||  paragraph.successor is Table || paragraph.isContainedInList
             let newlineType: NSAttributedString = shouldUseSingleNewline ? .singleNewline(withFontSize: newLineFontSize) : .doubleNewline(withFontSize: newLineFontSize)
             result.append(newlineType)
 //            result.append(.doubleNewline(withFontSize: newLineFontSize))
@@ -154,11 +164,11 @@ public struct AdvancedMarkdownParser: MarkupVisitor {
 
         result.applyHeading(withLevel: heading.level)
 
-        if heading.hasSuccessor {
+        if heading.hasSuccessor && !(heading.successor is CodeBlock) {
             result.append(.doubleNewline(withFontSize: newLineFontSize))
         }
         
-        if heading.hasPredecessor && !(heading.predecessor is Paragraph) {
+        if heading.hasPredecessor && !(heading.predecessor is Paragraph) && !(heading.predecessor is CodeBlock) {
             result.insert(.singleNewline(withFontSize: newLineFontSize), at: 0)
         }
 
@@ -203,7 +213,7 @@ public struct AdvancedMarkdownParser: MarkupVisitor {
         let result = NSMutableAttributedString()
         
         for listItem in unorderedList.listItems {
-            result.append(NSAttributedString(string: " -  "))
+            result.append(NSAttributedString(string: "-  "))
             result.append(visit(listItem))
             if listItem.hasSuccessor {
                 result.append(NSAttributedString(string: "\n"))
@@ -221,7 +231,7 @@ public struct AdvancedMarkdownParser: MarkupVisitor {
         let result = NSMutableAttributedString()
         
         for (index, listItem) in orderedList.listItems.enumerated() {
-            result.append(NSAttributedString(string: " \(orderedList.startIndex + UInt(index)).  "))
+            result.append(NSAttributedString(string: "\(orderedList.startIndex + UInt(index)).  "))
             result.append(visit(listItem))
             if listItem.hasSuccessor {
                 result.append(NSAttributedString(string: "\n"))
@@ -285,7 +295,7 @@ public struct AdvancedMarkdownParser: MarkupVisitor {
 extension NSMutableAttributedString {
     func applyEmphasis() {
         enumerateAttribute(.font, in: NSRange(location: 0, length: length), options: []) { value, range, stop in
-            guard let font = value as? TTFont else { return }
+            guard let font = value as? PlatformFont else { return }
 
             #if os(macOS)
             let newFont = font.apply(newTraits: .italic)
@@ -299,13 +309,13 @@ extension NSMutableAttributedString {
 
     func applyHeading(withLevel headingLevel: Int) {
         enumerateAttribute(.font, in: NSRange(location: 0, length: length), options: []) { value, range, stop in
-            guard let font = value as? TTFont else { return }
+            guard let font = value as? PlatformFont else { return }
             
             let scaleFactor: CGFloat = 1.1
             let baseHeadingSize: CGFloat = font.pointSize * 1.0
             
             let newSize = baseHeadingSize * pow(scaleFactor, CGFloat(6 - headingLevel))
-            let newFont = TTFont.systemFont(ofSize: newSize, weight: .bold)
+            let newFont = PlatformFont.systemFont(ofSize: newSize, weight: .bold)
             
             addAttribute(.font, value: newFont, range: range)
         }
@@ -445,155 +455,3 @@ extension NSAttributedString {
         return NSAttributedString(string: "\n\n")
     }
 }
-
-
-
-struct ParserResult: Identifiable {
-    let id = UUID()
-    var code: String? = nil
-    var attributedString: NSAttributedString? = nil
-//    let isCodeBlock: Bool
-//    let codeBlockLanguage: String?
-}
-
-//import Foundation
-//import Markdown
-//
-//actor ResponseParsingTask {
-//
-//    func parse(text: String) async -> AttributedOutput {
-//        let document = Document(parsing: text)
-//        var markdownParser = AdvancedMarkdownParser()
-//        let results = markdownParser.parserResults(from: document)
-//        return AttributedOutput(string: text, results: results)
-//    }
-//
-//}
-
-//actor ResponseParsingTask {
-//
-//    func parse(text: String) async -> [ParserResult] {
-//        let document = Document(parsing: text)
-//        var markdownParser = AdvancedMarkdownParser()
-//        let results = markdownParser.parserResults(from: document)
-//        return results
-//    }
-//
-//}
-
-//struct AttributedOutput {
-//    let string: String
-//    let results: [ParserResult]
-//}
-
-
-//mutating public func visitUnorderedList2(_ unorderedList: UnorderedList) -> NSAttributedString {
-//    return defaultVisit(unorderedList)
-////        let result = NSMutableAttributedString()
-////
-////        let font = TTFont.systemFont(ofSize: baseFontSize, weight: .regular)
-////
-////        for listItem in unorderedList.listItems {
-////            var listItemAttributes: [NSAttributedString.Key: Any] = [:]
-////
-////            let listItemParagraphStyle = NSMutableParagraphStyle()
-////
-////            let baseLeftMargin: CGFloat = 15.0
-////            let leftMarginOffset = baseLeftMargin + (20.0 * CGFloat(unorderedList.listDepth))
-////            let spacingFromIndex: CGFloat = 8.0
-////            let bulletWidth = ceil(NSAttributedString(string: "•", attributes: [.font: font]).size().width)
-////            let firstTabLocation = leftMarginOffset + bulletWidth
-////            let secondTabLocation = firstTabLocation + spacingFromIndex
-////
-////            listItemParagraphStyle.tabStops = [
-////                NSTextTab(textAlignment: .right, location: firstTabLocation),
-////                NSTextTab(textAlignment: .left, location: secondTabLocation)
-////            ]
-////
-////            listItemParagraphStyle.headIndent = secondTabLocation
-////
-////            listItemAttributes[.paragraphStyle] = listItemParagraphStyle
-////            listItemAttributes[.font] = TTFont.systemFont(ofSize: baseFontSize, weight: .regular)
-////            listItemAttributes[.listDepth] = unorderedList.listDepth
-////
-////            let listItemAttributedString = visit(listItem).mutableCopy() as! NSMutableAttributedString
-////            listItemAttributedString.insert(NSAttributedString(string: "\t•\t", attributes: listItemAttributes), at: 0)
-////
-////            result.append(listItemAttributedString)
-////        }
-////
-////        if unorderedList.hasSuccessor {
-////            result.append(.doubleNewline(withFontSize: newLineFontSize))
-////        }
-////
-////        return result
-//}
-//
-//mutating public func visitListItem2(_ listItem: ListItem) -> NSAttributedString {
-//    return defaultVisit(listItem)
-////        let result = NSMutableAttributedString()
-////
-////        for child in listItem.children {
-////            result.append(visit(child))
-////        }
-////
-////        if listItem.hasSuccessor {
-////            result.append(.singleNewline(withFontSize: newLineFontSize))
-////        }
-////
-////        return result
-//}
-//
-//mutating public func visitOrderedList2(_ orderedList: OrderedList) -> NSAttributedString {
-//    return defaultVisit(orderedList)
-////        let result = NSMutableAttributedString()
-////
-////        for (index, listItem) in orderedList.listItems.enumerated() {
-////            var listItemAttributes: [NSAttributedString.Key: Any] = [:]
-////
-////            let font = TTFont.systemFont(ofSize: baseFontSize, weight: .regular)
-////            let numeralFont = TTFont.monospacedDigitSystemFont(ofSize: baseFontSize, weight: .regular)
-////
-////            let listItemParagraphStyle = NSMutableParagraphStyle()
-////
-////            // Implement a base amount to be spaced from the left side at all times to better visually differentiate it as a list
-////            let baseLeftMargin: CGFloat = 15.0
-////            let leftMarginOffset = baseLeftMargin + (20.0 * CGFloat(orderedList.listDepth))
-////
-////            // Grab the highest number to be displayed and measure its width (yes normally some digits are wider than others but since we're using the numeral mono font all will be the same width in this case)
-////            let highestNumberInList = orderedList.childCount
-////            let numeralColumnWidth = ceil(NSAttributedString(string: "\(highestNumberInList).", attributes: [.font: numeralFont]).size().width)
-////
-////            let spacingFromIndex: CGFloat = 8.0
-////            let firstTabLocation = leftMarginOffset + numeralColumnWidth
-////            let secondTabLocation = firstTabLocation + spacingFromIndex
-////
-////            listItemParagraphStyle.tabStops = [
-////                NSTextTab(textAlignment: .right, location: firstTabLocation),
-////                NSTextTab(textAlignment: .left, location: secondTabLocation)
-////            ]
-////
-////            listItemParagraphStyle.headIndent = secondTabLocation
-////
-////            listItemAttributes[.paragraphStyle] = listItemParagraphStyle
-////            listItemAttributes[.font] = font
-////            listItemAttributes[.listDepth] = orderedList.listDepth
-////
-////            let listItemAttributedString = visit(listItem).mutableCopy() as! NSMutableAttributedString
-////
-////            // Same as the normal list attributes, but for prettiness in formatting we want to use the cool monospaced numeral font
-////            var numberAttributes = listItemAttributes
-////            numberAttributes[.font] = numeralFont
-////
-////            let numberAttributedString = NSAttributedString(string: "\t\(index + 1).\t", attributes: numberAttributes)
-////            listItemAttributedString.insert(numberAttributedString, at: 0)
-////
-////            result.append(listItemAttributedString)
-////        }
-////
-////        if orderedList.hasSuccessor {
-////            result.append(orderedList.isContainedInList ? .singleNewline(withFontSize: newLineFontSize) : .doubleNewline(withFontSize: newLineFontSize))
-////        }
-////
-////        return result
-//}

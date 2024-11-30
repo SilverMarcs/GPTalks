@@ -1,5 +1,5 @@
 //
-//  MessageRowiew.swift
+//  MarkdownView.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 8/3/24.
@@ -21,12 +21,8 @@ struct MarkdownView: View {
             Text(content)
                 .textSelection(.enabled)
                 .font(.system(size: config.fontSize))
-        case .basic,
-             .webview where !chatVM.searchText.isEmpty:
-            BasicMarkdownView(text: content, highlightText: chatVM.searchText)
-                .textSelection(.enabled)
-        case .advanced:
-            AdvancedMarkdownView(content: content)
+        case .native:
+            NativeMarkdownView(content: content, searchText: chatVM.searchText)
                 .textSelection(.enabled)
         case .webview:
             SwiftMarkdownView(content, calculatedHeight: calculatedHeight)
