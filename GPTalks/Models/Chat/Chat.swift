@@ -68,6 +68,7 @@ final class Chat {
     @MainActor
     func processRequest(message: Message) async {
         AppConfig.shared.hasUserScrolled = false
+        scrollDown()
         errorMessage = ""
         date = Date()
         streamingTask = Task {

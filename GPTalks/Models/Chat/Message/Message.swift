@@ -32,7 +32,7 @@ final class Message {
     
     var height: CGFloat = 0
     
-    @Relationship(deleteRule: .nullify)
+    @Relationship(deleteRule: .cascade)
     var next: MessageGroup?
     
     // TODO: typed init functions for diff roles
