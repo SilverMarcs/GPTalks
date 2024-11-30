@@ -188,7 +188,7 @@ extension Color {
     }
 }
 
-
+// MARK: - Conditional View Modifier
 extension View {
     /// Applies the given transform if the given condition evaluates to `true`.
     /// - Parameters:
@@ -202,4 +202,10 @@ extension View {
             self
         }
     }
+}
+
+// Environment Values
+
+extension EnvironmentValues {
+    @Entry var isReplying = false
 }

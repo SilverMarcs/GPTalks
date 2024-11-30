@@ -10,6 +10,7 @@ import HighlightSwift
 
 struct CodeBlockView: View {
     @Environment(ChatVM.self) var chatVM
+    @Environment(\.isReplying) var isReplying
     @ObservedObject var config = AppConfig.shared
     
     let code: String
@@ -18,16 +19,22 @@ struct CodeBlockView: View {
     @State var clicked = false
     
     var body: some View {
-//        ZStack(alignment: .bottomTrailing) {
-            CodeText(code)
-                .codeTextColors(.theme(config.codeBlockTheme.toHighlightTheme()))
-                .highlightedString(chatVM.searchText)
-                .font(.system(size: AppConfig.shared.fontSize - 1, design: .monospaced))
-                .padding()
-
-//            copyButton
-//                .padding(5)
-//        }
+        ZStack(alignment: .bottomTrailing) {
+            if isReplying {
+                Text(code)
+                    .font(.system(size: AppConfig.shared.fontSize - 1, design: .monospaced))
+                    .padding()
+            } else {
+                CodeText(code)
+                    .codeTextColors(.theme(config.codeBlockTheme.toHighlightTheme()))
+                    .highlightedString(chatVM.searchText)
+                    .font(.system(size: AppConfig.shared.fontSize - 1, design: .monospaced))
+                    .padding()
+            }
+            
+            copyButton
+                .padding(5)
+        }
         .roundedRectangleOverlay(radius: 6)
         .background(.background.quinary.opacity(0.1), in: RoundedRectangle(cornerRadius: 6))
     }

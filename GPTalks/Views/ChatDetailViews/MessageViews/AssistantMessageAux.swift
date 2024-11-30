@@ -34,6 +34,7 @@ struct AssistantMessageAux: View {
             .padding(.leading, -23)
             
             MarkdownView(content: message.content, calculatedHeight: $height)
+                .environment(\.isReplying, message.isReplying)
                 .transaction { $0.animation = nil }
                 .if(config.markdownProvider == .webview) { view in
                     view

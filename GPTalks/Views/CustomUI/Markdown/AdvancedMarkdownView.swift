@@ -26,7 +26,6 @@ struct AdvancedMarkdownView: View {
                     .font(.system(size: config.fontSize))
             case .codeBlock(let codeString, let language):
                 CodeBlockView(code: codeString, language: language)
-                    .id(codeString)
                     .padding(.top, -10)
                     .padding(.bottom, 8)
             }
