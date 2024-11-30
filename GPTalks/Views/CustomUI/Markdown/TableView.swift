@@ -10,6 +10,7 @@ import Markdown
 
 struct TableView: View {
     @Environment(ChatVM.self) var chatVM
+    @ObservedObject var config = AppConfig.shared
     let table: Markdown.Table
     
     var body: some View {
@@ -39,6 +40,7 @@ struct TableView: View {
                     .background(rowIndex % 2 == 0 ? AnyShapeStyle(.background) : AnyShapeStyle(.background.secondary))
                 }
             }
+            .font(.system(size: AppConfig.shared.fontSize))
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .roundedRectangleOverlay(radius: 6)
             
