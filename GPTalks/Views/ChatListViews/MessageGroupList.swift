@@ -12,7 +12,10 @@ struct MessageGroupList: View {
     @Environment(ChatVM.self) var chatVM
     
     @Query var messageGroups: [MessageGroup]
+    
     var searchText: String
+    @State private var selectedGroupID: MessageGroup.ID?
+
     
     var body: some View {
         let groupedMessageGroups = Dictionary(grouping: messageGroups.filter { $0.chat != nil }) { $0.chat! }
@@ -25,6 +28,7 @@ struct MessageGroupList: View {
                             let delay = chatVM.activeChat == chat ? 0 : 0.2
                             
                             chatVM.selections = [chat]
+                            selectedGroupID = group.id
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                                 Scroller.scroll(to: .top, of: group)
@@ -37,7 +41,11 @@ struct MessageGroupList: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .opacity(0.8)
                         }
-                        .buttonStyle(ClickHighlightButton())
+                        .padding(.horizontal, -4)
+                        .buttonStyle(SelectedButtonStyle(isSelected: Binding(
+                            get: { selectedGroupID == group.id },
+                            set: { _ in }
+                        )))
                     }
                 }
             }

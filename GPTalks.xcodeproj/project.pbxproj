@@ -158,6 +158,7 @@
 		08C1ACE62C54BCB600B86D37 /* TopPSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1ACE52C54BCB600B86D37 /* TopPSlider.swift */; };
 		08C49FD82C502EC90085792F /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C49FD72C502EC90085792F /* FileHelper.swift */; };
 		08C5AD752CFB792200F5FEA0 /* CustomCopyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5AD742CFB792200F5FEA0 /* CustomCopyButton.swift */; };
+		08C5AD772CFB7FBF00F5FEA0 /* SelectedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5AD762CFB7FBF00F5FEA0 /* SelectedButtonStyle.swift */; };
 		08C5C7292C9A1392004992A4 /* GoogleAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5C7282C9A1392004992A4 /* GoogleAuth.swift */; };
 		08C5C72B2C9A139F004992A4 /* GoogleSignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5C72A2C9A139F004992A4 /* GoogleSignIn.swift */; };
 		08C800322C36AE1D009581C5 /* ChatList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800312C36AE1D009581C5 /* ChatList.swift */; };
@@ -359,6 +360,7 @@
 		08C1ACE52C54BCB600B86D37 /* TopPSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopPSlider.swift; sourceTree = "<group>"; };
 		08C49FD72C502EC90085792F /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		08C5AD742CFB792200F5FEA0 /* CustomCopyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCopyButton.swift; sourceTree = "<group>"; };
+		08C5AD762CFB7FBF00F5FEA0 /* SelectedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedButtonStyle.swift; sourceTree = "<group>"; };
 		08C5C7282C9A1392004992A4 /* GoogleAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuth.swift; sourceTree = "<group>"; };
 		08C5C72A2C9A139F004992A4 /* GoogleSignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignIn.swift; sourceTree = "<group>"; };
 		08C800312C36AE1D009581C5 /* ChatList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatList.swift; sourceTree = "<group>"; };
@@ -731,6 +733,7 @@
 		08AAFB912C3C88CA002C04E0 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				08C5AD762CFB7FBF00F5FEA0 /* SelectedButtonStyle.swift */,
 				08FD45592CB8EF680046D165 /* ClickHighlightButton.swift */,
 				081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */,
 				08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */,
@@ -1128,6 +1131,7 @@
 				085276C02C98794C009184D2 /* ToolCallView.swift in Sources */,
 				08C1ACE42C54BCA600B86D37 /* FrequencyPenaltySlider.swift in Sources */,
 				0893B2022C3955CC00D4D501 /* CustomSearchField.swift in Sources */,
+				08C5AD772CFB7FBF00F5FEA0 /* SelectedButtonStyle.swift in Sources */,
 				085524EA2C4EDEC400CBB827 /* ModelList.swift in Sources */,
 				08A3134B2C4ADEA000C3E578 /* ImageRow.swift in Sources */,
 				08CA42C42CF1F3F30073BB01 /* RegenButton.swift in Sources */,
