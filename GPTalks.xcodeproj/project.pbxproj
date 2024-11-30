@@ -18,7 +18,6 @@
 		080E70F22CDFB9C800A949C9 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70F12CDFB9C800A949C9 /* KeychainHelper.swift */; };
 		0810F5892CEAFB5C002D4ACF /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0810F5882CEAFB5C002D4ACF /* ContextResetDivider.swift */; };
 		0812974D2CF5A9DE00440D19 /* HighlightSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0812974C2CF5A9DE00440D19 /* HighlightSwift */; };
-		081297502CF5B7DF00440D19 /* HighlightSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0812974F2CF5B7DF00440D19 /* HighlightSwift */; };
 		081297522CF5C3FF00440D19 /* AssistantMessageAux.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081297512CF5C3FF00440D19 /* AssistantMessageAux.swift */; };
 		08149A572C3E5E5B004485AC /* MessageRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08149A562C3E5E5B004485AC /* MessageRole.swift */; };
 		0819479E2C48DCDB0061227B /* ImageList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819479D2C48DCDB0061227B /* ImageList.swift */; };
@@ -186,6 +185,12 @@
 		08D913EC2CD9CAF7002E4E53 /* AIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D913EB2CD9CAF7002E4E53 /* AIModel.swift */; };
 		08DB150B2CDC5B2200DC5B90 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DB150A2CDC5B2200DC5B90 /* OpenAI */; };
 		08E7209A2CE7D46D0014888B /* SearchToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E720992CE7D46D0014888B /* SearchToken.swift */; };
+		08F02DB32CFAE7140041F128 /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 08F02DB22CFAE7140041F128 /* Markdown */; };
+		08F02DB52CFAE73B0041F128 /* AdvancedMarkdownParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F02DB42CFAE73B0041F128 /* AdvancedMarkdownParser.swift */; };
+		08F02DB82CFB006E0041F128 /* HighlightSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08F02DB72CFB006E0041F128 /* HighlightSwift */; };
+		08F02DBB2CFB02E50041F128 /* Highlightr in Frameworks */ = {isa = PBXBuildFile; productRef = 08F02DBA2CFB02E50041F128 /* Highlightr */; };
+		08F02DBE2CFB13030041F128 /* HighlightSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08F02DBD2CFB13030041F128 /* HighlightSwift */; };
+		08F02DC02CFB2F800041F128 /* BasicMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F02DBF2CFB2F800041F128 /* BasicMarkdownView.swift */; };
 		08F0EF1E2C6C2DFD00900ED0 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */; };
 		08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F369E22C3C278E002E4A35 /* ProviderType.swift */; };
 		08F3CA042C705B3300A800F9 /* SettingsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F3CA032C705B3300A800F9 /* SettingsWindow.swift */; platformFilters = (macos, ); };
@@ -380,6 +385,8 @@
 		08D571672CF7CCAD002EC931 /* MessageGroupList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGroupList.swift; sourceTree = "<group>"; };
 		08D913EB2CD9CAF7002E4E53 /* AIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModel.swift; sourceTree = "<group>"; };
 		08E720992CE7D46D0014888B /* SearchToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchToken.swift; sourceTree = "<group>"; };
+		08F02DB42CFAE73B0041F128 /* AdvancedMarkdownParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedMarkdownParser.swift; sourceTree = "<group>"; };
+		08F02DBF2CFB2F800041F128 /* BasicMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicMarkdownView.swift; sourceTree = "<group>"; };
 		08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		08F369E22C3C278E002E4A35 /* ProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderType.swift; sourceTree = "<group>"; };
 		08F3CA032C705B3300A800F9 /* SettingsWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindow.swift; sourceTree = "<group>"; };
@@ -412,13 +419,16 @@
 			files = (
 				082AA6F62CE683C40088A8B2 /* OpenAI in Frameworks */,
 				0823550D2CDBB74900388273 /* GoogleGenerativeAI in Frameworks */,
-				081297502CF5B7DF00440D19 /* HighlightSwift in Frameworks */,
+				08F02DB32CFAE7140041F128 /* Markdown in Frameworks */,
+				08F02DBE2CFB13030041F128 /* HighlightSwift in Frameworks */,
 				086346B42CE780C6006E5927 /* GoogleGenerativeAI in Frameworks */,
 				0812974D2CF5A9DE00440D19 /* HighlightSwift in Frameworks */,
 				082355152CDBBB2B00388273 /* SwiftMarkdownView in Frameworks */,
 				086346B12CE780B6006E5927 /* SwiftAnthropic in Frameworks */,
 				08DB150B2CDC5B2200DC5B90 /* OpenAI in Frameworks */,
 				086346AB2CE78078006E5927 /* SwiftMarkdownView in Frameworks */,
+				08F02DB82CFB006E0041F128 /* HighlightSwift in Frameworks */,
+				08F02DBB2CFB02E50041F128 /* Highlightr in Frameworks */,
 				0823551E2CDBC94D00388273 /* SwiftAnthropic in Frameworks */,
 				0867741C2CE682C700FF2A3C /* OpenAI in Frameworks */,
 				086346AE2CE7808B006E5927 /* OpenAI in Frameworks */,
@@ -732,6 +742,8 @@
 		08AC26142CF5553D00750269 /* Markdown */ = {
 			isa = PBXGroup;
 			children = (
+				08F02DBF2CFB2F800041F128 /* BasicMarkdownView.swift */,
+				08F02DB42CFAE73B0041F128 /* AdvancedMarkdownParser.swift */,
 				08B8DE122C97F3550041A690 /* MarkdownView.swift */,
 				08AC26152CF5555A00750269 /* CodeBlockView.swift */,
 				08AC26122CF54BA700750269 /* NativeMarkdown.swift */,
@@ -943,7 +955,10 @@
 				086346B02CE780B6006E5927 /* SwiftAnthropic */,
 				086346B32CE780C6006E5927 /* GoogleGenerativeAI */,
 				0812974C2CF5A9DE00440D19 /* HighlightSwift */,
-				0812974F2CF5B7DF00440D19 /* HighlightSwift */,
+				08F02DB22CFAE7140041F128 /* Markdown */,
+				08F02DB72CFB006E0041F128 /* HighlightSwift */,
+				08F02DBA2CFB02E50041F128 /* Highlightr */,
+				08F02DBD2CFB13030041F128 /* HighlightSwift */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -979,7 +994,9 @@
 				086346AC2CE7808B006E5927 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				086346AF2CE780B6006E5927 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
 				086346B22CE780C6006E5927 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */,
-				0812974E2CF5B7DF00440D19 /* XCRemoteSwiftPackageReference "HighlightSwift" */,
+				08F02DB12CFAE7140041F128 /* XCRemoteSwiftPackageReference "swift-markdown" */,
+				08F02DB92CFB02E50041F128 /* XCRemoteSwiftPackageReference "Highlightr" */,
+				08F02DBC2CFB13030041F128 /* XCRemoteSwiftPackageReference "HighlightSwift" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1031,6 +1048,7 @@
 				08A77CCC2C65AA820087D0F3 /* DatabaseService.swift in Sources */,
 				08F815242C97F59100B49355 /* PluginSettings.swift in Sources */,
 				08CA42B62CF1F13B0073BB01 /* ExpandButton.swift in Sources */,
+				08F02DB52CFAE73B0041F128 /* AdvancedMarkdownParser.swift in Sources */,
 				08CA42BA2CF1F18D0073BB01 /* ForkButton.swift in Sources */,
 				08CA42BE2CF1F3C00073BB01 /* SelectTextButton.swift in Sources */,
 				0893B2062C39810900D4D501 /* ChatConfig.swift in Sources */,
@@ -1131,6 +1149,7 @@
 				08F8152B2C97F5FA00B49355 /* ImageGenerator.swift in Sources */,
 				080E70E82CDF1BC100A949C9 /* Tips.swift in Sources */,
 				08F0EF1E2C6C2DFD00900ED0 /* ActionButton.swift in Sources */,
+				08F02DC02CFB2F800041F128 /* BasicMarkdownView.swift in Sources */,
 				087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */,
 				08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */,
 				085910CA2C4F7A720086E493 /* ImageVM.swift in Sources */,
@@ -1434,14 +1453,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		0812974E2CF5B7DF00440D19 /* XCRemoteSwiftPackageReference "HighlightSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/HighlightSwift";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		086346A92CE78078006E5927 /* XCRemoteSwiftPackageReference "SwiftMarkdownView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/SwiftMarkdownView";
@@ -1482,16 +1493,35 @@
 				version = 2.0.2;
 			};
 		};
+		08F02DB12CFAE7140041F128 /* XCRemoteSwiftPackageReference "swift-markdown" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/swiftlang/swift-markdown";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.0;
+			};
+		};
+		08F02DB92CFB02E50041F128 /* XCRemoteSwiftPackageReference "Highlightr" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/raspu/Highlightr";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.1;
+			};
+		};
+		08F02DBC2CFB13030041F128 /* XCRemoteSwiftPackageReference "HighlightSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SilverMarcs/HighlightSwift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		0812974C2CF5A9DE00440D19 /* HighlightSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = HighlightSwift;
-		};
-		0812974F2CF5B7DF00440D19 /* HighlightSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0812974E2CF5B7DF00440D19 /* XCRemoteSwiftPackageReference "HighlightSwift" */;
 			productName = HighlightSwift;
 		};
 		0823550C2CDBB74900388273 /* GoogleGenerativeAI */ = {
@@ -1542,6 +1572,25 @@
 		08DB150A2CDC5B2200DC5B90 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
+		};
+		08F02DB22CFAE7140041F128 /* Markdown */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08F02DB12CFAE7140041F128 /* XCRemoteSwiftPackageReference "swift-markdown" */;
+			productName = Markdown;
+		};
+		08F02DB72CFB006E0041F128 /* HighlightSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HighlightSwift;
+		};
+		08F02DBA2CFB02E50041F128 /* Highlightr */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08F02DB92CFB02E50041F128 /* XCRemoteSwiftPackageReference "Highlightr" */;
+			productName = Highlightr;
+		};
+		08F02DBD2CFB13030041F128 /* HighlightSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08F02DBC2CFB13030041F128 /* XCRemoteSwiftPackageReference "HighlightSwift" */;
+			productName = HighlightSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

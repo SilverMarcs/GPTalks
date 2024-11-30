@@ -108,6 +108,7 @@ struct ChatDetail: View {
                 }
             
                 ForEach(messagesToShow, id: \.self) { message in
+//                ForEach(Array(messagesToShow.enumerated()), id: \.offset) { _, message in
                     MessageView(message: message)
                 }
                 .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 0))
