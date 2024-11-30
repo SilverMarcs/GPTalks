@@ -43,9 +43,6 @@ struct AppearanceSettings: View {
                     Text("Markdown Provider")
                     Text("Native uses less memeory but may be inaccurate")
                 }
-                #if os(macOS)
-                .pickerStyle(.radioGroup)
-                #endif
                 
                 Picker(selection: $config.codeBlockTheme) {
                     ForEach(CodeTheme.allCases, id: \.self) { theme in

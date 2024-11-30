@@ -21,12 +21,12 @@ struct MarkdownView: View {
             Text(content)
                 .textSelection(.enabled)
                 .font(.system(size: config.fontSize))
-        case .basic:
-            BasicMarkdownView(content: content)
-                .textSelection(.enabled)
-        case .native,
+        case .basic,
              .webview where !chatVM.searchText.isEmpty:
-            NativeMarkdown(text: content, highlightText: chatVM.searchText)
+            BasicMarkdownView(text: content, highlightText: chatVM.searchText)
+                .textSelection(.enabled)
+        case .advanced:
+            AdvancedMarkdownView(content: content)
                 .textSelection(.enabled)
         case .webview:
             SwiftMarkdownView(content, calculatedHeight: calculatedHeight)

@@ -12,7 +12,7 @@ enum MarkdownProvider: String, CaseIterable, Identifiable {
     
     case disabled
     case basic
-    case native
+    case advanced
     case webview
     
     var name: String {
@@ -21,8 +21,8 @@ enum MarkdownProvider: String, CaseIterable, Identifiable {
             "Disabled"
         case .basic:
             "Basic"
-        case .native:
-            "Native"
+        case .advanced:
+            "Advanced"
         case .webview:
             "Webview"
         }
