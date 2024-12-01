@@ -14,30 +14,19 @@ struct MessageMenu: View {
 
     var body: some View {
         ExpandButton(isExpanded: $isExpanded, message: message)
-        
+
         Section {
             EditButton(message: message)
             RegenButton(message: message)
         }
-    
+
         Section {
             CopyButton(message: message)
             ForkButton(message: message)
             #if !os(macOS)
-            SelectTextButton(toggleTextSelection: toggleTextSelection)
+                SelectTextButton(toggleTextSelection: toggleTextSelection)
             #endif
         }
-        
-        Section {
-            ResetContextButton(message: message)
-            DeleteButton(message: message)
-        }
-        
-        #if os(macOS)
-        Section {
-            NavigationButtons(message: message)
-        }
-        #endif
     }
 }
 

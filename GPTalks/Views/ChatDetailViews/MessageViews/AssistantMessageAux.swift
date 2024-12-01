@@ -58,9 +58,15 @@ struct AssistantMessageAux: View {
                     .controlSize(.small)
             }
             
-            if !showMenu {
-                secondaryNavigateButtons
+            #if os(macOS)
+            if !message.isReplying {
+                if !showMenu {
+                    SecondaryNavigationButtons(group: group)
+                } else {
+                    NavigationButtons(message: group)
+                }
             }
+            #endif
             
             Spacer()
         }
@@ -76,30 +82,7 @@ struct AssistantMessageAux: View {
             TextSelectionView(content: message.content)
         }
     }
-    
-    @ViewBuilder
-    var secondaryNavigateButtons: some View {
-        if group.secondaryMessages.count > 1 {
-            HStack {
-                Button {
-                    group.previousSecondaryMessage()
-                } label: {
-                    Label("Previous", systemImage: "chevron.left")
-                }
-                .disabled(!group.canGoToPreviousSecondary)
-                .opacity(!group.canGoToPreviousSecondary ? 0.5 : 1)
-                
-                Button {
-                    group.nextSecondaryMessage()
-                } label: {
-                    Label("Next", systemImage: "chevron.right")
-                }
-                .disabled(!group.canGoToNextSecondary)
-                .opacity(!group.canGoToNextSecondary ? 0.5 : 1)
-            }
-            .buttonStyle(HoverScaleButtonStyle())
-        }
-    }
+
 }
 
 #Preview {

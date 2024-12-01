@@ -12,31 +12,34 @@ struct NavigationButtons: View {
     
     var body: some View {
         if message.allMessages.count > 1 {
-            if message.allMessages.count >= 2 {
-                Button {
-                    message.toggleSplitView()
-                } label: {
-                    Label(message.isSplitView ? "Exit SplitView" : "SplitView", systemImage: message.isSplitView ? "rectangle.split.2x1.slash" : "square.split.2x1")
+            HStack {
+                if message.allMessages.count >= 2 && message.role == .assistant {
+                    Button {
+                        message.toggleSplitView()
+                    } label: {
+                        Label(message.isSplitView ? "Exit SplitView" : "SplitView", systemImage: message.isSplitView ? "rectangle.split.2x1.slash" : "square.split.2x1")
+                    }
                 }
-            }
-            
-            if !message.isSplitView {
-                Button {
-                    message.goToPreviousMessage()
-                } label: {
-                    Label("Previous", systemImage: "chevron.left")
-                }
-                .disabled(!message.canGoToPrevious)
-//                .opacity(message.canGoToPrevious ? 1 : 0.5)
                 
-                Button {
-                    message.goToNextMessage()
-                } label: {
-                    Label("Next", systemImage: "chevron.right")
+                if !message.isSplitView {
+                    Button {
+                        message.goToPreviousMessage()
+                    } label: {
+                        Label("Previous", systemImage: "chevron.left")
+                    }
+                    .disabled(!message.canGoToPrevious)
+                    .opacity(message.canGoToPrevious ? 1 : 0.5)
+                    
+                    Button {
+                        message.goToNextMessage()
+                    } label: {
+                        Label("Next", systemImage: "chevron.right")
+                    }
+                    .disabled(!message.canGoToNext)
+                    .opacity(message.canGoToNext ? 1 : 0.5)
                 }
-                .disabled(!message.canGoToNext)
-//                .opacity(message.canGoToNext ? 1 : 0.5)
             }
+            .buttonStyle(HoverScaleButtonStyle())
         }
     }
 }

@@ -43,6 +43,12 @@ struct UserMessage: View {
                         .clear
                     )
             )
+            
+            #if os(macOS)
+            HStack {
+                NavigationButtons(message: message)
+            }
+            #endif
         }
         .padding(.leading, leadingPadding)
         .frame(maxWidth: .infinity, alignment: .trailing)

@@ -67,8 +67,6 @@ final class Chat {
     
     @MainActor
     func processRequest(message: Message) async {
-        AppConfig.shared.hasUserScrolled = false
-        scrollDown()
         errorMessage = ""
         date = Date()
         streamingTask = Task {
@@ -87,6 +85,11 @@ final class Chat {
             #endif
             
             do {
+                scrollDown()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.scrollDown()
+                }
+                
                 try await streamer.handleRequest()
             } catch {
                 handleError(error)
@@ -139,14 +142,12 @@ final class Chat {
             } else {
                 let lastGroup = currentThread.last!
                 lastGroup.activeMessage.next = userGroup
-                scrollDown()
             }
             
             let assistantMessage = Message(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
             let assistantGroup = MessageGroup(message: assistantMessage)
             assistantGroup.chat = self
             userGroup.activeMessage.next = assistantGroup
-            scrollDown()
              
             await processRequest(message: assistantMessage)
         }

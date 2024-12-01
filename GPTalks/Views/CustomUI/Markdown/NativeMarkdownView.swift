@@ -16,7 +16,7 @@ struct NativeMarkdownView: View {
     init(content: String, searchText: String) {
         let document = Document(parsing: content)
         var markdownParser = MarkdownParser()
-        self.contentItems = markdownParser.parserResults2(from: document, highlightText: searchText)
+        self.contentItems = markdownParser.parserResults(from: document, highlightText: searchText)
     }
     
     var body: some View {

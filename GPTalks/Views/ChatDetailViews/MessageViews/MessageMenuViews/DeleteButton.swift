@@ -15,7 +15,7 @@ struct DeleteButton: View {
             Button(role: .destructive) {
                 message.chat?.deleteLastMessage()
             } label: {
-                Label("Delete Message", systemImage: "trash")
+                Label("Delete Message", systemImage: "minus.circle")
             }
         }
     }

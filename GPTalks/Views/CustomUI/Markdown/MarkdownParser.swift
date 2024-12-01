@@ -39,7 +39,7 @@ public struct MarkdownParser: MarkupVisitor {
         return visit(document)
     }
   
-    mutating func parserResults2(from document: Document, highlightText: String) -> [ContentItem] {
+    mutating func parserResults(from document: Document, highlightText: String) -> [ContentItem] {
         var results = [ContentItem]()
         var currentTextBuffer = NSMutableAttributedString()
         
