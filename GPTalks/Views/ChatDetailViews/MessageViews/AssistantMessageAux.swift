@@ -18,7 +18,7 @@ struct AssistantMessageAux: View {
     @State private var showingTextSelection = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 7) {
+        VStack(alignment: .leading, spacing: 8) {
             Label {
                 Text(message.model?.name ?? "Assistant")
                     .font(.subheadline)
@@ -61,9 +61,30 @@ struct AssistantMessageAux: View {
             #if os(macOS)
             if !message.isReplying {
                 if !showMenu {
-                    SecondaryNavigationButtons(group: group)
+                    HStack(alignment: .center) {
+                        SecondaryNavigationButtons(group: group)
+                            .buttonStyle(.plain)
+                            .labelStyle(.iconOnly)
+                    }
                 } else {
-                    NavigationButtons(message: group)
+                    HStack(alignment: .center) {
+                        Menu {
+                            MessageMenu(message: group, isExpanded: .constant(true)) {
+                                showingTextSelection.toggle()
+                            }
+                            .labelStyle(.titleOnly)
+                        } label: {
+                            Label("More", systemImage: "ellipsis.circle")
+                        }
+                        .fixedSize()
+                        .menuIndicator(.hidden)
+                        .labelStyle(.titleOnly)
+                        .buttonStyle(.primaryBordered)
+                        
+                        NavigationButtons(message: group)
+                            .buttonStyle(.plain)
+                            .labelStyle(.iconOnly)
+                    }
                 }
             }
             #endif
@@ -71,18 +92,19 @@ struct AssistantMessageAux: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.leading, 27)
+        .padding(.leading, 25)
         .padding(.trailing, 30)
+        .sheet(isPresented: $showingTextSelection) {
+            TextSelectionView(content: message.content)
+        }
+        #if !os(macOS)
         .contextMenu {
             MessageMenu(message: group, isExpanded: .constant(true)) {
                 showingTextSelection.toggle()
             }
         }
-        .sheet(isPresented: $showingTextSelection) {
-            TextSelectionView(content: message.content)
-        }
+        #endif
     }
-
 }
 
 #Preview {

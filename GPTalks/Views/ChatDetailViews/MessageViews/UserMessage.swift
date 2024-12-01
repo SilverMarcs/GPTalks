@@ -18,7 +18,7 @@ struct UserMessage: View {
     @State var showingTextSelection = false
     
     var body: some View {
-        VStack(alignment: .trailing, spacing: 7) {
+        VStack(alignment: .trailing, spacing: 8) {
             if !message.dataFiles.isEmpty {
                 DataFilesView(dataFiles: message.dataFiles)
             }
@@ -35,31 +35,47 @@ struct UserMessage: View {
             }
             .transaction { $0.animation = nil }
             .groupBoxStyle(PlatformGroupBoxStyle())
-            .background(
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(
-                        (message.chat?.inputManager.editingMessage == self.message.activeMessage) ?
-                        Color.accentColor.opacity(0.2) :
-                        .clear
-                    )
-            )
+            .if(message.chat?.inputManager.editingMessage == self.message.activeMessage) {
+                $0.background(
+                    RoundedRectangle(cornerRadius: 5)
+                        .fill(Color.accentColor.opacity(0.2))
+                )
+            }
             
             #if os(macOS)
-            HStack {
+            HStack(alignment: .center) {
                 NavigationButtons(message: message)
+                    .labelStyle(.iconOnly)
+                    .buttonStyle(.plain)
+                
+                Menu {
+                    MessageMenu(message: message, isExpanded: $isExpanded) {
+                        showingTextSelection.toggle()
+                    }
+                    .labelStyle(.titleOnly)
+                } label: {
+                    Label("More", systemImage: "ellipsis.circle")
+                }
+                .fixedSize()
+                .menuIndicator(.hidden)
+                .labelStyle(.titleOnly)
+                .buttonStyle(.primaryBordered)
             }
             #endif
         }
         .padding(.leading, leadingPadding)
         .frame(maxWidth: .infinity, alignment: .trailing)
+
+        .sheet(isPresented: $showingTextSelection) {
+            TextSelectionView(content: message.content)
+        }
+        #if !os(macOS)
         .contextMenu {
             MessageMenu(message: message, isExpanded: $isExpanded) {
                 showingTextSelection.toggle()
             }
         }
-        .sheet(isPresented: $showingTextSelection) {
-            TextSelectionView(content: message.content)
-        }
+        #endif
     }
     
     var leadingPadding: CGFloat {

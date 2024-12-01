@@ -78,6 +78,7 @@
 		086346AE2CE7808B006E5927 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 086346AD2CE7808B006E5927 /* OpenAI */; };
 		086346B12CE780B6006E5927 /* SwiftAnthropic in Frameworks */ = {isa = PBXBuildFile; productRef = 086346B02CE780B6006E5927 /* SwiftAnthropic */; };
 		086346B42CE780C6006E5927 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 086346B32CE780C6006E5927 /* GoogleGenerativeAI */; };
+		0865E0962CFC903100C40B83 /* PrimaryBorderedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0865E0952CFC903100C40B83 /* PrimaryBorderedButtonStyle.swift */; };
 		0867741C2CE682C700FF2A3C /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0867741B2CE682C700FF2A3C /* OpenAI */; };
 		0869A3EB2C958A4C009BF9F2 /* ChatConfigTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869A3EA2C958A4C009BF9F2 /* ChatConfigTools.swift */; };
 		0869A3F22C95DBF9009BF9F2 /* StreamResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869A3F12C95DBF9009BF9F2 /* StreamResponse.swift */; };
@@ -281,6 +282,7 @@
 		085645432C3F98DF00ED84DA /* TitleGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleGenerator.swift; sourceTree = "<group>"; };
 		085910C92C4F7A720086E493 /* ImageVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageVM.swift; sourceTree = "<group>"; };
 		085EA4A42C9C4E9600124F83 /* IntegerStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerStepper.swift; sourceTree = "<group>"; };
+		0865E0952CFC903100C40B83 /* PrimaryBorderedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryBorderedButtonStyle.swift; sourceTree = "<group>"; };
 		0869A3EA2C958A4C009BF9F2 /* ChatConfigTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatConfigTools.swift; sourceTree = "<group>"; };
 		0869A3F12C95DBF9009BF9F2 /* StreamResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamResponse.swift; sourceTree = "<group>"; };
 		0869A3F52C95E4CC009BF9F2 /* ChatToolCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatToolCall.swift; sourceTree = "<group>"; };
@@ -735,6 +737,7 @@
 		08AAFB912C3C88CA002C04E0 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				0865E0952CFC903100C40B83 /* PrimaryBorderedButtonStyle.swift */,
 				08C5AD762CFB7FBF00F5FEA0 /* SelectedButtonStyle.swift */,
 				08FD45592CB8EF680046D165 /* ClickHighlightButton.swift */,
 				081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */,
@@ -1160,6 +1163,7 @@
 				087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */,
 				08A313472C4AD03300C3E578 /* ImageInputView.swift in Sources */,
 				08C5AD752CFB792200F5FEA0 /* CustomCopyButton.swift in Sources */,
+				0865E0962CFC903100C40B83 /* PrimaryBorderedButtonStyle.swift in Sources */,
 				085910CA2C4F7A720086E493 /* ImageVM.swift in Sources */,
 				08CA42B32CF0F4430073BB01 /* MessageGroup.swift in Sources */,
 				08A77CC92C65A3AD0087D0F3 /* SectionFooterView.swift in Sources */,

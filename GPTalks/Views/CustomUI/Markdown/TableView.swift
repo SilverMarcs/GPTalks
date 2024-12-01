@@ -112,6 +112,8 @@ struct TableView: View {
     }
     
     private func populateTableData() async {
+        // sleep for 0.1s
+        try? await Task.sleep(nanoseconds: 100_000_000)
         // Populate headers
         headers = (0..<table.head.childCount).map { index in
             cellText(for: table.head.child(at: index) as! Markdown.Table.Cell)

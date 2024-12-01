@@ -24,7 +24,7 @@ struct MessageMenu: View {
             CopyButton(message: message)
             ForkButton(message: message)
             #if !os(macOS)
-                SelectTextButton(toggleTextSelection: toggleTextSelection)
+            SelectTextButton(toggleTextSelection: toggleTextSelection)
             #endif
         }
     }
