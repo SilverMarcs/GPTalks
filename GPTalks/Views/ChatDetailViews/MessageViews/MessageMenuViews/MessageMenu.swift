@@ -28,6 +28,11 @@ struct MessageMenu: View {
             SelectTextButton(toggleTextSelection: toggleTextSelection)
             #endif
         }
+        
+        Section {
+            ResetContextButton(message: message)
+            DeleteButton(message: message)
+        }
     }
 }
 
