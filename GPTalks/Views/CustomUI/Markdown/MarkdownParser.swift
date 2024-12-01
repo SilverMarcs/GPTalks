@@ -300,7 +300,7 @@ extension NSMutableAttributedString {
             #if os(macOS)
             let newFont = font.apply(newTraits: .italic)
             #else
-            let newFont = font.withSymbolicTraits(.traitItalic)
+            let newFont = font.apply(newTraits: .traitItalic)
             #endif
             
             addAttribute(.font, value: newFont, range: range)
