@@ -14,6 +14,8 @@ struct MessageMenu: View {
 
     var body: some View {
         ExpandButton(isExpanded: $isExpanded, message: message)
+        
+        CopyButton(message: message)
 
         Section {
             EditButton(message: message)
@@ -21,7 +23,6 @@ struct MessageMenu: View {
         }
 
         Section {
-            CopyButton(message: message)
             ForkButton(message: message)
             #if !os(macOS)
             SelectTextButton(toggleTextSelection: toggleTextSelection)

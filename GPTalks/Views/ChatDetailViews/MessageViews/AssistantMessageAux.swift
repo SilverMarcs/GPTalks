@@ -19,19 +19,8 @@ struct AssistantMessageAux: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label {
-                Text(message.model?.name ?? "Assistant")
-                    .font(.subheadline)
-                    .bold()
-                    .foregroundStyle(.secondary)
-                    .transaction { $0.animation = nil }
-            } icon: {
-                Image(message.provider?.type.imageName ?? "brain.SFSymbol")
-                    .imageScale(.large)
-                    .foregroundStyle(Color(hex: message.provider?.color ?? "#00947A").gradient)
-                    .transaction { $0.animation = nil }
-            }
-            .padding(.leading, -23)
+            AssistantLabel(message: message)
+                .padding(.leading, labelPadding)
             
             MarkdownView(content: message.content, calculatedHeight: $height)
                 .environment(\.isReplying, message.isReplying)
@@ -86,10 +75,9 @@ struct AssistantMessageAux: View {
                             .labelStyle(.iconOnly)
                     }
                 }
-            }
-            #endif
-            
+            }  
             Spacer()
+            #endif
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 25)
@@ -105,6 +93,14 @@ struct AssistantMessageAux: View {
         }
         #endif
     }
+    
+    var labelPadding: CGFloat {
+        #if os(macOS)
+        return -22
+        #else
+        return -25
+        #endif
+    }
 }
 
 #Preview {
@@ -112,4 +108,3 @@ struct AssistantMessageAux: View {
         .environment(ChatVM())
         .frame(width: 600, height: 300)
 }
-

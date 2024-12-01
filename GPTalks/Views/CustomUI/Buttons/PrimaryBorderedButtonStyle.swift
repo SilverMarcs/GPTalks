@@ -13,9 +13,10 @@ struct PrimaryBorderedButtonStyle: ButtonStyle {
             .padding(.horizontal, 5)
             .padding(.vertical, 2)
             .font(.callout)
+            .opacity(0.9)
             .background(
                 RoundedRectangle(cornerRadius: 4)
-                    .stroke(.secondary, lineWidth: 1)
+                    .stroke(.secondary, lineWidth: 0.5)
             )
             .contentShape(Rectangle())
     }

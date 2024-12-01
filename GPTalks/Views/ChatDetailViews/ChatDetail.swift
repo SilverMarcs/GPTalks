@@ -111,7 +111,9 @@ struct ChatDetail: View {
 //                ForEach(Array(messagesToShow.enumerated()), id: \.offset) { _, message in
                     MessageView(message: message)
                 }
+                #if os(macOS)
                 .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 0))
+                #endif
                 .listRowSeparator(.hidden)
                 
                 ErrorMessageView(message: $chat.errorMessage)

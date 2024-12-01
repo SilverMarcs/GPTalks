@@ -23,6 +23,7 @@
 		0819479E2C48DCDB0061227B /* ImageList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819479D2C48DCDB0061227B /* ImageList.swift */; };
 		081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D932C3BD33F0078BB24 /* ParameterSettings.swift */; };
 		081C1D982C3BD8A50078BB24 /* GeneralSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081C1D972C3BD8A50078BB24 /* GeneralSettings.swift */; };
+		081CB4E52CFC9A320033E6A3 /* AssistantLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081CB4E42CFC9A320033E6A3 /* AssistantLabel.swift */; };
 		081F58B82C6C8FFE00565F20 /* HoverScaleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */; };
 		08217FC02CE0EC5300D0D10D /* AdvancedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08217FBF2CE0EC5300D0D10D /* AdvancedSettings.swift */; };
 		0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082181592C382B9B00171BF3 /* ProviderGeneral.swift */; };
@@ -235,6 +236,7 @@
 		0819479D2C48DCDB0061227B /* ImageList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageList.swift; sourceTree = "<group>"; };
 		081C1D932C3BD33F0078BB24 /* ParameterSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterSettings.swift; sourceTree = "<group>"; };
 		081C1D972C3BD8A50078BB24 /* GeneralSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettings.swift; sourceTree = "<group>"; };
+		081CB4E42CFC9A320033E6A3 /* AssistantLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantLabel.swift; sourceTree = "<group>"; };
 		081F58B72C6C8FFE00565F20 /* HoverScaleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverScaleButton.swift; sourceTree = "<group>"; };
 		08217FBF2CE0EC5300D0D10D /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
 		082181592C382B9B00171BF3 /* ProviderGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderGeneral.swift; sourceTree = "<group>"; };
@@ -820,6 +822,7 @@
 				08C800462C36C4ED009581C5 /* UserMessage.swift */,
 				08C800482C36C521009581C5 /* AssistantMessage.swift */,
 				081297512CF5C3FF00440D19 /* AssistantMessageAux.swift */,
+				081CB4E42CFC9A320033E6A3 /* AssistantLabel.swift */,
 				085276BF2C98794C009184D2 /* ToolCallView.swift */,
 				08B8DE222C97F4EA0041A690 /* ToolResponseMessage.swift */,
 			);
@@ -1167,6 +1170,7 @@
 				085910CA2C4F7A720086E493 /* ImageVM.swift in Sources */,
 				08CA42B32CF0F4430073BB01 /* MessageGroup.swift in Sources */,
 				08A77CC92C65A3AD0087D0F3 /* SectionFooterView.swift in Sources */,
+				081CB4E52CFC9A320033E6A3 /* AssistantLabel.swift in Sources */,
 				08CF5B892C68980B0079D5EE /* HighlightableTextView.swift in Sources */,
 				08F815292C97F5E100B49355 /* ChatTool.swift in Sources */,
 				089825272CE9B67700980468 /* WelcomeOnboarding.swift in Sources */,
