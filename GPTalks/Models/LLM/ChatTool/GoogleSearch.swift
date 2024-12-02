@@ -8,6 +8,7 @@
 import Foundation
 import OpenAI
 import GoogleGenerativeAI
+import SwiftAnthropic
 
 struct GoogleSearch: ToolProtocol {
     static let toolName = "googleSearch"
@@ -47,7 +48,7 @@ struct GoogleSearch: ToolProtocol {
                         return "Title: \(title)\nLink: \(link)\nSnippet: \(snippet)\n"
                     }.joined(separator: "\n")
                     
-                    return .init(string: searchResultsString)
+                    return ToolData(string: searchResultsString)
                 }
             }
         } catch {
@@ -56,8 +57,6 @@ struct GoogleSearch: ToolProtocol {
         
         throw RuntimeError("Failed to parse search results")
     }
-
-
     
     static func process(arguments: String) async throws -> ToolData {
         let query = try getQuery(from: arguments)
@@ -142,22 +141,17 @@ struct GoogleSearch: ToolProtocol {
             )
         ])
     }
-
-    static var vertex: [String: Any] {
-        [
-            "name": toolName,
-            "description": description,
-            "input_schema": [
-                "type": "object",
-                "properties": [
-                    "query": [
-                        "type": "string",
-                        "description": "The search query to search google with"
-                    ]
+    
+    static var anthropic: MessageParameter.Tool {
+        .init(
+            name: toolName,
+            description: description,
+            inputSchema: .init(
+                type: .object,
+                properties: [
+                    "query": .init(type: .string, description: "The search query to search google with"),
                 ],
-                "required": ["query"]
-            ]
-        ]
+                required: ["query"])
+        )
     }
-
 }

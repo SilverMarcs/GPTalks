@@ -13,6 +13,8 @@ struct ClaudeService: AIService {
     typealias ConvertedType = MessageParameter.Message
     
     static func convert(conversation: Message) -> MessageParameter.Message {
+        var localRole = conversation.role.toClaudeRole()
+        
         let contentItems = FileHelper.processDataFiles(conversation.dataFiles, messageId: conversation.id.uuidString, role: conversation.role)
         var contentObjects: [MessageParameter.Message.Content.ContentObject] = []
         for item in contentItems {
@@ -29,10 +31,22 @@ struct ClaudeService: AIService {
             }
         }
         
-        contentObjects.append(.text(conversation.content))
+        if !conversation.content.isEmpty {
+            contentObjects.append(.text(conversation.content))
+        }
+        
+        if let response = conversation.toolResponse {
+            localRole = .user
+            contentObjects.append(.toolResult(response.tool.toolName, response.processedContent))
+        }
+        
+        for call in conversation.toolCalls {
+            print("Conversion ToolCallId: \(call.toolCallId)")
+            contentObjects.append(.toolUse(call.tool.toolName, call.toolCallId, ["arguments": .string(call.arguments)]))
+        }
         
         let finalContent: MessageParameter.Message = .init(
-            role: conversation.role.toClaudeRole(),
+            role: localRole,
             content: .list(contentObjects)
         )
         
@@ -53,9 +67,56 @@ struct ClaudeService: AIService {
             Task {
                 do {
                     let response = try await service.streamMessage(parameters)
+                    var currentToolUseId: String?
+                    var currentToolName: String?
+                    var partialJsonAccumulator = ""
+
                     for try await result in response {
-                        if let content = result.delta?.text {
-                            continuation.yield(.content(content))
+                        let content = result.delta?.text ?? ""
+                        continuation.yield(.content(content))
+                        
+                        if let streamEvent = result.streamEvent {
+                            switch streamEvent {
+                            case .contentBlockStart:
+                                if let toolUse = result.contentBlock?.toolUse {
+                                    // Start accumulating JSON for this tool use
+                                    currentToolUseId = toolUse.id
+                                    currentToolName = toolUse.name
+                                    partialJsonAccumulator = ""
+                                }
+                                
+                            case .contentBlockDelta:
+                                // Continue accumulating partial JSON data
+                                if let partialJson = result.delta?.partialJson {
+                                    partialJsonAccumulator += partialJson
+                                }
+                                
+                            case .contentBlockStop:
+                                // Finalize the tool call when the content block stops
+                                if let toolId = currentToolUseId, let toolName = currentToolName {
+                                    // Use the accumulated JSON
+                                    let argumentsString = partialJsonAccumulator
+
+                                    // Create the ChatToolCall object
+                                    print("ToolId: \(toolId)")
+                                    let call = ChatToolCall(
+                                        toolCallId: toolId,
+                                        tool: ChatTool(rawValue: toolName)!,
+                                        arguments: argumentsString
+                                    )
+                                    
+                                    // Yield the tool call
+                                    continuation.yield(.toolCalls([call]))
+                                    
+                                    // Reset the accumulator and current tool information
+                                    currentToolUseId = nil
+                                    currentToolName = nil
+                                    partialJsonAccumulator = ""
+                                }
+                                
+                            default:
+                                break
+                            }
                         }
                     }
                     continuation.finish()
@@ -88,12 +149,13 @@ struct ClaudeService: AIService {
     static private func createParameters(from conversations: [Message], config: ChatConfig, stream: Bool) -> MessageParameter {
         let messages = conversations.map { convert(conversation: $0) }
         let systemPrompt = MessageParameter.System.text(config.systemPrompt)
+        let tools = config.tools.enabledTools.map { $0.anthropic }
         
-        for message in messages {
-            print(message.role)
-            print(message.content)
-            print("\n")
-        }
+//        for message in messages {
+//            print("\n")
+//            print(message.role)
+//            print(message.content)
+//        }
     
         return MessageParameter(
             model: .other(config.model.code),
@@ -102,7 +164,8 @@ struct ClaudeService: AIService {
             system: systemPrompt,
             stream: stream,
             temperature: config.temperature,
-            topP: config.topP
+            topP: config.topP,
+            tools: tools.isEmpty ? nil : tools
         )
     }
     

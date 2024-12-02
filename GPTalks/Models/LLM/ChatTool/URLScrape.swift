@@ -8,6 +8,7 @@
 import Foundation
 import OpenAI
 import GoogleGenerativeAI
+import SwiftAnthropic
 
 struct URLScrape: ToolProtocol {
     static let toolName = "urlScrape"
@@ -148,25 +149,17 @@ struct URLScrape: ToolProtocol {
             )
         ])
     }
-    
-    static var vertex: [String: Any] {
-         [
-            "name": toolName,
-            "description": description,
-            "input_schema": [
-                "type": "object",
-                "properties": [
-                    "url_list": [
-                        "type": "array",
-                        "description": "The array of URLs of the websites to scrape",
-                        "items": [
-                            "type": "string"
-                        ],
-                        "maxItems": 5
-                    ]
+
+    static var anthropic: MessageParameter.Tool {
+        .init(
+            name: toolName,
+            description: description,
+            inputSchema: .init(
+                type: .object,
+                properties: [
+                    "url_list": .init(type: .array, description: "The array of URLs of the website(s) to scrape"),
                 ],
-                "required": ["url_list"]
-            ]
-        ]
+                required: ["url_list"])
+        )
     }
 }

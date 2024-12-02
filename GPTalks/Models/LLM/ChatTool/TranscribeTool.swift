@@ -9,6 +9,7 @@ import Foundation
 import OpenAI
 import GoogleGenerativeAI
 import SwiftData
+import SwiftAnthropic
 
 struct TranscribeTool: ToolProtocol {
     static let toolName: String = "transcribe"
@@ -152,28 +153,17 @@ struct TranscribeTool: ToolProtocol {
         ])
     }
     
-    static var vertex: [String: Any] {
-         [
-            "name": toolName,
-            "description": description,
-            "input_schema": [
-                "type": "object",
-                "properties": [
-                    "conversationID": [
-                        "type": "string",
-                        "description": "The conversation ID"
-                    ],
-                    "fileNames": [
-                        "type": "array",
-                        "description": "The array of audio file names WITH extension to access",
-                        "items": [
-                            "type": "string"
-                        ],
-                        "maxItems": 5
-                    ]
+    static var anthropic: MessageParameter.Tool {
+        .init(
+            name: toolName,
+            description: description,
+            inputSchema: .init(
+                type: .object,
+                properties: [
+                    "conversationID": .init(type: .string, description: "The conversation ID"),
+                    "fileNames": .init(type: .string, description: "The array of audio file names WITH extension to access")
                 ],
-                "required": ["conversationID", "fileNames"]
-            ]
-        ]
+                required: ["conversationID", "fileNames"])
+        )
     }
 }

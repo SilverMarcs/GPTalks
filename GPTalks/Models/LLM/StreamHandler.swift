@@ -134,6 +134,7 @@ struct StreamHandler {
         let newAssistant: Message
         if toolDatas.isEmpty {
             newAssistant = Message(role: .assistant, provider: chat.config.provider, model: chat.config.model)
+            newAssistant.isReplying = true
             let newAssistantGroup = MessageGroup(message: newAssistant)
             newAssistantGroup.chat = chat
             
@@ -143,7 +144,7 @@ struct StreamHandler {
             try await streamer.handleRequest()
         } else {
             newAssistant = Message(role: .assistant, provider: chat.config.provider, model: chat.config.provider.imageModel)
-            newAssistant.content = "Here are the images I generated:"
+            newAssistant.content = "Here are the generated image(s):"
             newAssistant.dataFiles = toolDatas
             newAssistant.isReplying = false
             

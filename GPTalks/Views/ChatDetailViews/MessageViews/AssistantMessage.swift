@@ -40,7 +40,10 @@ struct AssistantMessage: View {
                 }
             
             if !message.dataFiles.isEmpty {
-                DataFilesView(dataFiles: message.dataFiles, edge: .leading)
+//                DataFilesView(dataFiles: message.dataFiles, edge: .leading)
+                ForEach(message.dataFiles, id: \.self) { data in
+                    ImageViewerData(data: data.data)
+                }
             }
             
             if message.isReplying {

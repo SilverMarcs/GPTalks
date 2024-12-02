@@ -19,21 +19,33 @@ struct ToolCallView: View {
                         showArguments.toggle()
                     }
                 } label: {
-                    Text("^[\(message.toolCalls.count) Tool](inflect: true)")
-                        .foregroundStyle(.secondary)
-                    
-                    if message.isReplying {
-                        ProgressView()
-                            .controlSize(.mini)
-                    } else {
-                        Image(systemName: showArguments ? "chevron.up" : "chevron.down")
+                    HStack(spacing: 4) {
+                        Text("^[\(message.toolCalls.count) Tool](inflect: true)")
+                            .font(.subheadline)
+                            .bold()
                             .foregroundStyle(.secondary)
+                            .foregroundStyle(.teal)
+                            .brightness(1.1)
+                        
+                        if message.isReplying {
+                            ProgressView()
+                                .controlSize(.mini)
+                        } else {
+                            Image(systemName: showArguments ? "chevron.up" : "chevron.down")
+                                .foregroundStyle(.secondary)
+                                .font(.subheadline)
+                                .bold()
+                                .foregroundStyle(.secondary)
+                                .foregroundStyle(.teal)
+                                .brightness(1.1)
+                        }
                     }
+                    .contentShape(.rect)
                 }
                 .transaction { $0.animation = nil }
                 .buttonStyle(.plain)
             } icon: {
-                Image(systemName: "hammer")
+                Image(systemName: "hammer.fill")
                     .imageScale(.medium)
                     .fontWeight(.semibold)
                     .foregroundStyle(.teal)
@@ -43,7 +55,7 @@ struct ToolCallView: View {
             .padding(.leading, -23)
             
             if !message.content.isEmpty {
-                Text(message.content)
+                Text(message.content.trimmingCharacters(in: .whitespacesAndNewlines))
                     .lineSpacing(3)
                     .textSelection(.enabled)
                     .transaction { $0.animation = nil }
@@ -60,6 +72,8 @@ struct ToolCallView: View {
                         ForEach(message.toolCalls) { toolCall in
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(toolCall.tool.displayName)
+                                    .bold()
+                                
                                 Text(toolCall.arguments)
                                     .foregroundStyle(.secondary)
                                     .textSelection(.enabled)
@@ -69,6 +83,7 @@ struct ToolCallView: View {
                     }
                 }
                 .padding(.leading, 4)
+                .padding(.vertical, 8)
             }
         }
         .padding(.leading, 27)
