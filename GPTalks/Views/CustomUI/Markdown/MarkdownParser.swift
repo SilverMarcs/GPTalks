@@ -221,7 +221,7 @@ public struct MarkdownParser: MarkupVisitor {
         }
         
         if unorderedList.hasSuccessor {
-            result.append(NSAttributedString(string: "\n"))
+            result.append(NSAttributedString(string: "\n\n"))
         }
         
         return result
@@ -239,7 +239,7 @@ public struct MarkdownParser: MarkupVisitor {
         }
         
         if orderedList.hasSuccessor {
-            result.append(NSAttributedString(string: "\n"))
+            result.append(NSAttributedString(string: "\n\n"))
         }
         
         return result

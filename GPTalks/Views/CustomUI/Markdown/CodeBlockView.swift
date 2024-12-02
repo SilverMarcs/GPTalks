@@ -9,6 +9,7 @@ import SwiftUI
 import HighlightSwift
 
 struct CodeBlockView: View {
+    @Environment(\.colorScheme) var colorScheme
     @Environment(ChatVM.self) var chatVM
     @Environment(\.isReplying) var isReplying
     @ObservedObject var config = AppConfig.shared
@@ -40,7 +41,11 @@ struct CodeBlockView: View {
         .font(.system(size: AppConfig.shared.fontSize - 5, design: .monospaced))
         #endif
         .roundedRectangleOverlay(radius: 6)
-        .background(.background.quinary.opacity(0.1), in: RoundedRectangle(cornerRadius: 6))
+        .background(color.opacity(0.05), in: RoundedRectangle(cornerRadius: 6))
+    }
+    
+    var color: Color {
+        colorScheme == .dark ? .black : .gray
     }
 }
 

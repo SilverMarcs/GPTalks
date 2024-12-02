@@ -117,6 +117,13 @@ struct ChatDetail: View {
                 
                 ErrorMessageView(message: $chat.errorMessage)
                 
+                if chat.isReplying && !config.hasUserScrolled && chat.status != .quick {
+                    Color.clear
+                        .transaction { $0.animation = nil }
+                        .listRowSeparator(.hidden)
+                        .frame(height: 450) // TODO: shud be diff size on ios
+                }
+                
                 Color.clear
                     .transaction { $0.animation = nil }
                     .id(String.bottomID)
