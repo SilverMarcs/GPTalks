@@ -21,6 +21,7 @@ struct AssistantMessage: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             AssistantLabel(message: message)
+                .transaction { $0.animation = nil }
                 .padding(.leading, labelPadding)
             
             MarkdownView(content: message.content, calculatedHeight: $height)
@@ -49,15 +50,21 @@ struct AssistantMessage: View {
             
             #if os(macOS)
             if !message.isReplying {
-                if isHovering {
-                    HoverableMessageMenu {
-                        MessageMenu(message: group) {
-                            showingTextSelection.toggle()
-                        }
+                if !showMenu {
+                    HStack {
+                        SecondaryNavigationButtons(group: group)
                     }
                 } else {
-                    // Display a clear view of the same height as the menu
-                    Color.clear.frame(height: 25)
+                    if isHovering {
+                        HoverableMessageMenu {
+                            MessageMenu(message: group) {
+                                showingTextSelection.toggle()
+                            }
+                        }
+                    } else {
+                        // Display a clear view of the same height as the menu
+                        Color.clear.frame(height: 25)
+                    }
                 }
             }
             Spacer()

@@ -30,31 +30,46 @@ struct ModelRefresher: View {
                         ContentUnavailableView.search
                     } else {
                         List {
-                            ForEach(filteredModels) { selectableModel in
-                                HStack {
-                                    Toggle(isOn: $refreshedModels[refreshedModels.firstIndex(where: { $0.id == selectableModel.id })!].isSelected) {
-                                        VStack(alignment: .leading) {
-                                            Text(selectableModel.code)
-                                            Text(selectableModel.name)
-                                                .font(.subheadline)
-                                                .foregroundColor(.secondary)
+                            ForEach(filteredModels) { model in
+                                if model.isExisting {
+                                    // UI for existing models
+                                    HStack {
+                                        Text(model.code)
+                                            .monospaced()
+                                        
+                                        Spacer()
+                                        
+                                        Image(systemName: model.selectedModelType.icon)
+                                    }
+                                    .padding(.vertical, 4)
+                                } else {
+                                    // UI for new models
+                                    HStack {
+                                        Toggle(isOn: $refreshedModels[refreshedModels.firstIndex(where: { $0.id == model.id })!].isSelected) {
+                                            VStack(alignment: .leading) {
+                                                Text(model.code)
+                                                    .monospaced()
+                                                Text(model.name)
+                                                    .font(.subheadline)
+                                                    .foregroundColor(.secondary)
+                                            }
                                         }
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Picker("Model Type", selection: $refreshedModels[refreshedModels.firstIndex(where: { $0.id == selectableModel.id })!].selectedModelType) {
-                                        ForEach(ModelType.allCases, id: \.self) { option in
-                                            Image(systemName: option.icon)
-                                                .tag(option)
+                                        
+                                        Spacer()
+                                        
+                                        Picker("Model Type", selection: $refreshedModels[refreshedModels.firstIndex(where: { $0.id == model.id })!].selectedModelType) {
+                                            ForEach(ModelType.allCases, id: \.self) { option in
+                                                Image(systemName: option.icon)
+                                                    .tag(option)
+                                            }
                                         }
+                                        .onChange(of: model.selectedModelType) {
+                                            refreshedModels[refreshedModels.firstIndex(where: { $0.id == model.id })!].isSelected = true
+                                        }
+                                        .labelsHidden()
+                                        .pickerStyle(.segmented)
+                                        .fixedSize()
                                     }
-                                    .onChange(of: selectableModel.selectedModelType) {
-                                        refreshedModels[refreshedModels.firstIndex(where: { $0.id == selectableModel.id })!].isSelected = true
-                                    }
-                                    .labelsHidden()
-                                    .pickerStyle(.segmented)
-                                    .fixedSize()
                                 }
                             }
                         }
@@ -98,18 +113,32 @@ struct ModelRefresher: View {
         }
     }
 
-    private func loadModels() async {
-        refreshedModels = await provider.refreshModels()
-        isLoading = false
-    }
-
-    private func addSelectedModels() {
-        let selectedModels = refreshedModels.filter { $0.isSelected }
-
-        for model in selectedModels {
-            provider.models.append(.init(code: model.code, name: model.name, type: model.selectedModelType))
+private func loadModels() async {
+    let newModels = await provider.refreshModels()
+    
+    refreshedModels = newModels.map { model in
+        var genericModel = GenericModel(code: model.code, name: model.name)
+        if let existingModel = provider.models.first(where: { $0.code == model.code }) {
+            genericModel.isExisting = true
+            genericModel.selectedModelType = existingModel.type
         }
-
-        dismiss()
+        return genericModel
     }
+    
+    // Sort to put existing models on top
+    refreshedModels.sort { $0.isExisting && !$1.isExisting }
+    
+    isLoading = false
+}
+
+private func addSelectedModels() {
+    let selectedModels = refreshedModels.filter { $0.isSelected && !$0.isExisting }
+
+    for model in selectedModels {
+        provider.models.append(.init(code: model.code, name: model.name, type: model.selectedModelType))
+    }
+
+    dismiss()
+}
+                            
 }

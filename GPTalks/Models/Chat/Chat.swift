@@ -187,9 +187,9 @@ final class Chat {
         
         guard let last = currentThread.last else { return }
         last.isReplying = false
-        if last.activeMessage.content.isEmpty {
-            deleteLastMessage()
-        }
+//        if last.activeMessage.content.isEmpty {
+//            deleteLastMessage()
+//        }
     }
     
     private func handleError(_ error: Error) {
