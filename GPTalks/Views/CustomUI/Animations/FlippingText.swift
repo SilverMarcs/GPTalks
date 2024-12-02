@@ -20,7 +20,7 @@ struct FlippingText: View {
             ForEach(Array(text).indices, id: \.self) { index in
                 Text(String(text[index]))
                     .rotation3DEffect(.degrees(flipAngle), axis: (x: 0, y: 1, z: 0))
-                    .animation(.easeInOut(duration: 0.2).delay(Double(index) * 0.1), value: flipAngle)
+                    .animation(.easeInOut(duration: 0.4).delay(Double(index) * 0.1), value: flipAngle)
             }
         }
         .onAppear {

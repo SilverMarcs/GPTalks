@@ -17,6 +17,7 @@ struct ChatDetail: View {
     @Bindable var chat: Chat
     
     @State private var showingAllMessages = false
+    @State private var colorViewHeight: CGFloat = 1 // Initial height
     
     var body: some View {
         ScrollViewReader { proxy in
@@ -106,7 +107,7 @@ struct ChatDetail: View {
                         .frame(maxWidth: .infinity)
                         .listRowSeparator(.hidden)
                 }
-            
+
                 ForEach(messagesToShow, id: \.self) { message in
                     MessageView(message: message)
                 }
@@ -117,22 +118,42 @@ struct ChatDetail: View {
                 
                 ErrorMessageView(message: $chat.errorMessage)
                 
-                if chat.isReplying && !config.hasUserScrolled && chat.status != .quick {
-                    Color.clear
-                        .transaction { $0.animation = nil }
-                        .listRowSeparator(.hidden)
-                        .frame(height: 400) // TODO: shud be diff size on ios
-                        .onAppear {
-                            Scroller.scrollToBottom()
-                        }
-                }
+                resizingColor
                 
                 Color.clear
+                    .frame(height: 1)
                     .transaction { $0.animation = nil }
                     .id(String.bottomID)
                     .listRowSeparator(.hidden)
             }
         }
+    }
+    
+    // TODO: dunno how expensive this is
+    var resizingColor: some View {
+        Color.clear
+            .frame(height: colorViewHeight)
+            .listRowSeparator(.hidden)
+            .onChange(of: chat.isReplying) {
+                if chat.isReplying {
+                    colorViewHeight = 400
+                } else {
+                    // Animate height reduction in small steps
+                    let numberOfSteps = 100 // More steps = smoother animation
+                    let totalDuration = 0.4 // Total animation duration in seconds
+                    let stepDuration = totalDuration / Double(numberOfSteps)
+                    let heightDifference = 399.0 // 400 - 1
+                    let stepChange = heightDifference / Double(numberOfSteps)
+                    
+                    for step in 0..<numberOfSteps {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + Double(step) * stepDuration) {
+                            withAnimation(.easeIn(duration: stepDuration)) {
+                                colorViewHeight = 400 - (stepChange * Double(step + 1))
+                            }
+                        }
+                    }
+                }
+            }
     }
 }
 
