@@ -18,7 +18,7 @@ struct CodeBlockView: View {
 
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
+        VStack(alignment: .trailing, spacing: 0) {
             if isReplying {
                 Text(code)
                     .padding()
@@ -31,6 +31,8 @@ struct CodeBlockView: View {
             
             CustomCopyButton(content: code)
                 .padding(5)
+                .offset(y: -30) // Adjust this value as needed
+                .padding(.bottom, -30) // This counteracts the offset to prevent extra space
         }
         #if os(macOS)
         .font(.system(size: AppConfig.shared.fontSize - 1, design: .monospaced))
