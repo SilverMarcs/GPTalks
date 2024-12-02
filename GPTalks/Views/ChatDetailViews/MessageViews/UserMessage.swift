@@ -36,11 +36,9 @@ struct UserMessage: View {
                     
                     if shouldShowMoreButton {
                         Button {
-                            withAnimation {
-                                isExpanded.toggle()
-                                if !isExpanded {
-                                    Scroller.scroll(to: .top, of: message)
-                                }
+                            isExpanded.toggle()
+                            if !isExpanded {
+                                Scroller.scroll(to: .top, of: message)
                             }
                         } label: {
                             Text(isExpanded ? "Less" : "More")
@@ -53,7 +51,7 @@ struct UserMessage: View {
                     }
                 }
             }
-//            .transaction { $0.animation = nil }
+            .transaction { $0.animation = nil }
             .groupBoxStyle(PlatformGroupBoxStyle())
             .if(message.chat?.inputManager.editingMessage == self.message.activeMessage) {
                 $0.background(

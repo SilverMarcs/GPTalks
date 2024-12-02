@@ -71,7 +71,6 @@ import PhotosUI
 // MARK: - Drag and Drop
 extension InputManager {
     func processData(_ data: Data, fileType: UTType? = nil, fileName: String? = nil, url: URL? = nil) async throws {
-
             let fileURL = url ?? URL(fileURLWithPath: fileName ?? "Unknown")
             let fileType = fileType ?? (try? fileURL.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier).flatMap { UTType($0) } ?? .data
             let fileName = fileName ?? fileURL.deletingPathExtension().lastPathComponent + "." + fileType.fileExtension
@@ -101,16 +100,26 @@ extension InputManager {
     
     func handleDrop(_ providers: [NSItemProvider]) -> Bool {
         for provider in providers {
-            provider.loadFileRepresentation(forTypeIdentifier: UTType.data.identifier) { url, error in
-                guard let url = url else {
-                    return
-                }
+            // First, get the file name using loadFileRepresentation
+            provider.loadFileRepresentation(forTypeIdentifier: UTType.item.identifier) { url, _ in
+                guard let url = url else { return }
                 
-                Task {
-                    do {
-                        try await self.processFile(at: url)
-                    } catch {
-                        print("Failed to process file: \(url.lastPathComponent). Error: \(error)")
+                let fileName = url.lastPathComponent
+                
+                // Now, use loadDataRepresentation to get the data and file type
+                provider.loadDataRepresentation(forTypeIdentifier: UTType.item.identifier) { data, error in
+                    guard let data = data else {
+                        print("Failed to load data representation")
+                        return
+                    }
+                    
+                    Task {
+                        do {
+                            let fileType = provider.registeredTypeIdentifiers.first.flatMap { UTType($0) } ?? .data
+                            try await self.processData(data, fileType: fileType, fileName: fileName)
+                        } catch {
+                            print("Failed to process file: \(fileName). Error: \(error)")
+                        }
                     }
                 }
             }

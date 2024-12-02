@@ -17,7 +17,7 @@ struct MessageView: View {
                 UserMessage(message: message)
             case .assistant:
                 if message.toolCalls.isEmpty {
-                    AssistantMessage(message: message)
+                    AssistantMessageAux(message: message)
                 } else {
                     ToolCallView(message: message)
                 }

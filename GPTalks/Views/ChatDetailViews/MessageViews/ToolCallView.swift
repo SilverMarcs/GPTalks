@@ -76,7 +76,7 @@ struct ToolCallView: View {
 }
 
 #Preview {
-    AssistantMessage(message: .mockAssistantToolCallGroup)
+    AssistantMessageAux(message: .mockAssistantToolCallGroup)
         .frame(width: 500, height: 300)
 }
 

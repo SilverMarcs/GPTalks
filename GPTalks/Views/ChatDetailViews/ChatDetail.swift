@@ -108,7 +108,6 @@ struct ChatDetail: View {
                 }
             
                 ForEach(messagesToShow, id: \.self) { message in
-//                ForEach(Array(messagesToShow.enumerated()), id: \.offset) { _, message in
                     MessageView(message: message)
                 }
                 #if os(macOS)
