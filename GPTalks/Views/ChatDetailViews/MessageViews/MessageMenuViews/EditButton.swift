@@ -8,16 +8,12 @@
 import SwiftUI
 
 struct EditButton: View {
-    var message: MessageGroup
-    
+    var setupEditing: () -> Void
+
     var body: some View {
-        if message.role == .user {
-            Button {
-                message.chat?.inputManager.setupEditing(message: message)
-            } label: {
-                Label("Edit", systemImage: "pencil.and.outline")
-            }
-            .help("Edit")
+        Button(action: setupEditing) {
+            Label("Edit", systemImage: "pencil.and.outline")
         }
+        .help("Edit")
     }
 }

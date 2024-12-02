@@ -15,24 +15,42 @@ struct MessageMenu: View {
     var body: some View {
         ExpandButton(isExpanded: $isExpanded, message: message)
         
-        CopyButton(message: message)
+        CopyButton(content: message.content, dataFiles: message.dataFiles)
 
         Section {
-            EditButton(message: message)
-            RegenButton(message: message)
+            if message.role == .user {
+                EditButton(setupEditing: { message.chat?.inputManager.setupEditing(message: message) })
+            }
+            
+            if !message.isSplitView {
+                 RegenButton(regenerate: { Task { await message.chat?.regenerate(message: message) } })
+             }
         }
 
         Section {
-            ForkButton(message: message)
             #if !os(macOS)
-            SelectTextButton(toggleTextSelection: toggleTextSelection)
+            if let toggleTextSelection = toggleTextSelection {
+                SelectTextButton(toggleTextSelection: toggleTextSelection)
+            }
             #endif
+            
+            ForkButton(copyChat: { await message.chat?.copy(from: message.activeMessage, purpose: .chat) })
         }
         
         Section {
-            ResetContextButton(message: message)
-            DeleteButton(message: message)
+            ResetContextButton(resetContext: { message.chat?.resetContext(at: message) })
+            if message.chat?.currentThread.last == message {
+                DeleteButton(deleteLastMessage: { message.chat?.deleteLastMessage() })
+            }
         }
+        
+        #if os(macOS)
+//        Divider()
+        
+        Section {
+            NavigationButtons(message: message)
+        }
+        #endif
     }
 }
 

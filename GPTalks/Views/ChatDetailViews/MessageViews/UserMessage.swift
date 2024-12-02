@@ -43,23 +43,10 @@ struct UserMessage: View {
             }
             
             #if os(macOS)
-            HStack(alignment: .center) {
-                NavigationButtons(message: message)
-                    .labelStyle(.iconOnly)
-                    .buttonStyle(.plain)
-                
-                Menu {
-                    MessageMenu(message: message, isExpanded: $isExpanded) {
-                        showingTextSelection.toggle()
-                    }
-                    .labelStyle(.titleOnly)
-                } label: {
-                    Label("More", systemImage: "ellipsis.circle")
+            HoverableMessageMenu(alignment: .leading) {
+                MessageMenu(message: message, isExpanded: $isExpanded) {
+                    showingTextSelection.toggle()
                 }
-                .fixedSize()
-                .menuIndicator(.hidden)
-                .labelStyle(.titleOnly)
-                .buttonStyle(.primaryBordered)
             }
             #endif
         }

@@ -17,3 +17,9 @@ struct SelectedButtonStyle: ButtonStyle {
             .cornerRadius(5)
     }
 }
+
+extension ButtonStyle where Self == SelectedButtonStyle {
+    static func selected(_ isSelected: Binding<Bool>) -> SelectedButtonStyle {
+        SelectedButtonStyle(isSelected: isSelected)
+    }
+}

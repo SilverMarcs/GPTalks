@@ -29,6 +29,9 @@ struct NavigationButtons: View {
                 .disabled(!message.canGoToPrevious)
                 .opacity(message.canGoToPrevious ? 1 : 0.5)
                 
+                Text("\(message.currentMessageIndex + 1)/\(message.allMessages.count)")
+                    .foregroundStyle(.secondary)
+                    
                 Button {
                     message.goToNextMessage()
                 } label: {

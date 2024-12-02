@@ -8,12 +8,10 @@
 import SwiftUI
 
 struct ResetContextButton: View {
-    var message: MessageGroup
-    
+    var resetContext: () -> Void
+
     var body: some View {
-        Button {
-            message.chat?.resetContext(at: message)
-        } label: {
+        Button(action: resetContext) {
             Label("Reset Context", systemImage: "eraser")
         }
         .help("Reset Context")

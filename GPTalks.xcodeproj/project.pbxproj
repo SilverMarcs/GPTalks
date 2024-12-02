@@ -189,6 +189,7 @@
 		08D571682CF7CCAD002EC931 /* MessageGroupList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D571672CF7CCAD002EC931 /* MessageGroupList.swift */; };
 		08D913EC2CD9CAF7002E4E53 /* AIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D913EB2CD9CAF7002E4E53 /* AIModel.swift */; };
 		08DB150B2CDC5B2200DC5B90 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DB150A2CDC5B2200DC5B90 /* OpenAI */; };
+		08E4B9E52CFD3681002A807F /* HoverableMessageMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E4B9E42CFD3681002A807F /* HoverableMessageMenu.swift */; };
 		08E7209A2CE7D46D0014888B /* SearchToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E720992CE7D46D0014888B /* SearchToken.swift */; };
 		08F02DB32CFAE7140041F128 /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 08F02DB22CFAE7140041F128 /* Markdown */; };
 		08F02DB52CFAE73B0041F128 /* MarkdownParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F02DB42CFAE73B0041F128 /* MarkdownParser.swift */; };
@@ -393,6 +394,7 @@
 		08CF5B882C68980B0079D5EE /* HighlightableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightableTextView.swift; sourceTree = "<group>"; };
 		08D571672CF7CCAD002EC931 /* MessageGroupList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGroupList.swift; sourceTree = "<group>"; };
 		08D913EB2CD9CAF7002E4E53 /* AIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModel.swift; sourceTree = "<group>"; };
+		08E4B9E42CFD3681002A807F /* HoverableMessageMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverableMessageMenu.swift; sourceTree = "<group>"; };
 		08E720992CE7D46D0014888B /* SearchToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchToken.swift; sourceTree = "<group>"; };
 		08F02DB42CFAE73B0041F128 /* MarkdownParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownParser.swift; sourceTree = "<group>"; };
 		08F02DBF2CFB2F800041F128 /* NativeMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeMarkdownView.swift; sourceTree = "<group>"; };
@@ -877,6 +879,7 @@
 				08CA42B92CF1F18D0073BB01 /* ForkButton.swift */,
 				08CA42B72CF1F1530073BB01 /* EditButton.swift */,
 				08CA42B52CF1F13B0073BB01 /* ExpandButton.swift */,
+				08E4B9E42CFD3681002A807F /* HoverableMessageMenu.swift */,
 				08C800442C36C10A009581C5 /* MessageMenu.swift */,
 			);
 			path = MessageMenuViews;
@@ -1193,6 +1196,7 @@
 				088DA8F92CA752EF006C017E /* IOSWindow.swift in Sources */,
 				0821815A2C382B9B00171BF3 /* ProviderGeneral.swift in Sources */,
 				0898252D2CE9C0C100980468 /* ReadyPageView.swift in Sources */,
+				08E4B9E52CFD3681002A807F /* HoverableMessageMenu.swift in Sources */,
 				08A313492C4AD0DC00C3E578 /* CommonModifiers.swift in Sources */,
 				08A222C42C2AC6B300D76C8B /* ChatDetail.swift in Sources */,
 				08C800472C36C4ED009581C5 /* UserMessage.swift in Sources */,

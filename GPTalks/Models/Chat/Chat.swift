@@ -86,9 +86,9 @@ final class Chat {
             
             do {
                 scrollDown()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    self.scrollDown()
-                }
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//                    self.scrollDown()
+//                }
                 
                 try await streamer.handleRequest()
             } catch {

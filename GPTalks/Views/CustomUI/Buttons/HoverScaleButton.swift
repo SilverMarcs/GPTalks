@@ -19,9 +19,8 @@ struct HoverScaleButtonStyle: ButtonStyle {
     }
 }
 
-struct HoverScaleMenuStyle: MenuStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        Menu(configuration)
-            .buttonStyle(HoverScaleButtonStyle())
+extension ButtonStyle where Self == HoverScaleButtonStyle {
+    static var hoverScale: HoverScaleButtonStyle {
+        HoverScaleButtonStyle()
     }
 }

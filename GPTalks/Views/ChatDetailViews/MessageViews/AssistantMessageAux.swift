@@ -56,23 +56,10 @@ struct AssistantMessageAux: View {
                             .labelStyle(.iconOnly)
                     }
                 } else {
-                    HStack(alignment: .center) {
-                        Menu {
-                            MessageMenu(message: group, isExpanded: .constant(true)) {
-                                showingTextSelection.toggle()
-                            }
-                            .labelStyle(.titleOnly)
-                        } label: {
-                            Label("More", systemImage: "ellipsis.circle")
+                    HoverableMessageMenu(alignment: .trailing) {
+                        MessageMenu(message: group, isExpanded: .constant(true)) {
+                            showingTextSelection.toggle()
                         }
-                        .fixedSize()
-                        .menuIndicator(.hidden)
-                        .labelStyle(.titleOnly)
-                        .buttonStyle(.primaryBordered)
-                        
-                        NavigationButtons(message: group)
-                            .buttonStyle(.plain)
-                            .labelStyle(.iconOnly)
                     }
                 }
             }  

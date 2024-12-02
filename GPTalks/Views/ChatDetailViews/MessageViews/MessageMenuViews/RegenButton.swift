@@ -8,17 +8,11 @@
 import SwiftUI
 
 struct RegenButton: View {
-    var message: MessageGroup
-    
+    var regenerate: () -> Void
+
     var body: some View {
-        if !message.isSplitView {
-            Button {
-                Task {
-                    await message.chat?.regenerate(message: message)
-                }
-            } label: {
-                Label("Regenerate", systemImage: "arrow.2.circlepath")
-            }
+        Button(action: regenerate) {
+            Label("Regenerate", systemImage: "arrow.2.circlepath")
         }
     }
 }

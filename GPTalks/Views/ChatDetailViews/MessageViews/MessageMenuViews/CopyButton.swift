@@ -8,33 +8,32 @@
 import SwiftUI
 
 struct CopyButton: View {
-    var message: MessageGroup
-    @State private var isCopied = false
+    let content: String
+    let dataFiles: [TypedData]
     
+    @State private var isCopied = false
+
     var body: some View {
-        Button {
-            message.content.copyToPasteboard()
+        Menu {
+            if !dataFiles.isEmpty {
+                Button {
+                    var finalString = dataFiles.map { $0.formattedTextContent }.joined()
+                    finalString += content
+                    finalString.copyToPasteboard()
+                } label: {
+                    Label("Copy Files", systemImage: "doc.richtext")
+                }
+            }
+        } label: {
+            Label("Copy", systemImage: isCopied ? "checkmark" : "paperclip")
+        } primaryAction: {
+            content.copyToPasteboard()
             isCopied = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 isCopied = false
             }
-        } label: {
-            Label("Copy", systemImage: "doc.on.clipboard")
         }
-        
-        if !message.dataFiles.isEmpty {
-            Button {
-                var finalString = ""
-                
-                for data in message.dataFiles {
-                    finalString += data.formattedTextContent
-                }
-                
-                finalString += message.content
-                finalString.copyToPasteboard()
-            } label: {
-                Label("Copy Files", systemImage: "doc.richtext")
-            }
-        }
+        .contentTransition(.symbolEffect(.replace))
+        .frame(width: 15)
     }
 }

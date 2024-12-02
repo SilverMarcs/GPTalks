@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct ForkButton: View {
+    var copyChat: () async -> Chat?
+
     @Environment(ChatVM.self) var chatVM
-    
-    var message: MessageGroup
-    
     @State private var isForking = false
-    
+
     var body: some View {
         if isForking {
             ProgressView()
@@ -22,7 +21,7 @@ struct ForkButton: View {
             Button {
                 isForking = true
                 Task {
-                    if let newChat = await message.chat?.copy(from: message.activeMessage, purpose: .chat) {
+                    if let newChat = await copyChat() {
                         chatVM.fork(newChat: newChat)
                         isForking = false
                     }

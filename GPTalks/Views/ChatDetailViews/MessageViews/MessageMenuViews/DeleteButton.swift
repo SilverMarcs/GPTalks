@@ -8,15 +8,11 @@
 import SwiftUI
 
 struct DeleteButton: View {
-    var message: MessageGroup
-    
+    var deleteLastMessage: () -> Void
+
     var body: some View {
-        if message.chat?.currentThread.last == self.message {
-            Button(role: .destructive) {
-                message.chat?.deleteLastMessage()
-            } label: {
-                Label("Delete Message", systemImage: "minus.circle")
-            }
+        Button(role: .destructive, action: deleteLastMessage) {
+            Label("Delete Message", systemImage: "minus.circle")
         }
     }
 }
