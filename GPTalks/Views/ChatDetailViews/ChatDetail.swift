@@ -121,7 +121,10 @@ struct ChatDetail: View {
                     Color.clear
                         .transaction { $0.animation = nil }
                         .listRowSeparator(.hidden)
-                        .frame(height: 450) // TODO: shud be diff size on ios
+                        .frame(height: 400) // TODO: shud be diff size on ios
+                        .onAppear {
+                            Scroller.scrollToBottom()
+                        }
                 }
                 
                 Color.clear

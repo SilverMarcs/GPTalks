@@ -18,8 +18,23 @@ struct ChatListRow: View {
     
     var swipeTip = SwipeActionTip()
     
+    @State private var isAnimating = false
+       @State private var previousTitle = ""
+
     var body: some View {
         row
+            .onAppear {
+                previousTitle = chat.title
+            }
+            .onChange(of: chat.title) {
+                if chat.title != previousTitle {
+                   isAnimating = true
+                   DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                       isAnimating = false
+                       previousTitle = chat.title
+                   }
+               }
+           }
         .swipeActions(edge: .leading) {
             swipeActionsLeading
         }
@@ -37,15 +52,23 @@ struct ChatListRow: View {
         }
         #endif
     }
+    
     var row: some View {
         HStack {
             ProviderImage(provider: chat.config.provider, radius: 8, frame: imageSize, scale: .medium)
                 .symbolEffect(.bounce, options: .speed(0.5), isActive: chat.isReplying)
             
-            HighlightableTextView(chat.title, highlightedText: chatVM.searchText)
-                .lineLimit(1)
-                .font(font)
-                .opacity(0.9)
+            Group {
+                if isAnimating {
+                    FlippingText(chat.title)
+                        .kerning(-0.2)
+                } else {
+                    HighlightableTextView(chat.title, highlightedText: chatVM.searchText)
+                }
+            }
+            .lineLimit(1)
+            .font(font)
+            .opacity(0.9)
             
             Spacer()
             

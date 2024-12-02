@@ -127,7 +127,9 @@ final class Chat {
     func sendInput() async {
         guard !inputManager.prompt.isEmpty else { return }
         errorMessage = ""
-        AppConfig.shared.hasUserScrolled = false
+        DispatchQueue.main.async {
+            AppConfig.shared.hasUserScrolled = false
+        }
         
         if let editingMessage = inputManager.editingMessage {
             await editMessage(editingMessage)
