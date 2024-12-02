@@ -29,6 +29,8 @@ struct ClaudeService: AIService {
             }
         }
         
+        contentObjects.append(.text(conversation.content))
+        
         let finalContent: MessageParameter.Message = .init(
             role: conversation.role.toClaudeRole(),
             content: .list(contentObjects)
@@ -58,6 +60,7 @@ struct ClaudeService: AIService {
                     }
                     continuation.finish()
                 } catch {
+                    print(error)
                     continuation.finish(throwing: error)
                 }
             }
@@ -86,6 +89,12 @@ struct ClaudeService: AIService {
         let messages = conversations.map { convert(conversation: $0) }
         let systemPrompt = MessageParameter.System.text(config.systemPrompt)
         
+        for message in messages {
+            print(message.role)
+            print(message.content)
+            print("\n")
+        }
+    
         return MessageParameter(
             model: .other(config.model.code),
             messages: messages,

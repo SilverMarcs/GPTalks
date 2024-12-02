@@ -36,5 +36,7 @@ struct AssistantLabel: View {
             .font(.subheadline)
             .bold()
             .foregroundStyle(.secondary)
+            .foregroundStyle(Color(hex: message.provider?.color ?? "#00947A"))
+            .brightness(1.1)
     }
 }

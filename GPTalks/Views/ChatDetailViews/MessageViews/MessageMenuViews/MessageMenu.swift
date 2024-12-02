@@ -13,13 +13,13 @@ struct MessageMenu: View {
 
     var body: some View {
         Section {
+            if !message.isSplitView {
+                 RegenButton(regenerate: { Task { await message.chat?.regenerate(message: message) } })
+            }
+            
             if message.role == .user {
                 EditButton(setupEditing: { message.chat?.inputManager.setupEditing(message: message) })
             }
-            
-            if !message.isSplitView {
-                 RegenButton(regenerate: { Task { await message.chat?.regenerate(message: message) } })
-             }
         }
         
         CopyButton(content: message.content, dataFiles: message.dataFiles)

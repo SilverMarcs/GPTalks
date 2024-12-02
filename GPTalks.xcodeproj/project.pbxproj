@@ -97,7 +97,7 @@
 		087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F932CDE19EC001298B3 /* AboutWindow.swift */; platformFilters = (macos, ); };
 		088475342CAE8E57006C04F0 /* AppIconMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088475332CAE8E57006C04F0 /* AppIconMenu.swift */; platformFilters = (ios, xros, ); };
 		08850D892CFE00A6004D944C /* FlippingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D882CFE00A6004D944C /* FlippingText.swift */; };
-		08850D8B2CFE0A99004D944C /* PermissionsOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D8A2CFE0A99004D944C /* PermissionsOnboarding.swift */; };
+		08850D8B2CFE0A99004D944C /* PermissionsOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D8A2CFE0A99004D944C /* PermissionsOnboarding.swift */; platformFilters = (ios, xros, ); };
 		0886050F2CF61E4200A9657C /* ShortcutSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886050E2CF61E4200A9657C /* ShortcutSettings.swift */; platformFilters = (macos, ); };
 		088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A09F22C55C7740055B567 /* TextSelectionView.swift */; };
 		088DA8F92CA752EF006C017E /* IOSWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DA8F82CA752EF006C017E /* IOSWindow.swift */; platformFilters = (ios, xros, ); };
