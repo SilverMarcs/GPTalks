@@ -67,11 +67,8 @@ final class DatabaseService: NSObject {
             
             // Adding default providers
             let openAI = Provider.factory(type: .openai)
-            openAI.isPersistent = true
             let anthropic = Provider.factory(type: .anthropic)
-            anthropic.isPersistent = true
             let google = Provider.factory(type: .google)
-            google.isPersistent = true
             
             modelContext.insert(openAI)
             modelContext.insert(anthropic)

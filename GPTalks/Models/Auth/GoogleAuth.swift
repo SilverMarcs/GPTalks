@@ -15,10 +15,10 @@ import AuthenticationServices
     private var refreshToken: String = ""
     private var expirationDate: Date = Date()
     
-    let clientId = "401645137849-5tlu6a5kai0oav5m498ntbhevm2lvgu1.apps.googleusercontent.com"
-    let redirectUri = "com.zabir.GPTalksNew:/oauth2redirect"
+    let clientId = "680142594110-k1vj398tktjd56q1slv9dv9o0ia37502.apps.googleusercontent.com" // TODO: take user input
+    let redirectUri = "com.SilverMarcs.GPTalks:/oauth2redirect"
     
-    private let queue = DispatchQueue(label: "com.zabir.GPTalksNew.tokenmanager")
+    private let queue = DispatchQueue(label: "com.SilverMarcs.GPTalks.tokenmanager")
     private var authenticationSession: ASWebAuthenticationSession?
     
     private override init() {
@@ -27,17 +27,17 @@ import AuthenticationServices
     }
     
     private func loadTokens() {
-        if let accessTokenData = KeychainHelper.load(service: "com.zabir.GPTalksNew", account: "accessToken"),
+        if let accessTokenData = KeychainHelper.load(service: "com.SilverMarcs.GPTalks", account: "accessToken"),
            let accessTokenString = String(data: accessTokenData, encoding: .utf8) {
             accessToken = accessTokenString
         }
         
-        if let refreshTokenData = KeychainHelper.load(service: "com.zabir.GPTalksNew", account: "refreshToken"),
+        if let refreshTokenData = KeychainHelper.load(service: "com.SilverMarcs.GPTalks", account: "refreshToken"),
            let refreshTokenString = String(data: refreshTokenData, encoding: .utf8) {
             refreshToken = refreshTokenString
         }
         
-        if let expirationDateData = KeychainHelper.load(service: "com.zabir.GPTalksNew", account: "tokenExpirationDate"),
+        if let expirationDateData = KeychainHelper.load(service: "com.SilverMarcs.GPTalks", account: "tokenExpirationDate"),
            let expirationInterval = Double(String(data: expirationDateData, encoding: .utf8) ?? ""),
            expirationInterval > 0 {
             expirationDate = Date(timeIntervalSince1970: expirationInterval)
@@ -45,10 +45,10 @@ import AuthenticationServices
     }
 
     private func saveTokens() {
-        let _ = KeychainHelper.save(service: "com.zabir.GPTalksNew", account: "accessToken", data: accessToken.data(using: .utf8) ?? Data())
-        let _ = KeychainHelper.save(service: "com.zabir.GPTalksNew", account: "refreshToken", data: refreshToken.data(using: .utf8) ?? Data())
+        let _ = KeychainHelper.save(service: "com.SilverMarcs.GPTalks", account: "accessToken", data: accessToken.data(using: .utf8) ?? Data())
+        let _ = KeychainHelper.save(service: "com.SilverMarcs.GPTalks", account: "refreshToken", data: refreshToken.data(using: .utf8) ?? Data())
         let expirationData = String(expirationDate.timeIntervalSince1970).data(using: .utf8) ?? Data()
-        let _ = KeychainHelper.save(service: "com.zabir.GPTalksNew", account: "tokenExpirationDate", data: expirationData)
+        let _ = KeychainHelper.save(service: "com.SilverMarcs.GPTalks", account: "tokenExpirationDate", data: expirationData)
     }
     
     func clearTokens() {
@@ -57,15 +57,15 @@ import AuthenticationServices
             self.refreshToken = ""
             self.expirationDate = Date()
             
-            KeychainHelper.delete(service: "com.zabir.GPTalksNew", account: "accessToken")
-            KeychainHelper.delete(service: "com.zabir.GPTalksNew", account: "refreshToken")
-            KeychainHelper.delete(service: "com.zabir.GPTalksNew", account: "tokenExpirationDate")
+            KeychainHelper.delete(service: "com.SilverMarcs.GPTalks", account: "accessToken")
+            KeychainHelper.delete(service: "com.SilverMarcs.GPTalks", account: "refreshToken")
+            KeychainHelper.delete(service: "com.SilverMarcs.GPTalks", account: "tokenExpirationDate")
         }
     }
     
     func signIn() async throws {
         let authUrl = URL(string: "https://accounts.google.com/o/oauth2/v2/auth?client_id=\(clientId)&redirect_uri=\(redirectUri)&response_type=code&scope=profile email https://www.googleapis.com/auth/cloud-platform openid")!
-        let callbackUrlScheme = "com.zabir.GPTalksNew"
+        let callbackUrlScheme = "com.SilverMarcs.GPTalks"
         
         return try await withCheckedThrowingContinuation { continuation in
             authenticationSession = ASWebAuthenticationSession(url: authUrl, callbackURLScheme: callbackUrlScheme) { callbackURL, error in

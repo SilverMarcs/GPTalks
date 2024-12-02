@@ -98,7 +98,6 @@
 		087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F932CDE19EC001298B3 /* AboutWindow.swift */; platformFilters = (macos, ); };
 		088475342CAE8E57006C04F0 /* AppIconMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088475332CAE8E57006C04F0 /* AppIconMenu.swift */; platformFilters = (ios, xros, ); };
 		0886050F2CF61E4200A9657C /* ShortcutSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886050E2CF61E4200A9657C /* ShortcutSettings.swift */; platformFilters = (macos, ); };
-		0886D8202C8707190058700F /* VertexService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886D81F2C8707190058700F /* VertexService.swift */; };
 		088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A09F22C55C7740055B567 /* TextSelectionView.swift */; };
 		088DA8F92CA752EF006C017E /* IOSWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DA8F82CA752EF006C017E /* IOSWindow.swift */; platformFilters = (ios, xros, ); };
 		08915D942C373340008ADE27 /* ProviderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08915D932C373340008ADE27 /* ProviderImage.swift */; };
@@ -163,7 +162,6 @@
 		08C5AD752CFB792200F5FEA0 /* CustomCopyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5AD742CFB792200F5FEA0 /* CustomCopyButton.swift */; };
 		08C5AD772CFB7FBF00F5FEA0 /* SelectedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5AD762CFB7FBF00F5FEA0 /* SelectedButtonStyle.swift */; };
 		08C5C7292C9A1392004992A4 /* GoogleAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5C7282C9A1392004992A4 /* GoogleAuth.swift */; };
-		08C5C72B2C9A139F004992A4 /* GoogleSignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5C72A2C9A139F004992A4 /* GoogleSignIn.swift */; };
 		08C800322C36AE1D009581C5 /* ChatList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800312C36AE1D009581C5 /* ChatList.swift */; };
 		08C800372C36B8CC009581C5 /* ChatListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800362C36B8CC009581C5 /* ChatListRow.swift */; };
 		08C8003A2C36BA30009581C5 /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800392C36BA30009581C5 /* ChatInputView.swift */; };
@@ -303,7 +301,6 @@
 		087F3F932CDE19EC001298B3 /* AboutWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
 		088475332CAE8E57006C04F0 /* AppIconMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconMenu.swift; sourceTree = "<group>"; };
 		0886050E2CF61E4200A9657C /* ShortcutSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutSettings.swift; sourceTree = "<group>"; };
-		0886D81F2C8707190058700F /* VertexService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexService.swift; sourceTree = "<group>"; };
 		088A09F22C55C7740055B567 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
 		088DA8F82CA752EF006C017E /* IOSWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSWindow.swift; sourceTree = "<group>"; };
 		08915D932C373340008ADE27 /* ProviderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderImage.swift; sourceTree = "<group>"; };
@@ -369,7 +366,6 @@
 		08C5AD742CFB792200F5FEA0 /* CustomCopyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCopyButton.swift; sourceTree = "<group>"; };
 		08C5AD762CFB7FBF00F5FEA0 /* SelectedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedButtonStyle.swift; sourceTree = "<group>"; };
 		08C5C7282C9A1392004992A4 /* GoogleAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuth.swift; sourceTree = "<group>"; };
-		08C5C72A2C9A139F004992A4 /* GoogleSignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignIn.swift; sourceTree = "<group>"; };
 		08C800312C36AE1D009581C5 /* ChatList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatList.swift; sourceTree = "<group>"; };
 		08C800362C36B8CC009581C5 /* ChatListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListRow.swift; sourceTree = "<group>"; };
 		08C800392C36BA30009581C5 /* ChatInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
@@ -456,7 +452,6 @@
 				0805DEEE2C58CB1400A8354A /* OpenAIService.swift */,
 				0805DEF22C58CB3D00A8354A /* GoogleService.swift */,
 				0805DEF02C58CB2A00A8354A /* ClaudeService.swift */,
-				0886D81F2C8707190058700F /* VertexService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -617,7 +612,6 @@
 				08915D982C37C648008ADE27 /* ProviderDetail.swift */,
 				082181592C382B9B00171BF3 /* ProviderGeneral.swift */,
 				082181692C39001B00171BF3 /* ProviderRow.swift */,
-				08C5C72A2C9A139F004992A4 /* GoogleSignIn.swift */,
 			);
 			path = ProviderViews;
 			sourceTree = "<group>";
@@ -1200,7 +1194,6 @@
 				08A313492C4AD0DC00C3E578 /* CommonModifiers.swift in Sources */,
 				08A222C42C2AC6B300D76C8B /* ChatDetail.swift in Sources */,
 				08C800472C36C4ED009581C5 /* UserMessage.swift in Sources */,
-				0886D8202C8707190058700F /* VertexService.swift in Sources */,
 				080E70EC2CDF380500A949C9 /* InspectorTab.swift in Sources */,
 				089825292CE9BA2900980468 /* QuickPanelOnboarding.swift in Sources */,
 				08B8DE1F2C97F3D10041A690 /* AppConfig.swift in Sources */,
@@ -1214,7 +1207,6 @@
 				0869A3F22C95DBF9009BF9F2 /* StreamResponse.swift in Sources */,
 				0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */,
 				089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */,
-				08C5C72B2C9A139F004992A4 /* GoogleSignIn.swift in Sources */,
 				085276BE2C98706E009184D2 /* InputEditor.swift in Sources */,
 				0886050F2CF61E4200A9657C /* ShortcutSettings.swift in Sources */,
 				081C1D942C3BD33F0078BB24 /* ParameterSettings.swift in Sources */,

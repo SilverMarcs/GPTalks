@@ -9,7 +9,6 @@ import Security
 import Foundation
 
 struct KeychainHelper {
-    
     static func save(service: String, account: String, data: Data) -> OSStatus {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,

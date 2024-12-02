@@ -20,7 +20,6 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     case github
     case anthropic
     case google
-    case vertex
     case ollama
     case lmstudio
     case custom
@@ -46,7 +45,6 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .github: "Github"
         case .anthropic: "Anthropic"
         case .google: "Google"
-        case .vertex: "Vertex"
         case .ollama: "Ollama"
         case .lmstudio: "LMStudio"
         case .custom: "Custom OpenAI"
@@ -58,7 +56,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "openai.SFSymbol"
         case .anthropic: "anthropic.SFSymbol"
         case .google: "google.SFSymbol"
-        case .vertex: "storm.SFSymbol"
+//        case .vertex: "storm.SFSymbol"
         case .openrouter: "openrouter.SFSymbol"
         case .mistral: "mistral.SFSymbol"
         case .perplexity: "perplexity.SFSymbol"
@@ -77,7 +75,6 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "#00947A"
         case .anthropic: "#E6784B"
         case .google: "#E64335"
-        case .vertex: "#4B62CA"
         case .openrouter: "#7a8799"
         case .mistral: "#EB5A29"
         case .perplexity: "#2F7999"
@@ -95,7 +92,6 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "api.openai.com"
         case .anthropic: "api.anthropic.com"
         case .google: "generativelanguage.googleapis.com"
-        case .vertex: ""
         case .ollama: "localhost:11434"
         case .github: "models.inference.ai.azure.com"
         case .perplexity: "api.perplexity.ai"
@@ -111,7 +107,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     
     var availableModelTypes: [ModelType] {
         switch self {
-        case .google, .anthropic, .vertex:
+        case .google, .anthropic:
             return [.chat]
         default:
             return ModelType.allCases
@@ -123,7 +119,6 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: AIModel.getOpenaiModels()
         case .anthropic: AIModel.getAnthropicModels()
         case .google: AIModel.getGoogleModels()
-        case .vertex: AIModel.getVertexModels()
         case .xai: AIModel.getXaiModels()
         case .openrouter: AIModel.getOpenrouterModels()
         case .github: AIModel.getOpenaiModels()
@@ -143,25 +138,16 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
             ClaudeService.self
         case .google:
             GoogleService.self
-        case .vertex:
-            VertexService.self
         default:
             OpenAIService.self
         }
     }
-    
-//    var fieldName: String {
-//        switch self {
-//        case .vertex: "Project ID"
-//        default: "Host URL"
-//        }
-    
+
     var extraInfo: String {
         switch self {
         case .openai: "Get OpenAI API key [here](https://platform.openai.com/settings/organization/api-keys)"
         case .anthropic: "Get Anthropic API key [here](https://console.anthropic.com/settings/keys)"
         case .google: "Get Google API key [here](https://aistudio.google.com/app/apikey)"
-        case .vertex: "Enable Vertex AI API and find project ID [here](https://console.cloud.google.com)"
         case .ollama: "Download and setup Ollama from [here](https://ollama.com/download/mac)"
         case .lmstudio: "Download and setup LMStudio from [here](https://lmstudio.ai/download)"
         case .xai: "Get xAI API key [here](https://console.x.ai) and click on key icon"

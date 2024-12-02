@@ -83,8 +83,11 @@ struct Guide: Identifiable {
         
         Guide(title: "VertexAI Instructions", icon: "brain.fill", content: """
         The app currently only supports **Anthropic Claude** providers for **VertexAI**.
+        
+        > Set `com.SilverMarcs.GPTalks` as the Bundle ID in Google 0Auth Screen
 
         1. Make sure you have credits in Google Cloud with the models enabled.
+        2. Make sure 0Auth is set up with correct bundle ID.
         2. Check the quota and usage limits of individual models.
         3. Sign in to Google in the Vertex provider settings to use the VertexAI Service.
 

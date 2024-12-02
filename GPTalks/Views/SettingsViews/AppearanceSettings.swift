@@ -63,6 +63,11 @@ struct AppearanceSettings: View {
                         .id(config.codeBlockTheme)
                         .padding(.bottom, -11)
                     }
+                    .if(config.markdownProvider == .native) {
+                        $0
+                            .padding(.top, 10)
+                            .padding(.bottom, -8)
+                    }
             }
         }
         .formStyle(.grouped)

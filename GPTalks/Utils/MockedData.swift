@@ -11,13 +11,11 @@ extension Provider {
     static var openAIProvider = Provider.factory(type: .openai)
     static var googleProvider = Provider.factory(type: .google)
     static var anthropicProvider = Provider.factory(type: .anthropic)
-    static var vertexProvider = Provider.factory(type: .vertex)
     
     static var mockProviders = [
         openAIProvider,
         googleProvider,
         anthropicProvider,
-        vertexProvider,
     ]
 }
 

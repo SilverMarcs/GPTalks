@@ -19,7 +19,6 @@ class Provider {
     @Attribute(.allowsCloudEncryption)
     var apiKey: String = ""
     
-    var isPersistent: Bool = false  // added by the app by default and are not deletable
     var color: String = "#00947A"
     var isEnabled: Bool = true
     

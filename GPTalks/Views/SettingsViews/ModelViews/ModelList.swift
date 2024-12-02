@@ -25,8 +25,6 @@ struct ModelList: View {
                     list
                 } header: {
                     TipView(ModelEditTip())
-                } footer: {
-//                    SectionFooterView(text: "Click on name or code to edit")
                 }
             }
             .formStyle(.grouped)
@@ -92,6 +90,7 @@ struct ModelList: View {
                         
                         Text("Actions")
                             .frame(maxWidth: .infinity, alignment: .trailing)
+                            .opacity(type == .chat ? 1 : 0)
                     }
                     .padding(.horizontal, 5)
                     #else

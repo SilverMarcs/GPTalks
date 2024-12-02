@@ -25,7 +25,7 @@ struct ProviderGeneral: View {
             
             Section {
                 HStack {
-                    TextField(provider.type == .vertex ? "Project ID" : "Host URL", text: $provider.host)
+                    TextField("Host URL", text: $provider.host)
                     
                     Button {
                         showPopover.toggle()
@@ -35,17 +35,13 @@ struct ProviderGeneral: View {
                     }
                     .buttonStyle(.plain)
                     .popover(isPresented: $showPopover) {
-                        Text(popoverText)
+                        Text("Omit https:// and /v1/ from the URL.\nCorrect input example: api.openai.com")
                             .padding()
                             .presentationCompactAdaptation(.popover)
                     }
                 }
                 
-                if provider.type == .vertex {
-                    GoogleSignIn()
-                } else {
-                    SecretInputView(label: provider.type == .github ? "Personal Access Token" : "API Key", secret: $provider.apiKey)
-                }
+                SecretInputView(label: provider.type == .github ? "Personal Access Token" : "API Key", secret: $provider.apiKey)
             } header: {
                 Text("Host Settings")
             } footer: {
@@ -95,6 +91,7 @@ struct ProviderGeneral: View {
             Toggle("Enabled", isOn: $provider.isEnabled)
                 .toggleStyle(.switch)
                 .labelsHidden()
+                .disabled(provider == providerDefaults.first!.defaultProvider)
         }
     }
     
@@ -141,15 +138,6 @@ struct ProviderGeneral: View {
             }
             .buttonStyle(.plain)
             .foregroundStyle(.blue)
-        }
-    }
-    
-    private var popoverText: String {
-        switch provider.type {
-        case .vertex:
-            "Provide your Google Cloud Project ID where Vertex AI API and Anthropic models are enabled."
-        default:
-            "Omit https:// and /v1/ from the URL.\nCorrect input example: api.openai.com"
         }
     }
 }
