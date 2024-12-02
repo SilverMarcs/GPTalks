@@ -894,10 +894,10 @@
 				087906862CA6C73100E5DCAD /* ImageWindow.swift */,
 				08F3CA032C705B3300A800F9 /* SettingsWindow.swift */,
 				087F3F932CDE19EC001298B3 /* AboutWindow.swift */,
+				08BBD78C2CE87BC3001510F5 /* HelpWindow.swift */,
 				088475332CAE8E57006C04F0 /* AppIconMenu.swift */,
 				08A222842C2AB4FD00D76C8B /* ChatContentView.swift */,
 				087906882CA6E22900E5DCAD /* ImageContentView.swift */,
-				08BBD78C2CE87BC3001510F5 /* HelpWindow.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";

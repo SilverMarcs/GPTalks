@@ -82,8 +82,8 @@ struct ModelList: View {
                         }
                     }
                 } header: {
+                    #if os(macOS)
                     HStack {
-                        
                         Text("Name")
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
@@ -94,6 +94,9 @@ struct ModelList: View {
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                     .padding(.horizontal, 5)
+                    #else
+                    Text("Click on name or code to edit")
+                    #endif
                 }
             }
         }

@@ -16,6 +16,7 @@ struct UserMessage: View {
 
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
+    @State private var isHovering = false
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 8) {
@@ -24,16 +25,35 @@ struct UserMessage: View {
             }
             
             GroupBox {
-                HighlightableTextView(String(message.content.prefix(isExpanded || !chatVM.searchText.isEmpty  ? .max : 400)),
-                                highlightedText: chatVM.searchText)
-                    .textSelection(.enabled)
-                    .font(.system(size: config.fontSize))
-                    #if os(macOS)
-                    .lineSpacing(2)
-                    .padding(5)
-                    #endif
+                VStack(alignment: .leading, spacing: 0) {
+                    HighlightableTextView(displayedText, highlightedText: chatVM.searchText)
+                        .textSelection(.enabled)
+                        .font(.system(size: config.fontSize))
+                        #if os(macOS)
+                        .lineSpacing(2)
+                        .padding(5)
+                        #endif
+                    
+                    if shouldShowMoreButton {
+                        Button {
+                            withAnimation {
+                                isExpanded.toggle()
+                                if !isExpanded {
+                                    Scroller.scroll(to: .top, of: message)
+                                }
+                            }
+                        } label: {
+                            Text(isExpanded ? "Less" : "More")
+                                .font(.callout)
+                                .foregroundStyle(.blue)
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.leading, 4)
+                        .padding(.bottom, 2)
+                    }
+                }
             }
-            .transaction { $0.animation = nil }
+//            .transaction { $0.animation = nil }
             .groupBoxStyle(PlatformGroupBoxStyle())
             .if(message.chat?.inputManager.editingMessage == self.message.activeMessage) {
                 $0.background(
@@ -43,16 +63,24 @@ struct UserMessage: View {
             }
             
             #if os(macOS)
-            HoverableMessageMenu(alignment: .leading) {
-                MessageMenu(message: message, isExpanded: $isExpanded) {
-                    showingTextSelection.toggle()
+            if isHovering {
+                HoverableMessageMenu {
+                    MessageMenu(message: message) {
+                        showingTextSelection.toggle()
+                    }
                 }
+            } else {
+                Color.clear.frame(height: 25)
             }
             #endif
         }
         .padding(.leading, leadingPadding)
         .frame(maxWidth: .infinity, alignment: .trailing)
-
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isHovering = hovering
+            }
+        }
         .sheet(isPresented: $showingTextSelection) {
             TextSelectionView(content: message.content)
         }
@@ -71,6 +99,19 @@ struct UserMessage: View {
         #else
         60
         #endif
+    }
+    
+    private var displayedText: String {
+        let maxCharacters = 400
+        if isExpanded || !chatVM.searchText.isEmpty {
+            return message.content
+        } else {
+            return String(message.content.prefix(maxCharacters))
+        }
+    }
+
+    private var shouldShowMoreButton: Bool {
+        message.content.count > 400 && chatVM.searchText.isEmpty
     }
 }
 

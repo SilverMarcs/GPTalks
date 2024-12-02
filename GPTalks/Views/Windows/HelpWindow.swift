@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HelpWindow: Scene {
     var body: some Scene {
-        UtilityWindow("Help", id: "help") {
+        UtilityWindow("Help", id: WindowID.help) {
             GuidesSettings()
                 .frame(width: 400, height: 500)
         }

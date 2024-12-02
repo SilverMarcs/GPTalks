@@ -16,6 +16,7 @@ struct AssistantMessageAux: View {
     
     @State var height: CGFloat = 0
     @State private var showingTextSelection = false
+    @State private var isHovering = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -30,8 +31,7 @@ struct AssistantMessageAux: View {
                         .frame(height: message.height, alignment: .top)
                         .onChange(of: height) {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                // without the delay window resizing adds extra space below
-                                if height > 0   {
+                                if height > 0 {
                                     message.height = height
                                 }
                             }
@@ -49,26 +49,28 @@ struct AssistantMessageAux: View {
             
             #if os(macOS)
             if !message.isReplying {
-                if !showMenu {
-                    HStack(alignment: .center) {
-                        SecondaryNavigationButtons(group: group)
-                            .buttonStyle(.plain)
-                            .labelStyle(.iconOnly)
-                    }
-                } else {
-                    HoverableMessageMenu(alignment: .trailing) {
-                        MessageMenu(message: group, isExpanded: .constant(true)) {
+                if isHovering {
+                    HoverableMessageMenu {
+                        MessageMenu(message: group) {
                             showingTextSelection.toggle()
                         }
                     }
+                } else {
+                    // Display a clear view of the same height as the menu
+                    Color.clear.frame(height: 25)
                 }
-            }  
+            }
             Spacer()
             #endif
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 25)
         .padding(.trailing, 30)
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isHovering = hovering
+            }
+        }
         .sheet(isPresented: $showingTextSelection) {
             TextSelectionView(content: message.content)
         }

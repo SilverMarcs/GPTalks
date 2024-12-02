@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AboutWindow: Scene {
     var body: some Scene {
-        Window("About", id: "about") {
+        Window("About", id: WindowID.about) {
             AboutSettings()
                 .padding(.top, -19)
                 .padding(.horizontal, 5)

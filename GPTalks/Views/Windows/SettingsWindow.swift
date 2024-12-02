@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SettingsWindow: Scene {
     var body: some Scene {
-        Window("Settings", id: "settings") {
+        Window("Settings", id: WindowID.settings) {
             SettingsView()
                 .frame(minWidth: 850, maxWidth: 850, minHeight: 600, maxHeight: 600)
         }

@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct AssistantMessage: View {
-    @Bindable var message: MessageGroup
-    
-    @State private var showingTextSelection = false
+    var message: MessageGroup
     
     var body: some View {
         #if os(macOS)

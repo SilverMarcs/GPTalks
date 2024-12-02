@@ -24,19 +24,19 @@ struct MenuCommands: Commands {
         
         CommandGroup(replacing: .appInfo) {
             Button("About GPTalks") {
-                openWindow(id: "about")
+                openWindow(id: WindowID.about)
             }
         }
         
         CommandGroup(replacing: .help) {
             Button("GPTalks Help") {
-                openWindow(id: "help")
+                openWindow(id: WindowID.help)
             }
         }
         
         CommandGroup(before: .appSettings) {
             Button("Settings") {
-                openWindow(id: "settings")
+                openWindow(id: WindowID.settings)
             }
             .keyboardShortcut(",", modifiers: .command)
         }

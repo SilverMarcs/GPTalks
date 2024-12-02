@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ImageWindow: Scene {
     var body: some Scene {
-        Window("Images", id: "images") {
+        Window("Images", id: WindowID.images) {
             ImageContentView()
         }
     }

@@ -9,14 +9,9 @@ import SwiftUI
 
 struct MessageMenu: View {
     var message: MessageGroup
-    @Binding var isExpanded: Bool
     var toggleTextSelection: (() -> Void)? = nil
 
     var body: some View {
-        ExpandButton(isExpanded: $isExpanded, message: message)
-        
-        CopyButton(content: message.content, dataFiles: message.dataFiles)
-
         Section {
             if message.role == .user {
                 EditButton(setupEditing: { message.chat?.inputManager.setupEditing(message: message) })
@@ -26,6 +21,8 @@ struct MessageMenu: View {
                  RegenButton(regenerate: { Task { await message.chat?.regenerate(message: message) } })
              }
         }
+        
+        CopyButton(content: message.content, dataFiles: message.dataFiles)
 
         Section {
             #if !os(macOS)
@@ -56,8 +53,8 @@ struct MessageMenu: View {
 
 #Preview {
     VStack {
-        MessageMenu(message: .mockUserGroup, isExpanded: .constant(true))
-        MessageMenu(message: .mockAssistantGroup, isExpanded: .constant(true))
+        MessageMenu(message: .mockUserGroup)
+        MessageMenu(message: .mockAssistantGroup)
     }
     .frame(width: 500)
     .padding()

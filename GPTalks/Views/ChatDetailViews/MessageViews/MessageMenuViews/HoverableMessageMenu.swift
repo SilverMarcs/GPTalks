@@ -8,33 +8,14 @@
 import SwiftUI
 
 struct HoverableMessageMenu<Content: View>: View {
-    @State private var isHovering = false
-    
-    var alignment: Edge.Set
     let content: () -> Content
 
     var body: some View {
         HStack {
-            if alignment == .trailing {
-                Image(systemName: "ellipsis.circle")
-            }
-            
-            if isHovering {
-                content()
-                    .buttonStyle(HoverScaleButtonStyle())
-            }
-            
-            if alignment == .leading {
-                Image(systemName: "ellipsis.circle")
-            }
+            content()
+                .buttonStyle(HoverScaleButtonStyle())
         }
         .frame(height: 25)
-        .padding(alignment, 300)
-        .contentShape(Rectangle())
-        .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.2)) {
-                isHovering = hovering
-            }
-        }
+        .transaction { $0.animation = nil }
     }
 }

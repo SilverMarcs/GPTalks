@@ -72,7 +72,7 @@ struct ChatListCards: View {
             cycleChatStatus()
         case .imagelist:
             #if os(macOS)
-            openWindow(id: "chats")
+            openWindow(id: WindowID.chats)
             if config.onlyOneWindow {
                 dismissWindow(id: "images")
             }
@@ -97,7 +97,7 @@ struct ChatListCards: View {
     
     func handleImagePress() {
         #if os(macOS)
-        openWindow(id: "images")
+        openWindow(id: WindowID.images)
         if config.onlyOneWindow {
             dismissWindow(id: "chats")
         }

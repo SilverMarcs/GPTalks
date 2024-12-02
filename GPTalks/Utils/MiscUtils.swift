@@ -55,7 +55,6 @@ extension Float {
 // MARK: - String
 extension String {
     static let bottomID = "bottomID"
-    static let topID = "topID"
     static let testPrompt = "Respond with just the word Test"
     
     func copyToPasteboard() {
@@ -204,8 +203,23 @@ extension View {
     }
 }
 
-// Environment Values
-
+// MARK: - Environment Values
 extension EnvironmentValues {
     @Entry var isReplying = false
 }
+
+// MARK: - Window Aliases
+
+// typealis for string calld WindowID
+typealias WindowID = String
+
+extension WindowID {
+    static let main = "main"
+    static let about = "about"
+    static let settings = "settings"
+    static let chats = "chats"
+    static let images = "images"
+    static let help = "help"
+}
+
+

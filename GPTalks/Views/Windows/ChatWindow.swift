@@ -10,7 +10,7 @@ import SwiftData
 
 struct ChatWindow: Scene {
     var body: some Scene {
-        Window("Chats", id: "chats") {
+        Window("Chats", id: WindowID.chats) {
             ChatContentView()
         }
         .commands {
