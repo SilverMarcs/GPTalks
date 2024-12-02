@@ -15,7 +15,6 @@
 		080E70EC2CDF380500A949C9 /* InspectorTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70EB2CDF380500A949C9 /* InspectorTab.swift */; };
 		080E70EE2CDF498F00A949C9 /* ChatStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70ED2CDF498F00A949C9 /* ChatStatus.swift */; };
 		080E70F02CDF781500A949C9 /* HTTPScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70EF2CDF781500A949C9 /* HTTPScheme.swift */; };
-		080E70F22CDFB9C800A949C9 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70F12CDFB9C800A949C9 /* KeychainHelper.swift */; };
 		0810F5892CEAFB5C002D4ACF /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0810F5882CEAFB5C002D4ACF /* ContextResetDivider.swift */; };
 		0812974D2CF5A9DE00440D19 /* HighlightSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0812974C2CF5A9DE00440D19 /* HighlightSwift */; };
 		081297522CF5C3FF00440D19 /* AssistantMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081297512CF5C3FF00440D19 /* AssistantMessage.swift */; };
@@ -98,6 +97,7 @@
 		087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F932CDE19EC001298B3 /* AboutWindow.swift */; platformFilters = (macos, ); };
 		088475342CAE8E57006C04F0 /* AppIconMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088475332CAE8E57006C04F0 /* AppIconMenu.swift */; platformFilters = (ios, xros, ); };
 		08850D892CFE00A6004D944C /* FlippingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D882CFE00A6004D944C /* FlippingText.swift */; };
+		08850D8B2CFE0A99004D944C /* PermissionsOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D8A2CFE0A99004D944C /* PermissionsOnboarding.swift */; };
 		0886050F2CF61E4200A9657C /* ShortcutSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886050E2CF61E4200A9657C /* ShortcutSettings.swift */; platformFilters = (macos, ); };
 		088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A09F22C55C7740055B567 /* TextSelectionView.swift */; };
 		088DA8F92CA752EF006C017E /* IOSWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DA8F82CA752EF006C017E /* IOSWindow.swift */; platformFilters = (ios, xros, ); };
@@ -162,7 +162,6 @@
 		08C49FD82C502EC90085792F /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C49FD72C502EC90085792F /* FileHelper.swift */; };
 		08C5AD752CFB792200F5FEA0 /* CustomCopyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5AD742CFB792200F5FEA0 /* CustomCopyButton.swift */; };
 		08C5AD772CFB7FBF00F5FEA0 /* SelectedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5AD762CFB7FBF00F5FEA0 /* SelectedButtonStyle.swift */; };
-		08C5C7292C9A1392004992A4 /* GoogleAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C5C7282C9A1392004992A4 /* GoogleAuth.swift */; };
 		08C800322C36AE1D009581C5 /* ChatList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800312C36AE1D009581C5 /* ChatList.swift */; };
 		08C800372C36B8CC009581C5 /* ChatListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800362C36B8CC009581C5 /* ChatListRow.swift */; };
 		08C8003A2C36BA30009581C5 /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C800392C36BA30009581C5 /* ChatInputView.swift */; };
@@ -229,7 +228,6 @@
 		080E70EB2CDF380500A949C9 /* InspectorTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorTab.swift; sourceTree = "<group>"; };
 		080E70ED2CDF498F00A949C9 /* ChatStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStatus.swift; sourceTree = "<group>"; };
 		080E70EF2CDF781500A949C9 /* HTTPScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPScheme.swift; sourceTree = "<group>"; };
-		080E70F12CDFB9C800A949C9 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		0810F5882CEAFB5C002D4ACF /* ContextResetDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextResetDivider.swift; sourceTree = "<group>"; };
 		081297512CF5C3FF00440D19 /* AssistantMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantMessage.swift; sourceTree = "<group>"; };
 		08149A562C3E5E5B004485AC /* MessageRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageRole.swift; sourceTree = "<group>"; };
@@ -302,6 +300,7 @@
 		087F3F932CDE19EC001298B3 /* AboutWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
 		088475332CAE8E57006C04F0 /* AppIconMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconMenu.swift; sourceTree = "<group>"; };
 		08850D882CFE00A6004D944C /* FlippingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippingText.swift; sourceTree = "<group>"; };
+		08850D8A2CFE0A99004D944C /* PermissionsOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsOnboarding.swift; sourceTree = "<group>"; };
 		0886050E2CF61E4200A9657C /* ShortcutSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutSettings.swift; sourceTree = "<group>"; };
 		088A09F22C55C7740055B567 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
 		088DA8F82CA752EF006C017E /* IOSWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSWindow.swift; sourceTree = "<group>"; };
@@ -367,7 +366,6 @@
 		08C49FD72C502EC90085792F /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		08C5AD742CFB792200F5FEA0 /* CustomCopyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCopyButton.swift; sourceTree = "<group>"; };
 		08C5AD762CFB7FBF00F5FEA0 /* SelectedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedButtonStyle.swift; sourceTree = "<group>"; };
-		08C5C7282C9A1392004992A4 /* GoogleAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuth.swift; sourceTree = "<group>"; };
 		08C800312C36AE1D009581C5 /* ChatList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatList.swift; sourceTree = "<group>"; };
 		08C800362C36B8CC009581C5 /* ChatListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListRow.swift; sourceTree = "<group>"; };
 		08C800392C36BA30009581C5 /* ChatInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
@@ -558,7 +556,6 @@
 			isa = PBXGroup;
 			children = (
 				080E70E62CDF1B9700A949C9 /* General */,
-				087F3F902CDDEFC5001298B3 /* Auth */,
 				087F3F892CDDEF28001298B3 /* Settings */,
 				08A222BC2C2ABD9E00D76C8B /* Chat */,
 				085361032C491BE5007DAB62 /* Image */,
@@ -579,15 +576,6 @@
 				087F3F8A2CDDEF4C001298B3 /* Guide.swift */,
 			);
 			path = Settings;
-			sourceTree = "<group>";
-		};
-		087F3F902CDDEFC5001298B3 /* Auth */ = {
-			isa = PBXGroup;
-			children = (
-				080E70F12CDFB9C800A949C9 /* KeychainHelper.swift */,
-				08C5C7282C9A1392004992A4 /* GoogleAuth.swift */,
-			);
-			path = Auth;
 			sourceTree = "<group>";
 		};
 		08850D872CFE009F004D944C /* Animations */ = {
@@ -637,6 +625,7 @@
 				089825242CE9B62900980468 /* APIKeyOnboarding.swift */,
 				089825322CE9ECF000980468 /* PluginsOnboarding.swift */,
 				089825282CE9BA2900980468 /* QuickPanelOnboarding.swift */,
+				08850D8A2CFE0A99004D944C /* PermissionsOnboarding.swift */,
 				089825302CE9D96A00980468 /* ImageGenOnboarding.swift */,
 				0898252C2CE9C0C100980468 /* ReadyPageView.swift */,
 			);
@@ -1079,6 +1068,7 @@
 				08F815362C97F65500B49355 /* ChatInspector.swift in Sources */,
 				08F815422C98093800B49355 /* ToolResponse.swift in Sources */,
 				082F09D12CB2628B00B7860A /* ModelAdder.swift in Sources */,
+				08850D8B2CFE0A99004D944C /* PermissionsOnboarding.swift in Sources */,
 				08C800452C36C10A009581C5 /* MessageMenu.swift in Sources */,
 				08AAFB9C2C3D01A6002C04E0 /* ChatListCards.swift in Sources */,
 				084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */,
@@ -1108,7 +1098,6 @@
 				08E7209A2CE7D46D0014888B /* SearchToken.swift in Sources */,
 				08436F222CDE9182007A160F /* Acknowledgement.swift in Sources */,
 				08A222852C2AB4FD00D76C8B /* ChatContentView.swift in Sources */,
-				08C5C7292C9A1392004992A4 /* GoogleAuth.swift in Sources */,
 				081F58B82C6C8FFE00565F20 /* HoverScaleButton.swift in Sources */,
 				08C800572C36F843009581C5 /* SettingsView.swift in Sources */,
 				08AC26112CF4F71500750269 /* ChatInputMenu.swift in Sources */,
@@ -1196,7 +1185,6 @@
 				08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */,
 				08C800322C36AE1D009581C5 /* ChatList.swift in Sources */,
 				0891D5732C96796100BA428F /* ImageConfigDefaults.swift in Sources */,
-				080E70F22CDFB9C800A949C9 /* KeychainHelper.swift in Sources */,
 				08A77CC52C65A0B70087D0F3 /* AppearanceSettings.swift in Sources */,
 				0869A3F62C95E4CC009BF9F2 /* ChatToolCall.swift in Sources */,
 				088DA8F92CA752EF006C017E /* IOSWindow.swift in Sources */,

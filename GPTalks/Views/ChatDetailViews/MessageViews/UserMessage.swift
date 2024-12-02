@@ -84,7 +84,7 @@ struct UserMessage: View {
         }
         #if !os(macOS)
         .contextMenu {
-            MessageMenu(message: message, isExpanded: $isExpanded) {
+            MessageMenu(message: message) {
                 showingTextSelection.toggle()
             }
         }

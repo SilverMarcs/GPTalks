@@ -13,6 +13,8 @@ enum OnboardingPage: Int, CaseIterable {
     case plugins
     #if os(macOS)
     case quickPanel
+    #else
+    case permissions
     #endif
     case imageGen
     case ready

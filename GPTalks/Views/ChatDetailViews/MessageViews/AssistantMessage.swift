@@ -83,7 +83,7 @@ struct AssistantMessage: View {
         }
         #if !os(macOS)
         .contextMenu {
-            MessageMenu(message: group, isExpanded: .constant(true)) {
+            MessageMenu(message: group) {
                 showingTextSelection.toggle()
             }
         }

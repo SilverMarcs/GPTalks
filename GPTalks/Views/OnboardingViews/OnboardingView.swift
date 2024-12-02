@@ -58,6 +58,9 @@ struct OnboardingView: View {
             #if os(macOS)
             case .quickPanel:
                 QuickPanelOnboarding(provider: providerDefaults.first!.quickProvider)
+            #else
+            case .permissions:
+                PermissionsOnboarding()
             #endif
             case .imageGen:
                 ImageGenOnboarding(provider: providerDefaults.first!.imageProvider)

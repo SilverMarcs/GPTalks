@@ -127,9 +127,7 @@ final class Chat {
     func sendInput() async {
         guard !inputManager.prompt.isEmpty else { return }
         errorMessage = ""
-        DispatchQueue.main.async {
-            AppConfig.shared.hasUserScrolled = false
-        }
+        resetScroll()
         
         if let editingMessage = inputManager.editingMessage {
             await editMessage(editingMessage)
@@ -160,7 +158,7 @@ final class Chat {
     @MainActor
     func regenerate(message: MessageGroup) async {
         guard let index = currentThread.firstIndex(where: { $0 == message }) else { return }
-        AppConfig.shared.hasUserScrolled = false
+        resetScroll()
        
         unsetContextResetPointIfNeeded(for: message)
        
@@ -183,7 +181,7 @@ final class Chat {
     }
     
     func stopStreaming() {
-        AppConfig.shared.hasUserScrolled = false
+        resetScroll()
         streamingTask?.cancel()
         streamingTask = nil
         
@@ -197,7 +195,7 @@ final class Chat {
     private func handleError(_ error: Error) {
         errorMessage = error.localizedDescription
         scrollDown()
-        AppConfig.shared.hasUserScrolled = false
+        resetScroll()
         
         // TODO: only delete last mesasage and not entire group if group has other messages
 //        DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
@@ -266,6 +264,12 @@ final class Chat {
     func scrollDown() {
         guard !AppConfig.shared.hasUserScrolled else { return }
         Scroller.scrollToBottom()
+    }
+    
+    func resetScroll() {
+        DispatchQueue.main.async {
+            AppConfig.shared.hasUserScrolled = false
+        }
     }
     
     func copy(from message: Message? = nil, purpose: ChatConfigPurpose) async -> Chat {
