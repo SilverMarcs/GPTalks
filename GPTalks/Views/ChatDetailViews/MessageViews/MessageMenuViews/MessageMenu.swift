@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MessageMenu: View {
-    var message: MessageGroup
+    @Bindable var message: MessageGroup
     var toggleTextSelection: (() -> Void)? = nil
 
     var body: some View {
@@ -22,7 +22,13 @@ struct MessageMenu: View {
             }
         }
         
-        CopyButton(content: message.content, dataFiles: message.dataFiles)
+        Section {
+            CopyButton(content: message.content, dataFiles: message.dataFiles)
+            
+            if message.chat?.config.provider.type == .anthropic && message.role == .user {
+                CacheButton(useCache: $message.useCache)
+            }
+        }
 
         Section {
             #if !os(macOS)
@@ -36,6 +42,7 @@ struct MessageMenu: View {
         
         Section {
             ResetContextButton(resetContext: { message.chat?.resetContext(at: message) })
+            
             if message.chat?.currentThread.last == message {
                 DeleteButton(deleteLastMessage: { message.chat?.deleteLastMessage() })
             }

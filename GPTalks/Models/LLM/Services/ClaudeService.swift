@@ -20,7 +20,11 @@ struct ClaudeService: AIService {
         for item in contentItems {
             switch item {
             case .text(let text):
-                contentObjects.append(.text(text))
+                if conversation.useCache {
+                    contentObjects.append(.cache(.init(text: text, cacheControl: .init(type: .ephemeral))))
+                } else {
+                    contentObjects.append(.text(text))
+                }
             case .image(let mimeType, let data):
                 let imageSource = MessageParameter.Message.Content.ImageSource(
                     type: .base64,
@@ -32,12 +36,21 @@ struct ClaudeService: AIService {
         }
         
         if !conversation.content.isEmpty {
-            contentObjects.append(.text(conversation.content))
+            if conversation.useCache {
+                contentObjects.append(.cache(.init(text: conversation.content, cacheControl: .init(type: .ephemeral))))
+            } else {
+                contentObjects.append(.text(conversation.content))
+            }
         }
         
         if let response = conversation.toolResponse {
             localRole = .user
-            contentObjects.append(.toolResult(response.tool.toolName, response.processedContent))
+            contentObjects.append(.toolResult(response.tool.toolName, "See next message"))
+            if conversation.useCache {
+                contentObjects.append(.cache(.init(text: response.processedContent, cacheControl: .init(type: .ephemeral))))
+            } else {
+                contentObjects.append(.text(response.processedContent))
+            }
         }
         
         for call in conversation.toolCalls {
@@ -204,6 +217,6 @@ struct ClaudeService: AIService {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         return AnthropicServiceFactory.service(
             apiKey: provider.apiKey,
-            basePath: provider.scheme.rawValue + "://" + provider.host, betaHeaders: betaHeaders)
+            basePath: provider.scheme.rawValue + "://" + provider.host, betaHeaders: betaHeaders, debugEnabled: true)
     }
 }

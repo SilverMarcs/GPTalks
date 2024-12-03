@@ -106,6 +106,9 @@ extension InputManager {
                 
                 let fileName = url.lastPathComponent
                 
+                // Capture necessary information outside the async context
+                let typeIdentifier = provider.registeredTypeIdentifiers.first
+                
                 // Now, use loadDataRepresentation to get the data and file type
                 provider.loadDataRepresentation(forTypeIdentifier: UTType.item.identifier) { data, error in
                     guard let data = data else {
@@ -115,7 +118,7 @@ extension InputManager {
                     
                     Task {
                         do {
-                            let fileType = provider.registeredTypeIdentifiers.first.flatMap { UTType($0) } ?? .data
+                            let fileType = typeIdentifier.flatMap { UTType($0) } ?? .data
                             try await self.processData(data, fileType: fileType, fileName: fileName)
                         } catch {
                             print("Failed to process file: \(fileName). Error: \(error)")

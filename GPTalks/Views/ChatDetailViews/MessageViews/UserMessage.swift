@@ -67,6 +67,7 @@ struct UserMessage: View {
                         showingTextSelection.toggle()
                     }
                 }
+                .transition(.symbolEffect(.appear))
             } else {
                 Color.clear.frame(height: 25)
             }
@@ -75,7 +76,7 @@ struct UserMessage: View {
         .padding(.leading, leadingPadding)
         .frame(maxWidth: .infinity, alignment: .trailing)
         .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.2)) {
+            withAnimation {
                 isHovering = hovering
             }
         }

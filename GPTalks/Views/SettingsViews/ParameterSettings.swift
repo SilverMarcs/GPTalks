@@ -16,7 +16,7 @@ struct ParameterSettings: View {
             Section("Basic") {
                 Toggle(isOn: $config.stream) {
                     Text("Stream")
-                    Text("This feature is temporarily disabled.")
+                    Text("This control is temporarily disabled.")
                 }
                 .disabled(true)
                 
@@ -29,6 +29,10 @@ struct ParameterSettings: View {
             }
             
             Section("Advanced", isExpanded: $expandAdvanced) {
+                Toggle(isOn: $config.useCache) {
+                    Text("Prompt Caching")
+                }
+                
                 TopPSlider(topP: $config.topP)
                 FrequencyPenaltySlider(penalty: $config.frequencyPenalty)
                 PresencePenaltySlider(penalty: $config.presencePenalty)

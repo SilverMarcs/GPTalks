@@ -64,6 +64,7 @@ struct AssistantMessage: View {
                                 showingTextSelection.toggle()
                             }
                         }
+                        .transition(.symbolEffect(.appear))
                     } else {
                         // Display a clear view of the same height as the menu
                         Color.clear.frame(height: 25)
@@ -77,7 +78,7 @@ struct AssistantMessage: View {
         .padding(.leading, 25)
         .padding(.trailing, 30)
         .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.2)) {
+            withAnimation {
                 isHovering = hovering
             }
         }

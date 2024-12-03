@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct ChatInputMenu: View {
-    var chat: Chat
+    @Bindable var chat: Chat
     
     @ObservedObject var config = AppConfig.shared
     
@@ -50,6 +50,20 @@ struct ChatInputMenu: View {
                     Label(
                         "Attach Files", systemImage: "paperclip")
                 }
+                
+//                Section {
+//                    Button {
+//                        guard !chat.isReplying, let lastMessage = chat.currentThread.last else { return }
+//                        
+//                        chat.resetContext(at: lastMessage)
+//                    } label: {
+//                        Label("Reset Context", systemImage: "eraser")
+//                    }
+//                    
+//                    Toggle(isOn: $chat.config.useCache) {
+//                        Label("Use Cache", systemImage: "cloud")
+//                    }
+//                }
             }
             .labelStyle(.titleAndIcon)
         } label: {

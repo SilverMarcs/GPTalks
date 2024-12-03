@@ -43,8 +43,7 @@ struct BasicInspector: View {
             
             Section("Parameters") {
                 Toggle(isOn: $chat.config.stream) {
-                    Text("Stream")
-                    Text("This feature is temporarily disabled.")
+                    Text("Stream (Temporarirly Disabled)")
                 }
                 .disabled(true)
                 

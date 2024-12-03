@@ -1,5 +1,5 @@
 //
-//  StreamResponse.swift
+//  ChatResponse.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 14/09/2024.
@@ -14,6 +14,13 @@ enum StreamResponse {
 }
 
 struct TokenUsage {
+    let inputTokens: Int
+    let outputTokens: Int
+}
+
+struct NonStreamResponse {
+    let content: String?
+    let toolCalls: [ChatToolCall]?
     let inputTokens: Int
     let outputTokens: Int
 }

@@ -130,10 +130,20 @@ final class Chat {
         resetScroll()
         
         if let editingMessage = inputManager.editingMessage {
+            if config.useCache {
+                DispatchQueue.main.async {
+                    editingMessage.useCache = true
+                }
+            }
             await editMessage(editingMessage)
             inputManager.editingMessage = nil
         } else {
             let userMessage = Message(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
+            if config.useCache {
+                DispatchQueue.main.async {
+                    userMessage.useCache = true
+                }
+            }
             let userGroup = MessageGroup(message: userMessage)
             userGroup.chat = self
             
