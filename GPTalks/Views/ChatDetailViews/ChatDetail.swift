@@ -136,23 +136,13 @@ struct ChatDetail: View {
             .listRowSeparator(.hidden)
             .onChange(of: chat.isReplying) {
                 if chat.isReplying {
-                    withAnimation {
-                        colorViewHeight = 475
-                    }
-                } else {
-                    // Animate height reduction in small steps
-                    let numberOfSteps = 100 // More steps = smoother animation
-                    let totalDuration = 0.45 // Total animation duration in seconds
-                    let stepDuration = totalDuration / Double(numberOfSteps)
-                    let heightDifference = 474.0 // 450 - 1
-                    let stepChange = heightDifference / Double(numberOfSteps)
-                    
-                    for step in 0..<numberOfSteps {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + Double(step) * stepDuration) {
-                            withAnimation(.easeIn(duration: stepDuration)) {
-                                colorViewHeight = 475 - (stepChange * Double(step + 1))
-                            }
-                        }
+                    colorViewHeight = 475
+                }
+            }
+            .onChange(of: config.hasUserScrolled) {
+                if config.hasUserScrolled {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        colorViewHeight = 1
                     }
                 }
             }

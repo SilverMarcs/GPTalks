@@ -186,6 +186,13 @@ final class Chat {
                 assistantGroup.activeMessage.next = nil
                
                 await processRequest(message: newAssistantMessage)
+            } else {
+                let assistantMessage = Message(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
+                let assistantGroup = MessageGroup(message: assistantMessage)
+                assistantGroup.chat = self
+                message.activeMessage.next = assistantGroup
+                
+                await processRequest(message: assistantMessage)
             }
         }
     }
@@ -229,9 +236,10 @@ final class Chat {
             contextResetPoint = nil
         } else {
             contextResetPoint = message
-            if let lastMessage = currentThread.last, lastMessage == message {
-                scrollDown()
-            }
+        }
+        
+        if let lastMessage = currentThread.last, lastMessage == message {
+            Scroller.scrollToBottom()
         }
     }
 
@@ -258,6 +266,8 @@ final class Chat {
             let secondToLastGroup = currentThread[currentThread.count - 2]
             secondToLastGroup.activeMessage.next = nil
         }
+        
+        Scroller.scrollToBottom()
 
         errorMessage = ""
     }

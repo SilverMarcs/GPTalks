@@ -85,7 +85,7 @@ struct OnboardingView: View {
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         #endif
                         
-                        navigationDirection = .backward // Set direction
+                        navigationDirection = .backward
                         withAnimation {
                             currentPage = OnboardingPage(rawValue: currentPage.rawValue - 1) ?? .welcome
                         }

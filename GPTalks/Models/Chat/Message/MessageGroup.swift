@@ -152,6 +152,7 @@ final class MessageGroup: Hashable, Identifiable {
     }
     
     private func scrollToActiveMessage() {
+        guard let chat = chat, chat.currentThread.last == self else { return }
         let anchor: UnitPoint = role == .assistant ? .bottom : .top
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             Scroller.scroll(to: anchor, of: self)
