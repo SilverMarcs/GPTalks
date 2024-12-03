@@ -138,6 +138,7 @@ struct ProviderGeneral: View {
             }
             .buttonStyle(.plain)
             .foregroundStyle(.blue)
+            .disabled(!provider.isEnabled)
         }
     }
 }

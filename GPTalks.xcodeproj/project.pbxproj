@@ -96,7 +96,6 @@
 		087F3F922CDDF00C001298B3 /* SettingsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F912CDDF00C001298B3 /* SettingsVM.swift */; };
 		087F3F942CDE19EC001298B3 /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F3F932CDE19EC001298B3 /* AboutWindow.swift */; platformFilters = (macos, ); };
 		088475342CAE8E57006C04F0 /* AppIconMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088475332CAE8E57006C04F0 /* AppIconMenu.swift */; platformFilters = (ios, xros, ); };
-		08850D892CFE00A6004D944C /* FlippingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D882CFE00A6004D944C /* FlippingText.swift */; };
 		08850D8B2CFE0A99004D944C /* PermissionsOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D8A2CFE0A99004D944C /* PermissionsOnboarding.swift */; platformFilters = (ios, xros, ); };
 		08850D932CFECC30004D944C /* CacheButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D922CFECC30004D944C /* CacheButton.swift */; };
 		08850D952CFEEF0D004D944C /* ModelSwitchButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D942CFEEF0D004D944C /* ModelSwitchButtons.swift */; };
@@ -300,7 +299,6 @@
 		087F3F912CDDF00C001298B3 /* SettingsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVM.swift; sourceTree = "<group>"; };
 		087F3F932CDE19EC001298B3 /* AboutWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
 		088475332CAE8E57006C04F0 /* AppIconMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconMenu.swift; sourceTree = "<group>"; };
-		08850D882CFE00A6004D944C /* FlippingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippingText.swift; sourceTree = "<group>"; };
 		08850D8A2CFE0A99004D944C /* PermissionsOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsOnboarding.swift; sourceTree = "<group>"; };
 		08850D922CFECC30004D944C /* CacheButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheButton.swift; sourceTree = "<group>"; };
 		08850D942CFEEF0D004D944C /* ModelSwitchButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSwitchButtons.swift; sourceTree = "<group>"; };
@@ -580,18 +578,9 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		08850D872CFE009F004D944C /* Animations */ = {
-			isa = PBXGroup;
-			children = (
-				08850D882CFE00A6004D944C /* FlippingText.swift */,
-			);
-			path = Animations;
-			sourceTree = "<group>";
-		};
 		08915D922C373332008ADE27 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
-				08850D872CFE009F004D944C /* Animations */,
 				08AC26142CF5553D00750269 /* Markdown */,
 				08AAFB912C3C88CA002C04E0 /* Buttons */,
 				08B4F45F2CE3B87A004B3618 /* FullScreenBackgroundStyle.swift */,
@@ -1048,7 +1037,6 @@
 				0810F5892CEAFB5C002D4ACF /* ContextResetDivider.swift in Sources */,
 				084B3C602CFB6DF70018ACDE /* TableView.swift in Sources */,
 				08B8DE232C97F4EA0041A690 /* ToolResponseMessage.swift in Sources */,
-				08850D892CFE00A6004D944C /* FlippingText.swift in Sources */,
 				087906892CA6E22900E5DCAD /* ImageContentView.swift in Sources */,
 				0805DEEF2C58CB1400A8354A /* OpenAIService.swift in Sources */,
 				08915D992C37C648008ADE27 /* ProviderDetail.swift in Sources */,

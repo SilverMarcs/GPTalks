@@ -58,17 +58,10 @@ struct ChatListRow: View {
             ProviderImage(provider: chat.config.provider, radius: 8, frame: imageSize, scale: .medium)
                 .symbolEffect(.bounce, options: .speed(0.5), isActive: chat.isReplying)
             
-            Group {
-                if isAnimating {
-                    FlippingText(chat.title)
-                        .kerning(-0.2)
-                } else {
-                    HighlightableTextView(chat.title, highlightedText: chatVM.searchText)
-                }
-            }
-            .lineLimit(1)
-            .font(font)
-            .opacity(0.9)
+            HighlightableTextView(chat.title, highlightedText: chatVM.searchText)
+                .lineLimit(1)
+                .font(font)
+                .opacity(0.9)
             
             Spacer()
             

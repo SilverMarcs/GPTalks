@@ -105,14 +105,14 @@ struct ChatList: View {
             Button(action: { chatVM.goToPreviousChat(chats: chats) }) {
                 Image(systemName: "chevron.left")
             }
-            .keyboardShortcut("[", modifiers: .command)
+            .keyboardShortcut("[", modifiers: [.command, .shift])
         }
         
         ToolbarItem(placement: .keyboard) {
             Button(action: { chatVM.goToNextChat(chats: chats) }) {
                 Image(systemName: "chevron.right")
             }
-            .keyboardShortcut("]", modifiers: .command)
+            .keyboardShortcut("]", modifiers: [.command, .shift])
         }
         
         ToolbarItem {

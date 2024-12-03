@@ -227,7 +227,9 @@ final class Chat {
         guard forced || adjustedContext.count <= 2 else { return }
         
         if let newTitle = await TitleGenerator.generateTitle(messages: adjustedContext, provider: config.provider) {
-            self.title = newTitle
+            withAnimation {
+                self.title = newTitle
+            }
         }
     }
 
