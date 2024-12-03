@@ -60,6 +60,7 @@ struct ClaudeService: AIService {
     }
     
     static func streamResponse(from conversations: [Message], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
+        print("doing ANTHROPIC stream")
         let parameters = createParameters(from: conversations, config: config, stream: true)
         let service = getService(provider: config.provider)
         
@@ -70,6 +71,8 @@ struct ClaudeService: AIService {
                     var currentToolUseId: String?
                     var currentToolName: String?
                     var partialJsonAccumulator = ""
+                    var inputTokens = 0
+                    var outputTokens = 0
 
                     for try await result in response {
                         let content = result.delta?.text ?? ""
@@ -77,6 +80,12 @@ struct ClaudeService: AIService {
                         
                         if let streamEvent = result.streamEvent {
                             switch streamEvent {
+                            case .messageStart:
+                                // Capture input tokens at the beginning
+                                if let usage = result.message?.usage {
+                                    inputTokens = usage.inputTokens ?? 0
+                                }
+
                             case .contentBlockStart:
                                 if let toolUse = result.contentBlock?.toolUse {
                                     // Start accumulating JSON for this tool use
@@ -98,14 +107,12 @@ struct ClaudeService: AIService {
                                     let argumentsString = partialJsonAccumulator
 
                                     // Create the ChatToolCall object
-                                    print("ToolId: \(toolId)")
                                     let call = ChatToolCall(
                                         toolCallId: toolId,
                                         tool: ChatTool(rawValue: toolName)!,
                                         arguments: argumentsString
                                     )
                                     
-                                    // Yield the tool call
                                     continuation.yield(.toolCalls([call]))
                                     
                                     // Reset the accumulator and current tool information
@@ -114,8 +121,16 @@ struct ClaudeService: AIService {
                                     partialJsonAccumulator = ""
                                 }
                                 
-                            default:
-                                break
+                            case .messageDelta:
+                                // Capture output tokens at the end
+                                if let usage = result.usage {
+                                    outputTokens = usage.outputTokens
+                                }
+                                
+                            case .messageStop:
+                                // Sum input and output tokens and yield as output tokens
+                                let totalTokens = TokenUsage(inputTokens: inputTokens, outputTokens: outputTokens)
+                                continuation.yield(.totalTokens(totalTokens))
                             }
                         }
                     }
@@ -129,6 +144,7 @@ struct ClaudeService: AIService {
     }
     
     static func nonStreamingResponse(from conversations: [Message], config: ChatConfig) async throws -> NonStreamResponse {
+        print("doing ANTHROPIC NON stream")
         let parameters = createParameters(from: conversations, config: config, stream: false)
         let service = getService(provider: config.provider)
         
@@ -150,12 +166,6 @@ struct ClaudeService: AIService {
         let messages = conversations.map { convert(conversation: $0) }
         let systemPrompt = MessageParameter.System.text(config.systemPrompt)
         let tools = config.tools.enabledTools.map { $0.anthropic }
-        
-//        for message in messages {
-//            print("\n")
-//            print(message.role)
-//            print(message.content)
-//        }
     
         return MessageParameter(
             model: .other(config.model.code),

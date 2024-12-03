@@ -32,8 +32,7 @@ struct StreamHandler {
         var streamText = ""
         var lastUIUpdateTime = Date()
         var pendingToolCalls: [ChatToolCall] = []
-        var inputTokens = 0
-        var outputTokens = 0
+        var totalTokens = 0
         
         let service = chat.config.provider.type.getService()
 
@@ -51,10 +50,9 @@ struct StreamHandler {
                 }
             case .toolCalls(let calls):
                 pendingToolCalls.append(contentsOf: calls)
-            case .inputTokens(let tokens):
-                inputTokens = tokens
-            case .outputTokens(let tokens):
-                outputTokens = tokens
+            case .totalTokens(let tokens):
+                // TODO: collect statistics
+                totalTokens = tokens.inputTokens + tokens.outputTokens
             }
         }
 
@@ -62,7 +60,7 @@ struct StreamHandler {
             try await handleToolCalls(pendingToolCalls)
         }
         
-        finaliseStream(streamText: streamText, pendingToolCalls: pendingToolCalls, totalTokens: inputTokens + outputTokens)
+        finaliseStream(streamText: streamText, pendingToolCalls: pendingToolCalls, totalTokens: totalTokens)
     }
     
     private func finaliseStream(streamText: String = "", pendingToolCalls: [ChatToolCall], totalTokens: Int) {
@@ -80,7 +78,8 @@ struct StreamHandler {
     @MainActor
     private func handleNonStream() async throws {
         let service = chat.config.provider.type.getService()
-        let response = try await service.nonStreamingResponse(from: chat.adjustedContext.dropLast(), config: chat.config)
+        let adjustedContext: [Message] = chat.adjustedContext.dropLast()
+        let response = try await service.nonStreamingResponse(from: adjustedContext, config: chat.config)
         
         if let content = response.content {
             assistant.content = content
@@ -102,7 +101,7 @@ struct StreamHandler {
     @MainActor
     private func handleToolCalls(_ toolCalls: [ChatToolCall]) async throws {
         // DO NOT call this when assistant.toolCalls is already populated. this func does it for you
-        assistant.isReplying = false
+        assistant.isReplying = false // TODO: set to false only after adding toolcall
         assistant.toolCalls = toolCalls
         scrollDown()
 

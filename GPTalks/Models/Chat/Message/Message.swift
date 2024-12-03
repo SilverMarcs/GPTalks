@@ -30,6 +30,7 @@ final class Message {
     var toolCalls: [ChatToolCall] = []
     var toolResponse: ToolResponse?
     
+    var useCache: Bool = false
     var height: CGFloat = 0
     
     @Relationship(deleteRule: .cascade)

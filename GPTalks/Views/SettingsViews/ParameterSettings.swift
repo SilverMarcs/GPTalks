@@ -14,7 +14,12 @@ struct ParameterSettings: View {
     var body: some View {
         Form {
             Section("Basic") {
-                Toggle("Stream", isOn: $config.stream)
+                Toggle(isOn: $config.stream) {
+                    Text("Stream")
+                    Text("This feature is temporarily disabled.")
+                }
+                .disabled(true)
+                
                 TemperatureSlider(temperature: $config.temperature)
                 MaxTokensPicker(value: $config.maxTokens)
             }

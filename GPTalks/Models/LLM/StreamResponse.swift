@@ -10,6 +10,10 @@ import Foundation
 enum StreamResponse {
     case content(String)
     case toolCalls([ChatToolCall])
-    case inputTokens(Int)
-    case outputTokens(Int)
+    case totalTokens(TokenUsage)
+}
+
+struct TokenUsage {
+    let inputTokens: Int
+    let outputTokens: Int
 }
