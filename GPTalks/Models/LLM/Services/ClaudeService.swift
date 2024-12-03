@@ -179,7 +179,7 @@ struct ClaudeService: AIService {
         let messages = conversations.map { convert(conversation: $0) }
         let systemPrompt = MessageParameter.System.text(config.systemPrompt)
         let tools = config.tools.enabledTools.map { $0.anthropic }
-    
+        
         return MessageParameter(
             model: .other(config.model.code),
             messages: messages,
@@ -217,6 +217,6 @@ struct ClaudeService: AIService {
         let betaHeaders = ["prompt-caching-2024-07-31", "max-tokens-3-5-sonnet-2024-07-15"]
         return AnthropicServiceFactory.service(
             apiKey: provider.apiKey,
-            basePath: provider.scheme.rawValue + "://" + provider.host, betaHeaders: betaHeaders, debugEnabled: true)
+            basePath: provider.scheme.rawValue + "://" + provider.host, betaHeaders: betaHeaders)
     }
 }

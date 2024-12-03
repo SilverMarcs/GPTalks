@@ -99,6 +99,7 @@
 		08850D892CFE00A6004D944C /* FlippingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D882CFE00A6004D944C /* FlippingText.swift */; };
 		08850D8B2CFE0A99004D944C /* PermissionsOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D8A2CFE0A99004D944C /* PermissionsOnboarding.swift */; platformFilters = (ios, xros, ); };
 		08850D932CFECC30004D944C /* CacheButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D922CFECC30004D944C /* CacheButton.swift */; };
+		08850D952CFEEF0D004D944C /* ModelSwitchButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08850D942CFEEF0D004D944C /* ModelSwitchButtons.swift */; };
 		0886050F2CF61E4200A9657C /* ShortcutSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886050E2CF61E4200A9657C /* ShortcutSettings.swift */; platformFilters = (macos, ); };
 		088A09F32C55C7740055B567 /* TextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A09F22C55C7740055B567 /* TextSelectionView.swift */; };
 		088DA8F92CA752EF006C017E /* IOSWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DA8F82CA752EF006C017E /* IOSWindow.swift */; platformFilters = (ios, xros, ); };
@@ -302,6 +303,7 @@
 		08850D882CFE00A6004D944C /* FlippingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippingText.swift; sourceTree = "<group>"; };
 		08850D8A2CFE0A99004D944C /* PermissionsOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsOnboarding.swift; sourceTree = "<group>"; };
 		08850D922CFECC30004D944C /* CacheButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheButton.swift; sourceTree = "<group>"; };
+		08850D942CFEEF0D004D944C /* ModelSwitchButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSwitchButtons.swift; sourceTree = "<group>"; };
 		0886050E2CF61E4200A9657C /* ShortcutSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutSettings.swift; sourceTree = "<group>"; };
 		088A09F22C55C7740055B567 /* TextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSelectionView.swift; sourceTree = "<group>"; };
 		088DA8F82CA752EF006C017E /* IOSWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSWindow.swift; sourceTree = "<group>"; };
@@ -789,6 +791,7 @@
 				08F815302C97F62B00B49355 /* ChatInspector */,
 				08A222C32C2AC6B300D76C8B /* ChatDetail.swift */,
 				085524E72C4ED61F00CBB827 /* ChatToolbar.swift */,
+				08850D942CFEEF0D004D944C /* ModelSwitchButtons.swift */,
 				0844C2742CA3E6E100F0A325 /* EmptyChat.swift */,
 				0810F5882CEAFB5C002D4ACF /* ContextResetDivider.swift */,
 				086E620B2C39BC4500AB4110 /* ErrorMessageView.swift */,
@@ -1203,6 +1206,7 @@
 				085361252C4A5ECC007DAB62 /* MaxTokensPicker.swift in Sources */,
 				081C1D982C3BD8A50078BB24 /* GeneralSettings.swift in Sources */,
 				086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */,
+				08850D952CFEEF0D004D944C /* ModelSwitchButtons.swift in Sources */,
 				0869A3F22C95DBF9009BF9F2 /* ChatResponse.swift in Sources */,
 				0834E77B2C71A42F007CB294 /* TypedData.swift in Sources */,
 				089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */,
