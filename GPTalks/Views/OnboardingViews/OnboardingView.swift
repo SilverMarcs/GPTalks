@@ -81,6 +81,10 @@ struct OnboardingView: View {
             HStack(spacing: 20) {
                 if currentPage != .welcome {
                     Button("Previous") {
+                        #if os(iOS)
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        #endif
+                        
                         navigationDirection = .backward // Set direction
                         withAnimation {
                             currentPage = OnboardingPage(rawValue: currentPage.rawValue - 1) ?? .welcome
@@ -101,6 +105,10 @@ struct OnboardingView: View {
                 
                 Button(currentPage != .ready ? "Next" : "Get Started") {
                     if currentPage != .ready {
+                        #if os(iOS)
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        #endif
+                        
                         navigationDirection = .forward
                         withAnimation {
                             currentPage = OnboardingPage(rawValue: currentPage.rawValue + 1) ?? .ready

@@ -13,7 +13,6 @@ struct APIKeyOnboarding: View {
     
     @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
-    
     var body: some View {
         GenericOnboardingView(
             icon: "cpu.fill",
