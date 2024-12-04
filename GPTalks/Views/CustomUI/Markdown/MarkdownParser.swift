@@ -60,7 +60,40 @@ public struct MarkdownParser: MarkupVisitor {
                 appendCurrentAttrString()
                 results.append(.table(table))
             } else {
-                currentTextBuffer.append(visit(markup))
+                // Assuming `visit(markup)` returns an NSAttributedString
+                let visitedText = visit(markup)
+                let fullText = visitedText.string
+                
+                // Detect LaTeX sections: either \[ ... \] or $ ... $
+                let latexPattern = #"(\[.*?\])|(\$.*?\$)"#
+                let regex = try? NSRegularExpression(pattern: latexPattern, options: .dotMatchesLineSeparators)
+                let matches = regex?.matches(in: fullText, options: [], range: NSRange(location: 0, length: fullText.utf16.count)) ?? []
+                
+                var lastRangeEnd = 0
+                for match in matches {
+                    // Extract text before the LaTeX section
+                    let beforeRange = NSRange(location: lastRangeEnd, length: match.range.lowerBound - lastRangeEnd)
+                    if beforeRange.length > 0 {
+                        let beforeText = (fullText as NSString).substring(with: beforeRange)
+                        currentTextBuffer.append(NSAttributedString(string: beforeText))
+                    }
+                    
+                    // Extract the entire LaTeX content including the delimiters
+                    if let latexRange = Range(match.range, in: fullText) {
+                        let latexContent = String(fullText[latexRange])
+                        appendCurrentAttrString()
+                        results.append(.latex(latexContent))
+                    }
+                    
+                    lastRangeEnd = match.range.upperBound
+                }
+                
+                // Append remaining text after the last LaTeX section
+                if lastRangeEnd < fullText.utf16.count {
+                    let remainingRange = NSRange(location: lastRangeEnd, length: fullText.utf16.count - lastRangeEnd)
+                    let remainingText = (fullText as NSString).substring(with: remainingRange)
+                    currentTextBuffer.append(NSAttributedString(string: remainingText))
+                }
             }
         }
         
@@ -220,7 +253,7 @@ public struct MarkdownParser: MarkupVisitor {
             }
         }
         
-        if unorderedList.hasSuccessor {
+        if !(unorderedList.successor is CodeBlock) {
             result.append(NSAttributedString(string: "\n\n"))
         }
         
@@ -238,7 +271,7 @@ public struct MarkdownParser: MarkupVisitor {
             }
         }
         
-        if orderedList.hasSuccessor {
+        if !(orderedList.successor is CodeBlock) {
             result.append(NSAttributedString(string: "\n\n"))
         }
         

@@ -12,4 +12,5 @@ enum ContentItem {
     case text(NSAttributedString)
     case codeBlock(String, language: String?)
     case table(Table)
+    case latex(String)
 }

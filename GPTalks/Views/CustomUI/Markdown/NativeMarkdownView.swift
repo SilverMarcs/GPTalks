@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Markdown
+import LaTeXSwiftUI
 
 struct NativeMarkdownView: View {
     @ObservedObject var config = AppConfig.shared
@@ -28,12 +29,20 @@ struct NativeMarkdownView: View {
                     .font(.system(size: config.fontSize))
             case .codeBlock(let codeString, let language):
                 CodeBlockView(code: codeString, language: language)
-                    .padding(.top, -10)
-                    .padding(.bottom, 8)
+//                    .padding(.top, -10)
+//                    .padding(.bottom, 8)
+                    .padding(.vertical, 8)
             case .table(let table):
                  TableView(table: table)
                     .padding(.top, -10)
                     .padding(.bottom, 8)
+            case .latex(let latexString):
+                LaTeX(latexString)
+                    .scrollDisabled(true)
+                    .parsingMode(.all)
+                    .renderingStyle(.progress)
+                    .renderingAnimation(.easeIn)
+                    .frame(height: 40)
             }
         }
     }

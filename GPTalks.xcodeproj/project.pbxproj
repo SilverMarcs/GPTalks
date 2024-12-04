@@ -34,6 +34,7 @@
 		0823550D2CDBB74900388273 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0823550C2CDBB74900388273 /* GoogleGenerativeAI */; };
 		082355152CDBBB2B00388273 /* SwiftMarkdownView in Frameworks */ = {isa = PBXBuildFile; productRef = 082355142CDBBB2B00388273 /* SwiftMarkdownView */; };
 		0823551E2CDBC94D00388273 /* SwiftAnthropic in Frameworks */ = {isa = PBXBuildFile; productRef = 0823551D2CDBC94D00388273 /* SwiftAnthropic */; };
+		08260FE62D00CB88006A8BD5 /* LaTeXSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 08260FE52D00CB88006A8BD5 /* LaTeXSwiftUI */; };
 		082A63322C551108003996B7 /* MarkdownBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082A63312C551108003996B7 /* MarkdownBackup.swift */; };
 		082A63382C55175E003996B7 /* MiscUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082A63372C55175E003996B7 /* MiscUtils.swift */; };
 		082AA6F62CE683C40088A8B2 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 082AA6F52CE683C40088A8B2 /* OpenAI */; };
@@ -429,6 +430,7 @@
 				08F02DB32CFAE7140041F128 /* Markdown in Frameworks */,
 				08F02DBE2CFB13030041F128 /* HighlightSwift in Frameworks */,
 				086346B42CE780C6006E5927 /* GoogleGenerativeAI in Frameworks */,
+				08260FE62D00CB88006A8BD5 /* LaTeXSwiftUI in Frameworks */,
 				0812974D2CF5A9DE00440D19 /* HighlightSwift in Frameworks */,
 				082355152CDBBB2B00388273 /* SwiftMarkdownView in Frameworks */,
 				086346B12CE780B6006E5927 /* SwiftAnthropic in Frameworks */,
@@ -960,6 +962,7 @@
 				08F02DB22CFAE7140041F128 /* Markdown */,
 				08F02DB72CFB006E0041F128 /* HighlightSwift */,
 				08F02DBD2CFB13030041F128 /* HighlightSwift */,
+				08260FE52D00CB88006A8BD5 /* LaTeXSwiftUI */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -997,6 +1000,7 @@
 				086346B22CE780C6006E5927 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */,
 				08F02DB12CFAE7140041F128 /* XCRemoteSwiftPackageReference "swift-markdown" */,
 				08F02DBC2CFB13030041F128 /* XCRemoteSwiftPackageReference "HighlightSwift" */,
+				08260FE42D00CB88006A8BD5 /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1457,6 +1461,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		08260FE42D00CB88006A8BD5 /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/colinc86/LaTeXSwiftUI";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		086346A92CE78078006E5927 /* XCRemoteSwiftPackageReference "SwiftMarkdownView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/SwiftMarkdownView";
@@ -1531,6 +1543,11 @@
 		0823551D2CDBC94D00388273 /* SwiftAnthropic */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftAnthropic;
+		};
+		08260FE52D00CB88006A8BD5 /* LaTeXSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08260FE42D00CB88006A8BD5 /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */;
+			productName = LaTeXSwiftUI;
 		};
 		082AA6F52CE683C40088A8B2 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
