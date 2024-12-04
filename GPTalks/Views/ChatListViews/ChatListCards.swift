@@ -84,7 +84,7 @@ struct ChatListCards: View {
     
     func cycleChatStatus() {
         config.hasUsedChatStatusFilter = true
-        let statusesToCycle = ChatStatus.allCases.filter { $0 != .quick }
+        let statusesToCycle = ChatStatus.allCases.filter { $0 != .quick && $0 != .temporary }
         
         guard let currentStatusIndex = statusesToCycle.firstIndex(of: chatVM.statusFilter) else {
             return

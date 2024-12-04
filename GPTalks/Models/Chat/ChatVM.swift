@@ -60,6 +60,26 @@ import SwiftUI
         return newChat
     }
     
+    @MainActor
+    @discardableResult
+    func createTemporaryChat() async -> Chat {
+        let modelContext = DatabaseService.shared.modelContext
+        
+        let provider = DatabaseService.shared.getDefaultProvider()
+        let config = ChatConfig(provider: provider, purpose: .chat)
+        
+        let newChat = Chat(config: config)
+        newChat.statusId = ChatStatus.temporary.id
+        
+        modelContext.insert(newChat)
+        
+        searchText = ""
+        searchTokens = []
+        selections = [newChat]
+        
+        return newChat
+    }
+    
     // MARK: - Navigation
     func goToNextChat(chats: [Chat]) {
         guard let activeChat = activeChat,

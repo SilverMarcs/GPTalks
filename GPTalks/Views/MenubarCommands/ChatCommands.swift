@@ -14,12 +14,19 @@ struct ChatCommands: Commands {
     
     var body: some Commands {
         CommandGroup(replacing: .newItem) {
-            Button("New Session") {
+            Button("New Chat") {
                 Task {
                     await chatVM.createNewChat()
                 }
             }
             .keyboardShortcut("n")
+            
+            Button("Temporary Chat") {
+                Task {
+                    await chatVM.createTemporaryChat()
+                }
+            }
+            .keyboardShortcut("n", modifiers: [.command, .shift])
         }
         
         CommandGroup(before: .toolbar) {

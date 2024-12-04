@@ -11,12 +11,20 @@ struct EmptyChat: View {
     @Bindable var chat: Chat
     
     var body: some View {
-        Image(chat.config.provider.type.imageName)
-            .resizable()
-            .scaledToFit()
-            .frame(width: 100, height: 100)
-            .foregroundStyle(.quaternary)
-            .fullScreenBackground()
+        VStack {
+            Image(chat.config.provider.type.imageName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 100, height: 100)
+                .foregroundStyle(.quaternary)
+            
+            if chat.status == .temporary {
+                Text("Temporary Chat")
+                    .font(.title2)
+                    .foregroundStyle(.tertiary)
+            }
+        }
+        .fullScreenBackground()
     }
 }
 

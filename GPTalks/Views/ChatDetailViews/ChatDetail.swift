@@ -74,7 +74,6 @@ struct ChatDetail: View {
         config.proxy = proxy
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            showingAllMessages = true
             #if os(macOS)
             if chatVM.searchText.isEmpty {
                 scrollToBottom(proxy: proxy, animated: false)

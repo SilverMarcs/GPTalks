@@ -42,7 +42,6 @@ final class DatabaseService: NSObject {
             let quickId = ChatStatus.quick.id
             fetchQuickChats.predicate = #Predicate { $0.statusId == quickId }
             fetchQuickChats.fetchLimit = 1
-            
             if let quickChat = try? modelContext.fetch(fetchQuickChats).first {
                 quickChat.deleteAllMessages()
                 var defaults = FetchDescriptor<ProviderDefaults>()
@@ -50,6 +49,16 @@ final class DatabaseService: NSObject {
                 if let providerDefaults = try modelContext.fetch(defaults).first {
                     quickChat.config.provider = providerDefaults.quickProvider
                     quickChat.config.model = providerDefaults.quickProvider.liteModel
+                }
+            }
+            
+            // fetch chats with temporary status
+            var fetchTempChats = FetchDescriptor<Chat>()
+            let tempId = ChatStatus.temporary.id
+            fetchTempChats.predicate = #Predicate { $0.statusId == tempId }
+            if let tempChats = try? modelContext.fetch(fetchTempChats) {
+                for chat in tempChats {
+                    modelContext.delete(chat)
                 }
             }
             
