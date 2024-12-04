@@ -16,7 +16,7 @@ struct ChatDetail: View {
     
     @Bindable var chat: Chat
     
-    @State private var showingAllMessages = false
+    @State private var numberOfMessagesToShow = 2
     @State private var colorViewHeight: CGFloat = 1 // Initial height
     
     var body: some View {
@@ -89,10 +89,11 @@ struct ChatDetail: View {
     }
     
     var messagesToShow: [MessageGroup] {
-        if showingAllMessages {
+        let totalMessages = chat.currentThread.count
+        if numberOfMessagesToShow >= totalMessages {
             return chat.currentThread
         } else {
-            return Array(chat.currentThread.suffix(2))
+            return Array(chat.currentThread.suffix(numberOfMessagesToShow))
         }
     }
     
@@ -102,14 +103,13 @@ struct ChatDetail: View {
             EmptyChat(chat: chat)
         } else {
             List {
-                if !showingAllMessages && chat.currentThread.count > 2 {
-                    ProgressView()
-                        .frame(maxWidth: .infinity)
-                        .listRowSeparator(.hidden)
-                }
-
                 ForEach(messagesToShow, id: \.self) { message in
                     MessageView(message: message)
+                        .onAppear {
+                            if message == messagesToShow.first {
+                                loadMoreMessages()
+                            }
+                        }
                 }
                 #if os(macOS)
                 .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 0))
@@ -129,7 +129,13 @@ struct ChatDetail: View {
         }
     }
     
-    // TODO: dunno how expensive this is
+    private func loadMoreMessages() {
+        let totalMessages = chat.currentThread.count
+        if numberOfMessagesToShow < totalMessages {
+            numberOfMessagesToShow += 2
+        }
+    }
+    
     var resizingColor: some View {
         Color.clear
             .frame(height: colorViewHeight)
