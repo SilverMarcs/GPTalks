@@ -51,6 +51,7 @@ struct GenericOnboardingView<Content: View>: View {
                 
                 Spacer()
             }
+            .multilineTextAlignment(.center)
         }
     }
 }

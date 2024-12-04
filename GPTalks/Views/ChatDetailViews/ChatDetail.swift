@@ -146,7 +146,7 @@ struct ChatDetail: View {
             }
             .onChange(of: config.hasUserScrolled) {
                 if config.hasUserScrolled {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                         colorViewHeight = 1
                     }
                 }

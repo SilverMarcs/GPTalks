@@ -84,11 +84,12 @@ struct URLScrape: ToolProtocol {
     }
     
     static let description: String = """
-        You can open a URL directly if one is provided by the user.
+        You can open URLs directly if one is provided by the user.
          - If you need more context or info, you may also call this with URLs returned by the googleSearch tool.
          - But never try to use made up google search link or random pre-known link with this tool, it is not a search engine. 
          - You may also use this tool if the context from a previous googleSearch is not sufficient to answer the user's question and you need more info
             for a more in-depth response.
+        Note that you may pass multiple url strings in the url_list array parameter.
         """
     
     static let jsonSchemaString = """

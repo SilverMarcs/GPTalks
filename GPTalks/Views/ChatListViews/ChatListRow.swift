@@ -59,6 +59,7 @@ struct ChatListRow: View {
                 .symbolEffect(.bounce, options: .speed(0.5), isActive: chat.isReplying)
             
             HighlightableTextView(chat.title, highlightedText: chatVM.searchText)
+                .contentTransition(.numericText())
                 .lineLimit(1)
                 .font(font)
                 .opacity(0.9)
