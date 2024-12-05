@@ -263,10 +263,13 @@ final class Chat {
         }
         
         if currentThread.count == 1 {
+            let temp = rootMessage
             rootMessage = nil
+            temp?.chat = nil
         } else {
             let secondToLastGroup = currentThread[currentThread.count - 2]
             secondToLastGroup.activeMessage.next = nil
+            lastGroup.chat = nil
         }
         
         Scroller.scrollToBottom()
