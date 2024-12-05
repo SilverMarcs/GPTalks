@@ -253,8 +253,12 @@ public struct MarkdownParser: MarkupVisitor {
             }
         }
         
-        if !(unorderedList.successor is CodeBlock) {
+//        if !(unorderedList.successor is CodeBlock) {
+        if unorderedList.hasSuccessor {
             result.append(NSAttributedString(string: "\n\n"))
+            if !(unorderedList.successor is CodeBlock) {
+                result.append(NSAttributedString(string: "\n"))
+            }
         }
         
         return result
@@ -271,8 +275,12 @@ public struct MarkdownParser: MarkupVisitor {
             }
         }
         
-        if !(orderedList.successor is CodeBlock) {
-            result.append(NSAttributedString(string: "\n\n"))
+//        if !(orderedList.successor is CodeBlock) {
+        if orderedList.hasSuccessor {
+            result.append(NSAttributedString(string: "\n"))
+            if !(orderedList.successor is CodeBlock) {
+                result.append(NSAttributedString(string: "\n"))
+            }
         }
         
         return result
