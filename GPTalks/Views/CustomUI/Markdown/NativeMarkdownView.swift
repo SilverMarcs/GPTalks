@@ -8,7 +8,6 @@
 import SwiftUI
 import Markdown
 import LaTeXSwiftUI
-import MarkdownUI
 
 struct NativeMarkdownView: View {
     @ObservedObject var config = AppConfig.shared
