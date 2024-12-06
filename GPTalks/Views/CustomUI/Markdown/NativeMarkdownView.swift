@@ -15,7 +15,7 @@ struct NativeMarkdownView: View {
     let contentItems: [ContentItem]
     
     init(content: String, searchText: String) {
-        let document = Document(parsing: content)
+        let document = Document(parsing: content, options: [.parseBlockDirectives])
         var markdownParser = MarkdownParser()
         self.contentItems = markdownParser.parserResults(from: document, highlightText: searchText)
     }
@@ -43,7 +43,36 @@ struct NativeMarkdownView: View {
                     .renderingStyle(.progress)
                     .renderingAnimation(.easeIn)
                     .frame(height: 40)
+            case .list(let type, let items):
+                ListView(type: type, items: items)
+                    .padding(.top, -10)
+                    .padding(.bottom, 4)
             }
         }
+    }
+}
+
+struct ListView: View {
+    let type: ListType
+    let items: [NSAttributedString]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            ForEach(Array(items.enumerated()), id: \.offset) { index, item in
+                HStack(alignment: .top) {
+                    Text(type == .ordered ? "\(index + 1)." : "•")
+                    
+                    Text(AttributedString(item))
+                        .lineSpacing(2)
+                }
+            }
+        }
+        .padding(.leading, 8)
+    }
+}
+
+#Preview {
+    List {
+        NativeMarkdownView(content: "Hello, **world**!", searchText: "")
     }
 }

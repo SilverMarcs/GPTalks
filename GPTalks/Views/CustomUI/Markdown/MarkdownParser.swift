@@ -39,6 +39,12 @@ public struct MarkdownParser: MarkupVisitor {
         return visit(document)
     }
   
+    mutating func mapListItems(_ listItems: LazyMapSequence<MarkupChildren, ListItem>) -> [NSAttributedString] {
+        return listItems.map { listItem in
+            return visit(listItem)
+        }
+    }
+    
     mutating func parserResults(from document: Document, highlightText: String) -> [ContentItem] {
         var results = [ContentItem]()
         var currentTextBuffer = NSMutableAttributedString()
@@ -59,41 +65,51 @@ public struct MarkdownParser: MarkupVisitor {
             } else if let table = markup as? Table {
                 appendCurrentAttrString()
                 results.append(.table(table))
+            } else if let orderedList = markup as? OrderedList {
+                appendCurrentAttrString()
+                let listItems = mapListItems(orderedList.listItems)
+                results.append(.list(.ordered, listItems))
+            } else if let unorderedList = markup as? UnorderedList {
+                appendCurrentAttrString()
+                let listItems = mapListItems(unorderedList.listItems)
+                results.append(.list(.unordered, listItems))
             } else {
-                // Assuming `visit(markup)` returns an NSAttributedString
-                let visitedText = visit(markup)
-                let fullText = visitedText.string
+                currentTextBuffer.append(visit(markup))
                 
-                // Detect LaTeX sections: either \[ ... \] or $ ... $
-                let latexPattern = #"(\[.*?\])|(\$.*?\$)"#
-                let regex = try? NSRegularExpression(pattern: latexPattern, options: .dotMatchesLineSeparators)
-                let matches = regex?.matches(in: fullText, options: [], range: NSRange(location: 0, length: fullText.utf16.count)) ?? []
-                
-                var lastRangeEnd = 0
-                for match in matches {
-                    // Extract text before the LaTeX section
-                    let beforeRange = NSRange(location: lastRangeEnd, length: match.range.lowerBound - lastRangeEnd)
-                    if beforeRange.length > 0 {
-                        let beforeText = (fullText as NSString).substring(with: beforeRange)
-                        currentTextBuffer.append(NSAttributedString(string: beforeText))
-                    }
-                    
-                    // Extract the entire LaTeX content including the delimiters
-                    if let latexRange = Range(match.range, in: fullText) {
-                        let latexContent = String(fullText[latexRange])
-                        appendCurrentAttrString()
-                        results.append(.latex(latexContent))
-                    }
-                    
-                    lastRangeEnd = match.range.upperBound
-                }
-                
-                // Append remaining text after the last LaTeX section
-                if lastRangeEnd < fullText.utf16.count {
-                    let remainingRange = NSRange(location: lastRangeEnd, length: fullText.utf16.count - lastRangeEnd)
-                    let remainingText = (fullText as NSString).substring(with: remainingRange)
-                    currentTextBuffer.append(NSAttributedString(string: remainingText))
-                }
+//                // Assuming `visit(markup)` returns an NSAttributedString
+//                let visitedText = visit(markup)
+//                let fullText = visitedText.string
+//                
+//                // Detect LaTeX sections: either \[ ... \] or $ ... $
+//                let latexPattern = #"(\[.*?\])|(\$.*?\$)"#
+//                let regex = try? NSRegularExpression(pattern: latexPattern, options: .dotMatchesLineSeparators)
+//                let matches = regex?.matches(in: fullText, options: [], range: NSRange(location: 0, length: fullText.utf16.count)) ?? []
+//                
+//                var lastRangeEnd = 0
+//                for match in matches {
+//                    // Extract text before the LaTeX section
+//                    let beforeRange = NSRange(location: lastRangeEnd, length: match.range.lowerBound - lastRangeEnd)
+//                    if beforeRange.length > 0 {
+//                        let beforeText = (fullText as NSString).substring(with: beforeRange)
+//                        currentTextBuffer.append(NSAttributedString(string: beforeText))
+//                    }
+//                    
+//                    // Extract the entire LaTeX content including the delimiters
+//                    if let latexRange = Range(match.range, in: fullText) {
+//                        let latexContent = String(fullText[latexRange])
+//                        appendCurrentAttrString()
+//                        results.append(.latex(latexContent))
+//                    }
+//                    
+//                    lastRangeEnd = match.range.upperBound
+//                }
+//                
+//                // Append remaining text after the last LaTeX section
+//                if lastRangeEnd < fullText.utf16.count {
+//                    let remainingRange = NSRange(location: lastRangeEnd, length: fullText.utf16.count - lastRangeEnd)
+//                    let remainingText = (fullText as NSString).substring(with: remainingRange)
+//                    currentTextBuffer.append(NSAttributedString(string: remainingText))
+//                }
             }
         }
         
@@ -178,8 +194,9 @@ public struct MarkdownParser: MarkupVisitor {
             result.append(visit(child))
         }
 
+        // TODO: store successor in a variable instead of feyching everytime
         if paragraph.hasSuccessor {
-            let shouldUseSingleNewline = paragraph.successor is CodeBlock ||  paragraph.successor is Table || paragraph.isContainedInList
+            let shouldUseSingleNewline = paragraph.successor is CodeBlock ||  paragraph.successor is Table || paragraph.successor is OrderedList || paragraph.successor is UnorderedList
             let newlineType: NSAttributedString = shouldUseSingleNewline ? .singleNewline(withFontSize: newLineFontSize) : .doubleNewline(withFontSize: newLineFontSize)
             result.append(newlineType)
 //            result.append(.doubleNewline(withFontSize: newLineFontSize))
@@ -197,10 +214,14 @@ public struct MarkdownParser: MarkupVisitor {
 
         result.applyHeading(withLevel: heading.level)
 
-        if heading.hasSuccessor && !(heading.successor is CodeBlock) {
+        if heading.hasSuccessor && !(heading.successor is CodeBlock) && !(heading.successor is OrderedList) && !(heading.successor is UnorderedList) {
             result.append(.doubleNewline(withFontSize: newLineFontSize))
         }
         
+        if heading.successor is OrderedList || heading.successor is UnorderedList || heading.successor is CodeBlock {
+            result.append(.singleNewline(withFontSize: newLineFontSize))
+        }
+            
         if heading.hasPredecessor && !(heading.predecessor is Paragraph) && !(heading.predecessor is CodeBlock) {
             result.insert(.singleNewline(withFontSize: newLineFontSize), at: 0)
         }

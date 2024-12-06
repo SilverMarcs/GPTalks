@@ -13,4 +13,15 @@ enum ContentItem {
     case codeBlock(String, language: String?)
     case table(Table)
     case latex(String)
+    case list(ListType, [NSAttributedString])
+}
+
+enum ListType {
+    case ordered
+    case unordered
+}
+
+struct ListItemContent {
+    let text: NSAttributedString
+//    let checkbox: Checkbox?
 }
