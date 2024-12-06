@@ -9,10 +9,10 @@ import SwiftUI
 
 struct NativeMarkdownView: View {
     @ObservedObject private var config = AppConfig.shared
-    var attributed: NSAttributedString
+    var attributed: AttributedString
 
     var body: some View {
-        Text(AttributedString(attributed))
+        Text(attributed)
             .lineSpacing(2)
             .font(.system(size: config.fontSize))
     }
@@ -20,157 +20,114 @@ struct NativeMarkdownView: View {
     init(text: String, highlightText: String) {
         self.attributed = NativeMarkdownView.parseMarkdown(text)
         if !highlightText.isEmpty {
-            var mutableAttributedString = NSMutableAttributedString(attributedString: self.attributed)
-            NativeMarkdownView.applyHighlighting(to: &mutableAttributedString, highlightText: highlightText)
-            self.attributed = mutableAttributedString
+            self.attributed = NativeMarkdownView.applyHighlighting(to: self.attributed, highlightText: highlightText)
         }
     }
 
-    private static func parseMarkdown(_ text: String) -> NSAttributedString {
-        let currentAttributedString = NSMutableAttributedString()
+    private static func parseMarkdown(_ text: String) -> AttributedString {
+        var attributed = AttributedString()
         
         let scanner = Scanner(string: text)
         scanner.charactersToBeSkipped = nil
 
         let baseSize = AppConfig.shared.fontSize
-        let defaultFont = PlatformFont.systemFont(ofSize: baseSize)
-        let monoFont = PlatformFont.monospacedSystemFont(ofSize: baseSize - 1, weight: .regular)
-        let boldFont = PlatformFont.boldSystemFont(ofSize: baseSize)
-
+        
         while !scanner.isAtEnd {
             if scanner.scanString("```") != nil {
                 let _ = scanner.scanUpToCharacters(from: .newlines) ?? ""
-                let _ = scanner.scanCharacters(from: .newlines) // Skip newline after language
+                let _ = scanner.scanCharacters(from: .newlines)
                 
                 if var codeContent = scanner.scanUpToString("```") {
                     if scanner.scanString("```") != nil {
-                        // remove trailing newline if any
                         if codeContent.last == "\n" {
                             codeContent.removeLast()
                         }
-                        currentAttributedString.append(NSAttributedString(string: codeContent, attributes: [.font: monoFont]))
+                        var codeAttribute = AttributedString(codeContent)
+                        codeAttribute.font = .monospacedSystemFont(ofSize: baseSize - 1, weight: .regular)
+                        attributed.append(codeAttribute)
                     } else {
-                        // No closing ``` found
-                        currentAttributedString.append(NSAttributedString(string: "```\(codeContent)", attributes: [.font: defaultFont]))
+                        var fallback = AttributedString("```\(codeContent)")
+                        fallback.font = .systemFont(ofSize: baseSize)
+                        attributed.append(fallback)
                     }
-                } else {
-                    // No closing ``` found
-                    let remainingText = scanner.string[scanner.currentIndex...]
-                    currentAttributedString.append(NSAttributedString(string: String(remainingText), attributes: [.font: defaultFont]))
-                    break
                 }
             } else if scanner.scanString("`") != nil {
                 if let codeContent = scanner.scanUpToString("`") {
                     if scanner.scanString("`") != nil {
-                        let codeAttributed = NSAttributedString(
-                            string: codeContent,
-                            attributes: [
-                                .font: monoFont,
-                                .backgroundColor: PlatformColor.secondarySystemFill,
-                            ]
-                        )
-                        currentAttributedString.append(codeAttributed)
+                        var inlineCode = AttributedString(codeContent)
+                        inlineCode.font = .monospacedSystemFont(ofSize: baseSize - 1, weight: .regular)
+                        inlineCode.backgroundColor = .secondarySystemFill
+                        attributed.append(inlineCode)
                     } else {
-                        // No closing ` found
-                        currentAttributedString.append(NSAttributedString(string: "`\(codeContent)", attributes: [.font: defaultFont]))
+                        var fallback = AttributedString("`\(codeContent)")
+                        fallback.font = .systemFont(ofSize: baseSize)
+                        attributed.append(fallback)
                     }
-                } else {
-                    // No closing ` found
-                    currentAttributedString.append(NSAttributedString(string: "`", attributes: [.font: defaultFont]))
                 }
             } else if scanner.scanString("**") != nil {
-                // Bold text
                 if let boldContent = scanner.scanUpToString("**") {
                     if scanner.scanString("**") != nil {
-                        let boldAttributed = NSAttributedString(string: boldContent, attributes: [.font: boldFont])
-                        currentAttributedString.append(boldAttributed)
+                        var bold = AttributedString(boldContent)
+                        bold.font = .boldSystemFont(ofSize: baseSize)
+                        attributed.append(bold)
                     } else {
-                        // No closing ** found
-                        currentAttributedString.append(NSAttributedString(string: "**\(boldContent)", attributes: [.font: defaultFont]))
+                        var fallback = AttributedString("**\(boldContent)")
+                        fallback.font = .systemFont(ofSize: baseSize)
+                        attributed.append(fallback)
                     }
-                } else {
-                    // No closing ** found
-                    currentAttributedString.append(NSAttributedString(string: "**", attributes: [.font: defaultFont]))
                 }
             } else if scanner.scanString("#") != nil {
-                // Heading
                 var headingLevel = 1
                 while scanner.scanString("#") != nil {
                     headingLevel += 1
                 }
-                let _ = scanner.scanCharacters(from: .whitespaces) // Skip whitespace
+                let _ = scanner.scanCharacters(from: .whitespaces)
                 if let headingContent = scanner.scanUpToCharacters(from: .newlines) {
-                    let headingSize: CGFloat
-                    switch headingLevel {
-                    case 1:
-                        headingSize = baseSize * 2.0
-                    case 2:
-                        headingSize = baseSize * 1.7
-                    case 3:
-                        headingSize = baseSize * 1.4
-                    case 4:
-                        headingSize = baseSize * 1.1
-                    default:
-                        headingSize = baseSize
-                    }
-                    let headingFont = PlatformFont.systemFont(ofSize: headingSize, weight: .bold)
-                    let headingAttributed = NSAttributedString(string: headingContent, attributes: [.font: headingFont])
-                    currentAttributedString.append(headingAttributed)
+                    let headingSize: CGFloat = baseSize * (2.0 - (0.3 * CGFloat(headingLevel - 1)))
+                    var heading = AttributedString(headingContent)
+                    heading.font = .systemFont(ofSize: headingSize, weight: .bold)
+                    attributed.append(heading)
                 }
-                // add newline after heading
-//                currentAttributedString.append(NSAttributedString(string: "\n"))
             } else {
-                // Regular text
                 if let textContent = scanner.scanUpToCharacters(from: CharacterSet(charactersIn: "`*#")) {
-                    let textAttributed = NSAttributedString(string: textContent, attributes: [.font: defaultFont])
-                    currentAttributedString.append(textAttributed)
-                } else {
-                    // Handle special characters not part of markdown syntax
-                    if let char = scanner.scanCharacter() {
-                        currentAttributedString.append(NSAttributedString(string: String(char), attributes: [.font: defaultFont]))
-                    }
+                    var text = AttributedString(textContent)
+                    text.font = .systemFont(ofSize: baseSize)
+                    attributed.append(text)
+                } else if let char = scanner.scanCharacter() {
+                    var text = AttributedString(String(char))
+                    text.font = .systemFont(ofSize: baseSize)
+                    attributed.append(text)
                 }
             }
         }
 
-        return currentAttributedString
+        return attributed
     }
 
-    private static func applyHighlighting(to attributedString: inout NSMutableAttributedString, highlightText: String) {
-        if highlightText.isEmpty {
-            return
-        }
+    private static func applyHighlighting(to attributedString: AttributedString, highlightText: String) -> AttributedString {
+        guard !highlightText.isEmpty else { return attributedString }
         
-        let nsString = attributedString.string as NSString
-        let stringLength = nsString.length
-        var searchRange = NSRange(location: 0, length: stringLength)
+        var attributed = attributedString
+        let lowercasedHighlight = highlightText.lowercased()
         
-        while searchRange.location < stringLength {
-            let foundRange = nsString.range(
-                of: highlightText,
-                options: .caseInsensitive,
-                range: searchRange
-            )
+        var searchRange = attributed.startIndex..<attributed.endIndex
+        
+        while let foundRange = attributed[searchRange].range(of: lowercasedHighlight, options: .caseInsensitive) {
+            // Apply highlighting to the found range
+            attributed[foundRange].backgroundColor = .yellow
+            attributed[foundRange].foregroundColor = .black
             
-            if foundRange.location == NSNotFound {
+            // Update the search range to start after the current foundRange
+            if foundRange.upperBound >= searchRange.upperBound {
                 break
             }
-            
-            // Highlighting takes priority - save existing attributes
-            let existingAttributes = attributedString.attributes(at: foundRange.location, effectiveRange: nil)
-            
-            // Apply highlight attributes while preserving existing ones
-            var newAttributes = existingAttributes
-            newAttributes[.backgroundColor] = PlatformColor.yellow
-            newAttributes[.foregroundColor] = PlatformColor.black
-            
-            attributedString.setAttributes(newAttributes, range: foundRange)
-            
-            searchRange.location = foundRange.location + foundRange.length
-            searchRange.length = stringLength - searchRange.location
+            searchRange = foundRange.upperBound..<searchRange.upperBound
         }
+        
+        return attributed
     }
 }
+
 
 
 #Preview {

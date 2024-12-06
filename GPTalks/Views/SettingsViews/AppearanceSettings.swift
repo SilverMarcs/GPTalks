@@ -41,33 +41,30 @@ struct AppearanceSettings: View {
                     }
                 } label: {
                     Text("Markdown Provider")
-                    Text("Native uses less memeory but may be inaccurate")
+                    Text("Native uses less memeory but is less capable")
                 }
                 #if os(macOS)
                 .pickerStyle(.radioGroup)
                 #endif
                 
-                Picker(selection: $config.codeBlockTheme) {
-                    ForEach(CodeTheme.allCases, id: \.self) { theme in
-                        Text(theme.rawValue)
-                            .tag(theme)
+                if config.markdownProvider == .webview {
+                    Picker(selection: $config.codeBlockTheme) {
+                        ForEach(CodeTheme.allCases, id: \.self) { theme in
+                            Text(theme.rawValue)
+                                .tag(theme)
+                        }
+                    } label: {
+                        Text("Code Block Theme")
+                        Text("Change chat selection to take effect")
                     }
-                } label: {
-                    Text("Code Block Theme")
-                    Text("Change chat selection to take effect")
+                    
+                    MarkdownView(content: String.onlyCodeBlock)
+                        .if(config.markdownProvider == .webview) {
+                            $0
+                                .id(config.codeBlockTheme)
+                                .padding(.bottom, -11)
+                        }
                 }
-                
-                MarkdownView(content: String.onlyCodeBlock)
-                    .if(config.markdownProvider == .webview) {
-                        $0
-                        .id(config.codeBlockTheme)
-                        .padding(.bottom, -11)
-                    }
-                    .if(config.markdownProvider == .native) {
-                        $0
-                            .padding(.top, 10)
-                            .padding(.bottom, -8)
-                    }
             }
         }
         .formStyle(.grouped)

@@ -72,6 +72,9 @@ struct ChatDetail: View {
     func onAppearStuff(proxy: ScrollViewProxy) {
         config.hasUserScrolled = false
         config.proxy = proxy
+        if !chatVM.searchText.isEmpty {
+            numberOfMessagesToShow = chat.currentThread.count
+        }
         
         if chatVM.searchText.isEmpty {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

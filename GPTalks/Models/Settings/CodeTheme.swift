@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import HighlightSwift
 import SwiftMarkdownView
 
 public enum CodeTheme: String, CaseIterable, Identifiable, Codable, Equatable {
@@ -20,25 +19,6 @@ public enum CodeTheme: String, CaseIterable, Identifiable, Codable, Equatable {
 
     public var id: String {
         rawValue
-    }
-
-    func toHighlightTheme() -> HighlightTheme {
-        switch self {
-        case .a11y:
-            return .a11y
-        case .atomOne:
-            return .atomOne
-        case .github:
-            return .github
-        case .pandaSyntax:
-            return .pandaSyntax
-        case .paraiso:
-            return .paraiso
-        case .stackoverflow:
-            return .stackoverflow
-        case .tokyoNight:
-            return .tokyoNight
-        }
     }
 
     func toCodeBlockTheme() -> CodeBlockTheme {

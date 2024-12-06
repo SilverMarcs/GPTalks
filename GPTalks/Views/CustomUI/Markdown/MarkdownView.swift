@@ -21,7 +21,7 @@ struct MarkdownView: View {
             Text(content)
                 .textSelection(.enabled)
                 .font(.system(size: config.fontSize))
-        case .native,
+        case .basic,
             .webview where !chatVM.searchText.isEmpty:
             NativeMarkdownView(text: content, highlightText: chatVM.searchText)
                 .textSelection(.enabled)
