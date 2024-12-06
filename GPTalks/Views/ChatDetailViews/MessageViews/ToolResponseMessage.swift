@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct ToolResponseMessage: View {
-    var message: Message
+    var message: MessageGroup
     @State private var showPopover = false
     
     var body: some View {
         HStack(alignment: .center, spacing: spacing) {
             Rectangle()
                 .opacity(0)
-                .frame(width: size, height: size)
+                .frame(width: 18, height: 18)
                 
             if !message.content.isEmpty {
                 Text(message.content)
@@ -30,6 +30,7 @@ struct ToolResponseMessage: View {
             
             Spacer()
         }
+        .padding(.top, -10)
     }
     
     func popoverContent(content: String) -> some View {
@@ -67,13 +68,9 @@ struct ToolResponseMessage: View {
                 }
                 .padding(3)
             }
-            .groupBoxStyle(PlatformSpecificGroupBoxStyle())
+            .groupBoxStyle(PlatformGroupBoxStyle())
         }
         .buttonStyle(.plain)
-    }
-    
-    var size: CGFloat {
-        18
     }
     
     var spacing: CGFloat {
@@ -86,5 +83,5 @@ struct ToolResponseMessage: View {
 }
 
 #Preview {
-    ToolResponseMessage(message: .mockToolMessage)
+    ToolResponseMessage(message: .mockToolGroup)
 }

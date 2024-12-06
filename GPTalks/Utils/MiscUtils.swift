@@ -55,35 +55,15 @@ extension Float {
 // MARK: - String
 extension String {
     static let bottomID = "bottomID"
-    static let topID = "topID"
     static let testPrompt = "Respond with just the word Test"
     
     func copyToPasteboard() {
-#if os(macOS)
+        #if os(macOS)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(self, forType: .string)
-#else
+        #else
         UIPasteboard.general.string = self
-#endif
-    }
-}
-
-// MARK: - Scrolling
-func scrollToBottom(proxy: ScrollViewProxy, id: String = String.bottomID, anchor: UnitPoint = .bottom, animated: Bool = true, delay: TimeInterval = 0.0) {
-    let action = {
-        if animated {
-            withAnimation {
-                proxy.scrollTo(id, anchor: anchor)
-            }
-        } else {
-            proxy.scrollTo(id, anchor: anchor)
-        }
-    }
-    
-    if delay > 0 {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: action)
-    } else {
-        DispatchQueue.main.async(execute: action)
+        #endif
     }
 }
 
@@ -98,13 +78,6 @@ struct RuntimeError: LocalizedError {
     var errorDescription: String? {
         description
     }
-}
-
-// MARK: - Environment Values
-extension EnvironmentValues {
-    @Entry var providers: [Provider] = []
-    
-    @Entry var isQuick: Bool = false
 }
 
 // MARK: - Image
@@ -213,3 +186,40 @@ extension Color {
         return Color(red: red, green: green, blue: blue)
     }
 }
+
+// MARK: - Conditional View Modifier
+extension View {
+    /// Applies the given transform if the given condition evaluates to `true`.
+    /// - Parameters:
+    ///   - condition: The condition to evaluate.
+    ///   - transform: The transform to apply to the source `View`.
+    /// - Returns: Either the original `View` or the modified `View` if the condition is `true`.
+    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
+    }
+}
+
+// MARK: - Environment Values
+extension EnvironmentValues {
+    @Entry var isReplying = false
+}
+
+// MARK: - Window Aliases
+
+// typealis for string calld WindowID
+typealias WindowID = String
+
+extension WindowID {
+    static let main = "main"
+    static let about = "about"
+    static let settings = "settings"
+    static let chats = "chats"
+    static let images = "images"
+    static let help = "help"
+}
+
+

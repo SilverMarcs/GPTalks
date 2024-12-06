@@ -8,6 +8,7 @@
 import Foundation
 import OpenAI
 import GoogleGenerativeAI
+import SwiftAnthropic
 
 struct URLScrape: ToolProtocol {
     static let toolName = "urlScrape"
@@ -83,11 +84,12 @@ struct URLScrape: ToolProtocol {
     }
     
     static let description: String = """
-        You can open a URL directly if one is provided by the user.
+        You can open URLs directly if one is provided by the user.
          - If you need more context or info, you may also call this with URLs returned by the googleSearch tool.
          - But never try to use made up google search link or random pre-known link with this tool, it is not a search engine. 
          - You may also use this tool if the context from a previous googleSearch is not sufficient to answer the user's question and you need more info
             for a more in-depth response.
+        Note that you may pass multiple url strings in the url_list array parameter.
         """
     
     static let jsonSchemaString = """
@@ -148,25 +150,17 @@ struct URLScrape: ToolProtocol {
             )
         ])
     }
-    
-    static var vertex: [String: Any] {
-         [
-            "name": toolName,
-            "description": description,
-            "input_schema": [
-                "type": "object",
-                "properties": [
-                    "url_list": [
-                        "type": "array",
-                        "description": "The array of URLs of the websites to scrape",
-                        "items": [
-                            "type": "string"
-                        ],
-                        "maxItems": 5
-                    ]
+
+    static var anthropic: MessageParameter.Tool {
+        .init(
+            name: toolName,
+            description: description,
+            inputSchema: .init(
+                type: .object,
+                properties: [
+                    "url_list": .init(type: .array, description: "The array of URLs of the website(s) to scrape"),
                 ],
-                "required": ["url_list"]
-            ]
-        ]
+                required: ["url_list"])
+        )
     }
 }

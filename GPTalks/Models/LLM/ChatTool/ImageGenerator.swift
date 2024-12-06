@@ -9,6 +9,7 @@ import Foundation
 import OpenAI
 import GoogleGenerativeAI
 import SwiftData
+import SwiftAnthropic
 
 struct ImageGenerator: ToolProtocol {
     static let toolName: String = "imageGenerator"
@@ -161,26 +162,18 @@ struct ImageGenerator: ToolProtocol {
             )
         ])
     }
-
-    static var vertex: [String: Any] {
-        [
-            "name": toolName,
-            "description": description,
-            "input_schema": [
-                "type": "object",
-                "properties": [
-                    "prompt": [
-                        "type": "string",
-                        "description": "The prompt for dalle"
-                    ],
-                    "n": [
-                        "type": "integer",
-                        "description": "The number of images to generate"
-                    ]
+    
+    static var anthropic: MessageParameter.Tool {
+        .init(
+            name: toolName,
+            description: description,
+            inputSchema: .init(
+                type: .object,
+                properties: [
+                    "prompt": .init(type: .string, description: "The prompt for dalle"),
+                    "n": .init(type: .integer, description: "The number of images to generate")
                 ],
-                "required": ["prompt", "n"]
-            ]
-        ]
+                required: ["prompt", "n"])
+        )
     }
-
 }

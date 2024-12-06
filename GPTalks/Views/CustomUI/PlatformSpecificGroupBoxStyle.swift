@@ -1,5 +1,5 @@
 //
-//  PlatformSpecificGroupBoxStyle.swift
+//  PlatformGroupBoxStyle.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 31/10/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PlatformSpecificGroupBoxStyle: GroupBoxStyle {
+struct PlatformGroupBoxStyle: GroupBoxStyle {
     func makeBody(configuration: Configuration) -> some View {
         GroupBox {
             configuration.content

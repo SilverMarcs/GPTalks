@@ -9,18 +9,22 @@ import Foundation
 import SwiftUI
 import SwiftAnthropic
 
-
-// TODO: refactor and combiine common variabels into static props
 struct ClaudeService: AIService {
     typealias ConvertedType = MessageParameter.Message
     
     static func convert(conversation: Message) -> MessageParameter.Message {
+        var localRole = conversation.role.toClaudeRole()
+        
         let contentItems = FileHelper.processDataFiles(conversation.dataFiles, messageId: conversation.id.uuidString, role: conversation.role)
         var contentObjects: [MessageParameter.Message.Content.ContentObject] = []
         for item in contentItems {
             switch item {
             case .text(let text):
-                contentObjects.append(.text(text))
+                if conversation.useCache {
+                    contentObjects.append(.cache(.init(text: text, cacheControl: .init(type: .ephemeral))))
+                } else {
+                    contentObjects.append(.text(text))
+                }
             case .image(let mimeType, let data):
                 let imageSource = MessageParameter.Message.Content.ImageSource(
                     type: .base64,
@@ -31,8 +35,31 @@ struct ClaudeService: AIService {
             }
         }
         
+        if !conversation.content.isEmpty {
+            if conversation.useCache {
+                contentObjects.append(.cache(.init(text: conversation.content, cacheControl: .init(type: .ephemeral))))
+            } else {
+                contentObjects.append(.text(conversation.content))
+            }
+        }
+        
+        if let response = conversation.toolResponse {
+            localRole = .user
+            contentObjects.append(.toolResult(response.tool.toolName, "See next message"))
+            if conversation.useCache {
+                contentObjects.append(.cache(.init(text: response.processedContent, cacheControl: .init(type: .ephemeral))))
+            } else {
+                contentObjects.append(.text(response.processedContent))
+            }
+        }
+        
+        for call in conversation.toolCalls {
+            print("Conversion ToolCallId: \(call.toolCallId)")
+            contentObjects.append(.toolUse(call.tool.toolName, call.toolCallId, ["arguments": .string(call.arguments)]))
+        }
+        
         let finalContent: MessageParameter.Message = .init(
-            role: conversation.role.toClaudeRole(),
+            role: localRole,
             content: .list(contentObjects)
         )
         
@@ -46,6 +73,7 @@ struct ClaudeService: AIService {
     }
     
     static func streamResponse(from conversations: [Message], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
+        print("doing ANTHROPIC stream")
         let parameters = createParameters(from: conversations, config: config, stream: true)
         let service = getService(provider: config.provider)
         
@@ -53,13 +81,75 @@ struct ClaudeService: AIService {
             Task {
                 do {
                     let response = try await service.streamMessage(parameters)
+                    var currentToolUseId: String?
+                    var currentToolName: String?
+                    var partialJsonAccumulator = ""
+                    var inputTokens = 0
+                    var outputTokens = 0
+
                     for try await result in response {
-                        if let content = result.delta?.text {
-                            continuation.yield(.content(content))
+                        let content = result.delta?.text ?? ""
+                        continuation.yield(.content(content))
+                        
+                        if let streamEvent = result.streamEvent {
+                            switch streamEvent {
+                            case .messageStart:
+                                // Capture input tokens at the beginning
+                                if let usage = result.message?.usage {
+                                    inputTokens = usage.inputTokens ?? 0
+                                }
+
+                            case .contentBlockStart:
+                                if let toolUse = result.contentBlock?.toolUse {
+                                    // Start accumulating JSON for this tool use
+                                    currentToolUseId = toolUse.id
+                                    currentToolName = toolUse.name
+                                    partialJsonAccumulator = ""
+                                }
+                                
+                            case .contentBlockDelta:
+                                // Continue accumulating partial JSON data
+                                if let partialJson = result.delta?.partialJson {
+                                    partialJsonAccumulator += partialJson
+                                }
+                                
+                            case .contentBlockStop:
+                                // Finalize the tool call when the content block stops
+                                if let toolId = currentToolUseId, let toolName = currentToolName {
+                                    // Use the accumulated JSON
+                                    let argumentsString = partialJsonAccumulator
+
+                                    // Create the ChatToolCall object
+                                    let call = ChatToolCall(
+                                        toolCallId: toolId,
+                                        tool: ChatTool(rawValue: toolName)!,
+                                        arguments: argumentsString
+                                    )
+                                    
+                                    continuation.yield(.toolCalls([call]))
+                                    
+                                    // Reset the accumulator and current tool information
+                                    currentToolUseId = nil
+                                    currentToolName = nil
+                                    partialJsonAccumulator = ""
+                                }
+                                
+                            case .messageDelta:
+                                // Capture output tokens at the end
+                                if let usage = result.usage {
+                                    outputTokens = usage.outputTokens
+                                }
+                                
+                            case .messageStop:
+                                // Sum input and output tokens and yield as output tokens
+                                let totalTokens = TokenUsage(inputTokens: inputTokens, outputTokens: outputTokens)
+                                continuation.yield(.totalTokens(totalTokens))
+                            }
                         }
                     }
                     continuation.finish()
                 } catch {
+                    print(error)
                     continuation.finish(throwing: error)
                 }
             }
@@ -67,6 +157,7 @@ struct ClaudeService: AIService {
     }
     
     static func nonStreamingResponse(from conversations: [Message], config: ChatConfig) async throws -> NonStreamResponse {
+        print("doing ANTHROPIC NON stream")
         let parameters = createParameters(from: conversations, config: config, stream: false)
         let service = getService(provider: config.provider)
         
@@ -87,6 +178,7 @@ struct ClaudeService: AIService {
     static private func createParameters(from conversations: [Message], config: ChatConfig, stream: Bool) -> MessageParameter {
         let messages = conversations.map { convert(conversation: $0) }
         let systemPrompt = MessageParameter.System.text(config.systemPrompt)
+        let tools = config.tools.enabledTools.map { $0.anthropic }
         
         return MessageParameter(
             model: .other(config.model.code),
@@ -95,7 +187,8 @@ struct ClaudeService: AIService {
             system: systemPrompt,
             stream: stream,
             temperature: config.temperature,
-            topP: config.topP
+            topP: config.topP,
+            tools: tools.isEmpty ? nil : tools
         )
     }
     

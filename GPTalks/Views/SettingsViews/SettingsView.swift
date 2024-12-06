@@ -49,6 +49,11 @@ struct SettingsView: View {
                 Label("Guides", systemImage: "book")
                     .tag(SettingsTab.guides)
                 
+                #if os(macOS)
+                Label("Shortcuts", systemImage: "command")
+                    .tag(SettingsTab.shortcuts)
+                #endif
+                
                 Label("About", systemImage: "info.circle")
                     .tag(SettingsTab.about)
                          
@@ -87,6 +92,10 @@ struct SettingsView: View {
                     AdvancedSettings()
                 case .guides:
                     GuidesSettings()
+                #if os(macOS)
+                case .shortcuts:
+                    ShortcutSettings()
+                #endif
                 case .about:
                     AboutSettings()
                 default:

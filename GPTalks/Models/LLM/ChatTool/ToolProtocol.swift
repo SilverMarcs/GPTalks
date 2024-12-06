@@ -8,11 +8,12 @@
 import Foundation
 import OpenAI
 import GoogleGenerativeAI
+import SwiftAnthropic
 
 protocol ToolProtocol {
     static var openai: ChatQuery.ChatCompletionToolParam { get }
     static var google: Tool { get }
-    static var vertex: [String: Any] { get }
+    static var anthropic: MessageParameter.Tool { get }
     static var jsonSchemaString: String { get }
     static var toolName: String { get }
     static var displayName: String { get }

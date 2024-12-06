@@ -2,97 +2,109 @@
 //  AssistantMessage.swift
 //  GPTalks
 //
-//  Created by Zabir Raihan on 04/07/2024.
+//  Created by Zabir Raihan on 26/11/2024.
 //
 
 import SwiftUI
 
 struct AssistantMessage: View {
-    @Environment(ChatVM.self) var chatVM
     @ObservedObject var config = AppConfig.shared
-    var message: Message
     
-    @State private var isHovering: Bool = false
+    var message: Message
+    var group: MessageGroup
+    var showMenu: Bool = true
+    
+    @State var height: CGFloat = 0
     @State private var showingTextSelection = false
+    @State private var isHovering = false
     
     var body: some View {
-        HStack(alignment: .top, spacing: spacing) {
-            Image(message.provider?.type.imageName ?? "brain.SFSymbol")
-                .resizable()
-                .frame(width: 17, height: 17)
-                .foregroundStyle(Color(hex: message.provider?.color  ?? "#00947A").gradient)
+        VStack(alignment: .leading, spacing: 8) {
+            AssistantLabel(message: message)
                 .transaction { $0.animation = nil }
+                .padding(.leading, labelPadding)
             
-            VStack(alignment: .leading, spacing: 7) {
-                Text(message.model?.name ?? "Assistant")
-                    .font(.subheadline)
-                    .bold()
-                    .foregroundStyle(.secondary)
-                    #if os(macOS)
-                    .padding(.top, 2)
-                    #endif
-                    .transaction { $0.animation = nil }
-                
-                MarkdownView(content: message.content)
-                    .transaction { $0.animation = nil }
-                
-                if !message.dataFiles.isEmpty {
-                    DataFilesView(dataFiles: message.dataFiles, edge: .leading)
+            MarkdownView(content: message.content, calculatedHeight: $height)
+                .environment(\.isReplying, message.isReplying)
+                .transaction { $0.animation = nil }
+                .if(config.markdownProvider == .webview) { view in
+                    view
+                        .frame(height: message.height, alignment: .top)
+                        .onChange(of: height) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                if height > 0 {
+                                    message.height = height
+                                }
+                            }
+                        }
                 }
-                
-                if message.isReplying {
-                    ProgressView()
-                        .controlSize(.small)
+            
+            if !message.dataFiles.isEmpty {
+//                DataFilesView(dataFiles: message.dataFiles, edge: .leading)
+                ForEach(message.dataFiles, id: \.self) { data in
+                    ImageViewerData(data: data.data)
                 }
-                
-                #if os(macOS)
-                messageMenuView
-                #endif
             }
-        }
-        #if !os(macOS)
-        .contextMenu {
+            
+            if message.isReplying {
+                ProgressView()
+                    .controlSize(.small)
+            }
+            
+            #if os(macOS)
             if !message.isReplying {
-                MessageMenu(message: message, isExpanded: .constant(true), toggleTextSelection: toggleTextSelection)
+                if !showMenu {
+                    HStack {
+                        SecondaryNavigationButtons(group: group)
+                    }
+                } else {
+                    if isHovering {
+                        HoverableMessageMenu {
+                            MessageMenu(message: group) {
+                                showingTextSelection.toggle()
+                            }
+                        }
+                        .transition(.symbolEffect(.appear))
+                    } else {
+                        // Display a clear view of the same height as the menu
+                        Color.clear.frame(height: 25)
+                    }
+                }
             }
-        } preview: {
-            Text("Assistant Message")
-                .padding()
+            Spacer()
+            #endif
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.leading, 25)
+        .padding(.trailing, 30)
+        .onHover { hovering in
+            withAnimation {
+                isHovering = hovering
+            }
         }
         .sheet(isPresented: $showingTextSelection) {
             TextSelectionView(content: message.content)
         }
-        #else
-        .onHover { isHovering = $0 }
-        #endif
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.trailing, 30)
-    }
-
-    @ViewBuilder
-    var messageMenuView: some View {
-        #if os(macOS)
-        MessageMenu(message: message, isExpanded: .constant(true))
-            .symbolEffect(.appear, isActive: !isHovering)
-            .opacity(message.isReplying ? 0 : 1)
+        #if !os(macOS)
+        .contextMenu {
+            MessageMenu(message: group) {
+                showingTextSelection.toggle()
+            }
+        }
         #endif
     }
     
-    var spacing: CGFloat {
+    var labelPadding: CGFloat {
         #if os(macOS)
-        10
+        return -22
         #else
-        7
+        return -25
         #endif
-    }
-    
-    func toggleTextSelection() {
-        showingTextSelection.toggle()
     }
 }
 
 #Preview {
-    AssistantMessage(message: .mockAssistantMessage)
-        .frame(width: 500, height: 300)
+    AssistantMessage(message: .mockAssistantMessage, group: .mockAssistantGroup)
+        .environment(ChatVM())
+        .frame(width: 600, height: 300)
 }
-

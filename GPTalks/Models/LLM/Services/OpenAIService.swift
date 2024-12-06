@@ -94,6 +94,7 @@ struct OpenAIService: AIService {
     }
     
     static func streamResponse(from conversations: [Message], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
+        print("doing OPENAI stream")
         let query = createQuery(from: conversations, config: config, stream: config.stream)
         let service = getService(provider: config.provider)
         
@@ -128,7 +129,8 @@ struct OpenAIService: AIService {
                         } else if let content = result.choices.first?.delta.content, !content.isEmpty {
                             continuation.yield(.content(content))
                         } else if let usage = result.usage {
-                            continuation.yield(.outputTokens(usage.totalTokens))
+                            let totalTokens = TokenUsage(inputTokens: usage.promptTokens, outputTokens: usage.completionTokens)
+                            continuation.yield(.totalTokens(totalTokens))
                         }
                     }
                     
@@ -145,6 +147,7 @@ struct OpenAIService: AIService {
     }
     
     static func nonStreamingResponse(from conversations: [Message], config: ChatConfig) async throws -> NonStreamResponse {
+        print("doing OPENAI non stream")
         let query = createQuery(from: conversations, config: config, stream: config.stream)
         let service = getService(provider: config.provider)
         

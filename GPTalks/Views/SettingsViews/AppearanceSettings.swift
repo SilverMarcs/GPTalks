@@ -41,18 +41,17 @@ struct AppearanceSettings: View {
                     }
                 } label: {
                     Text("Markdown Provider")
-                    Text("Native uses less memeory but webview performs better")
+                    Text("Native uses less memeory but is less capable")
                 }
                 #if os(macOS)
                 .pickerStyle(.radioGroup)
                 #endif
                 
                 if config.markdownProvider == .webview {
-                    Toggle("Skeleon Rendering in Markdown View", isOn: $config.renderSkeleton)
-                    
                     Picker(selection: $config.codeBlockTheme) {
-                        ForEach(CodeBlockTheme.allCases, id: \.self) { theme in
-                            Text(theme.name)
+                        ForEach(CodeTheme.allCases, id: \.self) { theme in
+                            Text(theme.rawValue)
+                                .tag(theme)
                         }
                     } label: {
                         Text("Code Block Theme")
@@ -60,8 +59,11 @@ struct AppearanceSettings: View {
                     }
                     
                     MarkdownView(content: String.onlyCodeBlock)
-                        .id(config.codeBlockTheme)
-                        .padding(.bottom, -11)
+                        .if(config.markdownProvider == .webview) {
+                            $0
+                                .id(config.codeBlockTheme)
+                                .padding(.bottom, -11)
+                        }
                 }
             }
         }

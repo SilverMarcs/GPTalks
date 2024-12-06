@@ -35,7 +35,7 @@ struct ProviderList: View {
                 NavigationLink(destination: ProviderDetail(provider: provider)) {
                     ProviderRow(provider: provider)
                 }
-                .deleteDisabled(provider.isPersistent)
+                .deleteDisabled(provider == providerDefaults.first!.defaultProvider || providers.count == 1)
             }
             .onDelete(perform: deleteProviders)
         }
@@ -55,7 +55,7 @@ struct ProviderList: View {
             }
             
             Section(header: Text("Other Providers")) {
-                ForEach([ProviderType.openrouter, .github, .vertex, .groq, .xai, .mistral, .perplexity, .togetherai], id: \.self) { type in
+                ForEach([ProviderType.openrouter, .github, .groq, .xai, .mistral, .perplexity, .togetherai], id: \.self) { type in
                     Button(action: { addProvider(type: type) }) {
                         Label(type.name, image: type.imageName)
                     }

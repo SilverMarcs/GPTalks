@@ -47,6 +47,7 @@ struct GoogleService: AIService {
     }
     
     static func streamResponse(from conversations: [Message], config: ChatConfig) -> AsyncThrowingStream<StreamResponse, Error> {
+        print("doing GOOGLLE stream")
         let (model, messages) = createModelAndMessages(from: conversations, config: config)
         
         return AsyncThrowingStream { continuation in
@@ -81,7 +82,8 @@ struct GoogleService: AIService {
                         }
                         
                         if let usageMetadata = response.usageMetadata {
-                            continuation.yield(.outputTokens(usageMetadata.totalTokenCount))
+                            let totalTokens = TokenUsage(inputTokens: usageMetadata.promptTokenCount, outputTokens: usageMetadata.candidatesTokenCount)
+                            continuation.yield(.totalTokens(totalTokens))
                         }
                     }
                     
@@ -94,6 +96,7 @@ struct GoogleService: AIService {
     }
     
     static func nonStreamingResponse(from conversations: [Message], config: ChatConfig) async throws -> NonStreamResponse {
+        print("doing GOOGLLE NON stream")
         let (model, messages) = createModelAndMessages(from: conversations, config: config)
         let response = try await model.generateContent(messages)
         let toolCalls = response.functionCalls.map {

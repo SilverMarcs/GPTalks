@@ -34,11 +34,12 @@ struct InputEditor: View {
                 ZStack(alignment: .leading) {
                     if chat.inputManager.prompt.isEmpty {
                         Text(placeHolder)
-                            .padding(.leading, 3)
+                            .padding(.leading, 6)
                             .foregroundStyle(.placeholder)
                     }
                     
                     TextEditor(text: $chat.inputManager.prompt)
+
                         .frame(maxHeight: 400)
                         .fixedSize(horizontal: false, vertical: true)
                         .scrollContentBackground(.hidden)
@@ -47,7 +48,7 @@ struct InputEditor: View {
             }
         }
         .focused($isFocused, equals: .textEditor)
-        .task(id: chatVM.selections) {
+        .task {
             guard chatVM.selections.count == 1 else { return }
             isFocused = .textEditor
         }

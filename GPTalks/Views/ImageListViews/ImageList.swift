@@ -12,7 +12,9 @@ struct ImageList: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(ImageVM.self) var imageVM
     @Environment(\.modelContext) var modelContext
-    @Environment(\.providers) var providers
+    
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
+    var providers: [Provider]
     
     @Query(sort: \ImageSession.date, order: .reverse, animation: .default)
     var sessions: [ImageSession]

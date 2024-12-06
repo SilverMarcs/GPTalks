@@ -6,10 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
-
-import SwiftUI
-import SwiftData
 
 struct ChatListCards: View {
     @Environment(\.isSearching) private var isSearching
@@ -23,6 +19,8 @@ struct ChatListCards: View {
     var source: Source
     var chatCount: String
     var imageSessionsCount: String
+    
+    @State private var isFlashing = false
 
     var body: some View {
         #if os(macOS)
@@ -44,15 +42,19 @@ struct ChatListCards: View {
                 count: chatCount) {
                     handleChatPress()
                 }
-                .overlay {
-                    if !config.hasUsedChatStatusFilter {
-                        RoundedRectangle(cornerRadius: radius)
-                            .stroke(Color.accentColor, lineWidth: 2)
-                            .allowsHitTesting(false)
-                    }
-                }
+                .symbolEffect(.bounce.down, options: .speed(0.1), isActive: config.hasUsedChatStatusFilter == false)
                 .contentTransition(.symbolEffect(.replace.offUp))
                 .disabled(isSearching)
+                .onAppear {
+                    if !config.hasUsedChatStatusFilter {
+                        isFlashing = true
+                    }
+                }
+                .onChange(of: config.hasUsedChatStatusFilter) {
+                    if config.hasUsedChatStatusFilter {
+                        isFlashing = false
+                    }
+                }
             
             ListCard(
                 icon: "photo.circle.fill", iconColor: .indigo, title: "Images",
@@ -70,7 +72,7 @@ struct ChatListCards: View {
             cycleChatStatus()
         case .imagelist:
             #if os(macOS)
-            openWindow(id: "chats")
+            openWindow(id: WindowID.chats)
             if config.onlyOneWindow {
                 dismissWindow(id: "images")
             }
@@ -82,7 +84,7 @@ struct ChatListCards: View {
     
     func cycleChatStatus() {
         config.hasUsedChatStatusFilter = true
-        let statusesToCycle = ChatStatus.allCases.filter { $0 != .quick }
+        let statusesToCycle = ChatStatus.allCases.filter { $0 != .quick && $0 != .temporary }
         
         guard let currentStatusIndex = statusesToCycle.firstIndex(of: chatVM.statusFilter) else {
             return
@@ -95,7 +97,7 @@ struct ChatListCards: View {
     
     func handleImagePress() {
         #if os(macOS)
-        openWindow(id: "images")
+        openWindow(id: WindowID.images)
         if config.onlyOneWindow {
             dismissWindow(id: "chats")
         }

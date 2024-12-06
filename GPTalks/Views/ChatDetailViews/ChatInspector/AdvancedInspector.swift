@@ -16,9 +16,20 @@ struct AdvancedInspector: View {
     var body: some View {
         Form {
             Section("Parameters") {
+                MaxTokensPicker(value: $chat.config.maxTokens)
                 TopPSlider(topP: $chat.config.topP, shortLabel: true)
                 FrequencyPenaltySlider(penalty: $chat.config.frequencyPenalty, shortLabel: true)
                 PresencePenaltySlider(penalty: $chat.config.presencePenalty, shortLabel: true)
+            }
+            
+            
+            if chat.config.provider.type == .anthropic {
+                Section("Prompt Caching") {
+                    Toggle(isOn: $chat.config.useCache) {
+                        Text("Use Cache for new messages")
+                        Text("Supports Anthropic Provider only.")
+                    }
+                }
             }
             
             Section("Tools") {

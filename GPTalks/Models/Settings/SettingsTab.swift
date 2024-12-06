@@ -12,6 +12,7 @@ enum SettingsTab {
     case appearance
     #if os(macOS)
     case quickPanel
+    case shortcuts
     #endif
     case tools
     case parameters

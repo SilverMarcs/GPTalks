@@ -12,8 +12,6 @@ struct CommonInputStyling: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .padding(3)
-            .roundedRectangleOverlay()
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal)
             .padding(.top, verticalPadding - 5)
@@ -26,7 +24,11 @@ struct CommonInputStyling: ViewModifier {
             .ignoresSafeArea()
     }
     
+    #if os(macOS)
     private let verticalPadding: CGFloat = 16
+    #else
+    private let verticalPadding: CGFloat = 12
+    #endif
 }
 
 #Preview {

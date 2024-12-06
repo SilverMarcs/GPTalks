@@ -25,20 +25,6 @@ struct GuidesSettings: View {
 
     var body: some View {
         Form {
-            #if os(macOS)
-            Section("Keyboard Shortcuts", isExpanded: $isExpanded) {
-                ForEach(Shortcut.shortcuts, id: \.key) { shortcut in
-                    HStack {
-                        Text(shortcut.key)
-                            .monospaced()
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                        Text(shortcut.action)
-                    }
-                }
-            }
-            #endif
-            
             ForEach(filteredGuides) { guide in
                 Section {
                     DisclosureGroup {

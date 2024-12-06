@@ -10,14 +10,16 @@ import SwiftUI
 import TipKit
 
 struct ChatList: View {
+    @Environment(\.openWindow) var openWindow
     @Environment(\.isSearching) private var isSearching
     @Environment(ChatVM.self) var chatVM
     @Environment(\.modelContext) var modelContext
-    @Environment(\.providers) private var providers
     
     @ObservedObject var config = AppConfig.shared
     
     @Query var chats: [Chat] // see init method below
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
+    var providers: [Provider]
     
     var body: some View {
         @Bindable var chatVM = chatVM
@@ -43,7 +45,7 @@ struct ChatList: View {
                 ContentUnavailableView.search
             } else {
                 ForEach(chats) { chat in
-                    ChatRow(chat: chat)
+                    ChatListRow(chat: chat)
                         .tag(chat)
                         .deleteDisabled(chat.status == .starred)
                         #if os(macOS)
@@ -63,6 +65,11 @@ struct ChatList: View {
             if let first = chats.first, chatVM.selections.isEmpty {
                 chatVM.selections = [first]
             }
+        }
+        #else
+        .fullScreenCover(isPresented: $config.showCamera) {
+            CameraView(chatVM: chatVM)
+                .ignoresSafeArea()
         }
         #endif
     }
@@ -94,10 +101,36 @@ struct ChatList: View {
     var toolbar: some ToolbarContent {
         ToolbarItem { Spacer() }
         
+        ToolbarItem(placement: .keyboard) {
+            Button(action: { chatVM.goToPreviousChat(chats: chats) }) {
+                Image(systemName: "chevron.left")
+            }
+            .keyboardShortcut("[", modifiers: [.command, .shift])
+        }
+        
+        ToolbarItem(placement: .keyboard) {
+            Button(action: { chatVM.goToNextChat(chats: chats) }) {
+                Image(systemName: "chevron.right")
+            }
+            .keyboardShortcut("]", modifiers: [.command, .shift])
+        }
+        
         ToolbarItem {
             Menu {
                 ForEach(providers) { provider in
-                    Button(provider.name) {
+                    // menu with chatmodels aray of each provider
+                    Menu {
+                        ForEach(provider.chatModels) { model in
+                            Button(model.name) {
+                                NewChatTip().invalidate(reason: .actionPerformed)
+                                Task {
+                                    await chatVM.createNewChat(provider: provider, model: model)
+                                }
+                            }
+                        }
+                    } label: {
+                        Label(provider.name, image: provider.type.imageName)
+                    } primaryAction: {
                         NewChatTip().invalidate(reason: .actionPerformed)
                         Task {
                             await chatVM.createNewChat(provider: provider)
@@ -135,36 +168,20 @@ struct ChatList: View {
         }
         
         let searchPredicate: Predicate<Chat>
-        if searchText.count >= 2 {
-            if searchTokens.isEmpty || (searchTokens.contains(.title) && searchTokens.contains(.messages)) {
-                searchPredicate = #Predicate<Chat> {
-                    $0.title.localizedStandardContains(searchText) ||
-                    $0.unorderedMessages.contains {
-                        $0.content.localizedStandardContains(searchText)
-                    }
-                }
-            } else if searchTokens.contains(.title) {
-                searchPredicate = #Predicate<Chat> {
-                    $0.title.localizedStandardContains(searchText)
-                }
-            } else if searchTokens.contains(.messages) {
-                searchPredicate = #Predicate<Chat> {
-                    $0.unorderedMessages.contains {
-                        $0.content.localizedStandardContains(searchText)
-                    }
-                }
-            } else {
-                searchPredicate = #Predicate<Chat> { _ in true }
+        if searchText.count >= 2 && (searchTokens.isEmpty || searchTokens.contains(.title)) {
+            searchPredicate = #Predicate<Chat> {
+                $0.title.localizedStandardContains(searchText)
             }
             
-            // When searching, we ignore the status filter
-            _chats = Query(filter: searchPredicate, sort: [sortDescriptor], animation: .default)
-        } else {
-            // When not searching, we apply the status filter
+            // Combine search and status predicates
             let combinedPredicate = #Predicate<Chat> {
-                statusPredicate.evaluate($0)
+                statusPredicate.evaluate($0) && searchPredicate.evaluate($0)
             }
+            
             _chats = Query(filter: combinedPredicate, sort: [sortDescriptor], animation: .default)
+        } else {
+            // When not searching or search tokens don't include title, we only apply the status filter
+            _chats = Query(filter: statusPredicate, sort: [sortDescriptor], animation: .default)
         }
     }
 }

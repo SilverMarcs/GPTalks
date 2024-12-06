@@ -11,50 +11,19 @@ import SwiftUI
 
 @Observable class ChatVM {
     var selections: Set<Chat> = []
+    
     var statusFilter: ChatStatus = .normal
     
     public var activeChat: Chat? {
-        guard selections.count == 1 else { return nil }
-        return selections.first
+        get {
+            guard selections.count == 1 else { return nil }
+            return selections.first
+        }
+        set {
+            selections = newValue.map { [$0] } ?? []
+        }
     }
     
-    private var activeChatAndLastMessage: (Chat, Message)? {
-        guard let chat = activeChat, !chat.isReplying,
-              let lastMessage = chat.messages.last else { return nil }
-        return (chat, lastMessage)
-    }
-    
-    func sendPrompt() async {
-        guard let chat = activeChat else { return }
-        await chat.sendInput()
-    }
-    
-    func stopStreaming() {
-        activeChat?.stopStreaming()
-    }
-    
-    func regenLastMessage() async {
-        guard let (chat, lastMessage) = activeChatAndLastMessage else { return }
-        await chat.regenerate(message: lastMessage)
-    }
-    
-    func resetContext() {
-        guard let (chat, lastMessage) = activeChatAndLastMessage else { return }
-        chat.resetContext(at: lastMessage)
-    }
-    
-    func deleteLastMessage() {
-        guard let (chat, lastMessage) = activeChatAndLastMessage else { return }
-        chat.deleteMessage(lastMessage)
-    }
-
-    func editLastMessage() {
-        guard let chat = activeChat else { return }
-        guard let lastUserMessage = chat.messages.last(where: { $0.role == .user }) else { return }
-        chat.inputManager.setupEditing(message: lastUserMessage)
-    }
-    
-    // must provide new chat, not the one to be forked
     @MainActor
     func fork(newChat: Chat) {
         let modelContext = DatabaseService.shared.modelContext
@@ -85,14 +54,65 @@ import SwiftUI
         modelContext.insert(newChat)
         
         searchText = ""
+        searchTokens = []
         selections = [newChat]
         
         return newChat
     }
     
+    @MainActor
+    @discardableResult
+    func createTemporaryChat() async -> Chat {
+        let modelContext = DatabaseService.shared.modelContext
+        
+        let provider = DatabaseService.shared.getDefaultProvider()
+        let config = ChatConfig(provider: provider, purpose: .chat)
+        
+        let newChat = Chat(config: config)
+        newChat.statusId = ChatStatus.temporary.id
+        
+        modelContext.insert(newChat)
+        
+        searchText = ""
+        searchTokens = []
+        selections = [newChat]
+        
+        return newChat
+    }
+    
+    // MARK: - Navigation
+    func goToNextChat(chats: [Chat]) {
+        guard let activeChat = activeChat,
+              let index = chats.firstIndex(of: activeChat),
+              index < chats.count - 1 else { return }
+        
+        let nextChat = chats[index + 1]
+        selections = [nextChat]
+    }
+
+    func goToPreviousChat(chats: [Chat]) {
+        guard let activeChat = activeChat,
+              let index = chats.firstIndex(of: activeChat),
+              index > 0 else { return }
+        
+        let previousChat = chats[index - 1]
+        selections = [previousChat]
+    }
+    
     // MARK: - Search
     var searchText: String = ""
-    var serchTokens = [ChatSearchToken]()
+    var localSearchText: String = ""
+    var searchTokens = [ChatSearchToken]()
+    
+    var filteredTokens: [ChatSearchToken] {
+        if searchTokens.isEmpty {
+            return localSearchText.isEmpty
+                ? ChatSearchToken.allCases
+                : ChatSearchToken.allCases.filter { $0.name.lowercased().hasPrefix(localSearchText.lowercased()) }
+        } else {
+            return [] // Return an empty array if a token is already selected
+        }
+    }
     
     // MARK: - Quick Panel
     var isQuickPanelPresented: Bool = false

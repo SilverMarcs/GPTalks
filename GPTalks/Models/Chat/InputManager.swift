@@ -9,91 +9,68 @@ import SwiftUI
 import UniformTypeIdentifiers
 import PhotosUI
 
-enum InputState {
-    case normal
-    case editing
-}
-
 @Observable class InputManager {
     var state: InputState = .normal
     
     var normalPrompt: String = ""
-    var tempNormalPrompt: String? = ""
-    
     var editingPrompt: String = ""
-    var editingDataFiles: [TypedData] = []
     
-    var editingIndex: Int?
+    var tempNormalPrompt: String = ""
+    var tempNormalDataFiles: [TypedData] = []
     
     var normalDataFiles: [TypedData] = []
-    var tempNormalDataFiles: [TypedData]? = []
+    var editingDataFiles: [TypedData] = []
     
-    init() { }
+    var editingMessage: Message?
     
     var prompt: String {
-        get {
-            switch state {
-            case .normal:
-                normalPrompt
-            case .editing:
-                editingPrompt
-            }
-        }
+        get { state == .normal ? normalPrompt : editingPrompt }
         set {
-            switch state {
-            case .normal:
+            if state == .normal {
                 normalPrompt = newValue
-            case .editing:
+            } else {
                 editingPrompt = newValue
             }
         }
     }
     
     var dataFiles: [TypedData] {
-        get {
-            switch state {
-            case .normal:
-                normalDataFiles
-            case .editing:
-                editingDataFiles
-            }
-        }
+        get { state == .normal ? normalDataFiles : editingDataFiles }
         set {
-            switch state {
-            case .normal:
+            if state == .normal {
                 normalDataFiles = newValue
-            case .editing:
+            } else {
                 editingDataFiles = newValue
             }
         }
     }
     
-    func setupEditing(message: Message) {
-        tempNormalPrompt = normalPrompt
-        tempNormalDataFiles = normalDataFiles
+    func setupEditing(message: MessageGroup) {
+        Scroller.scroll(to: .top, of: message, animated: false)
         
         withAnimation {
-            editingIndex = message.chat?.messages.firstIndex(of: message)
             state = .editing
         }
         
+        tempNormalPrompt = normalPrompt
+        tempNormalDataFiles = normalDataFiles
+        
+        editingMessage = message.activeMessage
         prompt = message.content
         dataFiles = message.dataFiles
-        AppConfig.shared.proxy?.scrollTo(message, anchor: .top)
     }
     
     func reset() {
         state = .normal
-        editingIndex = nil
-        dataFiles = tempNormalDataFiles ?? []
-        prompt = tempNormalPrompt ?? ""
+        editingMessage = nil
+        prompt = tempNormalPrompt
+        dataFiles = tempNormalDataFiles
     }
 }
 
 // MARK: - Drag and Drop
 extension InputManager {
     func processData(_ data: Data, fileType: UTType? = nil, fileName: String? = nil, url: URL? = nil) async throws {
-
             let fileURL = url ?? URL(fileURLWithPath: fileName ?? "Unknown")
             let fileType = fileType ?? (try? fileURL.resourceValues(forKeys: [.typeIdentifierKey]).typeIdentifier).flatMap { UTType($0) } ?? .data
             let fileName = fileName ?? fileURL.deletingPathExtension().lastPathComponent + "." + fileType.fileExtension
@@ -123,16 +100,29 @@ extension InputManager {
     
     func handleDrop(_ providers: [NSItemProvider]) -> Bool {
         for provider in providers {
-            provider.loadFileRepresentation(forTypeIdentifier: UTType.data.identifier) { url, error in
-                guard let url = url else {
-                    return
-                }
+            // First, get the file name using loadFileRepresentation
+            provider.loadFileRepresentation(forTypeIdentifier: UTType.item.identifier) { url, _ in
+                guard let url = url else { return }
                 
-                Task {
-                    do {
-                        try await self.processFile(at: url)
-                    } catch {
-                        print("Failed to process file: \(url.lastPathComponent). Error: \(error)")
+                let fileName = url.lastPathComponent
+                
+                // Capture necessary information outside the async context
+                let typeIdentifier = provider.registeredTypeIdentifiers.first
+                
+                // Now, use loadDataRepresentation to get the data and file type
+                provider.loadDataRepresentation(forTypeIdentifier: UTType.item.identifier) { data, error in
+                    guard let data = data else {
+                        print("Failed to load data representation")
+                        return
+                    }
+                    
+                    Task {
+                        do {
+                            let fileType = typeIdentifier.flatMap { UTType($0) } ?? .data
+                            try await self.processData(data, fileType: fileType, fileName: fileName)
+                        } catch {
+                            print("Failed to process file: \(fileName). Error: \(error)")
+                        }
                     }
                 }
             }

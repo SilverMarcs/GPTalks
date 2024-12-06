@@ -28,9 +28,11 @@ struct MarkdownBackup: FileDocument {
         
         var content = "# Chat Title: \(chat.title)\n\n"
         
-        for message in chat.messages {
+        for messageGroup in chat.currentThread {
+            let message = messageGroup.activeMessage
             content += "## \(message.role.rawValue.capitalized)\n"
-            content += "\(message.content)\n\n\n"
+            content += "\(message.dataFiles.map { $0.formattedTextContent }.joined(separator: "\n"))\n"
+            content += "\(message.content)\n\n"
         }
         
         return content

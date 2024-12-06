@@ -8,7 +8,6 @@
 import SwiftUI
 import SwiftData
 
-#if os(macOS)
 struct QuickPanelView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(ChatVM.self) private var chatVM
@@ -18,7 +17,6 @@ struct QuickPanelView: View {
     var toggleVisibility: () -> Void
 
     @FocusState private var isFocused: Bool
-    @State var selections: Set<Chat> = []
 
     @Query(filter: #Predicate<Provider> { $0.isEnabled })
     var providers: [Provider]
@@ -38,7 +36,7 @@ struct QuickPanelView: View {
                 .safeAreaPadding(.vertical, 10)
             }
             
-            if chat.messages.isEmpty {
+            if chat.currentThread.isEmpty {
                 Spacer()
             } else {
                 Divider()
@@ -52,15 +50,12 @@ struct QuickPanelView: View {
         .frame(width: 650)
         .onChange(of: chatVM.isQuickPanelPresented) {
             if chatVM.isQuickPanelPresented {
-                selections = chatVM.selections
-                chatVM.selections = [self.chat]
                 isFocused = true
-                if !chat.messages.isEmpty {
+                if !chat.currentThread.isEmpty {
                     updateHeight(500)
                 }
             } else {
                 DispatchQueue.main.async {
-                    chatVM.selections = selections
                     updateHeight(57)
                 }
             }
@@ -69,7 +64,7 @@ struct QuickPanelView: View {
             isFocused = true
         }
         .onChange(of: chat.inputManager.dataFiles.isEmpty) {
-            if chat.inputManager.dataFiles.isEmpty {
+            if chat.inputManager.dataFiles.isEmpty && chat.currentThread.isEmpty {
                 updateHeight(57)
             } else {
                 updateHeight(500)
@@ -106,7 +101,8 @@ struct QuickPanelView: View {
             }
             .buttonStyle(.plain)
             
-            TextField("Ask Anything...", text: $chat.inputManager.prompt)
+            TextField("Ask Anything...", text: $chat.inputManager.prompt, axis: .vertical)
+                .allowsTightening(true)
                 .focused($isFocused)
                 .font(.system(size: 25))
                 .textFieldStyle(.plain)
@@ -154,7 +150,7 @@ struct QuickPanelView: View {
                     Image(systemName: "plus.square.on.square")
                         .imageScale(.medium)
                 }
-                .disabled(chat.messages.isEmpty)
+                .disabled(chat.currentThread.isEmpty)
                 .keyboardShortcut("N", modifiers: [.command])
                 
             }
@@ -194,7 +190,7 @@ struct QuickPanelView: View {
             if let mainWindow = NSApp.windows.first(where: { $0.identifier?.rawValue == "chats" }) {
                 mainWindow.makeKeyAndOrderFront(nil)
             }
-            selections = [newChat]
+//            selections = [newChat]
             NSApp.activate(ignoringOtherApps: true)
         }
     }
@@ -217,4 +213,3 @@ struct QuickPanelView: View {
 #Preview {
     QuickPanelView(chat: .mockChat, updateHeight: { _ in }, toggleVisibility: {})
 }
-#endif

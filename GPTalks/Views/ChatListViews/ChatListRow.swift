@@ -1,5 +1,5 @@
 //
-//  ChatRow.swift
+//  ChatListRow.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 04/07/2024.
@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct ChatRow: View {
+struct ChatListRow: View {
     @Environment(\.modelContext) var modelContext
+    @Environment(\.openWindow) var openWindow
     @Environment(ChatVM.self) private var chatVM
     
     @ObservedObject var config = AppConfig.shared
@@ -17,30 +18,57 @@ struct ChatRow: View {
     
     var swipeTip = SwipeActionTip()
     
+    @State private var isAnimating = false
+       @State private var previousTitle = ""
+
     var body: some View {
         row
+            .onAppear {
+                previousTitle = chat.title
+            }
+            .onChange(of: chat.title) {
+                if chat.title != previousTitle {
+                   isAnimating = true
+                   DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                       isAnimating = false
+                       previousTitle = chat.title
+                   }
+               }
+           }
         .swipeActions(edge: .leading) {
             swipeActionsLeading
         }
         .swipeActions(edge: .trailing) {
             swipeActionsTrailing
         }
+        #if os(macOS)
+        .contextMenu {
+            Button {
+                openWindow(value: chat.id)
+            } label: {
+                Label("Open in New Window", systemImage: "rectangle.on.rectangle")
+                    .labelStyle(.titleAndIcon)
+            }
+        }
+        #endif
     }
+    
     var row: some View {
         HStack {
             ProviderImage(provider: chat.config.provider, radius: 8, frame: imageSize, scale: .medium)
                 .symbolEffect(.bounce, options: .speed(0.5), isActive: chat.isReplying)
             
-            HighlightedText(text: chat.title, highlightedText: chatVM.searchText, selectable: false)
+            HighlightableTextView(chat.title, highlightedText: chatVM.searchText)
+                .contentTransition(.numericText())
                 .lineLimit(1)
                 .font(font)
-                .fontWeight(fontWeight)
                 .opacity(0.9)
             
             Spacer()
             
             chatStatusMarker
                 .imageScale(.small)
+                .transition(.symbolEffect(.appear))
             
             Text(chat.config.model.name)
                 .font(.subheadline)
@@ -48,6 +76,7 @@ struct ChatRow: View {
                 .fontWidth(.compressed)
         }
         .padding(padding)
+//        defaultMinListRowHeight()
     }
     
     var imageSize: CGFloat {
@@ -60,17 +89,9 @@ struct ChatRow: View {
     
     var font: Font {
         #if os(macOS)
-        return .headline
+        return .headline.weight(.regular)
         #else
-        return .subheadline
-        #endif
-    }
-    
-    var fontWeight: Font.Weight {
-        #if os(macOS)
-        return .regular
-        #else
-        return .semibold
+        return .headline.weight(.medium)
         #endif
     }
     
@@ -148,8 +169,8 @@ struct ChatRow: View {
 
 #Preview {
     List {
-        ChatRow(chat: .mockChat)
+        ChatListRow(chat: .mockChat)
             .environment(ChatVM())
     }
-    .frame(width: 400)
+    .frame(width: 220)
 }
