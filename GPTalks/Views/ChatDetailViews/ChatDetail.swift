@@ -73,16 +73,16 @@ struct ChatDetail: View {
         config.hasUserScrolled = false
         config.proxy = proxy
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            #if os(macOS)
-            if chatVM.searchText.isEmpty {
+        if chatVM.searchText.isEmpty {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                #if os(macOS)
                 scrollToBottom(proxy: proxy, animated: false)
-            }
-            #else
-            scrollToBottom(proxy: proxy, delay: 0.3)
-            #endif
-            if config.markdownProvider == .webview {
+                #else
                 scrollToBottom(proxy: proxy, delay: 0.3)
+                #endif
+                if config.markdownProvider == .webview {
+                    scrollToBottom(proxy: proxy, delay: 0.3)
+                }
             }
         }
     }

@@ -16,7 +16,6 @@
 		080E70EE2CDF498F00A949C9 /* ChatStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70ED2CDF498F00A949C9 /* ChatStatus.swift */; };
 		080E70F02CDF781500A949C9 /* HTTPScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70EF2CDF781500A949C9 /* HTTPScheme.swift */; };
 		0810F5892CEAFB5C002D4ACF /* ContextResetDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0810F5882CEAFB5C002D4ACF /* ContextResetDivider.swift */; };
-		0812974D2CF5A9DE00440D19 /* HighlightSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0812974C2CF5A9DE00440D19 /* HighlightSwift */; };
 		081297522CF5C3FF00440D19 /* AssistantMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081297512CF5C3FF00440D19 /* AssistantMessage.swift */; };
 		08149A572C3E5E5B004485AC /* MessageRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08149A562C3E5E5B004485AC /* MessageRole.swift */; };
 		0819479E2C48DCDB0061227B /* ImageList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0819479D2C48DCDB0061227B /* ImageList.swift */; };
@@ -34,7 +33,6 @@
 		0823550D2CDBB74900388273 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0823550C2CDBB74900388273 /* GoogleGenerativeAI */; };
 		082355152CDBBB2B00388273 /* SwiftMarkdownView in Frameworks */ = {isa = PBXBuildFile; productRef = 082355142CDBBB2B00388273 /* SwiftMarkdownView */; };
 		0823551E2CDBC94D00388273 /* SwiftAnthropic in Frameworks */ = {isa = PBXBuildFile; productRef = 0823551D2CDBC94D00388273 /* SwiftAnthropic */; };
-		08260FE62D00CB88006A8BD5 /* LaTeXSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 08260FE52D00CB88006A8BD5 /* LaTeXSwiftUI */; };
 		082A63322C551108003996B7 /* MarkdownBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082A63312C551108003996B7 /* MarkdownBackup.swift */; };
 		082A63382C55175E003996B7 /* MiscUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082A63372C55175E003996B7 /* MiscUtils.swift */; };
 		082AA6F62CE683C40088A8B2 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 082AA6F52CE683C40088A8B2 /* OpenAI */; };
@@ -53,7 +51,6 @@
 		08436F2C2CDEAB3B007A160F /* ListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08436F2B2CDEAB3B007A160F /* ListState.swift */; };
 		08436F2E2CDF07C2007A160F /* FocusedField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08436F2D2CDF07C2007A160F /* FocusedField.swift */; };
 		0844C2752CA3E6E100F0A325 /* EmptyChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0844C2742CA3E6E100F0A325 /* EmptyChat.swift */; };
-		084B3C602CFB6DF70018ACDE /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084B3C5F2CFB6DF70018ACDE /* TableView.swift */; };
 		084C74402C521A8A0015AE2F /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084C743F2C521A8A0015AE2F /* DismissButton.swift */; };
 		0850374B2CF4D0AA00810CBC /* InputState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0850374A2CF4D0AA00810CBC /* InputState.swift */; };
 		085276BE2C98706E009184D2 /* InputEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085276BD2C98706E009184D2 /* InputEditor.swift */; };
@@ -145,8 +142,6 @@
 		08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB992C3D0017002C04E0 /* ListCard.swift */; };
 		08AAFB9C2C3D01A6002C04E0 /* ChatListCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AAFB9B2C3D01A6002C04E0 /* ChatListCards.swift */; };
 		08AC26112CF4F71500750269 /* ChatInputMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC26102CF4F71500750269 /* ChatInputMenu.swift */; };
-		08AC26162CF5555A00750269 /* CodeBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC26152CF5555A00750269 /* CodeBlockView.swift */; };
-		08AC26182CF5559000750269 /* ContentItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC26172CF5559000750269 /* ContentItem.swift */; };
 		08B4F4602CE3B87A004B3618 /* FullScreenBackgroundStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B4F45F2CE3B87A004B3618 /* FullScreenBackgroundStyle.swift */; };
 		08B5D7B82C77A64000D1F100 /* ChatWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B5D7B72C77A64000D1F100 /* ChatWindow.swift */; platformFilters = (macos, ); };
 		08B82C1D2C74EA9400DC0183 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B82C1C2C74EA9400DC0183 /* ImageViewer.swift */; };
@@ -190,10 +185,6 @@
 		08DB150B2CDC5B2200DC5B90 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 08DB150A2CDC5B2200DC5B90 /* OpenAI */; };
 		08E4B9E52CFD3681002A807F /* HoverableMessageMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E4B9E42CFD3681002A807F /* HoverableMessageMenu.swift */; };
 		08E7209A2CE7D46D0014888B /* SearchToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E720992CE7D46D0014888B /* SearchToken.swift */; };
-		08F02DB32CFAE7140041F128 /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = 08F02DB22CFAE7140041F128 /* Markdown */; };
-		08F02DB52CFAE73B0041F128 /* MarkdownParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F02DB42CFAE73B0041F128 /* MarkdownParser.swift */; };
-		08F02DB82CFB006E0041F128 /* HighlightSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08F02DB72CFB006E0041F128 /* HighlightSwift */; };
-		08F02DBE2CFB13030041F128 /* HighlightSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08F02DBD2CFB13030041F128 /* HighlightSwift */; };
 		08F02DC02CFB2F800041F128 /* NativeMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F02DBF2CFB2F800041F128 /* NativeMarkdownView.swift */; };
 		08F0EF1E2C6C2DFD00900ED0 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */; };
 		08F369E32C3C278E002E4A35 /* ProviderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F369E22C3C278E002E4A35 /* ProviderType.swift */; };
@@ -261,7 +252,6 @@
 		08436F2B2CDEAB3B007A160F /* ListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListState.swift; sourceTree = "<group>"; };
 		08436F2D2CDF07C2007A160F /* FocusedField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusedField.swift; sourceTree = "<group>"; };
 		0844C2742CA3E6E100F0A325 /* EmptyChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyChat.swift; sourceTree = "<group>"; };
-		084B3C5F2CFB6DF70018ACDE /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		084C743F2C521A8A0015AE2F /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
 		0850374A2CF4D0AA00810CBC /* InputState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputState.swift; sourceTree = "<group>"; };
 		085276BD2C98706E009184D2 /* InputEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputEditor.swift; sourceTree = "<group>"; };
@@ -349,8 +339,6 @@
 		08AAFB992C3D0017002C04E0 /* ListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCard.swift; sourceTree = "<group>"; };
 		08AAFB9B2C3D01A6002C04E0 /* ChatListCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCards.swift; sourceTree = "<group>"; };
 		08AC26102CF4F71500750269 /* ChatInputMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputMenu.swift; sourceTree = "<group>"; };
-		08AC26152CF5555A00750269 /* CodeBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeBlockView.swift; sourceTree = "<group>"; };
-		08AC26172CF5559000750269 /* ContentItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentItem.swift; sourceTree = "<group>"; };
 		08B4F45F2CE3B87A004B3618 /* FullScreenBackgroundStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenBackgroundStyle.swift; sourceTree = "<group>"; };
 		08B5D7B72C77A64000D1F100 /* ChatWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWindow.swift; sourceTree = "<group>"; };
 		08B82C1C2C74EA9400DC0183 /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
@@ -393,7 +381,6 @@
 		08D913EB2CD9CAF7002E4E53 /* AIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModel.swift; sourceTree = "<group>"; };
 		08E4B9E42CFD3681002A807F /* HoverableMessageMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverableMessageMenu.swift; sourceTree = "<group>"; };
 		08E720992CE7D46D0014888B /* SearchToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchToken.swift; sourceTree = "<group>"; };
-		08F02DB42CFAE73B0041F128 /* MarkdownParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownParser.swift; sourceTree = "<group>"; };
 		08F02DBF2CFB2F800041F128 /* NativeMarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeMarkdownView.swift; sourceTree = "<group>"; };
 		08F0EF1D2C6C2DFD00900ED0 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		08F369E22C3C278E002E4A35 /* ProviderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderType.swift; sourceTree = "<group>"; };
@@ -427,16 +414,11 @@
 			files = (
 				082AA6F62CE683C40088A8B2 /* OpenAI in Frameworks */,
 				0823550D2CDBB74900388273 /* GoogleGenerativeAI in Frameworks */,
-				08F02DB32CFAE7140041F128 /* Markdown in Frameworks */,
-				08F02DBE2CFB13030041F128 /* HighlightSwift in Frameworks */,
 				086346B42CE780C6006E5927 /* GoogleGenerativeAI in Frameworks */,
-				08260FE62D00CB88006A8BD5 /* LaTeXSwiftUI in Frameworks */,
-				0812974D2CF5A9DE00440D19 /* HighlightSwift in Frameworks */,
 				082355152CDBBB2B00388273 /* SwiftMarkdownView in Frameworks */,
 				086346B12CE780B6006E5927 /* SwiftAnthropic in Frameworks */,
 				08DB150B2CDC5B2200DC5B90 /* OpenAI in Frameworks */,
 				086346AB2CE78078006E5927 /* SwiftMarkdownView in Frameworks */,
-				08F02DB82CFB006E0041F128 /* HighlightSwift in Frameworks */,
 				0823551E2CDBC94D00388273 /* SwiftAnthropic in Frameworks */,
 				0867741C2CE682C700FF2A3C /* OpenAI in Frameworks */,
 				086346AE2CE7808B006E5927 /* OpenAI in Frameworks */,
@@ -461,7 +443,6 @@
 		080E70E62CDF1B9700A949C9 /* General */ = {
 			isa = PBXGroup;
 			children = (
-				08AC26172CF5559000750269 /* ContentItem.swift */,
 				089825362CEA01FC00980468 /* NavigationDirection.swift */,
 				0898252A2CE9BB1700980468 /* OnboardingPage.swift */,
 				08A1DDBA2CE0024A00DAF6F9 /* Source.swift */,
@@ -742,11 +723,8 @@
 		08AC26142CF5553D00750269 /* Markdown */ = {
 			isa = PBXGroup;
 			children = (
-				084B3C5F2CFB6DF70018ACDE /* TableView.swift */,
 				08F02DBF2CFB2F800041F128 /* NativeMarkdownView.swift */,
-				08F02DB42CFAE73B0041F128 /* MarkdownParser.swift */,
 				08B8DE122C97F3550041A690 /* MarkdownView.swift */,
-				08AC26152CF5555A00750269 /* CodeBlockView.swift */,
 				08CF5B882C68980B0079D5EE /* HighlightableTextView.swift */,
 			);
 			path = Markdown;
@@ -958,11 +936,6 @@
 				086346AD2CE7808B006E5927 /* OpenAI */,
 				086346B02CE780B6006E5927 /* SwiftAnthropic */,
 				086346B32CE780C6006E5927 /* GoogleGenerativeAI */,
-				0812974C2CF5A9DE00440D19 /* HighlightSwift */,
-				08F02DB22CFAE7140041F128 /* Markdown */,
-				08F02DB72CFB006E0041F128 /* HighlightSwift */,
-				08F02DBD2CFB13030041F128 /* HighlightSwift */,
-				08260FE52D00CB88006A8BD5 /* LaTeXSwiftUI */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -998,9 +971,6 @@
 				086346AC2CE7808B006E5927 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				086346AF2CE780B6006E5927 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
 				086346B22CE780C6006E5927 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */,
-				08F02DB12CFAE7140041F128 /* XCRemoteSwiftPackageReference "swift-markdown" */,
-				08F02DBC2CFB13030041F128 /* XCRemoteSwiftPackageReference "HighlightSwift" */,
-				08260FE42D00CB88006A8BD5 /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1039,7 +1009,6 @@
 				08915D942C373340008ADE27 /* ProviderImage.swift in Sources */,
 				087906872CA6C73100E5DCAD /* ImageWindow.swift in Sources */,
 				0810F5892CEAFB5C002D4ACF /* ContextResetDivider.swift in Sources */,
-				084B3C602CFB6DF70018ACDE /* TableView.swift in Sources */,
 				08B8DE232C97F4EA0041A690 /* ToolResponseMessage.swift in Sources */,
 				087906892CA6E22900E5DCAD /* ImageContentView.swift in Sources */,
 				0805DEEF2C58CB1400A8354A /* OpenAIService.swift in Sources */,
@@ -1053,7 +1022,6 @@
 				08A77CCC2C65AA820087D0F3 /* DatabaseService.swift in Sources */,
 				08F815242C97F59100B49355 /* PluginSettings.swift in Sources */,
 				08CA42B62CF1F13B0073BB01 /* ExpandButton.swift in Sources */,
-				08F02DB52CFAE73B0041F128 /* MarkdownParser.swift in Sources */,
 				08CA42BA2CF1F18D0073BB01 /* ForkButton.swift in Sources */,
 				08CA42BE2CF1F3C00073BB01 /* SelectTextButton.swift in Sources */,
 				0893B2062C39810900D4D501 /* ChatConfig.swift in Sources */,
@@ -1072,7 +1040,6 @@
 				082F09EB2CB3617200B7860A /* ProviderDefaults.swift in Sources */,
 				089DB5182CA8EC140013E5C3 /* ImageViewerData.swift in Sources */,
 				08B5D7B82C77A64000D1F100 /* ChatWindow.swift in Sources */,
-				08AC26162CF5555A00750269 /* CodeBlockView.swift in Sources */,
 				085361072C492282007DAB62 /* Generation.swift in Sources */,
 				08CA42C62CF1F3FE0073BB01 /* NavigationButtons.swift in Sources */,
 				08CA42B82CF1F1530073BB01 /* EditButton.swift in Sources */,
@@ -1123,7 +1090,6 @@
 				08C800552C36F82B009581C5 /* ProviderList.swift in Sources */,
 				082F09E52CB354FF00B7860A /* TranscribeTool.swift in Sources */,
 				08A222872C2AB4FD00D76C8B /* Chat.swift in Sources */,
-				08AC26182CF5559000750269 /* ContentItem.swift in Sources */,
 				082B88172CD36CD80092C4D0 /* PlatformSpecificGroupBoxStyle.swift in Sources */,
 				087F3F852CDDD99E001298B3 /* GuidesSettings.swift in Sources */,
 				085361132C4939C5007DAB62 /* GenerationView.swift in Sources */,
@@ -1461,14 +1427,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		08260FE42D00CB88006A8BD5 /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/colinc86/LaTeXSwiftUI";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		086346A92CE78078006E5927 /* XCRemoteSwiftPackageReference "SwiftMarkdownView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/SwiftMarkdownView";
@@ -1509,29 +1467,9 @@
 				version = 2.0.2;
 			};
 		};
-		08F02DB12CFAE7140041F128 /* XCRemoteSwiftPackageReference "swift-markdown" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/swiftlang/swift-markdown";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.5.0;
-			};
-		};
-		08F02DBC2CFB13030041F128 /* XCRemoteSwiftPackageReference "HighlightSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/HighlightSwift";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0812974C2CF5A9DE00440D19 /* HighlightSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = HighlightSwift;
-		};
 		0823550C2CDBB74900388273 /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GoogleGenerativeAI;
@@ -1543,11 +1481,6 @@
 		0823551D2CDBC94D00388273 /* SwiftAnthropic */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftAnthropic;
-		};
-		08260FE52D00CB88006A8BD5 /* LaTeXSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08260FE42D00CB88006A8BD5 /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */;
-			productName = LaTeXSwiftUI;
 		};
 		082AA6F52CE683C40088A8B2 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1585,20 +1518,6 @@
 		08DB150A2CDC5B2200DC5B90 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
-		};
-		08F02DB22CFAE7140041F128 /* Markdown */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08F02DB12CFAE7140041F128 /* XCRemoteSwiftPackageReference "swift-markdown" */;
-			productName = Markdown;
-		};
-		08F02DB72CFB006E0041F128 /* HighlightSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = HighlightSwift;
-		};
-		08F02DBD2CFB13030041F128 /* HighlightSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08F02DBC2CFB13030041F128 /* XCRemoteSwiftPackageReference "HighlightSwift" */;
-			productName = HighlightSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

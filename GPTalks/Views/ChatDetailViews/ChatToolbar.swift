@@ -38,6 +38,15 @@ struct ChatToolbar: ToolbarContent {
                 .allowsHitTesting(false)
         }
         
+        if chat.status == .temporary {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    chat.status = .normal
+                } label: {
+                    Label("Save", systemImage: "square.and.arrow.down")
+                }
+            }
+        }
         
         ToolbarItemGroup(placement: .keyboard) {
             ModelSwitchButtons(chat: chat)

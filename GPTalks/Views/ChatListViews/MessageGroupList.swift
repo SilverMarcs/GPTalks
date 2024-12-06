@@ -15,7 +15,6 @@ struct MessageGroupList: View {
     
     var searchText: String
     @State private var selectedGroupID: MessageGroup.ID?
-
     
     var body: some View {
         let groupedMessageGroups = Dictionary(grouping: messageGroups.filter { $0.chat != nil }) { $0.chat! }
@@ -40,6 +39,8 @@ struct MessageGroupList: View {
                                 .multilineTextAlignment(.leading)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .opacity(0.8)
+                                .contentShape(Rectangle())
+                            
                         }
                         .padding(.horizontal, -4)
                         .buttonStyle(SelectedButtonStyle(isSelected: Binding(

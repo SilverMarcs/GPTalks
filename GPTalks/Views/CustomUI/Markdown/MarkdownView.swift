@@ -21,8 +21,9 @@ struct MarkdownView: View {
             Text(content)
                 .textSelection(.enabled)
                 .font(.system(size: config.fontSize))
-        case .native:
-            NativeMarkdownView(content: content, searchText: chatVM.searchText)
+        case .native,
+            .webview where !chatVM.searchText.isEmpty:
+            NativeMarkdownView(text: content, highlightText: chatVM.searchText)
                 .textSelection(.enabled)
         case .webview:
             SwiftMarkdownView(content, calculatedHeight: calculatedHeight)
