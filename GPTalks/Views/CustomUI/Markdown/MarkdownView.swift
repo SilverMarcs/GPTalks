@@ -28,7 +28,7 @@ struct MarkdownView: View {
         case .webview:
             SwiftMarkdownView(content, calculatedHeight: calculatedHeight)
                 .markdownBaseURL("GPTalks Web Content")
-                .markdownHighlightString(chatVM.searchText)
+//                .markdownHighlightString(chatVM.searchText)
                 .markdownFontSize(CGFloat(config.fontSize))
                 .codeBlockTheme(config.codeBlockTheme.toCodeBlockTheme())
         }

@@ -21,7 +21,7 @@ struct MessageGroupList: View {
         
         return List {
             ForEach(groupedMessageGroups.keys.sorted(by: { $0.date > $1.date }), id: \.self) { chat in
-                Section(chat.title) {
+                Section {
                     ForEach(groupedMessageGroups[chat]?.sorted(by: { $0.date < $1.date }) ?? []) { group in
                         Button {
                             let delay = chatVM.activeChat == chat ? 0 : 0.2
@@ -47,6 +47,11 @@ struct MessageGroupList: View {
                             get: { selectedGroupID == group.id },
                             set: { _ in }
                         )))
+                    }
+                } header: {
+                    HStack {
+                        Image(systemName: chat.status.systemImageName)
+                        Text(chat.title)
                     }
                 }
             }

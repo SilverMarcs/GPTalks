@@ -15,7 +15,7 @@ struct ChatInputView: View {
     @Bindable var chat: Chat
 
     @State private var isExpanded = false
-    @State private var showSpacer = false
+    @State private var showExpandButton = false
     
     var body: some View {
         HStack(alignment: .bottom) {
@@ -45,11 +45,14 @@ struct ChatInputView: View {
                     }
                     
                     InputEditor(chat: chat)
+                        .onChange(of: chat.inputManager.prompt) {
+                            showExpandButton = chat.inputManager.prompt.contains("\n")
+                        }
                 }
                 .padding(4)
                 
                 VStack {
-                    if chat.inputManager.prompt.count > truncateLimit || isExpanded {
+                    if showExpandButton || isExpanded {
                         expandInput
                             .padding(3)
                         
