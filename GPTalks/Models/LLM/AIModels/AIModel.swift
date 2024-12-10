@@ -62,6 +62,7 @@ extension AIModel {
     static func getXaiModels() -> [AIModel] {
         return [
             .init(code: "grok-beta", name: "Grok", type: .chat),
+            .init(code: "grok-vision-beta", name: "Grok-V", type: .chat),
         ]
     }
     
