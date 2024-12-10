@@ -27,7 +27,6 @@ struct AdvancedInspector: View {
                 Section("Prompt Caching") {
                     Toggle(isOn: $chat.config.useCache) {
                         Text("Use Cache for new messages")
-                        Text("Supports Anthropic Provider only.")
                     }
                 }
             }

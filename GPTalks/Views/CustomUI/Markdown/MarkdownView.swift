@@ -21,14 +21,14 @@ struct MarkdownView: View {
             Text(content)
                 .textSelection(.enabled)
                 .font(.system(size: config.fontSize))
-        case .basic,
-            .webview where !chatVM.searchText.isEmpty:
+        case .basic:
+//            .webview where !chatVM.searchText.isEmpty:
             NativeMarkdownView(text: content, highlightText: chatVM.searchText)
                 .textSelection(.enabled)
         case .webview:
             SwiftMarkdownView(content, calculatedHeight: calculatedHeight)
                 .markdownBaseURL("GPTalks Web Content")
-//                .markdownHighlightString(chatVM.searchText)
+                .markdownHighlightString(chatVM.searchText)
                 .markdownFontSize(CGFloat(config.fontSize))
                 .codeBlockTheme(config.codeBlockTheme.toCodeBlockTheme())
         }

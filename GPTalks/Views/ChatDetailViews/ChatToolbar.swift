@@ -58,7 +58,7 @@ struct ChatToolbar: ToolbarContent {
                     chat.inputManager.setupEditing(message: lastUserMessage)
                 }
                 .keyboardShortcut("e")
-                .disabled(chat.status == .quick)
+                .disabled(chat.status == .quick || chat.isReplying)
                 
                 Button("Regen Last Message") {
                     if let last = lastMessage {
