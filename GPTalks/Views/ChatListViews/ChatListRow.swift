@@ -41,16 +41,26 @@ struct ChatListRow: View {
         .swipeActions(edge: .trailing) {
             swipeActionsTrailing
         }
-        #if os(macOS)
         .contextMenu {
+            #if os(macOS)
             Button {
                 openWindow(value: chat.id)
             } label: {
                 Label("Open in New Window", systemImage: "rectangle.on.rectangle")
                     .labelStyle(.titleAndIcon)
             }
+            
+            #endif
+            Button {
+                Task {
+                    let newChat = await chat.copy(purpose: .chat)
+                    chatVM.fork(newChat: newChat)
+                }
+            } label: {
+                Label("Duplicate Chat", systemImage: "arrow.branch")
+                    .labelStyle(.titleAndIcon)
+            }
         }
-        #endif
     }
     
     var row: some View {

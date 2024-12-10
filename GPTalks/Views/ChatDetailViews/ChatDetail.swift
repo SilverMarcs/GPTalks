@@ -83,9 +83,9 @@ struct ChatDetail: View {
                 #else
                 scrollToBottom(proxy: proxy, delay: 0.3)
                 #endif
-                if config.markdownProvider == .webview {
-                    scrollToBottom(proxy: proxy, delay: 0.3)
-                }
+//                if config.markdownProvider == .webview {
+//                    scrollToBottom(proxy: proxy, delay: 0.3)
+//                }
             }
         }
     }

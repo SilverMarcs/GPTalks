@@ -47,14 +47,6 @@ struct MessageMenu: View {
                 DeleteButton(deleteLastMessage: { message.chat?.deleteLastMessage() })
             }
         }
-        
-        #if os(macOS)
-//        Divider()
-        
-        Section {
-            NavigationButtons(message: message)
-        }
-        #endif
     }
 }
 

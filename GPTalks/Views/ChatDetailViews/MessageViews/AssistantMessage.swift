@@ -16,7 +16,6 @@ struct AssistantMessage: View {
     
     @State var height: CGFloat = 0
     @State private var showingTextSelection = false
-    @State private var isHovering = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -54,21 +53,9 @@ struct AssistantMessage: View {
             #if os(macOS)
             if !message.isReplying {
                 if !showMenu {
-                    HStack {
-                        SecondaryNavigationButtons(group: group)
-                    }
+                    SecondaryNavigationButtons(group: group)
                 } else {
-                    if isHovering {
-                        HoverableMessageMenu {
-                            MessageMenu(message: group) {
-                                showingTextSelection.toggle()
-                            }
-                        }
-                        .transition(.symbolEffect(.appear))
-                    } else {
-                        // Display a clear view of the same height as the menu
-                        Color.clear.frame(height: 25)
-                    }
+                    NavigationButtons(message: group)
                 }
             }
             Spacer()
@@ -77,21 +64,14 @@ struct AssistantMessage: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 25)
         .padding(.trailing, 30)
-        .onHover { hovering in
-            withAnimation {
-                isHovering = hovering
-            }
-        }
         .sheet(isPresented: $showingTextSelection) {
             TextSelectionView(content: message.content)
         }
-        #if !os(macOS)
         .contextMenu {
             MessageMenu(message: group) {
                 showingTextSelection.toggle()
             }
         }
-        #endif
     }
     
     var labelPadding: CGFloat {

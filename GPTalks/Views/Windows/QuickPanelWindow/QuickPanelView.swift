@@ -190,7 +190,6 @@ struct QuickPanelView: View {
             if let mainWindow = NSApp.windows.first(where: { $0.identifier?.rawValue == "chats" }) {
                 mainWindow.makeKeyAndOrderFront(nil)
             }
-//            selections = [newChat]
             NSApp.activate(ignoringOtherApps: true)
         }
     }

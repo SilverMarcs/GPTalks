@@ -16,8 +16,7 @@ struct UserMessage: View {
 
     @State var isExpanded: Bool = false
     @State var showingTextSelection = false
-    @State private var isHovering = false
-    
+
     var body: some View {
         VStack(alignment: .trailing, spacing: 8) {
             if !message.dataFiles.isEmpty {
@@ -60,36 +59,29 @@ struct UserMessage: View {
                 )
             }
             
-            #if os(macOS)
-            if isHovering {
-                HoverableMessageMenu {
-                    MessageMenu(message: message) {
-                        showingTextSelection.toggle()
-                    }
-                }
-                .transition(.symbolEffect(.appear))
-            } else {
-                Color.clear.frame(height: 25)
-            }
-            #endif
+//            #if os(macOS)
+//            if isHovering {
+//                HoverableMessageMenu {
+//                    MessageMenu(message: message) {
+//                        showingTextSelection.toggle()
+//                    }
+//                }
+//                .transition(.symbolEffect(.appear))
+//            } else {
+//                Color.clear.frame(height: 25)
+//            }
+//            #endif
         }
         .padding(.leading, leadingPadding)
         .frame(maxWidth: .infinity, alignment: .trailing)
-        .onHover { hovering in
-            withAnimation {
-                isHovering = hovering
-            }
-        }
         .sheet(isPresented: $showingTextSelection) {
             TextSelectionView(content: message.content)
         }
-        #if !os(macOS)
         .contextMenu {
             MessageMenu(message: message) {
                 showingTextSelection.toggle()
             }
         }
-        #endif
     }
     
     var leadingPadding: CGFloat {
