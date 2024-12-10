@@ -17,3 +17,9 @@ struct ClickHighlightButton: ButtonStyle {
             .padding(-10)
     }
 }
+
+extension ButtonStyle where Self == ClickHighlightButton {
+    static var clickHighlight: ClickHighlightButton {
+        ClickHighlightButton()
+    }
+}

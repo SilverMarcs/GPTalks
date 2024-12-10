@@ -5,9 +5,7 @@
 //  Created by Zabir Raihan on 27/09/2024.
 //
 
-#if os(macOS)
 import SwiftUI
-import SwiftData
 
 struct ImageContentView: View {
     @Environment(ImageVM.self) private var sessionVM
@@ -45,4 +43,3 @@ struct ImageContentView: View {
 #Preview {
     ImageContentView()
 }
-#endif

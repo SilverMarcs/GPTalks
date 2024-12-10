@@ -12,6 +12,7 @@ enum ChatStatus: Int, Codable, Identifiable, Equatable, CaseIterable {
     case starred
     case quick
     case archived
+    case temporary
     
     var id: Int { rawValue }
     
@@ -21,6 +22,7 @@ enum ChatStatus: Int, Codable, Identifiable, Equatable, CaseIterable {
         case .starred: return "star.circle.fill"
         case .quick: return "bolt.fill"
         case .archived: return "archivebox.circle.fill"
+        case .temporary: return "tray.circle"
         }
     }
     
@@ -30,6 +32,7 @@ enum ChatStatus: Int, Codable, Identifiable, Equatable, CaseIterable {
         case .starred: return .orange
         case .quick: return .yellow
         case .archived: return .gray
+        case .temporary: return .black
         }
     }
     
@@ -39,6 +42,7 @@ enum ChatStatus: Int, Codable, Identifiable, Equatable, CaseIterable {
         case .starred: return "Starred"
         case .quick: return "Quick"
         case .archived: return "Archived"
+        case .temporary: return "Temporary"
         }
     }
 }

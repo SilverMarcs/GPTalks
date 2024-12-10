@@ -7,16 +7,11 @@
 
 import Foundation
 import SwiftData
-import OpenAI
-import GoogleGenerativeAI
-import SwiftAnthropic
 
 @Model
 final class Message {
     var id: UUID = UUID()
     var date: Date = Date()
-    
-    var chat: Chat?
     
     @Relationship(deleteRule: .nullify)
     var provider: Provider?
@@ -35,16 +30,24 @@ final class Message {
     var toolCalls: [ChatToolCall] = []
     var toolResponse: ToolResponse?
     
-    init(role: MessageRole, content: String = "", chat: Chat? = nil, provider: Provider? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false) {
+    var useCache: Bool = false
+    var height: CGFloat = 0
+    
+    @Relationship(deleteRule: .cascade)
+    var next: MessageGroup?
+    
+    // TODO: typed init functions for diff roles
+    
+    init(role: MessageRole, content: String = "", provider: Provider? = nil, model: AIModel? = nil, dataFiles: [TypedData] = [], toolCalls: [ChatToolCall] = [], toolResponse: ToolResponse? = nil, isReplying: Bool = false, height: CGFloat = 0) {
         self.role = role
         self.content = content
-        self.chat = chat
         self.provider = provider
         self.model = model
         self.dataFiles = dataFiles
         self.toolCalls = toolCalls
         self.toolResponse = toolResponse
         self.isReplying = isReplying
+        self.height = height
     }
     
     init(toolResponse: ToolResponse) {
@@ -58,13 +61,13 @@ final class Message {
         return Message(
             role: role,
             content: content,
-            chat: chat,
             provider: provider,
             model: model,
             dataFiles: dataFiles,
             toolCalls: toolCalls,
             toolResponse: toolResponse,
-            isReplying: isReplying
+            isReplying: isReplying,
+            height: height
         )
     }
 }

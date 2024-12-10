@@ -17,6 +17,7 @@ class ChatConfigDefaults: ObservableObject {
     @AppStorage("topP") private var storedTopP: Double?
     @AppStorage("maxTokens") private var storedMaxTokens: Int?
     @AppStorage("stream") var stream: Bool = true
+    @AppStorage("useCache") var useCache: Bool = false
     @AppStorage("systemPrompt") var systemPrompt: String = "You are a helpful assistant."
     
     var temperature: Double? {

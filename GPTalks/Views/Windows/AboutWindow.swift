@@ -5,12 +5,11 @@
 //  Created by Zabir Raihan on 08/11/2024.
 //
 
-#if os(macOS)
 import SwiftUI
 
 struct AboutWindow: Scene {
     var body: some Scene {
-        Window("About", id: "about") {
+        Window("About", id: WindowID.about) {
             AboutSettings()
                 .padding(.top, -19)
                 .padding(.horizontal, 5)
@@ -24,4 +23,3 @@ struct AboutWindow: Scene {
         .windowResizability(.contentSize)
     }
 }
-#endif

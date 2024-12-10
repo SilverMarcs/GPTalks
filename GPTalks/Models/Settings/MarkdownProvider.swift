@@ -11,17 +11,17 @@ enum MarkdownProvider: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     
     case disabled
-    case native
+    case basic
     case webview
     
     var name: String {
         switch self {
         case .disabled:
-            return "Disabled"
-        case .native:
-            return "Native"
+            "Disabled"
+        case .basic:
+            "Native"
         case .webview:
-            return "Webview"
+            "Webview"
         }
     }
 }

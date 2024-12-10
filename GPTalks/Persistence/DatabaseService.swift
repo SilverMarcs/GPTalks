@@ -13,7 +13,7 @@ import KeyboardShortcuts
 #endif
 import Observation
 
-// make modelactor
+// TODO: make modelactor 
 
 @MainActor
 final class DatabaseService: NSObject {
@@ -25,6 +25,7 @@ final class DatabaseService: NSObject {
             Chat.self,
             ChatConfig.self,
             Message.self,
+            MessageGroup.self,
             Provider.self,
             Generation.self,
             ImageConfig.self,
@@ -41,9 +42,24 @@ final class DatabaseService: NSObject {
             let quickId = ChatStatus.quick.id
             fetchQuickChats.predicate = #Predicate { $0.statusId == quickId }
             fetchQuickChats.fetchLimit = 1
-            
             if let quickChat = try? modelContext.fetch(fetchQuickChats).first {
                 quickChat.deleteAllMessages()
+                var defaults = FetchDescriptor<ProviderDefaults>()
+                defaults.fetchLimit = 1
+                if let providerDefaults = try modelContext.fetch(defaults).first {
+                    quickChat.config.provider = providerDefaults.quickProvider
+                    quickChat.config.model = providerDefaults.quickProvider.liteModel
+                }
+            }
+            
+            // fetch chats with temporary status
+            var fetchTempChats = FetchDescriptor<Chat>()
+            let tempId = ChatStatus.temporary.id
+            fetchTempChats.predicate = #Predicate { $0.statusId == tempId }
+            if let tempChats = try? modelContext.fetch(fetchTempChats) {
+                for chat in tempChats {
+                    modelContext.delete(chat)
+                }
             }
             
             var fetchProviders = FetchDescriptor<Provider>()
@@ -60,11 +76,8 @@ final class DatabaseService: NSObject {
             
             // Adding default providers
             let openAI = Provider.factory(type: .openai)
-            openAI.isPersistent = true
             let anthropic = Provider.factory(type: .anthropic)
-            anthropic.isPersistent = true
             let google = Provider.factory(type: .google)
-            google.isPersistent = true
             
             modelContext.insert(openAI)
             modelContext.insert(anthropic)
@@ -77,16 +90,6 @@ final class DatabaseService: NSObject {
             chat.statusId = ChatStatus.quick.id
             chat.title = "(↯) Quick Chat"
             modelContext.insert(chat)
-            
-            // Demo favourite chat with some messages
-            let normalChatConfig2 = ChatConfig(provider: openAI, purpose: .chat)
-            let favouriteChat = Chat(config: normalChatConfig2)
-            favouriteChat.status = .starred
-            favouriteChat.statusId = ChatStatus.starred.id
-            favouriteChat.addMessage(.mockUserMessage)
-            favouriteChat.messages.append(.mockAssistantMessage)
-            favouriteChat.title = "Favourite Chat"
-            modelContext.insert(favouriteChat)
             
             // Demo chat with no messages
             let normalChatConfig = ChatConfig(provider: openAI, purpose: .chat)
@@ -101,6 +104,16 @@ final class DatabaseService: NSObject {
             archivedChat.statusId = ChatStatus.archived.id
             archivedChat.title = "Archived Chat"
             modelContext.insert(archivedChat)
+            
+            // Demo favourite chat with some messages
+            let normalChatConfig2 = ChatConfig(provider: openAI, purpose: .chat)
+            let favouriteChat = Chat(config: normalChatConfig2)
+            favouriteChat.status = .starred
+            favouriteChat.statusId = ChatStatus.starred.id
+//            favouriteChat.addMessage(.mockUserMessage)
+//            favouriteChat.messages.append(.mockAssistantGroup)
+            favouriteChat.title = "Favourite Chat"
+            modelContext.insert(favouriteChat)
             
             // Image session
             let imageChatConfig = ImageConfig(prompt: "", provider: openAI)

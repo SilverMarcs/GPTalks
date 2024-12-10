@@ -14,7 +14,9 @@ struct FullScreenBackgroundStyle: ViewModifier {
             #if !os(visionOS)
             .background(.background)
             #endif
+            #if os(macOS)
             .toolbarBackground(.hidden)
+            #endif
     }
 }
 

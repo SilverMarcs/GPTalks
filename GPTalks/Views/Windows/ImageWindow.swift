@@ -5,14 +5,12 @@
 //  Created by Zabir Raihan on 27/09/2024.
 //
 
-#if os(macOS)
 import SwiftUI
 
 struct ImageWindow: Scene {
     var body: some Scene {
-        Window("Images", id: "images") {
+        Window("Images", id: WindowID.images) {
             ImageContentView()
         }
     }
 }
-#endif

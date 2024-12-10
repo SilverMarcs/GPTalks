@@ -125,4 +125,14 @@ struct ChatInspectorToolsTip: Tip {
         MaxDisplayCount(2)
     }
 }
+
+struct ModelEditTip: Tip {
+    var title: Text {
+        Text("Click on model name or code to edit")
+    }
+    
+    var options: [Option] {
+        MaxDisplayCount(3)
+    }
+}
     

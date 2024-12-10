@@ -32,6 +32,6 @@ struct FileViewer: View {
                 }
             }
         }
-        .groupBoxStyle(PlatformSpecificGroupBoxStyle())
+        .groupBoxStyle(PlatformGroupBoxStyle())
     }
 }

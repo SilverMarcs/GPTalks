@@ -5,7 +5,6 @@
 //  Created by Zabir Raihan on 25/06/2024.
 //
 
-#if os(macOS)
 import SwiftUI
 import SwiftData
 
@@ -17,19 +16,23 @@ struct ChatContentView: View {
     
     @ObservedObject var config = AppConfig.shared
     
-    @State private var localSearchText = ""
     @FocusState private var isSearchFieldFocused: FocusedField?
     
     var body: some View {
         @Bindable var chatVM = chatVM
         
         NavigationSplitView {
-            ChatList(status: chatVM.statusFilter, searchText: chatVM.searchText, searchTokens: chatVM.serchTokens)
-                .navigationSplitViewColumnWidth(min: 270, ideal: 300, max: 400)
+            if !chatVM.searchText.isEmpty && chatVM.searchTokens.contains(.messages) {
+                MessageGroupList(searchText: chatVM.searchText)
+                    .navigationSplitViewColumnWidth(min: 270, ideal: 300, max: 400)
+            } else {
+                ChatList(status: chatVM.statusFilter, searchText: chatVM.searchText, searchTokens: chatVM.searchTokens)
+                    .navigationSplitViewColumnWidth(min: 270, ideal: 300, max: 400)
+            }
         } detail: {
-            if let chat = chatVM.activeChat, chat.status != .quick {
+            if let chat = chatVM.activeChat {
                 ChatDetail(chat: chat)
-//                    .id(chat.id)
+                    .id(chat.id)
             } else {
                 Text("^[\(chatVM.selections.count) Chat](inflect: true) Selected")
                     .font(.title)
@@ -42,21 +45,24 @@ struct ChatContentView: View {
         .sheet(isPresented: .constant(!config.hasCompletedOnboarding)) {
             OnboardingView()
         }
-        .searchable(text: $localSearchText, tokens: $chatVM.serchTokens, placement: searchPlacement) { token in
+        .searchable(text: $chatVM.localSearchText, tokens: $chatVM.searchTokens, placement: searchPlacement) { token in
             Text(token.name)
         }
         .searchSuggestions {
-            ForEach(filteredTokens) { suggestion in
+            ForEach(chatVM.filteredTokens) { suggestion in
                 Text("Matching: \(suggestion.name)")
                     .searchCompletion(suggestion)
             }
         }
         .searchFocused($isSearchFieldFocused, equals: .searchBox)
         .onSubmit(of: .search) {
-            chatVM.searchText = localSearchText
+            if chatVM.searchTokens.isEmpty {
+                chatVM.searchTokens = [.title]
+            }
+            chatVM.searchText = chatVM.localSearchText
         }
-        .onChange(of: localSearchText) {
-            if localSearchText.isEmpty {
+        .onChange(of: chatVM.localSearchText) {
+            if chatVM.localSearchText.isEmpty {
                 chatVM.searchText = ""
             }
         }
@@ -68,13 +74,6 @@ struct ChatContentView: View {
                 .keyboardShortcut("f")
             }
         }
-    }
-    
-    var filteredTokens: [ChatSearchToken] {
-        let remainingTokens = ChatSearchToken.allCases.filter { !chatVM.serchTokens.contains($0) }
-        return localSearchText.isEmpty
-            ? remainingTokens
-            : remainingTokens.filter { $0.name.lowercased().hasPrefix(localSearchText.lowercased()) }
     }
     
     private var searchPlacement: SearchFieldPlacement {
@@ -91,4 +90,3 @@ struct ChatContentView: View {
         .modelContainer(for: Chat.self, inMemory: true)
         .environment(ChatVM())
 }
-#endif

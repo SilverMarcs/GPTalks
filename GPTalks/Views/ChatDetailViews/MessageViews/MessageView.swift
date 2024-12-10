@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MessageView: View {
-    var message: Message
+    var message: MessageGroup
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -17,7 +17,7 @@ struct MessageView: View {
                 UserMessage(message: message)
             case .assistant:
                 if message.toolCalls.isEmpty {
-                    AssistantMessage(message: message)
+                    AssistantMessageAux(message: message)
                 } else {
                     ToolCallView(message: message)
                 }
@@ -27,19 +27,22 @@ struct MessageView: View {
                 Text("Unknown role")
             }
             
-            if message.chat?.messages.firstIndex(where: { $0 == message }) == message.chat?.resetMarker {
-                ContextResetDivider() { message.chat?.resetMarker = nil }
+            if message.chat?.contextResetPoint == message {
+                ContextResetDivider() { message.chat?.resetContext(at: message)}
                     .padding(.vertical)
             }
         }
+        #if os(iOS)
+        .opacity(0.9)
+        #endif
     }
 }
 
 
 #Preview {
     VStack {
-        MessageView(message: .mockUserMessage)
-        MessageView(message: .mockAssistantMessage)
+        MessageView(message: .mockUserGroup)
+        MessageView(message: .mockAssistantGroup)
     }
     .frame(width: 400)
     .padding()

@@ -6,14 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct BasicInspector: View {
-    @Environment(\.providers) var providers
+    @Environment(\.dismiss) var dismiss
     
     @Bindable var chat: Chat
     
     @State var isGeneratingTtile: Bool = false
     @State var showingDeleteConfirmation: Bool = false
+    
+    @Query(filter: #Predicate<Provider> { $0.isEnabled })
+    var providers: [Provider]
     
     var body: some View {
         Form {
@@ -38,9 +42,12 @@ struct BasicInspector: View {
             }
             
             Section("Parameters") {
-                Toggle("Stream", isOn: $chat.config.stream)
+                Toggle(isOn: $chat.config.stream) {
+                    Text("Stream (Temporarirly Disabled)")
+                }
+                .disabled(true)
+                
                 TemperatureSlider(temperature: $chat.config.temperature, shortLabel: true)
-                MaxTokensPicker(value: $chat.config.maxTokens)
             }
             
             Section("System Prompt") {
@@ -48,8 +55,10 @@ struct BasicInspector: View {
             }
             
             Section {
+                resetContext
                 deleteAllMessages
             }
+
         }
         .formStyle(.grouped)
     }
@@ -86,6 +95,28 @@ struct BasicInspector: View {
         .foregroundStyle(.mint.gradient)
     }
     
+    private var resetContext: some View {
+        Button(action: {}) {
+            Button {
+                guard !chat.isReplying, let lastMessage = chat.currentThread.last else { return }
+                chat.resetContext(at: lastMessage)
+                dismiss()
+            } label: {
+                Text("Reset Context At Last Message")
+                    .frame(maxWidth: .infinity)
+            }
+            .foregroundStyle(.orange)
+            #if os(macOS)
+            .buttonStyle(ClickHighlightButton())
+            #else
+            .buttonStyle(.bordered)
+            #endif
+        }
+        .buttonStyle(.plain)
+        .listRowBackground(EmptyView())
+        .listRowInsets(EdgeInsets())
+    }
+    
     private var deleteAllMessages: some View {
         Button(action: {}) {
             Button(role: .destructive) {
@@ -109,6 +140,7 @@ struct BasicInspector: View {
         .confirmationDialog("Are you sure you want to delete all messages?", isPresented: $showingDeleteConfirmation) {
             Button("Delete All", role: .destructive) {
                 chat.deleteAllMessages()
+                dismiss()
             }
             Button("Cancel", role: .cancel) {}
         }

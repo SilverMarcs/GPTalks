@@ -11,7 +11,7 @@ import TipKit
 @main
 struct GPTalksApp: App {
     @State private var chatVM: ChatVM = ChatVM()
-    @State private var imageVM: ImageVM = ImageVM()
+        @State private var imageVM: ImageVM = ImageVM()
     @State private var settingsVM: SettingsVM = SettingsVM()
     
     #if !os(macOS)
@@ -19,12 +19,22 @@ struct GPTalksApp: App {
     #endif
     
     var body: some Scene {
-        WindowScenes()
-            .commands { MenuCommands() }
-            .environment(chatVM)
-            .environment(imageVM)
-            .environment(settingsVM)
-            .modelContainer(DatabaseService.shared.container)
+        Group {
+            #if os(macOS)
+            ChatWindow()
+            ImageWindow()
+            SettingsWindow()
+            AboutWindow()
+            HelpWindow()
+            #else
+            IOSWindow()
+            #endif
+        }
+        .commands { MenuCommands() }
+        .environment(chatVM)
+        .environment(imageVM)
+        .environment(settingsVM)
+        .modelContainer(DatabaseService.shared.container)
     }
     
     init() {

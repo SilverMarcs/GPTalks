@@ -14,7 +14,12 @@ struct ParameterSettings: View {
     var body: some View {
         Form {
             Section("Basic") {
-                Toggle("Stream", isOn: $config.stream)
+                Toggle(isOn: $config.stream) {
+                    Text("Stream")
+                    Text("This control is temporarily disabled.")
+                }
+                .disabled(true)
+                
                 TemperatureSlider(temperature: $config.temperature)
                 MaxTokensPicker(value: $config.maxTokens)
             }
@@ -24,6 +29,10 @@ struct ParameterSettings: View {
             }
             
             Section("Advanced", isExpanded: $expandAdvanced) {
+                Toggle(isOn: $config.useCache) {
+                    Text("Prompt Caching")
+                }
+                
                 TopPSlider(topP: $config.topP)
                 FrequencyPenaltySlider(penalty: $config.frequencyPenalty)
                 PresencePenaltySlider(penalty: $config.presencePenalty)

@@ -14,7 +14,6 @@ final class Chat {
     var date: Date = Date()
     var title: String = "New Chat Session"
     var errorMessage: String = ""
-    var resetMarker: Int?
     var totalTokens: Int = 0
     
     var statusId: Int = 1 // normal status
@@ -23,15 +22,30 @@ final class Chat {
         set { statusId = newValue.id }
     }
     
-    @Relationship(deleteRule: .cascade, inverse: \Message.chat)
-    var unorderedMessages =  [Message]()
-    var messages: [Message] {
-        get { return unorderedMessages.sorted(by: {$0.date < $1.date})}
-        set { unorderedMessages = newValue }
+    @Relationship(deleteRule: .nullify)
+    var contextResetPoint: MessageGroup?
+    var adjustedContext: [Message] {
+        guard let resetPoint = contextResetPoint,
+              let resetIndex = currentThread.firstIndex(of: resetPoint),
+              resetIndex + 1 < currentThread.count else {
+            return currentThread.map { $0.activeMessage }
+        }
+
+        return currentThread[(resetIndex + 1)...].map { $0.activeMessage }
     }
-    var adjustedMessages: [Message] {
-        guard let resetMarker = resetMarker else { return messages }
-        return Array(messages.dropFirst(resetMarker))
+
+    @Relationship(deleteRule: .cascade)
+    var rootMessage: MessageGroup?
+    var currentThread: [MessageGroup] {
+        var thread: [MessageGroup] = []
+        var currentGroup = rootMessage
+        
+        while let group = currentGroup {
+            thread.append(group)
+            currentGroup = group.activeMessage.next
+        }
+        
+        return thread
     }
     
     @Relationship(deleteRule: .cascade)
@@ -41,7 +55,7 @@ final class Chat {
     var streamingTask: Task<Void, Error>?
     @Transient
     var isReplying: Bool {
-        messages.last?.isReplying ?? false
+        currentThread.last?.isReplying ?? false
     }
 
     @Transient
@@ -52,11 +66,11 @@ final class Chat {
     }
     
     @MainActor
-    func processRequest() async {
+    func processRequest(message: Message) async {
         errorMessage = ""
         date = Date()
         streamingTask = Task {
-            let streamer = StreamHandler(chat: self)
+            let streamer = StreamHandler(chat: self, assistant: message)
             
             // Request background task before starting network operations
             #if !os(macOS)
@@ -71,6 +85,11 @@ final class Chat {
             #endif
             
             do {
+                scrollDown()
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//                    self.scrollDown()
+//                }
+                
                 try await streamer.handleRequest()
             } catch {
                 handleError(error)
@@ -84,122 +103,197 @@ final class Chat {
             Task { await generateTitle() }
         }
     }
+
+    @MainActor
+    func editMessage(_ message: Message) async {
+        guard let userGroup = currentThread.first(where: { $0.activeMessage == message }) else { return }
+        
+        unsetContextResetPointIfNeeded(for: userGroup)
+        
+        let newUserMessage = Message(role: .user, content: inputManager.prompt, provider: message.provider, model: message.model, dataFiles: inputManager.dataFiles)
+        userGroup.addMessage(newUserMessage)
+        
+        let newAssistantMessage = Message(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
+        let newAssistantGroup = MessageGroup(message: newAssistantMessage)
+        newAssistantGroup.chat = self
+        
+        newUserMessage.next = newAssistantGroup
+         
+        await processRequest(message: newAssistantMessage)
+    }
     
+
     @MainActor
     func sendInput() async {
-        errorMessage = ""
-        
         guard !inputManager.prompt.isEmpty else { return }
-
-        if inputManager.state == .editing {
-            await handleEditing()
+        errorMessage = ""
+        resetScroll()
+        
+        if let editingMessage = inputManager.editingMessage {
+            if config.useCache {
+                DispatchQueue.main.async {
+                    editingMessage.useCache = true
+                }
+            }
+            await editMessage(editingMessage)
+            inputManager.editingMessage = nil
         } else {
-            await handleNewInput()
+            let userMessage = Message(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
+            if config.useCache {
+                DispatchQueue.main.async {
+                    userMessage.useCache = true
+                }
+            }
+            let userGroup = MessageGroup(message: userMessage)
+            userGroup.chat = self
+            
+            if rootMessage == nil {
+                rootMessage = userGroup
+            } else {
+                let lastGroup = currentThread.last!
+                lastGroup.activeMessage.next = userGroup
+            }
+            
+            let assistantMessage = Message(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
+            let assistantGroup = MessageGroup(message: assistantMessage)
+            assistantGroup.chat = self
+            userGroup.activeMessage.next = assistantGroup
+             
+            await processRequest(message: assistantMessage)
         }
+         
+        inputManager.reset()
     }
 
     @MainActor
-    private func handleEditing() async {
-        guard let index = inputManager.editingIndex else { return }
-        unsetResetMarker(at: index)
-        let editingMessage = messages[index]
-        editingMessage.content = inputManager.prompt
-        editingMessage.dataFiles = inputManager.dataFiles
-        inputManager.reset()
-        await regenerate(message: editingMessage)
-    }
-
-    @MainActor
-    private func handleNewInput() async {
-        let user = Message(role: .user, content: inputManager.prompt, dataFiles: inputManager.dataFiles)
-        addMessage(user)
-        inputManager.reset()
-        await processRequest()
-    }
-    
-    @MainActor
-    func regenerate(message: Message) async {
-        guard let index = messages.firstIndex(where: { $0 == message }) else { return }
-        unsetResetMarker(at: index)
-        messages.removeSubrange(message.role == .assistant ? index... : (index + 1)...)
-        await processRequest()
+    func regenerate(message: MessageGroup) async {
+        guard let index = currentThread.firstIndex(where: { $0 == message }) else { return }
+        resetScroll()
+       
+        unsetContextResetPointIfNeeded(for: message)
+       
+        if message.role == .assistant {
+            let newAssistantMessage = Message(role: .assistant)
+            message.addMessage(newAssistantMessage)
+            message.activeMessage.next = nil
+           
+            await processRequest(message: newAssistantMessage)
+        } else if message.role == .user {
+            if index + 1 < currentThread.count {
+                let assistantGroup = currentThread[index + 1]
+                let newAssistantMessage = Message(role: .assistant)
+                assistantGroup.addMessage(newAssistantMessage)
+                assistantGroup.activeMessage.next = nil
+               
+                await processRequest(message: newAssistantMessage)
+            } else {
+                let assistantMessage = Message(role: .assistant, provider: config.provider, model: config.model, isReplying: true)
+                let assistantGroup = MessageGroup(message: assistantMessage)
+                assistantGroup.chat = self
+                message.activeMessage.next = assistantGroup
+                
+                await processRequest(message: assistantMessage)
+            }
+        }
     }
     
     func stopStreaming() {
-        AppConfig.shared.hasUserScrolled = false
+        resetScroll()
         streamingTask?.cancel()
         streamingTask = nil
         
-        guard let last = messages.last else { return }
+        guard let last = currentThread.last else { return }
         last.isReplying = false
-        if last.content.isEmpty {
-            deleteMessage(last)
-        }
+//        if last.activeMessage.content.isEmpty {
+//            deleteLastMessage()
+//        }
     }
     
     private func handleError(_ error: Error) {
         errorMessage = error.localizedDescription
-        scrollBottom()
-        AppConfig.shared.hasUserScrolled = false
+        scrollDown()
+        resetScroll()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
-            if let lastMessage = self.messages.last, lastMessage.content.isEmpty, lastMessage.role == .assistant {
-                self.deleteMessage(lastMessage)
-            }
-        }
+        // TODO: only delete last mesasage and not entire group if group has other messages
+//        DispatchQueue.main.asyncAfter(deadline: .now() + Float.UIIpdateInterval) {
+//            if let lastMessage = self.currentThread.last, lastMessage.content.isEmpty, lastMessage.role == .assistant {
+//                self.deleteLastMessage()
+//            }
+//        }
     }
     
     func generateTitle(forced: Bool = false) async {
         guard status != .quick else { return }
-        guard forced || adjustedMessages.count <= 2 else { return }
+        guard forced || adjustedContext.count <= 2 else { return }
         
-        if let newTitle = await TitleGenerator.generateTitle(messages: adjustedMessages, provider: config.provider) {
-            self.title = newTitle
-        }
-    }
-
-    func addMessage(_ message: Message) {
-        if message.role == .assistant {
-            message.isReplying = true
-        }
-        messages.append(message)
-        scrollBottom()
-    }
-    
-    private func unsetResetMarker(at index: Int) {
-        if let resetMarker = resetMarker, index <= resetMarker {
-            self.resetMarker = nil
-        }
-    }
-
-    func resetContext(at message: Message) {
-        guard let index = messages.firstIndex(of: message) else { return }
-        resetMarker = (resetMarker == index) ? nil : index
-        if resetMarker == messages.count - 1 {
-            scrollBottom()
-        }
-    }
-    
-    func deleteMessage(_ message: Message) {
-        guard let index = messages.firstIndex(of: message) else { return }
-        unsetResetMarker(at: index)
-        messages.remove(at: index)
-        if messages.count == 0 {
-            errorMessage = ""
-        }
-    }
-
-    func deleteAllMessages() {
-        errorMessage = ""
-        resetMarker = nil
-        messages.removeAll()
-    }
-    
-    func scrollBottom() {
-        if let proxy = AppConfig.shared.proxy, !AppConfig.shared.hasUserScrolled {
-            DispatchQueue.main.async {
-                scrollToBottom(proxy: proxy)
+        if let newTitle = await TitleGenerator.generateTitle(messages: adjustedContext, provider: config.provider) {
+            withAnimation {
+                self.title = newTitle
             }
+        }
+    }
+
+    func resetContext(at message: MessageGroup) {
+        if contextResetPoint == message {
+            contextResetPoint = nil
+        } else {
+            contextResetPoint = message
+        }
+        
+        if let lastMessage = currentThread.last, lastMessage == message {
+            Scroller.scrollToBottom()
+        }
+    }
+
+    private func unsetContextResetPointIfNeeded(for messageGroup: MessageGroup) {
+        guard let resetPoint = contextResetPoint,
+              let resetIndex = currentThread.firstIndex(of: resetPoint),
+              let messageIndex = currentThread.firstIndex(of: messageGroup),
+              messageIndex <= resetIndex else {
+            return
+        }
+        contextResetPoint = nil
+    }
+    
+    func deleteLastMessage() {
+        guard let lastGroup = currentThread.last, !lastGroup.isReplying else { return }
+        
+        if lastGroup == contextResetPoint {
+            contextResetPoint = nil
+        }
+        
+        if currentThread.count == 1 {
+            let temp = rootMessage
+            rootMessage = nil
+            temp?.chat = nil
+        } else {
+            let secondToLastGroup = currentThread[currentThread.count - 2]
+            secondToLastGroup.activeMessage.next = nil
+            lastGroup.chat = nil
+        }
+        
+        Scroller.scrollToBottom()
+
+        errorMessage = ""
+    }
+    
+    func deleteAllMessages() {
+        rootMessage = nil
+        contextResetPoint = nil
+        stopStreaming()
+        errorMessage = ""
+        totalTokens = 0
+        
+    }
+    
+    func scrollDown() {
+        guard !AppConfig.shared.hasUserScrolled else { return }
+        Scroller.scrollToBottom()
+    }
+    
+    func resetScroll() {
+        DispatchQueue.main.async {
+            AppConfig.shared.hasUserScrolled = false
         }
     }
     
@@ -215,10 +309,30 @@ final class Chat {
         newChat.title = "\(leading) \(self.title)"
         newChat.totalTokens = self.totalTokens
         
-        if let message = message, let index = messages.firstIndex(of: message) {
-            newChat.messages = messages.prefix(through: index).map { $0.copy() }
+        var threadToCopy: [MessageGroup] = []
+        
+        if let message = message {
+            // Find the MessageGroup containing the specified message
+            if let groupIndex = currentThread.firstIndex(where: { $0.allMessages.contains(message) }) {
+                threadToCopy = Array(currentThread.prefix(through: groupIndex))
+            }
         } else {
-            newChat.messages = messages.map { $0.copy() }
+            threadToCopy = currentThread
+        }
+        
+        // Copy the thread
+        var previousGroup: MessageGroup?
+        for group in threadToCopy {
+            let copiedGroup = group.copy()
+            copiedGroup.chat = newChat
+            
+            if let previousGroup = previousGroup {
+                previousGroup.activeMessage.next = copiedGroup
+            } else {
+                newChat.rootMessage = copiedGroup
+            }
+            
+            previousGroup = copiedGroup
         }
         
         return newChat

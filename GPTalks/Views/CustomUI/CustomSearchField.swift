@@ -5,7 +5,6 @@
 //  Created by Zabir Raihan on 06/07/2024.
 //
 
-#if os(macOS)
 import SwiftUI
 
 extension NSSearchField {
@@ -19,4 +18,3 @@ extension NSSearchField {
         set { }
     }
 }
-#endif

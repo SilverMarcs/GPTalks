@@ -1,5 +1,5 @@
 //
-//  MessageRowiew.swift
+//  MarkdownView.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 8/3/24.
@@ -13,6 +13,7 @@ struct MarkdownView: View {
     
     @ObservedObject var config = AppConfig.shared
     var content: String
+    var calculatedHeight: Binding<CGFloat>? = nil
 
     var body: some View {
         switch config.markdownProvider {
@@ -20,17 +21,16 @@ struct MarkdownView: View {
             Text(content)
                 .textSelection(.enabled)
                 .font(.system(size: config.fontSize))
-        case .native,
-             .webview where !chatVM.searchText.isEmpty:
-                AttributedText(text: content, highlightText: chatVM.searchText, parseMarkdown: true)
-                    .textSelection(.enabled)
+        case .basic:
+//            .webview where !chatVM.searchText.isEmpty:
+            NativeMarkdownView(text: content, highlightText: chatVM.searchText)
+                .textSelection(.enabled)
         case .webview:
-            SwiftMarkdownView(content)
+            SwiftMarkdownView(content, calculatedHeight: calculatedHeight)
                 .markdownBaseURL("GPTalks Web Content")
                 .markdownHighlightString(chatVM.searchText)
                 .markdownFontSize(CGFloat(config.fontSize))
-                .renderSkeleton(config.renderSkeleton)
-                .codeBlockTheme(config.codeBlockTheme)
+                .codeBlockTheme(config.codeBlockTheme.toCodeBlockTheme())
         }
     }
 }

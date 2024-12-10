@@ -5,7 +5,6 @@
 //  Created by Zabir Raihan on 12/07/2024.
 //
 
-#if os(macOS)
 import SwiftUI
 import SwiftData
 import KeyboardShortcuts
@@ -57,7 +56,6 @@ class QuickPanelWindow: NSPanel {
             toggleVisibility: { [weak self] in self?.toggleVisibility() }
         )
         .ignoresSafeArea()
-        .environment(\.isQuick, true)
         .environment(chatVM)
         .modelContainer(modelContext.container)
         )
@@ -79,7 +77,6 @@ class QuickPanelWindow: NSPanel {
         
         contentView = visualEffectView
         
-        // Set the initial height constraint
         heightConstraint = visualEffectView.heightAnchor.constraint(equalToConstant: contentRect.height)
         heightConstraint?.isActive = true
         self.contentMinSize = NSSize(width: contentRect.width, height: contentRect.height)
@@ -94,7 +91,6 @@ class QuickPanelWindow: NSPanel {
     
     func toggleVisibility() {
         if chatVM.isQuickPanelPresented {
-            chatVM.isQuickPanelPresented = false
             close()
         } else {
             chatVM.isQuickPanelPresented = true
@@ -145,4 +141,3 @@ class QuickPanelWindow: NSPanel {
         self.contentMaxSize.height = height
     }
 }
-#endif
