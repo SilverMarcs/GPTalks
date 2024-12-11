@@ -120,7 +120,7 @@ struct ChatList: View {
                 ForEach(providers) { provider in
                     // menu with chatmodels aray of each provider
                     Menu {
-                        ForEach(provider.chatModels) { model in
+                        ForEach(provider.chatModels.filter { $0.isEnabled }) { model in
                             Button(model.name) {
                                 NewChatTip().invalidate(reason: .actionPerformed)
                                 Task {
