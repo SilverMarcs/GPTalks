@@ -45,5 +45,6 @@ struct NavigationButtons: View {
         }
         .buttonStyle(.plain)
         .labelStyle(.iconOnly)
+        .transaction { $0.animation = nil }
     }
 }

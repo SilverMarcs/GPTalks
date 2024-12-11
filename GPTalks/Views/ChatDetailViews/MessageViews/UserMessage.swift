@@ -59,18 +59,9 @@ struct UserMessage: View {
                 )
             }
             
-//            #if os(macOS)
-//            if isHovering {
-//                HoverableMessageMenu {
-//                    MessageMenu(message: message) {
-//                        showingTextSelection.toggle()
-//                    }
-//                }
-//                .transition(.symbolEffect(.appear))
-//            } else {
-//                Color.clear.frame(height: 25)
-//            }
-//            #endif
+            #if os(macOS)
+            NavigationButtons(message: group)
+            #endif
         }
         .padding(.leading, leadingPadding)
         .frame(maxWidth: .infinity, alignment: .trailing)

@@ -7,9 +7,11 @@
 
 import SwiftUI
 import SwiftMarkdownView
+import MarkdownView
 
 struct MDView: View {
     @Environment(ChatVM.self) private var chatVM
+    @Environment(\.isReplying) private var isReplying
     
     @ObservedObject var config = AppConfig.shared
     var content: String
@@ -22,9 +24,13 @@ struct MDView: View {
                 .textSelection(.enabled)
                 .font(.system(size: config.fontSize))
         case .basic:
-//            .webview where !chatVM.searchText.isEmpty:
-            NativeMarkdownView(text: content, highlightText: chatVM.searchText)
+            MarkdownView(content: content)
+                .searchText(chatVM.searchText)
+                .codeBlockFontSize(config.fontSize - 1)
+                .highlightCode(isReplying ? false : true)
                 .textSelection(.enabled)
+                .font(.system(size: config.fontSize))
+                .lineSpacing(2)
         case .webview:
             SwiftMarkdownView(content, calculatedHeight: calculatedHeight)
                 .markdownBaseURL("GPTalks Web Content")

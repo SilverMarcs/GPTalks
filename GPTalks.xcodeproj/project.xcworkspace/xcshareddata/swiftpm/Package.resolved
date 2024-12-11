@@ -1,5 +1,5 @@
 {
-  "originHash" : "93185ae2df416422866f4bcd675cd406c3c9f562f1ae2d4ac3c27ec13e962287",
+  "originHash" : "ddab9810c9b249c4d5f0b47bf610eb12045e5b57219dde7d48c5bd72f499476b",
   "pins" : [
     {
       "identity" : "googlegenerativeai",
@@ -8,6 +8,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "f17e1750c78e85254ad40d6be1f43aca41adf405"
+      }
+    },
+    {
+      "identity" : "highlightswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/HighlightSwift",
+      "state" : {
+        "branch" : "main",
+        "revision" : "0a67074838759f14279113b53b5415152f6373c7"
       }
     },
     {
@@ -20,12 +29,39 @@
       }
     },
     {
+      "identity" : "markdownview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SilverMarcs/MarkdownView",
+      "state" : {
+        "branch" : "main",
+        "revision" : "1478009238baddcabdd0de1421dd6ae26c6a1204"
+      }
+    },
+    {
       "identity" : "openai",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SilverMarcs/OpenAI",
       "state" : {
         "branch" : "main",
         "revision" : "d83f91da36e87991d4c61463cf721ea56b254ed5"
+      }
+    },
+    {
+      "identity" : "swift-cmark",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-cmark.git",
+      "state" : {
+        "revision" : "3ccff77b2dc5b96b77db3da0d68d28068593fa53",
+        "version" : "0.5.0"
+      }
+    },
+    {
+      "identity" : "swift-markdown",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-markdown",
+      "state" : {
+        "revision" : "8f79cb175981458a0a27e76cb42fee8e17b1a993",
+        "version" : "0.5.0"
       }
     },
     {

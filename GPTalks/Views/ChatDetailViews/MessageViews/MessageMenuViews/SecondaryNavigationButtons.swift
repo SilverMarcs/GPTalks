@@ -34,6 +34,7 @@ struct SecondaryNavigationButtons: View {
         }
         .buttonStyle(.plain)
         .labelStyle(.iconOnly)
+        .transaction { $0.animation = nil }
     }
 }
 
