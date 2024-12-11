@@ -146,7 +146,7 @@
 		08B5D7B82C77A64000D1F100 /* ChatWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B5D7B72C77A64000D1F100 /* ChatWindow.swift */; platformFilters = (macos, ); };
 		08B82C1D2C74EA9400DC0183 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B82C1C2C74EA9400DC0183 /* ImageViewer.swift */; };
 		08B82C1F2C74EAFD00DC0183 /* FileViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B82C1E2C74EAFD00DC0183 /* FileViewer.swift */; };
-		08B8DE132C97F3550041A690 /* MarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE122C97F3550041A690 /* MarkdownView.swift */; };
+		08B8DE132C97F3550041A690 /* MDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE122C97F3550041A690 /* MDView.swift */; };
 		08B8DE1F2C97F3D10041A690 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE1E2C97F3D10041A690 /* AppConfig.swift */; };
 		08B8DE212C97F3E10041A690 /* ChatConfigDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE202C97F3E10041A690 /* ChatConfigDefaults.swift */; };
 		08B8DE232C97F4EA0041A690 /* ToolResponseMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8DE222C97F4EA0041A690 /* ToolResponseMessage.swift */; };
@@ -343,7 +343,7 @@
 		08B5D7B72C77A64000D1F100 /* ChatWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWindow.swift; sourceTree = "<group>"; };
 		08B82C1C2C74EA9400DC0183 /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		08B82C1E2C74EAFD00DC0183 /* FileViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileViewer.swift; sourceTree = "<group>"; };
-		08B8DE122C97F3550041A690 /* MarkdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownView.swift; sourceTree = "<group>"; };
+		08B8DE122C97F3550041A690 /* MDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDView.swift; sourceTree = "<group>"; };
 		08B8DE1E2C97F3D10041A690 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		08B8DE202C97F3E10041A690 /* ChatConfigDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatConfigDefaults.swift; sourceTree = "<group>"; };
 		08B8DE222C97F4EA0041A690 /* ToolResponseMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolResponseMessage.swift; sourceTree = "<group>"; };
@@ -724,7 +724,7 @@
 			isa = PBXGroup;
 			children = (
 				08F02DBF2CFB2F800041F128 /* NativeMarkdownView.swift */,
-				08B8DE122C97F3550041A690 /* MarkdownView.swift */,
+				08B8DE122C97F3550041A690 /* MDView.swift */,
 				08CF5B882C68980B0079D5EE /* HighlightableTextView.swift */,
 			);
 			path = Markdown;
@@ -1000,7 +1000,7 @@
 				089825332CE9ECF000980468 /* PluginsOnboarding.swift in Sources */,
 				082181602C3880F700171BF3 /* RoundedRectangleOverlay.swift in Sources */,
 				08D913EC2CD9CAF7002E4E53 /* AIModel.swift in Sources */,
-				08B8DE132C97F3550041A690 /* MarkdownView.swift in Sources */,
+				08B8DE132C97F3550041A690 /* MDView.swift in Sources */,
 				087F3F922CDDF00C001298B3 /* SettingsVM.swift in Sources */,
 				08AAFB9A2C3D0017002C04E0 /* ListCard.swift in Sources */,
 				08F815382C97F65E00B49355 /* ToolsController.swift in Sources */,
