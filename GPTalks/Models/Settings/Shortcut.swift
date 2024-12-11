@@ -25,6 +25,10 @@ struct Shortcut: Identifiable {
         Shortcut(key: "⌘ + E", action: "Edit Last Prompt"),
         Shortcut(key: "⌘ + K", action: "Rest Context"),
         Shortcut(key: "⌘ + D", action: "Delete Last Prompt/Response"),
+        
+        Shortcut(key: "⌘ Shift + .", action: "Switch to Next Model"),
+        Shortcut(key: "⌘ Shift + ,", action: "Switch to Previous Model"),
+    
     ]
         
     static let appSettingsShortcuts = [

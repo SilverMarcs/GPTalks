@@ -32,8 +32,12 @@ struct ModelSwitchButtons: View {
         }
     }
     
+    private var enabledModels: [ChatModel] {
+        return chat.config.provider.chatModels.filter { $0.isEnabled }
+    }
+    
     private func getCurrentModelIndex() -> Int {
-        return chat.config.provider.chatModels.firstIndex(of: chat.config.model) ?? 0
+        return enabledModels.firstIndex(of: chat.config.model) ?? 0
     }
     
     private func hasPreviousModel() -> Bool {
@@ -41,20 +45,20 @@ struct ModelSwitchButtons: View {
     }
     
     private func hasNextModel() -> Bool {
-        return getCurrentModelIndex() < chat.config.provider.chatModels.count - 1
+        return getCurrentModelIndex() < enabledModels.count - 1
     }
     
     private func switchToPreviousModel() {
         let currentIndex = getCurrentModelIndex()
         if currentIndex > 0 {
-            chat.config.model = chat.config.provider.chatModels[currentIndex - 1]
+            chat.config.model = enabledModels[currentIndex - 1]
         }
     }
     
     private func switchToNextModel() {
         let currentIndex = getCurrentModelIndex()
-        if currentIndex < chat.config.provider.chatModels.count - 1 {
-            chat.config.model = chat.config.provider.chatModels[currentIndex + 1]
+        if currentIndex < enabledModels.count - 1 {
+            chat.config.model = enabledModels[currentIndex + 1]
         }
     }
 }

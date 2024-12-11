@@ -57,7 +57,7 @@ struct ChatContentView: View {
         .searchFocused($isSearchFieldFocused, equals: .searchBox)
         .onSubmit(of: .search) {
             if chatVM.searchTokens.isEmpty {
-                chatVM.searchTokens = [.title]
+                chatVM.searchTokens = [.messages]
             }
             chatVM.searchText = chatVM.localSearchText
         }

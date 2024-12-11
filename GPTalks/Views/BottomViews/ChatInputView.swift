@@ -62,6 +62,9 @@ struct ChatInputView: View {
                     ActionButton(isStop: chat.isReplying) {
                         chat.isReplying ? chat.stopStreaming() : sendInput()
                     }
+                    .if(showExpandButton) {
+                        $0.padding(2)
+                    }
                 }
             }
             .padding(2)
