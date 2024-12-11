@@ -13,13 +13,15 @@ class AIModel: Hashable, Identifiable {
     var id: UUID = UUID()
     var code: String
     var name: String
+    var isEnabled: Bool
     var testResult: Bool?
     var type: ModelType
     
-    init(code: String, name: String, type: ModelType) {
+    init(code: String, name: String, type: ModelType, isEnabled: Bool = true) {
         self.code = code
         self.name = name
         self.type = type
+        self.isEnabled = isEnabled
     }
 }
 

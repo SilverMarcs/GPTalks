@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SwiftMarkdownView
+import MarkdownView
 
 struct GuidesSettings: View {
     @State private var isExpanded = true
@@ -28,10 +28,10 @@ struct GuidesSettings: View {
             ForEach(filteredGuides) { guide in
                 Section {
                     DisclosureGroup {
-                        SwiftMarkdownView(guide.content)
-                            .markdownBaseURL("GPTalks Guide")
-                            .markdownHighlightString(searchText)
-                            .renderSkeleton(false)
+                        MarkdownView(content: guide.content)
+                            .searchText(searchText)
+                            .textSelection(.enabled)
+                            .lineSpacing(2)
                         
                     } label: {
                         HStack {

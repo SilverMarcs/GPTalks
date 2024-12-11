@@ -31,6 +31,7 @@ struct ProviderBackup: Codable {
         var code: String
         var name: String
         var type: ModelType
+        var isEnabled: Bool
     }
 }
 
@@ -80,13 +81,15 @@ extension ProviderBackup.AIModelBackup {
         self.code = model.code
         self.name = model.name
         self.type = model.type
+        self.isEnabled = model.isEnabled
     }
     
     func toAIModel() -> AIModel {
         AIModel(
             code: self.code,
             name: self.name,
-            type: self.type
+            type: self.type,
+            isEnabled: self.isEnabled
         )
     }
 }

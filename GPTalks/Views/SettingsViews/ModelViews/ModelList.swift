@@ -63,6 +63,14 @@ struct ModelList: View {
                 Section {
                     ForEach(provider.models.filter { $0.type == type }, id: \.self) { model in
                         ModelRow(provider: provider, model: model)
+                            .opacity(model.isEnabled ? 1 : 0.5)
+                            .swipeActions(edge: .leading) {
+                                Button {
+                                    model.isEnabled.toggle()
+                                } label: {
+                                    Label(model.isEnabled ? "Disable" : "Enable", systemImage: model.isEnabled ? "eye.slash" : "eye")
+                                }
+                            }
                     }
                     .onDelete { indexSet in
                         // Create an array of the filtered models

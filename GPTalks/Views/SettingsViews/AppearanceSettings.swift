@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-import SwiftMarkdownView
 
 struct AppearanceSettings: View {
     @Environment(\.modelContext) var modelContext
@@ -41,7 +40,7 @@ struct AppearanceSettings: View {
                     }
                 } label: {
                     Text("Markdown Provider")
-                    Text("Native uses less memeory but is less capable")
+                    Text("Native uses less memeory but may be less capable")
                 }
                 #if os(macOS)
                 .pickerStyle(.radioGroup)

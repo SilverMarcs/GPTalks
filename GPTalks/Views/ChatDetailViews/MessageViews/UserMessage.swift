@@ -60,7 +60,7 @@ struct UserMessage: View {
             }
             
             #if os(macOS)
-            NavigationButtons(message: group)
+            NavigationButtons(message: message)
             #endif
         }
         .padding(.leading, leadingPadding)

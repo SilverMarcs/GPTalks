@@ -14,7 +14,7 @@ struct ModelPicker: View {
     
     var body: some View {
         Picker(label, selection: $model) {
-            ForEach(models) { model in
+            ForEach(models.filter({ $0.isEnabled })) { model in
                 Text(model.name)
                     .tag(model)
             }
