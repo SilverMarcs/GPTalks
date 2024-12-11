@@ -27,7 +27,7 @@ struct GenerateImageSettings: View {
         }
         
         Section("Schema") {
-            MarkdownView(content: ChatTool.imageGenerator.jsonSchemaString)
+            MDView(content: ChatTool.imageGenerator.jsonSchemaString)
                 .padding(.bottom, -11)
         }
     }

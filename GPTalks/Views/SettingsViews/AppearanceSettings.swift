@@ -58,7 +58,7 @@ struct AppearanceSettings: View {
                         Text("Change chat selection to take effect")
                     }
                     
-                    MarkdownView(content: String.onlyCodeBlock)
+                    MDView(content: String.onlyCodeBlock)
                         .if(config.markdownProvider == .webview) {
                             $0
                                 .id(config.codeBlockTheme)

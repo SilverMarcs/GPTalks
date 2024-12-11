@@ -1,5 +1,5 @@
 //
-//  MarkdownView.swift
+//  MDView.swift
 //  GPTalks
 //
 //  Created by Zabir Raihan on 8/3/24.
@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftMarkdownView
 
-struct MarkdownView: View {
+struct MDView: View {
     @Environment(ChatVM.self) private var chatVM
     
     @ObservedObject var config = AppConfig.shared
@@ -36,7 +36,7 @@ struct MarkdownView: View {
 }
 
 #Preview {
-    MarkdownView(content: Message.mockAssistantMessage.content)
+    MDView(content: Message.mockAssistantMessage.content)
         .frame(width: 600, height: 500)
         .padding()
 }

@@ -16,7 +16,7 @@ struct URLScrapeSettings: View {
         }
         
         Section("Schema") {
-            MarkdownView(content: ChatTool.urlScrape.jsonSchemaString)
+            MDView(content: ChatTool.urlScrape.jsonSchemaString)
                 .padding(.bottom, -11)
         }
     }

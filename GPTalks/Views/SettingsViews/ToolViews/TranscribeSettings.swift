@@ -27,7 +27,7 @@ struct TranscribeSettings: View {
         }
         
         Section("Schema") {
-            MarkdownView(content: ChatTool.transcribe.jsonSchemaString)
+            MDView(content: ChatTool.transcribe.jsonSchemaString)
                 .padding(.bottom, -11)
         }
     }

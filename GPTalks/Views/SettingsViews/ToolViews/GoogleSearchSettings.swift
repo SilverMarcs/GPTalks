@@ -27,7 +27,7 @@ struct GoogleSearchSettings: View {
         }
         
         Section("Schema") {
-            MarkdownView(content: ChatTool.googleSearch.jsonSchemaString)
+            MDView(content: ChatTool.googleSearch.jsonSchemaString)
                 .padding(.bottom, -11)
         }
     }
