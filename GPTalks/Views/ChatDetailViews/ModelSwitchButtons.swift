@@ -32,7 +32,7 @@ struct ModelSwitchButtons: View {
         }
     }
     
-    private var enabledModels: [ChatModel] {
+    private var enabledModels: [AIModel] {
         return chat.config.provider.chatModels.filter { $0.isEnabled }
     }
     
