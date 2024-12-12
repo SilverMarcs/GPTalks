@@ -70,31 +70,34 @@ struct MessageGroupList: View {
         let limit = 80
         let ellipsis = "..."
         
+        // First, normalize the content by replacing newlines with spaces and removing excess whitespace
+        let normalizedContent = content.replacingOccurrences(of: "\n", with: " ")
+            .components(separatedBy: .whitespaces)
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
+        
         guard !searchText.isEmpty else {
-            let truncated = String(content.prefix(limit)).trimmingCharacters(in: .whitespacesAndNewlines)
-            return content.count > limit ? ellipsis + truncated + ellipsis : truncated
+            let truncated = String(normalizedContent.prefix(limit)).trimmingCharacters(in: .whitespacesAndNewlines)
+            return normalizedContent.count > limit ? ellipsis + truncated + ellipsis : truncated
         }
         
-        if let range = content.range(of: searchText, options: .caseInsensitive) {
+        if let range = normalizedContent.range(of: searchText, options: .caseInsensitive) {
             let matchLength = min(searchText.count, limit)
             let remainingLength = limit - matchLength
             
-            let preMatchStart = content.index(range.lowerBound, offsetBy: -remainingLength/2, limitedBy: content.startIndex) ?? content.startIndex
-            let postMatchEnd = content.index(range.lowerBound, offsetBy: matchLength + remainingLength/2, limitedBy: content.endIndex) ?? content.endIndex
+            let preMatchStart = normalizedContent.index(range.lowerBound, offsetBy: -remainingLength/2, limitedBy: normalizedContent.startIndex) ?? normalizedContent.startIndex
+            let postMatchEnd = normalizedContent.index(range.lowerBound, offsetBy: matchLength + remainingLength/2, limitedBy: normalizedContent.endIndex) ?? normalizedContent.endIndex
             
-            var result = String(content[preMatchStart..<postMatchEnd])
+            var result = String(normalizedContent[preMatchStart..<postMatchEnd])
             
-            // Trim the result to exactly 80 characters if it exceeds
             if result.count > limit {
                 result = String(result.prefix(limit))
             }
             
-            // Remove leading and trailing whitespaces or newlines
             result = result.trimmingCharacters(in: .whitespacesAndNewlines)
             
-            // Add ellipsis if truncation occurred
-            let needsLeadingEllipsis = preMatchStart > content.startIndex
-            let needsTrailingEllipsis = postMatchEnd < content.endIndex
+            let needsLeadingEllipsis = preMatchStart > normalizedContent.startIndex
+            let needsTrailingEllipsis = postMatchEnd < normalizedContent.endIndex
             
             if needsLeadingEllipsis {
                 result = ellipsis + result
@@ -105,8 +108,8 @@ struct MessageGroupList: View {
             
             return result
         } else {
-            let truncated = String(content.prefix(limit)).trimmingCharacters(in: .whitespacesAndNewlines)
-            return content.count > limit ? ellipsis + truncated + ellipsis : truncated
+            let truncated = String(normalizedContent.prefix(limit)).trimmingCharacters(in: .whitespacesAndNewlines)
+            return normalizedContent.count > limit ? ellipsis + truncated + ellipsis : truncated
         }
     }
 }
