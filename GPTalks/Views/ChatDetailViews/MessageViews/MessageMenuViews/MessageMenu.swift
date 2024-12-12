@@ -14,7 +14,7 @@ struct MessageMenu: View {
     var body: some View {
         Section {
             if !message.isSplitView {
-                 RegenButton(regenerate: { Task { await message.chat?.regenerate(message: message) } })
+                 RegenButton(group: message)
             }
             
             if message.role == .user {
