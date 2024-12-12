@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct AssistantMessage: View {
+    @Environment(ChatVM.self) var chatVM
+    
     @ObservedObject var config = AppConfig.shared
     
     var message: Message
@@ -24,6 +26,7 @@ struct AssistantMessage: View {
                 .padding(.leading, labelPadding)
             
             MDView(content: message.content, calculatedHeight: $height)
+                .environment(\.searchText, chatVM.searchText)
                 .environment(\.isReplying, message.isReplying)
                 .transaction { $0.animation = nil }
                 .if(config.markdownProvider == .webview) { view in

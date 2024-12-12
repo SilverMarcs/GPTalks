@@ -206,6 +206,7 @@ extension View {
 // MARK: - Environment Values
 extension EnvironmentValues {
     @Entry var isReplying = false
+    @Entry var searchText = ""
 }
 
 // MARK: - Window Aliases

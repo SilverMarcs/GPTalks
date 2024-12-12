@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import MarkdownView
 
 struct GuidesSettings: View {
     @State private var isExpanded = true
@@ -28,8 +27,8 @@ struct GuidesSettings: View {
             ForEach(filteredGuides) { guide in
                 Section {
                     DisclosureGroup {
-                        MarkdownView(content: guide.content)
-                            .searchText(searchText)
+                        MDView(content: guide.content)
+                            .environment(\.searchText, searchText)
                             .textSelection(.enabled)
                             .lineSpacing(2)
                         

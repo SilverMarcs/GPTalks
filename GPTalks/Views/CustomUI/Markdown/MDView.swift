@@ -10,7 +10,7 @@ import SwiftMarkdownView
 import MarkdownView
 
 struct MDView: View {
-    @Environment(ChatVM.self) private var chatVM
+    @Environment(\.searchText) private var searchText
     @Environment(\.isReplying) private var isReplying
     
     @ObservedObject var config = AppConfig.shared
@@ -25,7 +25,7 @@ struct MDView: View {
                 .font(.system(size: config.fontSize))
         case .basic:
             MarkdownView(content: content)
-                .searchText(chatVM.searchText)
+                .searchText(searchText)
                 .codeBlockFontSize(config.fontSize - 1)
                 .highlightCode(isReplying ? false : true)
                 .textSelection(.enabled)
@@ -34,7 +34,7 @@ struct MDView: View {
         case .webview:
             SwiftMarkdownView(content, calculatedHeight: calculatedHeight)
                 .markdownBaseURL("GPTalks Web Content")
-                .markdownHighlightString(chatVM.searchText)
+                .markdownHighlightString(searchText)
                 .markdownFontSize(CGFloat(config.fontSize))
                 .codeBlockTheme(config.codeBlockTheme.toCodeBlockTheme())
         }
