@@ -1,5 +1,5 @@
 {
-  "originHash" : "d4230fd2077f33ed29726896861dd95010c386d5059118adc7073c7934b5426a",
+  "originHash" : "d8be10188c6f074e2c525add82914f7114f9a88201c690b264e808d87cbc6862",
   "pins" : [
     {
       "identity" : "googlegenerativeai",
@@ -31,10 +31,10 @@
     {
       "identity" : "latexswiftui",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/colinc86/LaTeXSwiftUI",
+      "location" : "https://github.com/SilverMarcs/LaTeXSwiftUI",
       "state" : {
-        "revision" : "766be13e75a901cd0097122be189bac88b5b1963",
-        "version" : "1.3.2"
+        "branch" : "main",
+        "revision" : "766be13e75a901cd0097122be189bac88b5b1963"
       }
     },
     {
@@ -43,7 +43,7 @@
       "location" : "https://github.com/SilverMarcs/MarkdownView",
       "state" : {
         "branch" : "main",
-        "revision" : "d3afd9b38d4dc1aa204638c52f5e4fed868c25c3"
+        "revision" : "a57984e8b2a5fdf756204b4514c9733a2b0420a7"
       }
     },
     {
@@ -115,7 +115,7 @@
       "location" : "https://github.com/SilverMarcs/SwiftMarkdownView",
       "state" : {
         "branch" : "main",
-        "revision" : "b28e39e53fbdd6bccd0e4c8793842b9abf1d8449"
+        "revision" : "2f15915dfbd9d3766d0113a84bae9294581121dc"
       }
     }
   ],
