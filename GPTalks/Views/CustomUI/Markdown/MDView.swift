@@ -36,10 +36,10 @@ struct MDView: View {
 //                .textSelection(.enabled)
 //                .font(.system(size: config.fontSize))
 //                .lineSpacing(2)
-//            NativeMarkdownView(text: content, highlightText: searchText)
-            SimpleMarkdownView(text: content)
+            NativeMarkdownView(text: content, highlightText: searchText)
                 .textSelection(.enabled)
                 .lineSpacing(2)
+                .font(.system(size: config.fontSize))
                 
         case .webview:
             SwiftMarkdownView(content, calculatedHeight: calculatedHeight)

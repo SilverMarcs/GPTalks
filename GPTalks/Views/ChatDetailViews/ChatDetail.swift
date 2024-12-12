@@ -17,7 +17,7 @@ struct ChatDetail: View {
     @Bindable var chat: Chat
     
     @State private var numberOfMessagesToShow = 2
-    @State private var colorViewHeight: CGFloat = 1 // Initial height
+    @State private var colorViewHeight: CGFloat = 0 // Initial height
     
     var body: some View {
         ScrollViewReader { proxy in
@@ -150,7 +150,7 @@ struct ChatDetail: View {
             .onChange(of: config.hasUserScrolled) {
                 if config.hasUserScrolled {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                        colorViewHeight = 1
+                        colorViewHeight = 0
                     }
                 }
             }
