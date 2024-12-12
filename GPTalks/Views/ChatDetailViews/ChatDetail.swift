@@ -39,6 +39,7 @@ struct ChatDetail: View {
                     Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
                 }
             }
+            .toolbarTitleDisplayMode(.inline)
             #if os(macOS)
             .onAppear {
                 if chatVM.searchText.isEmpty {
@@ -49,7 +50,6 @@ struct ChatDetail: View {
             .pasteHandler(chat: chat)
             .navigationSubtitle("\(chat.config.model.name) • \(chat.config.systemPrompt.prefix(70))")
             .onReceive(NotificationCenter.default.publisher(for: NSScrollView.willStartLiveScrollNotification)) { _ in
-                
                 config.hasUserScrolled = true
             }
             #else
@@ -58,7 +58,6 @@ struct ChatDetail: View {
                 onAppearStuff(proxy: proxy)
             }
             .listStyle(.plain)
-            .toolbarTitleDisplayMode(.inline)
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardWillShowNotification)) { _ in
                 scrollToBottom(proxy: proxy, delay: 0.1)
             }
@@ -72,6 +71,7 @@ struct ChatDetail: View {
     func onAppearStuff(proxy: ScrollViewProxy) {
         config.hasUserScrolled = false
         config.proxy = proxy
+        
         if !chatVM.searchText.isEmpty {
             numberOfMessagesToShow = chat.currentThread.count
         }
@@ -83,9 +83,6 @@ struct ChatDetail: View {
                 #else
                 scrollToBottom(proxy: proxy, delay: 0.3)
                 #endif
-//                if config.markdownProvider == .webview {
-//                    scrollToBottom(proxy: proxy, delay: 0.3)
-//                }
             }
         }
     }
@@ -120,7 +117,9 @@ struct ChatDetail: View {
                 
                 ErrorMessageView(message: $chat.errorMessage)
                 
-                resizingColor
+                if chat.status != .quick {
+                    resizingColor
+                }
                 
                 Color.clear
                     .frame(height: 1)

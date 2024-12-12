@@ -42,7 +42,6 @@ struct AssistantMessage: View {
                 }
             
             if !message.dataFiles.isEmpty {
-//                DataFilesView(dataFiles: message.dataFiles, edge: .leading)
                 ForEach(message.dataFiles, id: \.self) { data in
                     ImageViewerData(data: data.data)
                 }
@@ -57,11 +56,14 @@ struct AssistantMessage: View {
             if !message.isReplying {
                 if !showMenu {
                     SecondaryNavigationButtons(group: group)
+                    Spacer()
                 } else {
-                    NavigationButtons(message: group)
+                    if group.secondaryMessages.count > 1 {
+                        NavigationButtons(message: group)
+                        Spacer()
+                    }
                 }
             }
-            Spacer()
             #endif
         }
         .frame(maxWidth: .infinity, alignment: .leading)

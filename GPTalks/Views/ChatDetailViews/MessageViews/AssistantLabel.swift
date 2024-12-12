@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AssistantLabel: View {
+    @Environment(\.colorScheme) var colorScheme
     var message: Message
     
     var body: some View {
@@ -37,6 +38,6 @@ struct AssistantLabel: View {
             .bold()
             .foregroundStyle(.secondary)
             .foregroundStyle(Color(hex: message.provider?.color ?? "#00947A"))
-            .brightness(1.1)
+            .brightness(colorScheme == .dark ? 1.1 : -0.5)
     }
 }

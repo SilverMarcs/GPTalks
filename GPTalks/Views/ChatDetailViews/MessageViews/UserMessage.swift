@@ -60,7 +60,9 @@ struct UserMessage: View {
             }
             
             #if os(macOS)
-            NavigationButtons(message: message)
+            if message.allMessages.count > 1 {
+                NavigationButtons(message: message)
+            }
             #endif
         }
         .padding(.leading, leadingPadding)
