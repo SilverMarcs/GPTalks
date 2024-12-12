@@ -43,9 +43,8 @@ struct BasicInspector: View {
             
             Section("Parameters") {
                 Toggle(isOn: $chat.config.stream) {
-                    Text("Stream (Temporarirly Disabled)")
+                    Text("Stream")
                 }
-                .disabled(true)
                 
                 TemperatureSlider(temperature: $chat.config.temperature, shortLabel: true)
             }

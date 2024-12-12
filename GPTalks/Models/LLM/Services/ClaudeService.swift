@@ -163,16 +163,30 @@ struct ClaudeService: AIService {
         
         let message = try await service.createMessage(parameters)
         // Extract the text content from the message
-        let content = message.content.compactMap { content -> String? in
-            switch content {
-            case .text(let text):
-                return text
-            case .toolUse:
-                return nil // TODO: claude toolCalls
-            }
-        }.joined()
-        
-        return NonStreamResponse(content: content, toolCalls: nil, inputTokens: 0, outputTokens: 0)
+        let (content, toolCalls) = message.content.reduce(("", [ChatToolCall]())) { (result, content) -> (String, [ChatToolCall]) in
+              var (currentContent, currentToolCalls) = result
+              switch content {
+              case .text(let text):
+                  currentContent += text
+              case .toolUse(let toolUse):
+                  // Extract tool name and arguments from toolUse
+                  let toolName = toolUse.name
+                  
+                  // Convert the input dictionary to a string representation of arguments
+                  let argumentsString = convertToString(toolUse.input)
+                  
+                  // Create ChatToolCall
+                  let call = ChatToolCall(
+                      toolCallId: toolUse.id,
+                      tool: ChatTool(rawValue: toolName)!,
+                      arguments: argumentsString
+                  )
+                  currentToolCalls.append(call)
+              }
+              return (currentContent, currentToolCalls)
+          }
+          
+          return NonStreamResponse(content: content, toolCalls: toolCalls.isEmpty ? nil : toolCalls, inputTokens: message.usage.inputTokens ?? 0, outputTokens: message.usage.outputTokens)
     }
     
     static private func createParameters(from conversations: [Message], config: ChatConfig, stream: Bool) -> MessageParameter {
@@ -219,4 +233,18 @@ struct ClaudeService: AIService {
             apiKey: provider.apiKey,
             basePath: provider.scheme.rawValue + "://" + provider.host, betaHeaders: betaHeaders)
     }
+}
+
+func convertToString(_ input: [String: MessageResponse.Content.DynamicContent]) -> String {
+    var result = ""
+    do {
+        let jsonData = try JSONEncoder().encode(input)
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            result = jsonString
+        }
+    } catch {
+        print("Error converting dictionary to JSON string: \(error)")
+    }
+    
+    return result
 }

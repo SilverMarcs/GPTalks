@@ -16,9 +16,7 @@ struct ParameterSettings: View {
             Section("Basic") {
                 Toggle(isOn: $config.stream) {
                     Text("Stream")
-                    Text("This control is temporarily disabled.")
                 }
-                .disabled(true)
                 
                 TemperatureSlider(temperature: $config.temperature)
                 MaxTokensPicker(value: $config.maxTokens)

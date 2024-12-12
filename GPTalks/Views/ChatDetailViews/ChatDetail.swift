@@ -133,7 +133,7 @@ struct ChatDetail: View {
     
     private func loadMoreMessages() {
         let totalMessages = chat.currentThread.count
-        if numberOfMessagesToShow < totalMessages {
+        if numberOfMessagesToShow <= totalMessages {
             numberOfMessagesToShow += 2
         }
     }

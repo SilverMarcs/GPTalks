@@ -114,7 +114,7 @@ struct GoogleService: AIService {
         }
         let totalTokens = response.usageMetadata?.totalTokenCount ?? 0
         
-        return NonStreamResponse(content: response.text, toolCalls: toolCalls, inputTokens: 0, outputTokens: totalTokens)
+        return NonStreamResponse(content: response.text, toolCalls: toolCalls.isEmpty ? nil : toolCalls, inputTokens: 0, outputTokens: totalTokens)
     }
     
     static private func createModelAndMessages(from conversations: [Message], config: ChatConfig) -> (GenerativeModel, [ModelContent]) {
