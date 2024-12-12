@@ -1,5 +1,5 @@
 {
-  "originHash" : "d8be10188c6f074e2c525add82914f7114f9a88201c690b264e808d87cbc6862",
+  "originHash" : "d4230fd2077f33ed29726896861dd95010c386d5059118adc7073c7934b5426a",
   "pins" : [
     {
       "identity" : "googlegenerativeai",
@@ -7,7 +7,7 @@
       "location" : "https://github.com/SilverMarcs/GoogleGenerativeAI",
       "state" : {
         "branch" : "main",
-        "revision" : "f17e1750c78e85254ad40d6be1f43aca41adf405"
+        "revision" : "801313343f8e58b820e6a2e3596267527fe71f87"
       }
     },
     {

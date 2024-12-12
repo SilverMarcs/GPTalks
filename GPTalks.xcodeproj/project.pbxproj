@@ -75,7 +75,6 @@
 		086346AB2CE78078006E5927 /* SwiftMarkdownView in Frameworks */ = {isa = PBXBuildFile; productRef = 086346AA2CE78078006E5927 /* SwiftMarkdownView */; };
 		086346AE2CE7808B006E5927 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 086346AD2CE7808B006E5927 /* OpenAI */; };
 		086346B12CE780B6006E5927 /* SwiftAnthropic in Frameworks */ = {isa = PBXBuildFile; productRef = 086346B02CE780B6006E5927 /* SwiftAnthropic */; };
-		086346B42CE780C6006E5927 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 086346B32CE780C6006E5927 /* GoogleGenerativeAI */; };
 		0865E0962CFC903100C40B83 /* PrimaryBorderedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0865E0952CFC903100C40B83 /* PrimaryBorderedButtonStyle.swift */; };
 		0867741C2CE682C700FF2A3C /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0867741B2CE682C700FF2A3C /* OpenAI */; };
 		0869A3EB2C958A4C009BF9F2 /* ChatConfigTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0869A3EA2C958A4C009BF9F2 /* ChatConfigTools.swift */; };
@@ -124,6 +123,8 @@
 		089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */; platformFilters = (macos, ); };
 		089DB5162CA865F70013E5C3 /* MockedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089DB5152CA865F70013E5C3 /* MockedData.swift */; };
 		089DB5182CA8EC140013E5C3 /* ImageViewerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089DB5172CA8EC140013E5C3 /* ImageViewerData.swift */; };
+		089FDB642D0A9FB50005CD26 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 089FDB632D0A9FB50005CD26 /* GoogleGenerativeAI */; };
+		089FDB672D0AA0010005CD26 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 089FDB662D0AA0010005CD26 /* GoogleGenerativeAI */; };
 		08A1DDBB2CE0024A00DAF6F9 /* Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1DDBA2CE0024A00DAF6F9 /* Source.swift */; };
 		08A222832C2AB4FD00D76C8B /* GPTalksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222822C2AB4FD00D76C8B /* GPTalksApp.swift */; };
 		08A222852C2AB4FD00D76C8B /* ChatContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A222842C2AB4FD00D76C8B /* ChatContentView.swift */; platformFilters = (macos, ); };
@@ -414,8 +415,9 @@
 				082AA6F62CE683C40088A8B2 /* OpenAI in Frameworks */,
 				0823550D2CDBB74900388273 /* GoogleGenerativeAI in Frameworks */,
 				08F345862D0A15B600F9A65C /* MarkdownView in Frameworks */,
-				086346B42CE780C6006E5927 /* GoogleGenerativeAI in Frameworks */,
+				089FDB642D0A9FB50005CD26 /* GoogleGenerativeAI in Frameworks */,
 				082355152CDBBB2B00388273 /* SwiftMarkdownView in Frameworks */,
+				089FDB672D0AA0010005CD26 /* GoogleGenerativeAI in Frameworks */,
 				086346B12CE780B6006E5927 /* SwiftAnthropic in Frameworks */,
 				08DB150B2CDC5B2200DC5B90 /* OpenAI in Frameworks */,
 				086346AB2CE78078006E5927 /* SwiftMarkdownView in Frameworks */,
@@ -934,8 +936,9 @@
 				086346AA2CE78078006E5927 /* SwiftMarkdownView */,
 				086346AD2CE7808B006E5927 /* OpenAI */,
 				086346B02CE780B6006E5927 /* SwiftAnthropic */,
-				086346B32CE780C6006E5927 /* GoogleGenerativeAI */,
 				08F345852D0A15B600F9A65C /* MarkdownView */,
+				089FDB632D0A9FB50005CD26 /* GoogleGenerativeAI */,
+				089FDB662D0AA0010005CD26 /* GoogleGenerativeAI */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -970,8 +973,8 @@
 				086346A92CE78078006E5927 /* XCRemoteSwiftPackageReference "SwiftMarkdownView" */,
 				086346AC2CE7808B006E5927 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				086346AF2CE780B6006E5927 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
-				086346B22CE780C6006E5927 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */,
 				08F345842D0A15B600F9A65C /* XCRemoteSwiftPackageReference "MarkdownView" */,
+				089FDB652D0AA0010005CD26 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1451,7 +1454,7 @@
 				kind = branch;
 			};
 		};
-		086346B22CE780C6006E5927 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */ = {
+		089FDB652D0AA0010005CD26 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/GoogleGenerativeAI";
 			requirement = {
@@ -1509,14 +1512,18 @@
 			package = 086346AF2CE780B6006E5927 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */;
 			productName = SwiftAnthropic;
 		};
-		086346B32CE780C6006E5927 /* GoogleGenerativeAI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 086346B22CE780C6006E5927 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */;
-			productName = GoogleGenerativeAI;
-		};
 		0867741B2CE682C700FF2A3C /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenAI;
+		};
+		089FDB632D0A9FB50005CD26 /* GoogleGenerativeAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GoogleGenerativeAI;
+		};
+		089FDB662D0AA0010005CD26 /* GoogleGenerativeAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 089FDB652D0AA0010005CD26 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */;
+			productName = GoogleGenerativeAI;
 		};
 		08AAFB952C3CF0DD002C04E0 /* KeyboardShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;

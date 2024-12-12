@@ -25,7 +25,11 @@ struct GoogleService: AIService {
     }
     
     static func convert(conversation: Message) -> GoogleGenerativeAI.ModelContent {
-        var parts: [ModelContent.Part] = [.text(conversation.content)]
+        var parts: [ModelContent.Part] = []
+        
+        if !conversation.content.isEmpty {
+            parts.append(.text(conversation.content))
+        }
         
         for dataFile in conversation.dataFiles {
             if dataFile.fileType.conforms(to: .text) {
@@ -35,6 +39,10 @@ struct GoogleService: AIService {
             } else if conversation.role == .user {
                 parts.insert(.data(mimetype: dataFile.mimeType, dataFile.data), at: 0)
             }
+        }
+        
+        for call in conversation.toolCalls {
+            parts.append(.functionCall(FunctionCall(name: call.tool.rawValue, args:  ["json_string": JSONValue.string(call.arguments)])))
         }
         
         if let response = conversation.toolResponse {
