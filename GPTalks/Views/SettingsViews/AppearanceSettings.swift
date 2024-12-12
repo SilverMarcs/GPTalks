@@ -40,7 +40,7 @@ struct AppearanceSettings: View {
                     }
                 } label: {
                     Text("Markdown Provider")
-                    Text("Native uses less memeory but may be less capable")
+                    Text("Native uses less memeory but is far less capable")
                 }
                 #if os(macOS)
                 .pickerStyle(.radioGroup)

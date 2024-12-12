@@ -7,7 +7,7 @@
 
 import SwiftUI
 import SwiftMarkdownView
-import MarkdownView
+//import MarkdownView
 
 struct MDView: View {
     @Environment(\.searchText) private var searchText
@@ -23,14 +23,24 @@ struct MDView: View {
             Text(content)
                 .textSelection(.enabled)
                 .font(.system(size: config.fontSize))
-        case .basic:
-            MarkdownView(content: content)
-                .searchText(searchText)
-                .codeBlockFontSize(config.fontSize - 1)
-                .highlightCode(isReplying ? false : true)
-                .textSelection(.enabled)
-                .font(.system(size: config.fontSize))
                 .lineSpacing(2)
+        case .basic:
+//            MarkdownView(content: content)
+//                .searchText(searchText)
+//                .codeBlockFontSize(config.fontSize - 1)
+//                .highlightCode(isReplying ? false : true)
+//                .textSelection(.enabled)
+//                .font(.system(size: config.fontSize))
+//                .lineSpacing(2)
+//            Text(LocalizedStringKey(content))
+//                .textSelection(.enabled)
+//                .font(.system(size: config.fontSize))
+//                .lineSpacing(2)
+//            NativeMarkdownView(text: content, highlightText: searchText)
+            SimpleMarkdownView(text: content)
+                .textSelection(.enabled)
+                .lineSpacing(2)
+                
         case .webview:
             SwiftMarkdownView(content, calculatedHeight: calculatedHeight)
                 .markdownBaseURL("GPTalks Web Content")
