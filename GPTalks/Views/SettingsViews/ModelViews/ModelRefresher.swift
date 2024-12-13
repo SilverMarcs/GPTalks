@@ -26,6 +26,12 @@ struct ModelRefresher: View {
                             await loadModels()
                         }
                 } else {
+                    #if os(macOS)
+                    Section {
+                        TextField("Search models", text: $searchText)
+                    }
+                    #endif
+                    
                     if filteredModels.isEmpty && !searchText.isEmpty {
                         ContentUnavailableView.search
                     } else {
@@ -77,7 +83,6 @@ struct ModelRefresher: View {
                 }
             }
             .formStyle(.grouped)
-            .searchable(text: $searchText, prompt: "Search models")
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -97,6 +102,8 @@ struct ModelRefresher: View {
             .padding(.top)
             .frame(width: 400, height: 450)
             #else
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search models")
+            .searchPresentationToolbarBehavior(.avoidHidingContent)
             .navigationTitle("Add Models")
             #endif
         }
@@ -113,32 +120,31 @@ struct ModelRefresher: View {
         }
     }
 
-private func loadModels() async {
-    let newModels = await provider.refreshModels()
-    
-    refreshedModels = newModels.map { model in
-        var genericModel = GenericModel(code: model.code, name: model.name)
-        if let existingModel = provider.models.first(where: { $0.code == model.code }) {
-            genericModel.isExisting = true
-            genericModel.selectedModelType = existingModel.type
+    private func loadModels() async {
+        let newModels = await provider.refreshModels()
+        
+        refreshedModels = newModels.map { model in
+            var genericModel = GenericModel(code: model.code, name: model.name)
+            if let existingModel = provider.models.first(where: { $0.code == model.code }) {
+                genericModel.isExisting = true
+                genericModel.selectedModelType = existingModel.type
+            }
+            return genericModel
         }
-        return genericModel
-    }
-    
-    // Sort to put existing models on top
-    refreshedModels.sort { $0.isExisting && !$1.isExisting }
-    
-    isLoading = false
-}
-
-private func addSelectedModels() {
-    let selectedModels = refreshedModels.filter { $0.isSelected && !$0.isExisting }
-
-    for model in selectedModels {
-        provider.models.append(.init(code: model.code, name: model.name, type: model.selectedModelType))
+        
+        // Sort to put existing models on top
+        refreshedModels.sort { $0.isExisting && !$1.isExisting }
+        
+        isLoading = false
     }
 
-    dismiss()
-}
-                            
+    private func addSelectedModels() {
+        let selectedModels = refreshedModels.filter { $0.isSelected && !$0.isExisting }
+
+        for model in selectedModels {
+            provider.models.append(.init(code: model.code, name: model.name, type: model.selectedModelType))
+        }
+
+        dismiss()
+    }
 }
