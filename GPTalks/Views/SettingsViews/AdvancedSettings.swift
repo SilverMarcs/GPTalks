@@ -102,6 +102,29 @@ struct AdvancedSettings: View {
                         if let existingProvider = providers.first(where: { $0.name.lowercased() == restoredProvider.name.lowercased() }) {
                             existingProvider.apiKey = restoredProvider.apiKey
                             existingProvider.isEnabled = restoredProvider.isEnabled
+                            
+                            // Add any missing models from restoredProvider to existingProvider
+                            for restoredModel in restoredProvider.models {
+                                if !existingProvider.models.contains(where: { $0.code == restoredModel.code }) {
+                                    let newModel = restoredModel.toAIModel()
+                                    existingProvider.models.append(newModel)
+                                }
+                            }
+
+                            // Set the existing provider's models to match the restored provider's models
+                            if let chatModel = existingProvider.models.first(where: { $0.code == restoredProvider.chatModelCode }) {
+                                existingProvider.chatModel = chatModel
+                            }
+                            if let liteModel = existingProvider.models.first(where: { $0.code == restoredProvider.liteModelCode }) {
+                                existingProvider.liteModel = liteModel
+                            }
+                            if let imageModel = existingProvider.models.first(where: { $0.code == restoredProvider.imageModelCode }) {
+                                existingProvider.imageModel = imageModel
+                            }
+                            if let sttModel = existingProvider.models.first(where: { $0.code == restoredProvider.sttModelCode }) {
+                                existingProvider.sttModel = sttModel
+                            }
+                            
                         } else {
                             modelContext.insert(restoredProvider.toProvider())
                             restoredCount += 1

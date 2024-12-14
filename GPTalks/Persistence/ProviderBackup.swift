@@ -26,7 +26,7 @@ struct ProviderBackup: Codable {
     var imageModelCode: String
     var sttModelCode: String
     
-    struct AIModelBackup: Codable {
+    struct AIModelBackup: Codable, Hashable, Equatable {
         var id: UUID
         var code: String
         var name: String

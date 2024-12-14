@@ -1,5 +1,5 @@
 {
-  "originHash" : "93185ae2df416422866f4bcd675cd406c3c9f562f1ae2d4ac3c27ec13e962287",
+  "originHash" : "bfeffb7bce4d8d444d4d9eab765afdf39472ef5901c8fc0bc5f798c02c3eb108",
   "pins" : [
     {
       "identity" : "googlegenerativeai",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
       "state" : {
-        "revision" : "e6b60117ec266e1e5d059f7f34815144f9762b36",
-        "version" : "2.0.2"
+        "revision" : "7ecc38bb6edf7d087d30e737057b8d8a9b7f51eb",
+        "version" : "2.2.4"
       }
     },
     {

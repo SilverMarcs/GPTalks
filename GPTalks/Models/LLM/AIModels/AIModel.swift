@@ -51,6 +51,7 @@ extension AIModel {
             .init(code: "gemini-1.5-flash-latest", name: "Gemini-1.5F", type: .chat),
             .init(code: "gemini-1.5-flash-8b-latest", name: "Gemini-1.5F-8B", type: .chat),
             .init(code: "gemini-1.5-pro-latest", name: "Gemini-1.5P", type: .chat),
+            .init(code: "gemini-2.0-flash-latest", name: "Gemini-2F", type: .chat),
         ]
     }
     
