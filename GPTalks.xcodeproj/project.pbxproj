@@ -124,7 +124,7 @@
 		089C7E142C405B01005E3BE9 /* QuickPanelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C7E132C405B01005E3BE9 /* QuickPanelSettings.swift */; platformFilters = (macos, ); };
 		089DB5162CA865F70013E5C3 /* MockedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089DB5152CA865F70013E5C3 /* MockedData.swift */; };
 		089DB5182CA8EC140013E5C3 /* ImageViewerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089DB5172CA8EC140013E5C3 /* ImageViewerData.swift */; };
-		089EFA3B2D0D08C000FF032C /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 089EFA3A2D0D08C000FF032C /* KeyboardShortcuts */; };
+		089EFA3B2D0D08C000FF032C /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = 089EFA3A2D0D08C000FF032C /* KeyboardShortcuts */; };
 		089FDB642D0A9FB50005CD26 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 089FDB632D0A9FB50005CD26 /* GoogleGenerativeAI */; };
 		089FDB672D0AA0010005CD26 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 089FDB662D0AA0010005CD26 /* GoogleGenerativeAI */; };
 		08A1DDBB2CE0024A00DAF6F9 /* Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1DDBA2CE0024A00DAF6F9 /* Source.swift */; };
@@ -1455,7 +1455,7 @@
 			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.2.4;
+				minimumVersion = 2.0.2;
 			};
 		};
 		089FDB652D0AA0010005CD26 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */ = {

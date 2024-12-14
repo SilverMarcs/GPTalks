@@ -31,9 +31,11 @@ struct MessageMenu: View {
         }
 
         Section {
+            #if !os(macOS)
             if let toggleTextSelection = toggleTextSelection {
                 SelectTextButton(toggleTextSelection: toggleTextSelection)
             }
+            #endif
             
             ForkButton(copyChat: { await message.chat?.copy(from: message.activeMessage, purpose: .chat) })
         }

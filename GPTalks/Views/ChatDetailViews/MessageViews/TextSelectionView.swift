@@ -5,8 +5,7 @@
 //  Created by Zabir Raihan on 14/01/2024.
 //
 
-import SwiftUI
-import SwiftMarkdownView
+import SwiftU
 
 struct TextSelectionView: View {
     @Environment(\.dismiss) var dismiss
@@ -16,21 +15,37 @@ struct TextSelectionView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                SwiftMarkdownView(content)
-                    .markdownBaseURL("GPTalks Web Content")
-                    .codeBlockTheme(config.codeBlockTheme.toCodeBlockTheme())
-            }
-            .safeAreaPadding(.horizontal)
-            .navigationTitle("Select Text")
-            .toolbarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Done") {
-                        dismiss()
+            SelectableTextView(text: content)
+                .navigationTitle("Select Text")
+                .toolbarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Done") {
+                            dismiss()
+                        }
                     }
                 }
-            }
         }
+    }
+}
+
+struct SelectableTextView: UIViewRepresentable {
+    let text: String
+    
+    func makeUIView(context: Context) -> UITextView {
+        let textView = UITextView()
+        textView.font = .systemFont(ofSize: UIFont.systemFontSize + 2)
+        textView.backgroundColor = .clear
+        textView.isEditable = false
+        textView.isSelectable = true
+        textView.isScrollEnabled = true
+        textView.textContainer.lineFragmentPadding = 0
+        textView.textContainerInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        return textView
+    }
+    
+    func updateUIView(_ uiView: UITextView, context: Context) {
+        uiView.text = text
+        uiView.sizeToFit()
     }
 }

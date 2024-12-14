@@ -32,12 +32,14 @@ struct ChatToolbar: ToolbarContent {
             }
         }
         
-        #if os(macOS)
-        ToolbarItem(placement: .primaryAction) {
-            Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
-                .allowsHitTesting(false)
+        if horizontalSizeClass == .regular {
+            ToolbarItem(placement: .primaryAction) {
+                Button("Tokens: \(String(format: "%.2fK", Double(chat.totalTokens) / 1000.0))") { }
+                    .allowsHitTesting(false)
+            }
         }
         
+        #if os(macOS)
         if chat.status == .temporary {
             ToolbarItem(placement: .primaryAction) {
                 Button {

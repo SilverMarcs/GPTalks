@@ -64,6 +64,7 @@ struct InputEditor: View {
         }
         #else
         TextField(placeHolder, text: $chat.inputManager.prompt, axis: .vertical)
+            .padding(.leading, 6)
             .focused($isFocused, equals: .textEditor)
             .lineLimit(10, reservesSpace: false)
             .onSubmit {
