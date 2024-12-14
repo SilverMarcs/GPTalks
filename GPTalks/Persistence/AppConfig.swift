@@ -22,7 +22,7 @@ class AppConfig: ObservableObject {
     #if os(macOS)
     @AppStorage("fontSize") var fontSize: Double = 13
     #else
-    @AppStorage("fontSize") var fontSize: Double = 18
+    @AppStorage("fontSize") var fontSize: Double = 17
     #endif
     
     // General
@@ -42,7 +42,7 @@ class AppConfig: ObservableObject {
         #if os(macOS)
         fontSize = 13
         #else
-        fontSize = 18
+        fontSize = 17
         #endif
     }
 }

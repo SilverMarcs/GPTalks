@@ -70,8 +70,13 @@ struct StreamHandler {
             assistant.content = streamText
             assistant.isReplying = false
 //            scrollDown()
-            AppConfig.shared.hasUserScrolled = false
             try? assistant.modelContext?.save()
+            #warning("This is very bad and should be rethinked")
+            #if os(macOS)
+            AppConfig.shared.hasUserScrolled = false
+            #else
+            AppConfig.shared.hasUserScrolled = true
+            #endif
         }
     }
 

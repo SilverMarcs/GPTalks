@@ -101,6 +101,7 @@ struct ChatList: View {
     var toolbar: some ToolbarContent {
         ToolbarItem { Spacer() }
         
+        #if os(macOS)
         ToolbarItem(placement: .keyboard) {
             Button(action: { chatVM.goToPreviousChat(chats: chats) }) {
                 Image(systemName: "chevron.left")
@@ -114,6 +115,7 @@ struct ChatList: View {
             }
             .keyboardShortcut("]", modifiers: [.command, .shift])
         }
+        #endif
         
         ToolbarItem {
             Menu {

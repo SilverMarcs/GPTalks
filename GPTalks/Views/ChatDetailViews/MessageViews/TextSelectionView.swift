@@ -5,7 +5,7 @@
 //  Created by Zabir Raihan on 14/01/2024.
 //
 
-import SwiftU
+import SwiftUI
 
 struct TextSelectionView: View {
     @Environment(\.dismiss) var dismiss
