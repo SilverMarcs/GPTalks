@@ -15,7 +15,13 @@ struct TextSelectionView: View {
 
     var body: some View {
         NavigationStack {
-            SelectableTextView(text: content)
+            Group {
+                #if !os(macOS)
+                SelectableTextView(text: content)
+                #else
+                Text(content)
+                #endif
+            }
                 .navigationTitle("Select Text")
                 .toolbarTitleDisplayMode(.inline)
                 .toolbar {
@@ -29,6 +35,7 @@ struct TextSelectionView: View {
     }
 }
 
+#if !os(macOS)
 struct SelectableTextView: UIViewRepresentable {
     let text: String
     
@@ -49,3 +56,4 @@ struct SelectableTextView: UIViewRepresentable {
         uiView.sizeToFit()
     }
 }
+#endif
