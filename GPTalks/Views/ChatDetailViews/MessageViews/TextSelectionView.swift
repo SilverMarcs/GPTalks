@@ -47,6 +47,7 @@ struct SelectableTextView: UIViewRepresentable {
         textView.isSelectable = true
         textView.isScrollEnabled = true
         textView.textContainer.lineFragmentPadding = 0
+        // TODO: contentInsetAdjustmentBehavior
         textView.textContainerInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         return textView
     }

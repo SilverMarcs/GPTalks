@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-final class MessageGroup: Hashable, Identifiable {
+final class MessageGroup: Hashable, Identifiable, Equatable {
     var id: UUID = UUID()
     var date: Date = Date()
     

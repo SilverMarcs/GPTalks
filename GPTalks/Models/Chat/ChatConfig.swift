@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class ChatConfig {
+final class ChatConfig: Equatable, Identifiable, Hashable {
     var temperature: Double? = ChatConfigDefaults.shared.temperature
     var frequencyPenalty: Double? = ChatConfigDefaults.shared.frequencyPenalty
     var presencePenalty: Double? = ChatConfigDefaults.shared.presencePenalty

@@ -136,6 +136,8 @@ struct GoogleService: AIService {
             tools.append(Tool(googleSearchRetrieval: .init()))
         }
         
+        print("tools", tools)
+        
         let model = GenerativeModel(
             name: config.model.code,
             apiKey: config.provider.apiKey,

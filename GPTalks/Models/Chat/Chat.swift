@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-final class Chat {
+final class Chat: Equatable, Identifiable, Hashable {
     var id: UUID = UUID()
     var date: Date = Date()
     var title: String = "New Chat Session"

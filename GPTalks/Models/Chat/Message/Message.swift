@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class Message {
+final class Message: Equatable, Identifiable, Hashable {
     var id: UUID = UUID()
     var date: Date = Date()
     
