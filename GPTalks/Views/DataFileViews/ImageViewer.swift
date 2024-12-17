@@ -17,11 +17,13 @@ struct ImageViewer: View {
             Image(platformImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 100, height: 48)
-                .clipShape(RoundedRectangle(cornerRadius: 5))
+//                .frame(width: 125, height: 48)
+                .frame(width: 125, height: 47)
+                .roundedRectangleOverlay(radius: 7)
+                .clipShape(RoundedRectangle(cornerRadius: 7))
         } else {
             Text("Image Unable to Load")
-                .frame(width: 100, height: 48)
+                .frame(width: 125, height: 47)
         }
     }
 }

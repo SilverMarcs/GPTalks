@@ -37,9 +37,9 @@ struct NativeMarkdownView: View {
                 
                 if var codeContent = scanner.scanUpToString("```") {
                     if scanner.scanString("```") != nil {
-                        if codeContent.last == "\n" {
-                            codeContent.removeLast()
-                        }
+//                        if codeContent.last == "\n" {
+//                            codeContent.removeLast()
+//                        }
                         var codeAttribute = AttributedString(codeContent)
                         codeAttribute.font = .monospacedSystemFont(ofSize: baseSize - 1, weight: .regular)
                         attributed.append(codeAttribute)

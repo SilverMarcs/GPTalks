@@ -30,7 +30,10 @@ struct FileViewer: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+                
+                Spacer()
             }
+            .frame(width: 135, height: 37)
         }
         .groupBoxStyle(PlatformGroupBoxStyle())
     }

@@ -17,15 +17,19 @@ struct DataFilesView: View {
     @State private var selectedFileURL: URL?
     
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack {
-                ForEach(dataFiles) { dataFile in
-                    fileItemView(for: dataFile)
+        VStack {  // Keep the ScrollView but make it vertical
+            Grid(horizontalSpacing: 8, verticalSpacing: 8) {
+                ForEach(Array(stride(from: 0, to: dataFiles.count, by: 3)), id: \.self) { index in
+                    GridRow {
+                        // Create a row with up to 3 items
+                        ForEach(0..<min(3, dataFiles.count - index), id: \.self) { offset in
+                            fileItemView(for: dataFiles[index + offset])
+                        }
+                    }
                 }
             }
             .quickLookPreview($selectedFileURL)
         }
-        .defaultScrollAnchor(edge)
     }
     
     @ViewBuilder
@@ -43,7 +47,9 @@ struct DataFilesView: View {
                         .contentShape(.rect)
                         #endif
                 }
-                .buttonStyle(HoverScaleButtonStyle())
+                .padding(2)
+                .buttonStyle(.plain)
+                .labelStyle(.iconOnly)
                 .shadow(radius: 5)
             }
         }

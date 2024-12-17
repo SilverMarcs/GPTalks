@@ -126,6 +126,7 @@ final class Chat: Equatable, Identifiable, Hashable {
     @MainActor
     func sendInput() async {
         guard !inputManager.prompt.isEmpty else { return }
+        inputManager.prompt = inputManager.prompt.trimmingCharacters(in: .whitespacesAndNewlines)
         errorMessage = ""
         resetScroll()
         
