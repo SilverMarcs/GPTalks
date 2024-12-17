@@ -136,13 +136,13 @@ struct GoogleService: AIService {
             tools.append(Tool(googleSearchRetrieval: .init()))
         }
         
-        print("tools", tools)
         
         let model = GenerativeModel(
             name: config.model.code,
             apiKey: config.provider.apiKey,
             generationConfig: genConfig,
             tools: tools.isEmpty ? nil : tools,
+//            toolConfig: .init(functionCallingConfig: .init()),
             systemInstruction: systemPrompt)
         
         let messages = conversations.map { convert(conversation: $0) }
