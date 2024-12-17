@@ -10,7 +10,7 @@ import Foundation
 enum OnboardingPage: Int, CaseIterable {
     case welcome
     case apiKey
-//    case plugins
+    case plugins
     #if os(macOS)
     case quickPanel
     #else

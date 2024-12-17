@@ -53,8 +53,8 @@ struct OnboardingView: View {
                 WelcomeOnboarding()
             case .apiKey:
                 APIKeyOnboarding(providerDefault: providerDefaults.first!)
-//            case .plugins:
-//                PluginsOnboarding()
+            case .plugins:
+                PluginsOnboarding()
             #if os(macOS)
             case .quickPanel:
                 QuickPanelOnboarding(provider: providerDefaults.first!.quickProvider)
