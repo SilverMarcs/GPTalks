@@ -115,12 +115,28 @@ struct ChatList: View {
             }
             .keyboardShortcut("]", modifiers: [.command, .shift])
         }
+
+        ToolbarItem(placement: .keyboard) {
+            Button(action: {
+                // Get the indices of the selected chats
+                let indices = chatVM.selections.compactMap { chat in
+                    chats.firstIndex(of: chat)
+                }
+                // Create an IndexSet from the indices
+                let indexSet = IndexSet(indices)
+                // Perform the delete operation
+                deleteItems(offsets: indexSet)
+            }) {
+                Image(systemName: "trash")
+            }
+            .keyboardShortcut(.delete, modifiers: [.command])
+            .disabled(chatVM.selections.count <= 1)
+        }
         #endif
         
         ToolbarItem {
             Menu {
                 ForEach(providers) { provider in
-                    // menu with chatmodels aray of each provider
                     Menu {
                         ForEach(provider.chatModels.filter { $0.isEnabled }) { model in
                             Button(model.name) {
