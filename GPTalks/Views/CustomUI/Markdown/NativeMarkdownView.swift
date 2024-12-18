@@ -35,7 +35,7 @@ struct NativeMarkdownView: View {
                 let _ = scanner.scanUpToCharacters(from: .newlines) ?? ""
                 let _ = scanner.scanCharacters(from: .newlines)
                 
-                if var codeContent = scanner.scanUpToString("```") {
+                if let codeContent = scanner.scanUpToString("```") {
                     if scanner.scanString("```") != nil {
 //                        if codeContent.last == "\n" {
 //                            codeContent.removeLast()

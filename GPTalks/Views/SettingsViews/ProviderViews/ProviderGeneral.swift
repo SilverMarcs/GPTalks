@@ -24,24 +24,11 @@ struct ProviderGeneral: View {
             }
             
             Section {
-                HStack {
-                    TextField("Host URL", text: $provider.host)
-                    
-                    Button {
-                        showPopover.toggle()
-                    } label: {
-                        Image(systemName: "info.circle")
-                            .foregroundStyle(.secondary)
-                    }
-                    .buttonStyle(.plain)
-                    .popover(isPresented: $showPopover) {
-                        Text("Omit https:// and /v1/ from the URL.\nCorrect input example: api.openai.com")
-                            .padding()
-                            .presentationCompactAdaptation(.popover)
-                    }
+                if provider.type == .bedrock {
+                    BedrockProviderHost(provider: provider)
+                } else {
+                    RegularProviderHost(provider: provider)
                 }
-                
-                SecretInputView(label: provider.type == .github ? "Personal Access Token" : "API Key", secret: $provider.apiKey)
             } header: {
                 Text("Host Settings")
             } footer: {

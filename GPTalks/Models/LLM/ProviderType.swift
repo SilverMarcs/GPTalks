@@ -20,6 +20,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
     case github
     case anthropic
     case google
+    case bedrock
     case ollama
     case lmstudio
     case custom
@@ -37,6 +38,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .openai: "OpenAI"
         case .openrouter: "OpenRouter"
+        case .bedrock: "Bedrock"
         case .groq: "Groq"
         case .xai: "xAI"
         case .mistral: "MistralAI"
@@ -56,7 +58,8 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "openai.SFSymbol"
         case .anthropic: "anthropic.SFSymbol"
         case .google: "google.SFSymbol"
-//        case .vertex: "storm.SFSymbol"
+        case .bedrock: "storm.SFSymbol"
+//        case .bedrock: "bedrock.SFSymbol"
         case .openrouter: "openrouter.SFSymbol"
         case .mistral: "mistral.SFSymbol"
         case .perplexity: "perplexity.SFSymbol"
@@ -75,6 +78,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "#00947A"
         case .anthropic: "#E6784B"
         case .google: "#E64335"
+        case .bedrock: "#EA5B0C"
         case .openrouter: "#7a8799"
         case .mistral: "#EB5A29"
         case .perplexity: "#2F7999"
@@ -92,6 +96,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "api.openai.com"
         case .anthropic: "api.anthropic.com"
         case .google: "generativelanguage.googleapis.com"
+        case .bedrock: "api.bedrock.com"
         case .ollama: "localhost:11434"
         case .github: "models.inference.ai.azure.com"
         case .perplexity: "api.perplexity.ai"
@@ -119,6 +124,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: AIModel.getOpenaiModels()
         case .anthropic: AIModel.getAnthropicModels()
         case .google: AIModel.getGoogleModels()
+        case .bedrock: AIModel.getOpenaiModels() // TODO: change
         case .xai: AIModel.getXaiModels()
         case .openrouter: AIModel.getOpenrouterModels()
         case .github: AIModel.getOpenaiModels()
@@ -138,6 +144,8 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
             ClaudeService.self
         case .google:
             GoogleService.self
+        case .bedrock:
+            BedrockService.self
         default:
             OpenAIService.self
         }
@@ -148,6 +156,7 @@ enum ProviderType: String, Codable, CaseIterable, Identifiable {
         case .openai: "Get OpenAI API key [here](https://platform.openai.com/settings/organization/api-keys)"
         case .anthropic: "Get Anthropic API key [here](https://console.anthropic.com/settings/keys)"
         case .google: "Get Google API key [here](https://aistudio.google.com/app/apikey)"
+        case .bedrock: "Check out Bedrock instructions in Guide Settings"
         case .ollama: "Download and setup Ollama from [here](https://ollama.com/download/mac)"
         case .lmstudio: "Download and setup LMStudio from [here](https://lmstudio.ai/download)"
         case .xai: "Get xAI API key [here](https://console.x.ai) and click on key icon"

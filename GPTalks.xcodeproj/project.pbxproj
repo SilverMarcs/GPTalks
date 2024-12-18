@@ -11,6 +11,11 @@
 		0805DEEF2C58CB1400A8354A /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEEE2C58CB1400A8354A /* OpenAIService.swift */; };
 		0805DEF12C58CB2A00A8354A /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEF02C58CB2A00A8354A /* ClaudeService.swift */; };
 		0805DEF32C58CB3D00A8354A /* GoogleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0805DEF22C58CB3D00A8354A /* GoogleService.swift */; };
+		080A186D2D11FE580081C6B1 /* BedrockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080A186C2D11FE580081C6B1 /* BedrockService.swift */; };
+		080A18702D12036F0081C6B1 /* AWSBedrock in Frameworks */ = {isa = PBXBuildFile; productRef = 080A186F2D12036F0081C6B1 /* AWSBedrock */; };
+		080A18722D12036F0081C6B1 /* AWSBedrockRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 080A18712D12036F0081C6B1 /* AWSBedrockRuntime */; };
+		080A18792D12241C0081C6B1 /* RegularProviderHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080A18782D12241C0081C6B1 /* RegularProviderHost.swift */; };
+		080A187B2D1224300081C6B1 /* BedrockProviderHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080A187A2D1224300081C6B1 /* BedrockProviderHost.swift */; };
 		080E70E82CDF1BC100A949C9 /* Tips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70E72CDF1BC100A949C9 /* Tips.swift */; };
 		080E70EC2CDF380500A949C9 /* InspectorTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70EB2CDF380500A949C9 /* InspectorTab.swift */; };
 		080E70EE2CDF498F00A949C9 /* ChatStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E70ED2CDF498F00A949C9 /* ChatStatus.swift */; };
@@ -216,6 +221,9 @@
 		0805DEEE2C58CB1400A8354A /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		0805DEF02C58CB2A00A8354A /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
 		0805DEF22C58CB3D00A8354A /* GoogleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleService.swift; sourceTree = "<group>"; };
+		080A186C2D11FE580081C6B1 /* BedrockService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BedrockService.swift; sourceTree = "<group>"; };
+		080A18782D12241C0081C6B1 /* RegularProviderHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegularProviderHost.swift; sourceTree = "<group>"; };
+		080A187A2D1224300081C6B1 /* BedrockProviderHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BedrockProviderHost.swift; sourceTree = "<group>"; };
 		080E70E72CDF1BC100A949C9 /* Tips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tips.swift; sourceTree = "<group>"; };
 		080E70EB2CDF380500A949C9 /* InspectorTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorTab.swift; sourceTree = "<group>"; };
 		080E70ED2CDF498F00A949C9 /* ChatStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStatus.swift; sourceTree = "<group>"; };
@@ -411,12 +419,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				080A18722D12036F0081C6B1 /* AWSBedrockRuntime in Frameworks */,
 				082AA6F62CE683C40088A8B2 /* OpenAI in Frameworks */,
 				0823550D2CDBB74900388273 /* GoogleGenerativeAI in Frameworks */,
 				089FDB642D0A9FB50005CD26 /* GoogleGenerativeAI in Frameworks */,
 				082355152CDBBB2B00388273 /* SwiftMarkdownView in Frameworks */,
 				089FDB672D0AA0010005CD26 /* GoogleGenerativeAI in Frameworks */,
 				089EFA3B2D0D08C000FF032C /* KeyboardShortcuts in Frameworks */,
+				080A18702D12036F0081C6B1 /* AWSBedrock in Frameworks */,
 				086346B12CE780B6006E5927 /* SwiftAnthropic in Frameworks */,
 				08DB150B2CDC5B2200DC5B90 /* OpenAI in Frameworks */,
 				086346AB2CE78078006E5927 /* SwiftMarkdownView in Frameworks */,
@@ -436,8 +446,16 @@
 				0805DEEE2C58CB1400A8354A /* OpenAIService.swift */,
 				0805DEF22C58CB3D00A8354A /* GoogleService.swift */,
 				0805DEF02C58CB2A00A8354A /* ClaudeService.swift */,
+				080A186C2D11FE580081C6B1 /* BedrockService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		080A18732D120E9C0081C6B1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		080E70E62CDF1B9700A949C9 /* General */ = {
@@ -585,6 +603,8 @@
 				08915D982C37C648008ADE27 /* ProviderDetail.swift */,
 				082181592C382B9B00171BF3 /* ProviderGeneral.swift */,
 				082181692C39001B00171BF3 /* ProviderRow.swift */,
+				080A18782D12241C0081C6B1 /* RegularProviderHost.swift */,
+				080A187A2D1224300081C6B1 /* BedrockProviderHost.swift */,
 			);
 			path = ProviderViews;
 			sourceTree = "<group>";
@@ -619,6 +639,7 @@
 			isa = PBXGroup;
 			children = (
 				08A222812C2AB4FD00D76C8B /* GPTalks */,
+				080A18732D120E9C0081C6B1 /* Frameworks */,
 				08A222802C2AB4FD00D76C8B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -936,6 +957,8 @@
 				089FDB632D0A9FB50005CD26 /* GoogleGenerativeAI */,
 				089FDB662D0AA0010005CD26 /* GoogleGenerativeAI */,
 				089EFA3A2D0D08C000FF032C /* KeyboardShortcuts */,
+				080A186F2D12036F0081C6B1 /* AWSBedrock */,
+				080A18712D12036F0081C6B1 /* AWSBedrockRuntime */,
 			);
 			productName = GPTalks;
 			productReference = 08A2227F2C2AB4FD00D76C8B /* GPTalks.app */;
@@ -971,6 +994,7 @@
 				086346AF2CE780B6006E5927 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
 				089FDB652D0AA0010005CD26 /* XCRemoteSwiftPackageReference "GoogleGenerativeAI" */,
 				089EFA392D0D08C000FF032C /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+				080A186E2D12036F0081C6B1 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
 			);
 			productRefGroup = 08A222802C2AB4FD00D76C8B /* Products */;
 			projectDirPath = "";
@@ -1020,6 +1044,7 @@
 				08F815462C980ABF00B49355 /* StreamHandler.swift in Sources */,
 				08A1DDBB2CE0024A00DAF6F9 /* Source.swift in Sources */,
 				08A77CCC2C65AA820087D0F3 /* DatabaseService.swift in Sources */,
+				080A187B2D1224300081C6B1 /* BedrockProviderHost.swift in Sources */,
 				08F815242C97F59100B49355 /* PluginSettings.swift in Sources */,
 				08CA42B62CF1F13B0073BB01 /* ExpandButton.swift in Sources */,
 				08CA42BA2CF1F18D0073BB01 /* ForkButton.swift in Sources */,
@@ -1045,6 +1070,7 @@
 				08CA42B82CF1F1530073BB01 /* EditButton.swift in Sources */,
 				08C800502C36F667009581C5 /* Provider.swift in Sources */,
 				085361092C4923E2007DAB62 /* ImageConfig.swift in Sources */,
+				080A186D2D11FE580081C6B1 /* BedrockService.swift in Sources */,
 				087F3F872CDDDC3C001298B3 /* AboutSettings.swift in Sources */,
 				0821816F2C39082900171BF3 /* MessageView.swift in Sources */,
 				08F815262C97F59900B49355 /* URLScrapeSettings.swift in Sources */,
@@ -1162,6 +1188,7 @@
 				085361232C4A390D007DAB62 /* ProviderPicker.swift in Sources */,
 				085361252C4A5ECC007DAB62 /* MaxTokensPicker.swift in Sources */,
 				081C1D982C3BD8A50078BB24 /* GeneralSettings.swift in Sources */,
+				080A18792D12241C0081C6B1 /* RegularProviderHost.swift in Sources */,
 				086E620C2C39BC4500AB4110 /* ErrorMessageView.swift in Sources */,
 				08850D952CFEEF0D004D944C /* ModelSwitchButtons.swift in Sources */,
 				0869A3F22C95DBF9009BF9F2 /* ChatResponse.swift in Sources */,
@@ -1428,6 +1455,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		080A186E2D12036F0081C6B1 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/awslabs/aws-sdk-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.61;
+			};
+		};
 		086346A92CE78078006E5927 /* XCRemoteSwiftPackageReference "SwiftMarkdownView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/SwiftMarkdownView";
@@ -1471,6 +1506,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		080A186F2D12036F0081C6B1 /* AWSBedrock */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 080A186E2D12036F0081C6B1 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
+			productName = AWSBedrock;
+		};
+		080A18712D12036F0081C6B1 /* AWSBedrockRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 080A186E2D12036F0081C6B1 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
+			productName = AWSBedrockRuntime;
+		};
 		0823550C2CDBB74900388273 /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GoogleGenerativeAI;

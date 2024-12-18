@@ -90,7 +90,7 @@ struct StreamHandler {
             assistant.content = content
         }
         
-        if let calls = response.toolCalls {
+        if let calls = response.toolCalls, !calls.isEmpty {
             try await handleToolCalls(calls)
         }
         

@@ -55,7 +55,7 @@ struct ProviderList: View {
             }
             
             Section(header: Text("Other Providers")) {
-                ForEach([ProviderType.openrouter, .github, .groq, .xai, .mistral, .perplexity, .togetherai], id: \.self) { type in
+                ForEach([ProviderType.bedrock, .openrouter, .github, .groq, .xai, .mistral, .perplexity, .togetherai], id: \.self) { type in
                     Button(action: { addProvider(type: type) }) {
                         Label(type.name, image: type.imageName)
                     }

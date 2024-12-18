@@ -105,5 +105,7 @@ struct Guide: Identifiable {
         * **Google Gemini Models:** These models natively support a wider range of file types, including audio, video, and image files.
         * **Unsupported Files:**  You can still paste unsupported files, but the app or LLM might not recognize or process them correctly. If errors occur, try removing the file to restore normal app function.
         """),
+        
+        Guide(title: "AWS Bedrock", icon: "sparkles", content: "Coming soon")
     ]
 }

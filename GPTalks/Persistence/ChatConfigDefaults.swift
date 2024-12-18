@@ -20,6 +20,10 @@ class ChatConfigDefaults: ObservableObject {
     @AppStorage("useCache") var useCache: Bool = false
     @AppStorage("systemPrompt") var systemPrompt: String = "You are a helpful assistant."
     
+    @AppStorage("bedrockAccessKey") var bedrockAccessKey: String = ""
+    @AppStorage("bedrockSecretKey") var bedrockSecretKey: String = ""
+    @AppStorage("bedrockRegion") var bedrockRegion: String = "us-east-1"
+    
     var temperature: Double? {
         get { storedTemperature }
         set { storedTemperature = newValue }
