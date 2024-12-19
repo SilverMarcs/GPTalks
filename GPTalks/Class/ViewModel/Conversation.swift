@@ -13,7 +13,6 @@ enum ConversationRole: String, Codable, CaseIterable {
     case user
     case assistant
     case system
-    case tool
 
     func toChatRole() -> ChatQuery.ChatCompletionMessageParam.Role {
         switch self {
@@ -23,8 +22,6 @@ enum ConversationRole: String, Codable, CaseIterable {
             return .assistant
         case .system:
             return .system
-        case .tool:
-            return .tool
         }
     }
 }
@@ -67,9 +64,7 @@ import Foundation
     func toChat(imageAsPath: Bool = false) -> ChatQuery.ChatCompletionMessageParam {
         let chatRole = role.toChatRole()
 
-        if chatRole == .assistant, let tool = ChatTool(rawValue: toolRawValue) {
-            return .init(role: .assistant, content: "", toolCalls: [.init(id: "", function: .init(arguments: arguments, name: tool.rawValue))])!
-        } else if chatRole == .user && !audioPath.isEmpty {
+        if chatRole == .user && !audioPath.isEmpty {
             let audioContent = content + "\n" + audioPath
             return .init(role: chatRole, content: audioContent)!
         } else if chatRole == .user && !pdfPath.isEmpty {
@@ -94,12 +89,6 @@ import Foundation
         }
 
         return .init(role: chatRole, content: content)!
-    }
-
-    func countTokens() -> Int {
-        let textToken = tokenCount(text: content + arguments)
-        let imageToken = imagePaths.count * 85 // this is wrong
-        return textToken + imageToken
     }
 }
 

@@ -21,32 +21,24 @@ struct MacOSMessages: View {
 
     var body: some View {
         ScrollViewReader { proxy in
-            Group {
-                if session.conversations.isEmpty {
-                    emptyListView
-                } else {
-//                    normalList(proxy: proxy)
-                    ScrollView {
-                        VStack(spacing: 0) {
-                            ForEach(session.conversations) { conversation in
-                                ConversationView(session: session, conversation: conversation) {
-                                    proxy.scrollTo(conversation.id, anchor: .top)
-                                }
-                                .id(conversation.id.uuidString)
-                                .animation(.default, value: conversation.isReplying)
-                            }
+            ScrollView {
+                VStack(spacing: 0) {
+                    ForEach(session.conversations) { conversation in
+                        ConversationView(session: session, conversation: conversation) {
+                            proxy.scrollTo(conversation.id, anchor: .top)
                         }
-                        
-                        ErrorDescView(session: session)
-                        
-                        Color.clear
-                            .frame(height: 30)
-                            .id("bottomID")
-                    
+                        .id(conversation.id.uuidString)
+                        .animation(.default, value: conversation.isReplying)
                     }
-                    .scrollContentBackground(AppConfiguration.shared.seamlessScrollView ? .visible : .hidden)
                 }
+                
+                ErrorDescView(session: session)
+                
+                Color.clear
+                    .frame(height: 30)
+                    .id("bottomID")
             }
+            .scrollContentBackground(.visible)
             .navigationTitle(session.title)
             .navigationSubtitle(navSubtitle)
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -55,16 +47,11 @@ struct MacOSMessages: View {
                     .id(session.id)
             }
             .onAppear {
-                if AppConfiguration.shared.alternateMarkdown {
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
-                    scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
-                    if session.conversations.count > 8 {
-                        scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
-                    }
-                } else {
-                    scrollToBottom(proxy: proxy, animated: false)
+                scrollToBottom(proxy: proxy, animated: true, delay: 0.2)
+                scrollToBottom(proxy: proxy, animated: true, delay: 0.4)
+                if session.conversations.count > 8 {
+                    scrollToBottom(proxy: proxy, animated: true, delay: 0.8)
                 }
-                
             }
             .onChange(of: session.conversations.last?.content) {
                 if !isUserScrolling {
@@ -152,10 +139,6 @@ struct MacOSMessages: View {
                         
                         
                         Section {
-                            ToolToggle(session: session)
-                        }
-                        
-                        Section {
                             ExportMenu(session: session)
                         }
 
@@ -203,72 +186,7 @@ struct MacOSMessages: View {
     }
     
     var navSubtitle: String {
-        "Tokens: " + session.activeTokenCount.formatToK() + " • " + session.configuration.systemPrompt.trimmingCharacters(in: .newlines).truncated(to: 45)
-    }
-    
-//    @ViewBuilder
-//    private var normalList: some View {
-//        let proxy: ScrollViewProxy
-//        
-//        ScrollView {
-//            VStack(spacing: 0) {
-//                ForEach(session.conversations) { conversation in
-//                    ConversationView(session: session, conversation: conversation) {
-////                        proxy.scrollTo(conversation.id, anchor: .top)
-//                        print("scroll")
-//                    }
-//                    .id(conversation.id.uuidString)
-//                    .animation(.default, value: conversation.isReplying)
-//                }
-//            }
-//            
-//            ErrorDescView(session: session)
-//            
-//            Color.clear
-//                .frame(height: 30)
-//                .id("bottomID")
-//        
-//        }
-//        .scrollContentBackground(AppConfiguration.shared.seamlessScrollView ? .visible : .hidden)
-//    }
-    
-    private var emptyListView: some View {
-        VStack {
-            Spacer()
-
-            HStack {
-                Image(systemName: "hammer.fill")
-                    .imageScale(.large)
-                    .foregroundStyle(.cyan)
-                Text("Tools")
-                    .font(.title)
-            }
-            
-            VStack(alignment: .leading) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Group {
-                            Toggle("Google Search", isOn: $session.configuration.useGSearch)
-                            Toggle("Image Generate", isOn: $session.configuration.useImageGenerate)
-                            Toggle("URL Scrape", isOn: $session.configuration.useUrlScrape)
-                        }
-                        .frame(width: 150, alignment: .leading)
-                    }
-                    VStack(alignment: .leading, spacing: 8) {
-                        Group {
-                            Toggle("Extract PDF", isOn: $session.configuration.useExtractPdf)
-                            Toggle("Vision", isOn: $session.configuration.useVision)
-                            Toggle("Transcribe", isOn: $session.configuration.useTranscribe)
-
-                        }
-                        .frame(width: 150, alignment: .leading)
-                    }
-                }
-            }
-            .offset(x: 35)
-            
-            Spacer()
-        }
+        session.configuration.systemPrompt.trimmingCharacters(in: .whitespacesAndNewlines).truncated(to: 45)
     }
     
     private var deleteLastMessage: some View {
@@ -348,6 +266,7 @@ struct MacSysPrompt: View {
         .padding(13)
     }
 }
+
 struct ExportMenu: View {
     var session: DialogueSession
     @State private var isShowExport = false

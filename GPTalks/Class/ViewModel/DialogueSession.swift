@@ -15,39 +15,12 @@ import OpenAI
         var systemPrompt: String
         var provider: Provider
         var model: Model
-        
-        var useGSearch: Bool = false
-        var useUrlScrape: Bool = false
-        var useImageGenerate: Bool = false
-        var useTranscribe: Bool = false
-        var useExtractPdf: Bool = false
-        var useVision: Bool = false
 
         init() {
             provider = AppConfiguration.shared.preferredChatService
             model = provider.preferredChatModel
             temperature = AppConfiguration.shared.temperature
             systemPrompt = AppConfiguration.shared.systemPrompt
-            
-            useGSearch = AppConfiguration.shared.isGoogleSearchEnabled
-            useUrlScrape = AppConfiguration.shared.isUrlScrapeEnabled
-            useImageGenerate = AppConfiguration.shared.isImageGenerateEnabled
-            useTranscribe = AppConfiguration.shared.isTranscribeEnabled
-            useExtractPdf = AppConfiguration.shared.isExtractPdfEnabled
-            useVision = AppConfiguration.shared.isVisionEnabled
-        }
-        
-        init(quick: Bool) {
-            provider = AppConfiguration.shared.quickPanelProvider
-            model = AppConfiguration.shared.quickPanelModel
-            temperature = AppConfiguration.shared.temperature
-            systemPrompt = AppConfiguration.shared.quickPanelPrompt
-            useGSearch = AppConfiguration.shared.qpIsGoogleSearchEnabled
-            useUrlScrape = AppConfiguration.shared.qpIsUrlScrapeEnabled
-            useImageGenerate = AppConfiguration.shared.qpIsImageGenerateEnabled
-            useTranscribe = AppConfiguration.shared.qpIsTranscribeEnabled
-            useExtractPdf = AppConfiguration.shared.qpIsExtractPdfEnabled
-            useVision = AppConfiguration.shared.qpIsVisionEnabled
         }
     }
 
@@ -119,18 +92,6 @@ import OpenAI
         return []
     }
     
-    var activeTokenCount: Int {
-        // TODO: add func call and system prompt tokens here too
-        
-        let messageTokenCount = adjustedConversations.reduce(0) { $0 + $1.countTokens() }
-        let systemPromptTokenCount = tokenCount(text: configuration.systemPrompt)
-        let funcCallTokenCount = ChatTool.countTokensForEnabledCases(configuration: configuration)
-        
-        let totalTokenCount = messageTokenCount + systemPromptTokenCount + funcCallTokenCount
-        
-        return totalTokenCount
-    }
-
     var streamingTask: Task<Void, Error>?
     var viewUpdater: Task<Void, Error>?
 
@@ -206,7 +167,7 @@ import OpenAI
             })
             
             let query = ChatQuery(messages: messages,
-                                  model: Model.gpt3t.id,
+                                  model: configuration.model.id,
                                   maxTokens: 10,
                                   stream: false)
             
@@ -480,29 +441,12 @@ import OpenAI
         }
         
         var finalMessages = mutableConversations.map({ conversation in
-            if shouldSwitchToVision && configuration.model != .gpt4vision && configuration.model != .gpt4t && configuration.model != .gpt4o && configuration.model != .customChat {
-                return conversation.toChat(imageAsPath: true)
-            } else {
-                return conversation.toChat()
-            }
+            return conversation.toChat()
         })
 
-
-        let toolSysPrompt = """
-        If you have access to multiple tools, never use them in parallel. For example, use the urlScrape function only after googleSearch has successfully returned some results.
-        After google search results have been returned, if they directly answer the user’s question, just give the user the answer. However if the user’s question is more analytical, use the urlScrape tool to browse URLs from the google search results to give a more in-depth response. Finally, use the search and URL results and your
-        own knowledge to give the user a comprehensive answer.
-        Again, Never ever call two tools in parallel.
-        """
-        
-        let count = ChatTool.enabledTools(for: configuration).count
         
         let finalSysPrompt = {
-            if count > 0 {
-                self.configuration.systemPrompt + "\n\n" + toolSysPrompt
-            } else {
-                self.configuration.systemPrompt
-            }
+            self.configuration.systemPrompt
         }
         
         let systemPrompt = Conversation(role: .system, content: finalSysPrompt())
@@ -511,18 +455,12 @@ import OpenAI
             finalMessages.insert(systemPrompt.toChat(), at: 0)
         }
         
-        if configuration.model == .gpt4vision || ChatTool.enabledTools(for: configuration).isEmpty {
-            return ChatQuery(messages: finalMessages,
-                             model: configuration.model.id,
-                             maxTokens: 4000,
-                             temperature: configuration.temperature)
-        } else {
-            return ChatQuery(messages: finalMessages,
-                             model: configuration.model.id,
-                             maxTokens: 4000,
-                             temperature: configuration.temperature,
-                             tools: ChatTool.enabledTools(for: configuration))
-        }
+  
+        return ChatQuery(messages: finalMessages,
+                         model: configuration.model.id,
+                         maxTokens: 4000,
+                         temperature: configuration.temperature)
+        
     }
     
     @MainActor
@@ -542,20 +480,9 @@ import OpenAI
         var lastUIUpdateTime = Date()
         
         var streamText = ""
-        var funcParam = ""
-        var chatTool: ChatTool?
         
         for try await result in service.chatsStream(query: query) {
-            if let funcCalls = result.choices.first?.delta.toolCalls, let firstFuncCall = funcCalls.first {
-                let toolName = firstFuncCall.function?.name ?? ""
-                let _ = firstFuncCall.id ?? ""
-
-                if chatTool == nil {
-                    chatTool = ChatTool(rawValue: toolName)
-                }
-                
-                funcParam += funcCalls.first?.function?.arguments ?? ""
-            } else {
+        
                 streamText += result.choices.first?.delta.content ?? ""
                 
                 let currentTime = Date()
@@ -564,166 +491,15 @@ import OpenAI
                     lastConversationData.sync(with: conversations[conversations.count - 1])
                     lastUIUpdateTime = currentTime
                 }
-            }
+        
         }
 
-        if let chatTool = chatTool {
-            conversations.last?.toolRawValue = chatTool.rawValue
-            conversations.last?.arguments = funcParam
-            conversations.last?.isReplying = false
-            
-            lastConversationData.sync(with: conversations[conversations.count - 1])
-            
-            try await handleToolCall(chatTool: chatTool, funcParam: funcParam)
-        } else {
-            if !streamText.isEmpty {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self.conversations[self.conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                    lastConversationData.sync(with: self.conversations[self.conversations.count - 1])
-                    self.conversations[self.conversations.count - 1].isReplying = false
-                }
-            }
-        }
-    }
-
-    @MainActor
-    func handleToolCall(chatTool: ChatTool, funcParam: String) async throws {
-        switch chatTool {
-        case .urlScrape:
-            if let urls = extractURLs(from: funcParam, forKey: "url_list") {
-               let lastToolCall = appendConversation(Conversation(role: .tool, content: "", toolRawValue: chatTool.rawValue, isReplying: true))
-               
-               var webContent = ""
-               
-               for url in urls {
-                   let content: String
-                   if AppConfiguration.shared.useExperimentalWebScraper {
-                       content = try await retrieveWebContent(from: url)
-                       webContent += "URL: \(url)\nContent:\n\(content)\n\n"
-                   } else {
-//                       content = try await fetchAndParseHTMLAsync(from: url)
-                       content = await useReader(from: url)
-                       webContent += content
-                   }
-                   // Append the URL and its content to webContent with clear separation
-//                   webContent += "URL: \(url)\nContent:\n\(content)\n\n"
-               }
-               
-               conversations[conversations.count - 1].content = webContent
-               lastToolCall.sync(with: conversations[conversations.count - 1])
-               conversations[conversations.count - 1].isReplying = false
-               
-               try await processRequest()
-           }
-        case .googleSearch:
-            if let searchQuery = extractValue(from: funcParam, forKey: chatTool.paramName) {
-                
-                let lastToolCall = appendConversation(Conversation(role: .tool, content: "", toolRawValue: chatTool.rawValue, isReplying: true))
-                
-                let searchResult: String
-                
-                if AppConfiguration.shared.alternateSearch {
-//                    searchResult = await fetchSearchResultsConcise(for: searchQuery) // v v v expensive
-                    searchResult = await fetchFilteredSearchResults(for: searchQuery) // v v v expensive
-                } else {
-                    searchResult = try await GoogleSearchService().performSearch(query: searchQuery)
-                }
-                
-                conversations[conversations.count - 1].content = searchResult
-                lastToolCall.sync(with: conversations[conversations.count - 1])
-                conversations[conversations.count - 1].isReplying = false
-                
-                try await processRequest()
-            }
-        case .transcribe:
-            let service = OpenAI(configuration: AppConfiguration.shared.transcriptionProvider.config)
-            
-            if let audioPath = extractValue(from: funcParam, forKey: chatTool.paramName) {
-                let query = try AudioTranscriptionQuery(file: Data(contentsOf: URL(string: audioPath)!), fileType: .mp3, model: AppConfiguration.shared.transcriptionModel.id)
-                
-                let lastToolCall = appendConversation(Conversation(role: .tool, content: "", toolRawValue: chatTool.rawValue, isReplying: true))
-                let result = try await service.audioTranscriptions(query: query)
-                
-                conversations[conversations.count - 1].content = result.text
-                lastToolCall.sync(with: conversations[conversations.count - 1])
-                conversations[conversations.count - 1].isReplying = false
-
-                try await processRequest()
-            }
-        case .extractPdf:
-            if let pdfPath = extractValue(from: funcParam, forKey: chatTool.paramName) {
-                let lastToolCall = appendConversation(Conversation(role: .tool, content: "", toolRawValue: chatTool.rawValue, isReplying: true))
-                
-                let pdfContent = extractTextFromPDF(at: URL(string: pdfPath)!)
-                
-                conversations[conversations.count - 1].content = pdfContent
-                lastToolCall.sync(with: conversations[conversations.count - 1])
-                conversations[conversations.count - 1].isReplying = false
-                
-                try await processRequest()
-            }
-        case .vision:
-            if let visionParams = extractVisionParameters(from: funcParam) {
-                let service = OpenAI(configuration: AppConfiguration.shared.visionProvider.config)
-                let chatCompletionObject = ChatQuery.ChatCompletionMessageParam(role: .user, content:
-                        [.init(chatCompletionContentPartTextParam: .init(text: visionParams.prompt))] +
-                        visionParams.imagePaths.compactMap { path in
-                            guard let imageData = loadImageData(from: path) else {
-                                print("Error: Could not load image data from path \(path).")
-                                return nil
-                            }
-                            return .init(chatCompletionContentPartImageParam:
-                                            .init(imageUrl:
-                                                    .init(
-                                                        url: "data:image/jpeg;base64," + imageData.base64EncodedString(),
-                                                        detail: .auto
-                                                    )
-                                            )
-                            )
-                        }
-                    )!
-                let query =  ChatQuery(messages: [chatCompletionObject],
-                                       model: Model.gpt4vision.id,
-                                       maxTokens: 4000,
-                                       temperature: configuration.temperature)
-                
-                let toolContent = "Provider: " + AppConfiguration.shared.visionProvider.name + "\n" + "Model: " + Model.gpt4vision.name
-                let _ = appendConversation(Conversation(role: .tool, content: toolContent, toolRawValue: chatTool.rawValue, isReplying: false))
-
-                var streamText = ""
-                let lastConversationData = appendConversation(Conversation(role: .assistant, content: "", isReplying: true))
-                for try await result in service.chatsStream(query: query) {
-                    streamText += result.choices.first?.delta.content ?? ""
-                    conversations[conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
-                    lastConversationData.sync(with: conversations[conversations.count - 1])
-                }
-                
-                conversations[conversations.count - 1].isReplying = false
-
-            }
-            
-        case .imageGenerate:
-            if let imageParams = extractImageParameters(from: funcParam) {
-                let service = OpenAI(configuration: AppConfiguration.shared.imageProvider.config)
-                
-                // Use the extracted parameters directly
-                let query = ImagesQuery(prompt: imageParams.prompt, model: AppConfiguration.shared.imageModel.id, n: imageParams.n, quality: .hd, size: ._1024)
-                let toolContent = "Provider: " + AppConfiguration.shared.imageProvider.name + "\n" + "Model: " + AppConfiguration.shared.imageModel.name
-                let _ = appendConversation(Conversation(role: .tool, content: toolContent, toolRawValue: chatTool.rawValue, isReplying: true))
-                
-                let results = try await service.images(query: query)
-                var savedImageURLs: [String] = []
-                for urlResult in results.data {
-                    if let urlString = urlResult.url, let url = URL(string: urlString) {
-                        let (data, _) = try await URLSession.shared.data(from: url)
-                        if let savedURL = saveImage(image: PlatformImage(data: data)!) {
-                            savedImageURLs.append(savedURL)
-                        }
-                    }
-                }
-                
-                appendConversation(Conversation(role: .assistant, content: "Here are the image(s) you requested:", imagePaths: savedImageURLs))
-                conversations[conversations.count - 2].isReplying = false // for the tool call
+       
+        if !streamText.isEmpty {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.conversations[self.conversations.count - 1].content = streamText.trimmingCharacters(in: .whitespacesAndNewlines)
+                lastConversationData.sync(with: self.conversations[self.conversations.count - 1])
+                self.conversations[self.conversations.count - 1].isReplying = false
             }
         }
     }

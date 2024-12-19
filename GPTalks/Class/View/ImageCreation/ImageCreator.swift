@@ -8,9 +8,6 @@
 import OpenAI
 import Photos
 import SwiftUI
-#if os(iOS)
-    import VisualEffectView
-#endif
 
 struct ImageCreator: View {
     @Environment(\.colorScheme) var colorScheme
@@ -126,16 +123,7 @@ struct ImageCreator: View {
         .padding(.horizontal)
         .padding(.top, verticalPadding)
         .padding(.bottom, verticalPadding + 2)
-        #if os(iOS)
-            .background(
-                VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 18, scale: 1)
-                    .ignoresSafeArea()
-            )
-        #elseif os(macOS)
-            .background(.bar)
-        #elseif os(visionOS)
-            .background(.regularMaterial)
-        #endif
+        .background(.background)
     }
     
     @ViewBuilder
@@ -211,12 +199,6 @@ struct ImageCreator: View {
                 .padding(.horizontal, 5)
                 .padding(.trailing, 25) // for avoiding send button
                 .frame(minHeight: imageSize + 5)
-            #if os(iOS)
-                .background(
-                    VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.3, blurRadius: 18, scale: 1)
-                        .cornerRadius(18)
-                )
-            #endif
             
             Group {
                 sendButton

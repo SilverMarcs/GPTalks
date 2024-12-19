@@ -23,38 +23,6 @@ struct CustomImportedImagesView: View {
     }
 }
 
-struct CustomPDFViewer: View {
-    @Bindable var session: DialogueSession
-    
-    private var currentPDFPath: Binding<String> {
-        session.isEditing ? $session.editingPDFPath : $session.inputPDFPath
-    }
-    
-    var body: some View {
-        if !currentPDFPath.wrappedValue.isEmpty {
-            PDFViewer(pdfURL: URL(string: currentPDFPath.wrappedValue)!, removePDFAction: {
-                self.currentPDFPath.wrappedValue = ""
-            })
-        }
-    }
-}
-
-struct CustomAudioPreviewer: View {
-    @Bindable var session: DialogueSession
-    
-    private var currentAudioPath: Binding<String> {
-        session.isEditing ? $session.editingAudioPath : $session.inputAudioPath
-    }
-    
-    var body: some View {
-        if !currentAudioPath.wrappedValue.isEmpty {
-            AudioPreviewer(audioURL: URL(string: currentAudioPath.wrappedValue)!, showRemoveButton: true, removeAudioAction: {
-                self.currentAudioPath.wrappedValue = ""
-            })
-        }
-    }
-}
-
 #if os(macOS)
 struct CustomTextEditorView: View {
     @Bindable var session: DialogueSession
@@ -80,21 +48,6 @@ struct CustomTextEditorView: View {
                     }
                     .padding(10)
                 }
-            }
-            
-            if containsPdfOrAudio {
-                ScrollView(.horizontal) {
-                    HStack {
-                        CustomPDFViewer(session: session)
-                        CustomAudioPreviewer(session: session)
-                    }
-                }
-                .padding(10)
-                .padding(.top, containsImage ? -7 : 0)
-            }
-            
-            if containsPdfOrAudio || containsImage {
-                Divider()
             }
 
             MacTextEditor(input: currentMessage)

@@ -36,18 +36,11 @@ struct MacInputView: View {
             }
             .offset(y: -2)
         }
-        .animation(.default, value: session.inputImages)
-        .animation(.default, value: session.editingImages)
-        .animation(.default, value: session.inputPDFPath)
-        .animation(.default, value: session.editingPDFPath)
-        .animation(.default, value: session.inputAudioPath)
-        .animation(.default, value: session.editingAudioPath)
-        .animation(.default, value: session.isEditing)
         .buttonStyle(.plain)
         .padding(.horizontal)
         .padding(.top, verticalPadding - 2)
         .padding(.bottom, verticalPadding + 2)
-        .generalizedFileImporter(isPresented: $importingFiles) { urls in
+        .imageFileImporter(isPresented: $importingFiles) { urls in
             handleSelectedFiles(urls)
         }
     }
@@ -65,35 +58,13 @@ struct MacInputView: View {
     func handleSelectedFiles(_ urls: [URL]) {
         for url in urls {
             if let type = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType {
-                if type.conforms(to: .audio) {
-                    handleAudioFile(url)
-                } else if type.conforms(to: .pdf) {
-                    handlePDFFile(url)
-                } else if type.conforms(to: .image) {
+                if type.conforms(to: .image) {
                     handleImageFile(url)
                 }
             }
         }
     }
-   
-    func handleAudioFile(_ url: URL) {
-        var currentAudioPath: Binding<String> {
-            session.isEditing ? $session.editingAudioPath : $session.inputAudioPath
-        }
-       
-        currentAudioPath.wrappedValue = url.absoluteString
-        session.configuration.useTranscribe = true
-    }
-   
-    func handlePDFFile(_ url: URL) {
-        var currentPDFPath: Binding<String> {
-            session.isEditing ? $session.editingPDFPath : $session.inputPDFPath
-        }
-       
-        currentPDFPath.wrappedValue = url.absoluteString
-        session.configuration.useExtractPdf = true
-    }
-   
+    
     func handleImageFile(_ url: URL) {
         var currentImages: Binding<[String]> {
             session.isEditing ? $session.editingImages : $session.inputImages

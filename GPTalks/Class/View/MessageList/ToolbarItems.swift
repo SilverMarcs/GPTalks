@@ -48,15 +48,9 @@ struct ModelPicker: View {
 
     var body: some View {
         Picker("Model", selection: $session.configuration.model) {
-//            if session.shouldSwitchToVision || !session.inputImages.isEmpty {
-//                ForEach(session.configuration.provider.visionModels, id: \.self) { model in
-//                    Text(model.name).tag(model.id)
-//                }
-//            } else {
-                ForEach(session.configuration.provider.chatModels + session.configuration.provider.visionModels, id: \.self) { model in
-                    Text(model.name).tag(model.id)
-                }
-//            }
+            ForEach(session.configuration.provider.chatModels, id: \.self) { model in
+                Text(model.name).tag(model.id)
+            }
         }
     }
 }

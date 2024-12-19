@@ -12,7 +12,6 @@ struct ContentView: View {
     @Environment(\.scenePhase) var scenePhase
     
     @State var imageSession: ImageSession = .init()
-    @State var transcriptionSession: TranscriptionSession = .init()
     
     var body: some View {
 #if os(macOS)

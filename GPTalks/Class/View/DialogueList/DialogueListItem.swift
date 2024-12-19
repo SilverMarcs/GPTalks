@@ -18,47 +18,23 @@ struct DialogueListItem: View {
     var body: some View {
         HStack(spacing: imgToTextSpace) {
             session.configuration.provider.logoImage
-            VStack {
-                HStack {
-                    Text(session.title)
-                        .bold()
-                        .font(titleFont)
-                        .lineLimit(1)
-                    Spacer()
-                    #if !os(visionOS)
-                    Text(session.configuration.model.name)
-                        .font(.subheadline)
-                        .opacity(0.9)
-                    #endif
-                }
-                
-                HStack {
-                    if session.isReplying {
-                        ProgressView()
-                            .controlSize(.small)
-                    } else {
-                        Text(session.lastMessage)
-                            .font(lastMessageFont)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(textLineLimit)
-                            .frame(
-                                maxWidth: .infinity,
-                                maxHeight: lastMessageMaxHeight,
-                                alignment: .leading
-                            )
-                    }
-                    
-                    Spacer()
-                    
-                    if session.isArchive {
-                        Image(systemName: "star.fill")
-                            .foregroundStyle(.orange)
-                    }
-                }
+          
+            HStack {
+                Text(session.title)
+                    .bold()
+                    .font(titleFont)
+                    .lineLimit(1)
+                Spacer()
+                #if !os(visionOS)
+                Text(session.configuration.model.name)
+                    .font(.subheadline)
+                    .opacity(0.9)
+                #endif
             }
         }
-        .padding(paddingVal)
-        .frame(height: lastMessageMaxHeight)
+        
+//        .padding(paddingVal)
+//        .frame(height: lastMessageMaxHeight)
         .alert("Rename Session", isPresented: $showRenameDialogue) {
             TextField("Enter new name", text: $newName)
                 .onAppear {
@@ -97,8 +73,6 @@ struct DialogueListItem: View {
         }
         .swipeActions(edge: .leading) {
             archiveButton
-            
-            renameButton
         }
     }
     

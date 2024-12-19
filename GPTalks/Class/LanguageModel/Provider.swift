@@ -31,37 +31,20 @@ enum ProviderColor: String, CaseIterable {
             return "Orange"
         case .pinkColor:
             return "Pink"
-//        case .purpleColor:
-//            return "Purple"
         }
     }
 }
 
 enum Provider: String, CaseIterable, Codable, Identifiable {
     case openai
-    case oxygen
     case custom
-    case naga
-    case kraken
-    case shard
-    case mandril // Newly added case
 
     var id: String {
         switch self {
         case .openai:
             return "openai"
-        case .oxygen:
-            return "oxygen"
-        case .naga:
-            return "naga"
-        case .kraken:
-            return "kraken"
         case .custom:
             return "custom"
-        case .shard:
-            return "shard"
-        case .mandril:
-            return "mandril"
         }
     }
 
@@ -72,35 +55,10 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 token: AppConfiguration.shared.OAIkey,
                 host: "api.openai.com"
             )
-        case .oxygen:
-            return OpenAI.Configuration(
-                token: AppConfiguration.shared.Okey,
-                host: "app.oxyapi.uk"
-            )
-        case .naga:
-            return OpenAI.Configuration(
-                token: AppConfiguration.shared.Nkey,
-                host: "api.naga.ac"
-            )
-        case .kraken:
-            return OpenAI.Configuration(
-                token: AppConfiguration.shared.Kkey,
-                host: "api.cracked.systems"
-            )
         case .custom:
             return OpenAI.Configuration(
                 token: AppConfiguration.shared.Ckey,
                 host: AppConfiguration.shared.Chost
-            )
-        case .shard:
-            return OpenAI.Configuration(
-                token: AppConfiguration.shared.Skey,
-                host: "api.shard-ai.xyz"
-            )
-        case .mandril:
-            return OpenAI.Configuration(
-                token: AppConfiguration.shared.Mkey,
-                host: "api.mandrillai.tech"
             )
         }
     }
@@ -112,19 +70,9 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     var accentColor: Color {
         switch self {
         case .openai:
-            Color(AppConfiguration.shared.OAIColor.rawValue)
-        case .oxygen:
-            Color(AppConfiguration.shared.OColor.rawValue)
-        case .naga:
-            Color(AppConfiguration.shared.NColor.rawValue)
-        case .kraken:
-            Color(AppConfiguration.shared.KColor.rawValue)
+            return Color(AppConfiguration.shared.OAIColor.rawValue)
         case .custom:
-            Color(AppConfiguration.shared.CColor.rawValue)
-        case .shard:
-            Color(AppConfiguration.shared.SColor.rawValue)
-        case .mandril:
-            Color(AppConfiguration.shared.MColor.rawValue)
+            return Color(AppConfiguration.shared.CColor.rawValue)
         }
     }
 
@@ -132,18 +80,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .openai:
             return "OpenAI"
-        case .oxygen:
-            return "Oxygen"
-        case .naga:
-            return "Naga"
-        case .kraken:
-            return "Kraken"
         case .custom:
             return "Custom"
-        case .shard:
-            return "Shard"
-        case .mandril:
-            return "Mandril"
         }
     }
 
@@ -151,18 +89,8 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .openai:
             return AppConfiguration.shared.OAImodel
-        case .oxygen:
-            return AppConfiguration.shared.Omodel
-        case .naga:
-            return AppConfiguration.shared.Nmodel
-        case .kraken:
-            return AppConfiguration.shared.Kmodel
         case .custom:
             return AppConfiguration.shared.Cmodel
-        case .shard:
-            return AppConfiguration.shared.Smodel
-        case .mandril:
-            return AppConfiguration.shared.Mmodel
         }
     }
 
@@ -170,98 +98,25 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .openai:
             return AppConfiguration.shared.OAIImageModel
-        case .oxygen:
-            return AppConfiguration.shared.OImageModel
-        case .naga:
-            return AppConfiguration.shared.NImageModel
-        case .kraken:
-            return AppConfiguration.shared.KImageModel
         case .custom:
             return AppConfiguration.shared.CImageModel
-        case .shard:
-            return AppConfiguration.shared.SImageModel
-        case .mandril:
-            return AppConfiguration.shared.MImageModel
         }
     }
-
-    var preferredVisionModel: Model {
-        switch self {
-        case .openai, .oxygen, .naga, .kraken, .custom, .shard, .mandril:
-            return .gpt4vision
-        }
-    }
-
-    var preferredTranscriptionModel: Model {
-        switch self {
-        case .openai, .oxygen, .naga, .kraken, .custom, .shard, .mandril:
-            return .whisper1
-        }
-    }
-
     var chatModels: [Model] {
         switch self {
         case .openai:
             return Model.openAIChatModels
-        case .oxygen:
-            return Model.oxygenChatModels
-        case .naga:
-            return Model.nagaChatModels
-        case .kraken:
-            return Model.krakenChatModels
         case .custom:
-            return Model.nagaChatModels + [Model.customChat]
-        case .shard:
-            return Model.shardChatModels
-        case .mandril:
-            return Model.mandrilChatModels
+            return [Model.customChat]
         }
     }
-
-    var visionModels: [Model] {
-        switch self {
-        case .openai:
-            return Model.openAIVisionModels
-        case .oxygen:
-            return Model.oxygenVisionModels
-        case .naga:
-            return Model.nagaVisionModels
-        case .kraken:
-            return Model.krakenVisionModels
-        case .custom:
-            return Model.openAIVisionModels + [Model.customVision]
-        case .shard:
-            return Model.shardVisionModels
-        case .mandril:
-            return Model.mandrilVisionModels
-        }
-    }
-
+    
     var imageModels: [Model] {
         switch self {
         case .openai:
             return Model.openAIImageModels
-        case .oxygen:
-            return Model.oxygenImageModels
-        case .naga:
-            return Model.nagaImageModels
-        case .kraken:
-            return Model.krakenImageModels
         case .custom:
             return Model.openAIImageModels + [Model.customImage]
-        case .shard:
-            return Model.shardImageModels
-        case .mandril:
-            return Model.mandrilImageModels
-        }
-    }
-
-    var transcriptionModels: [Model] {
-        switch self {
-        case .openai, .oxygen, .naga, .kraken, .custom, .mandril:
-            return [.whisper1]
-        case .shard:
-            return [.swhisper]
         }
     }
 
@@ -278,52 +133,12 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
                 color: configuration.$OAIColor,
                 provider: self
             )
-        case .oxygen:
-            ServiceSettingsView(
-                chatModel: configuration.$Omodel,
-                imageModel: configuration.$OImageModel,
-                apiKey: configuration.$Okey,
-                color: configuration.$OColor,
-                provider: self
-            )
-        case .naga:
-            ServiceSettingsView(
-                chatModel: configuration.$Nmodel,
-                imageModel: configuration.$NImageModel,
-                apiKey: configuration.$Nkey,
-                color: configuration.$NColor,
-                provider: self
-            )
-        case .kraken:
-            ServiceSettingsView(
-                chatModel: configuration.$Kmodel,
-                imageModel: configuration.$KImageModel,
-                apiKey: configuration.$Kkey,
-                color: configuration.$KColor,
-                provider: self
-            )
         case .custom:
             ServiceSettingsView(
                 chatModel: configuration.$Cmodel,
                 imageModel: configuration.$CImageModel,
                 apiKey: configuration.$Ckey,
                 color: configuration.$CColor,
-                provider: self
-            )
-        case .shard:
-            ServiceSettingsView(
-                chatModel: configuration.$Smodel,
-                imageModel: configuration.$SImageModel,
-                apiKey: configuration.$Skey,
-                color: configuration.$SColor,
-                provider: self
-            )
-        case .mandril:
-            ServiceSettingsView(
-                chatModel: configuration.$Mmodel,
-                imageModel: configuration.$MImageModel,
-                apiKey: configuration.$Mkey,
-                color: configuration.$MColor,
                 provider: self
             )
         }
@@ -340,11 +155,6 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
     static var availableProviders: [Provider] {
         [
             .openai,
-            .oxygen,
-            .naga,
-            .mandril,
-            .kraken,
-//            .shard,
             .custom,
         ]
     }
@@ -356,7 +166,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
 
     private var imageRadius: CGFloat {
         #if os(macOS)
-            11
+            9
         #else
             16
         #endif
@@ -364,7 +174,7 @@ enum Provider: String, CaseIterable, Codable, Identifiable {
 
     private var imageSize: CGFloat {
         #if os(macOS)
-            36
+            23
         #else
             50
         #endif

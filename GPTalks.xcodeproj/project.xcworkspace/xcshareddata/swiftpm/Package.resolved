@@ -1,51 +1,6 @@
 {
-  "originHash" : "8be42810f2f019235da3c8baccc10a272081ae96b43f91a50177056db71dd1ce",
+  "originHash" : "3f38d22b811f98db151da0d1c8262cc6ea027b11e63e749c477eff7f98ee4ac5",
   "pins" : [
-    {
-      "identity" : "fuzi",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/cezheng/Fuzi",
-      "state" : {
-        "revision" : "f08c8323da21e985f3772610753bcfc652c2103f",
-        "version" : "3.1.3"
-      }
-    },
-    {
-      "identity" : "gptencoder",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/alfianlosari/GPTEncoder.git",
-      "state" : {
-        "revision" : "a86968867ab4380e36b904a14c42215f71efe8b4",
-        "version" : "1.0.4"
-      }
-    },
-    {
-      "identity" : "keyboardshortcuts",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
-      "state" : {
-        "revision" : "09e4a10ed6b65b3a40fe07b6bf0c84809313efc4",
-        "version" : "2.0.0"
-      }
-    },
-    {
-      "identity" : "markdown-webview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/markdown-webview",
-      "state" : {
-        "branch" : "master",
-        "revision" : "c3790a8b2cb301eacbf9ec3ba2449c958c36ee70"
-      }
-    },
-    {
-      "identity" : "networkimage",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gonzalezreal/NetworkImage",
-      "state" : {
-        "revision" : "7aff8d1b31148d32c5933d75557d42f6323ee3d1",
-        "version" : "6.0.0"
-      }
-    },
     {
       "identity" : "openai",
       "kind" : "remoteSourceControl",
@@ -56,39 +11,12 @@
       }
     },
     {
-      "identity" : "reeeed",
+      "identity" : "swiftmarkdownview",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nate-parrott/reeeed",
+      "location" : "https://github.com/SilverMarcs/SwiftMarkdownView",
       "state" : {
-        "revision" : "567e2f50592f8a5fe41e9ff64784b42c77f35433",
-        "version" : "1.0.1"
-      }
-    },
-    {
-      "identity" : "splash",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/AugustDev/Splash/",
-      "state" : {
-        "branch" : "master",
-        "revision" : "c31eba0866102be9be29391dac641ecb46795702"
-      }
-    },
-    {
-      "identity" : "swift-markdown-ui",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/electricsidecar-dev/swift-markdown-ui.git",
-      "state" : {
-        "branch" : "recursive",
-        "revision" : "f0d1b7fe722e6eda41db2e56f75529956ffa42fa"
-      }
-    },
-    {
-      "identity" : "swiftsoup",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/scinfu/SwiftSoup.git",
-      "state" : {
-        "revision" : "028487d4a8a291b2fe1b4392b5425b6172056148",
-        "version" : "2.7.2"
+        "branch" : "main",
+        "revision" : "e1eb0205e523e45e35376574871d1c9e28d8e557"
       }
     },
     {
@@ -98,15 +26,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "00abe43a5ac3f25543f5124d5baf8ca4ef8b3d08"
-      }
-    },
-    {
-      "identity" : "visualeffectview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/VisualEffectView",
-      "state" : {
-        "branch" : "master",
-        "revision" : "a47ca84e0f0b92d8e4264a6d306f152758ffc02d"
       }
     }
   ],

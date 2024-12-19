@@ -8,9 +8,6 @@
 #if !os(macOS)
 import SwiftUI
 import UniformTypeIdentifiers
-#if !os(visionOS)
-import VisualEffectView
-#endif
 
 struct iOSMessages: View {
     @Environment(\.colorScheme) var colorScheme
@@ -65,7 +62,7 @@ struct iOSMessages: View {
                 
                 scrollToBottom(proxy: proxy, delay: 0.3)
                 
-                if AppConfiguration.shared.alternateMarkdown && session.conversations.count > 8 {
+                if session.conversations.count > 8 {
                     scrollToBottom(proxy: proxy, delay: 0.8)
                 }
             }
@@ -104,25 +101,6 @@ struct iOSMessages: View {
             .onChange(of: session.isAddingConversation) {
                 scrollToBottom(proxy: proxy)
             }
-//            .onDrop(of: [UTType.image.identifier], isTargeted: nil) { providers -> Bool in
-//                if let itemProvider = providers.first {
-//                    itemProvider.loadObject(ofClass: UIImage.self) { image, error in
-//                        DispatchQueue.main.async {
-//                            if let image = image as? UIImage {
-//                                if session.isEditing {
-//                                    session.editingImages.append(image)
-//                                } else {
-//                                    session.inputImages.append(image)
-//                                }
-//                            } else {
-//                                print("Could not load image: \(String(describing: error))")
-//                            }
-//                        }
-//                    }
-//                    return true
-//                }
-//                return false
-//            }
             .alert("Rename Session", isPresented: $showRenameDialogue) {
                 TextField("Enter new name", text: $newName)
                 Button("Rename", action: {
@@ -162,47 +140,30 @@ struct iOSMessages: View {
                 session: session,
                 focused: _isTextFieldFocused
             )
-#if !os(visionOS)
-            .background(
-                VisualEffect(colorTint: colorScheme == .dark ? .black : .white, colorTintAlpha: 0.7, blurRadius: 8, scale: 1)
-                    .ignoresSafeArea()
-            )
-#else
-            .background(.bar)
-#endif
+            .background(.background)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(session.configuration.model.name)
         .toolbarTitleMenu {
-            Section(navSubtitle) {
-                Menu {
-                    ProviderPicker(session: session)
-                } label: {
-                    Label(session.configuration.provider.name, systemImage: "building.2")
-                }
-
-                Menu {
-                    ModelPicker(session: session)
-                } label: {
-                    Label(session.configuration.model.name, systemImage: "cube.box")
-                }
-
-                Menu {
-                    TempPicker(session: session)
-                } label: {
-                    Label("Temperature: " + String(session.configuration.temperature), systemImage: "thermometer.sun")
-                }
+            Menu {
+                ProviderPicker(session: session)
+            } label: {
+                Label(session.configuration.provider.name, systemImage: "building.2")
             }
-            
-            Section {
-                ToolToggle(session: session)
+
+            Menu {
+                ModelPicker(session: session)
+            } label: {
+                Label(session.configuration.model.name, systemImage: "cube.box")
+            }
+
+            Menu {
+                TempPicker(session: session)
+            } label: {
+                Label("Temperature: " + String(session.configuration.temperature), systemImage: "thermometer.sun")
             }
         }
         .toolbar {
-//            ToolbarItem(placement: .principal) {
-//                navTitle
-//            }
-
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     Section {
@@ -255,46 +216,23 @@ struct iOSMessages: View {
     }
 
     private var navTitle: some View {
-//        HStack {
-//            ProviderImage(radius: 9, color: session.configuration.provider.accentColor, frame: 29)
-//            
-//            VStack(alignment: .leading, spacing: 1) {
-//                Text(session.title)
-//                    .font(.system(size: 16))
-//                    .foregroundStyle(.primary)
-//                    .bold()
-//                
-//                Text(session.configuration.model.name + " • " + session.configuration.systemPrompt)
-//                    .font(.system(size: 11))
-//                    .foregroundStyle(.secondary)
-//            }
-//            
-//            Spacer()
-//        }
-        
         Menu {
-            Section(navSubtitle) {
-                Menu {
-                    ProviderPicker(session: session)
-                } label: {
-                    Label(session.configuration.provider.name, systemImage: "building.2")
-                }
-
-                Menu {
-                    ModelPicker(session: session)
-                } label: {
-                    Label(session.configuration.model.name, systemImage: "cube.box")
-                }
-
-                Menu {
-                    TempPicker(session: session)
-                } label: {
-                    Label("Temperature: " + String(session.configuration.temperature), systemImage: "thermometer.sun")
-                }
+            Menu {
+                ProviderPicker(session: session)
+            } label: {
+                Label(session.configuration.provider.name, systemImage: "building.2")
             }
-            
-            Section {
-                ToolToggle(session: session)
+
+            Menu {
+                ModelPicker(session: session)
+            } label: {
+                Label(session.configuration.model.name, systemImage: "cube.box")
+            }
+
+            Menu {
+                TempPicker(session: session)
+            } label: {
+                Label("Temperature: " + String(session.configuration.temperature), systemImage: "thermometer.sun")
             }
             
         } label: {
@@ -309,10 +247,6 @@ struct iOSMessages: View {
             }
         }
         .foregroundStyle(.primary)
-    }
-
-    private var navSubtitle: String {
-        "Tokens: " + session.activeTokenCount.formatToK()
     }
     
     private var ScrollSpacer: some View {

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import MarkdownWebView
 
 struct UserMessageView: View {
     @Environment(DialogueViewModel.self) private var viewModel
@@ -80,14 +79,8 @@ struct UserMessageView: View {
                         .bold()
                     
 #if os(macOS)
-//                    Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
-//                        .textSelection(.enabled)
-                    if AppConfiguration.shared.userMessageMarkdown {
-                        MarkdownWebView(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
-                    } else {
-                        Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
-                            .textSelection(.enabled)
-                    }
+                    Text(isExpanded || conversation.content.count <= 300 ? conversation.content : String(conversation.content.prefix(300)) + "\n...")
+                        .textSelection(.enabled)
 #else
                     
                     Text(conversation.content)
@@ -96,15 +89,6 @@ struct UserMessageView: View {
                     
                     ForEach(conversation.imagePaths, id: \.self) { imagePath in
                         ImageView2(imageUrlPath: imagePath, imageSize: imageSize)
-                    }
-                    
-                    if let audioUrl = URL(string: conversation.audioPath) {
-                        AudioPreviewer(audioURL: audioUrl,showRemoveButton: false, removeAudioAction: {})
-//                            .frame(maxWidth: 500)
-                    }
-                    
-                    if let pdfURL = URL(string: conversation.pdfPath) {
-                        PDFViewer(pdfURL: pdfURL, removePDFAction: {}, showRemoveButton: false)
                     }
                 }
                 

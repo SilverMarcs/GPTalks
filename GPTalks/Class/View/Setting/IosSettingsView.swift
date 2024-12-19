@@ -24,15 +24,7 @@ struct IosSettingsView: View {
                         Spacer()
                         Toggle("Markdown Enabled", isOn: $configuration.isMarkdownEnabled)
                     }
-                    
-                    HStack {
-                        Image(systemName: "note.text")
-                            .renderingMode(.original)
-                        Spacer()
-                        Toggle("Alternate Markdown UI", isOn: $configuration.alternateMarkdown)
-                    }
-                    .disabled(!configuration.isMarkdownEnabled)
-                    
+
                     HStack {
                         Image(systemName: "textformat")
                             .renderingMode(.original)
@@ -86,30 +78,6 @@ struct IosSettingsView: View {
                             Image(systemName: "cpu.fill")
                                 .renderingMode(.original)
                             Text("Default Parameters")
-                        }
-                    }
-                    
-                    NavigationLink {
-                        Form {
-                            List(ChatTool.allCases, id: \.self) { tool in
-                                NavigationLink(
-                                    destination: tool.destination,
-                                    label: {
-                                        HStack {
-                                            Image(systemName: tool.systemImageName)
-                                                .renderingMode(.template)
-                                            Text(tool.toolName)
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                        .navigationTitle("Plugins")
-                    } label: {
-                        HStack {
-                            Image(systemName: "puzzlepiece.fill")
-                                .renderingMode(.original)
-                            Text("Plugins")
                         }
                     }
                 }

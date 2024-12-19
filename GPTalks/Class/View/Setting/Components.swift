@@ -23,37 +23,6 @@ struct AutoGenTitleEnabler: View {
     }
 }
 
-struct SeamlessScroller: View {
-    @ObservedObject var configuration: AppConfiguration = .shared
-    var isPicker: Bool = false
-    
-    var body: some View {
-        if isPicker {
-            Picker("Seamless ScrollView", selection: $configuration.seamlessScrollView) {
-                Text("True").tag(true)
-                Text("False").tag(false)
-            }
-        } else {
-            Toggle("Seamless ScrollView", isOn: $configuration.seamlessScrollView)
-        }
-    }
-}
-
-struct MarkdownUserMessage: View {
-    @ObservedObject var configuration: AppConfiguration = .shared
-    var isPicker: Bool = false
-    
-    var body: some View {
-        if isPicker {
-            Picker("User Message Markdown", selection: $configuration.userMessageMarkdown) {
-                Text("True").tag(true)
-                Text("False").tag(false)
-            }
-        } else {
-            Toggle("User Message Markdown", isOn: $configuration.userMessageMarkdown)
-        }
-    }
-}
 
 struct MarkdownEnabler: View {
     @ObservedObject var configuration: AppConfiguration = .shared
@@ -67,22 +36,6 @@ struct MarkdownEnabler: View {
             }
         } else {
             Toggle("Markdown Enabled", isOn: $configuration.isMarkdownEnabled)
-        }
-    }
-}
-
-struct AlternateMarkdownEnabler: View {
-    @ObservedObject var configuration: AppConfiguration = .shared
-    var isPicker: Bool = false
-
-    var body: some View {
-        if isPicker {
-            Picker("Markdown Enabled", selection: $configuration.alternateMarkdown) {
-                Text("True").tag(true)
-                Text("False").tag(false)
-            }
-        } else {
-            Toggle("Markdown Enabled", isOn: $configuration.alternateMarkdown)
         }
     }
 }
@@ -111,21 +64,6 @@ struct PreferredImageProvider: View {
     }
 }
 
-struct SmootherScrollPicker: View {
-    @ObservedObject var configuration: AppConfiguration = .shared
-    var isPicker: Bool = false
-    
-    var body: some View {
-        if isPicker {
-            Picker("Smoother Scrolling", selection: $configuration.seamlessScrollView) {
-                Text("True").tag(true)
-                Text("False").tag(false)
-            }
-        } else {
-            Toggle("Smoother Scrolling", isOn: $configuration.seamlessScrollView)
-        }
-    }
-}
 
 struct UseToolsPicker: View {
     @ObservedObject var configuration: AppConfiguration = .shared

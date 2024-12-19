@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import MarkdownWebView
+import SwiftMarkdownView
 
 struct AssistantMessageView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -44,6 +44,7 @@ struct AssistantMessageView: View {
     }
     
     
+    @ViewBuilder
     var alternateUI: some View {
         VStack(alignment: .trailing) {
             HStack(alignment: .top, spacing: 10) {
@@ -63,28 +64,14 @@ struct AssistantMessageView: View {
                     HStack {
                         Text("Assistant")
                             .font(.title3)
-                        
-                        if let _ = ChatTool(rawValue: conversation.toolRawValue) {
-                            Text("Tool Call")
-                                .foregroundStyle(.secondary)
-                                .font(.system(size: 11))
-                        }
                     }
                     
                     Group {
-                        if let _ = ChatTool(rawValue: conversation.toolRawValue) {
-                            Text(conversation.arguments)
-//                                .textSelection(.enabled)
+                        if AppConfiguration.shared.isMarkdownEnabled {
+    //                                    MessageMarkdownView(text: conversation.content)
+                            SwiftMarkdownView(conversation.content)
                         } else {
-//                            Group {
-                                if AppConfiguration.shared.isMarkdownEnabled {
-//                                    MessageMarkdownView(text: conversation.content)
-                                    MarkdownWebView(conversation.content)
-                                } else {
-                                    Text(conversation.content)
-                                }
-//                            }
-
+                            Text(conversation.content)
                         }
                     }
                     .textSelection(.enabled)
