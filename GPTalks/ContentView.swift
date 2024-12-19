@@ -10,13 +10,26 @@ import SwiftUI
 struct ContentView: View {
     @Environment(DialogueViewModel.self) private var viewModel
     @Environment(\.scenePhase) var scenePhase
+    @ObservedObject var config = AppConfiguration.shared
     
     @State var imageSession: ImageSession = .init()
+    
+    @State var showAlert = false
     
     var body: some View {
 #if os(macOS)
         NavigationSplitView {
             MacOSDialogList(viewModel: viewModel)
+                .onAppear {
+                    if config.OAIkey.isEmpty {
+                        showAlert.toggle()
+                    }
+                }
+                .alert("Enter OpenAI API Key", isPresented: $showAlert) {
+                    TextField("API Key", text: $config.OAIkey)
+                    Button("Cancel", role: .cancel) {}
+                    Button("OK") {}
+                }
         } detail: {
             if viewModel.selectedState == .images {
                 ImageCreator(imageSession: imageSession)
@@ -45,6 +58,16 @@ struct ContentView: View {
 #else
         NavigationSplitView {
             IOSDialogList(viewModel: viewModel)
+                .onAppear {
+                    if config.OAIkey.isEmpty {
+                        showAlert.toggle()
+                    }
+                }
+                .alert("Enter OpenAI API Key", isPresented: $showAlert) {
+                    TextField("API Key", text: $config.OAIkey)
+                    Button("Cancel", role: .cancel) {}
+                    Button("OK") {}
+                }
                 .onChange(of: scenePhase) {
                    switch scenePhase {
                    case .active:

@@ -10,11 +10,6 @@ import SwiftUI
 @main
 struct GPTalks: App {
     @State private var viewModel = DialogueViewModel(context: PersistenceController.shared.container.viewContext)
-    #if os(macOS)
-    @State var showingPanel = false
-    @State private var mainWindow: NSWindow?
-    @State var showAdditionalContent = false
-#endif
     
     var body: some Scene {
         WindowGroup {
