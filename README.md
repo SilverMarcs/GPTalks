@@ -25,7 +25,7 @@ A SwiftUI multi-platform app to interact with OpenAI Chat Completions and Image 
 - Open the  downloaded `GPTalks.dmg` and drag `GPTalks` to `Applications` folder
 - Launch the app and see a security error from MacOS
   - Go to Settings > Privacy & Security
-  - Scroll al the way down and click `Allow anyway` under security
+  - Scroll all the way down and click `Allow anyway` under security
 
 ## MacOS
 
