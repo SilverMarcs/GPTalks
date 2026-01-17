@@ -1,5 +1,5 @@
 {
-  "originHash" : "3f38d22b811f98db151da0d1c8262cc6ea027b11e63e749c477eff7f98ee4ac5",
+  "originHash" : "c280c84bfb0a09ca2eabf89c78eda783a253ce314004df64288577cdda71263e",
   "pins" : [
     {
       "identity" : "openai",
@@ -15,17 +15,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SilverMarcs/SwiftMarkdownView",
       "state" : {
-        "branch" : "main",
-        "revision" : "e1eb0205e523e45e35376574871d1c9e28d8e557"
-      }
-    },
-    {
-      "identity" : "swiftui-image-viewer",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SilverMarcs/swiftui-image-viewer",
-      "state" : {
-        "branch" : "main",
-        "revision" : "00abe43a5ac3f25543f5124d5baf8ca4ef8b3d08"
+        "revision" : "560ea08fe9187aea8bd6caa9230969efc886ac64"
       }
     }
   ],

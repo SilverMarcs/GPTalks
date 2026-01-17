@@ -37,8 +37,6 @@
 		085D40C32AFD8C250033F8B5 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085D40C22AFD8C250033F8B5 /* Provider.swift */; };
 		0868CF632BB535E70037646C /* InputComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0868CF622BB535E70037646C /* InputComponents.swift */; };
 		086E3FB52B310D0300FD9C0B /* ToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086E3FB42B310D0300FD9C0B /* ToolbarItems.swift */; };
-		086F6A072B94129100DF42F9 /* SwiftUIImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 086F6A062B94129100DF42F9 /* SwiftUIImageViewer */; };
-		086F6A0A2B94168100DF42F9 /* SwiftUIImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 086F6A092B94168100DF42F9 /* SwiftUIImageViewer */; };
 		0878E53B2B1683ED00E0D79D /* AppIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0878E53A2B1683ED00E0D79D /* AppIconView.swift */; };
 		087AC1982B6D40A7006B9386 /* EditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087AC1972B6D40A7006B9386 /* EditingView.swift */; };
 		08827D112B28B72B0044213B /* ErrorDescView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08827D102B28B72B0044213B /* ErrorDescView.swift */; };
@@ -137,11 +135,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				086F6A0A2B94168100DF42F9 /* SwiftUIImageViewer in Frameworks */,
 				08EA25A72B98B09F00EC5E65 /* OpenAI in Frameworks */,
 				0883CFE42B98B174004A6FEA /* OpenAI in Frameworks */,
 				08C594FB2B7FCEA4009AB268 /* OpenAI in Frameworks */,
-				086F6A072B94129100DF42F9 /* SwiftUIImageViewer in Frameworks */,
 				08D5A2962B7E068700BA1CE0 /* OpenAI in Frameworks */,
 				08C594FE2B7FD52C009AB268 /* OpenAI in Frameworks */,
 				080A18852D1425070081C6B1 /* SwiftMarkdownView in Frameworks */,
@@ -354,8 +350,6 @@
 				08D5A2952B7E068700BA1CE0 /* OpenAI */,
 				08C594FA2B7FCEA4009AB268 /* OpenAI */,
 				08C594FD2B7FD52C009AB268 /* OpenAI */,
-				086F6A062B94129100DF42F9 /* SwiftUIImageViewer */,
-				086F6A092B94168100DF42F9 /* SwiftUIImageViewer */,
 				08EA25A62B98B09F00EC5E65 /* OpenAI */,
 				0883CFE32B98B174004A6FEA /* OpenAI */,
 				083495A42BA8BCBA0009E271 /* OpenAI */,
@@ -390,7 +384,6 @@
 			);
 			mainGroup = E4C65E9529CA9E7E00AFA884;
 			packageReferences = (
-				086F6A082B94168100DF42F9 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
 				083495A32BA8BCBA0009E271 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				080A18832D1425070081C6B1 /* XCRemoteSwiftPackageReference "SwiftMarkdownView" */,
 			);
@@ -736,8 +729,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SilverMarcs/SwiftMarkdownView";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = revision;
+				revision = 560ea08fe9187aea8bd6caa9230969efc886ac64;
 			};
 		};
 		083495A32BA8BCBA0009E271 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
@@ -745,14 +738,6 @@
 			repositoryURL = "https://github.com/SilverMarcs/OpenAI";
 			requirement = {
 				branch = MacPaw.gpt_vision;
-				kind = branch;
-			};
-		};
-		086F6A082B94168100DF42F9 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SilverMarcs/swiftui-image-viewer";
-			requirement = {
-				branch = main;
 				kind = branch;
 			};
 		};
@@ -768,15 +753,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 083495A32BA8BCBA0009E271 /* XCRemoteSwiftPackageReference "OpenAI" */;
 			productName = OpenAI;
-		};
-		086F6A062B94129100DF42F9 /* SwiftUIImageViewer */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SwiftUIImageViewer;
-		};
-		086F6A092B94168100DF42F9 /* SwiftUIImageViewer */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 086F6A082B94168100DF42F9 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */;
-			productName = SwiftUIImageViewer;
 		};
 		0883CFE32B98B174004A6FEA /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;

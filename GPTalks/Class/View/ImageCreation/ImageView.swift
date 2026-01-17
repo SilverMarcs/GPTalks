@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUIImageViewer
 
 struct ImageView: View {
     let imageData: Data
@@ -43,7 +42,9 @@ struct ImageView: View {
                     isImagePresented = true
                 }
                 .sheet(isPresented: $isImagePresented) {
-                    SwiftUIImageViewer(image: Image(nsImage: nsImage))
+                    Image(nsImage: nsImage)
+                        .resizable()
+                        .scaledToFit()
                         .frame(width: 800, height: 800)
                         .overlay(alignment: .topTrailing) {
                             closeButton
@@ -65,7 +66,9 @@ struct ImageView: View {
                     isImagePresented = true
                 }
                 .fullScreenCover(isPresented: $isImagePresented) {
-                    SwiftUIImageViewer(image: Image(uiImage: uiImage))
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
                         .overlay(alignment: .topTrailing) {
                             closeButton
                         }
